@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'IDP Dashboard') }} - Login</title>
+    <title>{{ config('app.name', 'IDP Dashboard') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,9 +34,26 @@
             padding: 2.5rem 2.5rem;
             width: 100%;
             max-width: 440px;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
             z-index: 10;
             animation: slideUp 0.6s ease-out;
+            scrollbar-width: thin;
+            scrollbar-color: #e2e8f0 transparent;
+        }
+
+        .login-card::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .login-card::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .login-card::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 99px;
         }
 
         @keyframes slideUp {
@@ -235,7 +252,37 @@
             margin: 1.5rem 0;
         }
 
+        /* ── SELECT DROPDOWN ── */
+        .form-select {
+            width: 100%;
+            padding: 0.7rem 2.4rem 0.7rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            color: #1e293b;
+            background: #f8fafc;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: all 0.25s ease;
+            outline: none;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
 
+        .form-select:focus {
+            border-color: #22c55e;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+        }
+
+        .form-select option[value=''][disabled] {
+            color: #cbd5e1;
+            font-style: italic;
+        }
 
         .session-status {
             background: #f0fdf4;
@@ -253,8 +300,10 @@
     <div class="login-bg flex items-center justify-center px-4 py-8">
 
         <div class="login-card">
-            <!-- Title -->
-            <h1 class="login-title">Individual<br>Development Plan</h1>
+            <!-- Title hanya muncul di halaman login (bukan register) -->
+            @if (request()->routeIs('login'))
+                <h1 class="login-title">Individual<br>Development Plan</h1>
+            @endif
 
             {{ $slot }}
         </div>

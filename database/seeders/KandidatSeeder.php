@@ -21,7 +21,7 @@ class KandidatSeeder extends Seeder
                 'departemen'  => 'Human Resources',
                 'role_target' => 'HR Manager',
                 'username'    => 'budi.santoso',
-                'password'    => Hash::make('password123'),
+                'password'    => 'password123',
             ],
             [
                 'nama'        => 'Siti Rahayu',
@@ -30,7 +30,7 @@ class KandidatSeeder extends Seeder
                 'departemen'  => 'Finance',
                 'role_target' => 'Finance Manager',
                 'username'    => 'siti.rahayu',
-                'password'    => Hash::make('password123'),
+                'password'    => 'password123',
             ],
             [
                 'nama'        => 'Ahmad Fauzi',
@@ -39,7 +39,7 @@ class KandidatSeeder extends Seeder
                 'departemen'  => 'Operations',
                 'role_target' => 'Operations Manager',
                 'username'    => 'ahmad.fauzi',
-                'password'    => Hash::make('password123'),
+                'password'    => 'password123',
             ],
             [
                 'nama'        => 'Dewi Kartika',
@@ -48,7 +48,7 @@ class KandidatSeeder extends Seeder
                 'departemen'  => 'Marketing',
                 'role_target' => 'Marketing Specialist',
                 'username'    => 'dewi.kartika',
-                'password'    => Hash::make('password123'),
+                'password'    => 'password123',
             ],
             [
                 'nama'        => 'Rizky Pratama',
@@ -57,7 +57,7 @@ class KandidatSeeder extends Seeder
                 'departemen'  => 'Information Technology',
                 'role_target' => 'IT Lead',
                 'username'    => 'rizky.pratama',
-                'password'    => Hash::make('password123'),
+                'password'    => 'password123',
             ],
         ];
 

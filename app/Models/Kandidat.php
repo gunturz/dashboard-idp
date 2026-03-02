@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class Kandidat extends Model
+class Kandidat extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'kandidats';
 
@@ -24,7 +25,24 @@ class Kandidat extends Model
 
     protected $hidden = [
         'password',
+        'remember_token',
     ];
+
+    /**
+     * Kolom yang digunakan sebagai identifier login.
+     */
+    public function getAuthIdentifierName(): string
+    {
+        return 'username';
+    }
+
+    /**
+     * Kolom password.
+     */
+    public function getAuthPasswordName(): string
+    {
+        return 'password';
+    }
 
     /**
      * Hash password otomatis saat diisi.

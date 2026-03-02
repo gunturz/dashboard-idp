@@ -13,10 +13,26 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('nama');
+            $table->string('username')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('password');
+            $table->enum('role', [
+                'kandidat',
+                'atasan',
+                'mentor',
+                'finance',
+                'admin_pdc',
+                'bo_director',
+            ])->default('kandidat');
+            $table->string('perusahaan')->nullable();
+            $table->string('departemen')->nullable();
+            $table->string('jabatan')->nullable();
+            $table->string('jabatan_target')->nullable();
+            $table->unsignedBigInteger('mentor_id')->nullable();
+            $table->unsignedBigInteger('atasan_id')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -23,7 +23,13 @@
         }
 
         .login-bg {
-            background: #4B586F;
+            background-image: 
+                linear-gradient(135deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.45) 100%),
+                url('{{ asset('storage/images/Bg TS.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #4B586F; /* fallback color */
             min-height: 100vh;
             display: flex;
             align-items: center;

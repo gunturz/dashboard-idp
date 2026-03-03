@@ -98,7 +98,7 @@ class RegisteredUserController extends Controller
         ]);
 
         return redirect()->route('login')
-            ->with('status', 'Akun berhasil dibuat. Silakan login menggunakan kredensial Anda.');
+            ->with('status', 'Akun berhasil dibuat. Silahkan login dengan username dan password yang telah Anda buat.');
 
 
 
@@ -182,11 +182,34 @@ class RegisteredUserController extends Controller
         }
         KandidatKompetensi::create($kompetensiData);
 
+
+
+        // session()->forget('register_data');
+
+        // event(new Registered($user));
+        // Auth::login($user);
+
+        // return redirect()->route('kandidat.dashboard');
+
+
+
+
+
+        // Jangan login otomatis — arahkan ke login page
+        // Simpan intent kandidat (username + user_id) untuk verifikasi di login
+        session([
+            'register_kandidat' => [
+                'username' => $user->username,
+                'user_id'  => $user->id,
+            ],
+        ]);
+
         session()->forget('register_data');
 
-        event(new Registered($user));
-        Auth::login($user);
+        // JANGAN panggil Auth::login($user) dan event(Registered)
+        // Biarkan user login manual via login page
 
-        return redirect()->route('kandidat.dashboard');
+        return redirect()->route('login')
+            ->with('status', 'Kompetensi berhasil disimpan. Silahkan login dengan username dan password yang telah Anda buat.');
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Auth\Events\Registered;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,7 +29,24 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+
+        // Verifikasi intent kandidat (dari session storeKompetensi)
+        if (session()->has('register_kandidat')) {
+            $intent = session('register_kandidat');
+            // Pastikan user yang login adalah user_id yang baru registrasi
+            if (Auth::user()->id !== $intent['user_id']) {
+                Auth::logout();
+                return back()->withErrors(['username' => 'Akun yang Anda login bukan akun yang baru didaftarkan. Silakan gunakan akun terbaru.']);
+            }
+            // Trigger event Registered (yang seharusnya dipanggil di storeKompetensi)
+            event(new Registered(Auth::user()));
+            session()->forget('register_kandidat');
+        }
+
+
+
         // setelah Auth::attempt / setelah user di-retrieve dan login dilakukan
+        // Verifikasi intent non-kandidat (dari flow registrasi non-kandidat)
         if (session()->has('register_non_kandidat')) {
             $intent = session('register_non_kandidat');
             if ($user->role !== $intent['role']) {

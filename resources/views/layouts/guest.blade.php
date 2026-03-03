@@ -25,7 +25,7 @@
         .login-bg {
             background-image: 
                 linear-gradient(135deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.45) 100%),
-                url('{{ asset('storage/images/Bg TS.png') }}');
+                url('{{ asset('storage/images/Gambar TS.png') }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;

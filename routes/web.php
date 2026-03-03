@@ -8,13 +8,23 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+    // Jika kandidat, arahkan ke dashboard khusus kandidat
+    if ($user->role === 'kandidat') {
+        return redirect()->route('kandidat.dashboard');
+    }
+    // Untuk role lain, tampilkan dashboard umum dengan data yang diperlukan
+    $kompetensi = $user->kandidatKompetensi ?? null;
+    return view('dashboard', compact('user', 'kompetensi'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class , 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class , 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

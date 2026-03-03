@@ -14,4 +14,39 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+     <!-- PROFILE SECTION (dari registrasi awal) -->
+    <div class="profile-card">
+        <h3>{{ $user->nama }}</h3>
+        <p>Perusahaan: {{ $user->perusahaan }}</p>
+        <p>Departemen: {{ $user->departemen }}</p>
+        <p>Role Target: {{ $user->jabatan_target }}</p>
+        <p>Mentor: {{ $user->mentor_id ? $user->mentor->nama : '-' }}</p>
+        <p>Atasan: {{ $user->atasan_id ? $user->atasan->nama : '-' }}</p>
+    </div>
+
+    <!-- Kompetensi CHART SECTION (dari kompetensi yang diisi) -->
+    <div class="kompetensi-card">
+        @if ($kompetensi)
+            <!-- Gunakan library Chart.js / ApexCharts / Recharts -->
+            <canvas id="competencyChart"></canvas>
+            
+            <script>
+                const data = {
+                    integrity: {{ $kompetensi->integrity }},
+                    communication: {{ $kompetensi->communication }},
+                    leadership: {{ $kompetensi->leadership }},
+                    // ... semua kompetensi lainnya
+                };
+                // Render chart dengan data
+            </script>
+        @else
+            <p>Belum ada data kompetensi</p>
+        @endif
+    </div>
 </x-app-layout>

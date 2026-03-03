@@ -34,25 +34,25 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-            'is_active'         => 'boolean',
+            'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
     /**
      * Gunakan username sebagai identifier login (bukan email).
      */
-    public function getAuthIdentifierName(): string
-    {
-        return 'username';
-    }
+    // public function getAuthIdentifierName(): string
+    // {
+    //     return 'username';
+    // }
 
     /**
      * Relasi ke mentor (sesama user).
      */
     public function mentor()
     {
-        return $this->belongsTo(User::class, 'mentor_id');
+        return $this->belongsTo(User::class , 'mentor_id', 'id');
     }
 
     /**
@@ -60,6 +60,16 @@ class User extends Authenticatable
      */
     public function atasan()
     {
-        return $this->belongsTo(User::class, 'atasan_id');
+        return $this->belongsTo(User::class , 'atasan_id', 'id');
+    }
+
+
+
+
+
+
+    public function kandidatKompetensi()
+    {
+        return $this->hasOne(KandidatKompetensi::class , 'user_id', 'id');
     }
 }

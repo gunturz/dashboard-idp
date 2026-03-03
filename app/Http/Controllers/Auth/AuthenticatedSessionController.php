@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
         // Verifikasi intent non-kandidat (dari flow registrasi non-kandidat)
         if (session()->has('register_non_kandidat')) {
             $intent = session('register_non_kandidat');
-            if ($user->role !== $intent['role']) {
+            if (Auth::user()->role !== $intent['role']) {
                 Auth::logout();
                 return back()->withErrors(['username' => 'Role akun tidak sesuai dengan yang dipilih saat registrasi.']);
             }
@@ -59,15 +59,28 @@ class AuthenticatedSessionController extends Controller
 
         $role = Auth::user()->role;
 
-        return match($role) {
-            'kandidat'    => redirect()->route('kandidat.dashboard'),
-            'atasan'      => redirect()->route('atasan.dashboard'),
-            'mentor'      => redirect()->route('mentor.dashboard'),
-            'finance'     => redirect()->route('finance.dashboard'),
-            'admin_pdc'   => redirect()->route('admin_pdc.dashboard'),
-            'bo_director' => redirect()->route('bo_director.dashboard'),
-            default       => redirect('/'),
-        };
+        // Simple redirect based on role
+        if ($role === 'kandidat') {
+            return redirect()->route('kandidat.dashboard');
+        }
+        elseif ($role === 'atasan') {
+            return redirect()->route('atasan.dashboard');
+        }
+        elseif ($role === 'mentor') {
+            return redirect()->route('mentor.dashboard');
+        }
+        elseif ($role === 'finance') {
+            return redirect()->route('finance.dashboard');
+        }
+        elseif ($role === 'admin_pdc') {
+            return redirect()->route('admin_pdc.dashboard');
+        }
+        elseif ($role === 'bo_director') {
+            return redirect()->route('bo_director.dashboard');
+        }
+        else {
+            return redirect('/');
+        }
     }
 
     /**

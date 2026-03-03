@@ -303,6 +303,45 @@
             font-size: 0.82rem;
             margin-bottom: 1rem;
         }
+
+        /* ── FORGOT PASSWORD ── */
+        .fp-header {
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .fp-icon-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            color: #16a34a;
+        }
+
+        .fp-icon-wrap svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .fp-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.35;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .fp-subtitle {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            font-weight: 400;
+            line-height: 1.6;
+        }
     </style>
 </head>
 
@@ -310,7 +349,7 @@
     <div class="login-bg flex items-center justify-center px-4 py-8">
 
         <div class="login-card">
-            <!-- Title hanya muncul di halaman login (bukan register) -->
+            <!-- Title hanya muncul di halaman login -->
             @if (request()->routeIs('login'))
                 <h1 class="login-title">Individual<br>Development Plan</h1>
             @endif

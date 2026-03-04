@@ -307,7 +307,7 @@
         <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
 
             {{-- ── Kompetensi Bar Chart ── --}}
-            <div class="bg-white rounded-2xl shadow-sm p-6 fade-up fade-up-2 md:col-span-3 flex flex-col">
+            <div class="bg-white rounded-2xl shadow-sm p-6 fade-up fade-up-2 md:col-span-3">
                 <h2 class="text-base font-bold text-gray-800 mb-4">Kompetensi</h2>
                 @php
                     $kompetensiBars = [
@@ -324,7 +324,7 @@
                     ];
                     $maxScore = 5;
                 @endphp
-                <div class="flex-grow flex flex-col justify-between gap-2">
+                <div class="space-y-3">
                     @foreach ($kompetensiBars as $label => $score)
                         @php
                             // Skala 1-5: nilai 1 = 0%, nilai 5 = 100%
@@ -362,48 +362,37 @@
                 <h2 class="text-base font-bold text-gray-800 mb-6">IDP Monitoring</h2>
                 @php
                     $idpData = [
-                        'Exposure' => ['done' => 4, 'total' => 6],
-                        'Mentoring' => ['done' => 6, 'total' => 6],
-                        'Learning' => ['done' => 5, 'total' => 6],
+                        'Exposure' => ['done' => 4, 'total' => 6, 'color' => '#3d4f62'],
+                        'Mentoring' => ['done' => 6, 'total' => 6, 'color' => '#f59e0b'],
+                        'Learning' => ['done' => 5, 'total' => 6, 'color' => '#f97316'],
                     ];
                 @endphp
-                <div class="flex flex-wrap justify-center gap-x-12 gap-y-10 py-4">
+                <div class="flex flex-wrap justify-around gap-4">
                     @foreach ($idpData as $label => $d)
                         @php
-                            // Pewarnaan 6 slice mengisi dari bawah-kiri (180deg) memutar searah jarum jam.
-                            // Jika slice 'kosong' (belum done), warnanya disamakan dengan background card (#ffffff).
-                            $c1 = $d['done'] >= 1 ? '#cfd1d3' : '#ffffff'; // 180-240: Light Gray
-                            $c2 = $d['done'] >= 2 ? '#a19586' : '#ffffff'; // 240-300: Taupe
-                            $c3 = $d['done'] >= 3 ? '#576373' : '#ffffff'; // 300-360: Slate
-                            $c4 = $d['done'] >= 4 ? '#223647' : '#ffffff'; // 0-60: Dark Navy
-                            $c5 = $d['done'] >= 5 ? '#f2b31a' : '#ffffff'; // 60-120: Mustard
-                            $c6 = $d['done'] >= 6 ? '#fa7a25' : '#ffffff'; // 120-180: Orange
+                            $r = 40;
+                            $circ = 2 * M_PI * $r;
+                            $filledDash = ($d['done'] / $d['total']) * $circ;
+                            $emptyDash = $circ - $filledDash;
                         @endphp
-                        <div class="flex flex-col items-center gap-5">
-                            {{-- Donut dengan Conic Gradient --}}
-                            <div class="relative w-40 h-40 rounded-full flex items-center justify-center transform transition hover:scale-105 duration-300"
-                                style="background: conic-gradient(
-                                    {{ $c4 }} 0deg 60deg,
-                                    {{ $c5 }} 60deg 120deg,
-                                    {{ $c6 }} 120deg 180deg,
-                                    {{ $c1 }} 180deg 240deg,
-                                    {{ $c2 }} 240deg 300deg,
-                                    {{ $c3 }} 300deg 360deg
-                                );">
-                                {{-- Inner hole/Tengah putih --}}
-                                <div
-                                    class="w-[98px] h-[98px] bg-white rounded-full flex items-center justify-center absolute">
-                                    <span class="text-[40px] font-light text-gray-800 tracking-tight leading-none"
-                                        style="font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;">
-                                        {{ $d['done'] }}/{{ $d['total'] }}
-                                    </span>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="relative w-28 h-28">
+                                <svg viewBox="0 0 100 100" class="w-full h-full">
+                                    {{-- Track --}}
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                        stroke="#e2e8f0" stroke-width="12" />
+                                    {{-- Fill --}}
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                        stroke="{{ $d['color'] }}" stroke-width="12"
+                                        stroke-dasharray="{{ $filledDash }} {{ $emptyDash }}"
+                                        stroke-linecap="round" class="donut-ring" />
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span
+                                        class="text-lg font-bold text-gray-700">{{ $d['done'] }}/{{ $d['total'] }}</span>
                                 </div>
                             </div>
-                            {{-- Badge --}}
-                            <span
-                                class="px-5 py-1.5 border border-gray-300 rounded-lg text-sm font-semibold text-gray-800 bg-white shadow-sm">
-                                {{ $label }}
-                            </span>
+                            <span class="text-xs font-semibold text-gray-600">{{ $label }}</span>
                         </div>
                     @endforeach
                 </div>
@@ -612,7 +601,7 @@
         <div id="logbook" class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
 
             {{-- Download Template --}}
-            <div class="flex justify-start mb-5">
+            <div class="flex justify-center mb-5">
                 <a href="#"
                     class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-lg transition shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"

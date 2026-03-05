@@ -185,19 +185,10 @@
         }
 
         /* ── Page Background ── */
-        .page-bg {
-            background-image:
-                linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%),
-                url('{{ asset('storage/images/Gambar TS.png') }}');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-color: #f3f4f6;
-        }
     </style>
 </head>
 
-<body class="page-bg min-h-screen flex flex-col">
+<body class="bg-white min-h-screen flex flex-col">
 
     {{-- ══════════════════════════════ NAVBAR ══════════════════════════════ --}}
     <div class="navbar-outer">
@@ -304,10 +295,10 @@
     <div class="w-full px-6 pt-5 pb-6 space-y-6 flex-grow">
 
         {{-- ══════════════════════════════ CHART ROW ══════════════════════════════ --}}
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6" id="Kompetensi">
 
             {{-- ── Kompetensi Bar Chart ── --}}
-            <div class="bg-white rounded-2xl shadow-sm p-6 fade-up fade-up-2 md:col-span-3">
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl shadow-sm p-6 fade-up fade-up-2 md:col-span-3">
                 <h2 class="text-base font-bold text-gray-800 mb-4">Kompetensi</h2>
                 @php
                     $kompetensiBars = [
@@ -358,41 +349,50 @@
             </div>
 
             {{-- ── IDP Monitoring Donut Charts ── --}}
-            <div class="bg-white rounded-2xl shadow-sm p-6 fade-up fade-up-2 md:col-span-2">
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl shadow-sm p-6 fade-up fade-up-2 md:col-span-2"
+                id="IDP Monitoring">
                 <h2 class="text-base font-bold text-gray-800 mb-6">IDP Monitoring</h2>
                 @php
+                    // Data disesuaikan urutannya: Exposure (4), Learning (5), Mentoring (6)
                     $idpData = [
-                        'Exposure' => ['done' => 4, 'total' => 6, 'color' => '#3d4f62'],
-                        'Mentoring' => ['done' => 6, 'total' => 6, 'color' => '#f59e0b'],
-                        'Learning' => ['done' => 5, 'total' => 6, 'color' => '#f97316'],
+                        'Exposure' => ['done' => 4, 'total' => 6],
+                        'Learning' => ['done' => 5, 'total' => 6],
+                        'Mentoring' => ['done' => 6, 'total' => 6],
                     ];
+                    // Palette 6 warna slice (berlawanan jarum jam)
+                    $sliceColors = ['#3d4f62', '#64748b', '#a8a29e', '#cbd5e1', '#f97316', '#f59e0b'];
+                    // Start angles (setiap slice berputar 60 derajat mundur)
+                    $startAngles = [-117.5, -177.5, -237.5, -297.5, -357.5, -57.5];
                 @endphp
                 <div class="flex flex-wrap justify-around gap-4">
                     @foreach ($idpData as $label => $d)
-                        @php
-                            $r = 40;
-                            $circ = 2 * M_PI * $r;
-                            $filledDash = ($d['done'] / $d['total']) * $circ;
-                            $emptyDash = $circ - $filledDash;
-                        @endphp
                         <div class="flex flex-col items-center gap-3">
                             <div class="relative w-40 h-40">
                                 <svg viewBox="0 0 100 100" class="w-full h-full">
-                                    {{-- Track --}}
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                        stroke="#e2e8f0" stroke-width="12" />
-                                    {{-- Fill --}}
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                        stroke="{{ $d['color'] }}" stroke-width="12"
-                                        stroke-dasharray="{{ $filledDash }} {{ $emptyDash }}"
-                                        stroke-linecap="round" class="donut-ring" transform="rotate(-90 50 50)" />
+                                    @for ($i = 0; $i < 6; $i++)
+                                        @php
+                                            $isDone = $i < $d['done'];
+                                            $color = $isDone ? $sliceColors[$i] : '#ffffff';
+                                            // Panjang slice 55 derajat dari 360, menyisakan 5 derajat gap
+                                            // Circumference = 2 * PI * 40 = 251.3
+                                            // Slice = (55/360) * 251.327 = 38.4
+                                            $strokeDash = '38.4 213';
+                                        @endphp
+                                        <circle cx="50" cy="50" r="40" fill="none"
+                                            stroke="{{ $color }}" stroke-width="18"
+                                            stroke-dasharray="{{ $strokeDash }}"
+                                            transform="rotate({{ $startAngles[$i] }} 50 50)"
+                                            class="transition-colors duration-500" />
+                                    @endfor
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
                                     <span
-                                        class="text-2xl font-bold text-gray-700">{{ $d['done'] }}/{{ $d['total'] }}</span>
+                                        class="text-3xl font-light text-gray-700 tracking-tight">{{ $d['done'] }}/{{ $d['total'] }}</span>
                                 </div>
                             </div>
-                            <span class="text-sm font-semibold text-gray-600">{{ $label }}</span>
+                            <div class="mt-1 bg-white border border-gray-200 px-4 py-1.5 rounded-lg shadow-sm">
+                                <span class="text-xs font-semibold text-gray-800">{{ $label }}</span>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -400,279 +400,328 @@
         </div>
 
         {{-- ══════════════════════════════ KOMPETENSI FORM ══════════════════════════════ --}}
-        <div class="bg-white rounded-2xl shadow-sm p-6 fade-up fade-up-3">
-            {{-- Section header --}}
-            <div class="flex items-center gap-2 mb-5">
-                <span class="text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
-                    </svg>
-                </span>
-                <h2 class="text-lg font-bold text-gray-800">Kompetensi</h2>
+        <div class="space-y-1">
+            <div class="flex items-center gap-2.5 px-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                    stroke="currentColor" class="h-6 w-6 text-[#4a5a6a]">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
+                </svg>
+                <h2 class="text-xl font-bold text-[#4a5a6a]">Kompetensi</h2>
             </div>
 
-            <form action="#" method="POST">
-                @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl shadow-sm p-6 fade-up fade-up-3">
 
-                    {{-- Core Competencies --}}
-                    <div>
-                        <h3 class="text-sm font-bold text-gray-700 mb-3">Core Competencies</h3>
-                        <div class="space-y-2">
-                            @php
-                                $coreItems = [
-                                    'Integrity' => $kompetensi->integrity ?? 1,
-                                    'Communication' => $kompetensi->communication ?? 1,
-                                    'Innovation & Creativity' => $kompetensi->innovation_creativity ?? 1,
-                                    'Customer Orientation' => $kompetensi->customer_orientation ?? 1,
-                                    'Teamwork' => $kompetensi->teamwork ?? 1,
-                                ];
-                            @endphp
-                            @foreach ($coreItems as $itemLabel => $itemVal)
-                                <div
-                                    class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-2.5 border border-gray-100">
-                                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                                        <span class="text-gray-400">◦</span>
-                                        {{ $itemLabel }}
+                <form action="#" method="POST">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {{-- Core Competencies --}}
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-700 mb-3">Core Competencies</h3>
+                            <div class="space-y-2">
+                                @php
+                                    $coreItems = [
+                                        'Integrity' => $kompetensi->integrity ?? 1,
+                                        'Communication' => $kompetensi->communication ?? 1,
+                                        'Innovation & Creativity' => $kompetensi->innovation_creativity ?? 1,
+                                        'Customer Orientation' => $kompetensi->customer_orientation ?? 1,
+                                        'Teamwork' => $kompetensi->teamwork ?? 1,
+                                    ];
+                                @endphp
+                                @foreach ($coreItems as $itemLabel => $itemVal)
+                                    <div
+                                        class="flex items-center justify-between bg-white rounded-xl px-4 py-2.5 border border-gray-100 shadow-sm">
+                                        <div class="flex items-center gap-2 text-sm text-gray-700">
+                                            <span class="text-gray-400">◦</span>
+                                            {{ $itemLabel }}
+                                        </div>
+                                        <select name="core_{{ \Illuminate\Support\Str::slug($itemLabel, '_') }}"
+                                            class="score-select">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <option value="{{ $i }}" @selected($itemVal == $i)>
+                                                    {{ $i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
-                                    <select name="core_{{ \Illuminate\Support\Str::slug($itemLabel, '_') }}"
-                                        class="score-select">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <option value="{{ $i }}" @selected($itemVal == $i)>
-                                                {{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Managerial Competencies --}}
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-700 mb-3">Managerial Competencies</h3>
+                            <div class="space-y-2">
+                                @php
+                                    $mngItems = [
+                                        'Leadership' => $kompetensi->leadership ?? 1,
+                                        'Business Acumen' => $kompetensi->business_acumen ?? 1,
+                                        'Problem Solving & Decision Making' => $kompetensi->problem_solving ?? 1,
+                                        'Achievement Orientation' => $kompetensi->achievement_orientation ?? 1,
+                                        'Strategic Thinking' => $kompetensi->strategic_thinking ?? 1,
+                                    ];
+                                @endphp
+                                @foreach ($mngItems as $itemLabel => $itemVal)
+                                    <div
+                                        class="flex items-center justify-between bg-white rounded-xl px-4 py-2.5 border border-gray-100 shadow-sm">
+                                        <div class="flex items-center gap-2 text-sm text-gray-700">
+                                            <span class="text-gray-400">◦</span>
+                                            {{ $itemLabel }}
+                                        </div>
+                                        <select name="mng_{{ \Illuminate\Support\Str::slug($itemLabel, '_') }}"
+                                            class="score-select">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <option value="{{ $i }}" @selected($itemVal == $i)>
+                                                    {{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
 
-                    {{-- Managerial Competencies --}}
-                    <div>
-                        <h3 class="text-sm font-bold text-gray-700 mb-3">Managerial Competencies</h3>
-                        <div class="space-y-2">
-                            @php
-                                $mngItems = [
-                                    'Leadership' => $kompetensi->leadership ?? 1,
-                                    'Business Acumen' => $kompetensi->business_acumen ?? 1,
-                                    'Problem Solving & Decision Making' => $kompetensi->problem_solving ?? 1,
-                                    'Achievement Orientation' => $kompetensi->achievement_orientation ?? 1,
-                                    'Strategic Thinking' => $kompetensi->strategic_thinking ?? 1,
-                                ];
-                            @endphp
-                            @foreach ($mngItems as $itemLabel => $itemVal)
-                                <div
-                                    class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-2.5 border border-gray-100">
-                                    <div class="flex items-center gap-2 text-sm text-gray-700">
-                                        <span class="text-gray-400">◦</span>
-                                        {{ $itemLabel }}
-                                    </div>
-                                    <select name="mng_{{ \Illuminate\Support\Str::slug($itemLabel, '_') }}"
-                                        class="score-select">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <option value="{{ $i }}" @selected($itemVal == $i)>
-                                                {{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                            @endforeach
-                        </div>
+                    {{-- Submit Kompetensi --}}
+                    <div class="flex justify-end mt-6">
+                        <button type="submit"
+                            class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                            Submit
+                        </button>
                     </div>
-                </div>
-
-                {{-- Submit Kompetensi --}}
-                <div class="flex justify-end mt-6">
-                    <button type="submit"
-                        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+        </div> {{-- /wrapper Kompetensi form --}}
 
         {{-- ══════════════════════════════ IDP MONITORING CARDS ══════════════════════════════ --}}
-        <div class="bg-[#3d4f62] rounded-2xl shadow-md p-6 fade-up fade-up-4">
-            {{-- Header --}}
-            <div class="flex items-center gap-2 mb-5">
-                <span class="text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </span>
-                <h2 class="text-lg font-bold text-white">IDP Monitoring</h2>
+        <div class="space-y-1">
+            <div class="flex items-center gap-2.5 px-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                        d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                </svg>
+                <h2 class="text-xl font-bold text-[#4a5a6a]">IDP Monitoring</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
 
-                {{-- Exposure --}}
-                <div class="bg-white rounded-xl p-5 flex flex-col justify-between">
-                    <div class="flex flex-col h-full">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </span>
-                            <h3 class="text-base font-bold text-gray-800">Exposure</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    {{-- Exposure --}}
+                    <div
+                        class="bg-white shadow-sm border border-gray-100 rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex flex-col h-full">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </span>
+                                <h3 class="text-base font-bold text-gray-800">Exposure</h3>
+                            </div>
+                            <p class="text-sm text-teal-600 font-semibold mb-1">Exposure / Assignment</p>
+                            <p class="text-sm text-gray-600 mb-1 font-medium">Contoh kegiatan:</p>
+                            <ul class="text-sm text-gray-600 space-y-0.5 list-disc list-inside mb-3">
+                                <li>Meeting</li>
+                                <li>Shadowing</li>
+                                <li>Acting</li>
+                                <li>Project</li>
+                            </ul>
+                            <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
                         </div>
-                        <p class="text-sm text-teal-600 font-semibold mb-1">Exposure / Assignment</p>
-                        <p class="text-sm text-gray-600 mb-1 font-medium">Contoh kegiatan:</p>
-                        <ul class="text-sm text-gray-600 space-y-0.5 list-disc list-inside mb-3">
-                            <li>Meeting</li>
-                            <li>Shadowing</li>
-                            <li>Acting</li>
-                            <li>Project</li>
-                        </ul>
-                        <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
+                        <button
+                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
+                            Next
+                        </button>
                     </div>
-                    <button
-                        class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
-                        Next
-                    </button>
-                </div>
 
-                {{-- Mentoring --}}
-                <div class="bg-white rounded-xl p-5 flex flex-col justify-between">
-                    <div class="flex flex-col h-full">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </span>
-                            <h3 class="text-base font-bold text-gray-800">Mentoring</h3>
+                    {{-- Mentoring --}}
+                    <div
+                        class="bg-white shadow-sm border border-gray-100 rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex flex-col h-full">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </span>
+                                <h3 class="text-base font-bold text-gray-800">Mentoring</h3>
+                            </div>
+                            <p class="text-sm text-teal-600 font-semibold mb-1">Mentoring / Coaching</p>
+                            <p class="text-sm text-gray-600 mb-1 font-medium">Contoh kegiatan:</p>
+                            <ul class="text-sm text-gray-600 space-y-0.5 list-disc list-inside mb-3">
+                                <li>Penjadwalan</li>
+                                <li>Catatan singkat</li>
+                                <li>Action plan</li>
+                            </ul>
+                            <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
                         </div>
-                        <p class="text-sm text-teal-600 font-semibold mb-1">Mentoring / Coaching</p>
-                        <p class="text-sm text-gray-600 mb-1 font-medium">Contoh kegiatan:</p>
-                        <ul class="text-sm text-gray-600 space-y-0.5 list-disc list-inside mb-3">
-                            <li>Penjadwalan</li>
-                            <li>Catatan singkat</li>
-                            <li>Action plan</li>
-                        </ul>
-                        <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
+                        <button
+                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
+                            Next
+                        </button>
                     </div>
-                    <button
-                        class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
-                        Next
-                    </button>
-                </div>
 
-                {{-- Learning --}}
-                <div class="bg-white rounded-xl p-5 flex flex-col justify-between">
-                    <div class="flex flex-col h-full">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </span>
-                            <h3 class="text-base font-bold text-gray-800">Learning</h3>
+                    {{-- Learning --}}
+                    <div
+                        class="bg-white shadow-sm border border-gray-100 rounded-xl p-5 flex flex-col justify-between">
+                        <div class="flex flex-col h-full">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </span>
+                                <h3 class="text-base font-bold text-gray-800">Learning</h3>
+                            </div>
+                            <p class="text-sm text-teal-600 font-semibold mb-1">Learning</p>
+                            <p class="text-sm text-gray-600 mb-1 font-medium">Contoh kegiatan:</p>
+                            <ul class="text-sm text-gray-600 space-y-0.5 list-disc list-inside mb-3">
+                                <li>LMS Internal</li>
+                                <li>Youtube edukatif</li>
+                                <li>Artikel</li>
+                                <li>Online course</li>
+                            </ul>
+                            <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
                         </div>
-                        <p class="text-sm text-teal-600 font-semibold mb-1">Learning</p>
-                        <p class="text-sm text-gray-600 mb-1 font-medium">Contoh kegiatan:</p>
-                        <ul class="text-sm text-gray-600 space-y-0.5 list-disc list-inside mb-3">
-                            <li>LMS Internal</li>
-                            <li>Youtube edukatif</li>
-                            <li>Artikel</li>
-                            <li>Online course</li>
-                        </ul>
-                        <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
+                        <button
+                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
+                            Next
+                        </button>
                     </div>
-                    <button
-                        class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
-                        Next
-                    </button>
-                </div>
 
+                </div>
             </div>
-        </div>
+        </div> {{-- /wrapper IDP Monitoring cards --}}
 
         {{-- ══════════════════════════════ PROJECT IMPROVEMENT ══════════════════════════════ --}}
-        <div id="logbook" class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
-
-            {{-- Download Template --}}
-            <div class="flex justify-center mb-5">
-                <a href="#"
-                    class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-lg transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download Template
-                </a>
+        <div class="space-y-1">
+            <div class="flex items-center gap-2.5 px-2" id="Project Improvement">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                </svg>
+                <h2 class="text-xl font-bold text-[#4a5a6a]">Project Improvement</h2>
             </div>
 
-            <p class="text-xs text-gray-500 mb-2">Unggah projek anda disini</p>
+            <div class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
 
-            {{-- Upload Area --}}
-            <form action="#" method="POST" enctype="multipart/form-data" id="upload-form">
-                @csrf
-                <label for="file-upload"
-                    class="upload-area rounded-xl cursor-pointer flex flex-col items-center justify-center py-10 mb-4"
-                    id="drop-zone">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                    </svg>
-                    <span class="text-sm text-gray-500">Klik untuk mengunggah</span>
-                    <input id="file-upload" name="project_file" type="file" class="sr-only">
-                </label>
-
-                {{-- Project Table --}}
-                <div class="overflow-hidden rounded-xl border border-gray-200 mb-5">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="text-left px-4 py-3 font-semibold text-gray-700 border-b border-gray-200">
-                                    Judul Project Improvement</th>
-                                <th class="text-left px-4 py-3 font-semibold text-gray-700 border-b border-gray-200">
-                                    Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white border-b border-gray-100">
-                                <td class="px-4 py-3 text-gray-700" id="uploaded-file-name">–</td>
-                                <td class="px-4 py-3">
-                                    <span
-                                        class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
-                                        <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
-                                        Pending
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b border-gray-100">
-                                <td class="px-4 py-3 text-gray-300">–</td>
-                                <td class="px-4 py-3"></td>
-                            </tr>
-                            <tr class="bg-white">
-                                <td class="px-4 py-3 text-gray-300">–</td>
-                                <td class="px-4 py-3"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                {{-- Download Template --}}
+                <div class="flex justify-center mb-5">
+                    <a href="#"
+                        class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-lg transition shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Download Template
+                    </a>
                 </div>
 
-                {{-- Submit Project --}}
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
-                        Submit
-                    </button>
+                <p class="text-xs text-gray-500 mb-2">Unggah projek anda disini</p>
+
+                {{-- Upload Area --}}
+                <form action="#" method="POST" enctype="multipart/form-data" id="upload-form">
+                    @csrf
+                    <label for="file-upload"
+                        class="upload-area rounded-xl cursor-pointer flex flex-col items-center justify-center py-10 mb-4"
+                        id="drop-zone">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                        </svg>
+                        <span class="text-sm text-gray-500">Klik untuk mengunggah</span>
+                        <input id="file-upload" name="project_file" type="file" class="sr-only">
+                    </label>
+
+                    {{-- Project Table --}}
+                    <div class="overflow-hidden rounded-xl border border-gray-200 mb-5">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th
+                                        class="text-left px-4 py-3 font-semibold text-gray-700 border-b border-gray-200">
+                                        Judul Project Improvement</th>
+                                    <th
+                                        class="text-left px-4 py-3 font-semibold text-gray-700 border-b border-gray-200">
+                                        Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b border-gray-100">
+                                    <td class="px-4 py-3 text-gray-700" id="uploaded-file-name">–</td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
+                                            <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
+                                            Pending
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white border-b border-gray-100">
+                                    <td class="px-4 py-3 text-gray-300">–</td>
+                                    <td class="px-4 py-3"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="px-4 py-3 text-gray-300">–</td>
+                                    <td class="px-4 py-3"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- Submit Project --}}
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div> {{-- /wrapper Project Improvement --}}
+
+        {{-- ══════════════════════════════ LOGBOOK ══════════════════════════════ --}}
+        <div class="space-y-1">
+            <div class="flex items-center gap-2.5 px-2" id="LogBook">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                        d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                </svg>
+                <h2 class="text-xl font-bold text-[#4a5a6a]">LogBook</h2>
+            </div>
+
+            <div
+                class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up flex items-center justify-between">
+                <div class="pr-6">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#4a5a6a]" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        <h3 class="text-base font-bold text-[#4a5a6a]">Lihat rekap aktivitas LogBook kamu</h3>
+                    </div>
+                    <p class="text-sm text-gray-500 font-medium">Pantau progress Exposure, Mentoring, dan Learning
+                        secara
+                        lengkap &mdash; klik tombol untuk melihat detail seluruh sesi.</p>
                 </div>
-            </form>
+                <a href="#"
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-xl text-sm shadow transition-all hover:shadow-md active:scale-95">
+                    Lihat Detail
+                </a>
+            </div>
         </div>
+    </div> {{-- /wrapper LogBook --}}
     </div> <!-- Tutup w-full px-6 flex-grow wrapper -->
 
     {{-- ══════════════════════════════ FOOTER ══════════════════════════════ --}}

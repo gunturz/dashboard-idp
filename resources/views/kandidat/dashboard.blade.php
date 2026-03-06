@@ -33,6 +33,23 @@
             transform-origin: 50% 50%;
         }
 
+        /* ── Title Animation ── */
+        @keyframes titleReveal {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-title {
+            animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
         /* ── Smooth entrance ── */
         @keyframes fadeSlideUp {
             from {
@@ -93,10 +110,10 @@
             padding: 0.4rem 2rem 0.4rem 0.75rem;
             min-width: 64px;
             border: 1.5px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 0.875rem;
             font-weight: 600;
-            color: #3d4f62;
+            color: #2e3746;
             background-color: #f8fafc;
             cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -104,8 +121,8 @@
 
         .score-select:focus {
             outline: none;
-            border-color: #3d4f62;
-            box-shadow: 0 0 0 3px rgba(61, 79, 98, 0.12);
+            border-color: #2e3746;
+            box-shadow: 0 0 0 3px rgba(46, 55, 70, 0.12);
         }
 
         .score-select:hover {
@@ -135,7 +152,7 @@
             width: 100%;
             display: flex;
             align-items: center;
-            background: #3d4f62;
+            background: #2e3746;
             padding: 1rem 1.75rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -168,7 +185,7 @@
             border-radius: 50%;
             border: 2px solid #e2e8f0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #3d4f62;
+            color: #2e3746;
             cursor: pointer;
             transition: box-shadow 0.2s, transform 0.15s;
             position: relative;
@@ -207,7 +224,7 @@
 
         {{-- Brand --}}
         <div class="flex items-center gap-4 flex-shrink-0">
-            <div class="bg-white p-2 rounded-xl shadow-sm flex items-center justify-center w-14 h-14">
+            <div class="bg-white p-2 rounded-[10px] shadow-sm flex items-center justify-center w-14 h-14">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
             </div>
             <h1 class="text-white text-xl font-bold tracking-wide whitespace-nowrap">
@@ -226,6 +243,7 @@
 
         {{-- Ikon (Kanan) --}}
         <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
+<<<<<<< HEAD
 
             {{-- Bell Dropdown --}}
             <div class="relative" id="bell-wrapper">
@@ -308,12 +326,30 @@
                 </div>
             </div>
 
+=======
+            {{-- Bell --}}
+            <a href="{{ route('kandidat.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
+                <span class="notif-badge"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
+            </a>
+            {{-- Profile --}}
+            <button class="nav-icon-btn" aria-label="Profil">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+>>>>>>> b44ab4db2dde78cae58c56e7c6129eb5ae59d938
         </div>
 
     </div>
 
     {{-- ══════════════════════════════ PROFILE CARD ══════════════════════════════ --}}
-    <div class="bg-[#3d4f62] shadow-md py-6 fade-up fade-up-1">
+    <div class="bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
         <div class="flex items-stretch divide-x divide-white/20">
 
             {{-- Bagian 1: Avatar + Nama + Role --}}
@@ -322,10 +358,10 @@
                 <div class="flex-shrink-0">
                     @if ($user->foto ?? false)
                         <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                            class="w-24 h-24 rounded-xl object-cover border-2 border-white/30">
+                            class="w-24 h-24 rounded-[10px] object-cover border-2 border-white/30">
                     @else
                         <div
-                            class="w-24 h-24 rounded-xl bg-white/20 flex items-center justify-center border-2 border-white/30">
+                            class="w-24 h-24 rounded-[10px] bg-white/20 flex items-center justify-center border-2 border-white/30">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/70" fill="currentColor"
                                 viewBox="0 0 24 24">
                                 <path
@@ -377,17 +413,17 @@
         {{-- ══════════════════════════════ CHART ROW ══════════════════════════════ --}}
         <div class="space-y-1" id="Kompetensi">
             <div class="flex items-center gap-2.5 px-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                         clip-rule="evenodd" />
                 </svg>
-                <h2 class="text-xl font-bold text-[#4a5a6a]">Kompetensi</h2>
+                <h2 class="text-xl font-bold text-[#2e3746] animate-title">Kompetensi</h2>
             </div>
 
             {{-- ── Kompetensi Bar Chart (full width) ── --}}
-            <div class="bg-gray-50 border border-gray-100 rounded-2xl shadow-sm p-6 fade-up fade-up-2">
+            <div class="bg-gray-50 border border-gray-100 rounded-[10px] shadow-sm p-6 fade-up fade-up-2">
                 @php
                     $kompetensiBars = [
                         'Integrity' => $kompetensi->integrity ?? 3,
@@ -440,15 +476,15 @@
         {{-- ══════════════════════════════ IDP MONITORING CARDS ══════════════════════════════ --}}
         <div class="space-y-1" id="IDP Monitoring">
             <div class="flex items-center gap-2.5 px-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path
                         d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                 </svg>
-                <h2 class="text-xl font-bold text-[#4a5a6a]">IDP Monitoring</h2>
+                <h2 class="text-xl font-bold text-[#2e3746] animate-title">IDP Monitoring</h2>
             </div>
 
-            <div class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
+            <div class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
 
                 {{-- Smooth Progress Circle Charts --}}
                 @php
@@ -511,7 +547,7 @@
                                         style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <div class="bg-white border border-gray-200 px-5 py-1.5 rounded-xl shadow-sm">
+                            <div class="bg-white border border-gray-200 px-5 py-1.5 rounded-[10px] shadow-sm">
                                 <span class="text-sm font-bold text-gray-800">{{ $label }}</span>
                             </div>
                         </div>
@@ -522,7 +558,7 @@
 
                     {{-- Exposure --}}
                     <div
-                        class="bg-white shadow-sm border border-gray-100 rounded-xl p-5 flex flex-col justify-between">
+                        class="bg-white shadow-sm border border-gray-100 rounded-[10px] p-5 flex flex-col justify-between">
                         <div class="flex flex-col h-full">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-gray-500">
@@ -544,15 +580,15 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
                         </div>
-                        <button
-                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
+                        <a href="{{ route('kandidat.idp_monitoring') }}"
+                            class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
-                        </button>
+                        </a>
                     </div>
 
                     {{-- Mentoring --}}
                     <div
-                        class="bg-white shadow-sm border border-gray-100 rounded-xl p-5 flex flex-col justify-between">
+                        class="bg-white shadow-sm border border-gray-100 rounded-[10px] p-5 flex flex-col justify-between">
                         <div class="flex flex-col h-full">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-gray-500">
@@ -574,14 +610,14 @@
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
                         </div>
                         <button
-                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
+                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
                         </button>
                     </div>
 
                     {{-- Learning --}}
                     <div
-                        class="bg-white shadow-sm border border-gray-100 rounded-xl p-5 flex flex-col justify-between">
+                        class="bg-white shadow-sm border border-gray-100 rounded-[10px] p-5 flex flex-col justify-between">
                         <div class="flex flex-col h-full">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-gray-500">
@@ -604,7 +640,7 @@
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
                         </div>
                         <button
-                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-lg transition active:scale-95">
+                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
                         </button>
                     </div>
@@ -616,19 +652,19 @@
         {{-- ══════════════════════════════ PROJECT IMPROVEMENT ══════════════════════════════ --}}
         <div class="space-y-1">
             <div class="flex items-center gap-2.5 px-2" id="Project Improvement">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                 </svg>
-                <h2 class="text-xl font-bold text-[#4a5a6a]">Project Improvement</h2>
+                <h2 class="text-xl font-bold text-[#2e3746] animate-title">Project Improvement</h2>
             </div>
 
-            <div class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
+            <div class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
 
                 {{-- Download Template --}}
                 <div class="flex justify-start mb-5">
                     <a href="#"
-                        class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-lg transition shadow-sm">
+                        class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-[10px] transition shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -644,7 +680,7 @@
                 <form action="#" method="POST" enctype="multipart/form-data" id="upload-form">
                     @csrf
                     <label for="file-upload"
-                        class="upload-area rounded-xl cursor-pointer flex flex-col items-center justify-center py-10 mb-4"
+                        class="upload-area rounded-[10px] cursor-pointer flex flex-col items-center justify-center py-10 mb-4"
                         id="drop-zone">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -656,7 +692,7 @@
                     </label>
 
                     {{-- Project Table --}}
-                    <div class="overflow-hidden rounded-xl border border-gray-200 mb-5">
+                    <div class="overflow-hidden rounded-[10px] border border-gray-200 mb-5">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-100">
@@ -708,7 +744,7 @@
                     {{-- Submit Project --}}
                     <div class="flex justify-end">
                         <button type="submit"
-                            class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                            class="bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold px-8 py-2.5 rounded-[10px] transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
                             Submit
                         </button>
                     </div>
@@ -719,30 +755,31 @@
         {{-- ══════════════════════════════ LOGBOOK ══════════════════════════════ --}}
         <div class="space-y-1">
             <div class="flex items-center gap-2.5 px-2" id="LogBook">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#4a5a6a]" viewBox="0 0 20 20"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path
                         d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                 </svg>
-                <h2 class="text-xl font-bold text-[#4a5a6a]">LogBook</h2>
+                <h2 class="text-xl font-bold text-[#2e3746] animate-title">LogBook</h2>
             </div>
 
             <div
-                class="bg-gray-50 rounded-2xl shadow-sm p-6 border border-gray-200 fade-up flex items-center justify-between">
+                class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up flex items-center justify-between">
                 <div class="pr-6">
                     <div class="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#4a5a6a]" fill="none"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2e3746]" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
-                        <h3 class="text-base font-bold text-[#4a5a6a]">Lihat rekap aktivitas LogBook kamu</h3>
+                        <h3 class="text-base font-bold text-[#2e3746] animate-title">Lihat rekap aktivitas LogBook kamu
+                        </h3>
                     </div>
                     <p class="text-sm text-gray-500 font-medium">Pantau progress Exposure, Mentoring, dan Learning
                         secara lengkap klik tombol untuk melihat detail seluruh sesi.</p>
                 </div>
                 <a href="#"
-                    class="bg-green-500 hover:bg-green-600 text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-xl text-sm shadow transition-all hover:shadow-md active:scale-95">
+                    class="bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
                     Lihat Detail
                 </a>
             </div>
@@ -751,8 +788,8 @@
     </div> <!-- Tutup w-full px-6 flex-grow wrapper -->
 
     {{-- ══════════════════════════════ FOOTER ══════════════════════════════ --}}
-    <footer class="mt-auto bg-[#3d4f62]/90 backdrop-blur-sm shadow-md py-4 text-center w-full">
-        <span class="text-white/80 text-sm font-medium tracking-wide">
+    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
+        <span class="text-white text-sm font-medium tracking-wide">
             &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
         </span>
     </footer>

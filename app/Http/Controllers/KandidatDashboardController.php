@@ -34,4 +34,36 @@ class KandidatDashboardController extends Controller
             throw $e;
         }
     }
+
+    public function idpMonitoring()
+    {
+        try {
+            $user = Auth::user();
+            
+            if ($user->role !== 'kandidat') {
+                abort(403, 'Hanya kandidat yang bisa mengakses halaman ini.');
+            }
+
+            return view('kandidat.idp-monitoring', compact('user'));
+        } catch (\Exception $e) {
+            Log::error('KandidatDashboard idpMonitoring error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function notifikasi()
+    {
+        try {
+            $user = Auth::user();
+            
+            if ($user->role !== 'kandidat') {
+                abort(403, 'Hanya kandidat yang bisa mengakses halaman ini.');
+            }
+
+            return view('kandidat.notifikasi', compact('user'));
+        } catch (\Exception $e) {
+            Log::error('KandidatDashboard notifikasi error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }

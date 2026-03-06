@@ -41,7 +41,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
+            border-radius: 10px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             padding: 3rem 2.5rem;
             width: 100%;
@@ -200,7 +200,7 @@
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -300,7 +300,7 @@
             background: #f0fdf4;
             border: 1px solid #86efac;
             color: #166534;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 0.6rem 1rem;
             font-size: 0.82rem;
             margin-bottom: 1rem;
@@ -313,7 +313,7 @@
             gap: 0.75rem;
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
             border: 1.5px solid #86efac;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 0.9rem 1rem;
             margin-bottom: 1.25rem;
             animation: slideUp 0.5s ease-out;
@@ -353,7 +353,7 @@
             width: 56px;
             height: 56px;
             background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-            border-radius: 16px;
+            border-radius: 10px;
             margin-bottom: 1rem;
             color: #16a34a;
         }

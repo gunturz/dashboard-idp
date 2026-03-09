@@ -57,7 +57,7 @@ class AuthenticatedSessionController extends Controller
             session()->forget('register_non_kandidat');
         }
 
-        $role = Auth::user()->role;
+        $role = strtolower(Auth::user()->role ?? '');
 
         // Simple redirect based on role
         if ($role === 'kandidat') {

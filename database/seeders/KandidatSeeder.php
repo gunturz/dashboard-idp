@@ -16,7 +16,7 @@ class KandidatSeeder extends Seeder
         $kandidats = [
             [
                 'nama'        => 'Budi Santoso',
-                'role'        => 'Staff',
+                'role'        => 'Kandidat',
                 'perusahaan'  => 'PT Maju Bersama',
                 'departemen'  => 'Human Resources',
                 'role_target' => 'HR Manager',

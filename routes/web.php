@@ -9,7 +9,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $user = auth()->user()->load('kandidatKompetensi');
+    $user = auth()->user();
+    // Jika kandidat, arahkan ke dashboard khusus kandidat
     if ($user->role === 'kandidat') {
         return redirect()->route('kandidat.dashboard');
     }

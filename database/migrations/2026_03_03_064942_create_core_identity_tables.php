@@ -48,6 +48,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
+            $table->string('role')->nullable();
             $table->string('nama_lengkap');
             $table->foreignId('perusahaan_id')->constrained('company');
             $table->foreignId('department_id')->constrained('department');

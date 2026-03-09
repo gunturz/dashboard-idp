@@ -170,8 +170,8 @@ class DatabaseSeeder extends Seeder
         $userIds = [];
         foreach ($users as $user) {
             $role = $user['role'];
-            unset($user['role']);
-
+            // Jangan hapus role agar masuk ke tabel users
+            
             $userId = DB::table('users')->insertGetId([
                 ...$user,
                 'created_at' => now(),

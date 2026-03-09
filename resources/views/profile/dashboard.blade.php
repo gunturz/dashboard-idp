@@ -245,6 +245,10 @@
                                 Ganti Foto
                             </label>
                             <input id="foto-input" name="foto" type="file" accept="image/*" class="sr-only" onchange="previewFoto(this)">
+                            
+                            {{-- Input tersembunyi untuk penanda hapus foto --}}
+                            <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
+                            
                             <button type="button" onclick="hapusFoto()"
                                     class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -264,19 +268,20 @@
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @php
                                     $akunFields = [
-                                        ['label' => 'Username', 'key' => 'username', 'type' => 'text',     'disabled' => true],
-                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email',    'disabled' => true],
-                                        ['label' => 'Password', 'key' => '_pw',      'type' => 'password', 'disabled' => true, 'display' => '•••••••', 'value' => ''],
+                                        ['label' => 'Username', 'key' => 'username', 'type' => 'text'],
+                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email'],
+                                        ['label' => 'Password', 'key' => 'password', 'type' => 'password', 'placeholder' => 'Isi untuk ganti password'],
                                     ];
                                 @endphp
                                 @foreach ($akunFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
                                         <span class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span class="view-field text-sm text-gray-700">{{ $field['display'] ?? ($user->{$field['key']} ?? '-') }}</span>
+                                        <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
                                         <input type="{{ $field['type'] }}"
                                                name="{{ $field['key'] }}"
-                                               value="{{ $field['value'] ?? ($user->{$field['key']} ?? '') }}"
-                                               {{ $field['disabled'] ? 'disabled' : '' }}
+                                               value="{{ $field['key'] === 'password' ? '' : ($user->{$field['key']} ?? '') }}"
+                                               placeholder="{{ $field['placeholder'] ?? '' }}"
+                                               {{ $field['disabled'] ?? false ? 'disabled' : '' }}
                                                class="edit-field prof-input hidden">
                                     </div>
                                 @endforeach
@@ -292,7 +297,7 @@
                                         ['label' => 'Nama',               'key' => 'nama',           'editable' => true],
                                         ['label' => 'Perusahaan',         'key' => 'perusahaan',     'editable' => true],
                                         ['label' => 'Departemen',         'key' => 'departemen',     'editable' => true],
-                                        ['label' => 'Role',               'key' => 'role',           'editable' => false],
+                                        ['label' => 'Role',               'key' => 'role',           'editable' => true],
                                         ['label' => 'Jabatan yang dituju', 'key' => 'jabatan_target','editable' => true],
                                         ['label' => 'Mentor',             'value' => $user->mentor?->nama ?? '-', 'editable' => false],
                                         ['label' => 'Atasan',             'value' => $user->atasan?->nama ?? '-', 'editable' => false],
@@ -432,6 +437,7 @@
             if (preview) { preview.src = ''; preview.classList.add('hidden'); }
             if (placeholder) placeholder.classList.remove('hidden');
             document.getElementById('foto-input').value = '';
+            document.getElementById('should_delete_foto').value = '1';
         }
 
         // Modal konfirmasi

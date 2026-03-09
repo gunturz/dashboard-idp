@@ -81,6 +81,13 @@ class ProfileController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
+        // Handle password hashing
+        if (!empty($data['password'])) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+        } else {
+            unset($data['password']); // Jangan update password jika kosong
+        }
+
         // Handle upload foto
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
@@ -88,11 +95,12 @@ class ProfileController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
             }
             $data['foto'] = $request->file('foto')->store('foto-profil', 'public');
-        }
-
-        // Hapus key foto dari data jika tidak ada upload (agar tidak menimpa nilai lama)
-        if (!isset($data['foto'])) {
-            unset($data['foto']);
+        } elseif ($request->boolean('should_delete_foto')) {
+            // Hapus foto jika diminta (tanpa upload baru)
+            if ($user->foto) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
+            }
+            $data['foto'] = null;
         }
 
         $user->fill($data)->save();

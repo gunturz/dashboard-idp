@@ -207,6 +207,7 @@
                 opacity: 0;
                 transform: scale(0.95) translateY(-6px);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
@@ -246,30 +247,36 @@
 
             {{-- Bell Dropdown --}}
             <div class="relative" id="bell-wrapper">
-                <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
-                    @if($notifications->where('is_read', false)->count() > 0)
+                <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn"
+                    onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
+                    @if ($notifications->where('is_read', false)->count() > 0)
                         <span class="notif-badge"></span>
                     @endif
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                        <path
+                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                 </button>
-                <div id="bell-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                <div id="bell-dropdown"
+                    class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                     <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
                         <span class="text-sm font-bold text-gray-700">Notifikasi</span>
-                        <span class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai semua</span>
+                        <span class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai
+                            semua</span>
                     </div>
                     <ul class="divide-y divide-gray-50 max-h-64 overflow-y-auto">
-                        @foreach($notifications as $notif)
-                            <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
-                                @if(!$notif['is_read'])
+                        @foreach ($notifications as $notif)
+                            <li
+                                class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
+                                @if (!$notif['is_read'])
                                     <span class="w-2 h-2 mt-1.5 rounded-full bg-teal-500 flex-shrink-0"></span>
                                 @else
                                     <span class="w-2 h-2 mt-1.5 rounded-full bg-gray-300 flex-shrink-0"></span>
                                 @endif
                                 <div>
-                                    <p class="text-sm {{ !$notif['is_read'] ? 'text-gray-700 font-medium' : 'text-gray-500' }}">
+                                    <p
+                                        class="text-sm {{ !$notif['is_read'] ? 'text-gray-700 font-medium' : 'text-gray-500' }}">
                                         {!! $notif['title'] !!}
                                     </p>
                                     <p class="text-xs text-gray-400 mt-0.5">{{ $notif['time'] }}</p>
@@ -278,19 +285,24 @@
                         @endforeach
                     </ul>
                     <div class="px-4 py-2.5 border-t border-gray-100 text-center">
-                        <a href="{{ route('kandidat.notifikasi') }}" class="text-xs text-gray-400 font-medium hover:text-teal-600 transition-colors">Lihat semua notifikasi</a>
+                        <a href="{{ route('kandidat.notifikasi') }}"
+                            class="text-xs text-gray-400 font-medium hover:text-teal-600 transition-colors">Lihat semua
+                            notifikasi</a>
                     </div>
                 </div>
             </div>
 
             {{-- Profile Dropdown --}}
             <div class="relative" id="profile-wrapper">
-                <button class="nav-icon-btn" aria-label="Profil" id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')">
+                <button class="nav-icon-btn" aria-label="Profil" id="profile-btn"
+                    onclick="toggleDropdown('profile-dropdown', 'profile-btn')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd" />
                     </svg>
                 </button>
-                <div id="profile-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                <div id="profile-dropdown"
+                    class="dropdown-panel hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                     {{-- User info --}}
                     <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
                         <p class="text-sm font-bold text-gray-800 truncate">{{ $user->nama ?? $user->name }}</p>
@@ -299,9 +311,12 @@
                     {{-- Menu items --}}
                     <ul class="py-1">
                         <li>
-                            <a href="{{ route('profile.show') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            <a href="{{ route('profile.show') }}"
+                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                        clip-rule="evenodd" />
                                 </svg>
                                 Lihat Profil
                             </a>
@@ -309,9 +324,12 @@
                         <li class="border-t border-gray-100">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                <button type="submit"
+                                    class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                     </svg>
                                     Keluar
                                 </button>
@@ -339,8 +357,8 @@
                     @else
                         <div
                             class="w-24 h-24 rounded-[10px] bg-white/20 flex items-center justify-center border-2 border-white/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/70" fill="currentColor"
-                                viewBox="0 0 24 24">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/70"
+                                fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                             </svg>
@@ -557,7 +575,7 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
                         </div>
-                        <a href="{{ route('kandidat.idp_monitoring') }}"
+                        <a href="{{ route('kandidat.idp_monitoring', 'exposure') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
                         </a>
@@ -586,10 +604,10 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
                         </div>
-                        <button
-                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
+                        <a href="{{ route('kandidat.idp_monitoring', 'mentoring') }}"
+                            class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
-                        </button>
+                        </a>
                     </div>
 
                     {{-- Learning --}}
@@ -616,10 +634,10 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
                         </div>
-                        <button
-                            class="mt-4 w-full bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
+                        <a href="{{ route('kandidat.idp_monitoring', 'learning') }}"
+                            class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
-                        </button>
+                        </a>
                     </div>
 
                 </div>

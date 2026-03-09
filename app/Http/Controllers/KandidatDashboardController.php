@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\KandidatKompetensi;
+use App\Models\User;
 
 class KandidatDashboardController extends Controller
 {
@@ -36,7 +37,7 @@ class KandidatDashboardController extends Controller
         }
     }
 
-    public function idpMonitoring()
+    public function idpMonitoring($tab = 'exposure')
     {
         try {
             $user = Auth::user();
@@ -45,7 +46,14 @@ class KandidatDashboardController extends Controller
                 abort(403, 'Hanya kandidat yang bisa mengakses halaman ini.');
             }
 
-            return view('kandidat.idp-monitoring', compact('user'));
+            // Get mentors and atasans for the dropdown list
+            $mentors = User::whereIn('role', ['mentor'])->get();
+            $atasans = User::whereIn('role', ['atasan'])->get();
+            
+            // For the Exposure tab which says "Mentor / Atasan"
+            $mentorAtasanList = User::whereIn('role', ['mentor', 'atasan'])->get();
+
+            return view('kandidat.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans', 'mentorAtasanList'));
         } catch (\Exception $e) {
             Log::error('KandidatDashboard idpMonitoring error: ' . $e->getMessage());
             throw $e;

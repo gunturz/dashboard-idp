@@ -328,6 +328,18 @@
     {{-- ══════════════════════════════ FORM AREA ══════════════════════════════ --}}
     <div class="w-full max-w-5xl mx-auto px-6 pt-10 pb-12 flex-grow fade-up fade-up-2">
 
+        {{-- Back Link --}}
+        <div class="px-2 mb-4">
+            <a href="{{ route('kandidat.dashboard') }}"
+                class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#0d9488] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Dashboard
+            </a>
+        </div>
+
         {{-- Custom Title --}}
         <div class="flex items-center gap-2.5 px-2 mb-5">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
@@ -343,9 +355,12 @@
 
             {{-- Tabs --}}
             <div class="flex space-x-0 relative z-10 w-full pl-2">
-                <div class="tab-btn tab-active pb-[1.1rem]">Exposure</div>
-                <div class="tab-btn tab-inactive pb-[1.1rem]">Mentoring</div>
-                <div class="tab-btn tab-inactive pb-[1.1rem]">Learning</div>
+                <a href="{{ route('kandidat.idp_monitoring', 'exposure') }}"
+                    class="tab-btn pb-[1.1rem] {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
+                <a href="{{ route('kandidat.idp_monitoring', 'mentoring') }}"
+                    class="tab-btn pb-[1.1rem] {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
+                <a href="{{ route('kandidat.idp_monitoring', 'learning') }}"
+                    class="tab-btn pb-[1.1rem] {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
             </div>
 
             {{-- White Form Content --}}
@@ -353,35 +368,67 @@
                 <form action="#" method="POST" class="space-y-4">
                     @csrf
 
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-6">
-                        <label class="text-sm font-semibold text-gray-800">Mentor</label>
-                        <input type="text" class="form-input" placeholder="">
-                    </div>
+                    @if ($tab == 'learning')
+                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                            <label class="text-sm font-semibold text-gray-800">Sumber</label>
+                            <input type="text" class="form-input" placeholder="" required>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                            <label class="text-sm font-semibold text-gray-800">Mentor</label>
+                            <input type="text" list="mentor-list" class="form-input"
+                                placeholder="Ketik nama mentor..." required>
+                            <datalist id="mentor-list">
+                                @foreach ($mentors as $m)
+                                    <option value="{{ $m->nama_lengkap }}">{{ $m->nama_lengkap }}</option>
+                                @endforeach
+                            </datalist>
+                        </div>
+                    @endif
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tema</label>
-                        <input type="text" class="form-input" placeholder="">
+                        <input type="text" class="form-input" placeholder="" required>
                     </div>
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tanggal</label>
-                        <input type="text" class="form-input" placeholder="">
+                        <input type="date" class="form-input" required>
                     </div>
 
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-6">
-                        <label class="text-sm font-semibold text-gray-800">Lokasi</label>
-                        <input type="text" class="form-input" placeholder="">
-                    </div>
+                    @if ($tab == 'learning')
+                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                            <label class="text-sm font-semibold text-gray-800">Platform</label>
+                            <input type="text" class="form-input" placeholder="" required>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                            <label class="text-sm font-semibold text-gray-800">Lokasi</label>
+                            <input type="text" class="form-input" placeholder="" required>
+                        </div>
+                    @endif
 
-                    <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
-                        <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
-                        <textarea class="form-textarea h-24" placeholder=""></textarea>
-                    </div>
+                    @if ($tab == 'mentoring')
+                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                            <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
+                            <textarea class="form-textarea h-24" placeholder="" required></textarea>
+                        </div>
 
-                    <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
-                        <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                        <textarea class="form-textarea h-24" placeholder=""></textarea>
-                    </div>
+                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                            <label class="text-sm font-semibold text-gray-800 pt-3">Action Plan</label>
+                            <textarea class="form-textarea h-24" placeholder="" required></textarea>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                            <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
+                            <textarea class="form-textarea h-24" placeholder="" required></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                            <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
+                            <textarea class="form-textarea h-24" placeholder="" required></textarea>
+                        </div>
+                    @endif
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6 pt-2">
                         <label class="text-sm font-semibold text-gray-800">Dokumentasi</label>
@@ -393,7 +440,7 @@
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                 </svg>
                                 Upload
-                                <input type="file" class="hidden">
+                                <input type="file" class="hidden" required>
                             </label>
                         </div>
                     </div>

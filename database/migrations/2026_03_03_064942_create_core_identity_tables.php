@@ -14,7 +14,7 @@ return new class extends Migration
         // 1. BUAT TABEL REFERENSI (Tanpa foreign key)
         Schema::create('company', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_perusahaan');
+            $table->string('nama_company');
             $table->timestamps();
         });
 
@@ -50,11 +50,19 @@ return new class extends Migration
             $table->string('password');
             $table->string('nama');
             $table->string('email')->unique();
-            $table->foreignId('perusahaan_id')->constrained('company');
+            $table->foreignId('company_id')->constrained('company');
             $table->foreignId('department_id')->constrained('department');
             $table->foreignId('position_id')->constrained('position');
-            $table->foreignID('role_id')->constrained('role');
+            $table->foreignId('role_id')->constrained('role');
+            $table->unsignedBigInteger('mentor_id')->nullable();
+            $table->unsignedBigInteger('atasan_id')->nullable();
             $table->timestamps();
+        });
+
+        // Tambahkan FK self-referencing setelah tabel users selesai dibuat
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('mentor_id')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('atasan_id')->references('id')->on('users')->nullOnDelete();
         });
 
         // 3. BUAT TABEL PIVOT/RELASI (Membutuhkan users dan role)
@@ -73,6 +81,11 @@ return new class extends Migration
     {
         // Hapus dalam urutan terbalik untuk menghindari error constraint
         Schema::dropIfExists('user_role');
+        // Hapus FK self-referencing dulu sebelum drop tabel users
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['mentor_id']);
+            $table->dropForeign(['atasan_id']);
+        });
         Schema::dropIfExists('users');
         Schema::dropIfExists('idp_type');
         Schema::dropIfExists('role');

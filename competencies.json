@@ -1,0 +1,9 @@
+﻿
+Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since 8.5, use Pdo\Mysql::ATTR_SSL_CA instead in C:\laragon\www\dashboard-idp\vendor\laravel\framework\config\database.php on line 61
+
+Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since 8.5, use Pdo\Mysql::ATTR_SSL_CA instead in C:\laragon\www\dashboard-idp\vendor\laravel\framework\config\database.php on line 81
+
+Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since 8.5, use Pdo\Mysql::ATTR_SSL_CA instead in C:\laragon\www\dashboard-idp\config\database.php on line 58
+
+Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since 8.5, use Pdo\Mysql::ATTR_SSL_CA instead in C:\laragon\www\dashboard-idp\config\database.php on line 78
+[{"id":1,"name":"Integrity"},{"id":2,"name":"Communication"},{"id":3,"name":"Innovation & Creativity"},{"id":4,"name":"Customer Orientation"},{"id":5,"name":"Teamwork"},{"id":6,"name":"Leadership"},{"id":7,"name":"Business Acumen"},{"id":8,"name":"Problem Solving & Decission Making"},{"id":9,"name":"Acievement Orientation"},{"id":10,"name":"Strategic Thinking"}]

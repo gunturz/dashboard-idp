@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
+<<<<<<< HEAD
     Route::get('/kandidat/dashboard', [KandidatDashboardController::class, 'index'])
         ->name('kandidat.dashboard');
     Route::get('/kandidat/idp-monitoring/{tab?}', [KandidatDashboardController::class, 'idpMonitoring'])
@@ -83,4 +84,18 @@ Route::middleware('auth')->group(function () {
         ->name('kandidat.notifikasi.markAllRead');
     Route::get('/kandidat/logbook/detail', [KandidatDashboardController::class, 'logbookDetail'])
         ->name('kandidat.logbook.detail');
+=======
+    Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class, 'index'])
+        ->name('talent.dashboard');
+    Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class, 'competency'])
+        ->name('talent.competency');
+    Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class, 'storeCompetency'])
+        ->name('talent.competency.store');
+    Route::get('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class, 'idpMonitoring'])
+        ->name('talent.idp_monitoring');
+    Route::post('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class, 'storeIdpMonitoring'])
+        ->name('talent.idp_monitoring.store');
+    Route::get('/talent/notifikasi', [\App\Http\Controllers\TalentDashboardController::class, 'notifikasi'])
+        ->name('talent.notifikasi');
+>>>>>>> c642f9cce40d2b8babd67def90e3e3f679ff4937
 });

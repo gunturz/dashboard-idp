@@ -15,15 +15,12 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role',
-        'perusahaan',
-        'departemen',
-        'jabatan',
-        'jabatan_target',
+        'company_id',
+        'department_id',
+        'position_id',
+        'role_id',
         'mentor_id',
         'atasan_id',
-        'is_active',
-        'foto',
     ];
 
     protected $hidden = [
@@ -36,41 +33,41 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' => 'boolean',
         ];
     }
 
-    /**
-     * Gunakan username sebagai identifier login (bukan email).
-     */
-    // public function getAuthIdentifierName(): string
-    // {
-    //     return 'username';
-    // }
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
 
-    /**
-     * Relasi ke mentor (sesama user).
-     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class, 'position_id');
+    }
+    
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+    
+    public function promotion_plan()
+    {
+        return $this->hasOne(PromotionPlan::class, 'user_id_talent');
+    }
+
     public function mentor()
     {
-        return $this->belongsTo(User::class , 'mentor_id', 'id');
+        return $this->belongsTo(User::class, 'mentor_id');
     }
 
-    /**
-     * Relasi ke atasan (sesama user).
-     */
     public function atasan()
     {
-        return $this->belongsTo(User::class , 'atasan_id', 'id');
-    }
-
-
-
-
-
-
-    public function kandidatKompetensi()
-    {
-        return $this->hasOne(KandidatKompetensi::class , 'user_id', 'id');
+        return $this->belongsTo(User::class, 'atasan_id');
     }
 }

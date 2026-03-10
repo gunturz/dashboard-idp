@@ -147,26 +147,21 @@
             @enderror
         </div>
 
-        {{-- ── PERUSAHAAN ───────────────────────── --}}
+        {{-- ── COMPANY ───────────────────────── --}}
         <div style="margin-bottom: 1rem;">
-            <label for="perusahaan" class="form-label">Perusahaan</label>
+            <label for="company_id" class="form-label">Perusahaan</label>
             <div class="input-wrapper">
-                <select id="perusahaan" name="perusahaan" class="form-select" required>
-                    <option value="" disabled {{ old('perusahaan') ? '' : 'selected' }}>Pilih nama perusahaan
+                <select id="company_id" name="company_id" class="form-select" required>
+                    <option value="" disabled {{ old('company_id') ? '' : 'selected' }}>Pilih nama perusahaan
                     </option>
-                    <option value="PT Maju Bersama" {{ old('perusahaan') == 'PT Maju Bersama' ? 'selected' : '' }}>
-                        PT Maju Bersama</option>
-                    <option value="PT Sukses Mandiri"
-                        {{ old('perusahaan') == 'PT Sukses Mandiri' ? 'selected' : '' }}>
-                        PT Sukses Mandiri</option>
-                    <option value="PT Nusantara Jaya"
-                        {{ old('perusahaan') == 'PT Nusantara Jaya' ? 'selected' : '' }}>
-                        PT Nusantara Jaya</option>
-                    <option value="PT Karya Utama" {{ old('perusahaan') == 'PT Karya Utama' ? 'selected' : '' }}>
-                        PT Karya Utama</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
+                            {{ $company->nama_company }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
-            @error('perusahaan')
+            @error('company_id')
                 <p class="error-message">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
@@ -178,32 +173,47 @@
             @enderror
         </div>
 
+
         {{-- ── DEPARTEMEN ───────────────────────── --}}
         <div style="margin-bottom: 1rem;">
-            <label for="departemen" class="form-label">Departemen</label>
+            <label for="department_id" class="form-label">Departemen</label>
             <div class="input-wrapper">
-                <select id="departemen" name="departemen" class="form-select" required>
-                    <option value="" disabled {{ old('departemen') ? '' : 'selected' }}>Pilih nama departemen
+                <select id="department_id" name="department_id" class="form-select" required>
+                    <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>Pilih nama departemen
                     </option>
-                    <option value="Human Resources" {{ old('departemen') == 'Human Resources' ? 'selected' : '' }}>
-                        Human Resources</option>
-                    <option value="Finance" {{ old('departemen') == 'Finance' ? 'selected' : '' }}>
-                        Finance</option>
-                    <option value="Operations" {{ old('departemen') == 'Operations' ? 'selected' : '' }}>
-                        Operations</option>
-                    <option value="Marketing" {{ old('departemen') == 'Marketing' ? 'selected' : '' }}>
-                        Marketing</option>
-                    <option
-                        value="Information Technology"{{ old('departemen') == 'Information Technology' ? 'selected' : '' }}>
-                        Information Technology</option>
-                    <option value="Legal" {{ old('departemen') == 'Legal' ? 'selected' : '' }}>Legal
-                    </option>
-                    <option value="Business Development"
-                        {{ old('departemen') == 'Business Development' ? 'selected' : '' }}>Business Development
-                    </option>
+                    @foreach ($departments as $dept)
+                        <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
+                            {{ $dept->nama_department }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
-            @error('departemen')
+            @error('department_id')
+                <p class="error-message">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+        {{-- ── POSISI SEKARANG ────────────────────── --}}
+        <div style="margin-bottom: 1rem;">
+            <label for="position_id" class="form-label">Posisi saat ini</label>
+            <div class="input-wrapper">
+                <select id="position_id" name="position_id" class="form-select" required>
+                    <option value="" disabled {{ old('position_id') ? '' : 'selected' }}>Pilih posisi saat ini</option>
+                    @foreach ($positions as $pos)
+                        <option value="{{ $pos->id }}" {{ old('position_id') == $pos->id ? 'selected' : '' }}>
+                            {{ $pos->position_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            @error('position_id')
                 <p class="error-message">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
@@ -217,21 +227,19 @@
 
         {{-- ── ROLE ─────────────────────────────── --}}
         <div style="margin-bottom: 1rem;">
-            <label for="role" class="form-label">Role</label>
+            <label for="role_id" class="form-label">Role</label>
             <div class="input-wrapper">
-                <select id="role" name="role" class="form-select" required
-                    onchange="handleRoleChange(this.value)">
-                    <option value="" disabled {{ old('role') ? '' : 'selected' }}>Pilih role</option>
-                    <option value="kandidat" {{ old('role') == 'kandidat' ? 'selected' : '' }}>Talent</option>
-                    <option value="atasan" {{ old('role') == 'atasan' ? 'selected' : '' }}>Atasan</option>
-                    <option value="mentor" {{ old('role') == 'mentor' ? 'selected' : '' }}>Mentor</option>
-                    <option value="finance" {{ old('role') == 'finance' ? 'selected' : '' }}>Finance</option>
-                    <option value="admin_pdc" {{ old('role') == 'admin_pdc' ? 'selected' : '' }}>Admin PDC</option>
-                    <option value="bo_director" {{ old('role') == 'bo_director' ? 'selected' : '' }}>BO Director
-                    </option>
+                <select id="role_id" name="role_id" class="form-select" required
+                    onchange="handleRoleChange(this)">
+                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Pilih role</option>
+                    @foreach ($roles as $rl)
+                        <option value="{{ $rl->id }}" data-rolename="{{ $rl->role_name }}" {{ old('role_id') == $rl->id ? 'selected' : '' }}>
+                            {{ ucfirst($rl->role_name) }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
-            @error('role')
+            @error('role_id')
                 <p class="error-message">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
@@ -243,37 +251,30 @@
             @enderror
         </div>
 
-        {{-- ── JABATAN YANG DITUJU (hanya tampil untuk Talent) ── --}}
+        {{-- ── POSISI YANG DITUJU (hanya tampil untuk Talent) ── --}}
         <div id="field-jabatan-target"
-            style="margin-bottom: 1rem; display: {{ old('role') == 'kandidat' ? 'block' : 'none' }}">
-            <label for="jabatan_target" class="form-label">Jabatan yang Dituju</label>
+            style="margin-bottom: 1rem; display: none;">
+            <label for="jabatan_target" class="form-label">Posisi yang dituju</label>
             <div class="input-wrapper">
                 <select id="jabatan_target" name="jabatan_target" class="form-select">
-                    <option value="" disabled {{ old('jabatan_target') ? '' : 'selected' }}>Pilih role target
+                    <option value="" disabled {{ old('jabatan_target') ? '' : 'selected' }}>Pilih posisi yang dituju
                     </option>
-                    <option value="Manager" {{ old('jabatan_target') == 'Manager' ? 'selected' : '' }}>
-                        Manager</option>
-                    <option value="Senior Manager" {{ old('jabatan_target') == 'Senior Manager' ? 'selected' : '' }}>
-                        Senior Manager</option>
-                    <option value="General Manager"
-                        {{ old('jabatan_target') == 'General Manager' ? 'selected' : '' }}>General Manager</option>
-                    <option value="Director" {{ old('jabatan_target') == 'Director' ? 'selected' : '' }}>
-                        Director</option>
-                    <option value="VP" {{ old('jabatan_target') == 'VP' ? 'selected' : '' }}>Vice
-                        President</option>
-                    <option value="C-Level" {{ old('jabatan_target') == 'C-Level' ? 'selected' : '' }}>
-                        C-Level</option>
+                    @foreach ($targetPositions as $pos)
+                        <option value="{{ $pos->id }}" {{ old('jabatan_target') == $pos->id ? 'selected' : '' }}>
+                            {{ $pos->position_name }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
         </div>
 
         {{-- ── MENTOR (hanya tampil untuk Talent) ───────── --}}
         <div id="field-mentor"
-            style="margin-bottom: 1rem; display: {{ old('role') == 'kandidat' ? 'block' : 'none' }}">
+            style="margin-bottom: 1rem; display: none;">
             <label for="mentor_id" class="form-label">Mentor</label>
             <div class="input-wrapper">
                 <select id="mentor_id" name="mentor_id" class="form-select">
-                    <option value="">Pilih mentor</option>
+                    <option value="" disabled {{ old('mentor_id') ? '' : 'selected' }}>Pilih mentor</option>
                     @foreach ($mentors as $mentor)
                         <option value="{{ $mentor->id }}" {{ old('mentor_id') == $mentor->id ? 'selected' : '' }}>
                             {{ $mentor->nama }}
@@ -281,15 +282,25 @@
                     @endforeach
                 </select>
             </div>
+            @error('mentor_id')
+                <p class="error-message">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
         </div>
 
         {{-- ── ATASAN (hanya tampil untuk Talent) ───────── --}}
         <div id="field-atasan"
-            style="margin-bottom: 1rem; display: {{ old('role') == 'kandidat' ? 'block' : 'none' }}">
+            style="margin-bottom: 1rem; display: none;">
             <label for="atasan_id" class="form-label">Atasan</label>
             <div class="input-wrapper">
                 <select id="atasan_id" name="atasan_id" class="form-select">
-                    <option value="">Pilih atasan</option>
+                    <option value="" disabled {{ old('atasan_id') ? '' : 'selected' }}>Pilih atasan</option>
                     @foreach ($atasans as $atasan)
                         <option value="{{ $atasan->id }}" {{ old('atasan_id') == $atasan->id ? 'selected' : '' }}>
                             {{ $atasan->nama }}
@@ -297,6 +308,16 @@
                     @endforeach
                 </select>
             </div>
+            @error('atasan_id')
+                <p class="error-message">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
         </div>
 
         {{-- ── TOMBOL DAFTAR / NEXT ──────────────────────── --}}
@@ -317,28 +338,29 @@
 
     {{-- Script: show/hide field berdasarkan role --}}
     <script>
-        function handleRoleChange(role) {
-            const kandidatFields = ['field-jabatan-target', 'field-mentor', 'field-atasan'];
-            const isKandidat = role === 'kandidat';
+        function handleRoleChange(selectElement) {
+            const roleName = selectElement.options[selectElement.selectedIndex].dataset.rolename;
+            const isTalent = roleName === 'talent';
+            const talentFields = ['field-jabatan-target', 'field-mentor', 'field-atasan'];
 
-            kandidatFields.forEach(id => {
+            talentFields.forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.style.display = isKandidat ? 'block' : 'none';
+                if (el) el.style.display = isTalent ? 'block' : 'none';
             });
 
             // Ubah teks dan ikon tombol
             const label = document.getElementById('btn-label');
-            if (label) label.textContent = isKandidat ? 'Next' : 'Daftar';
+            if (label) label.textContent = isTalent ? 'Next' : 'Daftar';
 
             const warningEl = document.getElementById('non-kandidat-warning');
-            if (warningEl) warningEl.style.display = isKandidat ? 'none' : 'block';
+            if (warningEl) warningEl.style.display = isTalent ? 'none' : 'block';
         }
 
         // Trigger saat halaman dimuat (untuk kasus old() value setelah validasi error)
         document.addEventListener('DOMContentLoaded', function() {
-            const roleSelect = document.getElementById('role');
+            const roleSelect = document.getElementById('role_id');
             if (roleSelect && roleSelect.value) {
-                handleRoleChange(roleSelect.value);
+                handleRoleChange(roleSelect);
             }
         });
     </script>

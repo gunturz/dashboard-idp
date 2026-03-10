@@ -11,16 +11,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Tampilkan halaman profil kandidat (gambar 3)
-     */
-    public function show(Request $request): View
-    {
-        $user = $request->user()->load(['mentor', 'atasan']);
-        $notifications = $this->getNotifications();
-        return view('profile.dashboard', compact('user', 'notifications'));
-    }
 
+<<<<<<< HEAD
     private function getNotifications()
     {
         $allRead = session('notifications_all_read', false);
@@ -64,6 +56,8 @@ class ProfileController extends Controller
             ]
         ]);
     }
+=======
+>>>>>>> c642f9cce40d2b8babd67def90e3e3f679ff4937
 
     /**
      * Tampilkan form edit profil
@@ -114,7 +108,7 @@ class ProfileController extends Controller
 
         $user->fill($data)->save();
 
-        return Redirect::route('profile.show')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**

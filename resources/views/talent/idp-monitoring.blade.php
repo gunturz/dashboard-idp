@@ -241,21 +241,26 @@
         </div>
 
         <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-            <a href="{{ route('kandidat.dashboard') }}#Kompetensi"
+            <a href="{{ route('talent.dashboard') }}#Kompetensi"
                 class="hover:text-blue-200 transition-colors duration-150">Kompetensi</a>
-            <a href="{{ route('kandidat.dashboard') }}#IDP Monitoring"
+            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
                 class="hover:text-blue-200 transition-colors duration-150">IDP</a>
-            <a href="{{ route('kandidat.dashboard') }}#Project Improvement"
+            <a href="{{ route('talent.dashboard') }}#Project Improvement"
                 class="hover:text-blue-200 transition-colors duration-150">Project Improvement</a>
-            <a href="{{ route('kandidat.dashboard') }}#LogBook"
+            <a href="{{ route('talent.dashboard') }}#LogBook"
                 class="hover:text-blue-200 transition-colors duration-150">LogBook</a>
         </div>
 
         <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
+<<<<<<< HEAD:resources/views/kandidat/idp-monitoring.blade.php
             <a href="{{ route('kandidat.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
                 @if($notifications->where('is_read', false)->count() > 0)
                     <span class="notif-badge"></span>
                 @endif
+=======
+            <a href="{{ route('talent.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
+                <span class="notif-badge"></span>
+>>>>>>> c642f9cce40d2b8babd67def90e3e3f679ff4937:resources/views/talent/idp-monitoring.blade.php
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path
                         d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
@@ -294,33 +299,35 @@
                 <div>
                     <p class="text-white font-bold text-base leading-tight">{{ $user->nama ?? $user->name }}</p>
                     <p class="text-white/60 text-xs mt-1">
-                        {{ $user->role === 'kandidat' ? 'Talent' : ucfirst($user->role) }}</p>
+                        {{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
                 </div>
             </div>
 
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm">
+            {{-- Bagian 2: Departemen, Jabatan Sekarang --}}
+            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Perusahaan</span>
-                    <span class="text-white">{{ $user->perusahaan ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Company</span>
+                    <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
                     <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
-                    <span class="text-white">{{ $user->departemen ?? '-' }}</span>
+                    <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Jabatan yang Dituju</span>
-                    <span class="text-white">{{ $user->jabatan_target ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Jabatan Sekarang</span>
+                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
                 </div>
             </div>
 
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm">
+            {{-- Bagian 3: Role, Email --}}
+            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-20 flex-shrink-0">Mentor</span>
-                    <span class="text-white">{{ $user->mentor->nama ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Role</span>
+                    <span class="text-white capitalize">{{ optional($user->role)->role_name ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-20 flex-shrink-0">Atasan</span>
-                    <span class="text-white">{{ $user->atasan->nama ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Email</span>
+                    <span class="text-white">{{ $user->email ?? '-' }}</span>
                 </div>
             </div>
 
@@ -332,7 +339,7 @@
 
         {{-- Back Link --}}
         <div class="px-2 mb-4">
-            <a href="{{ route('kandidat.dashboard') }}"
+            <a href="{{ route('talent.dashboard') }}"
                 class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#0d9488] transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2.5">
@@ -357,17 +364,17 @@
 
             {{-- Tabs --}}
             <div class="flex space-x-0 relative z-10 w-full pl-2">
-                <a href="{{ route('kandidat.idp_monitoring', 'exposure') }}"
+                <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
                     class="tab-btn pb-[1.1rem] {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
-                <a href="{{ route('kandidat.idp_monitoring', 'mentoring') }}"
+                <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
                     class="tab-btn pb-[1.1rem] {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
-                <a href="{{ route('kandidat.idp_monitoring', 'learning') }}"
+                <a href="{{ route('talent.idp_monitoring', 'learning') }}"
                     class="tab-btn pb-[1.1rem] {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
             </div>
 
             {{-- White Form Content --}}
             <div class="form-bg p-8 relative z-20 -mt-2 shadow-sm">
-                <form action="{{ route('kandidat.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
+                <form action="{{ route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
                     enctype="multipart/form-data" class="space-y-4">
                     @csrf
 
@@ -435,18 +442,54 @@
                         @endif
                     @endif
 
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-6 pt-2">
-                        <label class="text-sm font-semibold text-gray-800">Dokumentasi</label>
-                        <div>
-                            <label class="upload-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                </svg>
-                                Upload
-                                <input type="file" name="document" class="hidden" required>
-                            </label>
+                    <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-2">
+                        <label class="text-sm font-semibold text-gray-800 mt-2">Dokumentasi</label>
+                        <div class="flex flex-col gap-3">
+                            <div>
+                                <label class="upload-btn" id="uploadBtnLabel">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    <span id="uploadLabelText">Upload File</span>
+                                    <input type="file" name="document" id="documentInput" class="hidden" required
+                                        accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
+                                </label>
+                            </div>
+
+                            {{-- Preview Area --}}
+                            <div id="filePreviewContainer"
+                                class="hidden flex items-center gap-3 p-3 bg-teal-50 border border-teal-100 rounded-[10px] max-w-md shadow-sm">
+                                {{-- Thumbnail for image --}}
+                                <div id="imagePreviewWrapper"
+                                    class="hidden w-12 h-12 shrink-0 rounded bg-gray-200 overflow-hidden border border-gray-300">
+                                    <img id="imagePreview" src="" alt="Preview"
+                                        class="w-full h-full object-cover">
+                                </div>
+                                {{-- Icon for non-image --}}
+                                <div id="docPreviewWrapper"
+                                    class="hidden w-12 h-12 shrink-0 rounded bg-teal-100 text-teal-600 flex items-center justify-center border border-teal-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p id="fileNameDisplay" class="text-sm font-bold text-gray-800 truncate"></p>
+                                    <p id="fileSizeDisplay" class="text-xs text-gray-500"></p>
+                                </div>
+                                <button type="button" id="removeFileBtn"
+                                    class="shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition"
+                                    title="Hapus File">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -489,6 +532,68 @@
                     ticking = true;
                 }
             });
+
+            // File Upload Preview Logic
+            const documentInput = document.getElementById('documentInput');
+            const filePreviewContainer = document.getElementById('filePreviewContainer');
+            const imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
+            const imagePreview = document.getElementById('imagePreview');
+            const docPreviewWrapper = document.getElementById('docPreviewWrapper');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const uploadBtnLabel = document.getElementById('uploadBtnLabel');
+            const uploadLabelText = document.getElementById('uploadLabelText');
+
+            if (documentInput) {
+                documentInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const file = this.files[0];
+
+                        // Update text & info
+                        fileNameDisplay.textContent = file.name;
+
+                        // Calculate size
+                        const sizeKB = Math.round(file.size / 1024);
+                        if (sizeKB > 1024) {
+                            fileSizeDisplay.textContent = (sizeKB / 1024).toFixed(2) + ' MB';
+                        } else {
+                            fileSizeDisplay.textContent = sizeKB + ' KB';
+                        }
+
+                        // Check if file is image
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                imagePreview.src = e.target.result;
+                                imagePreviewWrapper.classList.remove('hidden');
+                                docPreviewWrapper.classList.add('hidden');
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            // Non image
+                            imagePreviewWrapper.classList.add('hidden');
+                            imagePreview.src = '';
+                            docPreviewWrapper.classList.remove('hidden');
+                        }
+
+                        // Show preview, modify button
+                        filePreviewContainer.classList.remove('hidden');
+                        uploadLabelText.textContent = 'Ganti File';
+                    }
+                });
+
+                removeFileBtn.addEventListener('click', function() {
+                    // Reset input
+                    documentInput.value = '';
+
+                    // Hide preview
+                    filePreviewContainer.classList.add('hidden');
+
+                    // Reset button text
+                    uploadLabelText.textContent = 'Upload File';
+                });
+            }
         })();
     </script>
 </body>

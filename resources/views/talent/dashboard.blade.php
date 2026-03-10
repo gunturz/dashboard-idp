@@ -287,7 +287,7 @@
                         @endforeach
                     </ul>
                     <div class="px-4 py-2.5 border-t border-gray-100 text-center">
-                        <a href="{{ route('kandidat.notifikasi') }}"
+                        <a href="{{ route('talent.notifikasi') }}"
                             class="text-xs text-gray-400 font-medium hover:text-teal-600 transition-colors">Lihat semua
                             notifikasi</a>
                     </div>
@@ -313,7 +313,7 @@
                     {{-- Menu items --}}
                     <ul class="py-1">
                         <li>
-                            <a href="{{ route('profile.show') }}"
+                            <a href="{{ route('profile.edit') }}"
                                 class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
                                     viewBox="0 0 20 20" fill="currentColor">
@@ -370,35 +370,36 @@
                 <div>
                     <p class="text-white font-bold text-base leading-tight">{{ $user->nama ?? $user->name }}</p>
                     <p class="text-white/60 text-xs mt-1">
-                        {{ $user->role === 'kandidat' ? 'Talent' : ucfirst($user->role) }}</p>
+                        {{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
                 </div>
             </div>
 
-            {{-- Bagian 2: Perusahaan, Departemen, Jabatan yang Dituju --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm">
+            {{-- Bagian 2: Departemen, Jabatan --}}
+            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
                 <div class="flex gap-2">
                     <span class="font-semibold text-white/70 w-32 flex-shrink-0">Perusahaan</span>
-                    <span class="text-white">{{ $user->perusahaan ?? '-' }}</span>
+                    <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
                     <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
-                    <span class="text-white">{{ $user->departemen ?? '-' }}</span>
+                    <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Jabatan yang Dituju</span>
-                    <span class="text-white">{{ $user->jabatan_target ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Jabatan yang dituju</span>
+                    <span
+                        class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
 
-            {{-- Bagian 3: Mentor, Atasan --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm">
+            {{-- Bagian 3: Role, Email --}}
+            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-20 flex-shrink-0">Mentor</span>
-                    <span class="text-white">{{ $user->mentor->nama ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Role</span>
+                    <span class="text-white capitalize">{{ optional($user->role)->role_name ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-20 flex-shrink-0">Atasan</span>
-                    <span class="text-white">{{ $user->atasan->nama ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Email</span>
+                    <span class="text-white">{{ $user->email ?? '-' }}</span>
                 </div>
             </div>
 
@@ -601,7 +602,7 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
                         </div>
-                        <a href="{{ route('kandidat.idp_monitoring', 'exposure') }}"
+                        <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
                         </a>
@@ -630,7 +631,7 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
                         </div>
-                        <a href="{{ route('kandidat.idp_monitoring', 'mentoring') }}"
+                        <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
                         </a>
@@ -660,7 +661,7 @@
                             </ul>
                             <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
                         </div>
-                        <a href="{{ route('kandidat.idp_monitoring', 'learning') }}"
+                        <a href="{{ route('talent.idp_monitoring', 'learning') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
                             Next
                         </a>

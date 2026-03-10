@@ -14,8 +14,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')"
-                        :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
@@ -33,25 +32,23 @@
                             class="inline-flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 bg-white rounded-md hover:text-gray-800 focus:outline-none transition">
 
                             <!-- Icon User -->
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-6 w-6 text-gray-600"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5.121 17.804A9 9 0 1118.879 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    d="M5.121 17.804A9 9 0 1118.879 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
 
                             <!-- Foto Profil -->
                             <div class="h-9 w-9 rounded-full overflow-hidden border border-gray-300">
-                                @if(auth()->user()->foto)
+                                @if (auth()->user()->foto)
                                     <img src="{{ asset('storage/' . auth()->user()->foto) }}"
-                                         class="object-cover w-full h-full" alt="Profile">
+                                        class="object-cover w-full h-full" alt="Profile">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="h-5 w-5 text-gray-400"
-                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5.121 17.804A9 9 0 1118.879 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                d="M5.121 17.804A9 9 0 1118.879 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
                                     </div>
                                 @endif
@@ -88,14 +85,10 @@
                 <button @click="open = !open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': !open}"
-                              class="inline-flex"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M4 6h16M4 12h16M4 18h16"/>
-                        <path :class="{'hidden': !open, 'inline-flex': open}"
-                              class="hidden"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M6 18L18 6M6 6l12 12"/>
+                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -104,10 +97,9 @@
     </div>
 
     <!-- MOBILE MENU -->
-    <div :class="{'block': open, 'hidden': !open}" class="hidden sm:hidden">
+    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')"
-                :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
@@ -118,16 +110,15 @@
 
                 <!-- Foto -->
                 <div class="h-10 w-10 rounded-full overflow-hidden border border-gray-300 flex-shrink-0">
-                    @if(auth()->user()->foto)
-                        <img src="{{ asset('storage/' . auth()->user()->foto) }}"
-                             class="object-cover w-full h-full" alt="Profile">
+                    @if (auth()->user()->foto)
+                        <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="object-cover w-full h-full"
+                            alt="Profile">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 text-gray-400"
-                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5.121 17.804A9 9 0 1118.879 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    d="M5.121 17.804A9 9 0 1118.879 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </div>
                     @endif
@@ -146,7 +137,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.show')">
+                <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profil') }}
                 </x-responsive-nav-link>
 

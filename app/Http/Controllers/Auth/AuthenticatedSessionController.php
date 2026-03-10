@@ -57,11 +57,14 @@ class AuthenticatedSessionController extends Controller
             session()->forget('register_non_kandidat');
         }
 
-        $role = strtolower(Auth::user()->role ?? '');
+        $role = strtolower(Auth::user()->role->role_name ?? '');
 
         // Simple redirect based on role
         if ($role === 'kandidat') {
             return redirect()->route('kandidat.dashboard');
+        }
+        elseif ($role === 'talent') {
+            return redirect()->route('talent.competency');
         }
         elseif ($role === 'atasan') {
             return redirect()->route('atasan.dashboard');
@@ -75,11 +78,11 @@ class AuthenticatedSessionController extends Controller
         elseif ($role === 'admin_pdc') {
             return redirect()->route('admin_pdc.dashboard');
         }
-        elseif ($role === 'bo_director') {
+        elseif ($role === 'bo_director' || $role === 'bod') {
             return redirect()->route('bo_director.dashboard');
         }
         else {
-            return redirect('/');
+            return redirect()->route('dashboard'); // fallback route
         }
     }
 

@@ -3,220 +3,113 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\KandidatKompetensi;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    // ─── STEP 1: Tampilkan form registrasi ───────────────────────────────────
-
+    /**
+     * Display the registration view.
+     */
     public function create(): View
     {
-        $mentors = User::where('role', 'mentor')->where('is_active', true)->get(['id', 'nama']);
-        $atasans = User::where('role', 'atasan')->where('is_active', true)->get(['id', 'nama']);
+        $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->get();
+        $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->get();
+        $companies = DB::table('company')->get();
+        $departments = DB::table('department')->get();
+        $roles = DB::table('role')->whereNotIn('role_name', ['admin_pdc'])->get();
+        $positions = DB::table('position')
+            ->whereNotIn('position_name', ['Super Admin'])
+            ->get();
+        $targetPositions = DB::table('position')
+            ->whereNotIn('position_name', ['Super Admin', 'Board of Directors'])
+            ->get();
 
-        return view('auth.register', compact('mentors', 'atasans'));
+        return view('auth.register', compact('mentors', 'atasans', 'companies', 'departments', 'roles', 'positions', 'targetPositions'));
     }
 
-    // ─── STEP 1: Proses submit form registrasi ───────────────────────────────
-
+    /**
+     * Handle an incoming registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'username'       => ['required', 'string', 'min:3', 'max:50', 'unique:users,username', 'regex:/^[a-zA-Z0-9._-]+$/'],
-            'email'          => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password'       => ['required', 'confirmed', Rules\Password::defaults()->mixedCase()->numbers()],
-            'nama'           => ['required', 'string', 'max:255'],
-            'perusahaan'     => ['required', 'string', 'max:255'],
-            'departemen'     => ['required', 'string', 'max:255'],
-            'role'           => ['required', 'in:kandidat,atasan,mentor,finance,admin_pdc,bo_director'],
-            'jabatan_target' => ['nullable', 'string', 'max:255'],
-            'mentor_id'      => ['nullable', 'exists:users,id'],
-            'atasan_id'      => ['nullable', 'exists:users,id'],
-        ], [
-            'username.required'   => 'Username wajib diisi.',
-            'username.min'        => 'Username minimal 3 karakter.',
-            'username.unique'     => 'Username sudah digunakan.',
-            'username.regex'      => 'Username hanya boleh huruf, angka, titik, underscore, atau strip.',
-            'email.required'      => 'Email wajib diisi.',
-            'email.email'         => 'Format email tidak valid.',
-            'email.unique'        => 'Email sudah digunakan.',
-            'password.required'   => 'Password wajib diisi.',
-            'password.confirmed'  => 'Konfirmasi password tidak cocok.',
-            'password.mixed_case' => 'Password harus mengandung minimal 1 huruf kapital.',
-            'password.numbers'    => 'Password harus mengandung minimal 1 angka.',
-            'nama.required'       => 'Nama lengkap wajib diisi.',
-            'perusahaan.required' => 'Perusahaan wajib dipilih.',
-            'departemen.required' => 'Departemen wajib dipilih.',
-            'role.required'       => 'Role wajib dipilih.',
-            'role.in'             => 'Role yang dipilih tidak valid.',
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'nama' => ['required', 'string', 'max:255'],
+            'company_id' => ['required', 'exists:company,id'],
+            'department_id' => ['required', 'exists:department,id'],
+            'position_id' => ['required', 'exists:position,id'],
+            'role_id' => ['required', 'exists:role,id'],
+            'jabatan_target' => ['nullable', 'exists:position,id'],
+            'mentor_id' => ['nullable', 'exists:users,id'],
+            'atasan_id' => ['nullable', 'exists:users,id'],
         ]);
 
-        // Jika role = kandidat → simpan ke session, lanjut ke step kompetensi
-        if ($request->role === 'kandidat') {
-            session([
-                'register_data' => [
-                    'nama'           => $request->nama,
-                    'username'       => $request->username,
-                    'email'          => $request->email,
-                    'password'       => $request->password, // di-hash di step terakhir
-                    'role'           => 'kandidat',
-                    'perusahaan'     => $request->perusahaan,
-                    'departemen'     => $request->departemen,
-                    'jabatan'        => $request->jabatan ?? null,
-                    'jabatan_target' => $request->jabatan_target ?? null,
-                    'mentor_id'      => $request->mentor_id ?? null,
-                    'atasan_id'      => $request->atasan_id ?? null,
-                ],
+        DB::beginTransaction();
+
+        try {
+            // 1. Buat User Baru
+            $user = User::create([
+                'nama' => $request->nama,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'company_id' => $request->company_id,
+                'department_id' => $request->department_id,
+                'position_id' => $request->position_id,
+                'role_id' => $request->role_id,
+                'mentor_id' => $request->mentor_id,
+                'atasan_id' => $request->atasan_id,
             ]);
 
-            return redirect()->route('register.kompetensi');
+            // 2. Hubungkan User dengan tabel user_role
+            DB::table('user_role')->insert([
+                'id_user' => $user->id,
+                'id_role' => $request->role_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Cek apakah rolenya adalah talent
+            $isTalent = DB::table('role')
+                ->where('id', $request->role_id)
+                ->whereIn('role_name', ['talent', 'Talent'])
+                ->exists();
+
+            // 3. Tambahkan ke promotion_plan (IDP) jika dia Talent & punya target jabatan
+            if ($isTalent && $request->jabatan_target) {
+                DB::table('promotion_plan')->insert([
+                    'user_id_talent' => $user->id,
+                    'target_position_id' => $request->jabatan_target,
+                    'status_promotion' => 'Draft',
+                    'start_date' => now(),
+                    'target_date' => now()->addYear(), // Target otomatis 1 tahun ke depan
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            DB::commit();
+
+            event(new Registered($user));
+
+            // Redirect ke halaman login dengan pesan sukses
+            return redirect()->route('login')->with('status', 'Pendaftaran akun berhasil! Silakan masuk.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->withErrors(['email' => 'Proses pendaftaran gagal: ' . $e->getMessage()]);
         }
-
-        // Role selain kandidat → buat user langsung
-        $user = User::create([
-            'nama'           => $request->nama,
-            'username'       => $request->username,
-            'email'          => $request->email ?? null,
-            'password'       => Hash::make($request->password),
-            'role'           => $request->role,
-            'perusahaan'     => $request->perusahaan,
-            'departemen'     => $request->departemen,
-            'jabatan'        => $request->jabatan ?? null,
-            'jabatan_target' => null,
-            'mentor_id'      => null,
-            'atasan_id'      => null,
-            'is_active'      => true,
-        ]);
-
-        // Role selain kandidat → simpan intent dan redirect ke login (jangan buat user)
-        session([
-            'register_non_kandidat' => [
-                'username'   => $user->username,
-                'role'       => $user->role,
-            ],
-        ]);
-
-        return redirect()->route('login')
-            ->with('status', 'Akun Anda berhasil dibuat! Silakan masuk menggunakan username "' . $user->username . '" atau email "' . $user->email . '".');
-
-
-
-
-
-
-        event(new Registered($user));
-        Auth::login($user);
-
-        return match($user->role) {
-            'atasan'      => redirect()->route('atasan.dashboard'),
-            'mentor'      => redirect()->route('mentor.dashboard'),
-            'finance'     => redirect()->route('finance.dashboard'),
-            'admin_pdc'   => redirect()->route('admin_pdc.dashboard'),
-            'bo_director' => redirect()->route('bo_director.dashboard'),
-            default       => redirect('/'),
-        };
-    }
-
-    // ─── STEP 2: Tampilkan form kompetensi ───────────────────────────────────
-
-    public function stepKompetensi(): View|RedirectResponse
-    {
-        if (!session()->has('register_data')) {
-            return redirect()->route('register')
-                ->withErrors(['role' => 'Sesi registrasi habis. Silakan ulangi.']);
-        }
-
-        $kompetensi = KandidatKompetensi::labels();
-        $levels     = KandidatKompetensi::levels();
-
-        return view('auth.kompetensi', compact('kompetensi', 'levels'));
-    }
-
-    // ─── STEP 2: Proses submit kompetensi → buat user + simpan kompetensi ────
-
-    public function storeKompetensi(Request $request): RedirectResponse
-    {
-        if (!session()->has('register_data')) {
-            return redirect()->route('register')
-                ->withErrors(['role' => 'Sesi registrasi habis. Silakan ulangi.']);
-        }
-
-        $columns = array_keys(KandidatKompetensi::labels());
-        $labels  = array_values(KandidatKompetensi::labels());
-
-        $rules = [];
-        foreach ($columns as $col) {
-            $rules[$col] = ['required', 'integer', 'min:1', 'max:5'];
-        }
-
-        $messages = [];
-        foreach ($columns as $i => $col) {
-            $messages["$col.required"] = "\"{$labels[$i]}\" wajib dipilih.";
-        }
-
-        $request->validate($rules, $messages);
-
-        $data = session('register_data');
-
-        // Buat user kandidat
-        $user = User::create([
-            'nama'           => $data['nama'],
-            'username'       => $data['username'],
-            'email'          => $data['email'] ?? null,
-            'password'       => Hash::make($data['password']),
-            'role'           => 'kandidat',
-            'perusahaan'     => $data['perusahaan'],
-            'departemen'     => $data['departemen'],
-            'jabatan'        => $data['jabatan'] ?? null,
-            'jabatan_target' => $data['jabatan_target'] ?? null,
-            'mentor_id'      => $data['mentor_id'] ?? null,
-            'atasan_id'      => $data['atasan_id'] ?? null,
-            'is_active'      => true,
-        ]);
-
-        // Simpan data kompetensi
-        $kompetensiData = ['user_id' => $user->id];
-        foreach ($columns as $col) {
-            $kompetensiData[$col] = (int) $request->input($col);
-        }
-        KandidatKompetensi::create($kompetensiData);
-
-
-
-        // session()->forget('register_data');
-
-        // event(new Registered($user));
-        // Auth::login($user);
-
-        // return redirect()->route('kandidat.dashboard');
-
-
-
-
-
-        // Jangan login otomatis — arahkan ke login page
-        // Simpan intent kandidat (username + user_id) untuk verifikasi di login
-        session([
-            'register_kandidat' => [
-                'username' => $user->username,
-                'user_id'  => $user->id,
-            ],
-        ]);
-
-        session()->forget('register_data');
-
-        // JANGAN panggil Auth::login($user) dan event(Registered)
-        // Biarkan user login manual via login page
-
-        return redirect()->route('login')
-            ->with('status', 'Pendaftaran berhasil! Akun Anda sedang menunggu persetujuan admin. Silakan masuk menggunakan username "' . $user->username . '" atau email "' . $user->email . '".');
     }
 }

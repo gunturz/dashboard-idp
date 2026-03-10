@@ -188,21 +188,26 @@
         </div>
 
         <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-            <a href="{{ route('kandidat.dashboard') }}#Kompetensi"
+            <a href="{{ route('talent.dashboard') }}#Kompetensi"
                 class="hover:text-blue-200 transition-colors duration-150">Kompetensi</a>
-            <a href="{{ route('kandidat.dashboard') }}#IDP Monitoring"
+            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
                 class="hover:text-blue-200 transition-colors duration-150">IDP</a>
-            <a href="{{ route('kandidat.dashboard') }}#Project Improvement"
+            <a href="{{ route('talent.dashboard') }}#Project Improvement"
                 class="hover:text-blue-200 transition-colors duration-150">Project Improvement</a>
-            <a href="{{ route('kandidat.dashboard') }}#LogBook"
+            <a href="{{ route('talent.dashboard') }}#LogBook"
                 class="hover:text-blue-200 transition-colors duration-150">LogBook</a>
         </div>
 
         <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
+<<<<<<< HEAD:resources/views/kandidat/notifikasi.blade.php
             <a href="{{ route('kandidat.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
                 @if($notifications->where('is_read', false)->count() > 0)
                     <span class="notif-badge"></span>
                 @endif
+=======
+            <a href="{{ route('talent.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
+                <span class="notif-badge"></span>
+>>>>>>> c642f9cce40d2b8babd67def90e3e3f679ff4937:resources/views/talent/notifikasi.blade.php
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path
                         d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
@@ -251,28 +256,35 @@
 
         {{-- Notifications List --}}
         <div class="space-y-3">
-            @foreach($notifications as $notif)
+            @foreach ($notifications as $notif)
                 <div class="notif-card {{ !$notif['is_read'] ? 'notif-unread' : '' }}">
                     <div class="notif-icon-wrap icon-{{ $notif['type'] }}">
-                        @if($notif['type'] == 'success')
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        @if ($notif['type'] == 'success')
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         @elseif($notif['type'] == 'info')
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         @elseif($notif['type'] == 'warning')
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         @endif
                     </div>
                     <div class="flex-1">
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-gray-800 text-base">{!! $notif['title'] !!}</h3>
-                            @if($notif['badge'])
-                                <span class="text-xs text-teal-600 font-semibold bg-teal-50 px-2 py-1 rounded-md">{{ $notif['badge'] }}</span>
+                            @if ($notif['badge'])
+                                <span
+                                    class="text-xs text-teal-600 font-semibold bg-teal-50 px-2 py-1 rounded-md">{{ $notif['badge'] }}</span>
                             @endif
                         </div>
                         <p class="text-sm text-gray-600 mb-2 leading-relaxed">{!! $notif['desc'] !!}</p>

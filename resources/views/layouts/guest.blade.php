@@ -182,7 +182,7 @@
             display: block;
             text-align: right;
             font-size: 0.78rem;
-            color: #22c55e;
+            color: #10b981;
             text-decoration: none;
             margin-top: 0.4rem;
             font-weight: 500;
@@ -190,7 +190,7 @@
         }
 
         .forgot-link:hover {
-            color: #16a34a;
+            color: #059669;
             text-decoration: underline;
         }
 
@@ -238,14 +238,14 @@
         }
 
         .register-link-text a {
-            color: #22c55e;
+            color: #10b981;
             font-weight: 600;
             text-decoration: none;
             transition: color 0.2s;
         }
 
         .register-link-text a:hover {
-            color: #16a34a;
+            color: #059669;
             text-decoration: underline;
         }
 

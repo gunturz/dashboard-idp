@@ -21,7 +21,6 @@ class ProfileUpdateRequest extends FormRequest
             'email' => [
                 'nullable',
                 'string',
-                'lowercase',
                 'email',
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
@@ -29,7 +28,10 @@ class ProfileUpdateRequest extends FormRequest
             'perusahaan' => ['nullable', 'string', 'max:255'],
             'departemen' => ['nullable', 'string', 'max:255'],
             'jabatan_target' => ['nullable', 'string', 'max:255'],
+            'role' => ['nullable', 'string', 'max:255'],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'password' => ['nullable', 'string', 'min:8'],
+            'should_delete_foto' => ['nullable', 'boolean'],
         ];
     }
 }

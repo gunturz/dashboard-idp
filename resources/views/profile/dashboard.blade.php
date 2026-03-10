@@ -101,7 +101,7 @@
             {{-- Bell --}}
             <div class="relative" id="bell-wrapper">
                 <button class="nav-icon-btn" onclick="toggleDropdown('bell-dropdown')">
-                    @if($notifications->filter(fn($n) => !$n['is_read'])->count() > 0)
+                    @if($notifications->where('is_read', false)->count() > 0)
                         <span class="notif-badge"></span>
                     @endif
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -112,7 +112,10 @@
                 <div id="bell-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                     <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
                         <span class="text-sm font-bold text-gray-700">Notifikasi</span>
-                        <span class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai semua</span>
+                        <form action="{{ route('kandidat.notifikasi.markAllRead') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai semua</button>
+                        </form>
                     </div>
                     <ul class="divide-y divide-gray-50 max-h-64 overflow-y-auto">
                         @foreach($notifications as $notif)
@@ -178,12 +181,45 @@
     {{-- MAIN CONTENT --}}
     <div class="w-full max-w-3xl mx-auto px-6 py-8 flex-grow fade-up">
 
+        {{-- Back Link --}}
+        <div class="mb-4">
+            <a href="{{ route('kandidat.dashboard') }}"
+                class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#3d4f62] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Dashboard
+            </a>
+        </div>
+
         <div class="flex items-center gap-3 mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#3d4f62]" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
             </svg>
             <h1 class="text-2xl font-bold text-[#3d4f62]">Profil Kandidat</h1>
         </div>
+
+        {{-- Error Display --}}
+        @if ($errors->any())
+            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl shadow-sm">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700">Terjadi kesalahan pada data yang Anda masukkan:</p>
+                        <ul class="mt-1 list-disc list-inside text-xs text-red-600">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         {{-- Success banner --}}
         @if (session('status') === 'profile-updated')

@@ -262,8 +262,10 @@
                     class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                     <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
                         <span class="text-sm font-bold text-gray-700">Notifikasi</span>
-                        <span class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai
-                            semua</span>
+                        <form action="{{ route('kandidat.notifikasi.markAllRead') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai semua</button>
+                        </form>
                     </div>
                     <ul class="divide-y divide-gray-50 max-h-64 overflow-y-auto">
                         @foreach ($notifications as $notif)
@@ -792,7 +794,7 @@
                     <p class="text-sm text-gray-500 font-medium">Pantau progress Exposure, Mentoring, dan Learning
                         secara lengkap klik tombol untuk melihat detail seluruh sesi.</p>
                 </div>
-                <a href="#"
+                <a href="{{ route('kandidat.logbook.detail') }}"
                     class="bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
                     Lihat Detail
                 </a>

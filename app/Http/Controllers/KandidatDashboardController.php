@@ -58,7 +58,9 @@ class KandidatDashboardController extends Controller
             // For the Exposure tab which says "Mentor / Atasan"
             $mentorAtasanList = User::whereIn('role', ['mentor', 'atasan'])->get();
 
-            return view('kandidat.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans', 'mentorAtasanList'));
+            $notifications = $this->getNotifications();
+
+            return view('kandidat.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans', 'mentorAtasanList', 'notifications'));
         } catch (\Exception $e) {
             Log::error('KandidatDashboard idpMonitoring error: ' . $e->getMessage());
             throw $e;
@@ -132,8 +134,88 @@ class KandidatDashboardController extends Controller
         }
     }
 
+    public function markAllRead()
+    {
+        try {
+            session(['notifications_all_read' => true]);
+            return back()->with('success', 'Semua notifikasi ditandai dibaca.');
+        } catch (\Exception $e) {
+            Log::error('KandidatDashboard markAllRead error: ' . $e->getMessage());
+            return back()->with('error', 'Gagal menandai notifikasi.');
+        }
+    }
+
+    public function logbookDetail()
+    {
+        try {
+            $user = Auth::user();
+            $notifications = $this->getNotifications();
+
+            // Mock data for LogBook
+            $exposureData = [
+                [
+                    'mentor' => 'Andi Wijaya',
+                    'tema' => 'Leadership in Agile Environment',
+                    'tanggal' => '12 Feb 2024',
+                    'lokasi' => 'Head Office - Room 302',
+                    'aktivitas' => 'Mentoring Session',
+                    'deskripsi' => 'Discussing agile methodologies and leadership styles.',
+                    'dokumentasi' => 'doc_exposure_1.pdf',
+                    'komentar' => 'Great progress on agile understanding.',
+                    'status' => 'Approve'
+                ],
+                [
+                    'mentor' => 'Budi Santoso',
+                    'tema' => 'Project Management Essentials',
+                    'tanggal' => '15 Feb 2024',
+                    'lokasi' => 'Virtual Meeting',
+                    'aktivitas' => 'Workshop',
+                    'deskripsi' => 'Key concepts of project lifecycle.',
+                    'dokumentasi' => 'doc_exposure_2.pdf',
+                    'komentar' => 'Need to focus more on risk management.',
+                    'status' => 'Pending'
+                ],
+            ];
+
+            $mentoringData = [
+                [
+                    'mentor' => 'Siti Aminah',
+                    'tema' => 'Communication Skills',
+                    'tanggal' => '10 Feb 2024',
+                    'lokasi' => 'Cafe Menteng',
+                    'deskripsi' => 'Improving verbal and non-verbal communication.',
+                    'action_plan' => 'Practice presentation in front of the team.',
+                    'dokumentasi' => 'doc_mentoring_1.jpg',
+                    'komentar' => 'Active listener, good improvement.',
+                    'status' => 'Approve'
+                ],
+            ];
+
+            $learningData = [
+                [
+                    'sumber' => 'Coursera',
+                    'tema' => 'Data Science Fundamentals',
+                    'tanggal' => '05 Feb 2024',
+                    'platform' => 'Online Platform',
+                    'aktivitas' => 'Online Course',
+                    'deskripsi' => 'Completed module 1-3 of data science courses.',
+                    'dokumentasi' => 'cert_learning_1.pdf',
+                    'komentar' => 'Well done!',
+                    'status' => 'Approve'
+                ],
+            ];
+
+            return view('kandidat.logbook-detail', compact('user', 'notifications', 'exposureData', 'mentoringData', 'learningData'));
+        } catch (\Exception $e) {
+            Log::error('KandidatDashboard logbookDetail error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
     private function getNotifications()
     {
+        $allRead = session('notifications_all_read', false);
+
         return collect([
             [
                 'id' => 1,
@@ -141,8 +223,8 @@ class KandidatDashboardController extends Controller
                 'desc' => 'Formulir <span class="font-semibold">Exposure</span> Anda telah berhasil dikirim dan sedang menunggu tinjauan dari mentor/atasan.',
                 'type' => 'success', // success, info, warning
                 'time' => '10 menit yang lalu',
-                'is_read' => false,
-                'badge' => 'Baru'
+                'is_read' => $allRead ? true : false,
+                'badge' => $allRead ? null : 'Baru'
             ],
             [
                 'id' => 2,

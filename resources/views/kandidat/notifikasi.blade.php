@@ -200,7 +200,9 @@
 
         <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
             <a href="{{ route('kandidat.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
-                <span class="notif-badge"></span>
+                @if($notifications->where('is_read', false)->count() > 0)
+                    <span class="notif-badge"></span>
+                @endif
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path
                         d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
@@ -219,6 +221,18 @@
     {{-- ══════════════════════════════ CONTENT AREA ══════════════════════════════ --}}
     <div class="w-full max-w-4xl mx-auto px-6 pt-10 pb-12 flex-grow fade-up fade-up-1">
 
+        {{-- Back Link --}}
+        <div class="mb-4">
+            <a href="{{ route('kandidat.dashboard') }}"
+                class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-[#0d9488] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Dashboard
+            </a>
+        </div>
+
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-2.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" fill="none"
@@ -228,8 +242,11 @@
                 </svg>
                 <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Notifikasi</h2>
             </div>
-            <button class="text-sm font-semibold text-teal-600 hover:text-teal-700 transition">Tandai semua
-                dibaca</button>
+            <form action="{{ route('kandidat.notifikasi.markAllRead') }}" method="POST">
+                @csrf
+                <button type="submit" class="text-sm font-semibold text-teal-600 hover:text-teal-700 transition">Tandai semua
+                    dibaca</button>
+            </form>
         </div>
 
         {{-- Notifications List --}}

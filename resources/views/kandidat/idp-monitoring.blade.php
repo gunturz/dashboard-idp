@@ -253,7 +253,9 @@
 
         <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
             <a href="{{ route('kandidat.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
-                <span class="notif-badge"></span>
+                @if($notifications->where('is_read', false)->count() > 0)
+                    <span class="notif-badge"></span>
+                @endif
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path
                         d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />

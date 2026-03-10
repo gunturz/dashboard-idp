@@ -23,6 +23,8 @@ class ProfileController extends Controller
 
     private function getNotifications()
     {
+        $allRead = session('notifications_all_read', false);
+
         return collect([
             [
                 'id' => 1,
@@ -30,8 +32,8 @@ class ProfileController extends Controller
                 'desc' => 'Formulir <span class="font-semibold">Exposure</span> Anda telah berhasil dikirim dan sedang menunggu tinjauan dari mentor/atasan.',
                 'type' => 'success', // success, info, warning
                 'time' => '10 menit yang lalu',
-                'is_read' => false,
-                'badge' => 'Baru'
+                'is_read' => $allRead ? true : false,
+                'badge' => $allRead ? null : 'Baru'
             ],
             [
                 'id' => 2,
@@ -80,6 +82,13 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
+        
+        \Illuminate\Support\Facades\Log::info('Profile Update Data:', $data);
+
+        // Normalize email to lowercase
+        if (!empty($data['email'])) {
+            $data['email'] = strtolower($data['email']);
+        }
 
         // Handle password hashing
         if (!empty($data['password'])) {

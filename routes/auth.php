@@ -79,4 +79,8 @@ Route::middleware('auth')->group(function () {
         ->name('kandidat.idp_monitoring.store');
     Route::get('/kandidat/notifikasi', [KandidatDashboardController::class, 'notifikasi'])
         ->name('kandidat.notifikasi');
+    Route::post('/kandidat/notifikasi/mark-all-read', [KandidatDashboardController::class, 'markAllRead'])
+        ->name('kandidat.notifikasi.markAllRead');
+    Route::get('/kandidat/logbook/detail', [KandidatDashboardController::class, 'logbookDetail'])
+        ->name('kandidat.logbook.detail');
 });

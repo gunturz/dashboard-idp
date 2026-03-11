@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\IdpActivity;
+use App\Models\ImprovementProject;
 use App\Models\User;
 
 class TalentDashboardController extends Controller
@@ -24,7 +25,12 @@ class TalentDashboardController extends Controller
             $notifications = $this->getNotifications();
             $competenciesList = DB::table('competencies')->pluck('name')->toArray();
 
-            return view('talent.dashboard', compact('user', 'kompetensi', 'notifications', 'competenciesList'));
+            // Project Improvement: ambil data milik user ini
+            $projects = ImprovementProject::where('user_id_talent', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('talent.dashboard', compact('user', 'kompetensi', 'notifications', 'competenciesList', 'projects'));
         } catch (\Exception $e) {
             Log::error('talentDashboard error: ' . $e->getMessage());
             throw $e;
@@ -138,44 +144,125 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent/talent yang bisa mengakses halaman ini.');
             }
 
+            // ── Validasi input ──────────────────────────────────────────────
+            $rules = [
+                'theme'         => 'required|string|max:255',
+                'activity_date' => 'required|date',
+                'documents'     => 'nullable|array|max:5',          // maks 5 file
+                'documents.*'   => 'file|max:5120|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx',
+            ];
+
+            if ($tab === 'learning') {
+                $rules['activity'] = 'required|string|max:255';
+                $rules['platform'] = 'required|string|max:255';
+            } else {
+                $rules['mentor_name'] = 'required|string|max:255';
+                $rules['location']    = 'required|string|max:255';
+            }
+
+            if ($tab === 'mentoring') {
+                $rules['description'] = 'required|string';
+                $rules['action_plan'] = 'required|string';
+            } elseif ($tab === 'exposure') {
+                $rules['activity']    = 'required|string';
+                $rules['description'] = 'required|string';
+            }
+
+            $validated = $request->validate($rules, [
+                'documents.max'    => 'Maksimal 5 file yang bisa diupload.',
+                'documents.*.max'  => 'Ukuran setiap file tidak boleh melebihi 5 MB.',
+                'documents.*.mimes'=> 'Format file harus: PNG, JPG, PDF, DOC, DOCX, XLS, XLSX.',
+            ]);
+
+            // ── Type IDP ────────────────────────────────────────────────────
             $typeId = DB::table('idp_type')->where('type_name', ucfirst($tab))->value('id');
             if (!$typeId) {
                 return back()->with('error', 'Tipe IDP tidak valid.');
             }
 
-            $documentPath = '';
-            $fileName = null;
-            if ($request->hasFile('document')) {
-                $file = $request->file('document');
-                $fileName = $file->getClientOriginalName();
-                $documentPath = $file->store('idp_documents', 'public');
+            // ── Upload file(s) ──────────────────────────────────────────────
+            $documentPaths = [];
+            $fileNames     = [];
+
+            if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $file) {
+                    $fileNames[]     = $file->getClientOriginalName();
+                    $documentPaths[] = $file->store('idp_documents', 'public');
+                }
             }
 
+            $documentPath = count($documentPaths) === 1
+                ? $documentPaths[0]                    // satu file → simpan string biasa
+                : (count($documentPaths) > 1 ? json_encode($documentPaths) : ''); // banyak → JSON
+
+            $fileName = count($fileNames) === 1
+                ? $fileNames[0]
+                : (count($fileNames) > 1 ? implode(', ', $fileNames) : null);
+
+            // ── Verify by (mentor) ──────────────────────────────────────────
             $verifyById = null;
             if ($request->filled('mentor_name')) {
                 $verifyById = User::where('nama', $request->mentor_name)->value('id');
             }
 
+            // ── Simpan ke DB ────────────────────────────────────────────────
             IdpActivity::create([
                 'user_id_talent' => $user->id,
-                'type_idp' => $typeId,
-                'verify_by' => $verifyById,
-                'theme' => $request->theme ?? '',
-                'activity_date' => $request->activity_date,
-                'location' => $request->location ?? '',
-                'activity' => $request->activity ?? '',
-                'description' => $request->description ?? '',
-                'action_plan' => $request->action_plan ?? '',
-                'document_path' => $documentPath,
-                'file_name' => $fileName,
-                'status' => 'Pending',
-                'platform' => $request->platform ?? '',
+                'type_idp'       => $typeId,
+                'verify_by'      => $verifyById,
+                'theme'          => $validated['theme'],
+                'activity_date'  => $validated['activity_date'],
+                'location'       => $request->location ?? '',
+                'activity'       => $request->activity ?? '',
+                'description'    => $request->description ?? '',
+                'action_plan'    => $request->action_plan ?? '',
+                'document_path'  => $documentPath,
+                'file_name'      => $fileName,
+                'status'         => 'Pending',
+                'platform'       => $request->platform ?? '',
             ]);
 
             return redirect()->route('talent.dashboard')->with('success', 'IDP Activity berhasil disubmit.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('talentDashboard storeIdpMonitoring error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
+    }
+
+    public function storeProject(Request $request)
+    {
+        try {
+            $request->validate([
+                'title'        => 'required|string|max:255',
+                'project_file' => 'required|file|max:10240|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx,zip',
+            ], [
+                'title.required'        => 'Judul project harus diisi.',
+                'project_file.required' => 'File project harus diunggah.',
+                'project_file.max'      => 'Ukuran file tidak boleh melebihi 10 MB.',
+                'project_file.mimes'    => 'Format file tidak didukung.',
+            ]);
+
+            $documentPath = $request->file('project_file')
+                ->store('improvement_projects', 'public');
+
+            ImprovementProject::create([
+                'user_id_talent' => Auth::id(),
+                'title'          => $request->title,
+                'document_path'  => $documentPath,
+                'status'         => 'Pending',
+            ]);
+
+            return redirect()->route('talent.dashboard')
+                ->with('success_project', 'Project Improvement berhasil disubmit.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            Log::error('storeProject error: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan project.');
         }
     }
 

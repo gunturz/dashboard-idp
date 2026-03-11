@@ -683,7 +683,24 @@
 
             <div class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
 
-                <form action="#" method="POST" enctype="multipart/form-data" id="upload-form">
+                @if(session('success_project'))
+                    <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm" role="alert">
+                        <strong class="font-bold">Berhasil!</strong>
+                        <span class="block sm:inline">{{ session('success_project') }}</span>
+                    </div>
+                @endif
+                @if($errors->any())
+                    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-[10px] relative text-sm" role="alert">
+                        <strong class="font-bold">Oops! Terjadi kesalahan:</strong>
+                        <ul class="list-disc list-inside mt-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('talent.project.store') }}" method="POST" enctype="multipart/form-data" id="upload-form">
                     @csrf
 
                     {{-- Judul Project Input --}}
@@ -710,15 +727,15 @@
 
                     {{-- Upload Area --}}
                     <label for="file-upload"
-                        class="upload-area rounded-[10px] cursor-pointer flex flex-col items-center justify-center py-10 mb-5 bg-white"
+                        class="upload-area rounded-[10px] cursor-pointer flex flex-col items-center justify-center py-10 mb-5 bg-white border-2 border-dashed border-gray-300 hover:border-teal-500 transition-colors"
                         id="drop-zone">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                         </svg>
-                        <span class="text-sm text-gray-500">Klik untuk mengunggah</span>
-                        <input id="file-upload" name="project_file" type="file" class="sr-only">
+                        <span class="text-sm text-gray-500" id="file-name-display">Klik untuk mengunggah</span>
+                        <input id="file-upload" name="project_file" type="file" class="sr-only" required>
                     </label>
 
                     {{-- Submit Project --}}
@@ -743,25 +760,43 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($projects as $project)
                                 <tr class="bg-white border-b border-gray-100">
-                                    <td class="px-4 py-3 text-gray-700 border-r border-gray-200 text-center"
-                                        id="uploaded-file-name">–</td>
+                                    <td class="px-4 py-3 text-gray-700 border-r border-gray-200 font-medium">
+                                        {{ $project->title }}
+                                        <div class="text-xs text-gray-400 font-normal mt-0.5">{{ $project->created_at->format('d M Y') }}</div>
+                                    </td>
                                     <td class="text-center px-4 py-3">
-                                        <span
-                                            class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
-                                            <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
-                                            Pending
-                                        </span>
+                                        @if($project->status === 'Pending')
+                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span> Pending
+                                            </span>
+                                        @elseif($project->status === 'Verified')
+                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span> Verified
+                                            </span>
+                                        @elseif($project->status === 'On Progress')
+                                            <span class="inline-flex items-center gap-1.5 text-blue-500 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span> On Progress
+                                            </span>
+                                        @elseif($project->status === 'Rejected')
+                                            <span class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span> Rejected
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 text-gray-500 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-gray-400 inline-block"></span> {{ $project->status }}
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
-                                <tr class="bg-white border-b border-gray-100">
-                                    <td class="px-4 py-3 text-gray-300 border-r border-gray-200 text-center">–</td>
-                                    <td class="px-4 py-3"></td>
-                                </tr>
+                                @empty
                                 <tr class="bg-white">
-                                    <td class="px-4 py-3 text-gray-300 border-r border-gray-200 text-center">–</td>
-                                    <td class="px-4 py-3"></td>
+                                    <td class="px-4 py-5 text-gray-400 border-r border-gray-200 text-center text-xs" colspan="2">
+                                        Belum ada project yang disubmit.
+                                    </td>
                                 </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -864,6 +899,12 @@
         if (!clickedInside) {
             document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
         }
+    });
+
+    // File name update for Project Improvement upload
+    document.getElementById('file-upload').addEventListener('change', function(e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : 'Klik untuk mengunggah';
+        document.getElementById('file-name-display').textContent = fileName;
     });
 </script>
 

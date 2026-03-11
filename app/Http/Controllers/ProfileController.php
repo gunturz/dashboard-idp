@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Company;
+use App\Models\Department;
+use App\Models\Position;
+use App\Models\Role;
+use App\Models\PromotionPlan;
 
 class ProfileController extends Controller
 {
@@ -16,8 +21,27 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
+        return view('profile.dashboard', [
+            'user'          => $request->user()->load(['company', 'department', 'role', 'promotion_plan.targetPosition', 'mentor', 'atasan']),
+            'notifications' => $this->getNotifications(),
+            'companies'     => Company::all(),
+            'departments'   => Department::all(),
+            'roles'         => Role::all(),
+            'positions'     => Position::all(),
+        ]);
+    }
+
+    private function getNotifications() {
+        return collect([
+            [
+                'id' => 1,
+                'title' => 'Submit IDP Berhasil',
+                'desc' => 'Formulir <span class="font-semibold">Exposure</span> Anda telah berhasil dikirim dan sedang menunggu tinjauan dari mentor/atasan.',
+                'type' => 'success',
+                'time' => '10 menit yang lalu',
+                'is_read' => false,
+                'badge' => 'Baru'
+            ]
         ]);
     }
 
@@ -59,6 +83,13 @@ class ProfileController extends Controller
         }
 
         $user->fill($data)->save();
+
+        if (array_key_exists('target_position_id', $data)) {
+            PromotionPlan::updateOrCreate(
+                ['user_id_talent' => $user->id],
+                ['target_position_id' => $data['target_position_id']]
+            );
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

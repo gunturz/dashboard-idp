@@ -15,8 +15,8 @@ Route::get('/dashboard', function () {
         return redirect()->route('talent.competency');
     }
 
-    $kompetensi = null; // fallback for other roles
-    return view('dashboard', compact('user', 'kompetensi'));
+    $competency = null; // fallback for other roles
+    return view('dashboard', compact('user', 'competency'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

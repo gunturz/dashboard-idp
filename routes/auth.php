@@ -85,4 +85,6 @@ Route::middleware('auth')->group(function () {
         ->name('talent.notifikasi.markAllRead');
     Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class, 'logbookDetail'])
         ->name('talent.logbook.detail');
+    Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class, 'storeProject'])
+        ->name('talent.project.store');
 });

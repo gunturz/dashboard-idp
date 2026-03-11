@@ -440,7 +440,9 @@
                     <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-2">
                         <label class="text-sm font-semibold text-gray-800 mt-2">Dokumentasi</label>
                         <div class="flex flex-col gap-3">
-                            <div>
+                            {{-- Tombol Upload / Ganti / Tambah --}}
+                            <div class="flex items-center gap-2 flex-wrap">
+                                {{-- Tombol utama: Upload File / Ganti Semua File --}}
                                 <label class="upload-btn" id="uploadBtnLabel">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -448,42 +450,34 @@
                                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                     </svg>
                                     <span id="uploadLabelText">Upload File</span>
-                                    <input type="file" name="document" id="documentInput" class="hidden" required
-                                        accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
+                                    <input type="file" name="documents[]" id="documentInput" class="hidden" required
+                                        multiple accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
+                                </label>
+
+                                {{-- Tombol Tambah File (muncul setelah file pertama dipilih) --}}
+                                <label class="upload-btn hidden" id="addMoreBtnLabel" style="color:#0d9488; border-color:#0d9488;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    <span>Tambah File</span>
+                                    <input type="file" name="documents[]" id="documentInputExtra" class="hidden"
+                                        multiple accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
                                 </label>
                             </div>
 
-                            {{-- Preview Area --}}
-                            <div id="filePreviewContainer"
-                                class="hidden flex items-center gap-3 p-3 bg-teal-50 border border-teal-100 rounded-[10px] max-w-md shadow-sm">
-                                {{-- Thumbnail for image --}}
-                                <div id="imagePreviewWrapper"
-                                    class="hidden w-12 h-12 shrink-0 rounded bg-gray-200 overflow-hidden border border-gray-300">
-                                    <img id="imagePreview" src="" alt="Preview"
-                                        class="w-full h-full object-cover">
-                                </div>
-                                {{-- Icon for non-image --}}
-                                <div id="docPreviewWrapper"
-                                    class="hidden w-12 h-12 shrink-0 rounded bg-teal-100 text-teal-600 flex items-center justify-center border border-teal-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p id="fileNameDisplay" class="text-sm font-bold text-gray-800 truncate"></p>
-                                    <p id="fileSizeDisplay" class="text-xs text-gray-500"></p>
-                                </div>
-                                <button type="button" id="removeFileBtn"
-                                    class="shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition"
-                                    title="Hapus File">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
+                            {{-- Preview List: satu card per file --}}
+                            <div id="filePreviewContainer" class="hidden flex flex-col gap-2 max-w-lg">
+                                <div id="fileListWrapper" class="flex flex-col gap-2"></div>
+                            </div>
+
+                            {{-- Peringatan validasi --}}
+                            <div id="uploadWarning" class="hidden flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-[10px] max-w-lg text-sm text-amber-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 mt-0.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                                </svg>
+                                <span id="uploadWarningText"></span>
                             </div>
                         </div>
                     </div>
@@ -529,64 +523,163 @@
             });
 
             // File Upload Preview Logic
-            const documentInput = document.getElementById('documentInput');
+            const documentInput      = document.getElementById('documentInput');
+            const documentInputExtra = document.getElementById('documentInputExtra');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
-            const imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
-            const imagePreview = document.getElementById('imagePreview');
-            const docPreviewWrapper = document.getElementById('docPreviewWrapper');
-            const fileNameDisplay = document.getElementById('fileNameDisplay');
-            const fileSizeDisplay = document.getElementById('fileSizeDisplay');
-            const removeFileBtn = document.getElementById('removeFileBtn');
-            const uploadBtnLabel = document.getElementById('uploadBtnLabel');
-            const uploadLabelText = document.getElementById('uploadLabelText');
+            const fileListWrapper    = document.getElementById('fileListWrapper');
+            const uploadLabelText    = document.getElementById('uploadLabelText');
+            const addMoreBtnLabel    = document.getElementById('addMoreBtnLabel');
 
-            if (documentInput) {
-                documentInput.addEventListener('change', function() {
-                    if (this.files && this.files[0]) {
-                        const file = this.files[0];
+            // Semua file yang dipilih
+            let allFiles = [];
 
-                        // Update text & info
-                        fileNameDisplay.textContent = file.name;
+            function formatSize(bytes) {
+                const kb = Math.round(bytes / 1024);
+                return kb > 1024 ? (kb / 1024).toFixed(2) + ' MB' : kb + ' KB';
+            }
 
-                        // Calculate size
-                        const sizeKB = Math.round(file.size / 1024);
-                        if (sizeKB > 1024) {
-                            fileSizeDisplay.textContent = (sizeKB / 1024).toFixed(2) + ' MB';
-                        } else {
-                            fileSizeDisplay.textContent = sizeKB + ' KB';
-                        }
+            function getFileIconSvg() {
+                return `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>`;
+            }
 
-                        // Check if file is image
-                        if (file.type.startsWith('image/')) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                imagePreview.src = e.target.result;
-                                imagePreviewWrapper.classList.remove('hidden');
-                                docPreviewWrapper.classList.add('hidden');
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            // Non image
-                            imagePreviewWrapper.classList.add('hidden');
-                            imagePreview.src = '';
-                            docPreviewWrapper.classList.remove('hidden');
-                        }
+            function renderFileCards() {
+                fileListWrapper.innerHTML = '';
 
-                        // Show preview, modify button
-                        filePreviewContainer.classList.remove('hidden');
-                        uploadLabelText.textContent = 'Ganti File';
+                if (allFiles.length === 0) {
+                    filePreviewContainer.classList.add('hidden');
+                    addMoreBtnLabel.classList.add('hidden');
+                    uploadLabelText.textContent = 'Upload File';
+                    return;
+                }
+
+                filePreviewContainer.classList.remove('hidden');
+                addMoreBtnLabel.classList.remove('hidden');
+                uploadLabelText.textContent = 'Ganti Semua File';
+
+                allFiles.forEach((file, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'flex items-center gap-3 p-3 bg-teal-50 border border-teal-100 rounded-[10px] shadow-sm';
+
+                    // Thumbnail / icon
+                    const thumbWrapper = document.createElement('div');
+                    thumbWrapper.className = 'w-12 h-12 shrink-0 rounded overflow-hidden border flex items-center justify-center';
+
+                    if (file.type.startsWith('image/')) {
+                        thumbWrapper.className += ' bg-gray-200 border-gray-300';
+                        const img = document.createElement('img');
+                        img.alt = file.name;
+                        img.className = 'w-full h-full object-cover';
+                        const reader = new FileReader();
+                        reader.onload = e => { img.src = e.target.result; };
+                        reader.readAsDataURL(file);
+                        thumbWrapper.appendChild(img);
+                    } else {
+                        thumbWrapper.className += ' bg-teal-100 border-teal-200 text-teal-600';
+                        thumbWrapper.innerHTML = getFileIconSvg();
                     }
+
+                    // Info teks
+                    const info = document.createElement('div');
+                    info.className = 'flex-1 min-w-0';
+                    info.innerHTML = `
+                        <p class="text-sm font-bold text-gray-800 truncate" title="${file.name}">${file.name}</p>
+                        <p class="text-xs text-gray-500">${formatSize(file.size)}</p>
+                    `;
+
+                    // Tombol hapus per file
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.title = 'Hapus File';
+                    removeBtn.className = 'shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition';
+                    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>`;
+                    removeBtn.addEventListener('click', () => {
+                        allFiles.splice(index, 1);
+                        syncInput();
+                        renderFileCards();
+                    });
+
+                    card.appendChild(thumbWrapper);
+                    card.appendChild(info);
+                    card.appendChild(removeBtn);
+                    fileListWrapper.appendChild(card);
                 });
 
-                removeFileBtn.addEventListener('click', function() {
-                    // Reset input
-                    documentInput.value = '';
+                syncInput();
+            }
 
-                    // Hide preview
-                    filePreviewContainer.classList.add('hidden');
+            function syncInput() {
+                const dt = new DataTransfer();
+                allFiles.forEach(f => dt.items.add(f));
+                documentInput.files = dt.files;
+            }
 
-                    // Reset button text
-                    uploadLabelText.textContent = 'Upload File';
+            function showWarning(msg) {
+                const box  = document.getElementById('uploadWarning');
+                const text = document.getElementById('uploadWarningText');
+                text.textContent = msg;
+                box.classList.remove('hidden');
+                // Auto-hide setelah 5 detik
+                clearTimeout(box._timer);
+                box._timer = setTimeout(() => box.classList.add('hidden'), 5000);
+            }
+
+            function hideWarning() {
+                document.getElementById('uploadWarning').classList.add('hidden');
+            }
+
+            const MAX_FILES   = 5;
+            const MAX_SIZE_MB = 5;
+            const MAX_BYTES   = MAX_SIZE_MB * 1024 * 1024;
+
+            function addFiles(newFiles) {
+                const warnings = [];
+
+                newFiles.forEach(f => {
+                    // Cek ukuran file
+                    if (f.size > MAX_BYTES) {
+                        warnings.push(`"${f.name}" melebihi batas ${MAX_SIZE_MB} MB (ukuran: ${formatSize(f.size)}).`);
+                        return; // lewati file ini
+                    }
+
+                    // Cek duplikat
+                    if (allFiles.some(e => e.name === f.name && e.size === f.size)) {
+                        return; // lewati duplikat
+                    }
+
+                    // Cek batas jumlah file
+                    if (allFiles.length >= MAX_FILES) {
+                        warnings.push(`Maksimal ${MAX_FILES} file. "${f.name}" tidak ditambahkan.`);
+                        return;
+                    }
+
+                    allFiles.push(f);
+                });
+
+                if (warnings.length > 0) {
+                    showWarning(warnings.join(' '));
+                } else {
+                    hideWarning();
+                }
+
+                renderFileCards();
+            }
+
+            if (documentInput) {
+                // Pilih / Ganti file (reset)
+                documentInput.addEventListener('change', function() {
+                    allFiles = [];
+                    addFiles(Array.from(this.files));
+                });
+
+                // Tambah file
+                documentInputExtra.addEventListener('change', function() {
+                    addFiles(Array.from(this.files));
+                    this.value = '';
                 });
             }
         })();

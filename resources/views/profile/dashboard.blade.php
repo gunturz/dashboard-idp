@@ -330,29 +330,42 @@
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @php
                                     $profilFields = [
-                                        ['label' => 'Nama',               'key' => 'nama',           'editable' => true],
-                                        ['label' => 'Perusahaan',         'key' => 'perusahaan',     'editable' => true],
-                                        ['label' => 'Departemen',         'key' => 'departemen',     'editable' => true],
-                                        ['label' => 'Role',               'key' => 'role',           'editable' => true],
-                                        ['label' => 'Jabatan yang dituju', 'key' => 'jabatan_target','editable' => true],
-                                        ['label' => 'Mentor',             'value' => $user->mentor?->nama ?? '-', 'editable' => false],
-                                        ['label' => 'Atasan',             'value' => $user->atasan?->nama ?? '-', 'editable' => false],
+                                        ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
+                                        ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->name ?? '-'],
+                                        ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->name ?? '-'],
+                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => $user->role->role_name ?? '-'],
+                                        ['label' => 'Jabatan yang dituju', 'key' => 'target_position_id','type' => 'select', 'options' => $positions ?? [],   'val' => $user->promotion_plan->targetPosition->name ?? '-'],
+                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => $user->mentor->nama ?? '-'],
+                                        ['label' => 'Atasan',             'type' => 'readonly', 'val' => $user->atasan->nama ?? '-'],
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
-                                    @php
-                                        $val = $field['value'] ?? ($user->{$field['key']} ?? '-');
-                                    @endphp
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
                                         <span class="text-sm font-semibold text-[#3d4f62] w-36 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span class="view-field text-sm text-gray-700">{{ $val }}</span>
-                                        @if ($field['editable'] ?? false)
+                                        <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
+                                        
+                                        @if (($field['type'] ?? '') === 'text')
                                             <input type="text"
                                                    name="{{ $field['key'] }}"
-                                                   value="{{ $val !== '-' ? $val : '' }}"
+                                                   value="{{ $user->{$field['key']} ?? '' }}"
                                                    class="edit-field prof-input hidden">
+                                        @elseif (($field['type'] ?? '') === 'select')
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
+                                                <option value="" disabled {{ !isset($user->{$field['key']}) && !isset($user->promotion_plan->target_position_id) ? 'selected' : '' }}>Pilih {{ $field['label'] }}</option>
+                                                @foreach ($field['options'] as $opt)
+                                                    @php
+                                                        $optName = $field['key'] === 'role_id' ? $opt->role_name : $opt->name;
+                                                        $selectedId = $field['key'] === 'target_position_id' 
+                                                            ? ($user->promotion_plan->target_position_id ?? null) 
+                                                            : ($user->{$field['key']} ?? null);
+                                                    @endphp
+                                                    <option value="{{ $opt->id }}" {{ $selectedId == $opt->id ? 'selected' : '' }}>
+                                                        {{ $optName }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         @else
-                                            <span class="edit-field text-sm text-gray-400 hidden">{{ $val }}</span>
+                                            <span class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
                                         @endif
                                     </div>
                                 @endforeach

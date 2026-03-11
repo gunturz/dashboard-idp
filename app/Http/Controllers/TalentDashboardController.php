@@ -121,7 +121,9 @@ class TalentDashboardController extends Controller
                 $q->where('role_name', 'atasan');
             })->get();
             
-            return view('talent.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans'));
+            $notifications = $this->getNotifications();
+            
+            return view('talent.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans', 'notifications'));
         } catch (\Exception $e) {
             Log::error('talentDashboard idpMonitoring error: ' . $e->getMessage());
             throw $e;

@@ -369,20 +369,23 @@
 
             {{-- White Form Content --}}
             <div class="form-bg p-8 relative z-20 -mt-2 shadow-sm">
-                <form action="{{ route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
+                <form action="{{ isset($editMode) ? route('talent.idp_monitoring.update', $activity->id) : route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
                     enctype="multipart/form-data" class="space-y-4">
                     @csrf
+                    @if(isset($editMode))
+                        @method('PUT')
+                    @endif
 
                     @if ($tab == 'learning')
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Sumber</label>
-                            <input type="text" name="activity" class="form-input" placeholder="" required>
+                            <input type="text" name="activity" class="form-input" placeholder="" value="{{ old('activity', $activity->activity ?? '') }}" required>
                         </div>
                     @else
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Mentor</label>
                             <input type="text" name="mentor_name" list="mentor-list" class="form-input"
-                                placeholder="Ketik nama mentor..." required>
+                                placeholder="Ketik nama mentor..." value="{{ old('mentor_name', $activity->verifier->nama ?? '') }}" required>
                             <datalist id="mentor-list">
                                 @foreach ($mentors as $m)
                                     <option value="{{ $m->nama }}">
@@ -393,46 +396,46 @@
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tema</label>
-                        <input type="text" name="theme" class="form-input" placeholder="" required>
+                        <input type="text" name="theme" class="form-input" placeholder="" value="{{ old('theme', $activity->theme ?? '') }}" required>
                     </div>
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tanggal</label>
-                        <input type="date" name="activity_date" class="form-input" required>
+                        <input type="date" name="activity_date" class="form-input" value="{{ old('activity_date', isset($activity) ? \Carbon\Carbon::parse($activity->activity_date)->format('Y-m-d') : '') }}" required>
                     </div>
 
                     @if ($tab == 'learning')
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Platform</label>
-                            <input type="text" name="platform" class="form-input" placeholder="" required>
+                            <input type="text" name="platform" class="form-input" placeholder="" value="{{ old('platform', $activity->platform ?? '') }}" required>
                         </div>
                     @else
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Lokasi</label>
-                            <input type="text" name="location" class="form-input" placeholder="" required>
+                            <input type="text" name="location" class="form-input" placeholder="" value="{{ old('location', $activity->location ?? '') }}" required>
                         </div>
                     @endif
 
                     @if ($tab == 'mentoring')
                         <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                            <textarea name="description" class="form-textarea h-24" placeholder="" required></textarea>
+                            <textarea name="description" class="form-textarea h-24" placeholder="" required>{{ old('description', $activity->description ?? '') }}</textarea>
                         </div>
 
                         <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Action Plan</label>
-                            <textarea name="action_plan" class="form-textarea h-24" placeholder="" required></textarea>
+                            <textarea name="action_plan" class="form-textarea h-24" placeholder="" required>{{ old('action_plan', $activity->action_plan ?? '') }}</textarea>
                         </div>
                     @else
                         @if ($tab == 'exposure')
                             <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                                 <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
-                                <textarea name="activity" class="form-textarea h-24" placeholder="" required></textarea>
+                                <textarea name="activity" class="form-textarea h-24" placeholder="" required>{{ old('activity', $activity->activity ?? '') }}</textarea>
                             </div>
 
                             <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                                 <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                                <textarea name="description" class="form-textarea h-24" placeholder="" required></textarea>
+                                <textarea name="description" class="form-textarea h-24" placeholder="" required>{{ old('description', $activity->description ?? '') }}</textarea>
                             </div>
                         @endif
                     @endif
@@ -440,8 +443,49 @@
                     <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-2">
                         <label class="text-sm font-semibold text-gray-800 mt-2">Dokumentasi</label>
                         <div class="flex flex-col gap-3">
+                            {{-- Tampilkan File Sebelumnya Jika Edit Mode --}}
+                            @if(isset($editMode) && $activity->document_path)
+                                @php
+                                    $paths = [];
+                                    $names = [];
+                                    if(str_starts_with($activity->document_path, '["')) {
+                                        $paths = json_decode($activity->document_path, true);
+                                        $names = explode(', ', $activity->file_name);
+                                    } else {
+                                        $paths = [$activity->document_path];
+                                        $names = [$activity->file_name];
+                                    }
+                                @endphp
+                                <div class="mb-2" id="existingFilesContainer">
+                                    <p class="text-[13px] text-gray-500 font-semibold mb-2">Dokumen Terlampir Saat Ini:</p>
+                                    <div class="flex flex-col gap-2 max-w-lg">
+                                        @foreach($paths as $index => $path)
+                                        <div class="flex items-center gap-3 p-2.5 bg-gray-50 border border-gray-200 rounded-[10px]" data-existing-file>
+                                            <input type="hidden" name="existing_documents_paths[]" value="{{ $path }}">
+                                            <input type="hidden" name="existing_documents_names[]" value="{{ $names[$index] ?? 'Dokumen' }}">
+                                            <div class="w-10 h-10 shrink-0 rounded overflow-hidden flex items-center justify-center bg-gray-200 text-gray-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="flex-1 min-w-0 flex items-center justify-between">
+                                                <div>
+                                                    <a href="{{ asset('storage/'.$path) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-800 hover:underline truncate block max-w-[250px]" title="{{ $names[$index] ?? 'Dokumen' }}">{{ $names[$index] ?? 'Dokumen' }}</a>
+                                                </div>
+                                                <button type="button" class="shrink-0 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition" title="Hapus File Ini" onclick="this.closest('[data-existing-file]').remove();">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                             {{-- Tombol Upload / Ganti / Tambah --}}
-                            <div class="flex items-center gap-2 flex-wrap">
+                            <div class="flex items-center gap-2 flex-wrap" id="uploadActionContainer">
                                 {{-- Tombol utama: Upload File / Ganti Semua File --}}
                                 <label class="upload-btn" id="uploadBtnLabel">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
@@ -450,19 +494,7 @@
                                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                     </svg>
                                     <span id="uploadLabelText">Upload File</span>
-                                    <input type="file" name="documents[]" id="documentInput" class="hidden" required
-                                        multiple accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
-                                </label>
-
-                                {{-- Tombol Tambah File (muncul setelah file pertama dipilih) --}}
-                                <label class="upload-btn hidden" id="addMoreBtnLabel" style="color:#0d9488; border-color:#0d9488;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    <span>Tambah File</span>
-                                    <input type="file" name="documents[]" id="documentInputExtra" class="hidden"
+                                    <input type="file" name="documents[]" id="documentInput" class="hidden" {{ isset($editMode) ? '' : 'required' }}
                                         multiple accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
                                 </label>
                             </div>
@@ -524,11 +556,9 @@
 
             // File Upload Preview Logic
             const documentInput      = document.getElementById('documentInput');
-            const documentInputExtra = document.getElementById('documentInputExtra');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
             const fileListWrapper    = document.getElementById('fileListWrapper');
             const uploadLabelText    = document.getElementById('uploadLabelText');
-            const addMoreBtnLabel    = document.getElementById('addMoreBtnLabel');
 
             // Semua file yang dipilih
             let allFiles = [];
@@ -550,14 +580,12 @@
 
                 if (allFiles.length === 0) {
                     filePreviewContainer.classList.add('hidden');
-                    addMoreBtnLabel.classList.add('hidden');
                     uploadLabelText.textContent = 'Upload File';
                     return;
                 }
 
                 filePreviewContainer.classList.remove('hidden');
-                addMoreBtnLabel.classList.remove('hidden');
-                uploadLabelText.textContent = 'Ganti Semua File';
+                uploadLabelText.textContent = 'Upload';
 
                 allFiles.forEach((file, index) => {
                     const card = document.createElement('div');
@@ -670,16 +698,10 @@
             }
 
             if (documentInput) {
-                // Pilih / Ganti file (reset)
+                // Pilih file
                 documentInput.addEventListener('change', function() {
-                    allFiles = [];
+                    // Jangan reset array agar file baru bertambah (append) bukan menggantikan pilihan sebelumnya di UI
                     addFiles(Array.from(this.files));
-                });
-
-                // Tambah file
-                documentInputExtra.addEventListener('change', function() {
-                    addFiles(Array.from(this.files));
-                    this.value = '';
                 });
             }
         })();

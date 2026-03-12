@@ -13,33 +13,33 @@ use App\Http\Controllers\KandidatDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
+    Route::get('register', [RegisteredUserController::class , 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('register', [RegisteredUserController::class , 'store']);
 
     // Step 2 registrasi kandidat: halaman kompetensi
-    Route::get('register/kompetensi', [RegisteredUserController::class, 'stepKompetensi'])
+    Route::get('register/kompetensi', [RegisteredUserController::class , 'stepKompetensi'])
         ->name('register.kompetensi');
 
-    Route::post('register/kompetensi', [RegisteredUserController::class, 'storeKompetensi'])
+    Route::post('register/kompetensi', [RegisteredUserController::class , 'storeKompetensi'])
         ->name('register.kompetensi.store');
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    Route::get('login', [AuthenticatedSessionController::class , 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('login', [AuthenticatedSessionController::class , 'store']);
 
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+    Route::get('forgot-password', [PasswordResetLinkController::class , 'create'])
         ->name('password.request');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+    Route::post('forgot-password', [PasswordResetLinkController::class , 'store'])
         ->name('password.email');
 
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+    Route::get('reset-password/{token}', [NewPasswordController::class , 'create'])
         ->name('password.reset');
 
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
+    Route::post('reset-password', [NewPasswordController::class , 'store'])
         ->name('password.store');
 });
 
@@ -51,40 +51,47 @@ Route::middleware('auth')->group(function () {
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class , 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
 
-    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+    Route::get('confirm-password', [ConfirmablePasswordController::class , 'show'])
         ->name('password.confirm');
 
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+    Route::post('confirm-password', [ConfirmablePasswordController::class , 'store']);
 
-    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+    Route::put('password', [PasswordController::class , 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    Route::post('logout', [AuthenticatedSessionController::class , 'destroy'])
         ->name('logout');
 
-        
+
+
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class, 'index'])
+    Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class , 'index'])
         ->name('talent.dashboard');
-    Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class, 'competency'])
+    Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'competency'])
         ->name('talent.competency');
-    Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class, 'storeCompetency'])
+    Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'storeCompetency'])
         ->name('talent.competency.store');
-    Route::get('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class, 'idpMonitoring'])
+    Route::get('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class , 'idpMonitoring'])
         ->name('talent.idp_monitoring');
-    Route::post('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class, 'storeIdpMonitoring'])
+    Route::post('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class , 'storeIdpMonitoring'])
         ->name('talent.idp_monitoring.store');
-    Route::get('/talent/notifikasi', [\App\Http\Controllers\TalentDashboardController::class, 'notifikasi'])
+    Route::get('/talent/idp-monitoring/edit/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'editIdpMonitoring'])
+        ->name('talent.idp_monitoring.edit');
+    Route::put('/talent/idp-monitoring/update/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'updateIdpMonitoring'])
+        ->name('talent.idp_monitoring.update');
+    Route::delete('/talent/idp-monitoring/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'destroyIdpMonitoring'])
+        ->name('talent.idp_monitoring.destroy');
+    Route::get('/talent/notifikasi', [\App\Http\Controllers\TalentDashboardController::class , 'notifikasi'])
         ->name('talent.notifikasi');
-    Route::post('/talent/notifikasi/mark-all-read', [\App\Http\Controllers\TalentDashboardController::class, 'markAllNotificationsRead'])
+    Route::post('/talent/notifikasi/mark-all-read', [\App\Http\Controllers\TalentDashboardController::class , 'markAllNotificationsRead'])
         ->name('talent.notifikasi.markAllRead');
-    Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class, 'logbookDetail'])
+    Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class , 'logbookDetail'])
         ->name('talent.logbook.detail');
-    Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class, 'storeProject'])
+    Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class , 'storeProject'])
         ->name('talent.project.store');
 });

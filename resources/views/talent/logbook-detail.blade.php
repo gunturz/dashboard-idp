@@ -368,6 +368,7 @@
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Dokumentasi</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">FeedBack</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Status</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[150px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -381,13 +382,27 @@
                                 <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
                                     {{ $data['deskripsi'] ?? '-' }}
                                 </td>
-                                <td class="px-6 py-4 text-emerald-600 font-medium whitespace-nowrap border-r border-gray-100">
-                                    <div class="w-40 border border-gray-200 rounded-lg h-10 mr-auto flex items-center justify-start px-3 gap-1 text-xs">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                        </svg>
-                                        {{ $data['dokumentasi'] ? \Illuminate\Support\Str::limit($data['dokumentasi'], 15) : 'Tidak ada' }}
-                                    </div>
+                                <td class="px-6 py-4 text-emerald-600 font-medium border-r border-gray-100">
+                                    @if(!empty($data['file_paths']))
+                                        <div class="flex flex-col gap-1">
+                                            @foreach($data['file_paths'] as $fi => $fp)
+                                            <a href="{{ asset('storage/' . $fp) }}" target="_blank"
+                                                class="flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-gray-200 hover:bg-emerald-50 hover:border-emerald-200 transition-colors max-w-[160px]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                </svg>
+                                                <span class="truncate" title="{{ $data['file_names'][$fi] ?? 'Dokumen' }}">{{ \Illuminate\Support\Str::limit($data['file_names'][$fi] ?? 'Dokumen', 18) }}</span>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-gray-200 text-gray-400 max-w-[160px]">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                            Tidak ada
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
                                     -
@@ -405,10 +420,30 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-4 border-l border-gray-100">
+                                    <div class="flex items-center justify-center gap-3">
+                                        {{-- Edit Button --}}
+                                        <a href="{{ route('talent.idp_monitoring.edit', $data['id']) }}" class="text-blue-500 hover:text-blue-700 transition" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </a>
+                                        {{-- Delete Button --}}
+                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data logbook ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Hapus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Exposure yang dicatat.</td>
+                                <td colspan="10" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Exposure yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -434,6 +469,7 @@
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Dokumentasi</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">FeedBack</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Status</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[150px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -450,12 +486,26 @@
                                     {{ $data['action_plan'] ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-emerald-600 font-medium border-r border-gray-100">
-                                    <div class="w-40 border border-gray-200 rounded-lg h-10 mr-auto flex items-center justify-start px-3 gap-1 text-xs">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                        </svg>
-                                        {{ $data['dokumentasi'] ? \Illuminate\Support\Str::limit($data['dokumentasi'], 15) : 'Tidak ada' }}
-                                    </div>
+                                    @if(!empty($data['file_paths']))
+                                        <div class="flex flex-col gap-1">
+                                            @foreach($data['file_paths'] as $fi => $fp)
+                                            <a href="{{ asset('storage/' . $fp) }}" target="_blank"
+                                                class="flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-gray-200 hover:bg-emerald-50 hover:border-emerald-200 transition-colors max-w-[160px]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                </svg>
+                                                <span class="truncate" title="{{ $data['file_names'][$fi] ?? 'Dokumen' }}">{{ \Illuminate\Support\Str::limit($data['file_names'][$fi] ?? 'Dokumen', 18) }}</span>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-gray-200 text-gray-400 max-w-[160px]">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                            Tidak ada
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
                                     -
@@ -473,10 +523,28 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-4 border-l border-gray-100">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <a href="{{ route('talent.idp_monitoring.edit', $data['id']) }}" class="text-blue-500 hover:text-blue-700 transition" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </a>
+                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data logbook ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Hapus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                <td colspan="10" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -500,6 +568,7 @@
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Dokumentasi</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">FeedBack</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Status</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[150px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -510,12 +579,26 @@
                                 <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                                 <td class="px-6 py-4 text-gray-600 whitespace-nowrap border-r border-gray-100 text-left">{{ $data['platform'] }}</td>
                                 <td class="px-6 py-4 text-emerald-600 font-medium border-r border-gray-100">
-                                    <div class="w-40 border border-gray-200 rounded-lg h-10 mr-auto flex items-center justify-start px-3 gap-1 text-xs">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                        </svg>
-                                        {{ $data['dokumentasi'] ? \Illuminate\Support\Str::limit($data['dokumentasi'], 15) : 'Tidak ada' }}
-                                    </div>
+                                    @if(!empty($data['file_paths']))
+                                        <div class="flex flex-col gap-1">
+                                            @foreach($data['file_paths'] as $fi => $fp)
+                                            <a href="{{ asset('storage/' . $fp) }}" target="_blank"
+                                                class="flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-gray-200 hover:bg-emerald-50 hover:border-emerald-200 transition-colors max-w-[160px]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                </svg>
+                                                <span class="truncate" title="{{ $data['file_names'][$fi] ?? 'Dokumen' }}">{{ \Illuminate\Support\Str::limit($data['file_names'][$fi] ?? 'Dokumen', 18) }}</span>
+                                            </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-gray-200 text-gray-400 max-w-[160px]">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                            Tidak ada
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
                                     -
@@ -533,10 +616,28 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-4 border-l border-gray-100">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <a href="{{ route('talent.idp_monitoring.edit', $data['id']) }}" class="text-blue-500 hover:text-blue-700 transition" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </a>
+                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data logbook ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Hapus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Learning yang dicatat.</td>
+                                <td colspan="8" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Learning yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -552,6 +653,10 @@
         </span>
     </footer>
 
+
+
+
+    
     <script>
         // Hide navbar on scroll down, show on scroll up
         (function() {

@@ -515,26 +515,27 @@
                 @php
                     $idpChartData = [
                         'Exposure' => [
-                            'done' => 4,
+                            'done' => min($exposureCount ?? 0, 6),
                             'total' => 6,
-                            'from' => '#ea580c',
-                            'to' => '#fbbf24',
+                            'from' => '#c2410c',
+                            'to' => '#fb923c',
                             'id' => 'grad-exposure',
                         ],
+                        'Mentoring' => [
+                            'done' => min($mentoringCount ?? 0, 6),
+                            'total' => 6,
+                            'from' => '#c2410c',
+                            'to' => '#fb923c',
+                            'id' => 'grad-mentoring',
+                        ],
                         'Learning' => [
-                            'done' => 5,
+                            'done' => min($learningCount ?? 0, 6),
                             'total' => 6,
                             'from' => '#c2410c',
                             'to' => '#fb923c',
                             'id' => 'grad-learning',
                         ],
-                        'Mentoring' => [
-                            'done' => 6,
-                            'total' => 6,
-                            'from' => '#7c2d12',
-                            'to' => '#ea580c',
-                            'id' => 'grad-mentoring',
-                        ],
+                        
                     ];
                     $r = 38;
                     $circ = 2 * M_PI * $r; // ≈ 238.76

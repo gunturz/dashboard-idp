@@ -140,34 +140,44 @@
             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
         }
 
-        /* Fix to match the design border radius and colors */
+        /* ── Tab bar ── */
+        .tab-bar {
+            display: flex;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            padding: 5px;
+            gap: 4px;
+            width: fit-content;
+            margin-bottom: 1.5rem;
+        }
+
         .tab-btn {
-            padding: 0.8rem 2.5rem;
+            padding: 0.55rem 1.75rem;
             font-weight: 600;
-            font-size: 1rem;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+            font-size: 0.9rem;
+            border-radius: 9999px;
             cursor: pointer;
             transition: all 0.2s;
+            text-decoration: none;
+            color: #64748b;
+            background: transparent;
+            white-space: nowrap;
         }
 
         .tab-active {
-            background-color: #e5e7eb;
-            /* Light grayish */
-            color: #2e3746;
-            /* Dark gray text */
+            background-color: #2e3746;
+            color: #ffffff;
+            box-shadow: 0 2px 12px rgba(46,55,70,0.22);
         }
 
         .tab-inactive {
-            background-color: #2e3746;
-            /* Dark slate */
-            color: white;
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: #64748b;
         }
 
         .tab-inactive:hover {
-            background-color: #2e3746;
+            background-color: #cbd5e1;
+            color: #2e3746;
         }
 
         .upload-btn {
@@ -358,13 +368,13 @@
         <div class="wrapper-bg rounded-[16px] shadow-sm p-6 border border-gray-200">
 
             {{-- Tabs --}}
-            <div class="flex space-x-0 relative z-10 w-full pl-2">
+            <div class="tab-bar">
                 <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
-                    class="tab-btn pb-[1.1rem] {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
+                    class="tab-btn {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
                 <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
-                    class="tab-btn pb-[1.1rem] {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
+                    class="tab-btn {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
                 <a href="{{ route('talent.idp_monitoring', 'learning') }}"
-                    class="tab-btn pb-[1.1rem] {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
+                    class="tab-btn {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
             </div>
 
             {{-- White Form Content --}}

@@ -16,7 +16,7 @@
         .navbar-outer {
             position: fixed; top: 0; left: 0; right: 0; z-index: 50;
             display: flex; align-items: center;
-            background: #3d4f62;
+            background: #2e3746;
             padding: 1rem 1.75rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.25);
         }
@@ -31,7 +31,7 @@
             background: white; border-radius: 50%;
             border: 2px solid #e2e8f0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-            color: #3d4f62; cursor: pointer;
+            color: #2e3746; cursor: pointer;
             transition: box-shadow 0.2s, transform 0.15s;
             position: relative;
         }
@@ -48,7 +48,7 @@
 
         .section-header {
             display: inline-block;
-            background: #3d4f62; color: white;
+            background: #2e3746; color: white;
             font-weight: 600; font-size: 0.875rem;
             padding: 0.35rem 1.25rem;
             border-radius: 6px 6px 0 0;
@@ -62,7 +62,7 @@
             transition: border-color 0.2s, box-shadow 0.2s;
             color: #1e293b;
         }
-        .prof-input:focus { outline: none; border-color: #3d4f62; box-shadow: 0 0 0 3px rgba(61,79,98,0.1); }
+        .prof-input:focus { outline: none; border-color: #2e3746; box-shadow: 0 0 0 3px rgba(46,55,70,0.1); }
         .prof-input:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
 
         @keyframes fadeSlideUp {
@@ -78,6 +78,10 @@
         }
     </style>
 </head>
+
+
+
+
 
 <body class="bg-gray-100 min-h-screen flex flex-col pt-[80px]">
 
@@ -194,10 +198,10 @@
         </div>
 
         <div class="flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#3d4f62]" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
             </svg>
-            <h1 class="text-2xl font-bold text-[#3d4f62]">Profil Kandidat</h1>
+            <h1 class="text-2xl font-bold text-[#2e3746]">Profil Kandidat</h1>
         </div>
 
         {{-- Error Display --}}
@@ -331,17 +335,18 @@
                                 @php
                                     $profilFields = [
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
-                                        ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->name ?? '-'],
-                                        ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->name ?? '-'],
+                                        ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->nama_company ?? '-'],
+                                        ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
                                         ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => $user->role->role_name ?? '-'],
-                                        ['label' => 'Jabatan yang dituju', 'key' => 'target_position_id','type' => 'select', 'options' => $positions ?? [],   'val' => $user->promotion_plan->targetPosition->name ?? '-'],
+                                        ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-'],
                                         ['label' => 'Mentor',             'type' => 'readonly', 'val' => $user->mentor->nama ?? '-'],
                                         ['label' => 'Atasan',             'type' => 'readonly', 'val' => $user->atasan->nama ?? '-'],
+                                        ['label' => 'Posisi Yang Dituju', 'key' => 'target_position_id','type' => 'select', 'options' => $positions ?? [],   'val' => $user->promotion_plan->targetPosition->position_name ?? '-'],
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#3d4f62] w-36 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="text-sm font-semibold text-[#2e3746] w-36 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
                                         
                                         @if (($field['type'] ?? '') === 'text')
@@ -351,12 +356,22 @@
                                                    class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
                                             <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
-                                                <option value="" disabled {{ !isset($user->{$field['key']}) && !isset($user->promotion_plan->target_position_id) ? 'selected' : '' }}>Pilih {{ $field['label'] }}</option>
+                                                <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
-                                                        $optName = $field['key'] === 'role_id' ? $opt->role_name : $opt->name;
-                                                        $selectedId = $field['key'] === 'target_position_id' 
-                                                            ? ($user->promotion_plan->target_position_id ?? null) 
+                                                        if ($field['key'] === 'role_id') {
+                                                            $optName = $opt->role_name;
+                                                        } elseif ($field['key'] === 'company_id') {
+                                                            $optName = $opt->nama_company;
+                                                        } elseif ($field['key'] === 'department_id') {
+                                                            $optName = $opt->nama_department;
+                                                        } elseif (in_array($field['key'], ['position_id', 'target_position_id'])) {
+                                                            $optName = $opt->position_name;
+                                                        } else {
+                                                            $optName = $opt->name ?? $opt->position_name ?? $opt->nama ?? '';
+                                                        }
+                                                        $selectedId = $field['key'] === 'target_position_id'
+                                                            ? ($user->promotion_plan->target_position_id ?? null)
                                                             : ($user->{$field['key']} ?? null);
                                                     @endphp
                                                     <option value="{{ $opt->id }}" {{ $selectedId == $opt->id ? 'selected' : '' }}>
@@ -398,7 +413,7 @@
     </div>
 
     {{-- FOOTER --}}
-    <footer class="mt-auto bg-[#3d4f62]/90 backdrop-blur-sm shadow-md py-4 text-center w-full">
+    <footer class="mt-auto bg-[#2e3746]/90 backdrop-blur-sm shadow-md py-4 text-center w-full">
         <span class="text-white/80 text-sm font-medium tracking-wide">
             &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
         </span>
@@ -422,7 +437,7 @@
                     Batalkan
                 </button>
                 <button type="button" onclick="submitForm()"
-                        class="flex-1 bg-[#3d4f62] hover:bg-[#2e3d4e] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
+                        class="flex-1 bg-[#2e3746] hover:bg-[#1e2a36] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
                     Ya, Yakin
                 </button>
             </div>

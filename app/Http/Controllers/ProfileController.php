@@ -22,7 +22,7 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         return view('profile.dashboard', [
-            'user'          => $request->user()->load(['company', 'department', 'role', 'promotion_plan.targetPosition', 'mentor', 'atasan']),
+            'user'          => $request->user()->load(['company', 'department', 'position', 'role', 'promotion_plan.targetPosition', 'mentor', 'atasan']),
             'notifications' => $this->getNotifications(),
             'companies'     => Company::all(),
             'departments'   => Department::all(),

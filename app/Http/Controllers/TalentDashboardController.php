@@ -74,9 +74,10 @@ class TalentDashboardController extends Controller
             }
 
             // Validasi Input Array Score dari request POST
+            // min:0 karena Level 1 + Ragu-ragu = skor 0
             $data = $request->validate([
                 'scores' => 'required|array',
-                'scores.*' => 'required|integer|min:1|max:5',
+                'scores.*' => 'required|integer|min:0|max:5',
             ]);
 
             DB::beginTransaction();
@@ -86,7 +87,6 @@ class TalentDashboardController extends Controller
             // 1. Buat Header / Sesi Assessment Baru
             $assessmentId = DB::table('assessment_session')->insertGetId([
                 'user_id_talent' => $user->id,
-                // Assign supervisor ID defaults if null for assessment
                 'user_id_atasan' => $user->atasan_id ?? $user->id,
                 'period' => "Assessment {$bulanTahun}",
                 'created_at' => now(),
@@ -96,13 +96,12 @@ class TalentDashboardController extends Controller
             // 2. Siapkan Data Multiple Detail Assessment untuk di-insert
             $details = [];
             foreach ($data['scores'] as $competenceId => $scoreTalent) {
-                // Konversi competenceId jika ada validasi dari string dict/array index
                 $details[] = [
                     'assessment_id' => $assessmentId,
                     'competence_id' => (int)$competenceId,
                     'score_atasan' => 0, // diisi nanti oleh Atasan
                     'score_talent' => (int)$scoreTalent,
-                    'gap_score' => 0, // diisi nanti/bisa update
+                    'gap_score' => 0, // diisi nanti
                     'notes' => 'Completed by talent',
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -114,8 +113,13 @@ class TalentDashboardController extends Controller
 
             DB::commit();
 
-            return redirect()->route('talent.dashboard')->with('success', 'Berhasil! Penilaian kompetensi Anda telah tersimpan ke sistem.');
+            return redirect()->route('talent.dashboard')
+                ->with('success', 'Berhasil! Penilaian kompetensi Anda telah tersimpan.');
 
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput()
+                ->with('error', 'Data assessment tidak valid. Pastikan semua kompetensi sudah dinilai.');
         }
         catch (\Exception $e) {
             DB::rollBack();

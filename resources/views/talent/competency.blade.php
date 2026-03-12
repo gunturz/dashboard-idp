@@ -605,8 +605,10 @@
         }
 
         function handleRaguRagu() {
-            // Ragu-ragu → skor berhenti di level sebelumnya (min 1)
-            const scoreToSave = (currentLevel === 1) ? 1 : (currentLevel - 1);
+            // Ragu-ragu → skor berhenti di level sebelumnya
+            // Jika di Level 1 dan ragu → skor 0 (belum kompeten di level apapun)
+            // Jika di Level 2+ dan ragu → skor level sebelumnya (currentLevel - 1)
+            const scoreToSave = (currentLevel === 1) ? 0 : (currentLevel - 1);
             showConfirmPopup(scoreToSave);
         }
 

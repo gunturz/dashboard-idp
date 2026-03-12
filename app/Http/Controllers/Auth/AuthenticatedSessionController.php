@@ -64,7 +64,17 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('kandidat.dashboard');
         }
         elseif ($role === 'talent') {
-            return redirect()->route('talent.competency');
+            // Check if talent has already completed an assessment
+            $hasAssessed = \Illuminate\Support\Facades\DB::table('assessment_session')
+                ->where('user_id_talent', Auth::id())
+                ->exists();
+
+            if ($hasAssessed) {
+                return redirect()->route('talent.dashboard');
+            }
+            else {
+                return redirect()->route('talent.competency');
+            }
         }
         elseif ($role === 'atasan') {
             return redirect()->route('atasan.dashboard');

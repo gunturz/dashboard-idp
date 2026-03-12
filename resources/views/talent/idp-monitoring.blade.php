@@ -140,43 +140,34 @@
             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
         }
 
-        .tab-bar {
-            display: flex;
-            background: #ffffff;
-            border-radius: 9999px;
-            padding: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            gap: 2px;
-            width: fit-content;
-            margin-bottom: 1.5rem;
-        }
-
+        /* Fix to match the design border radius and colors */
         .tab-btn {
-            padding: 0.55rem 2rem;
+            padding: 0.8rem 2.5rem;
             font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 9999px;
+            font-size: 1rem;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            white-space: nowrap;
-            text-decoration: none;
+            transition: all 0.2s;
         }
 
         .tab-active {
-            background-color: #1e293b;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(30,41,59,0.25);
+            background-color: #e5e7eb;
+            /* Light grayish */
+            color: #2e3746;
+            /* Dark gray text */
         }
 
         .tab-inactive {
-            background-color: transparent;
-            color: #64748b;
-            border: none;
+            background-color: #2e3746;
+            /* Dark slate */
+            color: white;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .tab-inactive:hover {
-            background-color: #f1f5f9;
-            color: #1e293b;
+            background-color: #2e3746;
         }
 
         .upload-btn {
@@ -367,17 +358,17 @@
         <div class="wrapper-bg rounded-[16px] shadow-sm p-6 border border-gray-200">
 
             {{-- Tabs --}}
-            <div class="tab-bar">
+            <div class="flex space-x-0 relative z-10 w-full pl-2">
                 <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
-                    class="tab-btn {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
+                    class="tab-btn pb-[1.1rem] {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
                 <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
-                    class="tab-btn {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
+                    class="tab-btn pb-[1.1rem] {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
                 <a href="{{ route('talent.idp_monitoring', 'learning') }}"
-                    class="tab-btn {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
+                    class="tab-btn pb-[1.1rem] {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
             </div>
 
             {{-- White Form Content --}}
-            <div class="form-bg p-8 shadow-sm">
+            <div class="form-bg p-8 relative z-20 -mt-2 shadow-sm">
                 <form action="{{ route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
                     enctype="multipart/form-data" class="space-y-4">
                     @csrf

@@ -27,6 +27,7 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'company_id' => ['nullable', 'integer', 'exists:company,id'],
             'department_id' => ['nullable', 'integer', 'exists:department,id'],
+            'position_id' => ['nullable', 'integer', 'exists:position,id'],
             'target_position_id' => ['nullable', 'integer', 'exists:position,id'],
             'role_id' => ['nullable', 'integer', 'exists:role,id'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],

@@ -319,7 +319,7 @@
                     <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Jabatan Sekarang</span>
+                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Sekarang</span>
                     <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
                 </div>
             </div>
@@ -333,6 +333,10 @@
                 <div class="flex gap-2">
                     <span class="font-semibold text-white/70 w-24 flex-shrink-0">Atasan</span>
                     <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
+                </div>
+                <div class="flex gap-2">
+                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Posisi Dituju</span>
+                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
 

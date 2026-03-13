@@ -1,350 +1,28 @@
-<!DOCTYPE html>
-<html lang="id">
+<x-talent.layout title="IDP Monitoring – Individual Development Plan" :user="$user" :notifications="$notifications">
+    <x-slot name="styles">
+        <style>
+            /* ── Form Items ── */
+            .form-input, .form-textarea { width: 100%; padding: 0.55rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.875rem; outline: none; transition: border-color 0.2s; background-color: #ffffff; }
+            .form-input:focus, .form-textarea:focus { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12); }
+            /* ── Tab bar ── */
+            .tab-bar { display: flex; background: #e2e8f0; border-radius: 9999px; padding: 5px; gap: 4px; width: fit-content; margin-bottom: 1.5rem; }
+            .tab-btn { padding: 0.55rem 1.75rem; font-weight: 600; font-size: 0.9rem; border-radius: 9999px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: #64748b; background: transparent; white-space: nowrap; }
+            .tab-active { background-color: #2e3746; color: #ffffff; box-shadow: 0 2px 12px rgba(46,55,70,0.22); }
+            .tab-inactive { background: transparent; color: #64748b; }
+            .tab-inactive:hover { background-color: #cbd5e1; color: #2e3746; }
+            .upload-btn { border: 1.5px solid #cbd5e1; padding: 0.4rem 1.2rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.875rem; color: #2e3746; cursor: pointer; transition: all 0.2s; font-weight: 500; background-color: white; }
+            .upload-btn:hover { background-color: #f0fdf4; color: #16a34a; border-color: #22c55e; }
+            .submit-btn { background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 600; padding: 0.5rem 2.5rem; border-radius: 10px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 0.875rem; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3); }
+            .submit-btn:hover { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5); transform: translateY(-1px); }
+            .submit-btn:active { transform: translateY(0); box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3); }
+            /* Main Gray Container matches the image */
+            .wrapper-bg { background-color: #f3f4f6; }
+            .form-bg { background-color: #ffffff; border-radius: 10px; }
+        </style>
+    </x-slot>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDP Monitoring – Individual Development Plan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* ── Scrollbar ── */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 99px;
-        }
-
-        /* ── Title Animation ── */
-        @keyframes titleReveal {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .animate-title {
-            animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-
-        /* ── Smooth entrance ── */
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            animation: fadeSlideUp 0.5s ease both;
-        }
-
-        .fade-up-1 {
-            animation-delay: 0.05s;
-        }
-
-        .fade-up-2 {
-            animation-delay: 0.12s;
-        }
-
-        /* ── Navbar outer wrapper ── */
-        .navbar-outer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            background: #2e3746;
-            padding: 1rem 1.75rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .navbar-outer.nav-hidden {
-            transform: translateY(-110%);
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 9px;
-            height: 9px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 1.5px solid white;
-        }
-
-        .nav-icon-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #2e3746;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.15s;
-            position: relative;
-        }
-
-        .nav-icon-btn:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
-
-        /* ── Form Items ── */
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 0.55rem 1rem;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            outline: none;
-            transition: border-color 0.2s;
-            background-color: #ffffff;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
-        }
-
-        /* ── Tab bar ── */
-        .tab-bar {
-            display: flex;
-            background: #e2e8f0;
-            border-radius: 9999px;
-            padding: 5px;
-            gap: 4px;
-            width: fit-content;
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-btn {
-            padding: 0.55rem 1.75rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            color: #64748b;
-            background: transparent;
-            white-space: nowrap;
-        }
-
-        .tab-active {
-            background-color: #2e3746;
-            color: #ffffff;
-            box-shadow: 0 2px 12px rgba(46,55,70,0.22);
-        }
-
-        .tab-inactive {
-            background: transparent;
-            color: #64748b;
-        }
-
-        .tab-inactive:hover {
-            background-color: #cbd5e1;
-            color: #2e3746;
-        }
-
-        .upload-btn {
-            border: 1.5px solid #cbd5e1;
-            padding: 0.4rem 1.2rem;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.875rem;
-            color: #2e3746;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-            background-color: white;
-        }
-
-        .upload-btn:hover {
-            background-color: #f0fdf4;
-            color: #16a34a;
-            border-color: #22c55e;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 2.5rem;
-            border-radius: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.875rem;
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #16a34a, #15803d);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
-        }
-
-        /* Main Gray Container matches the image */
-        .wrapper-bg {
-            background-color: #f3f4f6;
-            /* Gray 100 */
-        }
-
-        .form-bg {
-            background-color: #ffffff;
-            /* White Form Box */
-            border-radius: 10px;
-        }
-    </style>
-</head>
-
-<body class="bg-white min-h-screen flex flex-col pt-[80px]">
-
-    {{-- ══════════════════════════════ NAVBAR ══════════════════════════════ --}}
-    <div class="navbar-outer">
-        <a href="{{ route('talent.dashboard') }}" class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-2 rounded-[10px] shadow-sm flex items-center justify-center w-14 h-14">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
-            </div>
-            <h1 class="text-white text-xl font-bold tracking-wide whitespace-nowrap">
-                Individual Development Plan
-            </h1>
-        </a>
-
-        <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-            <a href="{{ route('talent.dashboard') }}#Kompetensi"
-                class="hover:text-blue-200 transition-colors duration-150">Kompetensi</a>
-            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
-                class="hover:text-blue-200 transition-colors duration-150">IDP</a>
-            <a href="{{ route('talent.dashboard') }}#Project Improvement"
-                class="hover:text-blue-200 transition-colors duration-150">Project Improvement</a>
-            <a href="{{ route('talent.dashboard') }}#LogBook"
-                class="hover:text-blue-200 transition-colors duration-150">LogBook</a>
-        </div>
-
-        <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
-            <a href="{{ route('talent.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
-                @if($notifications->where('is_read', false)->count() > 0)
-                    <span class="notif-badge"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                </svg>
-            </a>
-            <button class="nav-icon-btn" aria-label="Profil">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    {{-- ══════════════════════════════ PROFILE CARD ══════════════════════════════ --}}
-    <div class="bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
-        <div class="flex items-stretch divide-x divide-white/20">
-
-            <div class="flex items-center gap-5 px-10 flex-shrink-0 w-1/3 justify-center py-2">
-                <div class="flex-shrink-0">
-                    @if ($user->foto ?? false)
-                        <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                            class="w-24 h-24 rounded-[10px] object-cover border-2 border-white/30">
-                    @else
-                        <div
-                            class="w-24 h-24 rounded-[10px] bg-white/20 flex items-center justify-center border-2 border-white/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/70" fill="currentColor"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    <p class="text-white font-bold text-base leading-tight">{{ $user->nama ?? $user->name }}</p>
-                    <p class="text-white/60 text-xs mt-1">
-                        {{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
-                </div>
-            </div>
-
-            {{-- Bagian 2: Departemen, Jabatan Sekarang --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Company</span>
-                    <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
-                    <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Sekarang</span>
-                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
-                </div>
-            </div>
-
-            {{-- Bagian 3: Mentor, Atasan --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Mentor</span>
-                    <span class="text-white">{{ optional($user->mentor)->nama ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Atasan</span>
-                    <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Posisi Dituju</span>
-                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    {{-- ══════════════════════════════ FORM AREA ══════════════════════════════ --}}
     <div class="w-full max-w-5xl mx-auto px-6 pt-10 pb-12 flex-grow fade-up fade-up-2">
+
 
         {{-- Back Link --}}
         <div class="px-2 mb-4">
@@ -539,37 +217,12 @@
         </div>
     </div>
 
-    {{-- FOOTER --}}
-    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
-        <span class="text-white text-sm font-medium tracking-wide">
-            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
-        </span>
-    </footer>
-
-    <script>
-        (function() {
-            const navbar = document.querySelector('.navbar-outer');
-            let lastScrollY = window.scrollY;
-            let ticking = false;
-
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        const currentScrollY = window.scrollY;
-                        if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                            navbar.classList.add('nav-hidden');
-                        } else {
-                            navbar.classList.remove('nav-hidden');
-                        }
-                        lastScrollY = currentScrollY;
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-
-            // File Upload Preview Logic
-            const documentInput      = document.getElementById('documentInput');
+    
+    <x-slot name="scripts">
+        <script>
+            (function() {
+// File Upload Preview Logic
+const documentInput      = document.getElementById('documentInput');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
             const fileListWrapper    = document.getElementById('fileListWrapper');
             const uploadLabelText    = document.getElementById('uploadLabelText');
@@ -719,7 +372,6 @@
                 });
             }
         })();
-    </script>
-</body>
-
-</html>
+        </script>
+    </x-slot>
+</x-talent.layout>

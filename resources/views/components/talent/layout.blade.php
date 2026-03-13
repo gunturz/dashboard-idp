@@ -1,0 +1,237 @@
+@props([
+    'title' => 'Individual Development Plan',
+    'bodyClass' => 'bg-white min-h-screen flex flex-col pt-[80px]',
+    'showProfileCard' => true,
+    'user' => null,
+    'notifications' => null
+])
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 99px;
+        }
+
+        /* ── Title Animation ── */
+        @keyframes titleReveal {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-title {
+            animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        /* ── Smooth entrance ── */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeSlideUp 0.5s ease both;
+        }
+
+        .fade-up-1 {
+            animation-delay: 0.05s;
+        }
+
+        .fade-up-2 {
+            animation-delay: 0.12s;
+        }
+
+        .fade-up-3 {
+            animation-delay: 0.20s;
+        }
+
+        .fade-up-4 {
+            animation-delay: 0.28s;
+        }
+
+        /* ── Navbar outer wrapper ── */
+        .navbar-outer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: #2e3746;
+            padding: 1rem 1.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .navbar-outer.nav-hidden {
+            transform: translateY(-110%);
+        }
+
+        /* ── Navbar notification badge ── */
+        .notif-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 9px;
+            height: 9px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 1.5px solid white;
+        }
+
+        /* ── Icon buttons (bell & user) ── */
+        .nav-icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+            color: #2e3746;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.15s;
+            position: relative;
+        }
+
+        .nav-icon-btn:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+            transform: translateY(-1px);
+        }
+
+        /* ── Dropdown panel ── */
+        .dropdown-panel {
+            transform-origin: top right;
+            animation: dropIn 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        @keyframes dropIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+    </style>
+    
+    {{ $styles ?? '' }}
+</head>
+
+<body class="{{ $bodyClass }}">
+
+    {{-- NAVBAR --}}
+    @include('components.talent.navbar', ['user' => $user ?? auth()->user(), 'notifications' => $notifications ?? collect([])])
+
+    {{-- PROFILE CARD --}}
+    @if($showProfileCard)
+        @include('components.talent.profile-card', ['user' => $user ?? auth()->user()])
+    @endif
+
+    {{-- MAIN CONTENT --}}
+    {{ $slot }}
+
+    {{-- FOOTER --}}
+    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
+        <span class="text-white text-sm font-medium tracking-wide">
+            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
+        </span>
+    </footer>
+
+    <script>
+        // Hide navbar on scroll down, show on scroll up
+        (function() {
+            const navbar = document.querySelector('.navbar-outer');
+            let lastScrollY = window.scrollY;
+            let ticking = false;
+
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        const currentScrollY = window.scrollY;
+                        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                            // Scroll down — hide navbar
+                            navbar.classList.add('nav-hidden');
+                        } else {
+                            // Scroll up — show navbar
+                            navbar.classList.remove('nav-hidden');
+                        }
+                        lastScrollY = currentScrollY;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        })();
+
+        // ── Dropdown toggle (bell & profile) ──
+        function toggleDropdown(dropdownId, btnId) {
+            const dropdown = document.getElementById(dropdownId);
+            const isHidden = dropdown.classList.contains('hidden');
+
+            // Tutup semua dropdown lain dulu
+            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        // Klik di luar → tutup semua dropdown
+        document.addEventListener('click', function(e) {
+            const wrappers = ['bell-wrapper', 'profile-wrapper'];
+            const clickedInside = wrappers.some(id => {
+                const el = document.getElementById(id);
+                return el && el.contains(e.target);
+            });
+            if (!clickedInside) {
+                document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            }
+        });
+    </script>
+    
+    {{ $scripts ?? '' }}
+</body>
+</html>

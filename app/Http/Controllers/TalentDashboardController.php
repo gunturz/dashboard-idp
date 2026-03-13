@@ -23,15 +23,12 @@ class TalentDashboardController extends Controller
 
             $kompetensi = null;
             $notifications = $this->getNotifications();
-            $competenciesList = DB::table('competencies')->pluck('name')->toArray();
+            $competenciesList = DB::table('competencies')->pluck('name', 'id')->toArray();
 
             // Project Improvement: ambil data milik user ini
             $projects = ImprovementProject::where('user_id_talent', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
-
-
-            //  return view('talent.dashboard', compact('user', 'kompetensi', 'notifications', 'competenciesList', 'projects'));
 
             $idpActivities = IdpActivity::with('type')
                 ->where('user_id_talent', $user->id)
@@ -41,7 +38,38 @@ class TalentDashboardController extends Controller
             $learningCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Learning')->count();
             $mentoringCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Mentoring')->count();
 
-            return view('talent.dashboard', compact('user', 'kompetensi', 'notifications', 'competenciesList', 'projects', 'exposureCount', 'learningCount', 'mentoringCount'));
+            // Kinerja (Kompetensi) Logic
+            $latestAssessment = DB::table('assessment_session')
+                ->where('user_id_talent', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $kompetensiData = [];
+            $atasanHasScored = false;
+
+            if ($latestAssessment) {
+                $details = DB::table('detail_assessment')
+                    ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
+                    ->where('assessment_id', $latestAssessment->id)
+                    ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan')
+                    ->get();
+
+                $totalAtasanScore = $details->sum('score_atasan');
+                if ($totalAtasanScore > 0) {
+                    $atasanHasScored = true;
+                }
+
+                foreach ($details as $d) {
+                    // Capping at 5 just in case
+                    $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
+                    $kompetensiData[$d->name] = $avg;
+                }
+            }
+
+            return view('talent.dashboard', compact(
+                'user', 'notifications', 'projects', 'exposureCount', 'learningCount', 'mentoringCount',
+                'kompetensiData', 'atasanHasScored', 'latestAssessment'
+            ));
         }
         catch (\Exception $e) {
             Log::error('talentDashboard error: ' . $e->getMessage());

@@ -251,7 +251,7 @@
 
         {{-- Notifications List --}}
         <div class="space-y-3">
-            @foreach ($notifications as $notif)
+            @forelse ($notifications as $notif)
                 <div class="notif-card {{ !$notif['is_read'] ? 'notif-unread' : '' }}">
                     <div class="notif-icon-wrap icon-{{ $notif['type'] }}">
                         @if ($notif['type'] == 'success')
@@ -286,7 +286,14 @@
                         <span class="text-xs text-gray-400 font-medium">{{ $notif['time'] }}</span>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="text-center py-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <p class="text-gray-400 text-sm font-medium">Belum ada notifikasi</p>
+                </div>
+            @endforelse
         </div>
 
     </div>

@@ -202,10 +202,10 @@
 
         {{-- ── POSISI SEKARANG ────────────────────── --}}
         <div style="margin-bottom: 1rem;">
-            <label for="position_id" class="form-label">Posisi sekarang</label>
+            <label for="position_id" class="form-label">Posisi saat ini</label>
             <div class="input-wrapper">
                 <select id="position_id" name="position_id" class="form-select" required>
-                    <option value="" disabled {{ old('position_id') ? '' : 'selected' }}>Pilih posisi sekarang</option>
+                    <option value="" disabled {{ old('position_id') ? '' : 'selected' }}>Pilih posisi saat ini</option>
                     @foreach ($positions as $pos)
                         <option value="{{ $pos->id }}" {{ old('position_id') == $pos->id ? 'selected' : '' }}>
                             {{ $pos->position_name }}

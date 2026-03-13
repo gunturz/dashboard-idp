@@ -250,7 +250,7 @@ class TalentDashboardController extends Controller
                 'success'
             );
 
-            return redirect()->route('talent.dashboard')->with('success', 'IDP Activity berhasil disubmit.');
+            return redirect()->route('talent.idp_monitoring', $tab)->with('success', 'IDP Activity berhasil disubmit.');
 
         }
         catch (\Illuminate\Validation\ValidationException $e) {

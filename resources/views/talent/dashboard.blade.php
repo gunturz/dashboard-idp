@@ -1,415 +1,23 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Talent – Individual Development Plan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* ── Scrollbar ── */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 99px;
-        }
-
-        /* ── Donut Chart ── */
-        .donut-ring {
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-
-        /* ── Title Animation ── */
-        @keyframes titleReveal {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .animate-title {
-            animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-
-        /* ── Smooth entrance ── */
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            animation: fadeSlideUp 0.5s ease both;
-        }
-
-        .fade-up-1 {
-            animation-delay: 0.05s;
-        }
-
-        .fade-up-2 {
-            animation-delay: 0.12s;
-        }
-
-        .fade-up-3 {
-            animation-delay: 0.20s;
-        }
-
-        .fade-up-4 {
-            animation-delay: 0.28s;
-        }
-
-        /* ── Competency bar ── */
-        @keyframes barReveal {
-            from {
-                clip-path: inset(0 100% 0 0);
-            }
-
-            to {
-                clip-path: inset(0 0% 0 0);
-            }
-        }
-
-        .bar-fill {
-            animation: barReveal 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
-            animation-delay: 0.35s;
-        }
-
-        /* ── Dropdown custom ── */
-        .score-select {
-            -webkit-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%234a5a6a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            background-size: 14px;
-            padding: 0.4rem 2rem 0.4rem 0.75rem;
-            min-width: 64px;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #2e3746;
-            background-color: #f8fafc;
-            cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .score-select:focus {
-            outline: none;
-            border-color: #2e3746;
-            box-shadow: 0 0 0 3px rgba(46, 55, 70, 0.12);
-        }
-
-        .score-select:hover {
-            border-color: #94a3b8;
-            background-color: #fff;
-        }
-
-        /* ── Upload area ── */
-        .upload-area {
-            border: 2px dashed #cbd5e1;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .upload-area:hover,
-        .upload-area.drag-over {
-            border-color: #22c55e;
-            background: #f0fdf4;
-        }
-
-        /* ── Navbar outer wrapper ── */
-        .navbar-outer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            background: #2e3746;
-            padding: 1rem 1.75rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .navbar-outer.nav-hidden {
-            transform: translateY(-110%);
-        }
-
-        /* ── Navbar notification badge ── */
-        .notif-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 9px;
-            height: 9px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 1.5px solid white;
-        }
-
-        /* ── Icon buttons (bell & user) ── */
-        .nav-icon-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #2e3746;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.15s;
-            position: relative;
-        }
-
-        .nav-icon-btn:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
-
-        /* ── Dropdown panel ── */
-        .dropdown-panel {
-            transform-origin: top right;
-            animation: dropIn 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-
-        @keyframes dropIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-6px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        /* ── Page Background ── */
-    </style>
-</head>
-
-<body class="bg-white min-h-screen flex flex-col pt-[80px]">
-
-    {{-- ══════════════════════════════ NAVBAR ══════════════════════════════ --}}
-    <div class="navbar-outer">
-
-        {{-- Brand --}}
-        <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-2 rounded-[10px] shadow-sm flex items-center justify-center w-14 h-14">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
-            </div>
-            <h1 class="text-white text-xl font-bold tracking-wide whitespace-nowrap">
-                Individual Development Plan
-            </h1>
-        </a>
-
-        {{-- Nav links --}}
-        <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-            <a href="#Kompetensi" class="hover:text-blue-200 transition-colors duration-150">Kompetensi</a>
-            <a href="#IDP Monitoring" class="hover:text-blue-200 transition-colors duration-150">IDP</a>
-            <a href="#Project Improvement" class="hover:text-blue-200 transition-colors duration-150">Project
-                Improvement</a>
-            <a href="#LogBook" class="hover:text-blue-200 transition-colors duration-150">LogBook</a>
-        </div>
-
-        {{-- Ikon (Kanan) --}}
-        <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
-
-            {{-- Bell Dropdown --}}
-            <div class="relative" id="bell-wrapper">
-                <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn"
-                    onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
-                    @if ($notifications->where('is_read', false)->count() > 0)
-                        <span class="notif-badge"></span>
-                    @endif
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path
-                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                    </svg>
-                </button>
-                <div id="bell-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                        <span class="text-sm font-bold text-gray-700">Notifikasi</span>
-                        <form action="{{ route('talent.notifikasi.markAllRead') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai semua</button>
-                        </form>
-                    </div>
-                    <ul class="divide-y divide-gray-50 max-h-64 overflow-y-auto">
-                        @foreach ($notifications as $notif)
-                            <li
-                                class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
-                                @if (!$notif['is_read'])
-                                    <span class="w-2 h-2 mt-1.5 rounded-full bg-teal-500 flex-shrink-0"></span>
-                                @else
-                                    <span class="w-2 h-2 mt-1.5 rounded-full bg-gray-300 flex-shrink-0"></span>
-                                @endif
-                                <div>
-                                    <p
-                                        class="text-sm {{ !$notif['is_read'] ? 'text-gray-700 font-medium' : 'text-gray-500' }}">
-                                        {!! $notif['title'] !!}
-                                    </p>
-                                    <p class="text-xs text-gray-400 mt-0.5">{{ $notif['time'] }}</p>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <div class="px-4 py-2.5 border-t border-gray-100 text-center">
-                        <a href="{{ route('talent.notifikasi') }}"
-                            class="text-xs text-gray-400 font-medium hover:text-teal-600 transition-colors">Lihat semua
-                            notifikasi</a>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Profile Dropdown --}}
-            <div class="relative" id="profile-wrapper">
-                <button class="nav-icon-btn" aria-label="Profil" id="profile-btn"
-                    onclick="toggleDropdown('profile-dropdown', 'profile-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-                <div id="profile-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    {{-- User info --}}
-                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
-                        <p class="text-sm font-bold text-gray-800 truncate">{{ $user->nama ?? $user->name }}</p>
-                        <p class="text-xs text-gray-400 mt-0.5 truncate">{{ $user->email }}</p>
-                    </div>
-                    {{-- Menu items --}}
-                    <ul class="py-1">
-                        <li>
-                            <a href="{{ route('profile.edit') }}"
-                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                Lihat Profil
-                            </a>
-                        </li>
-                        <li class="border-t border-gray-100">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Keluar
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    {{-- ══════════════════════════════ PROFILE CARD ══════════════════════════════ --}}
-    <div class="bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
-        <div class="flex items-stretch divide-x divide-white/20">
-
-            {{-- Bagian 1: Avatar + Nama + Role --}}
-            <div class="flex items-center gap-5 px-10 flex-shrink-0 w-1/3 justify-center py-2">
-                {{-- Avatar --}}
-                <div class="flex-shrink-0">
-                    @if ($user->foto ?? false)
-                        <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                            class="w-24 h-24 rounded-[10px] object-cover border-2 border-white/30">
-                    @else
-                        <div
-                            class="w-24 h-24 rounded-[10px] bg-white/20 flex items-center justify-center border-2 border-white/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/70"
-                                fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    <p class="text-white font-bold text-base leading-tight">{{ $user->nama ?? $user->name }}</p>
-                    <p class="text-white/60 text-xs mt-1">
-                        {{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
-                </div>
-            </div>
-
-            {{-- Bagian 2: Departemen, Jabatan --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Perusahaan</span>
-                    <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
-                    <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Sekarang</span>
-                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
-                </div>
-            </div>
-
-            {{-- Bagian 3: Mentor, Atasan --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Mentor</span>
-                    <span class="text-white">{{ optional($user->mentor)->nama ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Atasan</span>
-                    <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Posisi Dituju</span>
-                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
+<x-talent.layout title="Dashboard Talent – Individual Development Plan" :user="$user" :notifications="$notifications">
+    <x-slot name="styles">
+        <style>
+            /* ── Donut Chart ── */
+            .donut-ring { transform: rotate(-90deg); transform-origin: 50% 50%; }
+            /* ── Competency bar ── */
+            @keyframes barReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0% 0 0); } }
+            .bar-fill { animation: barReveal 0.9s cubic-bezier(0.4, 0, 0.2, 1) both; animation-delay: 0.35s; }
+            /* ── Dropdown custom ── */
+            .score-select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%234a5a6a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; background-size: 14px; padding: 0.4rem 2rem 0.4rem 0.75rem; min-width: 64px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.875rem; font-weight: 600; color: #2e3746; background-color: #f8fafc; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
+            .score-select:focus { outline: none; border-color: #2e3746; box-shadow: 0 0 0 3px rgba(46, 55, 70, 0.12); }
+            .score-select:hover { border-color: #94a3b8; background-color: #fff; }
+            /* ── Upload area ── */
+            .upload-area { border: 2px dashed #cbd5e1; transition: border-color 0.2s, background 0.2s; }
+            .upload-area:hover, .upload-area.drag-over { border-color: #22c55e; background: #f0fdf4; }
+        </style>
+    </x-slot>
 
     <div class="w-full px-6 pt-5 pb-6 space-y-6 flex-grow">
+
 
         {{-- ══════════════════════════════ CHART ROW ══════════════════════════════ --}}
         <div class="space-y-1" id="Kompetensi">
@@ -425,75 +33,52 @@
 
             {{-- ── Kompetensi Bar Chart (full width) ── --}}
             <div class="bg-gray-50 border border-gray-100 rounded-[10px] shadow-sm p-6 fade-up fade-up-2">
-                @php
-                    $kompetensiBars = [];
-                    $columns = [
-                        'integrity',
-                        'communication',
-                        'innovation_creativity',
-                        'customer_orientation',
-                        'teamwork',
-                        'leadership',
-                        'business_acumen',
-                        'problem_solving',
-                        'achievement_orientation',
-                        'strategic_thinking',
-                    ];
-
-                    $defaultScores = [3, 4, 3, 2, 4, 3, 3, 2, 3, 2];
-
-                    $fallbackNames = [
-                        'Integrity',
-                        'Communication',
-                        'Innovation & Creativity',
-                        'Customer Orientation',
-                        'Teamwork',
-                        'Leadership',
-                        'Business Acumen',
-                        'Problem Solving & Decision Making',
-                        'Achievement Orientation',
-                        'Strategic Thinking',
-                    ];
-
-                    for ($i = 0; $i < count($columns); $i++) {
-                        $col = $columns[$i];
-                        $name = $competenciesList[$i] ?? $fallbackNames[$i];
-                        $score = $kompetensi->$col ?? $defaultScores[$i];
-                        $kompetensiBars[$name] = $score;
-                    }
-                    $maxScore = 5;
-                @endphp
-                <div class="space-y-5">
-                    @foreach ($kompetensiBars as $label => $score)
-                        @php
-                            $pct = ($score / $maxScore) * 100;
-                        @endphp
-                        <div class="flex items-center gap-3">
-                            <span
-                                class="text-sm text-gray-700 w-52 flex-shrink-0 whitespace-nowrap overflow-hidden truncate"
-                                title="{{ $label }}">{{ $label }}</span>
-                            <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                                <div class="bar-fill h-full rounded-full"
-                                    style="width:{{ $pct }}%; background:#0d9488;"></div>
-                            </div>
-                            <span class="text-sm font-bold w-6 text-right flex-shrink-0"
-                                style="color:#0d9488;">{{ $score }}</span>
-                        </div>
-                    @endforeach
-                    {{-- Skala keterangan -- sejajar dengan bar --}}
-                    <div class="flex items-center gap-3 pt-1">
-                        <span class="w-52 flex-shrink-0"></span>
-                        <div class="flex-1 flex justify-between text-xs text-gray-400">
-                            <span>0</span>
-                            <span>1</span>
-                            <span>2</span>
-                            <span>3</span>
-                            <span>4</span>
-                            <span>5</span>
-                        </div>
-                        <span class="w-6 flex-shrink-0"></span>
+                @if(!$latestAssessment)
+                    <div class="flex flex-col items-center justify-center py-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p class="text-sm font-semibold text-gray-500">Anda belum mengisi assessment kompetensi.</p>
+                        <a href="{{ route('talent.competency') }}" class="mt-3 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Isi Sekarang</a>
                     </div>
-                </div>
+                @elseif(!$atasanHasScored)
+                    <div class="flex flex-col items-center justify-center py-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-orange-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p class="text-base font-bold text-gray-700">Atasan Belum Memberikan Nilai</p>
+                        <p class="text-sm text-gray-500 mt-1 text-center max-w-sm">Grafik kompetensi akan muncul setelah atasan Anda memberikan penilaian dan approval.</p>
+                    </div>
+                @else
+                    @php $maxScore = 5; @endphp
+                    <div class="space-y-5">
+                        @foreach ($kompetensiData as $label => $score)
+                            @php
+                                $pct = ($score / $maxScore) * 100;
+                            @endphp
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-gray-700 w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate" title="{{ $label }}">{{ $label }}</span>
+                                <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                                    <div class="bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488;"></div>
+                                </div>
+                                <span class="text-sm font-bold w-10 text-right flex-shrink-0" style="color:#0d9488;">{{ number_format($score, 1) }}</span>
+                            </div>
+                        @endforeach
+                        {{-- Skala keterangan -- sejajar dengan bar --}}
+                        <div class="flex items-center gap-3 pt-1">
+                            <span class="w-56 flex-shrink-0"></span>
+                            <div class="flex-1 flex justify-between text-xs text-gray-400">
+                                <span>0</span>
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                                <span>4</span>
+                                <span>5</span>
+                            </div>
+                            <span class="w-10 flex-shrink-0"></span>
+                        </div>
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -841,75 +426,16 @@
             </div>
         </div>
     </div> {{-- /wrapper LogBook --}}
+    
     </div> <!-- Tutup w-full px-6 flex-grow wrapper -->
 
-    {{-- ══════════════════════════════ FOOTER ══════════════════════════════ --}}
-    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
-        <span class="text-white text-sm font-medium tracking-wide">
-            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
-        </span>
-    </footer>
-
-</body>
-
-<script>
-    // Hide navbar on scroll down, show on scroll up
-    (function() {
-        const navbar = document.querySelector('.navbar-outer');
-        let lastScrollY = window.scrollY;
-        let ticking = false;
-
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                window.requestAnimationFrame(function() {
-                    const currentScrollY = window.scrollY;
-                    if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                        // Scroll down — hide navbar
-                        navbar.classList.add('nav-hidden');
-                    } else {
-                        // Scroll up — show navbar
-                        navbar.classList.remove('nav-hidden');
-                    }
-                    lastScrollY = currentScrollY;
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-    })();
-</script>
-
-<script>
-    // ── Dropdown toggle (bell & profile) ──
-    function toggleDropdown(dropdownId, btnId) {
-        const dropdown = document.getElementById(dropdownId);
-        const isHidden = dropdown.classList.contains('hidden');
-
-        // Tutup semua dropdown lain dulu
-        document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-
-        if (isHidden) {
-            dropdown.classList.remove('hidden');
-        }
-    }
-
-    // Klik di luar → tutup semua dropdown
-    document.addEventListener('click', function(e) {
-        const wrappers = ['bell-wrapper', 'profile-wrapper'];
-        const clickedInside = wrappers.some(id => {
-            const el = document.getElementById(id);
-            return el && el.contains(e.target);
-        });
-        if (!clickedInside) {
-            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-        }
-    });
-
-    // File name update for Project Improvement upload
-    document.getElementById('file-upload').addEventListener('change', function(e) {
-        const fileName = e.target.files[0] ? e.target.files[0].name : 'Klik untuk mengunggah';
-        document.getElementById('file-name-display').textContent = fileName;
-    });
-</script>
-
-</html>
+    <x-slot name="scripts">
+        <script>
+            // File name update for Project Improvement upload
+            document.getElementById('file-upload').addEventListener('change', function(e) {
+                const fileName = e.target.files[0] ? e.target.files[0].name : 'Klik untuk mengunggah';
+                document.getElementById('file-name-display').textContent = fileName;
+            });
+        </script>
+    </x-slot>
+</x-talent.layout>

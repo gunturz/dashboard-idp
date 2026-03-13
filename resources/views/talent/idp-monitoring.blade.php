@@ -167,7 +167,7 @@
         .tab-active {
             background-color: #2e3746;
             color: #ffffff;
-            box-shadow: 0 2px 12px rgba(46, 55, 70, 0.22);
+            box-shadow: 0 2px 12px rgba(46,55,70,0.22);
         }
 
         .tab-inactive {
@@ -241,8 +241,7 @@
 
     {{-- ══════════════════════════════ NAVBAR ══════════════════════════════ --}}
     <div class="navbar-outer">
-        <a href="{{ route('talent.dashboard') }}"
-            class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
+        <a href="{{ route('talent.dashboard') }}" class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
             <div class="bg-white p-2 rounded-[10px] shadow-sm flex items-center justify-center w-14 h-14">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
             </div>
@@ -305,8 +304,7 @@
                 <div>
                     <p class="text-white font-bold text-base leading-tight">{{ $user->nama ?? $user->name }}</p>
                     <p class="text-white/60 text-xs mt-1">
-                        {{ ucfirst($user->role->role_name ?? 'Talent') }}
-                    </p>
+                        {{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
                 </div>
             </div>
 
@@ -338,8 +336,7 @@
                 </div>
                 <div class="flex gap-2">
                     <span class="font-semibold text-white/70 w-24 flex-shrink-0">Posisi Dituju</span>
-                    <span
-                        class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
 
@@ -374,44 +371,45 @@
         {{-- Main Gray Container Background (Wrapper) --}}
         @if(session('success'))
             <div id="successPopup" class="mb-5" style="
-                    opacity: 0; transform: translateY(-10px);
-                    background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;
-                    padding: 0.75rem 1.25rem;
-                    animation: popupIn 0.35s ease 0.1s forwards;
-                ">
-                <p style="font-size: 0.85rem; color: #15803d; margin: 0;">
-                    <strong>Berhasil!</strong> {{ session('success') }}
-                </p>
+                opacity: 0; transform: translateY(-15px);
+                background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+                border: 1.5px solid #6ee7b7; border-radius: 14px;
+                padding: 1rem 1.5rem;
+                box-shadow: 0 8px 30px rgba(16, 185, 129, 0.2), 0 2px 8px rgba(0,0,0,0.06);
+                display: flex; align-items: center; gap: 14px;
+                animation: popupIn 0.4s cubic-bezier(0.4,0,0.2,1) 0.1s forwards;
+            ">
+                <div style="flex-shrink:0; width:36px; height:36px; background:linear-gradient(135deg,#10b981,#059669);
+                    border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;color:#fff;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <div style="flex:1;">
+                    <p style="font-weight:700; font-size:0.875rem; color:#065f46; margin:0;">Berhasil!</p>
+                    <p style="font-size:0.8rem; color:#047857; margin:2px 0 0 0;">{{ session('success') }}</p>
+                </div>
+                <button onclick="closePopup()" style="flex-shrink:0; background:none; border:none; cursor:pointer; padding:4px; color:#6ee7b7; transition:color 0.2s;">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
             <style>
                 @keyframes popupIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-10px);
-                    }
-
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                    from { opacity: 0; transform: translateY(-15px); }
+                    to   { opacity: 1; transform: translateY(0); }
                 }
-
                 @keyframes popupOut {
-                    from {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-
-                    to {
-                        opacity: 0;
-                        transform: translateY(-10px);
-                    }
+                    from { opacity: 1; transform: translateY(0); max-height: 80px; margin-bottom: 1.25rem; }
+                    to   { opacity: 0; transform: translateY(-15px); max-height: 0; margin-bottom: 0; padding: 0; overflow: hidden; }
                 }
             </style>
             <script>
                 function closePopup() {
                     const el = document.getElementById('successPopup');
-                    if (el) { el.style.animation = 'popupOut 0.3s ease forwards'; setTimeout(() => el.remove(), 300); }
+                    el.style.animation = 'popupOut 0.4s ease forwards';
+                    setTimeout(() => el.remove(), 400);
                 }
                 setTimeout(closePopup, 4000);
             </script>
@@ -431,9 +429,8 @@
 
             {{-- White Form Content --}}
             <div class="form-bg p-8 relative z-20 -mt-2 shadow-sm">
-                <form
-                    action="{{ isset($editMode) ? route('talent.idp_monitoring.update', $activity->id) : route('talent.idp_monitoring.store', ['tab' => $tab]) }}"
-                    method="POST" enctype="multipart/form-data" class="space-y-4">
+                <form action="{{ isset($editMode) ? route('talent.idp_monitoring.update', $activity->id) : route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
+                    enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     @if(isset($editMode))
                         @method('PUT')
@@ -442,15 +439,13 @@
                     @if ($tab == 'learning')
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Sumber</label>
-                            <input type="text" name="activity" class="form-input" placeholder=""
-                                value="{{ old('activity', $activity->activity ?? '') }}" required>
+                            <input type="text" name="activity" class="form-input" placeholder="" value="{{ old('activity', $activity->activity ?? '') }}" required>
                         </div>
                     @else
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Mentor</label>
                             <input type="text" name="mentor_name" list="mentor-list" class="form-input"
-                                placeholder="Ketik nama mentor..."
-                                value="{{ old('mentor_name', $activity->verifier->nama ?? '') }}" required>
+                                placeholder="Ketik nama mentor..." value="{{ old('mentor_name', $activity->verifier->nama ?? '') }}" required>
                             <datalist id="mentor-list">
                                 @foreach ($mentors as $m)
                                     <option value="{{ $m->nama }}">
@@ -461,55 +456,46 @@
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tema</label>
-                        <input type="text" name="theme" class="form-input" placeholder=""
-                            value="{{ old('theme', $activity->theme ?? '') }}" required>
+                        <input type="text" name="theme" class="form-input" placeholder="" value="{{ old('theme', $activity->theme ?? '') }}" required>
                     </div>
 
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tanggal</label>
-                        <input type="date" name="activity_date" class="form-input"
-                            value="{{ old('activity_date', isset($activity) ? \Carbon\Carbon::parse($activity->activity_date)->format('Y-m-d') : '') }}"
-                            required>
+                        <input type="date" name="activity_date" class="form-input" value="{{ old('activity_date', isset($activity) ? \Carbon\Carbon::parse($activity->activity_date)->format('Y-m-d') : '') }}" required>
                     </div>
 
                     @if ($tab == 'learning')
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Platform</label>
-                            <input type="text" name="platform" class="form-input" placeholder=""
-                                value="{{ old('platform', $activity->platform ?? '') }}" required>
+                            <input type="text" name="platform" class="form-input" placeholder="" value="{{ old('platform', $activity->platform ?? '') }}" required>
                         </div>
                     @else
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Lokasi</label>
-                            <input type="text" name="location" class="form-input" placeholder=""
-                                value="{{ old('location', $activity->location ?? '') }}" required>
+                            <input type="text" name="location" class="form-input" placeholder="" value="{{ old('location', $activity->location ?? '') }}" required>
                         </div>
                     @endif
 
                     @if ($tab == 'mentoring')
                         <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                            <textarea name="description" class="form-textarea h-24" placeholder=""
-                                required>{{ old('description', $activity->description ?? '') }}</textarea>
+                            <textarea name="description" class="form-textarea h-24" placeholder="" required>{{ old('description', $activity->description ?? '') }}</textarea>
                         </div>
 
                         <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Action Plan</label>
-                            <textarea name="action_plan" class="form-textarea h-24" placeholder=""
-                                required>{{ old('action_plan', $activity->action_plan ?? '') }}</textarea>
+                            <textarea name="action_plan" class="form-textarea h-24" placeholder="" required>{{ old('action_plan', $activity->action_plan ?? '') }}</textarea>
                         </div>
                     @else
                         @if ($tab == 'exposure')
                             <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                                 <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
-                                <textarea name="activity" class="form-textarea h-24" placeholder=""
-                                    required>{{ old('activity', $activity->activity ?? '') }}</textarea>
+                                <textarea name="activity" class="form-textarea h-24" placeholder="" required>{{ old('activity', $activity->activity ?? '') }}</textarea>
                             </div>
 
                             <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                                 <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                                <textarea name="description" class="form-textarea h-24" placeholder=""
-                                    required>{{ old('description', $activity->description ?? '') }}</textarea>
+                                <textarea name="description" class="form-textarea h-24" placeholder="" required>{{ old('description', $activity->description ?? '') }}</textarea>
                             </div>
                         @endif
                     @endif
@@ -522,7 +508,7 @@
                                 @php
                                     $paths = [];
                                     $names = [];
-                                    if (str_starts_with($activity->document_path, '["')) {
+                                    if(str_starts_with($activity->document_path, '["')) {
                                         $paths = json_decode($activity->document_path, true);
                                         $names = explode(', ', $activity->file_name);
                                     } else {
@@ -534,37 +520,25 @@
                                     <p class="text-[13px] text-gray-500 font-semibold mb-2">Dokumen Terlampir Saat Ini:</p>
                                     <div class="flex flex-col gap-2 max-w-lg">
                                         @foreach($paths as $index => $path)
-                                            <div class="flex items-center gap-3 p-2.5 bg-gray-50 border border-gray-200 rounded-[10px]"
-                                                data-existing-file>
-                                                <input type="hidden" name="existing_documents_paths[]" value="{{ $path }}">
-                                                <input type="hidden" name="existing_documents_names[]"
-                                                    value="{{ $names[$index] ?? 'Dokumen' }}">
-                                                <div
-                                                    class="w-10 h-10 shrink-0 rounded overflow-hidden flex items-center justify-center bg-gray-200 text-gray-500">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                                    </svg>
-                                                </div>
-                                                <div class="flex-1 min-w-0 flex items-center justify-between">
-                                                    <div>
-                                                        <a href="{{ asset('storage/' . $path) }}" target="_blank"
-                                                            class="text-sm font-bold text-teal-600 hover:text-teal-800 hover:underline truncate block max-w-[250px]"
-                                                            title="{{ $names[$index] ?? 'Dokumen' }}">{{ $names[$index] ?? 'Dokumen' }}</a>
-                                                    </div>
-                                                    <button type="button"
-                                                        class="shrink-0 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition"
-                                                        title="Hapus File Ini"
-                                                        onclick="this.closest('[data-existing-file]').remove();">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
+                                        <div class="flex items-center gap-3 p-2.5 bg-gray-50 border border-gray-200 rounded-[10px]" data-existing-file>
+                                            <input type="hidden" name="existing_documents_paths[]" value="{{ $path }}">
+                                            <input type="hidden" name="existing_documents_names[]" value="{{ $names[$index] ?? 'Dokumen' }}">
+                                            <div class="w-10 h-10 shrink-0 rounded overflow-hidden flex items-center justify-center bg-gray-200 text-gray-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                                </svg>
                                             </div>
+                                            <div class="flex-1 min-w-0 flex items-center justify-between">
+                                                <div>
+                                                    <a href="{{ asset('storage/'.$path) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-800 hover:underline truncate block max-w-[250px]" title="{{ $names[$index] ?? 'Dokumen' }}">{{ $names[$index] ?? 'Dokumen' }}</a>
+                                                </div>
+                                                <button type="button" class="shrink-0 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition" title="Hapus File Ini" onclick="this.closest('[data-existing-file]').remove();">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -580,8 +554,8 @@
                                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                     </svg>
                                     <span id="uploadLabelText">Upload File</span>
-                                    <input type="file" name="documents[]" id="documentInput" class="hidden" {{ isset($editMode) ? '' : 'required' }} multiple
-                                        accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
+                                    <input type="file" name="documents[]" id="documentInput" class="hidden" {{ isset($editMode) ? '' : 'required' }}
+                                        multiple accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
                                 </label>
                             </div>
 
@@ -591,12 +565,9 @@
                             </div>
 
                             {{-- Peringatan validasi --}}
-                            <div id="uploadWarning"
-                                class="hidden flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-[10px] max-w-lg text-sm text-amber-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 mt-0.5 text-amber-500"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                            <div id="uploadWarning" class="hidden flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-[10px] max-w-lg text-sm text-amber-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 mt-0.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                                 </svg>
                                 <span id="uploadWarningText"></span>
                             </div>
@@ -622,14 +593,14 @@
     </footer>
 
     <script>
-        (function () {
+        (function() {
             const navbar = document.querySelector('.navbar-outer');
             let lastScrollY = window.scrollY;
             let ticking = false;
 
-            window.addEventListener('scroll', function () {
+            window.addEventListener('scroll', function() {
                 if (!ticking) {
-                    window.requestAnimationFrame(function () {
+                    window.requestAnimationFrame(function() {
                         const currentScrollY = window.scrollY;
                         if (currentScrollY > lastScrollY && currentScrollY > 80) {
                             navbar.classList.add('nav-hidden');
@@ -644,10 +615,10 @@
             });
 
             // File Upload Preview Logic
-            const documentInput = document.getElementById('documentInput');
+            const documentInput      = document.getElementById('documentInput');
             const filePreviewContainer = document.getElementById('filePreviewContainer');
-            const fileListWrapper = document.getElementById('fileListWrapper');
-            const uploadLabelText = document.getElementById('uploadLabelText');
+            const fileListWrapper    = document.getElementById('fileListWrapper');
+            const uploadLabelText    = document.getElementById('uploadLabelText');
 
             // Semua file yang dipilih
             let allFiles = [];
@@ -736,7 +707,7 @@
             }
 
             function showWarning(msg) {
-                const box = document.getElementById('uploadWarning');
+                const box  = document.getElementById('uploadWarning');
                 const text = document.getElementById('uploadWarningText');
                 text.textContent = msg;
                 box.classList.remove('hidden');
@@ -749,9 +720,9 @@
                 document.getElementById('uploadWarning').classList.add('hidden');
             }
 
-            const MAX_FILES = 5;
+            const MAX_FILES   = 5;
             const MAX_SIZE_MB = 5;
-            const MAX_BYTES = MAX_SIZE_MB * 1024 * 1024;
+            const MAX_BYTES   = MAX_SIZE_MB * 1024 * 1024;
 
             function addFiles(newFiles) {
                 const warnings = [];
@@ -788,7 +759,7 @@
 
             if (documentInput) {
                 // Pilih file
-                documentInput.addEventListener('change', function () {
+                documentInput.addEventListener('change', function() {
                     // Jangan reset array agar file baru bertambah (append) bukan menggantikan pilihan sebelumnya di UI
                     addFiles(Array.from(this.files));
                 });

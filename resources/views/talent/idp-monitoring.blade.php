@@ -369,6 +369,36 @@
         </div>
 
         {{-- Main Gray Container Background (Wrapper) --}}
+        @if(session('success'))
+            <div id="successPopup" class="mb-5" style="
+                opacity: 0; transform: translateY(-10px);
+                background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;
+                padding: 0.75rem 1.25rem;
+                animation: popupIn 0.35s ease 0.1s forwards;
+            ">
+                <p style="font-size: 0.85rem; color: #15803d; margin: 0;">
+                    <strong>Berhasil!</strong> {{ session('success') }}
+                </p>
+            </div>
+            <style>
+                @keyframes popupIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to   { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes popupOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to   { opacity: 0; transform: translateY(-10px); }
+                }
+            </style>
+            <script>
+                function closePopup() {
+                    const el = document.getElementById('successPopup');
+                    if (el) { el.style.animation = 'popupOut 0.3s ease forwards'; setTimeout(() => el.remove(), 300); }
+                }
+                setTimeout(closePopup, 4000);
+            </script>
+        @endif
+
         <div class="wrapper-bg rounded-[16px] shadow-sm p-6 border border-gray-200">
 
             {{-- Tabs --}}

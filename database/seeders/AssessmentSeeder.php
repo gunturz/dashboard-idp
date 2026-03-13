@@ -43,5 +43,19 @@ class AssessmentSeeder extends Seeder
                 'notes' => 'Initial assessment notes',
             ]
         ]);
+
+        // Standar Kompetensi per Posisi (Contoh untuk Position 2/Manager)
+        DB::table('position_target_competence')->insert([
+            ['position_id' => 2, 'competence_id' => 1, 'target_level' => 5],
+            ['position_id' => 2, 'competence_id' => 2, 'target_level' => 4],
+            ['position_id' => 2, 'competence_id' => 3, 'target_level' => 3],
+            ['position_id' => 2, 'competence_id' => 4, 'target_level' => 3],
+            ['position_id' => 2, 'competence_id' => 5, 'target_level' => 4],
+            ['position_id' => 2, 'competence_id' => 6, 'target_level' => 4],
+            ['position_id' => 2, 'competence_id' => 7, 'target_level' => 4],
+            ['position_id' => 2, 'competence_id' => 8, 'target_level' => 4],
+            ['position_id' => 2, 'competence_id' => 9, 'target_level' => 4],
+            ['position_id' => 2, 'competence_id' => 10, 'target_level' => 4],
+        ]);
     }
 }

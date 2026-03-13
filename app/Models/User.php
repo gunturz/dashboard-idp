@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'atasan_id');
     }
+
+    public function assessmentSession()
+    {
+        return $this->hasOne(AssessmentSession::class, 'user_id_talent');
+    }
 }

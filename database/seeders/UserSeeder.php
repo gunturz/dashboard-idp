@@ -224,9 +224,21 @@ class UserSeeder extends Seeder
         
         foreach ($talentIdsDb as $index => $talentId) {
             DB::table('users')->where('id', $talentId)->update([
-                // Secara berurutan membagikan mentor & atasan agar merata
                 'mentor_id' => $mentorIdsDb[$index % count($mentorIdsDb)],
                 'atasan_id' => $atasanIdsDb[$index % count($atasanIdsDb)],
+            ]);
+
+            // Tambahkan Promotion Plan agar muncul di PDC Admin Dashboard
+            // Variasikan target posisi: 4 (Manager), 5 (General Manager), 2 (Supervisor)
+            $targetPosId = [4, 5, 2][$index % 3];
+            DB::table('promotion_plan')->insert([
+                'user_id_talent' => $talentId,
+                'target_position_id' => $targetPosId,
+                'status_promotion' => 'In Progress',
+                'start_date' => now(),
+                'target_date' => now()->addYear(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 

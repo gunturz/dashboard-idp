@@ -94,4 +94,10 @@ Route::middleware('auth')->group(function () {
         ->name('talent.logbook.detail');
     Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class , 'storeProject'])
         ->name('talent.project.store');
+
+    // PDC Admin Routes
+    Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class, 'dashboard'])
+        ->name('pdc_admin.dashboard');
+    Route::get('/pdc-admin/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class, 'detail'])
+        ->name('pdc_admin.detail');
 });

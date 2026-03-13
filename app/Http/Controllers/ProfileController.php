@@ -52,7 +52,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
-        
+
         \Illuminate\Support\Facades\Log::info('Profile Update Data:', $data);
 
         // Normalize email to lowercase
@@ -82,12 +82,33 @@ class ProfileController extends Controller
             $data['foto'] = null;
         }
 
-        $user->fill($data)->save();
+        // Hapus password jika kosong, agar tidak ikut ke-update menjadi null hash
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
 
+        // Buang should_delete_foto dari array data agar tidak ikut diupdate ke DB
+        if (array_key_exists('should_delete_foto', $data)) {
+            unset($data['should_delete_foto']);
+        }
+
+        // Buang target_position_id dari $data agar tidak di-update ke tabel users
+        $targetPositionId = null;
         if (array_key_exists('target_position_id', $data)) {
+            $targetPositionId = $data['target_position_id'];
+            unset($data['target_position_id']);
+        }
+
+        // Bypassing the Eloquent model to prevent "Unknown Column" cache issues
+        \Illuminate\Support\Facades\DB::table('users')
+            ->where('id', $user->id)
+            ->update($data);
+
+        // Update target position ke tabel promotion_plan jika ada
+        if (!is_null($targetPositionId)) {
             PromotionPlan::updateOrCreate(
-                ['user_id_talent' => $user->id],
-                ['target_position_id' => $data['target_position_id']]
+            ['user_id_talent' => $user->id],
+            ['target_position_id' => $targetPositionId]
             );
         }
 

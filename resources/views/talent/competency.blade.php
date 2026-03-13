@@ -130,11 +130,11 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        .score-1 { background:#fee2e2; color:#b91c1c; }
-        .score-2 { background:#fef3c7; color:#92400e; }
-        .score-3 { background:#dbeafe; color:#1d4ed8; }
-        .score-4 { background:#d1fae5; color:#065f46; }
-        .score-5 { background:#ccfbf1; color:#0f766e; }
+        .score-1 { color:#1e293b; }
+        .score-2 { color:#1e293b; }
+        .score-3 { color:#1e293b; }
+        .score-4 { color:#1e293b; }
+        .score-5 { color:#1e293b; }
         .edit-row-btn {
             padding: 5px 16px;
             border-radius: 8px;
@@ -280,12 +280,12 @@
                     <button id="confirm-btn-no" onclick="confirmNo()"
                         class="flex-1 py-2.5 rounded-lg font-semibold text-slate-700 transition hover:-translate-y-0.5"
                         style="background:#f1f5f9; border:none; cursor:pointer;">
-                        Tidak
+                        Kembali
                     </button>
                     <button id="confirm-btn-yes" onclick="confirmYes()"
                         class="flex-1 py-2.5 rounded-lg font-semibold text-white transition hover:-translate-y-0.5"
                         style="background: linear-gradient(135deg, #0f766e, #0d9488); border:none; cursor:pointer;">
-                        Ya, Lanjutkan
+                        Lanjutkan
                     </button>
                 </div>
                 <!-- Buttons: Mode Edit -->
@@ -334,7 +334,7 @@
                                 <thead>
                                     <tr class="text-xs text-gray-400 uppercase tracking-wider" style="background:#f8fafc">
                                         <th class="px-5 py-3 text-left font-semibold">Kompetensi</th>
-                                        <th class="py-3 text-center font-semibold" style="width:120px">Skor</th>
+                                        <th class="py-3 text-center font-semibold" style="width:120px">Level</th>
                                         <th class="px-5 py-3 text-right font-semibold" style="width:90px">Aksi</th>
                                     </tr>
                                 </thead>
@@ -354,7 +354,7 @@
                                 <thead>
                                     <tr class="text-xs text-gray-400 uppercase tracking-wider" style="background:#f8fafc">
                                         <th class="px-5 py-3 text-left font-semibold">Kompetensi</th>
-                                        <th class="py-3 text-center font-semibold" style="width:120px">Skor</th>
+                                        <th class="py-3 text-center font-semibold" style="width:120px">Level</th>
                                         <th class="px-5 py-3 text-right font-semibold" style="width:90px">Aksi</th>
                                     </tr>
                                 </thead>
@@ -540,13 +540,13 @@
 
             if (isEditMode) {
                 // Mode Edit: tampilkan konfirmasi simpan edit
-                const msg = `Apakah Anda yakin mengedit kompetensi<br><strong>${catName}</strong><br>dengan level <strong>${score}</strong>?`;
+                const msg = `Apakah Anda yakin mengedit kompetensi<br><strong>${catName}</strong>?`;
                 document.getElementById('confirm-message').innerHTML = msg;
                 document.getElementById('confirm-btns-normal').style.display = 'none';
                 document.getElementById('confirm-btns-edit').style.display = '';
             } else {
                 // Mode Normal: konfirmasi sebelum pindah kompetensi
-                const msg = `Level kompetensi <strong>${catName}</strong> Anda adalah <strong>${score}</strong>.<br>Apakah Anda yakin dengan jawaban Anda?`;
+                const msg = ` Terima kasih sudah mengisi kompetensi <strong>${catName}</strong>.<br>Apakah Anda yakin dengan jawaban Anda?`;
                 document.getElementById('confirm-message').innerHTML = msg;
                 document.getElementById('confirm-btns-normal').style.display = '';
                 document.getElementById('confirm-btns-edit').style.display = 'none';
@@ -685,7 +685,7 @@
                     tr.innerHTML = `
                         <td class="px-5 py-3.5 font-medium text-slate-700">${cat.name}</td>
                         <td class="py-3.5 text-center" style="width:120px">
-                            <span class="score-badge ${badgeClass}">${isNaN(scoreNum) ? '?' : scoreNum} / 5</span>
+                            <span class="score-badge ${badgeClass}">${isNaN(scoreNum) ? '?' : scoreNum}</span>
                         </td>
                         <td class="px-5 py-3.5 text-right" style="width:90px">
                             <button class="edit-row-btn" onclick="editCategory('${topLevelKey}', ${idx})">

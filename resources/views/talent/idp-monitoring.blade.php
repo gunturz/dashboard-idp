@@ -371,47 +371,29 @@
         {{-- Main Gray Container Background (Wrapper) --}}
         @if(session('success'))
             <div id="successPopup" class="mb-5" style="
-                opacity: 0; transform: translateY(-15px);
-                background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-                border: 1.5px solid #6ee7b7; border-radius: 14px;
-                padding: 1rem 1.5rem;
-                box-shadow: 0 8px 30px rgba(16, 185, 129, 0.2), 0 2px 8px rgba(0,0,0,0.06);
-                display: flex; align-items: center; gap: 14px;
-                animation: popupIn 0.4s cubic-bezier(0.4,0,0.2,1) 0.1s forwards;
+                opacity: 0; transform: translateY(-10px);
+                background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;
+                padding: 0.75rem 1.25rem;
+                animation: popupIn 0.35s ease 0.1s forwards;
             ">
-                <div style="flex-shrink:0; width:36px; height:36px; background:linear-gradient(135deg,#10b981,#059669);
-                    border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(16,185,129,0.3);">
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;color:#fff;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-                <div style="flex:1;">
-                    <p style="font-weight:700; font-size:0.875rem; color:#065f46; margin:0;">Berhasil!</p>
-                    <p style="font-size:0.8rem; color:#047857; margin:2px 0 0 0;">{{ session('success') }}</p>
-                </div>
-                <button onclick="closePopup()" style="flex-shrink:0; background:none; border:none; cursor:pointer; padding:4px; color:#6ee7b7; transition:color 0.2s;">
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                <p style="font-size: 0.85rem; color: #166534; margin: 0;">
+                    <strong>Berhasil!</strong> {{ session('success') }}
+                </p>
             </div>
             <style>
                 @keyframes popupIn {
-                    from { opacity: 0; transform: translateY(-15px); }
+                    from { opacity: 0; transform: translateY(-10px); }
                     to   { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes popupOut {
-                    from { opacity: 1; transform: translateY(0); max-height: 80px; margin-bottom: 1.25rem; }
-                    to   { opacity: 0; transform: translateY(-15px); max-height: 0; margin-bottom: 0; padding: 0; overflow: hidden; }
                 }
             </style>
             <script>
-                function closePopup() {
-                    const el = document.getElementById('successPopup');
-                    el.style.animation = 'popupOut 0.4s ease forwards';
-                    setTimeout(() => el.remove(), 400);
-                }
-                setTimeout(closePopup, 4000);
+                setTimeout(function() {
+                    var el = document.getElementById('successPopup');
+                    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-10px)';
+                    setTimeout(function() { el.remove(); }, 400);
+                }, 4000);
             </script>
         @endif
 

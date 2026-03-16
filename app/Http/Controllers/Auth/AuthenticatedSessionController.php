@@ -86,7 +86,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('finance.dashboard');
         }
         elseif ($role === 'admin_pdc' || $role === 'pdc admin' || $role === 'pdc_admin') {
-            return redirect()->route('pdc_admin.dashboard');
+            // Redirect admin_pdc ke panel Filament yang terpisah
+            return redirect('/admin-pdc');
         }
         elseif ($role === 'bo_director' || $role === 'bod') {
             return redirect()->route('bo_director.dashboard');

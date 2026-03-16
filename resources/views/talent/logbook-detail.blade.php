@@ -2,10 +2,21 @@
     <x-slot name="styles">
         <style>
             /* Custom Scrollbar Styles for LogBook Tables */
-            .custom-scrollbar::-webkit-scrollbar { height: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #2E3746; border-radius: 10px; }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1e2530; }
+            .custom-scrollbar::-webkit-scrollbar { 
+                height: 8px; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-track { 
+                background: #f8fafc; 
+                border-radius: 10px; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb { 
+                background: #0d9488; 
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+                background: #0f766e; 
+            }
         </style>
     </x-slot>
 

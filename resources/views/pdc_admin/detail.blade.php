@@ -1,6 +1,122 @@
 <x-pdc_admin.layout title="Detail Progress Talent – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
+            /* Custom Scrollbar */
+            ::-webkit-scrollbar {
+                width: 5px;
+                height: 5px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 20px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+
+            /* --- MODAL STYLES --- */
+            .modal-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(4px);
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
+            }
+            .modal-overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .modal-content {
+                background: white;
+                width: 100%;
+                max-width: 500px;
+                max-height: 90vh;
+                border-radius: 20px;
+                padding: 32px;
+                overflow-y: auto;
+                transform: translateY(20px);
+                transition: transform 0.3s;
+            }
+            .modal-overlay.active .modal-content {
+                transform: translateY(0);
+            }
+
+            .modal-title { font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+            .modal-subtitle { font-size: 1rem; font-weight: 700; color: #475569; margin-bottom: 24px; }
+
+            .alert-info-modal {
+                background: #f0fdfa;
+                border: 1px solid #5eead4;
+                border-radius: 8px;
+                padding: 12px;
+                display: flex;
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+            .alert-info-modal span { font-size: 0.75rem; color: #0d9488; line-height: 1.4; }
+
+            .gap-selection-list { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 12px; 
+                margin-bottom: 24px; 
+                max-height: 400px; 
+                overflow-y: auto;
+                padding-right: 8px;
+            }
+            .gap-select-item {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 12px 16px;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .gap-select-item input[type="checkbox"] {
+                width: 20px; height: 20px; border-radius: 4px; border: 2px solid #cbd5e1;
+                cursor: pointer; accent-color: #2e3746;
+            }
+            .gap-name-modal { flex: 1; font-weight: 700; color: #334155; font-size: 0.875rem; }
+            .gap-score-modal { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+            .gap-value-badge {
+                padding: 4px 8px; background: #f8fafc; border-radius: 6px;
+                font-size: 0.75rem; font-weight: 800; color: #1e293b; min-width: 32px; text-align: center;
+            }
+
+            /* Priority Colors */
+            .gap-select-item.priority-1 { border-color: #ef4444; border-width: 2px; }
+            .gap-select-item.priority-1 input { accent-color: #ef4444; }
+            .gap-select-item.priority-2 { border-color: #f97316; border-width: 2px; }
+            .gap-select-item.priority-2 input { accent-color: #f97316; }
+            .gap-select-item.priority-3 { border-color: #3b82f6; border-width: 2px; }
+            .gap-select-item.priority-3 input { accent-color: #3b82f6; }
+
+            .textarea-label { font-size: 0.75rem; font-weight: 800; color: #1e293b; margin-bottom: 8px; display: block; text-transform: uppercase; }
+            .modal-textarea {
+                width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 0.8125rem;
+                min-height: 100px; resize: none; margin-bottom: 24px; color: #475569;
+            }
+            .modal-textarea::placeholder { color: #cbd5e1; }
+
+            .modal-footer { display: flex; gap: 12px; justify-content: flex-end; }
+            .btn-modal { padding: 10px 24px; border-radius: 10px; font-size: 0.875rem; font-weight: 700; transition: all 0.2s; }
+            .btn-reset-auto { background: #f3f4f6; color: #4b5563; }
+            .btn-cancel { background: #fef3c7; color: #92400e; }
+            .btn-save { background: #22c55e; color: white; flex: 1; }
+            .btn-save:hover { background: #16a34a; }
+
+            /* --- PRE-EXISTING STYLES --- */
             .btn-back {
                 padding: 8px 16px;
                 border: 1px solid #e2e8f0;
@@ -232,17 +348,18 @@
                 font-size: 0.875rem;
                 font-weight: 600;
             }
-            .gap-item:nth-child(1) { border: 1px solid #ef4444; color: #ef4444; background: #fef2f2; }
-            .gap-item:nth-child(2) { border: 1px solid #f97316; color: #f97316; background: #fff7ed; }
-            .gap-item:nth-child(3) { border: 1px solid #3b82f6; color: #3b82f6; background: #eff6ff; }
+            .gap-item.prio-1 { border: 1.5px solid #b91c1c; color: #991b1b; background: #fef2f2; }
+            .gap-item.prio-2 { border: 1.5px solid #c2410c; color: #9a3412; background: #fff7ed; }
+            .gap-item.prio-3 { border: 1.5px solid #1d4ed8; color: #1e40af; background: #eff6ff; }
             .gap-number {
                 width: 24px; height: 24px; border-radius: 50%;
                 display: flex; align-items: center; justify-content: center;
                 color: white; font-size: 0.75rem; margin-right: 12px;
+                font-weight: 800;
             }
-            .gap-item:nth-child(1) .gap-number { background: #ef4444; }
-            .gap-item:nth-child(2) .gap-number { background: #f97316; }
-            .gap-item:nth-child(3) .gap-number { background: #3b82f6; }
+            .gap-item.prio-1 .gap-number { background: #b91c1c; }
+            .gap-item.prio-2 .gap-number { background: #c2410c; }
+            .gap-item.prio-3 .gap-number { background: #1d4ed8; }
 
             .heatmap-container {
                 background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;
@@ -264,6 +381,39 @@
             .hidden { display: none !important; }
         </style>
     </x-slot>
+
+    {{-- Modal pilih GAP --}}
+    <div id="gap-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+        <div class="modal-content">
+            <h3 class="modal-title">Pilih 3 GAP Prioritas IDP</h3>
+            <p id="modal-talent-name" class="modal-subtitle">Nama Talent</p>
+
+            <div class="alert-info-modal">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>Sistem menampilkan Top 3 GAP terbesar otomatis. PDC dapat mengubah sesuai konteks strategis.</span>
+            </div>
+
+            <div id="modal-gap-list" class="gap-selection-list">
+                <!-- Will be populated by JS -->
+            </div>
+
+            <label class="textarea-label">Alasan Mengesampingkan</label>
+            <textarea class="modal-textarea" placeholder="cth: Leadership diprioritaskan karena kandidat akan acting sebagai PIC proyek..."></textarea>
+
+            <div class="modal-footer">
+                <button class="btn-modal btn-reset-auto flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Reset Auto
+                </button>
+                <button class="btn-modal btn-cancel" onclick="closeGapModal()">Batal</button>
+                <button class="btn-modal btn-save">Simpan</button>
+            </div>
+        </div>
+    </div>
 
     {{-- Header Navigation --}}
     <div class="flex justify-between items-center mb-10">
@@ -333,7 +483,7 @@
                                 <p>{{ optional($talent->position)->position_name ?? 'Officer' }} - {{ optional($talent->department)->nama_department ?? '-' }}</p>
                             </div>
                         </div>
-                        <button class="btn-pilih-gap">Pilih 3 GAP</button>
+                        <button class="btn-pilih-gap" onclick="openGapModal('{{ $talent->nama }}', {{ $talent->assessmentSession ? $talent->assessmentSession->details->map(fn($d) => ['name' => $d->competence->name, 'score' => ($d->score_talent + $d->score_atasan)/2, 'standard' => $standards[$d->competence_id] ?? 0, 'gap' => $d->gap_score])->toJson() : '[]' }})">Pilih 3 GAP</button>
                     </div>
 
                     <div class="mb-4 text-xs font-bold text-gray-500">
@@ -343,7 +493,7 @@
 
                     <span class="top-gap-label">TOP 3 GAP</span>
                     @forelse($gaps as $index => $gap)
-                        <div class="gap-item">
+                        <div class="gap-item prio-{{ $index + 1 }}">
                             <div class="flex items-center">
                                 <span class="gap-number">{{ $index + 1 }}</span>
                                 {{ $gap->competence->name }}
@@ -423,6 +573,30 @@
                             @endforeach
                         </tr>
                     @endforeach
+                    {{-- Nilai Rata-rata --}}
+                    <tr class="font-bold bg-gray-50">
+                        <td class="td-left">Nilai Rata-Rata</td>
+                        <td>{{ number_format($standards->avg() ?: 0, 1) }}</td>
+                        @foreach ($talents as $talent)
+                            @php
+                                $avgSelf = optional(optional($talent->assessmentSession)->details)->avg('score_talent') ?: 0;
+                                $avgAtasan = optional(optional($talent->assessmentSession)->details)->avg('score_atasan') ?: 0;
+                                $avgGap = optional(optional($talent->assessmentSession)->details)->avg('gap_score') ?: 0;
+                            @endphp
+                            <td>{{ number_format($avgSelf, 1) }}</td>
+                            <td>{{ number_format($avgAtasan, 1) }}</td>
+                            <td>{{ number_format(($avgSelf + $avgAtasan) / 2, 1) }}</td>
+                            <td class="p-1">
+                                @php
+                                    $cls = 'gap-ok';
+                                    if ($avgGap == 0) $cls = 'gap-none';
+                                    elseif ($avgGap < -1.5) $cls = 'gap-large';
+                                    elseif ($avgGap < 0) $cls = 'gap-small';
+                                @endphp
+                                <span class="gap-badge {{ $cls }}">{{ number_format($avgGap, 1) }}</span>
+                            </td>
+                        @endforeach
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -584,6 +758,68 @@
     </div>
 
     <script>
+        function openGapModal(talentName, gaps) {
+            document.getElementById('modal-talent-name').textContent = talentName;
+            const listContainer = document.getElementById('modal-gap-list');
+            listContainer.innerHTML = '';
+
+            // Sort gaps by GAP score ascending (most negative first)
+            const sortedGaps = [...gaps].sort((a, b) => a.gap - b.gap);
+
+            sortedGaps.forEach((g, idx) => {
+                const isTop3 = idx < 3;
+                const item = document.createElement('div');
+                item.className = `gap-select-item ${isTop3 ? 'priority-' + (idx + 1) : ''}`;
+                item.onclick = function() { toggleCheck(this); };
+
+                item.innerHTML = `
+                    <input type="checkbox" ${isTop3 ? 'checked' : ''} onclick="event.stopPropagation(); updatePriorityStyles();">
+                    <div class="gap-name-modal">${g.name}</div>
+                    <div class="gap-score-modal">${g.score}/${g.standard}</div>
+                    <div class="gap-value-badge">${g.gap == 0 ? '0' : g.gap.toFixed(1)}</div>
+                `;
+                listContainer.appendChild(item);
+            });
+
+            document.getElementById('gap-modal').classList.add('active');
+            updatePriorityStyles();
+        }
+
+        function toggleCheck(item) {
+            const checkbox = item.querySelector('input');
+            const checkedCount = document.querySelectorAll('#modal-gap-list input:checked').length;
+            
+            if (!checkbox.checked && checkedCount >= 3) {
+                return; // Limit to 3
+            }
+            
+            checkbox.checked = !checkbox.checked;
+            updatePriorityStyles();
+        }
+
+        function updatePriorityStyles() {
+            const items = document.querySelectorAll('.gap-select-item');
+            let checkedIdx = 0;
+            items.forEach(item => {
+                const cb = item.querySelector('input');
+                item.classList.remove('priority-1', 'priority-2', 'priority-3');
+                if (cb.checked) {
+                    checkedIdx++;
+                    if (checkedIdx <= 3) {
+                        item.classList.add('priority-' + checkedIdx);
+                    }
+                }
+            });
+        }
+
+        function closeGapModal() {
+            document.getElementById('gap-modal').classList.remove('active');
+        }
+
+        function closeModalOnOutside(e) {
+            if (e.target.id === 'gap-modal') closeGapModal();
+        }
+
         function switchSection(targetId, el) {
             // Hide all sections
             document.getElementById('section-kompetensi').classList.add('hidden');

@@ -45,8 +45,7 @@ Route::get('/dashboard', function () {
         return redirect()->route('finance.dashboard');
     }
     elseif (in_array($roleName, ['admin_pdc', 'pdc admin', 'pdc_admin'])) {
-        // Admin PDC → Panel Filament terpisah
-        return redirect('/admin-pdc');
+        return redirect()->route('pdc_admin.dashboard');
     }
     elseif (in_array($roleName, ['bo_director', 'bod'])) {
         return redirect()->route('bo_director.dashboard');

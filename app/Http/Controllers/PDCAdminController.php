@@ -51,7 +51,7 @@ class PDCAdminController extends Controller
             ->whereHas('promotion_plan', function($q) use ($position_id) {
                 $q->where('target_position_id', $position_id);
             })
-            ->with(['department', 'position', 'mentor', 'atasan', 'assessmentSession.details.competence'])
+            ->with(['department', 'position', 'mentor', 'atasan', 'assessmentSession.details.competence', 'idpActivities.type', 'improvementProjects.verifier'])
             ->get();
 
         $competencies = Competence::all();

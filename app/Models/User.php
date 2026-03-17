@@ -5,31 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasName;
-use Filament\Panel;
-
-class User extends Authenticatable implements HasName, FilamentUser
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
-    public function getFilamentName(): string
-    {
-        return $this->nama ?? 'Unknown';
-    }
-
-    /**
-     * Hanya user dengan role admin_pdc yang boleh akses panel Filament.
-     * Method ini dipanggil otomatis oleh middleware Filament saat akses /admin-pdc.
-     */
-    public function canAccessPanel(Panel $panel): bool
-    {
-        if (!$this->role) {
-            return false;
-        }
-        $roleName = strtolower(trim($this->role->role_name));
-        return in_array($roleName, ['admin_pdc', 'pdc admin', 'pdc_admin', 'admin.pdc']);
-    }
 
     protected $fillable = [
         'nama',
@@ -96,5 +74,15 @@ class User extends Authenticatable implements HasName, FilamentUser
     public function assessmentSession()
     {
         return $this->hasOne(AssessmentSession::class , 'user_id_talent');
+    }
+
+    public function idpActivities()
+    {
+        return $this->hasMany(IdpActivity::class, 'user_id_talent');
+    }
+
+    public function improvementProjects()
+    {
+        return $this->hasMany(ImprovementProject::class, 'user_id_talent');
     }
 }

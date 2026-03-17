@@ -17,6 +17,54 @@
                 background: #94a3b8;
             }
 
+            /* Custom Scrollbar Styles for LogBook Tables */
+            .custom-scrollbar::-webkit-scrollbar { 
+                height: 8px; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-track { 
+                background: #f8fafc; 
+                border-radius: 10px; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb { 
+                background: #0d9488; 
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+                background: #0f766e; 
+            }
+
+            .log-table-container {
+                background: white;
+                border-radius: 16px;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+            .pdc-log-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .pdc-log-table th {
+                padding: 24px 32px;
+                background: #f8fafc;
+                font-weight: 800;
+                color: #475569;
+                font-size: 0.95rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+            .pdc-log-table td {
+                padding: 32px;
+                color: #64748b;
+                font-size: 0.9rem;
+                border-top: 1px solid #f1f5f9;
+            }
+            .pdc-log-table tr:hover {
+                background: #fafafa;
+            }
+
             /* --- MODAL STYLES --- */
             .modal-overlay {
                 position: fixed;
@@ -102,6 +150,105 @@
             .gap-select-item.priority-3 { border-color: #3b82f6; border-width: 2px; }
             .gap-select-item.priority-3 input { accent-color: #3b82f6; }
 
+            /* --- FINANCE MODAL STYLES --- */
+            .finance-modal-content {
+                max-width: 700px;
+                padding: 0;
+            }
+            .finance-header {
+                padding: 24px 32px;
+                border-bottom: 1px solid #f1f5f9;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .finance-body {
+                padding: 32px;
+            }
+            .finance-alert {
+                background: #f0fdfa;
+                border: 1px solid #5eead4;
+                border-radius: 8px;
+                padding: 16px;
+                display: flex;
+                gap: 16px;
+                margin-bottom: 32px;
+            }
+            .finance-alert-text {
+                font-size: 0.8rem;
+                color: #0f766e;
+                line-height: 1.5;
+            }
+            .finance-form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 24px;
+            }
+            .finance-field-label {
+                font-size: 0.85rem;
+                font-weight: 800;
+                color: #2e3746;
+                text-transform: uppercase;
+                margin-bottom: 8px;
+                display: block;
+            }
+            .finance-readonly-box {
+                background: #ffffff;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 12px 16px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1e293b;
+            }
+            .finance-input {
+                width: 100%;
+                background: #ffffff;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 12px 16px;
+                font-size: 0.95rem;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            .finance-input:focus {
+                border-color: #0d9488;
+            }
+            .finance-textarea {
+                min-height: 120px;
+                resize: none;
+            }
+            .finance-footer {
+                padding: 0 32px 32px;
+                display: flex;
+                justify-content: flex-end;
+                gap: 16px;
+            }
+            .btn-finance-cancel {
+                background: #f5f5f1;
+                color: #1e293b;
+                font-weight: 700;
+                padding: 12px 32px;
+                border-radius: 12px;
+                transition: all 0.2s;
+            }
+            .btn-finance-cancel:hover {
+                background: #e7e7e2;
+            }
+            .btn-finance-submit {
+                background: #16c60c;
+                color: white;
+                font-weight: 700;
+                padding: 12px 48px;
+                border-radius: 12px;
+                transition: all 0.2s;
+            }
+            .btn-finance-submit:hover {
+                background: #14b00a;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(22, 198, 12, 0.2);
+            }
             .textarea-label { font-size: 0.75rem; font-weight: 800; color: #1e293b; margin-bottom: 8px; display: block; text-transform: uppercase; }
             .modal-textarea {
                 width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 0.8125rem;
@@ -625,21 +772,25 @@
                             ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
                             ['label' => 'Learning', 'done' => min($learningCount, 6), 'total' => 6, 'color' => '#0d9488']
                         ];
-                        $r = 70; $circ = 2 * M_PI * $r;
+                        $r = 38; $circ = 2 * M_PI * $r;
                     @endphp
 
                     @foreach($charts as $chart)
                         @php $pct = $chart['done'] / $chart['total']; $filled = $pct * $circ; $empty = $circ - $filled; @endphp
-                        <div class="donut-wrapper">
-                            <svg viewBox="0 0 160 160" class="w-full h-full -rotate-90">
-                                <circle cx="80" cy="80" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="20" />
-                                <circle cx="80" cy="80" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}" stroke-width="20" stroke-linecap="round" stroke-dasharray="{{ $filled }} {{ $empty }}" />
-                            </svg>
-                            <div class="donut-text">
-                                <span class="text-3xl font-extrabold" style="color: #1e293b">{{ $chart['done'] }}/{{ $chart['total'] }}</span><br>
-                                <span class="text-sm font-bold text-gray-400">{{ round($pct * 100) }}%</span>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="relative w-48 h-48 drop-shadow-sm">
+                                <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="10" />
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}" stroke-width="10" stroke-linecap="round" stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" style="transition: stroke-dasharray 0.8s ease;" />
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-3xl font-extrabold" style="color: #1e293b">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
+                                    <span class="text-sm font-bold text-gray-400 mt-[-4px]">{{ round($pct * 100) }}%</span>
+                                </div>
                             </div>
-                            <div class="donut-label-box">{{ $chart['label'] }}</div>
+                            <div class="bg-white border border-gray-200 px-5 py-1.5 rounded-[10px] shadow-sm">
+                                <span class="text-sm font-bold text-gray-800">{{ $chart['label'] }}</span>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -657,8 +808,8 @@
         </div>
 
         @foreach ($talents as $talent)
-            <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 mb-8 shadow-sm">
-                <div class="flex justify-between items-center mb-6">
+            <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 mb-20 shadow-sm">
+                <div class="flex justify-between items-center mb-16">
                     <div class="flex items-center gap-4 text-left">
                         <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                         <div>
@@ -666,7 +817,7 @@
                             <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
                         </div>
                     </div>
-                    <button class="btn-audit">Validasi Finance</button>
+                    <button class="btn-audit" onclick="openFinanceModal('{{ $talent->nama }}', '{{ optional($talent->department)->nama_department }}', '{{ optional($talent->position)->position_name }}')">Validasi Finance</button>
                 </div>
 
                 <table class="pdc-custom-table">
@@ -720,8 +871,8 @@
         </div>
 
         @foreach ($talents as $talent)
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-8 shadow-sm">
-                <div class="flex items-center gap-4 mb-6">
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-20 shadow-sm">
+                <div class="flex items-center gap-4 mb-16">
                     <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                     <div>
                         <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
@@ -729,30 +880,272 @@
                     </div>
                 </div>
 
-                <table class="pdc-custom-table log-table" data-talent="{{ $talent->id }}">
-                    <thead>
-                        <tr>
-                            <th>Mentor</th>
-                            <th>Tema</th>
-                            <th>Tanggal</th>
-                            <th>Lokasi</th>
-                            <th>Aktivitas</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($talent->idpActivities as $act)
-                            <tr class="log-row type-{{ $act->type_idp }} {{ $act->type_idp != 1 ? 'hidden' : '' }}">
-                                <td>{{ $talent->mentor->nama ?? '-' }}</td>
-                                <td class="font-bold">{{ $act->theme }}</td>
-                                <td>{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
-                                <td>{{ $act->location }}</td>
-                                <td>{{ $act->activity }}</td>
-                            </tr>
-                        @empty
-                            <tr><td colspan="5" class="text-gray-400 py-8">Belum ada aktivitas tercatat.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                {{-- Logbook Content Area --}}
+                <div class="logbook-content-wrapper" data-talent-id="{{ $talent->id }}">
+                    
+                    {{-- EXPOSURE TABLE --}}
+                    <div class="log-table-type exposure-table" data-type="1">
+                        <div class="log-table-container custom-scrollbar overflow-x-auto">
+                            <table class="pdc-log-table min-w-[2000px]">
+                                <thead>
+                                    <tr>
+                                        <th>Mentor</th>
+                                        <th>Tema</th>
+                                        <th>Tanggal</th>
+                                        <th>Lokasi</th>
+                                        <th>Aktivitas</th>
+                                        <th>Deskripsi</th>
+                                        <th>Dokumentasi</th>
+                                        <th>FeedBack</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $expActivities = $talent->idpActivities->where('type_idp', 1); @endphp
+                                    @forelse($expActivities as $act)
+                                        <tr>
+                                            <td class="text-center font-medium">{{ $talent->mentor->nama ?? '-' }}</td>
+                                            <td class="text-center font-bold text-[#1e293b]">{{ $act->theme }}</td>
+                                            <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
+                                            <td class="text-center">{{ $act->location }}</td>
+                                            <td class="text-center">{{ $act->activity }}</td>
+                                            <td class="text-center">{{ $act->description ?? '-' }}</td>
+                                            <td class="text-center">
+                                                @php
+                                                    $paths = [];
+                                                    $names = [];
+                                                    if($act->document_path) {
+                                                        if(str_starts_with($act->document_path, '["')) {
+                                                            $paths = json_decode($act->document_path, true);
+                                                            $names = explode(', ', $act->file_name);
+                                                        } else {
+                                                            $paths = [$act->document_path];
+                                                            $names = [$act->file_name];
+                                                        }
+                                                    }
+                                                @endphp
+                                                @if(count($paths) > 0)
+                                                    <div class="flex flex-col gap-1 items-center">
+                                                        @foreach($paths as $index => $path)
+                                                            <a href="{{ asset('storage/'.$path) }}" target="_blank" class="text-[10px] text-teal-600 hover:text-teal-800 hover:underline flex items-center gap-1 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 max-w-[120px] truncate" title="{{ $names[$index] ?? 'Dokumen' }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                                </svg>
+                                                                {{ $names[$index] ?? 'Dokumen' }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <span class="text-gray-400 text-xs">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center text-gray-400">-</td>
+                                            <td class="text-center">
+                                                @if($act->status === 'Approve')
+                                                    <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                                        <span class="w-1 h-1 rounded-full bg-green-500"></span> Approve
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
+                                                        <span class="w-1 h-1 rounded-full bg-orange-400"></span> {{ $act->status ?: 'Pending' }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="flex items-center justify-center gap-2">
+                                                    <button class="text-gray-400 hover:text-teal-600 transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="11" class="py-12 px-6 text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- MENTORING TABLE --}}
+                    <div class="log-table-type mentoring-table hidden" data-type="2">
+                        <div class="log-table-container custom-scrollbar overflow-x-auto">
+                            <table class="pdc-log-table min-w-[2000px]">
+                                <thead>
+                                    <tr>
+                                        <th>Mentor</th>
+                                        <th>Tema</th>
+                                        <th>Tanggal</th>
+                                        <th>Lokasi</th>
+                                        <th>Deskripsi</th>
+                                        <th>Action Plan</th>
+                                        <th>Dokumentasi</th>
+                                        <th>FeedBack</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $menActivities = $talent->idpActivities->where('type_idp', 2); @endphp
+                                    @forelse($menActivities as $act)
+                                        <tr>
+                                            <td class="text-center font-medium">{{ $talent->mentor->nama ?? '-' }}</td>
+                                            <td class="text-center font-bold text-[#1e293b]">{{ $act->theme }}</td>
+                                            <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
+                                            <td class="text-center">{{ $act->location }}</td>
+                                            <td class="text-center">{{ $act->description ?? '-' }}</td>
+                                            <td class="text-center font-semibold text-[#0d9488]">{{ $act->action_plan ?? '-' }}</td>
+                                            <td class="text-center">
+                                                @php
+                                                    $paths = [];
+                                                    $names = [];
+                                                    if($act->document_path) {
+                                                        if(str_starts_with($act->document_path, '["')) {
+                                                            $paths = json_decode($act->document_path, true);
+                                                            $names = explode(', ', $act->file_name);
+                                                        } else {
+                                                            $paths = [$act->document_path];
+                                                            $names = [$act->file_name];
+                                                        }
+                                                    }
+                                                @endphp
+                                                @if(count($paths) > 0)
+                                                    <div class="flex flex-col gap-1 items-center">
+                                                        @foreach($paths as $index => $path)
+                                                            <a href="{{ asset('storage/'.$path) }}" target="_blank" class="text-[10px] text-teal-600 hover:text-teal-800 hover:underline flex items-center gap-1 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 max-w-[120px] truncate" title="{{ $names[$index] ?? 'Dokumen' }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                                </svg>
+                                                                {{ $names[$index] ?? 'Dokumen' }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <span class="text-gray-400 text-xs">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center text-gray-400">-</td>
+                                            <td class="text-center">
+                                                @if($act->status === 'Approve')
+                                                    <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                                        <span class="w-1 h-1 rounded-full bg-green-500"></span> Approve
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
+                                                        <span class="w-1 h-1 rounded-full bg-orange-400"></span> {{ $act->status ?: 'Pending' }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="flex items-center justify-center gap-2">
+                                                    <button class="text-gray-400 hover:text-teal-600 transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="10" class="py-12 px-6 text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- LEARNING TABLE --}}
+                    <div class="log-table-type learning-table hidden" data-type="3">
+                        <div class="log-table-container custom-scrollbar overflow-x-auto">
+                            <table class="pdc-log-table min-w-[2000px]">
+                                <thead>
+                                    <tr>
+                                        <th>Sumber</th>
+                                        <th>Tema</th>
+                                        <th>Tanggal</th>
+                                        <th>Platform</th>
+                                        <th>Deskripsi</th>
+                                        <th>Dokumentasi</th>
+                                        <th>FeedBack</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $leaActivities = $talent->idpActivities->where('type_idp', 3); @endphp
+                                    @forelse($leaActivities as $act)
+                                        <tr>
+                                            <td class="text-center font-medium">{{ $act->activity }}</td>
+                                            <td class="text-center font-bold text-[#1e293b]">{{ $act->theme }}</td>
+                                            <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
+                                            <td class="text-center">{{ $act->platform }}</td>
+                                            <td class="text-center">{{ $act->description ?? '-' }}</td>
+                                            <td class="text-center">
+                                                @php
+                                                    $paths = [];
+                                                    $names = [];
+                                                    if($act->document_path) {
+                                                        if(str_starts_with($act->document_path, '["')) {
+                                                            $paths = json_decode($act->document_path, true);
+                                                            $names = explode(', ', $act->file_name);
+                                                        } else {
+                                                            $paths = [$act->document_path];
+                                                            $names = [$act->file_name];
+                                                        }
+                                                    }
+                                                @endphp
+                                                @if(count($paths) > 0)
+                                                    <div class="flex flex-col gap-1 items-center">
+                                                        @foreach($paths as $index => $path)
+                                                            <a href="{{ asset('storage/'.$path) }}" target="_blank" class="text-[10px] text-teal-600 hover:text-teal-800 hover:underline flex items-center gap-1 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 max-w-[120px] truncate" title="{{ $names[$index] ?? 'Dokumen' }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                                </svg>
+                                                                {{ $names[$index] ?? 'Dokumen' }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <span class="text-gray-400 text-xs">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center text-gray-400">-</td>
+                                            <td class="text-center">
+                                                <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                                    <span class="w-1 h-1 rounded-full bg-green-500"></span> Verified
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="flex items-center justify-center gap-2">
+                                                    <button class="text-gray-400 hover:text-teal-600 transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="9" class="py-12 px-6 text-gray-400">Belum ada aktivitas Learning yang dicatat.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         @endforeach
     </div>
@@ -840,14 +1233,123 @@
             document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
             el.classList.add('active');
 
-            // Filter rows
-            document.querySelectorAll('.log-row').forEach(row => {
-                if (row.classList.contains('type-' + typeId)) {
-                    row.classList.remove('hidden');
+            // Find all tables for all talents
+            document.querySelectorAll('.log-table-type').forEach(tableDiv => {
+                if (tableDiv.getAttribute('data-type') == typeId) {
+                    tableDiv.classList.remove('hidden');
                 } else {
-                    row.classList.add('hidden');
+                    tableDiv.classList.add('hidden');
                 }
             });
         }
+
+        // --- FINANCE MODAL FUNCTIONS ---
+        function openFinanceModal(talentName, deptName, posName) {
+            document.getElementById('fin-talent-name').textContent = talentName;
+            document.getElementById('fin-dept-name').textContent = deptName || '-';
+            document.getElementById('fin-pos-name').textContent = posName || '-';
+            // Perusahaan default as per reference image
+            document.getElementById('fin-company-name').textContent = 'PT. Tiga Serangkai Pustaka Mandiri';
+            
+            document.getElementById('finance-modal').classList.add('active');
+        }
+
+        function closeFinanceModal() {
+            document.getElementById('finance-modal').classList.remove('active');
+        }
+
+        function submitFinanceValidation() {
+            // For now, just a UI feedback
+            const btn = event.currentTarget;
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Permintaan validasi finance berhasil dikirim!');
+                closeFinanceModal();
+                btn.innerHTML = 'Kirim';
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        // Close on backdrop
+        window.onclick = function(event) {
+            const gapModal = document.getElementById('gap-modal');
+            const financeModal = document.getElementById('finance-modal');
+            if (event.target == gapModal) closeGapModal();
+            if (event.target == financeModal) closeFinanceModal();
+        }
     </script>
+
+    {{-- ================================= MODAL: FINANCE VALIDATION ================================= --}}
+    <div id="finance-modal" class="modal-overlay">
+        <div class="modal-content finance-modal-content">
+            <div class="finance-header">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gray-100 p-2 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-[#1e293b]">Kirim Permintaan Validasi Finance</h3>
+                </div>
+                <button onclick="closeFinanceModal()" class="text-gray-400 hover:text-gray-600 p-2 border border-gray-100 rounded-xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="finance-body">
+                <div class="finance-alert">
+                    <div class="bg-yellow-100 p-2 rounded-lg shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <p class="finance-alert-text">Sistem secara otomatis mengirim catatan kepada finance untuk segera direview. Harap isi pada catatan sesuai dengan kebutuhan Anda.</p>
+                </div>
+
+                <div class="finance-form-grid">
+                    <div>
+                        <label class="finance-field-label">Talent</label>
+                        <div id="fin-talent-name" class="finance-readonly-box">Rudi Santiago</div>
+                    </div>
+                    <div>
+                        <label class="finance-field-label">Perusahaan</label>
+                        <div id="fin-company-name" class="finance-readonly-box">PT. Tiga Serangkai Pustaka Mandiri</div>
+                    </div>
+                    <div>
+                        <label class="finance-field-label">Departemen</label>
+                        <div id="fin-dept-name" class="finance-readonly-box">Human Resource</div>
+                    </div>
+                    <div>
+                        <label class="finance-field-label">Posisi yang dituju</label>
+                        <div id="fin-pos-name" class="finance-readonly-box">Manager</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="finance-field-label">Judul Project Improvement</label>
+                        <input type="text" class="finance-input" placeholder="Masukkan judul project...">
+                    </div>
+                    <div>
+                        <label class="finance-field-label">Lampiran</label>
+                        <input type="file" class="finance-input py-[10px]">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="finance-field-label">Catatan</label>
+                    <textarea class="finance-input finance-textarea" placeholder="cth: Pada slide ke 17 apakah sudah memenuhi standar kriteria untuk melakukan bisnis. . ."></textarea>
+                </div>
+            </div>
+
+            <div class="finance-footer">
+                <button onclick="closeFinanceModal()" class="btn-finance-cancel">Batal</button>
+                <button onclick="submitFinanceValidation()" class="btn-finance-submit">Kirim</button>
+            </div>
+        </div>
+    </div>
 </x-pdc_admin.layout>

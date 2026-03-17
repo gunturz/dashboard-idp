@@ -105,22 +105,22 @@
                         'Exposure' => [
                             'done' => min($exposureCount ?? 0, 6),
                             'total' => 6,
-                            'from' => '#c2410c',
-                            'to' => '#fb923c',
+                            'from' => '#334155',
+                            'to' => '#334155',
                             'id' => 'grad-exposure',
                         ],
                         'Mentoring' => [
                             'done' => min($mentoringCount ?? 0, 6),
                             'total' => 6,
-                            'from' => '#c2410c',
-                            'to' => '#fb923c',
+                            'from' => '#f59e0b',
+                            'to' => '#f59e0b',
                             'id' => 'grad-mentoring',
                         ],
                         'Learning' => [
                             'done' => min($learningCount ?? 0, 6),
                             'total' => 6,
-                            'from' => '#c2410c',
-                            'to' => '#fb923c',
+                            'from' => '#0d9488',
+                            'to' => '#0d9488',
                             'id' => 'grad-learning',
                         ],
                         

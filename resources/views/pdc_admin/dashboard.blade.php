@@ -129,7 +129,17 @@
                                             {{ optional($talent->department)->nama_department ?? '-' }}
                                         </td>
                                     @endif
-                                    <td>{{ optional($talent->mentor)->nama ?? '-' }}</td>
+                                    <td>
+                                        @php
+                                            $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+                                            if (!empty($mentorIds)) {
+                                                $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
+                                                echo implode('<br>', $mentorNames) ?: '-';
+                                            } else {
+                                                echo optional($talent->mentor)->nama ?? '-';
+                                            }
+                                        @endphp
+                                    </td>
                                     <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
                                     @if($index === 0)
                                         <td rowspan="{{ count($posData['talents']) }}" class="bg-white text-center">

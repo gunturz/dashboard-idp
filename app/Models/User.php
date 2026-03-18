@@ -78,11 +78,11 @@ class User extends Authenticatable
 
     public function idpActivities()
     {
-        return $this->hasMany(IdpActivity::class, 'user_id_talent');
+        return $this->hasMany(IdpActivity::class , 'user_id_talent');
     }
 
     public function improvementProjects()
     {
-        return $this->hasMany(ImprovementProject::class, 'user_id_talent');
+        return $this->hasMany(ImprovementProject::class , 'user_id_talent');
     }
 }

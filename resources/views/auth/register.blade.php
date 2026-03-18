@@ -251,7 +251,7 @@
             @enderror
         </div>
 
-        {{-- ── POSISI YANG DITUJU (hanya tampil untuk Talent) ── --}}
+        <!-- {{-- ── POSISI YANG DITUJU (hanya tampil untuk Talent) ── --}}
         <div id="field-jabatan-target"
             style="margin-bottom: 1rem; display: none;">
             <label for="jabatan_target" class="form-label">Posisi yang dituju</label>
@@ -318,7 +318,7 @@
                     {{ $message }}
                 </p>
             @enderror
-        </div>
+        </div> -->
 
         {{-- ── TOMBOL DAFTAR / NEXT ──────────────────────── --}}
         <button type="submit" id="register-btn" class="btn-login">

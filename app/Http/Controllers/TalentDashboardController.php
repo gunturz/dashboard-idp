@@ -164,14 +164,9 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent/talent yang bisa mengakses halaman ini.');
             }
 
-            // Get mentors and atasans for the dropdown list using relations
-            $mentors = User::whereHas('role', function ($q) {
-                $q->where('role_name', 'mentor');
-            })->get();
-
-            $atasans = User::whereHas('role', function ($q) {
-                $q->where('role_name', 'atasan');
-            })->get();
+            // Ambil mentor dan atasan yang HANYA ditugaskan untuk talent ini
+            $mentors = $user->mentor ? collect([$user->mentor]) : collect();
+            $atasans = $user->atasan ? collect([$user->atasan]) : collect();
 
             $notifications = $this->getNotifications();
 
@@ -469,14 +464,9 @@ class TalentDashboardController extends Controller
 
             $tab = strtolower($activity->type->type_name ?? 'exposure');
 
-            // Get mentors and atasans for the dropdown list using relations
-            $mentors = User::whereHas('role', function ($q) {
-                $q->where('role_name', 'mentor');
-            })->get();
-
-            $atasans = User::whereHas('role', function ($q) {
-                $q->where('role_name', 'atasan');
-            })->get();
+            // Ambil mentor dan atasan yang HANYA ditugaskan untuk talent ini
+            $mentors = $user->mentor ? collect([$user->mentor]) : collect();
+            $atasans = $user->atasan ? collect([$user->atasan]) : collect();
 
             $notifications = $this->getNotifications();
             $editMode = true;

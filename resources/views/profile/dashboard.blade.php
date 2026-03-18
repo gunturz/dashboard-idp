@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Kandidat – Individual Development Plan</title>
+    <title>Profile Talent – Individual Development Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -201,7 +201,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
             </svg>
-            <h1 class="text-2xl font-bold text-[#2e3746]">Profil Kandidat</h1>
+            <h1 class="text-2xl font-bold text-[#2e3746]">Profile Talent</h1>
         </div>
 
         {{-- Error Display --}}
@@ -233,7 +233,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    <span class="text-sm font-semibold">Pengubahan profil kandidat berhasil</span>
+                    <span class="text-sm font-semibold">Pengubahan Profile Talent berhasil</span>
                 </div>
                 <button onclick="document.getElementById('success-banner').remove()"
                         class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
@@ -309,8 +309,7 @@
                                 @php
                                     $akunFields = [
                                         ['label' => 'Username', 'key' => 'username', 'type' => 'text'],
-                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email'],
-                                        ['label' => 'Password', 'key' => 'password', 'type' => 'password', 'placeholder' => 'Isi untuk ganti password'],
+                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email']
                                     ];
                                 @endphp
                                 @foreach ($akunFields as $i => $field)
@@ -339,9 +338,9 @@
                                         ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
                                         ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => $user->role->role_name ?? '-'],
                                         ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-'],
-                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => $user->mentor->nama ?? '-'],
-                                        ['label' => 'Atasan',             'type' => 'readonly', 'val' => $user->atasan->nama ?? '-'],
-                                        ['label' => 'Posisi Yang Dituju', 'key' => 'target_position_id','type' => 'select', 'options' => $positions ?? [],   'val' => $user->promotion_plan->targetPosition->position_name ?? '-'],
+                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => optional($user->mentor)->nama ?? '-'],
+                                        ['label' => 'Atasan',             'type' => 'readonly', 'val' => optional($user->atasan)->nama ?? '-'],
+                                        ['label' => 'Posisi Yang Dituju', 'type' => 'readonly', 'val' => optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-'],
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)

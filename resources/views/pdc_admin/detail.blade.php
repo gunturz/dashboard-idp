@@ -634,7 +634,17 @@
                     </div>
 
                     <div class="mb-4 text-xs font-bold text-gray-500">
-                        <p>MENTOR : {{ strtoupper($talent->mentor->nama ?? '-') }}</p>
+                        <p>MENTOR : 
+                            @php
+                                $mIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+                                if (!empty($mIds)) {
+                                    $mNames = \App\Models\User::whereIn('id', $mIds)->pluck('nama')->toArray();
+                                    echo strtoupper(implode(', ', $mNames)) ?: '-';
+                                } else {
+                                    echo strtoupper($talent->mentor->nama ?? '-');
+                                }
+                            @endphp
+                        </p>
                         <p>ATASAN : {{ strtoupper($talent->atasan->nama ?? '-') }}</p>
                     </div>
 
@@ -896,7 +906,6 @@
                                         <th>Aktivitas</th>
                                         <th>Deskripsi</th>
                                         <th>Dokumentasi</th>
-                                        <th>FeedBack</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -940,7 +949,6 @@
                                                     <span class="text-gray-400 text-xs">-</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center text-gray-400">-</td>
                                             <td class="text-center">
                                                 @if($act->status === 'Approve')
                                                     <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
@@ -965,7 +973,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="11" class="py-12 px-6 text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td>
+                                            <td colspan="9" class="py-12 px-6 text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -986,7 +994,6 @@
                                         <th>Deskripsi</th>
                                         <th>Action Plan</th>
                                         <th>Dokumentasi</th>
-                                        <th>FeedBack</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -1030,7 +1037,6 @@
                                                     <span class="text-gray-400 text-xs">-</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center text-gray-400">-</td>
                                             <td class="text-center">
                                                 @if($act->status === 'Approve')
                                                     <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
@@ -1055,7 +1061,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="10" class="py-12 px-6 text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                            <td colspan="9" class="py-12 px-6 text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -1075,7 +1081,6 @@
                                         <th>Platform</th>
                                         <th>Deskripsi</th>
                                         <th>Dokumentasi</th>
-                                        <th>FeedBack</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -1118,7 +1123,6 @@
                                                     <span class="text-gray-400 text-xs">-</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center text-gray-400">-</td>
                                             <td class="text-center">
                                                 <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
                                                     <span class="w-1 h-1 rounded-full bg-green-500"></span> Verified
@@ -1137,7 +1141,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="9" class="py-12 px-6 text-gray-400">Belum ada aktivitas Learning yang dicatat.</td>
+                                            <td colspan="8" class="py-12 px-6 text-gray-400">Belum ada aktivitas Learning yang dicatat.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

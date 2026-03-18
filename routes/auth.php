@@ -96,8 +96,16 @@ Route::middleware('auth')->group(function () {
         ->name('talent.project.store');
 
     // PDC Admin Routes
-    Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class, 'dashboard'])
+    Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class , 'dashboard'])
         ->name('pdc_admin.dashboard');
-    Route::get('/pdc-admin/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class, 'detail'])
+    Route::get('/pdc-admin/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'detail'])
         ->name('pdc_admin.detail');
+    Route::get('/pdc-admin/talents-by-company', [\App\Http\Controllers\PDCAdminController::class , 'getTalentsByCompany'])
+        ->name('pdc_admin.talents_by_company');
+    Route::post('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'storeDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.store');
+    Route::get('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'developmentPlan'])
+        ->name('pdc_admin.development_plan');
+    Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
+        ->name('pdc_admin.detail.talent');
 });

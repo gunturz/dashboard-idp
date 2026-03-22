@@ -401,41 +401,26 @@
 
             {{-- Tabs --}}
             <div class="tab-bar">
-                <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
-                    class="tab-btn {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</a>
-                <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
-                    class="tab-btn {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</a>
-                <a href="{{ route('talent.idp_monitoring', 'learning') }}"
-                    class="tab-btn {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</a>
+                <button type="button" onclick="switchIdpTab('exposure')" id="tab-btn-exposure"
+                    class="tab-btn {{ $tab == 'exposure' ? 'tab-active' : 'tab-inactive' }}">Exposure</button>
+                <button type="button" onclick="switchIdpTab('mentoring')" id="tab-btn-mentoring"
+                    class="tab-btn {{ $tab == 'mentoring' ? 'tab-active' : 'tab-inactive' }}">Mentoring</button>
+                <button type="button" onclick="switchIdpTab('learning')" id="tab-btn-learning"
+                    class="tab-btn {{ $tab == 'learning' ? 'tab-active' : 'tab-inactive' }}">Learning</button>
             </div>
 
             {{-- White Form Content --}}
             <div class="form-bg p-8 relative z-20 -mt-2 shadow-sm">
-                <form action="{{ isset($editMode) ? route('talent.idp_monitoring.update', $activity->id) : route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
+                <form id="idp-form" action="{{ isset($editMode) ? route('talent.idp_monitoring.update', $activity->id) : route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
                     enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     @if(isset($editMode))
                         @method('PUT')
                     @endif
 
-                    @if ($tab == 'learning')
-                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
-                            <label class="text-sm font-semibold text-gray-800">Sumber</label>
-                            <input type="text" name="activity" class="form-input" placeholder="" value="{{ old('activity', $activity->activity ?? '') }}" required>
-                        </div>
-                    @else
-                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
-                            <label class="text-sm font-semibold text-gray-800">Mentor</label>
-                            <input type="text" name="mentor_name" list="mentor-list" class="form-input"
-                                placeholder="Ketik nama mentor..." value="{{ old('mentor_name', $activity->verifier->nama ?? '') }}" required>
-                            <datalist id="mentor-list">
-                                @foreach ($mentors as $m)
-                                    <option value="{{ $m->nama }}">
-                                @endforeach
-                            </datalist>
-                        </div>
-                    @endif
+                    <input type="hidden" name="tab_type" id="tab_type" value="{{ old('tab_type', $tab) }}">
 
+                    {{-- Common fields: Theme & Date --}}
                     <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tema</label>
                         <input type="text" name="theme" class="form-input" placeholder="" value="{{ old('theme', $activity->theme ?? '') }}" required>
@@ -446,41 +431,59 @@
                         <input type="date" name="activity_date" class="form-input" value="{{ old('activity_date', isset($activity) ? \Carbon\Carbon::parse($activity->activity_date)->format('Y-m-d') : '') }}" required>
                     </div>
 
-                    @if ($tab == 'learning')
+                    {{-- Fields for Exposure & Mentoring --}}
+                    <div id="fields-exp-men" class="{{ $tab == 'learning' ? 'hidden' : '' }} space-y-4">
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
-                            <label class="text-sm font-semibold text-gray-800">Platform</label>
-                            <input type="text" name="platform" class="form-input" placeholder="" value="{{ old('platform', $activity->platform ?? '') }}" required>
+                            <label class="text-sm font-semibold text-gray-800">Mentor</label>
+                            <input type="text" name="mentor_name" list="mentor-list" class="form-input"
+                                placeholder="Ketik nama mentor..." value="{{ old('mentor_name', $activity->verifier->nama ?? '') }}" {{ $tab != 'learning' ? 'required' : '' }}>
+                            <datalist id="mentor-list">
+                                @foreach ($mentors as $m)
+                                    <option value="{{ $m->nama }}">
+                                @endforeach
+                            </datalist>
                         </div>
-                    @else
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Lokasi</label>
-                            <input type="text" name="location" class="form-input" placeholder="" value="{{ old('location', $activity->location ?? '') }}" required>
+                            <input type="text" name="location" class="form-input" placeholder="" value="{{ old('location', $activity->location ?? '') }}" {{ $tab != 'learning' ? 'required' : '' }}>
                         </div>
-                    @endif
+                    </div>
 
-                    @if ($tab == 'mentoring')
+                    {{-- Fields for Learning --}}
+                    <div id="fields-learning" class="{{ $tab != 'learning' ? 'hidden' : '' }} space-y-4">
+                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                            <label class="text-sm font-semibold text-gray-800">Sumber</label>
+                            <input type="text" name="activity_learning" id="activity_learning" class="form-input" placeholder="" value="{{ old('activity_learning', ($tab == 'learning' ? ($activity->activity ?? '') : '')) }}" {{ $tab == 'learning' ? 'required' : '' }}>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                            <label class="text-sm font-semibold text-gray-800">Platform</label>
+                            <input type="text" name="platform" class="form-input" placeholder="" value="{{ old('platform', $activity->platform ?? '') }}" {{ $tab == 'learning' ? 'required' : '' }}>
+                        </div>
+                    </div>
+
+                    {{-- Specific fields for Mentoring --}}
+                    <div id="fields-mentoring" class="{{ $tab != 'mentoring' ? 'hidden' : '' }} space-y-4">
                         <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                            <textarea name="description" class="form-textarea h-24" placeholder="" required>{{ old('description', $activity->description ?? '') }}</textarea>
+                            <textarea name="description_mentoring" id="description_mentoring" class="form-textarea h-24" placeholder="" {{ $tab == 'mentoring' ? 'required' : '' }}>{{ old('description_mentoring', ($tab == 'mentoring' ? ($activity->description ?? '') : '')) }}</textarea>
                         </div>
-
                         <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Action Plan</label>
-                            <textarea name="action_plan" class="form-textarea h-24" placeholder="" required>{{ old('action_plan', $activity->action_plan ?? '') }}</textarea>
+                            <textarea name="action_plan" class="form-textarea h-24" placeholder="" {{ $tab == 'mentoring' ? 'required' : '' }}>{{ old('action_plan', $activity->action_plan ?? '') }}</textarea>
                         </div>
-                    @else
-                        @if ($tab == 'exposure')
-                            <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
-                                <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
-                                <textarea name="activity" class="form-textarea h-24" placeholder="" required>{{ old('activity', $activity->activity ?? '') }}</textarea>
-                            </div>
+                    </div>
 
-                            <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
-                                <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
-                                <textarea name="description" class="form-textarea h-24" placeholder="" required>{{ old('description', $activity->description ?? '') }}</textarea>
-                            </div>
-                        @endif
-                    @endif
+                    {{-- Specific fields for Exposure --}}
+                    <div id="fields-exposure" class="{{ $tab != 'exposure' ? 'hidden' : '' }} space-y-4">
+                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                            <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
+                            <textarea name="activity_exposure" id="activity_exposure" class="form-textarea h-24" placeholder="" {{ $tab == 'exposure' ? 'required' : '' }}>{{ old('activity_exposure', ($tab == 'exposure' ? ($activity->activity ?? '') : '')) }}</textarea>
+                        </div>
+                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                            <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
+                            <textarea name="description_exposure" id="description_exposure" class="form-textarea h-24" placeholder="" {{ $tab == 'exposure' ? 'required' : '' }}>{{ old('description_exposure', ($tab == 'exposure' ? ($activity->description ?? '') : '')) }}</textarea>
+                        </div>
+                    </div>
 
                     <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-2">
                         <label class="text-sm font-semibold text-gray-800 mt-2">Dokumentasi</label>
@@ -575,6 +578,65 @@
     </footer>
 
     <script>
+        function switchIdpTab(tab) {
+            // 1. Update Buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+            document.getElementById('tab-btn-' + tab).classList.remove('tab-inactive');
+            document.getElementById('tab-btn-' + tab).classList.add('tab-active');
+
+            // 2. Hide all field groups
+            document.getElementById('fields-exp-men').classList.add('hidden');
+            document.getElementById('fields-learning').classList.add('hidden');
+            document.getElementById('fields-mentoring').classList.add('hidden');
+            document.getElementById('fields-exposure').classList.add('hidden');
+
+            // 3. Show relevant field groups & update required attributes
+            const form = document.getElementById('idp-form');
+            const tabTypeInput = document.getElementById('tab_type');
+            tabTypeInput.value = tab;
+
+            // Reset all required
+            form.querySelectorAll('[required]').forEach(el => {
+                if (!['theme', 'activity_date'].includes(el.name)) {
+                    el.removeAttribute('required');
+                }
+            });
+
+            if (tab === 'learning') {
+                document.getElementById('fields-learning').classList.remove('hidden');
+                form.querySelector('[name="activity_learning"]').setAttribute('required', '');
+                form.querySelector('[name="platform"]').setAttribute('required', '');
+            } else {
+                document.getElementById('fields-exp-men').classList.remove('hidden');
+                form.querySelector('[name="mentor_name"]').setAttribute('required', '');
+                form.querySelector('[name="location"]').setAttribute('required', '');
+
+                if (tab === 'mentoring') {
+                    document.getElementById('fields-mentoring').classList.remove('hidden');
+                    form.querySelector('[name="description_mentoring"]').setAttribute('required', '');
+                    form.querySelector('[name="action_plan"]').setAttribute('required', '');
+                } else if (tab === 'exposure') {
+                    document.getElementById('fields-exposure').classList.remove('hidden');
+                    form.querySelector('[name="activity_exposure"]').setAttribute('required', '');
+                    form.querySelector('[name="description_exposure"]').setAttribute('required', '');
+                }
+            }
+
+            // 4. Update Form Action (for store)
+            @if(!isset($editMode))
+                let baseUrl = "{{ route('talent.idp_monitoring.store', ['tab' => 'TAB_PLACEHOLDER']) }}";
+                form.action = baseUrl.replace('TAB_PLACEHOLDER', tab);
+            @endif
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const initialTab = document.getElementById('tab_type').value;
+            switchIdpTab(initialTab);
+        });
+
         (function() {
             const navbar = document.querySelector('.navbar-outer');
             let lastScrollY = window.scrollY;

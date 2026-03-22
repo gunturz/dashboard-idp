@@ -15,6 +15,7 @@ class ImprovementProject extends Model
         'status',
         'verify_by',
         'verify_at',
+        'feedback',
     ];
 
     protected $casts = [

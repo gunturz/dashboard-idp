@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Competence extends Model
 {
     protected $table = 'competencies';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'category'];
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class, 'competence_id')->orderBy('level');
+    }
 
     public function targetCompetences()
     {

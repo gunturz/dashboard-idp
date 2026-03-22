@@ -108,4 +108,20 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.development_plan');
     Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
         ->name('pdc_admin.detail.talent');
+    Route::get('/pdc-admin/finance-validation', [\App\Http\Controllers\PDCAdminController::class , 'financeValidation'])
+        ->name('pdc_admin.finance_validation');
+    Route::patch('/pdc-admin/finance-validation/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateFinanceValidation'])
+        ->name('pdc_admin.finance_validation.update');
+    Route::get('/pdc-admin/kompetensi', [\App\Http\Controllers\PDCAdminController::class , 'kompetensi'])
+        ->name('pdc_admin.kompetensi');
+    Route::post('/pdc-admin/kompetensi/questions', [\App\Http\Controllers\PDCAdminController::class , 'updateQuestions'])
+        ->name('pdc_admin.competency.update_questions');
+    Route::post('/pdc-admin/kompetensi/target-scores/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateTargetScores'])
+        ->name('pdc_admin.target_score.update');
+    Route::get('/pdc-admin/mentor', [\App\Http\Controllers\PDCAdminController::class , 'mentor'])
+        ->name('pdc_admin.mentor');
+    Route::post('/pdc-admin/mentor/store', [\App\Http\Controllers\PDCAdminController::class , 'storeMentor'])
+        ->name('pdc_admin.mentor.store');
+    Route::get('/pdc-admin/atasan', [\App\Http\Controllers\PDCAdminController::class , 'atasan'])
+        ->name('pdc_admin.atasan');
 });

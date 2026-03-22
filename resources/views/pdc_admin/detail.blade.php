@@ -411,21 +411,24 @@
                 display: flex;
                 background: #e2e8f0;
                 padding: 4px;
-                border-radius: 12px;
+                border-radius: 9999px;
                 width: fit-content;
                 margin-bottom: 20px;
             }
             .pill {
                 padding: 8px 32px;
-                border-radius: 10px;
+                border-radius: 9999px;
                 font-size: 0.875rem;
                 font-weight: 700;
                 color: #475569;
                 cursor: pointer;
+                transition: all 0.2s;
             }
+            .pill:hover { background: #cbd5e1; color: #1e293b; }
             .pill.active {
                 background: #2e3746;
                 color: white;
+                box-shadow: 0 2px 12px rgba(46,55,70,0.22);
             }
 
             /* --- HEATMAP & COMPETENCY --- */

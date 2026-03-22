@@ -169,4 +169,158 @@ class PDCAdminController extends Controller
 
         return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards'));
     }
+
+    public function financeValidation()
+    {
+        $user = auth()->user();
+
+        $projects = \App\Models\ImprovementProject::with('talent')
+            ->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
+            ->get();
+
+        $total    = $projects->count();
+        $pending  = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
+        $approved = $projects->where('status', 'Verified')->count();
+        $rejected = $projects->where('status', 'Rejected')->count();
+
+        return view('pdc_admin.finance-validation', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected'));
+    }
+
+    public function updateFinanceValidation(Request $request, $id)
+    {
+        $request->validate(['status' => 'required|in:Verified,Rejected']);
+
+        \App\Models\ImprovementProject::findOrFail($id)->update([
+            'status'    => $request->status,
+            'verify_by' => auth()->id(),
+            'verify_at' => now(),
+        ]);
+
+        return back()->with('success', 'Status berhasil diperbarui.');
+    }
+
+    public function kompetensi()
+    {
+        $user = auth()->user();
+
+        // Core: IDs 1-5, Managerial: IDs 6-10 (based on seeder order)
+        $coreCompetencies       = \App\Models\Competence::with('questions')->whereBetween('id', [1, 5])->get();
+        $managerialCompetencies = \App\Models\Competence::with('questions')->where('id', '>', 5)->get();
+        $allCompetencies        = \App\Models\Competence::with('questions')->get();
+
+        $positions = \App\Models\Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+
+        // Build a lookup: [position_id][competence_id] => target_level
+        $targetScores = \App\Models\PositionTargetCompetence::all()
+            ->groupBy('position_id')
+            ->map(fn($rows) => $rows->pluck('target_level', 'competence_id'));
+
+        return view('pdc_admin.kompetensi', compact('user', 'coreCompetencies', 'managerialCompetencies', 'allCompetencies', 'positions', 'targetScores'));
+    }
+
+    public function updateQuestions(Request $request)
+    {
+        $competenceId = $request->competence_id;
+
+        foreach ($request->questions as $levelData) {
+            $level = $levelData['level'];
+            $text  = $levelData['text'] ?? '';
+            $id    = $levelData['id'] ?? null;
+
+            if ($id) {
+                \App\Models\Question::where('id', $id)->update(['question_text' => $text]);
+            } elseif ($text) {
+                \App\Models\Question::create([
+                    'competence_id' => $competenceId,
+                    'level'         => $level,
+                    'question_text' => $text,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Questions berhasil diperbarui.');
+    }
+
+    public function updateTargetScores(Request $request, $position_id)
+    {
+        $scores = $request->input('scores'); // array of competence_id => target_level
+        if ($scores) {
+            foreach ($scores as $comp_id => $level) {
+                \App\Models\PositionTargetCompetence::updateOrCreate(
+                    ['position_id' => $position_id, 'competence_id' => $comp_id],
+                    ['target_level' => $level]
+                );
+            }
+        }
+        // stay on the same tab
+        return back()->with('success', 'Target Score berhasil diperbarui.');
+    }
+
+    public function mentor()
+    {
+        $user = auth()->user();
+        $mentors = \App\Models\User::whereHas('role', function($q) {
+            $q->where('role_name', 'mentor');
+        })->with(['position', 'department', 'mentees' => function($q) {
+            $q->with('position', 'promotion_plan.targetPosition');
+        }])->get();
+        
+        $departments = \App\Models\Department::all();
+        $positions = \App\Models\Position::all();
+
+        return view('pdc_admin.mentor', compact('user', 'mentors', 'departments', 'positions'));
+    }
+
+    public function atasan()
+    {
+        $user = auth()->user();
+        $atasans = \App\Models\User::whereHas('role', function($q) {
+            $q->where('role_name', 'atasan');
+        })->with(['position', 'department', 'subordinates' => function($q) {
+            $q->with('position', 'promotion_plan.targetPosition');
+        }])->get();
+        return view('pdc_admin.atasan', compact('user', 'atasans'));
+    }
+
+    public function storeMentor(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'position_id' => 'required',
+            'department_id' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        $id = $request->input('id');
+
+        if ($id) {
+            $mentor = \App\Models\User::find($id);
+            if ($mentor) {
+                $mentor->update($request->only('nama', 'position_id', 'department_id', 'email'));
+                return back()->with('success', 'Mentor berhasil diperbarui.');
+            }
+        } else {
+            $role_id = \App\Models\Role::where('role_name', 'mentor')->first()->id ?? null;
+            $user = \App\Models\User::create([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'position_id' => $request->position_id,
+                'department_id' => $request->department_id,
+                'role_id' => $role_id,
+                'username' => strtolower(str_replace(' ', '.', $request->nama)) . rand(10,99),
+                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+            ]);
+            
+            if ($role_id) {
+                \Illuminate\Support\Facades\DB::table('user_role')->insert([
+                    'id_user' => $user->id,
+                    'id_role' => $role_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            return back()->with('success', 'Mentor berhasil ditambahkan.');
+        }
+        return back();
+    }
 }

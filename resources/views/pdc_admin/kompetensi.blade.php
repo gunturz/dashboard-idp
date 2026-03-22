@@ -1,0 +1,556 @@
+<x-pdc_admin.layout title="Kompetensi – PDC Admin" :user="$user">
+    <x-slot name="styles">
+        <style>
+            /* ── Top Tabs ── */
+            .top-tabs {
+                display: flex;
+                background: #e8ecf0;
+                border-radius: 9999px;
+                padding: 5px;
+                gap: 4px;
+                margin-bottom: 16px;
+            }
+
+            .top-tab-btn {
+                flex: 1;
+                padding: 11px 24px;
+                border-radius: 9999px;
+                border: none;
+                font-size: 0.9rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all .2s;
+                color: #64748b;
+                background: transparent;
+            }
+
+            .top-tab-btn.active {
+                background: #2e3746;
+                color: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,.18);
+            }
+
+            /* ── Sub Tabs ── */
+            .sub-tabs {
+                display: flex;
+                background: #e8ecf0;
+                border-radius: 9999px;
+                padding: 5px;
+                gap: 4px;
+                margin-bottom: 24px;
+            }
+
+            .sub-tab-btn {
+                flex: 1;
+                padding: 11px 24px;
+                border-radius: 9999px;
+                border: none;
+                background: transparent;
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #64748b;
+                cursor: pointer;
+                transition: all .2s;
+            }
+
+            .sub-tab-btn.active {
+                background: #2e3746;
+                color: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,.18);
+            }
+
+            /* ── Competency Card ── */
+            .comp-card {
+                border: 1.5px solid #e2e8f0;
+                border-radius: 14px;
+                overflow: hidden;
+                margin-bottom: 20px;
+            }
+
+            .comp-card-title {
+                text-align: center;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #2e3746;
+                padding: 18px;
+                background: white;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .comp-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .comp-table thead tr {
+                background: #f8fafc;
+            }
+
+            .comp-table th {
+                padding: 12px 20px;
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: #475569;
+                text-align: center;
+                border-right: 1px solid #f1f5f9;
+            }
+
+            .comp-table th:first-child { width: 80px; }
+            .comp-table th:last-child { border-right: none; }
+
+            .comp-table td {
+                padding: 14px 20px;
+                font-size: 0.82rem;
+                color: #64748b;
+                vertical-align: top;
+                border-top: 1px solid #f1f5f9;
+                border-right: 1px solid #f1f5f9;
+                line-height: 1.6;
+            }
+
+            .comp-table td:first-child { text-align: center; font-weight: 700; color: #2e3746; vertical-align: middle; border-right: 1px solid #f1f5f9; }
+            .comp-table td:last-child { border-right: none; }
+
+            .comp-table tbody tr:hover { background: #fafafa; }
+
+            /* Edit button */
+            .btn-edit-comp {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 7px 18px;
+                background: #2e3746;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 0.78rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all .2s;
+            }
+            .btn-edit-comp:hover { background: #1e2737; }
+
+            .comp-card-footer {
+                padding: 12px 20px;
+                display: flex;
+                justify-content: flex-end;
+                background: white;
+                border-top: 1px solid #f1f5f9;
+            }
+
+            /* Panel visibility */
+            .tab-panel { display: none; }
+            .tab-panel.active { display: block; }
+            .pos-panel { display: none; }
+            .pos-panel.active { display: block; }
+
+            /* Target Score Position table */
+            .ts-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .ts-table th {
+                padding: 14px 10px;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #2e3746;
+                text-align: center;
+                background: #f8fafc;
+                border-bottom: 2px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+            }
+            .ts-table th:last-child { border-right: none; }
+            
+            .ts-table td {
+                border-bottom: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+                padding: 0;
+                vertical-align: middle;
+            }
+            .ts-table td:last-child { border-right: none; }
+
+            .ts-comp-name {
+                padding: 16px 24px !important;
+                font-weight: 500;
+                color: #475569;
+                text-align: left;
+                width: 30%;
+            }
+
+            .ts-radio-label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                min-height: 56px;
+                font-weight: 700;
+                color: #2e3746;
+                cursor: pointer;
+                transition: background 0.2s, color 0.2s;
+            }
+            .ts-radio-label:hover { background: #f1f5f9; }
+            input[type="radio"]:checked + .ts-radio-label {
+                background: #14b8a6;
+                color: white;
+            }
+
+            .btn-simpan-ts {
+                background: #16a34a;
+                color: white;
+                font-weight: 700;
+                font-size: 0.8rem;
+                border: none;
+                border-radius: 6px;
+                padding: 10px 0;
+                width: 100%;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-simpan-ts:hover { background: #15803d; }
+
+            .btn-batal-ts {
+                background: #f5f0e6;
+                color: #2e3746;
+                font-weight: 700;
+                font-size: 0.8rem;
+                border: none;
+                border-radius: 6px;
+                padding: 10px 0;
+                width: 100%;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-batal-ts:hover { background: #e8e2d4; }
+        </style>
+    </x-slot>
+
+    {{-- Page Header --}}
+    <div class="flex items-center gap-2 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+        <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Kompetensi</h2>
+    </div>
+
+    {{-- Top Tabs --}}
+    <div class="top-tabs">
+        <button class="top-tab-btn active" id="topTab-questions" onclick="switchTopTab('questions')">Questions</button>
+        <button class="top-tab-btn" id="topTab-target" onclick="switchTopTab('target')">Target Score Position</button>
+    </div>
+
+    {{-- ═══════════════════════════════ TAB: QUESTIONS ═══════════════════════════════ --}}
+    <div id="panel-questions" class="tab-panel active">
+
+        {{-- Sub Tabs --}}
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" id="subTab-core" onclick="switchSubTab('core')">Core Kompetensi</button>
+            <button class="sub-tab-btn" id="subTab-managerial" onclick="switchSubTab('managerial')">Managerial Kompetensi</button>
+        </div>
+
+        {{-- Core Kompetensi Panel --}}
+        <div id="panel-core" class="tab-panel active">
+            @foreach($coreCompetencies as $comp)
+                {{-- View Mode --}}
+                <div class="comp-card" id="view-comp-{{ $comp->id }}">
+                    <div class="comp-card-title">{{ $comp->name }}</div>
+                    <table class="comp-table">
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Questions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for($lvl = 1; $lvl <= 5; $lvl++)
+                                @php $q = $comp->questions->firstWhere('level', $lvl); @endphp
+                                <tr>
+                                    <td>{{ $lvl }}</td>
+                                    <td>{{ $q->question_text ?? '—' }}</td>
+                                </tr>
+                            @endfor
+                        </tbody>
+                    </table>
+                    <div class="comp-card-footer">
+                        <button class="btn-edit-comp" onclick="toggleEdit({{ $comp->id }}, true)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Edit Mode --}}
+                <div class="comp-card" id="edit-comp-{{ $comp->id }}" style="display:none;">
+                    <form action="{{ route('pdc_admin.competency.update_questions') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="competence_id" value="{{ $comp->id }}">
+                        <div class="comp-card-title">{{ $comp->name }}</div>
+                        <table class="comp-table">
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Questions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for($lvl = 1; $lvl <= 5; $lvl++)
+                                    @php $q = $comp->questions->firstWhere('level', $lvl); @endphp
+                                    <tr>
+                                        <td>{{ $lvl }}</td>
+                                        <td style="padding:0;">
+                                            @if($q) <input type="hidden" name="questions[{{$lvl}}][id]" value="{{$q->id}}"> @endif
+                                            <input type="hidden" name="questions[{{$lvl}}][level]" value="{{$lvl}}">
+                                            <textarea name="questions[{{$lvl}}][text]" style="width:100%; min-height:80px; padding:14px 20px; border:none; outline:none; resize:vertical; font-family:inherit; font-size:0.82rem; color:#475569;" placeholder="Masukkan pertanyaan level {{$lvl}}...">{{ $q->question_text ?? '' }}</textarea>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                        <div class="comp-card-footer" style="gap:12px;">
+                            <button type="button" class="btn-batal-ts" style="padding:8px 30px; width:auto;" onclick="toggleEdit({{ $comp->id }}, false)">Batal</button>
+                            <button type="submit" class="btn-simpan-ts" style="padding:8px 30px; width:auto;">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- Managerial Kompetensi Panel --}}
+        <div id="panel-managerial" class="tab-panel">
+            @foreach($managerialCompetencies as $comp)
+                {{-- View Mode --}}
+                <div class="comp-card" id="view-comp-{{ $comp->id }}">
+                    <div class="comp-card-title">{{ $comp->name }}</div>
+                    <table class="comp-table">
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Questions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for($lvl = 1; $lvl <= 5; $lvl++)
+                                @php $q = $comp->questions->firstWhere('level', $lvl); @endphp
+                                <tr>
+                                    <td>{{ $lvl }}</td>
+                                    <td>{{ $q->question_text ?? '—' }}</td>
+                                </tr>
+                            @endfor
+                        </tbody>
+                    </table>
+                    <div class="comp-card-footer">
+                        <button class="btn-edit-comp" onclick="toggleEdit({{ $comp->id }}, true)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Edit Mode --}}
+                <div class="comp-card" id="edit-comp-{{ $comp->id }}" style="display:none;">
+                    <form action="{{ route('pdc_admin.competency.update_questions') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="competence_id" value="{{ $comp->id }}">
+                        <div class="comp-card-title">{{ $comp->name }}</div>
+                        <table class="comp-table">
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Questions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for($lvl = 1; $lvl <= 5; $lvl++)
+                                    @php $q = $comp->questions->firstWhere('level', $lvl); @endphp
+                                    <tr>
+                                        <td>{{ $lvl }}</td>
+                                        <td style="padding:0;">
+                                            @if($q) <input type="hidden" name="questions[{{$lvl}}][id]" value="{{$q->id}}"> @endif
+                                            <input type="hidden" name="questions[{{$lvl}}][level]" value="{{$lvl}}">
+                                            <textarea name="questions[{{$lvl}}][text]" style="width:100%; min-height:80px; padding:14px 20px; border:none; outline:none; resize:vertical; font-family:inherit; font-size:0.82rem; color:#475569;" placeholder="Masukkan pertanyaan level {{$lvl}}...">{{ $q->question_text ?? '' }}</textarea>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                        <div class="comp-card-footer" style="gap:12px;">
+                            <button type="button" class="btn-batal-ts" style="padding:8px 30px; width:auto;" onclick="toggleEdit({{ $comp->id }}, false)">Batal</button>
+                            <button type="submit" class="btn-simpan-ts" style="padding:8px 30px; width:auto;">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <div id="panel-target" class="tab-panel">
+        {{-- Position Sub Tabs --}}
+        <div class="sub-tabs">
+            @foreach($positions as $index => $pos)
+                <button class="sub-tab-btn pos-tab-trigger {{ $index === 0 ? 'active' : '' }}" id="posTab-{{ $pos->id }}" onclick="switchPosTab({{ $pos->id }})">
+                    {{ $pos->position_name }}
+                </button>
+            @endforeach
+        </div>
+
+        {{-- Panels per Position --}}
+        @foreach($positions as $index => $pos)
+            <div id="pos-panel-{{ $pos->id }}" class="pos-panel {{ $index === 0 ? 'active' : '' }}">
+                
+                {{-- ─ CORE COMPETENCIES ─ --}}
+                <form action="{{ route('pdc_admin.target_score.update', $pos->id) }}" method="POST">
+                    @csrf
+                    <div class="comp-card">
+                        <div class="comp-card-title">Core Competencies</div>
+                        <table class="ts-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%;">Kompetensi</th>
+                                    <th colspan="5">Level</th>
+                                    <th style="width:20%;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($coreCompetencies as $comp)
+                                    @php $targetVal = $targetScores[$pos->id][$comp->id] ?? null; @endphp
+                                    <tr>
+                                        <td class="ts-comp-name">{{ $comp->name }}</td>
+                                        @for($lvl=1; $lvl<=5; $lvl++)
+                                            <td style="width:11%;">
+                                                <input type="radio" name="scores[{{$comp->id}}]" value="{{ $lvl }}" id="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="hidden" {{ $targetVal == $lvl ? 'checked' : '' }}>
+                                                <label for="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label">{{ $lvl }}</label>
+                                            </td>
+                                        @endfor
+                                        
+                                        @if($loop->first)
+                                            <td rowspan="{{ $coreCompetencies->count() }}">
+                                                <div class="flex flex-col gap-3 px-6">
+                                                    <button type="submit" class="btn-simpan-ts">Simpan</button>
+                                                    <button type="reset" class="btn-batal-ts">Batal</button>
+                                                </div>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+                {{-- ─ MANAGERIAL COMPETENCIES ─ --}}
+                <form action="{{ route('pdc_admin.target_score.update', $pos->id) }}" method="POST">
+                    @csrf
+                    <div class="comp-card">
+                        <div class="comp-card-title">Managerial Competencies</div>
+                        <table class="ts-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%;">Kompetensi</th>
+                                    <th colspan="5">Level</th>
+                                    <th style="width:20%;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($managerialCompetencies as $comp)
+                                    @php $targetVal = $targetScores[$pos->id][$comp->id] ?? null; @endphp
+                                    <tr>
+                                        <td class="ts-comp-name">{{ $comp->name }}</td>
+                                        @for($lvl=1; $lvl<=5; $lvl++)
+                                            <td style="width:11%;">
+                                                <input type="radio" name="scores[{{$comp->id}}]" value="{{ $lvl }}" id="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="hidden" {{ $targetVal == $lvl ? 'checked' : '' }}>
+                                                <label for="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label">{{ $lvl }}</label>
+                                            </td>
+                                        @endfor
+                                        
+                                        @if($loop->first)
+                                            <td rowspan="{{ $managerialCompetencies->count() }}">
+                                                <div class="flex flex-col gap-3 px-6">
+                                                    <button type="submit" class="btn-simpan-ts">Simpan</button>
+                                                    <button type="reset" class="btn-batal-ts">Batal</button>
+                                                </div>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        @endforeach
+    </div>
+
+    {{-- (Edit Modal has been replaced by inline editing) --}}
+
+    <x-slot name="scripts">
+    <script>
+        /* ── Top Tab Switcher ── */
+        function switchTopTab(tab) {
+            document.querySelectorAll('.top-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('topTab-' + tab).classList.add('active');
+            document.querySelectorAll('#panel-questions, #panel-target').forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+            const panel = document.getElementById('panel-' + tab);
+            panel.classList.add('active');
+            panel.style.display = 'block';
+        }
+
+        /* ── Sub Tab Switcher (Core/Managerial) ── */
+        function switchSubTab(sub) {
+            // Find the sub-tabs ONLY in the Questions panel to avoid conflicting with position subtabs
+            const panelQs = document.getElementById('panel-questions');
+            panelQs.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('subTab-' + sub).classList.add('active');
+            
+            document.getElementById('panel-core').classList.remove('active');
+            document.getElementById('panel-core').style.display = 'none';
+            document.getElementById('panel-managerial').classList.remove('active');
+            document.getElementById('panel-managerial').style.display = 'none';
+
+            const panel = document.getElementById('panel-' + sub);
+            panel.classList.add('active');
+            panel.style.display = 'block';
+        }
+
+        /* ── Position Tab Switcher ── */
+        function switchPosTab(posId) {
+            document.querySelectorAll('.pos-tab-trigger').forEach(b => b.classList.remove('active'));
+            document.getElementById('posTab-' + posId).classList.add('active');
+            
+            document.querySelectorAll('.pos-panel').forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+            const panel = document.getElementById('pos-panel-' + posId);
+            panel.classList.add('active');
+            panel.style.display = 'block';
+        }
+
+        /* ── Inline Edit Toggle ── */
+        function toggleEdit(compId, show) {
+            const viewCard = document.getElementById('view-comp-' + compId);
+            const editCard = document.getElementById('edit-comp-' + compId);
+            if (show) {
+                viewCard.style.display = 'none';
+                editCard.style.display = 'block';
+            } else {
+                viewCard.style.display = 'block';
+                editCard.style.display = 'none';
+            }
+        }
+
+        // Init panel visibility (CSS .active + display)
+        document.querySelectorAll('.tab-panel').forEach(p => {
+            p.style.display = p.classList.contains('active') ? 'block' : 'none';
+        });
+    </script>
+    </x-slot>
+
+</x-pdc_admin.layout>

@@ -212,11 +212,29 @@ class TalentDashboardController extends Controller
                 $rules['description'] = 'required|string';
             }
 
+            // Merge activity and description based on tab
+            $tab_from_request = $request->input('tab_type', $tab);
+            if ($tab_from_request === 'learning') {
+                $request->merge(['activity' => $request->input('activity_learning')]);
+            }
+            elseif ($tab_from_request === 'exposure') {
+                $request->merge([
+                    'activity' => $request->input('activity_exposure'),
+                    'description' => $request->input('description_exposure')
+                ]);
+            }
+            elseif ($tab_from_request === 'mentoring') {
+                $request->merge(['description' => $request->input('description_mentoring')]);
+            }
+
             $validated = $request->validate($rules, [
                 'documents.max' => 'Maksimal 5 file yang bisa diupload.',
                 'documents.*.max' => 'Ukuran setiap file tidak boleh melebihi 5 MB.',
                 'documents.*.mimes' => 'Format file harus: PNG, JPG, PDF, DOC, DOCX, XLS, XLSX.',
             ]);
+
+            // Gunakan tab dari request jika ada
+            $tab = $tab_from_request;
 
             // ── Type IDP ────────────────────────────────────────────────────
             $typeId = DB::table('idp_type')->where('type_name', ucfirst($tab))->value('id');
@@ -515,6 +533,21 @@ class TalentDashboardController extends Controller
             elseif ($tab === 'exposure') {
                 $rules['activity'] = 'required|string';
                 $rules['description'] = 'required|string';
+            }
+
+            // Merge activity and description based on tab
+            $tab_from_request = $request->input('tab_type', $tab);
+            if ($tab_from_request === 'learning') {
+                $request->merge(['activity' => $request->input('activity_learning')]);
+            }
+            elseif ($tab_from_request === 'exposure') {
+                $request->merge([
+                    'activity' => $request->input('activity_exposure'),
+                    'description' => $request->input('description_exposure')
+                ]);
+            }
+            elseif ($tab_from_request === 'mentoring') {
+                $request->merge(['description' => $request->input('description_mentoring')]);
             }
 
             $validated = $request->validate($rules, [

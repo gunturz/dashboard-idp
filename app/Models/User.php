@@ -85,4 +85,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(ImprovementProject::class , 'user_id_talent');
     }
+
+    public function mentees()
+    {
+        return $this->hasMany(User::class, 'mentor_id');
+    }
+
+    public function subordinates()
+    {
+        return $this->hasMany(User::class, 'atasan_id');
+    }
 }

@@ -167,6 +167,16 @@
             }
         }
 
+        /* ── Nav menu links (active bold) ── */
+        .nav-menu-link {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            transition: color 0.2s, font-weight 0.2s;
+        }
+
+        .nav-menu-link.active {
+            color: #ffffff;
+            font-weight: 700;
         /* ── Responsive ── */
         @media (max-width: 1024px) {
             .navbar-outer {
@@ -183,6 +193,7 @@
             body.pt-\[80px\] {
                 padding-top: 60px !important;
             }
+
         }
     </style>
     

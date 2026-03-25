@@ -166,6 +166,18 @@
                 transform: scale(1) translateY(0);
             }
         }
+
+        /* ── Nav menu links (active bold) ── */
+        .nav-menu-link {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            transition: color 0.2s, font-weight 0.2s;
+        }
+
+        .nav-menu-link.active {
+            color: #ffffff;
+            font-weight: 700;
+        }
     </style>
     
     {{ $styles ?? '' }}
@@ -241,6 +253,96 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
             }
         });
+
+        // ── Active nav menu on scroll ──
+        (function() {
+            const links = document.querySelectorAll('.nav-menu-link');
+            if (!links.length) return;
+
+            // On click, immediately set active
+            links.forEach(link => {
+                link.addEventListener('click', function() {
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // On scroll, detect which section is in view
+            function updateActiveOnScroll() {
+                // If on separate pages, keep those highlighted
+                const path = window.location.pathname;
+                if (path.includes('/talent/logbook')) {
+                    links.forEach(l => {
+                        if (l.getAttribute('data-section') === 'LogBook') l.classList.add('active');
+                        else l.classList.remove('active');
+                    });
+                    return;
+                }
+                if (path.includes('/talent/idp-monitoring')) {
+                    links.forEach(l => {
+                        if (l.getAttribute('data-section') === 'IDP Monitoring') l.classList.add('active');
+                        else l.classList.remove('active');
+                    });
+                    return;
+                }
+                if (path.includes('/talent/competency')) {
+                    links.forEach(l => {
+                        if (l.getAttribute('data-section') === 'Kompetensi') l.classList.add('active');
+                        else l.classList.remove('active');
+                    });
+                    return;
+                }
+
+                let currentSection = '';
+                links.forEach(link => {
+                    const sectionName = link.getAttribute('data-section');
+                    const section = document.getElementById(sectionName);
+                    if (section) {
+                        const rect = section.getBoundingClientRect();
+                        if (rect.top <= 150) currentSection = sectionName;
+                    }
+                });
+                
+                if (currentSection) {
+                    links.forEach(link => {
+                        if (link.getAttribute('data-section') === currentSection) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            }
+
+            window.addEventListener('scroll', updateActiveOnScroll);
+
+            // Set initial active from URL hash or path
+            const hash = decodeURIComponent(window.location.hash.replace('#', ''));
+            const path = window.location.pathname;
+
+            if (path.includes('/talent/logbook')) {
+                links.forEach(l => {
+                    if (l.getAttribute('data-section') === 'LogBook') l.classList.add('active');
+                    else l.classList.remove('active');
+                });
+            } else if (path.includes('/talent/idp-monitoring')) {
+                links.forEach(l => {
+                    if (l.getAttribute('data-section') === 'IDP Monitoring') l.classList.add('active');
+                    else l.classList.remove('active');
+                });
+            } else if (path.includes('/talent/competency')) {
+                links.forEach(l => {
+                    if (l.getAttribute('data-section') === 'Kompetensi') l.classList.add('active');
+                    else l.classList.remove('active');
+                });
+            } else if (hash) {
+                links.forEach(l => {
+                    if (l.getAttribute('data-section') === hash) l.classList.add('active');
+                });
+            } else {
+                links[0].classList.add('active');
+            }
+        })();
     </script>
     
     {{ $scripts ?? '' }}

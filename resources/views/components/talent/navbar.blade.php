@@ -8,11 +8,11 @@
         </h1>
     </a>
 
-    <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-        <a href="{{ route('talent.dashboard') }}#Kompetensi" class="hover:text-blue-200 transition-colors duration-150">Kompetensi</a>
-        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="hover:text-blue-200 transition-colors duration-150">IDP</a>
-        <a href="{{ route('talent.dashboard') }}#Project Improvement" class="hover:text-blue-200 transition-colors duration-150">Project Improvement</a>
-        <a href="{{ route('talent.dashboard') }}#LogBook" class="hover:text-blue-200 transition-colors duration-150">LogBook</a>
+    <div class="flex items-center space-x-14 text-white text-sm ml-auto pr-6">
+        <a href="{{ route('talent.dashboard') }}#Kompetensi" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="Kompetensi">Kompetensi</a>
+        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="IDP Monitoring">IDP</a>
+        <a href="{{ route('talent.dashboard') }}#Project Improvement" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="Project Improvement">Project Improvement</a>
+        <a href="{{ route('talent.dashboard') }}#LogBook" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="LogBook">LogBook</a>
     </div>
 
     <div class="flex items-center space-x-3 pl-4 border-l border-white/20">

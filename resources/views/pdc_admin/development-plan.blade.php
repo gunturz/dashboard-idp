@@ -95,21 +95,21 @@
 
             .dp-select {
                 width: 100%;
-                border: 1.5px solid #2dd4bf;
-                border-radius: 10px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
                 padding: 10px 14px;
                 font-size: 0.875rem;
-                color: #1e293b;
+                color: #475569;
                 background: #fff;
                 appearance: none;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%232dd4bf' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
                 background-repeat: no-repeat;
                 background-position: right 12px center;
                 padding-right: 36px;
                 transition: border-color .2s, box-shadow .2s;
                 cursor: pointer;
             }
-            .dp-select:focus { outline: none; border-color: #0d9488; }
+            .dp-select:focus { outline: none; border-color: #2dd4bf; }
             
             .mentor-stack {
                 display: flex;
@@ -129,6 +129,28 @@
                 transition: opacity 0.2s;
             }
             .btn-remove-talent:hover { opacity: 1; }
+
+            /* ── Responsive ── */
+            @media (max-width: 1024px) {
+                .field-row {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+                .field-label {
+                    width: 100%;
+                }
+                .talent-block-grid {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+                .mentor-label {
+                    text-align: left;
+                }
+                .talent-label {
+                    margin-bottom: -8px;
+                }
+            }
         </style>
     </x-slot>
 

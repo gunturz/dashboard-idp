@@ -174,8 +174,9 @@
                     <th>Talent</th>
                     <th>Judul Project Improvement</th>
                     <th>File</th>
+                    <th>Catatan</th>
+                    <th>Feedback dari Finance</th>
                     <th>Status</th>
-                    <th>Feedback</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -196,6 +197,8 @@
                                 <span class="text-gray-400 text-xs">—</span>
                             @endif
                         </td>
+                        <td class="text-left text-xs">{{ $project->feedback ?? '—' }}</td>
+                        <td class="text-left"><span class="text-gray-400 text-xs">—</span></td>
                         <td>
                             @if($project->status === 'Verified')
                                 <span class="status-dot status-approve">Approve</span>
@@ -207,7 +210,6 @@
                                 <span class="status-dot status-pending">{{ $project->status }}</span>
                             @endif
                         </td>
-                        <td class="text-left">{{ $project->feedback ?? '' }}</td>
                         <td>
                             <div class="flex items-center justify-center gap-2">
                                 <form method="POST" action="{{ route('pdc_admin.finance_validation.update', $project->id) }}">
@@ -227,7 +229,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="py-12 text-gray-400 text-sm">Belum ada permintaan validasi.</td>
+                        <td colspan="7" class="py-12 text-gray-400 text-sm text-center">Belum ada permintaan validasi.</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -338,7 +338,7 @@
                                         ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
                                         ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => $user->role->role_name ?? '-'],
                                         ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-'],
-                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => optional($user->mentor)->nama ?? '-'],
+                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-')],
                                         ['label' => 'Atasan',             'type' => 'readonly', 'val' => optional($user->atasan)->nama ?? '-'],
                                         ['label' => 'Posisi Yang Dituju', 'type' => 'readonly', 'val' => optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-'],
                                     ];
@@ -385,7 +385,6 @@
                                 @endforeach
                             </div>
                         </div>
-
                     </div>
                 </div>
 

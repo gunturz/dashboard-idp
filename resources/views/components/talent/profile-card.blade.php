@@ -37,7 +37,7 @@
         <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
             <div class="flex gap-2">
                 <span class="font-semibold text-white/70 w-24 flex-shrink-0">Mentor</span>
-                <span class="text-white">{{ optional($user->mentor)->nama ?? '-' }}</span>
+                <span class="text-white">{{ collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-') }}</span>
             </div>
             <div class="flex gap-2">
                 <span class="font-semibold text-white/70 w-24 flex-shrink-0">Atasan</span>

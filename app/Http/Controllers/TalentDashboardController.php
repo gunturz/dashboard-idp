@@ -85,7 +85,11 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent yang bisa mengakses halaman ini.');
             }
 
-            return view('talent.competency', compact('user'));
+            $competencies = \App\Models\Competence::with(['questions' => function ($q) {
+                $q->orderBy('level');
+            }])->get();
+
+            return view('talent.competency', compact('user', 'competencies'));
         }
         catch (\Exception $e) {
             Log::error('talent competency error: ' . $e->getMessage());
@@ -159,13 +163,13 @@ class TalentDashboardController extends Controller
     public function idpMonitoring($tab = 'exposure')
     {
         try {
-            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
+            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan', 'promotion_plan']);
             if ($user->role->role_name !== 'talent' && $user->role->role_name !== 'talent') {
                 abort(403, 'Hanya talent/talent yang bisa mengakses halaman ini.');
             }
 
-            // Ambil mentor dan atasan yang HANYA ditugaskan untuk talent ini
-            $mentors = $user->mentor ? collect([$user->mentor]) : collect();
+            // Ambil mentor dari promotion plan (multiple mentors)
+            $mentors = $user->promotion_plan ? $user->promotion_plan->mentor_models : collect();
             $atasans = $user->atasan ? collect([$user->atasan]) : collect();
 
             $notifications = $this->getNotifications();
@@ -470,7 +474,7 @@ class TalentDashboardController extends Controller
     public function editIdpMonitoring($id)
     {
         try {
-            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
+            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan', 'promotion_plan']);
             if ($user->role->role_name !== 'talent' && $user->role->role_name !== 'talent') {
                 abort(403, 'Hanya talent/talent yang bisa mengakses halaman ini.');
             }
@@ -482,8 +486,8 @@ class TalentDashboardController extends Controller
 
             $tab = strtolower($activity->type->type_name ?? 'exposure');
 
-            // Ambil mentor dan atasan yang HANYA ditugaskan untuk talent ini
-            $mentors = $user->mentor ? collect([$user->mentor]) : collect();
+            // Ambil mentor dari promotion plan (multiple mentors)
+            $mentors = $user->promotion_plan ? $user->promotion_plan->mentor_models : collect();
             $atasans = $user->atasan ? collect([$user->atasan]) : collect();
 
             $notifications = $this->getNotifications();

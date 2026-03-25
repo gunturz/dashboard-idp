@@ -221,7 +221,7 @@ class UserSeeder extends Seeder
         $mentorIdsDb = DB::table('users')->where('role_id', $roleIds['mentor'])->pluck('id');
         $atasanIdsDb = DB::table('users')->where('role_id', $roleIds['atasan'])->pluck('id');
         $talentIdsDb = DB::table('users')->where('role_id', $roleIds['talent'])->pluck('id');
-        
+
         foreach ($talentIdsDb as $index => $talentId) {
             DB::table('users')->where('id', $talentId)->update([
                 'mentor_id' => $mentorIdsDb[$index % count($mentorIdsDb)],
@@ -234,6 +234,7 @@ class UserSeeder extends Seeder
             DB::table('promotion_plan')->insert([
                 'user_id_talent' => $talentId,
                 'target_position_id' => $targetPosId,
+                'mentor_ids' => json_encode([(string)$mentorIdsDb[$index % count($mentorIdsDb)]]),
                 'status_promotion' => 'In Progress',
                 'start_date' => now(),
                 'target_date' => now()->addYear(),

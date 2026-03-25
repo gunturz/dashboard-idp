@@ -124,4 +124,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.mentor.store');
     Route::get('/pdc-admin/atasan', [\App\Http\Controllers\PDCAdminController::class , 'atasan'])
         ->name('pdc_admin.atasan');
+    Route::post('/pdc-admin/atasan/store', [\App\Http\Controllers\PDCAdminController::class , 'storeAtasan'])
+        ->name('pdc_admin.atasan.store');
+    Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class , 'requestFinanceValidation'])
+        ->name('pdc_admin.finance.request');
 });

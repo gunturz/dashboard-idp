@@ -56,7 +56,6 @@
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Aktivitas</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Deskripsi</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Dokumentasi</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">FeedBack</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[150px]">Aksi</th>
                             </tr>
@@ -94,9 +93,6 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
-                                    -
-                                </td>
                                 <td class="px-6 py-4 text-left">
                                     @if($data['status'] === 'Approve')
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-xs">
@@ -133,7 +129,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="10" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Exposure yang dicatat.</td>
+                                <td colspan="9" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Exposure yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -157,7 +153,6 @@
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Deskripsi</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Action Plan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Dokumentasi</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">FeedBack</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[150px]">Aksi</th>
                             </tr>
@@ -197,9 +192,6 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
-                                    -
-                                </td>
                                 <td class="px-6 py-4 text-left">
                                     @if($data['status'] === 'Approve')
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-xs">
@@ -234,7 +226,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="10" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                <td colspan="9" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -256,7 +248,6 @@
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Tanggal</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Platform</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Dokumentasi</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">FeedBack</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[150px]">Aksi</th>
                             </tr>
@@ -290,9 +281,6 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-gray-500 border-r border-gray-100 text-left">
-                                    -
-                                </td>
                                 <td class="px-6 py-4 text-left">
                                     @if($data['status'] === 'Approve')
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-xs">
@@ -327,7 +315,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Learning yang dicatat.</td>
+                                <td colspan="7" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Learning yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>

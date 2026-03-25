@@ -175,11 +175,12 @@ class PDCAdminController extends Controller
         $user = auth()->user();
 
         $projects = \App\Models\ImprovementProject::with('talent')
+            ->whereNotNull('feedback')
             ->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
             ->get();
 
-        $total    = $projects->count();
-        $pending  = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
+        $total = $projects->count();
+        $pending = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
         $approved = $projects->where('status', 'Verified')->count();
         $rejected = $projects->where('status', 'Rejected')->count();
 
@@ -191,7 +192,7 @@ class PDCAdminController extends Controller
         $request->validate(['status' => 'required|in:Verified,Rejected']);
 
         \App\Models\ImprovementProject::findOrFail($id)->update([
-            'status'    => $request->status,
+            'status' => $request->status,
             'verify_by' => auth()->id(),
             'verify_at' => now(),
         ]);
@@ -204,9 +205,9 @@ class PDCAdminController extends Controller
         $user = auth()->user();
 
         // Core: IDs 1-5, Managerial: IDs 6-10 (based on seeder order)
-        $coreCompetencies       = \App\Models\Competence::with('questions')->whereBetween('id', [1, 5])->get();
+        $coreCompetencies = \App\Models\Competence::with('questions')->whereBetween('id', [1, 5])->get();
         $managerialCompetencies = \App\Models\Competence::with('questions')->where('id', '>', 5)->get();
-        $allCompetencies        = \App\Models\Competence::with('questions')->get();
+        $allCompetencies = \App\Models\Competence::with('questions')->get();
 
         $positions = \App\Models\Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
 
@@ -224,15 +225,16 @@ class PDCAdminController extends Controller
 
         foreach ($request->questions as $levelData) {
             $level = $levelData['level'];
-            $text  = $levelData['text'] ?? '';
-            $id    = $levelData['id'] ?? null;
+            $text = $levelData['text'] ?? '';
+            $id = $levelData['id'] ?? null;
 
             if ($id) {
                 \App\Models\Question::where('id', $id)->update(['question_text' => $text]);
-            } elseif ($text) {
+            }
+            elseif ($text) {
                 \App\Models\Question::create([
                     'competence_id' => $competenceId,
-                    'level'         => $level,
+                    'level' => $level,
                     'question_text' => $text,
                 ]);
             }
@@ -247,11 +249,16 @@ class PDCAdminController extends Controller
         if ($scores) {
             foreach ($scores as $comp_id => $level) {
                 \App\Models\PositionTargetCompetence::updateOrCreate(
-                    ['position_id' => $position_id, 'competence_id' => $comp_id],
-                    ['target_level' => $level]
+                ['position_id' => $position_id, 'competence_id' => $comp_id],
+                ['target_level' => $level]
                 );
             }
         }
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Target Score berhasil diperbarui.']);
+        }
+
         // stay on the same tab
         return back()->with('success', 'Target Score berhasil diperbarui.');
     }
@@ -259,12 +266,10 @@ class PDCAdminController extends Controller
     public function mentor()
     {
         $user = auth()->user();
-        $mentors = \App\Models\User::whereHas('role', function($q) {
+        $mentors = \App\Models\User::whereHas('role', function ($q) {
             $q->where('role_name', 'mentor');
-        })->with(['position', 'department', 'mentees' => function($q) {
-            $q->with('position', 'promotion_plan.targetPosition');
-        }])->get();
-        
+        })->with(['position', 'department'])->get();
+
         $departments = \App\Models\Department::all();
         $positions = \App\Models\Position::all();
 
@@ -274,43 +279,64 @@ class PDCAdminController extends Controller
     public function atasan()
     {
         $user = auth()->user();
-        $atasans = \App\Models\User::whereHas('role', function($q) {
+        $atasans = \App\Models\User::whereHas('role', function ($q) {
             $q->where('role_name', 'atasan');
-        })->with(['position', 'department', 'subordinates' => function($q) {
+        })->with(['position', 'department', 'subordinates' => function ($q) {
             $q->with('position', 'promotion_plan.targetPosition');
         }])->get();
-        return view('pdc_admin.atasan', compact('user', 'atasans'));
+
+        $departments = \App\Models\Department::all();
+        $positions = \App\Models\Position::all();
+
+        return view('pdc_admin.atasan', compact('user', 'atasans', 'departments', 'positions'));
     }
 
     public function storeMentor(Request $request)
     {
-        $request->validate([
+        $id = $request->input('id');
+
+        $rules = [
             'nama' => 'required',
             'position_id' => 'required',
             'department_id' => 'required',
             'email' => 'required|email',
-        ]);
+        ];
 
-        $id = $request->input('id');
+        if ($id) {
+            $rules['username'] = 'required|unique:users,username,' . $id;
+            $rules['password'] = 'nullable|min:6';
+        }
+        else {
+            $rules['username'] = 'required|unique:users,username';
+            $rules['password'] = 'required|min:6';
+        }
+
+        $request->validate($rules);
 
         if ($id) {
             $mentor = \App\Models\User::find($id);
             if ($mentor) {
-                $mentor->update($request->only('nama', 'position_id', 'department_id', 'email'));
+                $data = $request->only('nama', 'position_id', 'department_id', 'email', 'username');
+                if ($request->filled('password')) {
+                    $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+                }
+                $mentor->update($data);
                 return back()->with('success', 'Mentor berhasil diperbarui.');
             }
-        } else {
+        }
+        else {
             $role_id = \App\Models\Role::where('role_name', 'mentor')->first()->id ?? null;
             $user = \App\Models\User::create([
                 'nama' => $request->nama,
                 'email' => $request->email,
                 'position_id' => $request->position_id,
                 'department_id' => $request->department_id,
+                'company_id' => auth()->user()->company_id,
                 'role_id' => $role_id,
-                'username' => strtolower(str_replace(' ', '.', $request->nama)) . rand(10,99),
-                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+                'username' => $request->username,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
             ]);
-            
+
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
                     'id_user' => $user->id,
@@ -322,5 +348,84 @@ class PDCAdminController extends Controller
             return back()->with('success', 'Mentor berhasil ditambahkan.');
         }
         return back();
+    }
+
+    public function storeAtasan(Request $request)
+    {
+        $id = $request->input('id');
+
+        $rules = [
+            'nama' => 'required',
+            'position_id' => 'required',
+            'department_id' => 'required',
+            'email' => 'required|email',
+        ];
+
+        if ($id) {
+            $rules['username'] = 'required|unique:users,username,' . $id;
+            $rules['password'] = 'nullable|min:6';
+        }
+        else {
+            $rules['username'] = 'required|unique:users,username';
+            $rules['password'] = 'required|min:6';
+        }
+
+        $request->validate($rules);
+
+        if ($id) {
+            $atasan = \App\Models\User::find($id);
+            if ($atasan) {
+                $data = $request->only('nama', 'position_id', 'department_id', 'email', 'username');
+                if ($request->filled('password')) {
+                    $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+                }
+                $atasan->update($data);
+                return back()->with('success', 'Atasan berhasil diperbarui.');
+            }
+        }
+        else {
+            $role_id = \App\Models\Role::where('role_name', 'atasan')->first()->id ?? null;
+            $user = \App\Models\User::create([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'position_id' => $request->position_id,
+                'department_id' => $request->department_id,
+                'company_id' => auth()->user()->company_id,
+                'role_id' => $role_id,
+                'username' => $request->username,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            ]);
+
+            if ($role_id) {
+                \Illuminate\Support\Facades\DB::table('user_role')->insert([
+                    'id_user' => $user->id,
+                    'id_role' => $role_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            return back()->with('success', 'Atasan berhasil ditambahkan.');
+        }
+        return back();
+    }
+
+    public function requestFinanceValidation(Request $request)
+    {
+        $request->validate([
+            'project_id' => 'required',
+            'notes' => 'required|string',
+        ]);
+
+        $project = \App\Models\ImprovementProject::find($request->project_id);
+        if ($project) {
+            $project->update([
+                'status' => 'Pending',
+                'feedback' => $request->notes, // Admin notes saved to feedback
+            ]);
+
+            return back()->with('success', 'Permintaan validasi Finance berhasil dikirim.');
+        }
+
+        return back()->with('error', 'Project tidak ditemukan.');
     }
 }

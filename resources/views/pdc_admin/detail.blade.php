@@ -830,7 +830,18 @@
                             <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
                         </div>
                     </div>
-                    <button class="btn-audit" onclick="openFinanceModal('{{ $talent->nama }}', '{{ optional($talent->department)->nama_department }}', '{{ optional($talent->position)->position_name }}')">Validasi Finance</button>
+                    @php
+                        $latestProject = $talent->improvementProjects->first();
+                        $projId = $latestProject ? $latestProject->id : 'null';
+                        $projTitle = $latestProject ? addslashes($latestProject->title) : '';
+                        $projFileUrl = $latestProject ? asset('storage/' . $latestProject->document_path) : '';
+                        $isSentToFinance = $latestProject && !empty($latestProject->feedback);
+                    @endphp
+                    @if($isSentToFinance)
+                        <button class="btn-audit opacity-50 cursor-not-allowed" disabled>Sudah terkirim ke Finance</button>
+                    @else
+                        <button class="btn-audit" onclick="openFinanceModal('{{ $talent->nama }}', '{{ optional($talent->department)->nama_department }}', '{{ optional($talent->promotion_plan->targetPosition)->position_name }}', '{{ optional($talent->company)->nama_company }}', {{ $projId }}, '{{ $projTitle }}', '{{ $projFileUrl }}')">Validasi Finance</button>
+                    @endif
                 </div>
 
                 <table class="pdc-custom-table">
@@ -860,10 +871,6 @@
                         @endforelse
                     </tbody>
                 </table>
-                <div class="flex justify-end gap-3 mt-4">
-                    <button class="btn-status-action btn-reject">Rejected</button>
-                    <button class="btn-status-action btn-approve">Approved</button>
-                </div>
             </div>
         @endforeach
     </div>
@@ -1251,32 +1258,21 @@
         }
 
         // --- FINANCE MODAL FUNCTIONS ---
-        function openFinanceModal(talentName, deptName, posName) {
-            document.getElementById('fin-talent-name').textContent = talentName;
+        function openFinanceModal(talentName, deptName, posName, companyName, projId, projTitle, projFileUrl) {
+            document.getElementById('fin-talent-name').textContent = talentName || '-';
             document.getElementById('fin-dept-name').textContent = deptName || '-';
             document.getElementById('fin-pos-name').textContent = posName || '-';
-            // Perusahaan default as per reference image
-            document.getElementById('fin-company-name').textContent = 'PT. Tiga Serangkai Pustaka Mandiri';
+            document.getElementById('fin-company-name').textContent = companyName || '-';
+            
+            document.getElementById('finance-proj-id').value = projId;
+            document.getElementById('finance-proj-title').value = projTitle;
+            document.getElementById('finance-proj-file').href = projFileUrl;
             
             document.getElementById('finance-modal').classList.add('active');
         }
 
         function closeFinanceModal() {
             document.getElementById('finance-modal').classList.remove('active');
-        }
-
-        function submitFinanceValidation() {
-            // For now, just a UI feedback
-            const btn = event.currentTarget;
-            btn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                alert('Permintaan validasi finance berhasil dikirim!');
-                closeFinanceModal();
-                btn.innerHTML = 'Kirim';
-                btn.disabled = false;
-            }, 1000);
         }
 
         // Close on backdrop
@@ -1307,56 +1303,68 @@
                 </button>
             </div>
 
-            <div class="finance-body">
-                <div class="finance-alert">
-                    <div class="bg-yellow-100 p-2 rounded-lg shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
+            <form action="{{ route('pdc_admin.finance.request') }}" method="POST">
+                @csrf
+                <input type="hidden" name="project_id" id="finance-proj-id">
+
+                <div class="finance-body">
+                    <div class="finance-alert">
+                        <div class="bg-yellow-100 p-2 rounded-lg shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <p class="finance-alert-text">Sistem secara otomatis mengirim catatan kepada finance untuk segera direview. Harap isi pada catatan sesuai dengan kebutuhan Anda.</p>
                     </div>
-                    <p class="finance-alert-text">Sistem secara otomatis mengirim catatan kepada finance untuk segera direview. Harap isi pada catatan sesuai dengan kebutuhan Anda.</p>
+
+                    <div class="finance-form-grid">
+                        <div>
+                            <label class="finance-field-label">Talent</label>
+                            <div id="fin-talent-name" class="finance-readonly-box">Rudi Santiago</div>
+                        </div>
+                        <div>
+                            <label class="finance-field-label">Perusahaan</label>
+                            <div id="fin-company-name" class="finance-readonly-box">PT. Tiga Serangkai Pustaka Mandiri</div>
+                        </div>
+                        <div>
+                            <label class="finance-field-label">Departemen</label>
+                            <div id="fin-dept-name" class="finance-readonly-box">Human Resource</div>
+                        </div>
+                        <div>
+                            <label class="finance-field-label">Posisi yang dituju</label>
+                            <div id="fin-pos-name" class="finance-readonly-box">Manager</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="finance-field-label">Judul Project Improvement</label>
+                            <input type="text" id="finance-proj-title" class="finance-input bg-gray-50 border-gray-200 text-gray-500 font-semibold cursor-not-allowed" readonly placeholder="Masukkan judul project...">
+                        </div>
+                        <div>
+                            <label class="finance-field-label">Lampiran</label>
+                            <div class="finance-input bg-gray-50 border-gray-200 flex items-center h-full px-3 py-[9px]">
+                                <a id="finance-proj-file" href="#" target="_blank" class="text-blue-600 hover:underline font-semibold flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                        <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 0 0-4.242 0l-7 7a3 3 0 0 0 4.241 4.243h.001l.497-.5a.75.75 0 0 1 1.064 1.057l-.498.501-.002.002a4.5 4.5 0 0 1-6.364-6.364l7-7a4.5 4.5 0 0 1 6.368 6.36l-3.455 3.553A2.625 2.625 0 1 1 9.52 9.52l3.45-3.451a.75.75 0 1 1 1.061 1.06l-3.45 3.451a1.125 1.125 0 0 0 1.587 1.595l3.454-3.553a3 3 0 0 0 0-4.242Z" clip-rule="evenodd" />
+                                    </svg>
+                                    Lihat File
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="finance-field-label">Catatan</label>
+                        <textarea name="notes" required class="finance-input finance-textarea" placeholder="cth: Pada slide ke 17 apakah sudah memenuhi standar kriteria untuk melakukan bisnis. . ."></textarea>
+                    </div>
                 </div>
 
-                <div class="finance-form-grid">
-                    <div>
-                        <label class="finance-field-label">Talent</label>
-                        <div id="fin-talent-name" class="finance-readonly-box">Rudi Santiago</div>
-                    </div>
-                    <div>
-                        <label class="finance-field-label">Perusahaan</label>
-                        <div id="fin-company-name" class="finance-readonly-box">PT. Tiga Serangkai Pustaka Mandiri</div>
-                    </div>
-                    <div>
-                        <label class="finance-field-label">Departemen</label>
-                        <div id="fin-dept-name" class="finance-readonly-box">Human Resource</div>
-                    </div>
-                    <div>
-                        <label class="finance-field-label">Posisi yang dituju</label>
-                        <div id="fin-pos-name" class="finance-readonly-box">Manager</div>
-                    </div>
+                <div class="finance-footer">
+                    <button type="button" onclick="closeFinanceModal()" class="btn-finance-cancel">Batal</button>
+                    <button type="submit" class="btn-finance-submit" onclick="this.innerHTML='Mengirim...'; this.form.submit();">Kirim</button>
                 </div>
-
-                <div class="grid grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="finance-field-label">Judul Project Improvement</label>
-                        <input type="text" class="finance-input" placeholder="Masukkan judul project...">
-                    </div>
-                    <div>
-                        <label class="finance-field-label">Lampiran</label>
-                        <input type="file" class="finance-input py-[10px]">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="finance-field-label">Catatan</label>
-                    <textarea class="finance-input finance-textarea" placeholder="cth: Pada slide ke 17 apakah sudah memenuhi standar kriteria untuk melakukan bisnis. . ."></textarea>
-                </div>
-            </div>
-
-            <div class="finance-footer">
-                <button onclick="closeFinanceModal()" class="btn-finance-cancel">Batal</button>
-                <button onclick="submitFinanceValidation()" class="btn-finance-submit">Kirim</button>
-            </div>
+            </form>
         </div>
     </div>
 </x-pdc_admin.layout>

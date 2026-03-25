@@ -86,13 +86,35 @@ class User extends Authenticatable
         return $this->hasMany(ImprovementProject::class , 'user_id_talent');
     }
 
-    public function mentees()
+    public function getMenteesAttribute()
     {
-        return $this->hasMany(User::class, 'mentor_id');
+        $id = $this->id;
+        return User::with(['position', 'promotion_plan.targetPosition'])
+            ->where(function ($q) use ($id) {
+            // Talent yang punya promotion_plan dengan mentor_ids berisi ID ini
+            $q->whereHas('promotion_plan', function ($query) use ($id) {
+                    $query->whereNotNull('mentor_ids')
+                        ->where(function ($inner) use ($id) {
+                    $inner->whereJsonContains('mentor_ids', (string)$id)
+                        ->orWhereJsonContains('mentor_ids', $id);
+                }
+                );
+            }
+            )
+                // ATAU talent yang belum punya promotion_plan dengan mentor_ids, tapi punya mentor_id lama ini
+                ->orWhere(function ($q2) use ($id) {
+                $q2->where('mentor_id', $id)
+                    ->whereDoesntHave('promotion_plan', function ($query) {
+                    $query->whereNotNull('mentor_ids');
+                }
+                );
+            }
+            );
+        })->get();
     }
 
     public function subordinates()
     {
-        return $this->hasMany(User::class, 'atasan_id');
+        return $this->hasMany(User::class , 'atasan_id');
     }
 }

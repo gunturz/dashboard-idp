@@ -243,7 +243,7 @@
                 <h3 id="level-title" class="text-2xl font-bold text-slate-800 mb-6 tracking-tight">Level 1</h3>
             
             <p id="level-desc" class="text-gray-600 leading-relaxed mb-12 text-[15px] font-medium text-justify">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare ante sapien, vitae volutpat felis pellentesque a. In mi tellus, feugiat ut tempor eget, convallis mollis orci. Curabitur laoreet ac purus ac lacinia. Nulla ut aliquam odio, at dapibus felis. Nunc ac efficitur nisi. Integer sit amet vehicula augue. Mauris congue mauris id quam facilisis porta. Vestibulum eros urna, aliquet ac viverra quis, blandit at tellus. Maecenas non nunc a velit posuere hendrerit sit amet et metus. Vivamus sit amet turpis pulvinar, vehicula leo sit amet, pulvinar turpis. Nulla tristique neque quis metus dapibus commodo.
+                Memuat data pertanyaan...
             </p>
 
                 <div class="flex items-center justify-end mt-auto">
@@ -408,6 +408,9 @@
     </main>
 
     <script>
+        // Data dari database
+        const competenciesData = @json($competencies->keyBy('id'));
+
         const topTabs = {
             core: {
                 id: 'tab-core',
@@ -505,16 +508,19 @@
             // Update Text Title
             document.getElementById('level-title').textContent = 'Level ' + currentLevel;
 
-            // Update Deskripsi (opsional sementara, untuk membuktikan pergantian level & kategori)
-            const soalDummy = [
-                "Pertanyaan level 1: Bagaimana Anda berhadapan dengan situasi kerja saat ini...",
-                "Pertanyaan level 2: Jika Anda dipercayakan tugas yang lebih berat...",
-                "Pertanyaan level 3: Mengelola konflik dalam tim di skala menengah...",
-                "Pertanyaan level 4: Menentukan arah dan visi taktis pada lingkup departemen...",
-                "Pertanyaan level 5: Merumuskan strategi besar yang berimbas pada kebijakan korporat..."
-            ];
-            const currentCatName = currentCatList[currentCategoryIndex].name;
-            document.getElementById('level-desc').innerHTML = `<strong>Kategori: ${currentCatName}</strong><br><br>${soalDummy[currentLevel - 1]}<br><br><em>(Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare ante sapien, vitae volutpat felis pellentesque a. In mi tellus, feugiat ut tempor eget, convallis mollis orci.)</em>`;
+            // Update Deskripsi dengan pertanyaan dari database
+            const currentCat = currentCatList[currentCategoryIndex];
+            const compData = competenciesData[currentCat.id];
+            
+            let questionText = "Belum ada pertanyaan untuk level ini.";
+            if (compData && compData.questions) {
+                const q = compData.questions.find(q => parseInt(q.level) === currentLevel);
+                if (q && q.question_text) {
+                    questionText = q.question_text;
+                }
+            }
+            
+            document.getElementById('level-desc').innerHTML = `<strong>Kategori: ${currentCat.name}</strong><br><br>${questionText}`;
 
             // Trigger animasi CSS supaya tidak kaku saat ganti soal
             const cardBlock = document.getElementById('card-block');
@@ -741,8 +747,7 @@
 
         // Inisialisasi fill saat halaman pertama kali load
         window.addEventListener('load', function() {
-            updateSubcategoryFill();
-            updatePrevBtn();
+            updateUI();
         });
     </script>
 

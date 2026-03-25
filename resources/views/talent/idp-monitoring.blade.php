@@ -435,13 +435,14 @@
                     <div id="fields-exp-men" class="{{ $tab == 'learning' ? 'hidden' : '' }} space-y-4">
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Mentor</label>
-                            <input type="text" name="mentor_name" list="mentor-list" class="form-input"
-                                placeholder="Ketik nama mentor..." value="{{ old('mentor_name', $activity->verifier->nama ?? '') }}" {{ $tab != 'learning' ? 'required' : '' }}>
-                            <datalist id="mentor-list">
+                            <select name="mentor_name" class="form-input" {{ $tab != 'learning' ? 'required' : '' }}>
+                                <option value="" disabled selected>Pilih mentor...</option>
                                 @foreach ($mentors as $m)
-                                    <option value="{{ $m->nama }}">
+                                    <option value="{{ $m->nama }}" {{ old('mentor_name', $activity->verifier->nama ?? '') == $m->nama ? 'selected' : '' }}>
+                                        {{ $m->nama }}
+                                    </option>
                                 @endforeach
-                            </datalist>
+                            </select>
                         </div>
                         <div class="grid grid-cols-[140px_1fr] items-center gap-6">
                             <label class="text-sm font-semibold text-gray-800">Lokasi</label>

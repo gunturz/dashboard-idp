@@ -222,6 +222,25 @@
                 transition: background 0.2s;
             }
             .btn-batal-ts:hover { background: #e8e2d4; }
+
+            .btn-edit-ts {
+                background: #2e3746;
+                color: white;
+                font-weight: 700;
+                font-size: 0.8rem;
+                border: none;
+                border-radius: 6px;
+                padding: 10px 0;
+                width: 100%;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-edit-ts:hover { background: #1e2737; }
+
+            .ts-table.view-mode .ts-radio-label {
+                pointer-events: none;
+                opacity: 0.8;
+            }
         </style>
     </x-slot>
 
@@ -402,11 +421,11 @@
             <div id="pos-panel-{{ $pos->id }}" class="pos-panel {{ $index === 0 ? 'active' : '' }}">
                 
                 {{-- ─ CORE COMPETENCIES ─ --}}
-                <form action="{{ route('pdc_admin.target_score.update', $pos->id) }}" method="POST">
+                <form id="ts-form-core-{{$pos->id}}" action="{{ route('pdc_admin.target_score.update', $pos->id) }}" method="POST">
                     @csrf
                     <div class="comp-card">
                         <div class="comp-card-title">Core Competencies</div>
-                        <table class="ts-table">
+                        <table class="ts-table view-mode" id="ts-table-core-{{$pos->id}}">
                             <thead>
                                 <tr>
                                     <th style="width:25%;">Kompetensi</th>
@@ -427,10 +446,15 @@
                                         @endfor
                                         
                                         @if($loop->first)
-                                            <td rowspan="{{ $coreCompetencies->count() }}">
-                                                <div class="flex flex-col gap-3 px-6">
-                                                    <button type="submit" class="btn-simpan-ts">Simpan</button>
-                                                    <button type="reset" class="btn-batal-ts">Batal</button>
+                                            <td rowspan="{{ $coreCompetencies->count() }}" style="vertical-align: middle;">
+                                                <!-- View Mode Actions -->
+                                                <div class="flex flex-col gap-3 px-6" id="ts-actions-view-core-{{$pos->id}}">
+                                                    <button type="button" class="btn-edit-ts" onclick="toggleTsEdit('core', {{ $pos->id }}, true)">Edit</button>
+                                                </div>
+                                                <!-- Edit Mode Actions -->
+                                                <div class="flex flex-col gap-3 px-6 hidden" id="ts-actions-edit-core-{{$pos->id}}" style="display:none;">
+                                                    <button type="button" class="btn-simpan-ts" onclick="submitTsForm('core', {{ $pos->id }})">Simpan</button>
+                                                    <button type="button" class="btn-batal-ts" onclick="cancelTsEdit('core', {{ $pos->id }})">Batal</button>
                                                 </div>
                                             </td>
                                         @endif
@@ -442,11 +466,11 @@
                 </form>
 
                 {{-- ─ MANAGERIAL COMPETENCIES ─ --}}
-                <form action="{{ route('pdc_admin.target_score.update', $pos->id) }}" method="POST">
+                <form id="ts-form-managerial-{{$pos->id}}" action="{{ route('pdc_admin.target_score.update', $pos->id) }}" method="POST">
                     @csrf
                     <div class="comp-card">
                         <div class="comp-card-title">Managerial Competencies</div>
-                        <table class="ts-table">
+                        <table class="ts-table view-mode" id="ts-table-managerial-{{$pos->id}}">
                             <thead>
                                 <tr>
                                     <th style="width:25%;">Kompetensi</th>
@@ -467,10 +491,15 @@
                                         @endfor
                                         
                                         @if($loop->first)
-                                            <td rowspan="{{ $managerialCompetencies->count() }}">
-                                                <div class="flex flex-col gap-3 px-6">
-                                                    <button type="submit" class="btn-simpan-ts">Simpan</button>
-                                                    <button type="reset" class="btn-batal-ts">Batal</button>
+                                            <td rowspan="{{ $managerialCompetencies->count() }}" style="vertical-align: middle;">
+                                                <!-- View Mode Actions -->
+                                                <div class="flex flex-col gap-3 px-6" id="ts-actions-view-managerial-{{$pos->id}}">
+                                                    <button type="button" class="btn-edit-ts" onclick="toggleTsEdit('managerial', {{ $pos->id }}, true)">Edit</button>
+                                                </div>
+                                                <!-- Edit Mode Actions -->
+                                                <div class="flex flex-col gap-3 px-6 hidden" id="ts-actions-edit-managerial-{{$pos->id}}" style="display:none;">
+                                                    <button type="button" class="btn-simpan-ts" onclick="submitTsForm('managerial', {{ $pos->id }})">Simpan</button>
+                                                    <button type="button" class="btn-batal-ts" onclick="cancelTsEdit('managerial', {{ $pos->id }})">Batal</button>
                                                 </div>
                                             </td>
                                         @endif
@@ -550,6 +579,53 @@
         document.querySelectorAll('.tab-panel').forEach(p => {
             p.style.display = p.classList.contains('active') ? 'block' : 'none';
         });
+
+        /* ── Target Score Inline Edit + AJAX ── */
+        function toggleTsEdit(type, posId, show) {
+            const table = document.getElementById(`ts-table-${type}-${posId}`);
+            const viewActions = document.getElementById(`ts-actions-view-${type}-${posId}`);
+            const editActions = document.getElementById(`ts-actions-edit-${type}-${posId}`);
+            
+            if(show) {
+                table.classList.remove('view-mode');
+                viewActions.style.display = 'none';
+                editActions.style.display = 'flex';
+            } else {
+                table.classList.add('view-mode');
+                viewActions.style.display = 'flex';
+                editActions.style.display = 'none';
+            }
+        }
+
+        function cancelTsEdit(type, posId) {
+            document.getElementById(`ts-form-${type}-${posId}`).reset();
+            toggleTsEdit(type, posId, false);
+        }
+
+        function submitTsForm(type, posId) {
+            const form = document.getElementById(`ts-form-${type}-${posId}`);
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if(response.ok) {
+                    toggleTsEdit(type, posId, false);
+                } else {
+                    alert('Gagal memperbarui Target Score.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menyimpan data.');
+            });
+        }
     </script>
     </x-slot>
 

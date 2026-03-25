@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+return new class extends Migration 
 {
     /**
      * Run the migrations.
@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id(); // PK id [cite: 149]
             $table->foreignId('user_id_talent')->constrained('users'); // FK user_id(kandidat) [cite: 153]
             $table->foreignId('target_position_id')->constrained('position'); // Key target position_id [cite: 161]
+            $table->json('mentor_ids')->nullable(); // Array of mentor user IDs
             $table->enum('status_promotion', ['Draft', 'In Progress', 'Ready', 'Promoted']); // Key status_promotion [cite: 168]
             $table->date('start_date'); // Key start date [cite: 175]
             $table->date('target_date'); // Key target_date [cite: 182]
@@ -47,6 +48,7 @@ return new class extends Migration
             $table->enum('status', ['On Progress', 'Pending', 'Verified', 'Rejected']); // Key status [cite: 180]
             $table->foreignId('verify_by')->nullable()->constrained('users'); // FK verify_by [cite: 235]
             $table->dateTime('verify_at')->nullable(); // Key verify_at [cite: 247]
+            $table->text('feedback')->nullable(); // Catatan admin / finance notes
             $table->timestamps();
         });
     }

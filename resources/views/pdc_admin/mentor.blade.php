@@ -94,7 +94,7 @@
             <div class="flex flex-col gap-3 mb-4 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar" style="scrollbar-width: thin;">
                 @foreach($mentors as $m)
                     <div class="w-full bg-white border border-[#d1d5db] rounded-lg p-4 flex justify-between items-center transition-colors text-left mentor-card-item" 
-                         onclick="handleCardClick({{ $m->id }}, '{{ addslashes($m->nama) }}', '{{ $m->position_id }}', '{{ $m->department_id }}', '{{ addslashes($m->email) }}', this)">
+                         onclick="handleCardClick({{ $m->id }}, '{{ addslashes($m->nama) }}', '{{ $m->position_id }}', '{{ $m->department_id }}', '{{ addslashes($m->email) }}', '{{ addslashes($m->username) }}', this)">
                         <div>
                             <p class="font-bold text-[#2e3746]">{{ $m->nama }}</p>
                             <p class="text-sm text-gray-500">{{ $m->position->position_name ?? '—' }} - {{ $m->department->nama_department ?? '—' }}</p>
@@ -124,7 +124,7 @@
 
                 <p class="text-sm font-bold text-[#2e3746] mb-4" id="form-title">Tambah Mentor</p>
 
-                <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">NAMA</label>
                         <input type="text" name="nama" id="input-nama" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan nama" required>
@@ -150,6 +150,17 @@
                     <div>
                         <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">EMAIL</label>
                         <input type="email" name="email" id="input-email" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan Email" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">USERNAME</label>
+                        <input type="text" name="username" id="input-username" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan Username" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase border-b-0 pb-0 flex items-end justify-between">
+                            <span>PASSWORD</span>
+                            <span id="password-hint" class="hidden font-normal text-gray-400 normal-case" style="font-size:10px;">(Kosongkan jika tidak diubah)</span>
+                        </label>
+                        <input type="password" name="password" id="input-password" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan Password">
                     </div>
                 </div>
 
@@ -183,6 +194,10 @@
                 document.getElementById('input-jabatan').value = '';
                 document.getElementById('input-departemen').value = '';
                 document.getElementById('input-email').value = '';
+                document.getElementById('input-username').value = '';
+                document.getElementById('input-password').value = '';
+                document.getElementById('password-hint').classList.add('hidden');
+                document.getElementById('input-password').setAttribute('required', 'required');
 
                 document.getElementById('form-title').innerText = 'Tambah Mentor';
                 
@@ -224,7 +239,7 @@
                 });
             }
 
-            function handleCardClick(id, nama, position_id, department_id, email, cardEl) {
+            function handleCardClick(id, nama, position_id, department_id, email, username, cardEl) {
                 if (!isEditMode) return;
 
                 // Highlight selected card (Teal-500: #14b8a6)
@@ -239,6 +254,10 @@
                 document.getElementById('input-jabatan').value = position_id;
                 document.getElementById('input-departemen').value = department_id;
                 document.getElementById('input-email').value = email;
+                document.getElementById('input-username').value = username;
+                document.getElementById('input-password').value = '';
+                document.getElementById('password-hint').classList.remove('hidden');
+                document.getElementById('input-password').removeAttribute('required');
 
                 document.getElementById('form-title').innerText = 'Edit Mentor';
                 

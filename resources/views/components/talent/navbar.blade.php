@@ -12,7 +12,7 @@
     </a>
 
 
-    <div class="flex items-center space-x-14 text-white text-sm ml-auto pr-6">
+    <div class="hidden lg:flex items-center space-x-14 text-white text-sm ml-auto pr-6">
         <a href="{{ route('talent.dashboard') }}#Kompetensi" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="Kompetensi">Kompetensi</a>
         <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="IDP Monitoring">IDP</a>
         <a href="{{ route('talent.dashboard') }}#Project Improvement" class="nav-menu-link hover:text-white transition-colors duration-150" data-section="Project Improvement">Project Improvement</a>
@@ -65,22 +65,22 @@
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#Kompetensi" class="block px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium whitespace-nowrap">
+                        <a href="{{ route('talent.dashboard') }}#Kompetensi" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="Kompetensi">
                             Kompetensi
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="block px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium whitespace-nowrap">
+                        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="IDP Monitoring">
                             IDP Monitoring
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#Project Improvement" class="block px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium whitespace-nowrap">
+                        <a href="{{ route('talent.dashboard') }}#Project Improvement" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="Project Improvement">
                             Project Improvement
                         </a>
                     </li>
                     <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#LogBook" class="block px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium whitespace-nowrap">
+                        <a href="{{ route('talent.dashboard') }}#LogBook" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="LogBook">
                             LogBook
                         </a>
                     </li>

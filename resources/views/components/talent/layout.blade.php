@@ -177,6 +177,23 @@
         .nav-menu-link.active {
             color: #ffffff;
             font-weight: 700;
+        }
+
+        /* Mobile Dropdown Nav Links Overlay */
+        .dropdown-panel .nav-menu-link {
+            color: #475569;
+            font-weight: 500;
+        }
+        .dropdown-panel .nav-menu-link:hover {
+            color: #005ba1;
+            background-color: #f8fafc;
+        }
+        .dropdown-panel .nav-menu-link.active {
+            color: #005ba1;
+            font-weight: 700;
+            background-color: #f8fafc;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 1024px) {
             .navbar-outer {

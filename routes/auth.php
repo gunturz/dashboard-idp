@@ -128,4 +128,12 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.atasan.store');
     Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class , 'requestFinanceValidation'])
         ->name('pdc_admin.finance.request');
+
+    // Atasan Routes
+    Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class , 'dashboard'])
+        ->name('atasan.dashboard');
+    Route::get('/atasan/monitoring', [\App\Http\Controllers\AtasanDashboardController::class , 'monitoring'])
+        ->name('atasan.monitoring');
+    Route::post('/atasan/assessment/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'storeAssessment'])
+        ->name('atasan.assessment.store');
 });

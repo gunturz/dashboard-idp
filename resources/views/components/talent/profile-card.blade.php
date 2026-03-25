@@ -1,7 +1,7 @@
 <div class="bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
-    <div class="flex items-stretch divide-x divide-white/20">
+    <div class="flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-white/20">
 
-        <div class="flex items-center gap-5 px-10 flex-shrink-0 w-1/3 justify-center py-2">
+        <div class="flex items-center gap-5 px-6 md:px-10 flex-shrink-0 w-full md:w-1/3 justify-center py-4 md:py-2">
             <div class="flex-shrink-0">
                 @if ($user->foto ?? false)
                     <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="w-24 h-24 rounded-[10px] object-cover border-2 border-white/30">
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
+        <div class="px-6 md:px-10 w-full md:w-1/3 flex flex-col py-4 md:pt-3 space-y-3 text-sm">
             <div class="flex gap-2">
                 <span class="font-semibold text-white/70 w-32 flex-shrink-0">Perusahaan</span>
                 <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
@@ -34,17 +34,17 @@
             </div>
         </div>
 
-        <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
+        <div class="px-6 md:px-10 w-full md:w-1/3 flex flex-col py-4 md:pt-3 space-y-3 text-sm">
             <div class="flex gap-2">
-                <span class="font-semibold text-white/70 w-24 flex-shrink-0">Mentor</span>
+                <span class="font-semibold text-white/70 w-32 flex-shrink-0">Mentor</span>
                 <span class="text-white">{{ collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-') }}</span>
             </div>
             <div class="flex gap-2">
-                <span class="font-semibold text-white/70 w-24 flex-shrink-0">Atasan</span>
+                <span class="font-semibold text-white/70 w-32 flex-shrink-0">Atasan</span>
                 <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
             </div>
             <div class="flex gap-2">
-                <span class="font-semibold text-white/70 w-24 flex-shrink-0">Posisi Dituju</span>
+                <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Dituju</span>
                 <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
             </div>
         </div>

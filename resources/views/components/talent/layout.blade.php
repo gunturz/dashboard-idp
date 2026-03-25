@@ -166,6 +166,24 @@
                 transform: scale(1) translateY(0);
             }
         }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .navbar-outer {
+                padding: 12px 16px;
+            }
+            .nav-icon-btn {
+                width: 38px;
+                height: 38px;
+            }
+            .notif-badge {
+                width: 7px;
+                height: 7px;
+            }
+            body.pt-\[80px\] {
+                padding-top: 60px !important;
+            }
+        }
     </style>
     
     {{ $styles ?? '' }}
@@ -232,7 +250,7 @@
 
         // Klik di luar → tutup semua dropdown
         document.addEventListener('click', function(e) {
-            const wrappers = ['bell-wrapper', 'profile-wrapper'];
+            const wrappers = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'];
             const clickedInside = wrappers.some(id => {
                 const el = document.getElementById(id);
                 return el && el.contains(e.target);

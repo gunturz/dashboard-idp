@@ -234,117 +234,51 @@
             /* White Form Box */
             border-radius: 10px;
         }
+
+        /* ── Responsive Navbar & Padding Fix ── */
+        @media (max-width: 1024px) {
+            .navbar-outer {
+                padding: 12px 16px;
+            }
+            .nav-icon-btn {
+                width: 38px;
+                height: 38px;
+            }
+            .notif-badge {
+                width: 7px;
+                height: 7px;
+            }
+            body.pt-\[80px\] {
+                padding-top: 60px !important;
+            }
+        }
+
+        /* ── Responsive Tab Bar ── */
+        @media (max-width: 640px) {
+            .tab-bar {
+                width: 100%;
+                justify-content: space-between;
+                padding: 4px;
+                margin-bottom: 1.25rem;
+            }
+            .tab-btn {
+                padding: 0.45rem 0.25rem;
+                font-size: 0.75rem;
+                flex: 1;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col pt-[80px]">
 
-    {{-- ══════════════════════════════ NAVBAR ══════════════════════════════ --}}
-    <div class="navbar-outer">
-        <a href="{{ route('talent.dashboard') }}" class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-2 rounded-[10px] shadow-sm flex items-center justify-center w-14 h-14">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
-            </div>
-            <h1 class="text-white text-xl font-bold tracking-wide whitespace-nowrap">
-                Individual Development Plan
-            </h1>
-        </a>
-
-        <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-            <a href="{{ route('talent.dashboard') }}#Kompetensi"
-                class="hover:text-blue-200 transition-colors duration-150">Kompetensi</a>
-            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
-                class="hover:text-blue-200 transition-colors duration-150">IDP</a>
-            <a href="{{ route('talent.dashboard') }}#Project Improvement"
-                class="hover:text-blue-200 transition-colors duration-150">Project Improvement</a>
-            <a href="{{ route('talent.dashboard') }}#LogBook"
-                class="hover:text-blue-200 transition-colors duration-150">LogBook</a>
-        </div>
-
-        <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
-            <a href="{{ route('talent.notifikasi') }}" class="nav-icon-btn" aria-label="Notifikasi">
-                @if($notifications->where('is_read', false)->count() > 0)
-                    <span class="notif-badge"></span>
-                @endif
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                </svg>
-            </a>
-            <button class="nav-icon-btn" aria-label="Profil">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    {{-- ══════════════════════════════ PROFILE CARD ══════════════════════════════ --}}
-    <div class="bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
-        <div class="flex items-stretch divide-x divide-white/20">
-
-            <div class="flex items-center gap-5 px-10 flex-shrink-0 w-1/3 justify-center py-2">
-                <div class="flex-shrink-0">
-                    @if ($user->foto ?? false)
-                        <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                            class="w-24 h-24 rounded-[10px] object-cover border-2 border-white/30">
-                    @else
-                        <div
-                            class="w-24 h-24 rounded-[10px] bg-white/20 flex items-center justify-center border-2 border-white/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/70" fill="currentColor"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    <p class="text-white font-bold text-base leading-tight">{{ $user->nama ?? $user->name }}</p>
-                    <p class="text-white/60 text-xs mt-1">
-                        {{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
-                </div>
-            </div>
-
-            {{-- Bagian 2: Departemen, Jabatan Sekarang --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Company</span>
-                    <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
-                    <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Sekarang</span>
-                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
-                </div>
-            </div>
-
-            {{-- Bagian 3: Mentor, Atasan --}}
-            <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm border-l border-white/20">
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Mentor</span>
-                    <span class="text-white">{{ optional($user->mentor)->nama ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Atasan</span>
-                    <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-24 flex-shrink-0">Posisi Dituju</span>
-                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    {{-- ══════════════════════════════ NAVBAR & PROFILE ══════════════════════════════ --}}
+    @include('components.talent.navbar', ['user' => $user ?? auth()->user(), 'notifications' => $notifications ?? collect([])])
+    @include('components.talent.profile-card', ['user' => $user ?? auth()->user()])
 
     {{-- ══════════════════════════════ FORM AREA ══════════════════════════════ --}}
-    <div class="w-full max-w-5xl mx-auto px-6 pt-10 pb-12 flex-grow fade-up fade-up-2">
+    <div class="w-full max-w-5xl mx-auto px-4 md:px-6 pt-6 md:pt-10 pb-12 flex-grow fade-up fade-up-2">
 
         {{-- Back Link --}}
         <div class="px-2 mb-4">
@@ -397,7 +331,7 @@
             </script>
         @endif
 
-        <div class="wrapper-bg rounded-[16px] shadow-sm p-6 border border-gray-200">
+        <div class="wrapper-bg rounded-[16px] shadow-sm p-4 md:p-6 border border-gray-200">
 
             {{-- Tabs --}}
             <div class="tab-bar">
@@ -410,7 +344,7 @@
             </div>
 
             {{-- White Form Content --}}
-            <div class="form-bg p-8 relative z-20 -mt-2 shadow-sm">
+            <div class="form-bg p-4 md:p-8 relative z-20 -mt-2 shadow-sm">
                 <form id="idp-form" action="{{ isset($editMode) ? route('talent.idp_monitoring.update', $activity->id) : route('talent.idp_monitoring.store', ['tab' => $tab]) }}" method="POST"
                     enctype="multipart/form-data" class="space-y-4">
                     @csrf
@@ -421,19 +355,19 @@
                     <input type="hidden" name="tab_type" id="tab_type" value="{{ old('tab_type', $tab) }}">
 
                     {{-- Common fields: Theme & Date --}}
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                    <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-center gap-4 md:gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tema</label>
                         <input type="text" name="theme" class="form-input" placeholder="" value="{{ old('theme', $activity->theme ?? '') }}" required>
                     </div>
 
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                    <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-center gap-4 md:gap-6">
                         <label class="text-sm font-semibold text-gray-800">Tanggal</label>
                         <input type="date" name="activity_date" class="form-input" value="{{ old('activity_date', isset($activity) ? \Carbon\Carbon::parse($activity->activity_date)->format('Y-m-d') : '') }}" required>
                     </div>
 
                     {{-- Fields for Exposure & Mentoring --}}
                     <div id="fields-exp-men" class="{{ $tab == 'learning' ? 'hidden' : '' }} space-y-4">
-                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-center gap-4 md:gap-6">
                             <label class="text-sm font-semibold text-gray-800">Mentor</label>
                             <select name="mentor_name" class="form-input" {{ $tab != 'learning' ? 'required' : '' }}>
                                 <option value="" disabled selected>Pilih mentor...</option>
@@ -444,7 +378,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-center gap-4 md:gap-6">
                             <label class="text-sm font-semibold text-gray-800">Lokasi</label>
                             <input type="text" name="location" class="form-input" placeholder="" value="{{ old('location', $activity->location ?? '') }}" {{ $tab != 'learning' ? 'required' : '' }}>
                         </div>
@@ -452,11 +386,11 @@
 
                     {{-- Fields for Learning --}}
                     <div id="fields-learning" class="{{ $tab != 'learning' ? 'hidden' : '' }} space-y-4">
-                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-center gap-4 md:gap-6">
                             <label class="text-sm font-semibold text-gray-800">Sumber</label>
                             <input type="text" name="activity_learning" id="activity_learning" class="form-input" placeholder="" value="{{ old('activity_learning', ($tab == 'learning' ? ($activity->activity ?? '') : '')) }}" {{ $tab == 'learning' ? 'required' : '' }}>
                         </div>
-                        <div class="grid grid-cols-[140px_1fr] items-center gap-6">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-center gap-4 md:gap-6">
                             <label class="text-sm font-semibold text-gray-800">Platform</label>
                             <input type="text" name="platform" class="form-input" placeholder="" value="{{ old('platform', $activity->platform ?? '') }}" {{ $tab == 'learning' ? 'required' : '' }}>
                         </div>
@@ -464,11 +398,11 @@
 
                     {{-- Specific fields for Mentoring --}}
                     <div id="fields-mentoring" class="{{ $tab != 'mentoring' ? 'hidden' : '' }} space-y-4">
-                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-start gap-4 md:gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
                             <textarea name="description_mentoring" id="description_mentoring" class="form-textarea h-24" placeholder="" {{ $tab == 'mentoring' ? 'required' : '' }}>{{ old('description_mentoring', ($tab == 'mentoring' ? ($activity->description ?? '') : '')) }}</textarea>
                         </div>
-                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-start gap-4 md:gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Action Plan</label>
                             <textarea name="action_plan" class="form-textarea h-24" placeholder="" {{ $tab == 'mentoring' ? 'required' : '' }}>{{ old('action_plan', $activity->action_plan ?? '') }}</textarea>
                         </div>
@@ -476,17 +410,17 @@
 
                     {{-- Specific fields for Exposure --}}
                     <div id="fields-exposure" class="{{ $tab != 'exposure' ? 'hidden' : '' }} space-y-4">
-                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-start gap-4 md:gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Aktivitas</label>
                             <textarea name="activity_exposure" id="activity_exposure" class="form-textarea h-24" placeholder="" {{ $tab == 'exposure' ? 'required' : '' }}>{{ old('activity_exposure', ($tab == 'exposure' ? ($activity->activity ?? '') : '')) }}</textarea>
                         </div>
-                        <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-1">
+                        <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-start gap-4 md:gap-6 pt-1">
                             <label class="text-sm font-semibold text-gray-800 pt-3">Deskripsi</label>
                             <textarea name="description_exposure" id="description_exposure" class="form-textarea h-24" placeholder="" {{ $tab == 'exposure' ? 'required' : '' }}>{{ old('description_exposure', ($tab == 'exposure' ? ($activity->description ?? '') : '')) }}</textarea>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-[140px_1fr] items-start gap-6 pt-2">
+                    <div class="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] items-start gap-4 md:gap-6 pt-2">
                         <label class="text-sm font-semibold text-gray-800 mt-2">Dokumentasi</label>
                         <div class="flex flex-col gap-3">
                             {{-- Tampilkan File Sebelumnya Jika Edit Mode --}}
@@ -579,6 +513,26 @@
     </footer>
 
     <script>
+        function toggleDropdown(dropdownId, btnId) {
+            const dropdown = document.getElementById(dropdownId);
+            const isHidden = dropdown.classList.contains('hidden');
+            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const wrappers = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'];
+            const clickedInside = wrappers.some(id => {
+                const el = document.getElementById(id);
+                return el && el.contains(e.target);
+            });
+            if (!clickedInside) {
+                document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
         function switchIdpTab(tab) {
             // 1. Update Buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {

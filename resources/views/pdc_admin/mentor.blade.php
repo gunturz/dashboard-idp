@@ -124,7 +124,7 @@
 
                 <p class="text-sm font-bold text-[#2e3746] mb-4" id="form-title">Tambah Mentor</p>
 
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">NAMA</label>
                         <input type="text" name="nama" id="input-nama" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan nama" required>

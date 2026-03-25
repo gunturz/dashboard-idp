@@ -241,6 +241,21 @@
                 pointer-events: none;
                 opacity: 0.8;
             }
+
+            /* ── Responsive ── */
+            @media (max-width: 768px) {
+                .top-tabs, .sub-tabs {
+                    flex-direction: column;
+                    border-radius: 12px;
+                }
+                .top-tab-btn, .sub-tab-btn {
+                    border-radius: 8px;
+                    padding: 8px 16px;
+                }
+                .comp-table, .ts-table {
+                    min-width: 900px;
+                }
+            }
         </style>
     </x-slot>
 
@@ -428,9 +443,9 @@
                         <table class="ts-table view-mode" id="ts-table-core-{{$pos->id}}">
                             <thead>
                                 <tr>
-                                    <th style="width:25%;">Kompetensi</th>
+                                    <th style="width:22%;">Kompetensi</th>
                                     <th colspan="5">Level</th>
-                                    <th style="width:20%;">Aksi</th>
+                                    <th style="width:18%;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -439,7 +454,7 @@
                                     <tr>
                                         <td class="ts-comp-name">{{ $comp->name }}</td>
                                         @for($lvl=1; $lvl<=5; $lvl++)
-                                            <td style="width:11%;">
+                                            <td style="width:12%;">
                                                 <input type="radio" name="scores[{{$comp->id}}]" value="{{ $lvl }}" id="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="hidden" {{ $targetVal == $lvl ? 'checked' : '' }}>
                                                 <label for="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label">{{ $lvl }}</label>
                                             </td>
@@ -448,11 +463,11 @@
                                         @if($loop->first)
                                             <td rowspan="{{ $coreCompetencies->count() }}" style="vertical-align: middle;">
                                                 <!-- View Mode Actions -->
-                                                <div class="flex flex-col gap-3 px-6" id="ts-actions-view-core-{{$pos->id}}">
+                                                <div class="flex flex-col gap-3 px-2 sm:px-4" id="ts-actions-view-core-{{$pos->id}}">
                                                     <button type="button" class="btn-edit-ts" onclick="toggleTsEdit('core', {{ $pos->id }}, true)">Edit</button>
                                                 </div>
                                                 <!-- Edit Mode Actions -->
-                                                <div class="flex flex-col gap-3 px-6 hidden" id="ts-actions-edit-core-{{$pos->id}}" style="display:none;">
+                                                <div class="flex flex-col gap-3 px-2 sm:px-4 hidden" id="ts-actions-edit-core-{{$pos->id}}" style="display:none;">
                                                     <button type="button" class="btn-simpan-ts" onclick="submitTsForm('core', {{ $pos->id }})">Simpan</button>
                                                     <button type="button" class="btn-batal-ts" onclick="cancelTsEdit('core', {{ $pos->id }})">Batal</button>
                                                 </div>
@@ -473,9 +488,9 @@
                         <table class="ts-table view-mode" id="ts-table-managerial-{{$pos->id}}">
                             <thead>
                                 <tr>
-                                    <th style="width:25%;">Kompetensi</th>
+                                    <th style="width:22%;">Kompetensi</th>
                                     <th colspan="5">Level</th>
-                                    <th style="width:20%;">Aksi</th>
+                                    <th style="width:18%;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -484,7 +499,7 @@
                                     <tr>
                                         <td class="ts-comp-name">{{ $comp->name }}</td>
                                         @for($lvl=1; $lvl<=5; $lvl++)
-                                            <td style="width:11%;">
+                                            <td style="width:12%;">
                                                 <input type="radio" name="scores[{{$comp->id}}]" value="{{ $lvl }}" id="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="hidden" {{ $targetVal == $lvl ? 'checked' : '' }}>
                                                 <label for="ts_{{$pos->id}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label">{{ $lvl }}</label>
                                             </td>
@@ -493,11 +508,11 @@
                                         @if($loop->first)
                                             <td rowspan="{{ $managerialCompetencies->count() }}" style="vertical-align: middle;">
                                                 <!-- View Mode Actions -->
-                                                <div class="flex flex-col gap-3 px-6" id="ts-actions-view-managerial-{{$pos->id}}">
+                                                <div class="flex flex-col gap-3 px-2 sm:px-4" id="ts-actions-view-managerial-{{$pos->id}}">
                                                     <button type="button" class="btn-edit-ts" onclick="toggleTsEdit('managerial', {{ $pos->id }}, true)">Edit</button>
                                                 </div>
                                                 <!-- Edit Mode Actions -->
-                                                <div class="flex flex-col gap-3 px-6 hidden" id="ts-actions-edit-managerial-{{$pos->id}}" style="display:none;">
+                                                <div class="flex flex-col gap-3 px-2 sm:px-4 hidden" id="ts-actions-edit-managerial-{{$pos->id}}" style="display:none;">
                                                     <button type="button" class="btn-simpan-ts" onclick="submitTsForm('managerial', {{ $pos->id }})">Simpan</button>
                                                     <button type="button" class="btn-batal-ts" onclick="cancelTsEdit('managerial', {{ $pos->id }})">Batal</button>
                                                 </div>
@@ -518,6 +533,18 @@
 
     <x-slot name="scripts">
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-wrap tables for mobile responsiveness without squashing
+            document.querySelectorAll('.comp-table, .ts-table').forEach(table => {
+                const wrapper = document.createElement('div');
+                wrapper.style.overflowX = 'auto';
+                wrapper.style.width = '100%';
+                wrapper.style.WebkitOverflowScrolling = 'touch';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            });
+        });
+
         /* ── Top Tab Switcher ── */
         function switchTopTab(tab) {
             document.querySelectorAll('.top-tab-btn').forEach(b => b.classList.remove('active'));

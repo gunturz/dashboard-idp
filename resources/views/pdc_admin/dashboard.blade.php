@@ -29,6 +29,7 @@
                 border: 1px solid #e2e8f0;
                 font-size: 0.875rem;
                 text-transform: capitalize;
+                white-space: nowrap;
             }
 
             .pdc-table td {
@@ -38,6 +39,7 @@
                 font-size: 0.875rem;
                 color: #334155;
                 vertical-align: middle;
+                white-space: nowrap;
             }
 
             .target-position {

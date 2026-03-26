@@ -52,9 +52,20 @@
                 @else
                     @php $maxScore = 5; @endphp
                     <div class="space-y-5">
-                        @foreach ($kompetensiData as $label => $score)
+                        <!-- Header for GAP score column so user knows what the number means -->
+                        <div class="flex justify-end hidden md:flex" style="margin-bottom: -15px;">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-[8px]">GAP</span>
+                        </div>
+                        @foreach ($kompetensiData as $label => $data)
                             @php
-                                $pct = ($score / $maxScore) * 100;
+                                $scoreVal = is_array($data) ? $data['score'] : $data;
+                                $gapVal   = is_array($data) ? $data['gap'] : 0;
+                                $pct = ($scoreVal / $maxScore) * 100;
+
+                                // Warna indikator GAP (opsional agar menarik)
+                                $textColor = '#64748b'; // default 0
+                                if ($gapVal < -1.5) $textColor = '#ef4444';
+                                elseif ($gapVal < 0) $textColor = '#f97316';
                             @endphp
                             <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2 md:mb-0">
                                 <span class="text-sm text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate" title="{{ $label }}">{{ $label }}</span>
@@ -62,7 +73,9 @@
                                     <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
                                         <div class="bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488;"></div>
                                     </div>
-                                    <span class="text-sm font-bold w-10 text-right flex-shrink-0" style="color:#0d9488;">{{ number_format($score, 1) }}</span>
+                                    <span class="text-sm font-black w-10 text-right flex-shrink-0" style="color:{{ $textColor }};">
+                                        {{ number_format($gapVal, 1) }}
+                                    </span>
                                 </div>
                             </div>
                         @endforeach

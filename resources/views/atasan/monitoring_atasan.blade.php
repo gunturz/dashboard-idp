@@ -301,6 +301,7 @@
                                     $scoreTalent = $detail->score_talent ?? 0;
                                     $scoreAtasan = $detail->score_atasan ?? 0;
                                     $gap = $detail->gap_score ?? 0;
+                                    
                                     $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
                                     $cls = 'gap-ok';
                                     if ($gap == 0) $cls = 'gap-none';

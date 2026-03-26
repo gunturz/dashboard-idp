@@ -51,7 +51,7 @@ class TalentDashboardController extends Controller
                 $details = DB::table('detail_assessment')
                     ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
                     ->where('assessment_id', $latestAssessment->id)
-                    ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan')
+                    ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan', 'detail_assessment.gap_score')
                     ->get();
 
                 $totalAtasanScore = $details->sum('score_atasan');
@@ -62,7 +62,10 @@ class TalentDashboardController extends Controller
                 foreach ($details as $d) {
                     // Capping at 5 just in case
                     $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
-                    $kompetensiData[$d->name] = $avg;
+                    $kompetensiData[$d->name] = [
+                        'score' => $avg,
+                        'gap' => $d->gap_score ?? 0
+                    ];
                 }
             }
 

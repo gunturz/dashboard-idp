@@ -33,7 +33,7 @@
             .fv-table-wrapper {
                 border: 1.5px solid #e2e8f0;
                 border-radius: 14px;
-                overflow: hidden;
+                overflow-x: auto;
             }
 
             .fv-table-title {
@@ -41,6 +41,7 @@
                 font-size: 1rem;
                 font-weight: 700;
                 color: #2e3746;
+                white-space: nowrap;
             }
 
             .fv-table {
@@ -146,7 +147,7 @@
     </div>
 
     {{-- Summary Cards --}}
-    <div class="flex gap-5 mb-10">
+    <div class="flex flex-wrap gap-5 mb-10">
         <div class="stat-card">
             <div class="stat-number">{{ $total }}</div>
             <div class="stat-label">Total</div>

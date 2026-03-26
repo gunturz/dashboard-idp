@@ -529,6 +529,32 @@
             .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
             .hidden { display: none !important; }
+
+            /* --- Responsive --- */
+            @media (max-width: 768px) {
+                .nav-tabs {
+                    flex-direction: column;
+                    width: 100%;
+                }
+                .talent-gap-grid {
+                    grid-template-columns: 1fr;
+                }
+                .donut-container {
+                    flex-direction: column;
+                    gap: 32px;
+                }
+                .finance-form-grid {
+                    grid-template-columns: 1fr;
+                }
+                .flex.justify-between.items-center.mb-10 {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 16px;
+                }
+                .btn-back {
+                    align-self: flex-start;
+                }
+            }
         </style>
     </x-slot>
 

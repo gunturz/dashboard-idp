@@ -59,7 +59,6 @@
             animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
         }
 
-        /* ── Navbar outer wrapper ── */
         .navbar-outer {
             position: fixed;
             top: 0;
@@ -67,10 +66,11 @@
             right: 0;
             z-index: 50;
             width: 100%;
+            height: 80px;
             display: flex;
             align-items: center;
             background: #2e3746;
-            padding: 1rem 1.75rem;
+            padding: 0 1.75rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
@@ -221,23 +221,81 @@
                 transform: scale(1) translateY(0);
             }
         }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px !important;
+                top: 60px !important;
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .sidebar.mobile-open .sidebar-label {
+                opacity: 1 !important;
+                width: auto !important;
+                pointer-events: auto !important;
+            }
+            .sidebar.mobile-open .sidebar-item {
+                padding: 12px 28px !important;
+                justify-content: flex-start !important;
+                gap: 16px !important;
+            }
+            .sidebar.mobile-open .toggle-btn {
+                display: none; /* Hide desktop toggle on mobile */
+            }
+            #main-content {
+                margin-left: 0 !important;
+                padding: 16px !important;
+            }
+            .navbar-outer {
+                height: 60px;
+                padding: 0 16px;
+            }
+            .navbar-outer h1 {
+                font-size: 1.1rem;
+                white-space: normal;
+                line-height: 1.3;
+            }
+            .nav-icon-btn {
+                width: 38px;
+                height: 38px;
+            }
+            .desktop-logo-text {
+                display: none;
+            }
+        }
     </style>
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-white min-h-screen pt-[80px]">
+<body class="bg-white min-h-screen pt-[60px] lg:pt-[80px]">
+
+    {{-- Overlay responsive --}}
+    <div id="mobile-overlay" class="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-30 hidden lg:hidden" onclick="toggleMobileSidebar()"></div>
 
     <div class="navbar-outer">
-        <a href="{{ route('pdc_admin.dashboard') }}" class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-2 rounded-[10px] shadow-sm flex items-center justify-center w-14 h-14">
+        <!-- Button toggle for mobile -->
+        <button class="nav-icon-btn mr-3 flex-shrink-0 lg:hidden" onclick="toggleMobileSidebar()" aria-label="Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+
+        <a href="{{ route('pdc_admin.dashboard') }}" class="flex items-center gap-2 lg:gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
+            <div class="bg-white p-1.5 lg:p-2 rounded-[8px] lg:rounded-[10px] shadow-sm flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14 hidden sm:flex">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-white text-xl font-bold tracking-wide whitespace-nowrap">
+            <h1 class="text-white text-base lg:text-xl font-bold tracking-wide whitespace-nowrap desktop-logo-text sm:block hidden">
                 Individual Development Plan
+            </h1>
+            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden block truncate max-w-[150px]">
+                IDP Admin
             </h1>
         </a>
 
-        <div class="flex items-center space-x-3 ml-auto pr-6">
+        <div class="flex items-center space-x-3 ml-auto lg:pr-6 pr-0">
             {{-- Notification --}}
             <div class="relative" id="bell-wrapper">
                 <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
@@ -402,6 +460,18 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
             }
         });
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            sidebar.classList.toggle('mobile-open');
+            if (sidebar.classList.contains('mobile-open')) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        }
     </script>
     {{ $scripts ?? '' }}
 </body>

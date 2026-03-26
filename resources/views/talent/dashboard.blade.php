@@ -16,7 +16,7 @@
         </style>
     </x-slot>
 
-    <div class="w-full px-6 pt-5 pb-6 space-y-6 flex-grow">
+    <div class="w-full px-4 lg:px-6 pt-5 pb-6 space-y-6 flex-grow">
 
 
         {{-- ══════════════════════════════ CHART ROW ══════════════════════════════ --}}
@@ -56,16 +56,18 @@
                             @php
                                 $pct = ($score / $maxScore) * 100;
                             @endphp
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm text-gray-700 w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate" title="{{ $label }}">{{ $label }}</span>
-                                <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                                    <div class="bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488;"></div>
+                            <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2 md:mb-0">
+                                <span class="text-sm text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate" title="{{ $label }}">{{ $label }}</span>
+                                <div class="flex items-center gap-3 flex-1 w-full">
+                                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                                        <div class="bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488;"></div>
+                                    </div>
+                                    <span class="text-sm font-bold w-10 text-right flex-shrink-0" style="color:#0d9488;">{{ number_format($score, 1) }}</span>
                                 </div>
-                                <span class="text-sm font-bold w-10 text-right flex-shrink-0" style="color:#0d9488;">{{ number_format($score, 1) }}</span>
                             </div>
                         @endforeach
                         {{-- Skala keterangan -- sejajar dengan bar --}}
-                        <div class="flex items-center gap-3 pt-1">
+                        <div class="items-center gap-3 pt-1 hidden md:flex">
                             <span class="w-56 flex-shrink-0"></span>
                             <div class="flex-1 flex justify-between text-xs text-gray-400">
                                 <span>0</span>
@@ -339,8 +341,8 @@
                     </div>
 
                     {{-- Project Table --}}
-                    <div class="overflow-hidden rounded-[10px] border border-gray-200">
-                        <table class="w-full text-sm bg-white">
+                    <div class="overflow-x-auto rounded-[10px] border border-gray-200">
+                        <table class="w-full text-sm bg-white min-w-[600px]">
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th
@@ -408,8 +410,8 @@
             </div>
 
             <div
-                class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up flex items-center justify-between">
-                <div class="pr-6">
+                class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="md:pr-6 pr-0 w-full">
                     <div class="flex items-center gap-2 mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2e3746]" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -423,7 +425,7 @@
                         secara lengkap klik tombol untuk melihat detail seluruh sesi.</p>
                 </div>
                 <a href="{{ route('talent.logbook.detail') }}"
-                    class="bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
+                    class="w-full md:w-auto text-center bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
                     Lihat Detail
                 </a>
             </div>

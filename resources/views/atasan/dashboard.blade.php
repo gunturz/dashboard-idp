@@ -213,13 +213,15 @@
                          class="talent-photo" alt="{{ $talent->nama }}">
                     <div>
                         <div class="talent-name">{{ $talent->nama }}</div>
-                        <div class="talent-position">
+                        <div class="talent-position flex items-center gap-1 flex-wrap">
                             {{ optional($talent->position)->position_name ?? '-' }}
                             @if(optional($talent->promotion_plan)->targetPosition)
-                                – {{ $talent->promotion_plan->targetPosition->position_name }}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-500 font-bold mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                                <span class="text-[#0d9488]">{{ $talent->promotion_plan->targetPosition->position_name }}</span>
                             @endif
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="font-semibold not-italic">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                            <span class="ml-3 font-semibold not-italic">{{ optional($talent->department)->nama_department ?? '-' }}</span>
                         </div>
                     </div>
                 </div>
@@ -256,10 +258,9 @@
                             Anda sudah mengisi Assessment ini
                         </div>
                     @else
-                        <button class="btn-assessment btn-assessment-active"
-                                onclick="openAssessmentModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}', {{ json_encode($competencies->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'standard' => $standards[$c->id] ?? 0, 'score_talent' => optional($details->firstWhere('competence_id', $c->id))->score_talent ?? 0])) }})">
+                        <a href="{{ route('atasan.competency_atasan.page', $talent->id) }}" class="btn-assessment btn-assessment-active" style="display: block;">
                             Isi Assessment
-                        </button>
+                        </a>
                     @endif
                 @else
                     <div class="btn-assessment btn-assessment-done">
@@ -270,73 +271,6 @@
         @endforeach
     </div>
 
-    {{-- Assessment Modal --}}
-    <div id="assessment-modal" class="modal-overlay" onclick="if(event.target===this) closeAssessmentModal()">
-        <div class="modal-box">
-            <h3 class="text-xl font-extrabold text-[#1e293b] mb-1">Isi Assessment</h3>
-            <p id="modal-talent-name" class="text-sm font-semibold text-[#64748b] mb-6"></p>
 
-            <form id="assessment-form" method="POST">
-                @csrf
-                <table class="competency-table" id="modal-competency-table">
-                    <thead>
-                        <tr>
-                            <th>Kompetensi</th>
-                            <th>Standar</th>
-                            <th>Skor Talent</th>
-                            <th>Skor Atasan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="modal-competency-body">
-                        {{-- Populated by JS --}}
-                    </tbody>
-                </table>
-
-                <div class="flex gap-3 mt-6">
-                    <button type="button" onclick="closeAssessmentModal()"
-                            class="flex-1 py-3 rounded-xl font-bold text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-                        Batal
-                    </button>
-                    <button type="submit"
-                            class="flex-1 py-3 rounded-xl font-bold text-sm text-white transition-all hover:shadow-lg"
-                            style="background: linear-gradient(135deg, #f59e0b, #eab308);">
-                        Simpan Assessment
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <x-slot name="scripts">
-        <script>
-            function openAssessmentModal(talentId, talentName, competencies) {
-                document.getElementById('modal-talent-name').textContent = talentName;
-                document.getElementById('assessment-form').action = '/atasan/assessment/' + talentId;
-
-                const tbody = document.getElementById('modal-competency-body');
-                tbody.innerHTML = '';
-
-                competencies.forEach(comp => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${comp.name}</td>
-                        <td>${comp.standard}</td>
-                        <td>${comp.score_talent || '-'}</td>
-                        <td>
-                            <input type="number" name="scores[${comp.id}]" class="score-input"
-                                   min="0" max="5" required placeholder="0-5">
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                document.getElementById('assessment-modal').classList.add('active');
-            }
-
-            function closeAssessmentModal() {
-                document.getElementById('assessment-modal').classList.remove('active');
-            }
-        </script>
-    </x-slot>
 
 </x-atasan.layout>

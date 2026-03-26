@@ -428,4 +428,39 @@ class PDCAdminController extends Controller
 
         return back()->with('error', 'Project tidak ditemukan.');
     }
+
+    public function updateTopGaps(Request $request, $talent_id)
+    {
+        try {
+            // Get priority IDs (Array of competence_id)
+            $competence_ids = $request->input('competence_ids');
+            $reason = $request->input('reason');
+
+            // Get the latest assessment for the talent
+            $latestAssessment = \App\Models\AssessmentSession::where('user_id_talent', $talent_id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($latestAssessment && is_array($competence_ids)) {
+                // First reset all notes in the session to "Completed by talent" to remove old priorities
+                \App\Models\DetailAssessment::where('assessment_id', $latestAssessment->id)
+                    ->update(['notes' => 'Completed by talent']);
+
+                // Set the priority to the selected ones
+                foreach ($competence_ids as $index => $compId) {
+                    $priority = $index + 1;
+                    $noteValue = "priority_" . $priority . "|" . $reason;
+                    \App\Models\DetailAssessment::where('assessment_id', $latestAssessment->id)
+                        ->where('competence_id', $compId)
+                        ->update(['notes' => $noteValue]);
+                }
+            }
+
+            return response()->json(['success' => true]);
+        }
+        catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('PDCAdmin updateTopGaps error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }

@@ -553,14 +553,14 @@
             <textarea class="modal-textarea" placeholder="cth: Leadership diprioritaskan karena kandidat akan acting sebagai PIC proyek..."></textarea>
 
             <div class="modal-footer">
-                <button class="btn-modal btn-reset-auto flex items-center gap-2">
+                <button class="btn-modal btn-reset-auto flex items-center gap-2" onclick="resetGapToAuto()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                     Reset Auto
                 </button>
                 <button class="btn-modal btn-cancel" onclick="closeGapModal()">Batal</button>
-                <button class="btn-modal btn-save">Simpan</button>
+                <button class="btn-modal btn-save" id="btn-save-gap" onclick="saveTopGaps(this)">Simpan</button>
             </div>
         </div>
     </div>
@@ -618,12 +618,24 @@
             TOP 3 GAP Kompetensi
         </div>
 
-        <div class="talent-gap-grid">
-            @foreach ($talents as $talent)
-                @php
-                    $details = optional($talent->assessmentSession)->details;
-                    $gaps = $details ? $details->sortBy('gap_score')->take(3) : collect();
-                @endphp
+    <div class="talent-gap-grid">
+        @foreach ($talents as $talent)
+            @php
+                $details = optional($talent->assessmentSession)->details;
+                $gaps = collect();
+                if ($details) {
+                    $overrides = $details->filter(function($d) {
+                        return str_starts_with($d->notes ?? '', 'priority_');
+                    })->sortBy(function($d) {
+                        return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
+                    });
+                    if ($overrides->count() > 0) {
+                        $gaps = $overrides->values();
+                    } else {
+                        $gaps = $details->sortBy('gap_score')->take(3)->values();
+                    }
+                }
+            @endphp
                 <div class="talent-card">
                     <div class="talent-header">
                         <div class="talent-info">
@@ -633,7 +645,10 @@
                                 <p>{{ optional($talent->position)->position_name ?? 'Officer' }} - {{ optional($talent->department)->nama_department ?? '-' }}</p>
                             </div>
                         </div>
-                        <button class="btn-pilih-gap" onclick="openGapModal('{{ $talent->nama }}', {{ $talent->assessmentSession ? $talent->assessmentSession->details->map(fn($d) => ['name' => $d->competence->name, 'score' => ($d->score_talent + $d->score_atasan)/2, 'standard' => $standards[$d->competence_id] ?? 0, 'gap' => $d->gap_score])->toJson() : '[]' }})">Pilih 3 GAP</button>
+                        <button class="btn-pilih-gap"
+                            data-talent-name="{{ $talent->nama }}"
+                            data-idx="{{ $loop->index }}"
+                            onclick="openGapModal(this.dataset.talentName, allTalentGaps[this.dataset.idx])">Pilih 3 GAP</button>
                     </div>
 
                     <div class="mb-4 text-xs font-bold text-gray-500">
@@ -720,7 +735,7 @@
                                     $scoreTalent = $detail->score_talent ?? 0;
                                     $scoreAtasan = $detail->score_atasan ?? 0;
                                     $gap = $detail->gap_score ?? 0;
-                                    $finalScore = $scoreTalent > 0 && $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent ?: ($scoreAtasan ?: 0));
+                                    $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
                                     $cls = 'gap-ok';
                                     if ($gap == 0) $cls = 'gap-none';
                                     elseif ($gap < -1.5) $cls = 'gap-large';
@@ -1164,26 +1179,105 @@
         @endforeach
     </div>
 
+    @php
+        $allTalentGapsData = $talents->map(function($talent) use ($standards) {
+            // Always return a proper object even if no assessment
+            if (!$talent->assessmentSession) {
+                return [
+                    'talent_id' => $talent->id,
+                    'reason' => '',
+                    'gaps' => []
+                ];
+            }
+
+            $details = $talent->assessmentSession->details;
+            $overrides = $details->filter(function($d) {
+                return str_starts_with($d->notes ?? '', 'priority_');
+            })->sortBy(function($d) {
+                return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
+            });
+
+            $reasonOverride = '';
+            $selectedIds = [];
+            
+            if ($overrides->count() > 0) {
+                $parts = explode('|', $overrides->first()->notes, 2);
+                $reasonOverride = $parts[1] ?? '';
+                $selectedIds = $overrides->pluck('competence_id')->toArray();
+            } else {
+                $selectedIds = $details->sortBy('gap_score')->take(3)->pluck('competence_id')->toArray();
+            }
+
+            return [
+                'talent_id' => $talent->id,
+                'reason' => $reasonOverride,
+                'gaps' => $details->map(function($d) use ($standards, $selectedIds) {
+                    $pIndex = array_search($d->competence_id, $selectedIds);
+                    return [
+                        'id'       => $d->competence_id,
+                        'name'     => $d->competence->name,
+                        'score'    => ($d->score_talent + $d->score_atasan) / 2,
+                        'standard' => $standards[$d->competence_id] ?? 0,
+                        'gap'      => (float)$d->gap_score,
+                        'selected' => $pIndex !== false,
+                        'priority' => $pIndex !== false ? $pIndex + 1 : 999
+                    ];
+                })->sortBy('gap')->values()->toArray()
+            ];
+        })->values()->toArray();
+    @endphp
+
     <script>
-        function openGapModal(talentName, gaps) {
+        const allTalentGaps = {!! json_encode($allTalentGapsData) !!};
+        let currentTalentEditId = null;
+        const csrfToken = '{{ csrf_token() }}';
+
+        function openGapModal(talentName, talentData) {
+            // Guard: jika talentData null/kosong/bukan object, tampilkan pesan
+            if (!talentData || Array.isArray(talentData) || !talentData.talent_id) {
+                alert('Data kompetensi talent ini belum tersedia. Pastikan talent sudah mengisi penilaian kompetensi.');
+                return;
+            }
+
+            currentTalentEditId = talentData.talent_id;
             document.getElementById('modal-talent-name').textContent = talentName;
+            
+            const textarea = document.querySelector('.modal-textarea');
+            textarea.value = talentData.reason || '';
+
             const listContainer = document.getElementById('modal-gap-list');
             listContainer.innerHTML = '';
 
-            // Sort gaps by GAP score ascending (most negative first)
-            const sortedGaps = [...gaps].sort((a, b) => a.gap - b.gap);
+            if (!talentData.gaps || talentData.gaps.length === 0) {
+                listContainer.innerHTML = '<p style="color:#94a3b8;font-size:0.875rem;text-align:center;padding:24px">Belum ada data gap untuk talent ini.</p>';
+                document.getElementById('gap-modal').classList.add('active');
+                return;
+            }
 
-            sortedGaps.forEach((g, idx) => {
-                const isTop3 = idx < 3;
+            const mappedGaps = [...talentData.gaps];
+
+            // Sort: selected first by priority, then unselected by gap ascending
+            mappedGaps.sort((a, b) => {
+                if (a.selected && !b.selected) return -1;
+                if (!a.selected && b.selected) return 1;
+                if (a.selected && b.selected) return a.priority - b.priority;
+                return a.gap - b.gap;
+            });
+
+            mappedGaps.forEach((g) => {
                 const item = document.createElement('div');
-                item.className = `gap-select-item ${isTop3 ? 'priority-' + (idx + 1) : ''}`;
+                item.className = 'gap-select-item gap-select-item-card';
+                item.dataset.id = g.id;
                 item.onclick = function() { toggleCheck(this); };
 
+                const scoreDisplay = (typeof g.score === 'number') ? (g.score % 1 === 0 ? g.score : g.score.toFixed(1)) : g.score;
+                const gapDisplay = (typeof g.gap === 'number') ? (g.gap == 0 ? '0' : g.gap.toFixed(1)) : g.gap;
+
                 item.innerHTML = `
-                    <input type="checkbox" ${isTop3 ? 'checked' : ''} onclick="event.stopPropagation(); updatePriorityStyles();">
+                    <input type="checkbox" ${g.selected ? 'checked' : ''} onclick="event.stopPropagation(); updatePriorityStyles();">
                     <div class="gap-name-modal">${g.name}</div>
-                    <div class="gap-score-modal">${g.score}/${g.standard}</div>
-                    <div class="gap-value-badge">${g.gap == 0 ? '0' : g.gap.toFixed(1)}</div>
+                    <div class="gap-score-modal">${scoreDisplay}/${g.standard}</div>
+                    <div class="gap-value-badge">${gapDisplay}</div>
                 `;
                 listContainer.appendChild(item);
             });
@@ -1205,7 +1299,7 @@
         }
 
         function updatePriorityStyles() {
-            const items = document.querySelectorAll('.gap-select-item');
+            const items = document.querySelectorAll('.gap-select-item-card');
             let checkedIdx = 0;
             items.forEach(item => {
                 const cb = item.querySelector('input');
@@ -1221,6 +1315,70 @@
 
         function closeGapModal() {
             document.getElementById('gap-modal').classList.remove('active');
+            currentTalentEditId = null;
+        }
+
+        async function saveTopGaps(btn) {
+            if (!currentTalentEditId) return;
+            
+            const checkedItems = document.querySelectorAll('.gap-select-item-card input:checked');
+            if (checkedItems.length !== 3) {
+                alert('Tolong pilih tepat 3 prioritas GAP.');
+                return;
+            }
+
+            const reason = document.querySelector('.modal-textarea').value.trim();
+            const competenceIds = Array.from(checkedItems).map(cb => parseInt(cb.closest('.gap-select-item-card').dataset.id));
+
+            btn.textContent = 'Menyimpan...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/pdc-admin/top-gaps/' + currentTalentEditId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        competence_ids: competenceIds,
+                        reason: reason
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    window.location.reload();
+                } else {
+                    alert('Gagal menyimpan Top 3 GAP: ' + (result.message || 'Unknown error'));
+                    btn.textContent = 'Simpan';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Terjadi kesalahan sistem.');
+                btn.textContent = 'Simpan';
+                btn.disabled = false;
+            }
+        }
+
+        function resetGapToAuto() {
+            const items = Array.from(document.querySelectorAll('.gap-select-item-card'));
+            
+            // Sort by gap value ascending (most negative first)
+            items.sort((a, b) => {
+                const gapA = parseFloat(a.querySelector('.gap-value-badge').textContent);
+                const gapB = parseFloat(b.querySelector('.gap-value-badge').textContent);
+                return gapA - gapB;
+            });
+            
+            items.forEach((item, idx) => {
+                item.querySelector('input').checked = (idx < 3);
+            });
+            document.querySelector('.modal-textarea').value = '';
+            
+            updatePriorityStyles();
         }
 
         function closeModalOnOutside(e) {

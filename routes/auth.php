@@ -102,6 +102,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.detail');
     Route::get('/pdc-admin/talents-by-company', [\App\Http\Controllers\PDCAdminController::class , 'getTalentsByCompany'])
         ->name('pdc_admin.talents_by_company');
+    Route::post('/pdc-admin/top-gaps/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateTopGaps'])
+        ->name('pdc_admin.top_gaps.update');
     Route::post('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'storeDevelopmentPlan'])
         ->name('pdc_admin.development_plan.store');
     Route::get('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'developmentPlan'])
@@ -134,6 +136,8 @@ Route::middleware('auth')->group(function () {
         ->name('atasan.dashboard');
     Route::get('/atasan/monitoring', [\App\Http\Controllers\AtasanDashboardController::class , 'monitoring'])
         ->name('atasan.monitoring');
-    Route::post('/atasan/assessment/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'storeAssessment'])
-        ->name('atasan.assessment.store');
+    Route::get('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'assessmentPage'])
+        ->name('atasan.competency_atasan.page');
+    Route::post('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'storeAssessment'])
+        ->name('atasan.competency_atasan.store');
 });

@@ -190,7 +190,21 @@
             @foreach ($talents as $talent)
                 @php
                     $details = optional($talent->assessmentSession)->details;
-                    $gaps = $details ? $details->sortBy('gap_score')->take(3) : collect();
+                    $hasAtasanScored = $details && $details->sum('score_atasan') > 0;
+                    $gaps = collect();
+                    
+                    if ($details && $hasAtasanScored) {
+                        $overrides = $details->filter(function($d) {
+                            return str_starts_with($d->notes ?? '', 'priority_');
+                        })->sortBy(function($d) {
+                            return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
+                        });
+                        if ($overrides->count() > 0) {
+                            $gaps = $overrides->values();
+                        } else {
+                            $gaps = $details->sortBy('gap_score')->take(3)->values();
+                        }
+                    }
                 @endphp
                 <div class="talent-card">
                     <div class="talent-header">
@@ -229,12 +243,12 @@
                         </div>
                     @empty
                         @for ($i = 1; $i <= 3; $i++)
-                            <div class="gap-item" style="border: 1px solid #e2e8f0; background: #f8fafc; color: #94a3b8;">
+                            <div class="gap-item" style="border: 1px solid #e2e8f0; background: #ffffff; color: #94a3b8;">
                                 <div class="flex items-center">
-                                    <span class="gap-number" style="background: #cbd5e1;">{{ $i }}</span>
-                                    -
+                                    <span class="gap-number" style="background: #cbd5e1; color: white;">{{ $i }}</span>
+                                    Belum dinilai Atasan
                                 </div>
-                                <span>0</span>
+                                <span>-</span>
                             </div>
                         @endfor
                     @endforelse
@@ -287,7 +301,7 @@
                                     $scoreTalent = $detail->score_talent ?? 0;
                                     $scoreAtasan = $detail->score_atasan ?? 0;
                                     $gap = $detail->gap_score ?? 0;
-                                    $finalScore = $scoreTalent > 0 && $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent ?: ($scoreAtasan ?: 0));
+                                    $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
                                     $cls = 'gap-ok';
                                     if ($gap == 0) $cls = 'gap-none';
                                     elseif ($gap < -1.5) $cls = 'gap-large';

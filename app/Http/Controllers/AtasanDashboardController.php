@@ -18,11 +18,11 @@ class AtasanDashboardController extends Controller
         // Fetch subordinates (talents under this atasan)
         $talents = User::where('atasan_id', $user->id)
             ->with([
-                'position',
-                'department',
-                'promotion_plan.targetPosition',
-                'assessmentSession.details.competence',
-            ])
+            'position',
+            'department',
+            'promotion_plan.targetPosition',
+            'assessmentSession.details.competence',
+        ])
             ->get();
 
         // Summary stats
@@ -42,7 +42,8 @@ class AtasanDashboardController extends Controller
             $totalAtasanScore = $session->details->sum('score_atasan');
             if ($totalAtasanScore == 0) {
                 $assessmentPending++;
-            } else {
+            }
+            else {
                 $onTrack++;
             }
         }
@@ -72,16 +73,16 @@ class AtasanDashboardController extends Controller
 
         $talents = User::where('atasan_id', $user->id)
             ->with([
-                'department',
-                'position',
-                'mentor',
-                'atasan',
-                'company',
-                'promotion_plan.targetPosition',
-                'assessmentSession.details.competence',
-                'idpActivities.type',
-                'improvementProjects.verifier',
-            ])
+            'department',
+            'position',
+            'mentor',
+            'atasan',
+            'company',
+            'promotion_plan.targetPosition',
+            'assessmentSession.details.competence',
+            'idpActivities.type',
+            'improvementProjects.verifier',
+        ])
             ->get();
 
         $competencies = Competence::all();
@@ -99,6 +100,18 @@ class AtasanDashboardController extends Controller
         return view('atasan.monitoring_atasan', compact('user', 'talents', 'competencies', 'standards'));
     }
 
+    public function assessmentPage($talentId)
+    {
+        $user = Auth::user();
+        $talent = User::where('atasan_id', $user->id)->findOrFail($talentId);
+
+        $competencies = Competence::with(['questions' => function ($q) {
+            $q->orderBy('level');
+        }])->get();
+
+        return view('atasan.competency_atasan', compact('user', 'talent', 'competencies'));
+    }
+
     public function storeAssessment(Request $request, $talentId)
     {
         $user = Auth::user();
@@ -112,7 +125,6 @@ class AtasanDashboardController extends Controller
         // Find the assessment session for this talent
         $session = DB::table('assessment_session')
             ->where('user_id_talent', $talentId)
-            ->where('user_id_atasan', $user->id)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -142,13 +154,13 @@ class AtasanDashboardController extends Controller
                 DB::table('detail_assessment')
                     ->where('id', $detail->id)
                     ->update([
-                        'score_atasan' => $scoreAtasan,
-                        'gap_score' => $gapScore,
-                        'updated_at' => now(),
-                    ]);
+                    'score_atasan' => $scoreAtasan,
+                    'gap_score' => $gapScore,
+                    'updated_at' => now(),
+                ]);
             }
         }
 
-        return back()->with('success', 'Assessment berhasil disimpan.');
+        return redirect()->route('atasan.dashboard')->with('success', 'Assessment berhasil disimpan.');
     }
 }

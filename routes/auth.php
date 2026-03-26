@@ -140,4 +140,12 @@ Route::middleware('auth')->group(function () {
         ->name('atasan.competency_atasan.page');
     Route::post('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'storeAssessment'])
         ->name('atasan.competency_atasan.store');
+
+    // Mentor Routes
+    Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class , 'dashboard'])
+        ->name('mentor.dashboard');
+    Route::get('/mentor/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
+        ->name('mentor.logbook');
+    Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
+        ->name('mentor.logbook.update_status');
 });

@@ -2,6 +2,7 @@
     'title' => 'Individual Development Plan',
     'bodyClass' => 'bg-white min-h-screen flex flex-col pt-[80px]',
     'showProfileCard' => true,
+    'mobileCollapsible' => false,
     'user' => null,
     'notifications' => null
 ])
@@ -194,6 +195,16 @@
             background-color: #f8fafc;
         }
 
+        /* ── Mobile profile collapsible ── */
+        .mobile-profile-detail-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-profile-detail-panel.open {
+            max-height: 400px !important;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 1024px) {
             .navbar-outer {
@@ -210,7 +221,14 @@
             body.pt-\[80px\] {
                 padding-top: 60px !important;
             }
+        }
 
+        /* ── Mobile: prevent horizontal page scroll ── */
+        @media (max-width: 767px) {
+            html, body {
+                overflow-x: hidden !important;
+                max-width: 100vw;
+            }
         }
     </style>
     
@@ -224,7 +242,7 @@
 
     {{-- PROFILE CARD --}}
     @if($showProfileCard)
-        @include('components.talent.profile-card', ['user' => $user ?? auth()->user()])
+        @include('components.talent.profile-card', ['user' => $user ?? auth()->user(), 'mobileCollapsible' => $mobileCollapsible])
     @endif
 
     {{-- MAIN CONTENT --}}
@@ -287,6 +305,17 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
             }
         });
+
+        // ── Toggle mobile profile detail ──
+        function toggleMobileProfile() {
+            const detail = document.getElementById('mobile-profile-detail');
+            const chevron = document.getElementById('mobile-profile-chevron');
+            if (!detail) return;
+            detail.classList.toggle('open');
+            if (chevron) {
+                chevron.style.transform = detail.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
 
         // ── Active nav menu on scroll ──
         (function() {

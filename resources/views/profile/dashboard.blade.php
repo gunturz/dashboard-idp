@@ -76,6 +76,21 @@
             background: rgba(0,0,0,0.45);
             display: flex; align-items: center; justify-content: center;
         }
+
+        /* ── Mobile Only ── */
+        .mobile-profile-navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            display: flex; align-items: center;
+            background: #2e3746;
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .dropdown-panel .mobile-nav-link { color: #475569; font-weight: 500; }
+        .dropdown-panel .mobile-nav-link:hover { color: #005ba1; background-color: #f8fafc; }
+        @media (max-width: 767px) {
+            html, body { overflow-x: hidden !important; max-width: 100vw; }
+            body.pt-\[80px\] { padding-top: 60px !important; }
+        }
     </style>
 </head>
 
@@ -85,8 +100,8 @@
 
 <body class="bg-gray-100 min-h-screen flex flex-col pt-[80px]">
 
-    {{-- NAVBAR --}}
-    <div class="navbar-outer">
+    {{-- ===== DESKTOP NAVBAR (tampilan asli laptop) ===== --}}
+    <div class="navbar-outer hidden md:flex">
         <a href="{{ route('talent.dashboard') }}" class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
             <div class="bg-white p-2 rounded-xl shadow-sm flex items-center justify-center w-14 h-14">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
@@ -182,6 +197,76 @@
         </div>
     </div>
 
+    {{-- ===== MOBILE NAVBAR (device HP only) ===== --}}
+    <div class="mobile-profile-navbar md:hidden">
+        <a href="{{ route('talent.dashboard') }}" class="flex items-center gap-2 flex-shrink-0 hover:opacity-90 transition-opacity">
+            <div class="bg-white p-1.5 rounded-lg shadow-sm flex items-center justify-center w-10 h-10">
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap truncate max-w-[150px]">IDP Talent</h1>
+        </a>
+        <div class="flex items-center ml-auto">
+            <div class="relative" id="mobile-menu-wrapper">
+                <button class="flex items-center justify-center p-2 text-white hover:bg-white/10 rounded-lg transition-all cursor-pointer" aria-label="Menu" onclick="toggleDropdown('mobile-menu-dropdown')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
+                    <div class="px-5 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative">
+                        <div class="flex items-center gap-3.5">
+                            @if ($user->foto ?? false)
+                                <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="w-[52px] h-[52px] rounded-full object-cover outline outline-1 outline-[#003865]/10 ring-[3px] ring-white shadow-sm">
+                            @else
+                                @php
+                                    $nameParts = explode(' ', $user->nama ?? $user->name);
+                                    $initials = count($nameParts) >= 2 ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) : strtoupper(substr($nameParts[0], 0, 2));
+                                @endphp
+                                <div class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#003865]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
+                                    {{ $initials }}
+                                </div>
+                            @endif
+                            <div class="flex flex-col">
+                                <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? $user->name }}</span>
+                                <a href="{{ route('profile.edit') }}" class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
+                                    Lihat Profil
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="py-3 px-3">
+                        <li class="mb-1">
+                            <a href="{{ route('talent.notifikasi') }}" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium">
+                                <span>Notifikasi</span>
+                                @if ($notifications->where('is_read', false)->count() > 0)
+                                    <span class="bg-[#f97316] text-white text-[12px] font-bold px-3.5 py-1 rounded-[12px] shadow-sm tracking-wide">{{ $notifications->where('is_read', false)->count() }}</span>
+                                @endif
+                            </a>
+                        </li>
+                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#Kompetensi" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">Kompetensi</a></li>
+                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">IDP Monitoring</a></li>
+                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#Project Improvement" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">Project Improvement</a></li>
+                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#LogBook" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">LogBook</a></li>
+                        <li class="border-t border-gray-100 mt-2 pt-2">
+                            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                @csrf
+                                <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors font-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    Keluar
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- MAIN CONTENT --}}
     <div class="w-full max-w-3xl mx-auto px-6 py-8 flex-grow fade-up">
 
@@ -249,7 +334,8 @@
             @method('PATCH')
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="flex gap-8 p-8">
+                {{-- ===== DESKTOP LAYOUT (laptop): foto kiri, data kanan ===== --}}
+                <div class="hidden md:flex gap-8 p-8">
 
                     {{-- Kolom Kiri: Foto --}}
                     <div class="flex flex-col items-center gap-4 flex-shrink-0 w-44">
@@ -388,6 +474,105 @@
                     </div>
                 </div>
 
+                {{-- ===== MOBILE LAYOUT (HP): foto atas, data bawah ===== --}}
+                <div class="md:hidden flex flex-col gap-5 p-4">
+                    {{-- Foto --}}
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="relative w-36 h-36">
+                            @if ($user->foto ?? false)
+                                <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
+                                     class="w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow foto-preview-mobile">
+                                <div class="hidden w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </div>
+                            @else
+                                <div class="w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </div>
+                                <img src="" alt="Foto Profil"
+                                     class="hidden w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0 foto-preview-mobile">
+                            @endif
+                        </div>
+                        <div class="flex gap-2 hidden w-36 foto-buttons-mobile">
+                            <label for="foto-input"
+                                   class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                Ganti
+                            </label>
+                            <button type="button" onclick="hapusFoto()"
+                                    class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Data --}}
+                    <div class="space-y-5">
+                        {{-- Info Akun --}}
+                        <div>
+                            <span class="section-header">Info Akun</span>
+                            <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
+                                @foreach ($akunFields as $i => $field)
+                                    <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+                                        <span class="text-sm font-semibold text-[#3d4f62] w-24 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
+                                        <input type="{{ $field['type'] }}"
+                                               name="{{ $field['key'] }}"
+                                               value="{{ $field['key'] === 'password' ? '' : ($user->{$field['key']} ?? '') }}"
+                                               placeholder="{{ $field['placeholder'] ?? '' }}"
+                                               {{ $field['disabled'] ?? false ? 'disabled' : '' }}
+                                               class="edit-field prof-input hidden">
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Profil --}}
+                        <div>
+                            <span class="section-header">Profil</span>
+                            <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
+                                @foreach ($profilFields as $i => $field)
+                                    <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+                                        <span class="text-sm font-semibold text-[#2e3746] w-28 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
+                                        @if (($field['type'] ?? '') === 'text')
+                                            <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}" class="edit-field prof-input hidden">
+                                        @elseif (($field['type'] ?? '') === 'select')
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
+                                                <option value="" disabled>Pilih {{ $field['label'] }}</option>
+                                                @foreach ($field['options'] as $opt)
+                                                    @php
+                                                        if ($field['key'] === 'role_id') $optName = $opt->role_name;
+                                                        elseif ($field['key'] === 'company_id') $optName = $opt->nama_company;
+                                                        elseif ($field['key'] === 'department_id') $optName = $opt->nama_department;
+                                                        elseif (in_array($field['key'], ['position_id', 'target_position_id'])) $optName = $opt->position_name;
+                                                        else $optName = $opt->name ?? $opt->position_name ?? $opt->nama ?? '';
+                                                        $selectedId = $field['key'] === 'target_position_id'
+                                                            ? ($user->promotion_plan->target_position_id ?? null)
+                                                            : ($user->{$field['key']} ?? null);
+                                                    @endphp
+                                                    <option value="{{ $opt->id }}" {{ $selectedId == $opt->id ? 'selected' : '' }}>{{ $optName }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <span class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Footer aksi --}}
                 <div class="border-t border-gray-100 px-8 py-5 flex justify-end gap-3">
                     <button type="button" id="btn-edit"
@@ -451,7 +636,7 @@
             if (isHidden) el.classList.remove('hidden');
         }
         document.addEventListener('click', function(e) {
-            const inside = ['bell-wrapper','profile-wrapper'].some(id => {
+            const inside = ['bell-wrapper','profile-wrapper','mobile-menu-wrapper'].some(id => {
                 const el = document.getElementById(id);
                 return el && el.contains(e.target);
             });
@@ -463,6 +648,7 @@
             document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.edit-field').forEach(el => el.classList.remove('hidden'));
             document.getElementById('foto-buttons').classList.remove('hidden');
+            document.querySelectorAll('.foto-buttons-mobile').forEach(el => el.classList.remove('hidden'));
             document.getElementById('btn-edit').classList.add('hidden');
             document.getElementById('btn-simpan').classList.remove('hidden');
             document.getElementById('btn-batal').classList.remove('hidden');
@@ -472,6 +658,7 @@
             document.querySelectorAll('.view-field').forEach(el => el.classList.remove('hidden'));
             document.querySelectorAll('.edit-field').forEach(el => el.classList.add('hidden'));
             document.getElementById('foto-buttons').classList.add('hidden');
+            document.querySelectorAll('.foto-buttons-mobile').forEach(el => el.classList.add('hidden'));
             document.getElementById('btn-edit').classList.remove('hidden');
             document.getElementById('btn-simpan').classList.add('hidden');
             document.getElementById('btn-batal').classList.add('hidden');

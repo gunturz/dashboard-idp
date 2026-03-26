@@ -17,10 +17,17 @@
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
                 background: #0f766e; 
             }
+
+            /* Mobile: constrain table containers within viewport */
+            @media (max-width: 767px) {
+                .custom-scrollbar {
+                    max-width: calc(100vw - 1.5rem);
+                }
+            }
         </style>
     </x-slot>
 
-    <div class="max-w-7xl mx-auto px-6 pt-4 pb-6 fade-up">
+    <div class="max-w-7xl mx-auto px-3 md:px-6 pt-4 pb-6 fade-up overflow-x-hidden">
 
         {{-- Back Link --}}
         <div class="mb-2">

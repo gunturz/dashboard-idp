@@ -1,4 +1,4 @@
-<x-talent.layout title="Dashboard Talent – Individual Development Plan" :user="$user" :notifications="$notifications">
+<x-talent.layout title="Dashboard Talent – Individual Development Plan" :user="$user" :notifications="$notifications" :mobileCollapsible="true">
     <x-slot name="styles">
         <style>
             /* ── Donut Chart ── */

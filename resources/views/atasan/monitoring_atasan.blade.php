@@ -135,7 +135,96 @@
             .legend-item { display: flex; align-items: center; gap: 4px; }
             .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
-            .hidden { display: none !important; }
+
+            /* ══ MOBILE ONLY — does NOT affect desktop ══ */
+            @media (max-width: 767px) {
+                .nav-tabs {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    padding-bottom: 4px;
+                }
+                .tab-item {
+                    padding: 6px 12px;
+                    font-size: 0.75rem;
+                    gap: 4px;
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                }
+                .tab-item svg {
+                    width: 18px;
+                    height: 18px;
+                }
+                .talent-gap-grid {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+                .talent-card {
+                    padding: 16px;
+                    border-radius: 12px;
+                }
+                .talent-photo {
+                    width: 48px;
+                    height: 48px;
+                }
+                .talent-meta h4 {
+                    font-size: 0.95rem;
+                }
+                .section-title {
+                    font-size: 1.05rem;
+                    margin-top: 24px;
+                    margin-bottom: 16px;
+                }
+                .heatmap-container {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .heatmap-table {
+                    min-width: 700px;
+                }
+                .legend {
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                .donut-container {
+                    flex-wrap: wrap;
+                    gap: 16px;
+                    padding: 16px;
+                }
+                .donut-container .relative.w-48.h-48 {
+                    width: 120px !important;
+                    height: 120px !important;
+                }
+                .donut-container .text-3xl {
+                    font-size: 1.25rem !important;
+                }
+                .idp-card-container {
+                    padding: 16px;
+                    border-radius: 12px;
+                }
+                .filter-pills {
+                    padding: 3px;
+                }
+                .pill {
+                    padding: 6px 20px;
+                    font-size: 0.78rem;
+                }
+                .pdc-log-table th {
+                    padding: 12px 16px;
+                    font-size: 0.8rem;
+                }
+                .pdc-log-table td {
+                    padding: 16px;
+                    font-size: 0.8rem;
+                }
+                .pdc-custom-table th {
+                    padding: 8px;
+                    font-size: 0.75rem;
+                }
+                .pdc-custom-table td {
+                    padding: 8px;
+                    font-size: 0.78rem;
+                }
+            }
         </style>
     </x-slot>
 

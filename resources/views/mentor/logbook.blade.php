@@ -16,12 +16,28 @@
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
                 background: #0f766e; 
             }
+
+            /* ══ MOBILE ONLY — does NOT affect desktop ══ */
+            @media (max-width: 767px) {
+                .logbook-container { padding: 16px !important; border-radius: 12px !important; }
+                .talent-selector-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+                .talent-selector-row select { font-size: 14px !important; }
+                .profile-row { gap: 12px !important; margin-bottom: 24px !important; }
+                .profile-row img { width: 56px !important; height: 56px !important; }
+                .profile-row h3 { font-size: 18px !important; }
+                .section-badge { padding: 6px 20px !important; font-size: 13px !important; }
+                .table-card { border-radius: 10px !important; }
+                .table-responsive { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+                .table-responsive table { min-width: 800px !important; }
+                .table-responsive th, .table-responsive td { padding: 10px 12px !important; font-size: 12px !important; }
+                .btn-action { padding: 8px 16px !important; }
+            }
         </style>
     </x-slot>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 logbook-container">
         {{-- Talent Selector --}}
-        <div class="mb-6 flex items-center gap-6">
+        <div class="mb-6 flex items-center gap-6 talent-selector-row">
             <label class="text-[15px] font-bold text-gray-700 whitespace-nowrap">Talent</label>
             <div class="relative w-full max-w-lg">
                 <select onchange="window.location.href='?talent_id='+this.value" class="w-full appearance-none border border-[#0d9488] rounded-lg py-2.5 px-4 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0d9488]/30 transition-shadow">
@@ -45,7 +61,7 @@
 
         {{-- Talent Profile --}}
         @if($selectedTalent)
-        <div class="flex items-center gap-5 mb-10">
+        <div class="flex items-center gap-5 mb-10 profile-row">
             <img src="{{ $selectedTalent->foto ? asset('storage/' . $selectedTalent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($selectedTalent->nama) . '&background=random' }}" 
                  class="w-[72px] h-[72px] rounded-full object-cover shadow-sm border-2 border-slate-50">
             <div>
@@ -58,11 +74,11 @@
 
         {{-- Exposure Section --}}
         <div class="mb-12">
-            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px]">
+            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px] section-badge">
                 Exposure
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar pb-2">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-card">
+                <div class="overflow-x-auto custom-scrollbar pb-2 table-responsive">
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">
@@ -125,11 +141,11 @@
 
         {{-- Mentoring Section --}}
         <div class="mb-12">
-            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px]">
+            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px] section-badge">
                 Mentoring
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar pb-2">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-card">
+                <div class="overflow-x-auto custom-scrollbar pb-2 table-responsive">
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">
@@ -191,12 +207,17 @@
         </div>
 
         {{-- Learning Section --}}
+<<<<<<< HEAD
         <div class="mb-12">
             <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px]">
+=======
+        <div>
+            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px] section-badge">
+>>>>>>> 539d0cd75d7d512bb5eecc8b89596a8192e2627b
                 Learning
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar pb-2">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-card">
+                <div class="overflow-x-auto custom-scrollbar pb-2 table-responsive">
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">

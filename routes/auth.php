@@ -98,6 +98,10 @@ Route::middleware('auth')->group(function () {
     // PDC Admin Routes
     Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class , 'dashboard'])
         ->name('pdc_admin.dashboard');
+    Route::get('/pdc-admin/notifikasi', [\App\Http\Controllers\PDCAdminController::class , 'notifikasi'])
+        ->name('pdc_admin.notifikasi');
+    Route::post('/pdc-admin/notifikasi/mark-all-read', [\App\Http\Controllers\PDCAdminController::class , 'markAllNotificationsRead'])
+        ->name('pdc_admin.notifikasi.markAllRead');
     Route::get('/pdc-admin/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'detail'])
         ->name('pdc_admin.detail');
     Route::get('/pdc-admin/talents-by-company', [\App\Http\Controllers\PDCAdminController::class , 'getTalentsByCompany'])
@@ -134,6 +138,10 @@ Route::middleware('auth')->group(function () {
     // Atasan Routes
     Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class , 'dashboard'])
         ->name('atasan.dashboard');
+    Route::get('/atasan/notifikasi', [\App\Http\Controllers\AtasanDashboardController::class , 'notifikasi'])
+        ->name('atasan.notifikasi');
+    Route::post('/atasan/notifikasi/mark-all-read', [\App\Http\Controllers\AtasanDashboardController::class , 'markAllNotificationsRead'])
+        ->name('atasan.notifikasi.markAllRead');
     Route::get('/atasan/monitoring', [\App\Http\Controllers\AtasanDashboardController::class , 'monitoring'])
         ->name('atasan.monitoring');
     Route::get('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'assessmentPage'])
@@ -144,6 +152,10 @@ Route::middleware('auth')->group(function () {
     // Mentor Routes
     Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class , 'dashboard'])
         ->name('mentor.dashboard');
+    Route::get('/mentor/notifikasi', [\App\Http\Controllers\MentorDashboardController::class , 'notifikasi'])
+        ->name('mentor.notifikasi');
+    Route::post('/mentor/notifikasi/mark-all-read', [\App\Http\Controllers\MentorDashboardController::class , 'markAllNotificationsRead'])
+        ->name('mentor.notifikasi.markAllRead');
     Route::get('/mentor/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
         ->name('mentor.logbook');
     Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])

@@ -44,10 +44,10 @@ Route::get('/dashboard', function () {
     elseif ($roleName === 'finance') {
         return redirect()->route('finance.dashboard');
     }
-    elseif (in_array($roleName, ['admin_pdc', 'pdc admin', 'pdc_admin'])) {
+    elseif (in_array($roleName, ['admin', 'pdc admin', 'pdc_admin'])) {
         return redirect()->route('pdc_admin.dashboard');
     }
-    elseif (in_array($roleName, ['bo_director', 'bod'])) {
+    elseif (in_array($roleName, ['bo_director', 'bod', 'board_of_director'])) {
         return redirect()->route('bo_director.dashboard');
     }
 

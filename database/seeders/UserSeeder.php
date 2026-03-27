@@ -111,7 +111,7 @@ class UserSeeder extends Seeder
      */
     private function seedRoles(): array
     {
-        $roles = ['admin_pdc', 'talent', 'atasan', 'mentor', 'finance', 'board_of_directors'];
+        $roles = ['admin', 'talent', 'atasan', 'mentor', 'finance', 'board_of_director'];
         $roleIds = [];
 
         foreach ($roles as $r) {
@@ -136,7 +136,7 @@ class UserSeeder extends Seeder
                 'username' => 'admin.pdc',
                 'email' => 'pdc@admin.com',
                 'password' => Hash::make('password123'),
-                'role_id' => $roleIds['admin_pdc'],
+                'role_id' => $roleIds['admin'],
                 'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
                 'department_id' => $deptIds['Human Resources'],
                 'position_id' => $posIds['Super Admin'],
@@ -146,7 +146,7 @@ class UserSeeder extends Seeder
                 'username' => 'rizky.pratama',
                 'email' => 'rizky@mail.com',
                 'password' => Hash::make('password123'),
-                'role_id' => $roleIds['board_of_directors'],
+                'role_id' => $roleIds['board_of_director'],
                 'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
                 'department_id' => $deptIds['Board of Directors'],
                 'position_id' => $posIds['Board of Directors'],

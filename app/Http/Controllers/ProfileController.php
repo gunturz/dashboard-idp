@@ -30,7 +30,7 @@ class ProfileController extends Controller
             $view = 'mentor.profile';
         } elseif ($roleName === 'atasan') {
             $view = 'atasan.profile';
-        } elseif (in_array($roleName, ['admin_pdc', 'pdc admin', 'pdc_admin'])) {
+        } elseif (in_array($roleName, ['admin', 'pdc admin', 'pdc_admin'])) {
             $view = 'pdc_admin.profile';
         } else {
             $view = 'profile.dashboard'; // fallback

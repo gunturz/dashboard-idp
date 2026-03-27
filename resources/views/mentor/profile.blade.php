@@ -23,6 +23,24 @@
                 background: rgba(0,0,0,0.45);
                 display: flex; align-items: center; justify-content: center;
             }
+                    .btn-back {
+                padding: 8px 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                background: white;
+                color: #475569;
+                font-weight: 500;
+                font-size: 0.875rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.2s;
+                width: fit-content;
+            }
+            .btn-back:hover {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+            }
         </style>
     </x-slot>
 
@@ -31,8 +49,7 @@
 
         {{-- Back Link --}}
         <div class="mb-4">
-            <a href="{{ route('mentor.dashboard') }}"
-                class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit">
+            <a href="{{ route('mentor.dashboard') }}" class="btn-back">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
@@ -158,7 +175,7 @@
                                 @endphp
                                 @foreach ($akunFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="text-sm font-semibold text-[#3d4f62] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
                                         <input type="{{ $field['type'] }}"
                                                name="{{ $field['key'] }}"
@@ -180,16 +197,13 @@
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
                                         ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->nama_company ?? '-'],
                                         ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
-                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => $user->role->role_name ?? '-'],
+                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $user->role->role_name ?? '-'))],
                                         ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-'],
-                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-')],
-                                        ['label' => 'Atasan',             'type' => 'readonly', 'val' => optional($user->atasan)->nama ?? '-'],
-                                        ['label' => 'Posisi Yang Dituju', 'type' => 'readonly', 'val' => optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-'],
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#2e3746] w-36 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="text-sm font-semibold text-[#2e3746] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
                                         
                                         @if (($field['type'] ?? '') === 'text')
@@ -203,7 +217,7 @@
                                                 @foreach ($field['options'] as $opt)
                                                     @php
                                                         if ($field['key'] === 'role_id') {
-                                                            $optName = $opt->role_name;
+                                                            $optName = ucwords(str_replace('_', ' ', $opt->role_name));
                                                         } elseif ($field['key'] === 'company_id') {
                                                             $optName = $opt->nama_company;
                                                         } elseif ($field['key'] === 'department_id') {
@@ -281,7 +295,7 @@
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @foreach ($akunFields as $i => $field)
                                     <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#3d4f62] w-24 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
                                         <input type="{{ $field['type'] }}"
                                                name="{{ $field['key'] }}"
@@ -309,7 +323,7 @@
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
-                                                        if ($field['key'] === 'role_id') $optName = $opt->role_name;
+                                                        if ($field['key'] === 'role_id') $optName = ucwords(str_replace('_', ' ', $opt->role_name));
                                                         elseif ($field['key'] === 'company_id') $optName = $opt->nama_company;
                                                         elseif ($field['key'] === 'department_id') $optName = $opt->nama_department;
                                                         elseif (in_array($field['key'], ['position_id', 'target_position_id'])) $optName = $opt->position_name;
@@ -345,7 +359,7 @@
                     </button>
                     <button type="button" id="btn-batal"
                             onclick="exitEditMode()"
-                            class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                            class="hidden border border-gray-300 text-gray-600 bg-white hover:bg-gray-50 hover:text-gray-800 font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
                         Batal
                     </button>
                 </div>

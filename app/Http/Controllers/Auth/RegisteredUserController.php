@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->get();
         $companies = DB::table('company')->get();
         $departments = DB::table('department')->get();
-        $roles = DB::table('role')->whereNotIn('role_name', ['admin_pdc'])->get();
+        $roles = DB::table('role')->whereNotIn('role_name', ['admin'])->get();
         $positions = DB::table('position')
             ->whereNotIn('position_name', ['Super Admin'])
             ->get();

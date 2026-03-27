@@ -529,12 +529,34 @@
             .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
             .hidden { display: none !important; }
+            .mobile-nav-select { display: none; width: 100%; margin-top: 12px; }
 
             /* --- Responsive --- */
             @media (max-width: 768px) {
                 .nav-tabs {
-                    flex-direction: column;
+                    display: none;
+                }
+                .mobile-nav-select {
+                    display: block;
+                }
+                .tab-item {
+                    padding: 6px 12px;
+                    font-size: 0.75rem;
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                }
+                .filter-pills {
                     width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 4px;
+                }
+                .pill {
+                    flex: 1;
+                    text-align: center;
+                    padding: 6px 2px;
+                    font-size: 0.75rem;
+                    white-space: nowrap;
                 }
                 .talent-gap-grid {
                     grid-template-columns: 1fr;
@@ -625,6 +647,20 @@
                     <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                 </svg>
                 Logbook
+            </div>
+        </div>
+
+        <div class="mobile-nav-select relative">
+            <select onchange="handleNavSelect(this)" id="mobile-nav-dropdown" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-[15px] rounded-xl py-3.5 pl-4 pr-10 font-bold shadow-[0_2px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-[#2e3746] focus:bg-white appearance-none cursor-pointer transition-all">
+                <option value="kompetensi">Kompetensi</option>
+                <option value="idp">IDP</option>
+                <option value="project">Project Improvement</option>
+                <option value="logbook">Logbook</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                <svg class="h-6 w-6 text-[#475569]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
             </div>
         </div>
     </div>
@@ -1423,7 +1459,20 @@
 
             // Update active tab
             document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
-            el.classList.add('active');
+            if (el) {
+                el.classList.add('active');
+            } else {
+                let tab = Array.from(document.querySelectorAll('.tab-item')).find(t => t.getAttribute('onclick').includes("'" + targetId + "'"));
+                if(tab) tab.classList.add('active');
+            }
+
+            // Sync dropdown
+            const dropdown = document.getElementById('mobile-nav-dropdown');
+            if (dropdown) dropdown.value = targetId;
+        }
+
+        function handleNavSelect(selectElement) {
+            switchSection(selectElement.value, null);
         }
 
         function filterLog(typeId, el) {

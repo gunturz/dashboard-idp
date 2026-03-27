@@ -9,16 +9,33 @@
             .icon-success { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #16a34a; }
             .icon-info { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: #2563eb; }
             .icon-warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706; }
+                    .btn-back {
+                padding: 8px 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                background: white;
+                color: #475569;
+                font-weight: 500;
+                font-size: 0.875rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.2s;
+                width: fit-content;
+            }
+            .btn-back:hover {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+            }
         </style>
     </x-slot>
 
-    <div class="w-full max-w-4xl mx-auto px-6 pt-10 pb-12 flex-grow fade-up fade-up-1">
+    <div class="w-full max-w-4xl mx-auto px-6 pb-8 pt-0 pb-12 -mt-6 flex-grow fade-up fade-up-1">
 
 
         {{-- Back Link --}}
         <div class="mb-4">
-            <a href="{{ route('atasan.dashboard') }}"
-                class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit">
+            <a href="{{ route('atasan.dashboard') }}" class="btn-back">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>

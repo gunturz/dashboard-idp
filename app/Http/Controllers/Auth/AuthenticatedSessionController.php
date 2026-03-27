@@ -85,10 +85,10 @@ class AuthenticatedSessionController extends Controller
         elseif ($role === 'finance') {
             return redirect()->route('finance.dashboard');
         }
-        elseif ($role === 'admin_pdc' || $role === 'pdc admin' || $role === 'pdc_admin') {
+        elseif ($role === 'admin' || $role === 'pdc admin' || $role === 'pdc_admin') {
             return redirect()->route('pdc_admin.dashboard');
         }
-        elseif ($role === 'bo_director' || $role === 'bod') {
+        elseif ($role === 'bo_director' || $role === 'bod' || $role === 'board_of_director') {
             return redirect()->route('bo_director.dashboard');
         }
         else {

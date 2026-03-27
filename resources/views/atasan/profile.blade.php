@@ -197,8 +197,8 @@
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
                                         ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->nama_company ?? '-'],
                                         ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
-                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $user->role->role_name ?? '-'))],
-                                        ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-'],
+                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $user->role->role_name ?? '-')), 'disabled' => true],
+                                        ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-', 'disabled' => true],
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
@@ -212,7 +212,7 @@
                                                    value="{{ $user->{$field['key']} ?? '' }}"
                                                    class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ ($field['disabled'] ?? false) ? 'disabled' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -319,7 +319,7 @@
                                         @if (($field['type'] ?? '') === 'text')
                                             <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}" class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ ($field['disabled'] ?? false) ? 'disabled' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -352,15 +352,20 @@
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Edit
                     </button>
-                    <button type="button" id="btn-simpan"
-                            onclick="openConfirmModal()"
-                            class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
-                        Simpan
+                    <button type="button" id="btn-batal"
+                            onclick="exitEditMode()"
+                            class="hidden bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                        Batal
                     </button>
                     <button type="button" id="btn-batal"
                             onclick="exitEditMode()"
                             class="hidden border border-gray-300 text-gray-600 bg-white hover:bg-gray-50 hover:text-gray-800 font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
                         Batal
+                    </button>
+                    <button type="button" id="btn-simpan"
+                            onclick="openConfirmModal()"
+                            class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                        Simpan
                     </button>
                 </div>
             </div>

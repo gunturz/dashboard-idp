@@ -126,6 +126,51 @@
                 cursor: default;
             }
 
+            /* ══ MOBILE ONLY — does NOT affect desktop ══ */
+            @media (max-width: 767px) {
+                .summary-card {
+                    padding: 20px 16px;
+                    border-radius: 12px;
+                }
+                .summary-number {
+                    font-size: 2rem;
+                }
+                .summary-label {
+                    font-size: 0.85rem;
+                }
+                .talent-card {
+                    padding: 20px 16px;
+                    border-radius: 12px;
+                }
+                .talent-header {
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+                .talent-photo {
+                    width: 44px;
+                    height: 44px;
+                }
+                .talent-name {
+                    font-size: 1rem;
+                }
+                .talent-position {
+                    font-size: 0.7rem;
+                }
+                .competency-table th {
+                    padding: 8px 10px;
+                    font-size: 0.7rem;
+                }
+                .competency-table td {
+                    padding: 8px 10px;
+                    font-size: 0.78rem;
+                }
+                .btn-assessment {
+                    padding: 10px;
+                    font-size: 0.8rem;
+                    border-radius: 10px;
+                }
+            }
+
             /* Modal */
             .modal-overlay {
                 position: fixed;
@@ -188,11 +233,11 @@
             <div class="summary-label">Talent</div>
         </div>
         <div class="summary-card">
-            <div class="summary-number text-[#2e3746]">{{ $assessmentPending }}</div>
+            <div class="summary-number text-[#f59e0b]">{{ $assessmentPending }}</div>
             <div class="summary-label">Assessment Pending</div>
         </div>
         <div class="summary-card">
-            <div class="summary-number text-[#f59e0b]">{{ $onTrack }}</div>
+            <div class="summary-number text-[#16a34a]">{{ $onTrack }}</div>
             <div class="summary-label">On track</div>
         </div>
     </div>

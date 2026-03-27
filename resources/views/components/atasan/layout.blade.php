@@ -164,7 +164,7 @@
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-white min-h-screen pt-[80px]">
+<body class="bg-white min-h-screen pt-[80px] flex flex-col">
 
     <div class="navbar-outer">
         {{-- Logo + Title --}}
@@ -355,6 +355,13 @@
             }
         });
     </script>
+    {{-- FOOTER --}}
+    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
+        <span class="text-white text-sm font-medium tracking-wide">
+            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
+        </span>
+    </footer>
+
     {{ $scripts ?? '' }}
 </body>
 

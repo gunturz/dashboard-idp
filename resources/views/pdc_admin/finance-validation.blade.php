@@ -153,15 +153,15 @@
             <div class="stat-label">Total</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">{{ $pending }}</div>
+            <div class="stat-number" style="color: #f59e0b;">{{ $pending }}</div>
             <div class="stat-label">Pending</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">{{ $approved }}</div>
+            <div class="stat-number" style="color: #22c55e;">{{ $approved }}</div>
             <div class="stat-label">Approved</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">{{ $rejected }}</div>
+            <div class="stat-number" style="color: #ef4444;">{{ $rejected }}</div>
             <div class="stat-label">Rejected</div>
         </div>
     </div>
@@ -177,7 +177,7 @@
                     <th>File</th>
                     <th>Catatan</th>
                     <th>Feedback dari Finance</th>
-                    <th>Status</th>
+                    <th>Validasi Finance</th>
                     <th>Aksi</th>
                 </tr>
             </thead>

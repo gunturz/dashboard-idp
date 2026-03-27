@@ -75,8 +75,8 @@
                             <div class="flex flex-col items-center gap-3">
                                 <div class="relative w-[110px] h-[110px] md:w-32 md:h-32 flex items-center justify-center">
                                     <svg viewBox="0 0 36 36" class="absolute w-full h-full -rotate-90">
-                                      <path class="text-teal-400/20" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"/>
-                                      <path class="text-[#0d9488]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="{{ $mentee['progress']['learning']['pct'] }}, 100" />
+                                      <path class="text-green-400/20" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"/>
+                                      <path class="text-[#22c55e]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="{{ $mentee['progress']['learning']['pct'] }}, 100" />
                                     </svg>
                                     <div class="flex flex-col items-center font-bold text-[#2e3746] leading-tight">
                                         <span class="text-xl tracking-tight">{{ $mentee['progress']['learning']['count'] }}/{{ $mentee['progress']['learning']['target'] }}</span>
@@ -85,6 +85,7 @@
                                 </div>
                                 <span class="border border-[#cbd5e1] text-[#475569] bg-white text-[12px] font-medium px-4 py-1.5 rounded-full shadow-sm w-[110px] text-center">Learning</span>
                             </div>
+
                         </div>
 
                         <!-- Right: Top 3 Gap -->

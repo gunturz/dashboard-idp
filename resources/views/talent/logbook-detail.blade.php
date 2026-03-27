@@ -100,10 +100,10 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-left">
-                                    @if($data['status'] === 'Approve')
+                                    @if(in_array($data['status'], ['Approve', 'Approved']))
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-xs">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                            Approve
+                                            Approved
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-orange-500 font-bold px-3 py-1 rounded-full text-xs">
@@ -199,10 +199,10 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-left">
-                                    @if($data['status'] === 'Approve')
+                                    @if(in_array($data['status'], ['Approve', 'Approved']))
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-xs">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                            Approve
+                                            Approved
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-orange-500 font-bold px-3 py-1 rounded-full text-xs">
@@ -288,10 +288,10 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-left">
-                                    @if($data['status'] === 'Approve')
+                                    @if(in_array($data['status'], ['Approve', 'Approved']))
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-xs">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                            Approve
+                                            Approved
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-orange-500 font-bold px-3 py-1 rounded-full text-xs">

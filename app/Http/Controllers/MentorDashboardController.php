@@ -12,33 +12,46 @@ class MentorDashboardController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        
+
         // Asumsi mentor memiliki talents bimbingan via relasi getMenteesAttribute yang ada di model User
         $talents = $user->mentees;
 
         // Collect stats per talent
-        $menteesList = $talents->map(function($talent) {
+        $menteesList = $talents->map(function ($talent) use ($user) {
             $gaps = collect();
             $details = optional($talent->assessmentSession)->details;
             if ($details) {
                 // Ambil gap yang telah dipilih oleh PDC Admin (priority_1, priority_2, dll)
-                $chosenGaps = $details->filter(function($d) {
-                    return is_string($d->notes) && str_starts_with($d->notes, 'priority_');
-                })->sortBy(function($d) {
-                    preg_match('/priority_(\d+)/', $d->notes, $matches);
-                    return isset($matches[1]) ? (int)$matches[1] : 999;
-                })->values();
+                $chosenGaps = $details->filter(function ($d) {
+                            return is_string($d->notes) && str_starts_with($d->notes, 'priority_');
+                        }
+                        )->sortBy(function ($d) {
+                            preg_match('/priority_(\d+)/', $d->notes, $matches);
+                            return isset($matches[1]) ? (int)$matches[1] : 999;
+                        }
+                        )->values();
 
-                if ($chosenGaps->isNotEmpty()) {
-                    $gaps = $chosenGaps;
-                } else {
-                    // Default fallback: 3 gap terendah (paling negatif)
-                    $gaps = $details->sortBy('gap_score')->take(3)->values();
+                        if ($chosenGaps->isNotEmpty()) {
+                            $gaps = $chosenGaps;
+                        }
+                        else {
+                            // Default fallback: 3 gap terendah (paling negatif)
+                            $gaps = $details->sortBy('gap_score')->take(3)->values();
+                        }
+                    }
+
+                    // Hitung status IDP logbook HANYA UNTUK mentor ini, tetapi ikut sertakan Learning
+                    $idpActivities = IdpActivity::with('type')
+                        ->where('user_id_talent', $talent->id)
+                        ->where(function ($q) use ($user) {
+                    $q->where('verify_by', $user->id)
+                        ->orWhereHas('type', function ($qType) {
+                        $qType->where('type_name', 'Learning');
+                    }
+                    );
                 }
-            }
-
-            // Hitung status IDP logbook
-            $idpActivities = IdpActivity::with('type')->where('user_id_talent', $talent->id)->get();
+            )
+                ->get();
             $pending = $idpActivities->where('status', 'Pending')->count();
             $approved = $idpActivities->whereIn('status', ['Approve', 'Approved'])->count();
             $rejected = $idpActivities->whereIn('status', ['Reject', 'Rejected'])->count();
@@ -50,24 +63,24 @@ class MentorDashboardController extends Controller
 
             // Atur default target = 6 (hanya contoh untuk pie chart)
             $target = 6;
-            
+
             return [
-                'id' => $talent->id,
-                'name' => $talent->nama,
-                'foto' => $talent->foto,
-                'position' => optional($talent->position)->position_name ?? '-',
-                'department' => optional($talent->department)->nama_department ?? '-',
-                'gaps' => $gaps,
-                'status' => [
-                    'pending' => $pending,
-                    'approved' => $approved,
-                    'rejected' => $rejected,
-                ],
-                'progress' => [
-                    'exposure' => ['count' => $countExposure, 'target' => $target, 'pct' => min(100, round(($countExposure / $target) * 100))],
-                    'mentoring' => ['count' => $countMentoring, 'target' => $target, 'pct' => min(100, round(($countMentoring / $target) * 100))],
-                    'learning' => ['count' => $countLearning, 'target' => $target, 'pct' => min(100, round(($countLearning / $target) * 100))],
-                ]
+            'id' => $talent->id,
+            'name' => $talent->nama,
+            'foto' => $talent->foto,
+            'position' => optional($talent->position)->position_name ?? '-',
+            'department' => optional($talent->department)->nama_department ?? '-',
+            'gaps' => $gaps,
+            'status' => [
+            'pending' => $pending,
+            'approved' => $approved,
+            'rejected' => $rejected,
+            ],
+            'progress' => [
+            'exposure' => ['count' => $countExposure, 'target' => $target, 'pct' => min(100, round(($countExposure / $target) * 100))],
+            'mentoring' => ['count' => $countMentoring, 'target' => $target, 'pct' => min(100, round(($countMentoring / $target) * 100))],
+            'learning' => ['count' => $countLearning, 'target' => $target, 'pct' => min(100, round(($countLearning / $target) * 100))],
+            ]
             ];
         });
 
@@ -81,7 +94,7 @@ class MentorDashboardController extends Controller
 
         $talentId = $request->get('talent_id');
         $selectedTalent = null;
-        
+
         $exposureData = [];
         $mentoringData = [];
         $learningData = [];
@@ -97,9 +110,17 @@ class MentorDashboardController extends Controller
             }
 
             if ($selectedTalent) {
-                // Ambil aktivitas dari talent yang dipilih
+                // Ambil aktivitas dari talent yang dipilih: 
+                // Exposure & Mentoring yang divalidasi oleh mentor ini, ditambah semua aktivitas Learning
                 $activities = IdpActivity::with(['type', 'verifier'])
                     ->where('user_id_talent', $selectedTalent->id)
+                    ->where(function ($q) use ($user) {
+                    $q->where('verify_by', $user->id)
+                        ->orWhereHas('type', function ($qType) {
+                        $qType->where('type_name', 'Learning');
+                    }
+                    );
+                })
                     ->orderBy('created_at', 'desc')
                     ->get();
 
@@ -113,7 +134,8 @@ class MentorDashboardController extends Controller
                         if (str_starts_with($act->document_path, '["')) {
                             $docPaths = json_decode($act->document_path, true) ?? [];
                             $docNames = $act->file_name ? explode(', ', $act->file_name) : [];
-                        } else {
+                        }
+                        else {
                             $docPaths = [$act->document_path];
                             $docNames = [$act->file_name ?? ''];
                         }
@@ -132,7 +154,8 @@ class MentorDashboardController extends Controller
                             'file_names' => $docNames,
                             'status' => $act->status,
                         ];
-                    } elseif ($typeName === 'Mentoring') {
+                    }
+                    elseif ($typeName === 'Mentoring') {
                         $mentoringData[] = [
                             'id' => $act->id,
                             'mentor' => $act->verifier ? $act->verifier->nama : '-',
@@ -145,7 +168,8 @@ class MentorDashboardController extends Controller
                             'file_names' => $docNames,
                             'status' => $act->status,
                         ];
-                    } elseif ($typeName === 'Learning') {
+                    }
+                    elseif ($typeName === 'Learning') {
                         $learningData[] = [
                             'id' => $act->id,
                             'sumber' => $act->activity,
@@ -173,7 +197,7 @@ class MentorDashboardController extends Controller
         ]);
 
         $activity = IdpActivity::findOrFail($id);
-        
+
         // Ensure the mentor is matching
         $mentor = Auth::user();
         if ($activity->verify_by !== $mentor->id) {

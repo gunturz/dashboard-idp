@@ -314,40 +314,47 @@ class PDCAdminController extends Controller
         $request->validate($rules);
 
         if ($id) {
-            $mentor = \App\Models\User::find($id);
-            if ($mentor) {
-                $data = $request->only('nama', 'position_id', 'department_id', 'email', 'username');
-                if ($request->filled('password')) {
-                    $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
-                }
-                $mentor->update($data);
-                return back()->with('success', 'Mentor berhasil diperbarui.');
-            }
-        }
-        else {
-            $role_id = \App\Models\Role::where('role_name', 'mentor')->first()->id ?? null;
-            $user = \App\Models\User::create([
-                'nama' => $request->nama,
-                'email' => $request->email,
-                'position_id' => $request->position_id,
+            // Gunakan DB::table langsung agar tidak kena double-hash dari Eloquent cast 'hashed'
+            $data = [
+                'nama'          => $request->nama,
+                'position_id'   => $request->position_id,
                 'department_id' => $request->department_id,
-                'company_id' => auth()->user()->company_id,
-                'role_id' => $role_id,
-                'username' => $request->username,
-                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+                'email'         => $request->email,
+                'username'      => $request->username,
+                'updated_at'    => now(),
+            ];
+            if ($request->filled('password')) {
+                $data['password']       = \Illuminate\Support\Facades\Hash::make($request->password);
+                $data['remember_token'] = $request->password;
+            }
+            \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update($data);
+            return back()->with('success', 'Mentor berhasil diperbarui.');
+        } else {
+            $role_id = \App\Models\Role::where('role_name', 'mentor')->first()->id ?? null;
+            $userId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
+                'nama'           => $request->nama,
+                'email'          => $request->email,
+                'position_id'    => $request->position_id,
+                'department_id'  => $request->department_id,
+                'company_id'     => auth()->user()->company_id,
+                'role_id'        => $role_id,
+                'username'       => $request->username,
+                'password'       => \Illuminate\Support\Facades\Hash::make($request->password),
+                'remember_token' => $request->password,
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]);
 
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
-                    'id_user' => $user->id,
-                    'id_role' => $role_id,
+                    'id_user'    => $userId,
+                    'id_role'    => $role_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
             return back()->with('success', 'Mentor berhasil ditambahkan.');
         }
-        return back();
     }
 
     public function storeAtasan(Request $request)
@@ -373,40 +380,47 @@ class PDCAdminController extends Controller
         $request->validate($rules);
 
         if ($id) {
-            $atasan = \App\Models\User::find($id);
-            if ($atasan) {
-                $data = $request->only('nama', 'position_id', 'department_id', 'email', 'username');
-                if ($request->filled('password')) {
-                    $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
-                }
-                $atasan->update($data);
-                return back()->with('success', 'Atasan berhasil diperbarui.');
-            }
-        }
-        else {
-            $role_id = \App\Models\Role::where('role_name', 'atasan')->first()->id ?? null;
-            $user = \App\Models\User::create([
-                'nama' => $request->nama,
-                'email' => $request->email,
-                'position_id' => $request->position_id,
+            // Gunakan DB::table langsung agar tidak kena double-hash dari Eloquent cast 'hashed'
+            $data = [
+                'nama'          => $request->nama,
+                'position_id'   => $request->position_id,
                 'department_id' => $request->department_id,
-                'company_id' => auth()->user()->company_id,
-                'role_id' => $role_id,
-                'username' => $request->username,
-                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+                'email'         => $request->email,
+                'username'      => $request->username,
+                'updated_at'    => now(),
+            ];
+            if ($request->filled('password')) {
+                $data['password']       = \Illuminate\Support\Facades\Hash::make($request->password);
+                $data['remember_token'] = $request->password;
+            }
+            \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update($data);
+            return back()->with('success', 'Atasan berhasil diperbarui.');
+        } else {
+            $role_id = \App\Models\Role::where('role_name', 'atasan')->first()->id ?? null;
+            $userId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
+                'nama'           => $request->nama,
+                'email'          => $request->email,
+                'position_id'    => $request->position_id,
+                'department_id'  => $request->department_id,
+                'company_id'     => auth()->user()->company_id,
+                'role_id'        => $role_id,
+                'username'       => $request->username,
+                'password'       => \Illuminate\Support\Facades\Hash::make($request->password),
+                'remember_token' => $request->password,
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]);
 
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
-                    'id_user' => $user->id,
-                    'id_role' => $role_id,
+                    'id_user'    => $userId,
+                    'id_role'    => $role_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
             return back()->with('success', 'Atasan berhasil ditambahkan.');
         }
-        return back();
     }
 
     public function requestFinanceValidation(Request $request)

@@ -965,7 +965,7 @@
                                     @php $expActivities = $talent->idpActivities->where('type_idp', 1); @endphp
                                     @forelse($expActivities as $act)
                                         <tr>
-                                            <td class="text-center font-medium">{{ $talent->mentor->nama ?? '-' }}</td>
+                                            <td class="text-center font-medium">{{ $act->verifier->nama ?? '-' }}</td>
                                             <td class="text-center font-bold text-[#1e293b]">{{ $act->theme }}</td>
                                             <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
                                             <td class="text-center">{{ $act->location }}</td>
@@ -1001,9 +1001,9 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if($act->status === 'Approve')
+                                                @if(in_array($act->status, ['Approve', 'Approved']))
                                                     <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
-                                                        <span class="w-1 h-1 rounded-full bg-green-500"></span> Approve
+                                                        <span class="w-1 h-1 rounded-full bg-green-500"></span> Approved
                                                     </span>
                                                 @else
                                                     <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
@@ -1053,7 +1053,7 @@
                                     @php $menActivities = $talent->idpActivities->where('type_idp', 2); @endphp
                                     @forelse($menActivities as $act)
                                         <tr>
-                                            <td class="text-center font-medium">{{ $talent->mentor->nama ?? '-' }}</td>
+                                            <td class="text-center font-medium">{{ $act->verifier->nama ?? '-' }}</td>
                                             <td class="text-center font-bold text-[#1e293b]">{{ $act->theme }}</td>
                                             <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
                                             <td class="text-center">{{ $act->location }}</td>
@@ -1089,9 +1089,9 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if($act->status === 'Approve')
+                                                @if(in_array($act->status, ['Approve', 'Approved']))
                                                     <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
-                                                        <span class="w-1 h-1 rounded-full bg-green-500"></span> Approve
+                                                        <span class="w-1 h-1 rounded-full bg-green-500"></span> Approved
                                                     </span>
                                                 @else
                                                     <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">

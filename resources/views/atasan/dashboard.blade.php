@@ -188,11 +188,11 @@
             <div class="summary-label">Talent</div>
         </div>
         <div class="summary-card">
-            <div class="summary-number text-[#2e3746]">{{ $assessmentPending }}</div>
+            <div class="summary-number text-[#f59e0b]">{{ $assessmentPending }}</div>
             <div class="summary-label">Assessment Pending</div>
         </div>
         <div class="summary-card">
-            <div class="summary-number text-[#f59e0b]">{{ $onTrack }}</div>
+            <div class="summary-number text-[#16a34a]">{{ $onTrack }}</div>
             <div class="summary-label">On track</div>
         </div>
     </div>

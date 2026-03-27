@@ -81,6 +81,7 @@ class AtasanDashboardController extends Controller
             'promotion_plan.targetPosition',
             'assessmentSession.details.competence',
             'idpActivities.type',
+            'idpActivities.verifier',
             'improvementProjects.verifier',
         ])
             ->get();

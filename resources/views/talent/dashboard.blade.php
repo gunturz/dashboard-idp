@@ -211,7 +211,7 @@
                         </div>
                         <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
-                            Next
+                            Uploud
                         </a>
                     </div>
 
@@ -240,7 +240,7 @@
                         </div>
                         <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
-                            Next
+                            Uploud
                         </a>
                     </div>
 
@@ -270,7 +270,7 @@
                         </div>
                         <a href="{{ route('talent.idp_monitoring', 'learning') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
-                            Next
+                            Uploud
                         </a>
                     </div>
 

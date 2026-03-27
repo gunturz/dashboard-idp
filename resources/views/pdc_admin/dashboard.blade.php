@@ -146,7 +146,12 @@
                                     @if($index === 0)
                                         <td rowspan="{{ count($posData['talents']) }}" class="bg-white text-center">
                                             @if($positionId != 0)
-                                                <a href="{{ route('pdc_admin.detail', ['company_id' => $companyId, 'position_id' => $positionId]) }}" class="action-link">Lihat Detail</a>
+                                                <a href="{{ route('pdc_admin.detail', ['company_id' => $companyId, 'position_id' => $positionId]) }}" class="inline-flex items-center justify-center gap-1.5 bg-[#2e3746] hover:bg-[#1e2a36] text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-[0_2px_4px_rgba(46,55,70,0.15)] active:scale-95 whitespace-nowrap mx-auto">
+                                                    Lihat Detail
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </a>
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif

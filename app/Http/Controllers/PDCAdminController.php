@@ -10,9 +10,27 @@ use App\Models\PositionTargetCompetence;
 use App\Models\PromotionPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PDCAdminController extends Controller
 {
+    public function notifikasi()
+    {
+        $notifications = collect([
+            ['id' => 1, 'is_read' => false, 'title' => 'Validasi', 'desc' => 'Terdapat validasi finance yang menunggu.', 'time' => '10 menit yang lalu', 'type' => 'warning', 'badge' => 'Perhatian'],
+        ]);
+
+        return view('pdc_admin.notifikasi', [
+            'user' => auth()->user(),
+            'notifications' => $notifications
+        ]);
+    }
+
+    public function markAllNotificationsRead()
+    {
+        return back();
+    }
+
     public function dashboard()
     {
         $user = auth()->user();

@@ -9,6 +9,24 @@ use App\Models\IdpActivity;
 
 class MentorDashboardController extends Controller
 {
+    public function notifikasi()
+    {
+        // Mockup notifications
+        $notifications = collect([
+            ['id' => 1, 'is_read' => false, 'title' => 'Logbook', 'desc' => 'Ada logbook baru dari mentee.', 'time' => '2 jam yang lalu', 'type' => 'info', 'badge' => 'Baru'],
+        ]);
+
+        return view('mentor.notifikasi', [
+            'user' => Auth::user(),
+            'notifications' => $notifications
+        ]);
+    }
+
+    public function markAllNotificationsRead()
+    {
+        return back();
+    }
+
     public function dashboard()
     {
         $user = Auth::user();

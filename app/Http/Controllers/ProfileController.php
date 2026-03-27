@@ -21,8 +21,23 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.dashboard', [
-            'user'          => $request->user()->load(['company', 'department', 'position', 'role', 'promotion_plan.targetPosition', 'mentor', 'atasan']),
+        $user = $request->user()->load(['company', 'department', 'position', 'role', 'promotion_plan.targetPosition', 'mentor', 'atasan']);
+        $roleName = strtolower(trim($user->role->role_name ?? ''));
+
+        if (in_array($roleName, ['talent', 'kandidat'])) {
+            $view = 'talent.profile';
+        } elseif ($roleName === 'mentor') {
+            $view = 'mentor.profile';
+        } elseif ($roleName === 'atasan') {
+            $view = 'atasan.profile';
+        } elseif (in_array($roleName, ['admin_pdc', 'pdc admin', 'pdc_admin'])) {
+            $view = 'pdc_admin.profile';
+        } else {
+            $view = 'profile.dashboard'; // fallback
+        }
+
+        return view($view, [
+            'user'          => $user,
             'notifications' => $this->getNotifications(),
             'companies'     => Company::all(),
             'departments'   => Department::all(),

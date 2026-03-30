@@ -82,14 +82,14 @@
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Mentor</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Lokasi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aktivitas</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Deskripsi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Dokumentasi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Mentor</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tema</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Lokasi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Aktivitas</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Deskripsi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[190px]">Dokumentasi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[150px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -101,7 +101,7 @@
                                 <td class="px-5 py-3 text-gray-600 border-r border-gray-100 text-center">{{ $data['lokasi'] }}</td>
                                 <td class="px-5 py-3 text-gray-600 border-r border-gray-100 text-center">{{ $data['aktivitas'] }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 min-w-[150px]">{{ $data['deskripsi'] ?: '-' }}</td>
-                                <td class="px-5 py-3 border-r border-gray-100">
+                                <td class="px-5 py-3 border-r border-gray-100 w-[190px]">
                                     @if(!empty($data['file_paths']))
                                         <div class="flex flex-col gap-1 items-center">
                                             @foreach($data['file_paths'] as $fi => $fp)
@@ -118,13 +118,13 @@
                                         <div class="text-center text-gray-400 text-xs">-</div>
                                     @endif
                                 </td>
-                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap min-w-[140px]">
+                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap w-[150px]">
                                     @if($data['status'] === 'Pending')
-                                        <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="bg-[#eab308] text-white font-bold px-6 py-2 rounded-full text-xs hover:bg-[#ca8a04] transition-colors shadow-sm w-full">
+                                        <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="bg-[#eab308] text-white font-bold px-6 py-2 rounded-full text-xs hover:bg-[#ca8a04] transition-colors shadow-sm w-[110px]">
                                             Pilih Aksi
                                         </button>
                                     @else
-                                        <span class="inline-flex items-center justify-center gap-1 border {{ in_array($data['status'], ['Approve', 'Approved']) ? 'border-green-300 text-green-500' : 'border-red-300 text-red-500' }} font-bold px-4 py-2 rounded-full text-[11px] w-full">
+                                        <span class="inline-flex items-center justify-center gap-1 border {{ in_array($data['status'], ['Approve', 'Approved']) ? 'border-green-300 text-green-500' : 'border-red-300 text-red-500' }} font-bold px-4 py-2 rounded-full text-[11px] w-[110px]">
                                             {{ in_array($data['status'], ['Approve', 'Approved']) ? 'Approved' : 'Rejected' }}
                                         </span>
                                     @endif
@@ -149,14 +149,14 @@
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Mentor</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Lokasi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Deskripsi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Action Plan</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Dokumentasi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Mentor</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tema</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Lokasi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Deskripsi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Action Plan</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[190px]">Dokumentasi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[150px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -168,7 +168,7 @@
                                 <td class="px-5 py-3 text-gray-600 border-r border-gray-100 text-center">{{ $data['lokasi'] }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 min-w-[150px]">{{ $data['deskripsi'] ?: '-' }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 min-w-[150px]">{{ $data['action_plan'] ?: '-' }}</td>
-                                <td class="px-5 py-3 border-r border-gray-100">
+                                <td class="px-5 py-3 border-r border-gray-100 w-[190px]">
                                     @if(!empty($data['file_paths']))
                                         <div class="flex flex-col gap-1 items-center">
                                             @foreach($data['file_paths'] as $fi => $fp)
@@ -185,13 +185,13 @@
                                         <div class="text-center text-gray-400 text-xs">-</div>
                                     @endif
                                 </td>
-                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap min-w-[140px]">
+                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap w-[150px]">
                                     @if($data['status'] === 'Pending')
-                                        <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="bg-[#eab308] text-white font-bold px-6 py-2 rounded-full text-xs hover:bg-[#ca8a04] transition-colors shadow-sm w-full">
+                                        <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="bg-[#eab308] text-white font-bold px-6 py-2 rounded-full text-xs hover:bg-[#ca8a04] transition-colors shadow-sm w-[110px]">
                                             Pilih Aksi
                                         </button>
                                     @else
-                                        <span class="inline-flex items-center justify-center gap-1 border {{ in_array($data['status'], ['Approve', 'Approved']) ? 'border-green-300 text-green-500' : 'border-red-300 text-red-500' }} font-bold px-4 py-2 rounded-full text-[11px] w-full">
+                                        <span class="inline-flex items-center justify-center gap-1 border {{ in_array($data['status'], ['Approve', 'Approved']) ? 'border-green-300 text-green-500' : 'border-red-300 text-red-500' }} font-bold px-4 py-2 rounded-full text-[11px] w-[110px]">
                                             {{ in_array($data['status'], ['Approve', 'Approved']) ? 'Approved' : 'Rejected' }}
                                         </span>
                                     @endif
@@ -216,12 +216,12 @@
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Sumber</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Platform</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Dokumentasi</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Sumber</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tema</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Platform</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[190px]">Dokumentasi</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[150px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -231,7 +231,7 @@
                                 <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center">{{ $data['tema'] ?: '-' }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal'] ? date('d M Y', strtotime($data['tanggal'])) : '-' }}</td>
                                 <td class="px-5 py-3 text-gray-600 border-r border-gray-100 text-center">{{ $data['platform'] ?: '-' }}</td>
-                                <td class="px-5 py-3 border-r border-gray-100">
+                                <td class="px-5 py-3 border-r border-gray-100 w-[190px]">
                                     @if(!empty($data['file_paths']))
                                         <div class="flex flex-col gap-1 items-center">
                                             @foreach($data['file_paths'] as $fi => $fp)
@@ -248,13 +248,13 @@
                                         <div class="text-center text-gray-400 text-xs">-</div>
                                     @endif
                                 </td>
-                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap min-w-[140px]">
+                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap w-[150px]">
                                     @if($data['status'] === 'Pending')
-                                        <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="bg-[#eab308] text-white font-bold px-6 py-2 rounded-full text-xs hover:bg-[#ca8a04] transition-colors shadow-sm w-full">
+                                        <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="bg-[#eab308] text-white font-bold px-6 py-2 rounded-full text-xs hover:bg-[#ca8a04] transition-colors shadow-sm w-[110px]">
                                             Pilih Aksi
                                         </button>
                                     @else
-                                        <span class="inline-flex items-center justify-center gap-1 border {{ in_array($data['status'], ['Approve', 'Approved']) ? 'border-green-300 text-green-500' : 'border-red-300 text-red-500' }} font-bold px-4 py-2 rounded-full text-[11px] w-full">
+                                        <span class="inline-flex items-center justify-center gap-1 border {{ in_array($data['status'], ['Approve', 'Approved']) ? 'border-green-300 text-green-500' : 'border-red-300 text-red-500' }} font-bold px-4 py-2 rounded-full text-[11px] w-[110px]">
                                             {{ in_array($data['status'], ['Approve', 'Approved']) ? 'Approved' : 'Rejected' }}
                                         </span>
                                     @endif

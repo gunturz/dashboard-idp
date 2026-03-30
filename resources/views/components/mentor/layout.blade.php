@@ -121,13 +121,13 @@
             font-weight: 500;
         }
         .dropdown-panel .mobile-nav-link:hover {
-            color: #00897b;
-            background-color: #f0fdfa;
+            color: #005ba1;
+            background-color: #f8fafc;
         }
         .dropdown-panel .mobile-nav-link.active {
-            color: #00897b;
+            color: #005ba1;
             font-weight: 700;
-            background-color: #f0fdfa;
+            background-color: #f8fafc;
         }
 
         /* ══════════════════════════════════════════════════════
@@ -212,12 +212,12 @@
                                 $nameParts = explode(' ', $user->nama ?? $user->name ?? '-');
                                 $initials = count($nameParts) >= 2 ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) : strtoupper(substr($nameParts[0], 0, 2));
                             @endphp
-                            <div class="w-[52px] h-[52px] rounded-full bg-[#0d9488] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#0d9488]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
+                            <div class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#466675]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
                                 {{ $initials }}
                             </div>
                             <div class="flex flex-col">
                                 <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? $user->name ?? '-' }}</span>
-                                <a href="{{ route('profile.edit') }}" class="text-[#0d9488] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
+                                <a href="{{ route('profile.edit') }}" class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
                                     Lihat Profil
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />

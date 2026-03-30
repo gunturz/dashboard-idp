@@ -309,7 +309,7 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main class="p-8 max-w-7xl mx-auto">
+    <main class="px-8 py-8 w-full">
         {{ $slot }}
     </main>
 

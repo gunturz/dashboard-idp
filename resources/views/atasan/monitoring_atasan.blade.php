@@ -1,4 +1,4 @@
-﻿<x-atasan.layout title="Monitoring â€“ Individual Development Plan" :user="$user">
+<x-atasan.layout title="Monitoring – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* Custom Scrollbar */
@@ -12,27 +12,17 @@
             .custom-scrollbar::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 10px; border: 2px solid #f8fafc; }
             .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #0f766e; }
 
-            body { background-color: #f8fafc !important; }
-
-            /* Match Logbook Main Container Width */
-            .max-w-monitor { max-width: 72rem !important; margin-left: auto; margin-right: auto; }
-            @media (min-width: 1280px) { .max-w-monitor { max-width: 80rem !important; } }
-            @media (min-width: 1536px) { .max-w-monitor { max-width: 72rem !important; } }
-            /* Force 6xl for precise alignment with Logbook */
-            .logbook-width { max-width: 72rem !important; }
-
             .log-table-container {
-                background: white; border-radius: 12px; border: 1px solid #e2e8f0;
+                background: white; border-radius: 16px; border: 1px solid #e2e8f0;
                 overflow: hidden; position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
             .pdc-log-table { width: 100%; border-collapse: collapse; }
             .pdc-log-table th {
-                padding: 16px 20px; background: #f8fafc; font-weight: 700; color: #3d4f62;
-                font-size: 0.85rem; text-align: center; white-space: nowrap;
-                border-bottom: 1px solid #f1f5f9;
+                padding: 24px 32px; background: #f8fafc; font-weight: 800; color: #475569;
+                font-size: 0.95rem; text-align: center; white-space: nowrap;
             }
             .pdc-log-table td {
-                padding: 16px 20px; color: #475569; font-size: 0.825rem; border-top: 1px solid #f1f5f9;
+                padding: 32px; color: #64748b; font-size: 0.9rem; border-top: 1px solid #f1f5f9;
             }
             .pdc-log-table tr:hover { background: #fafafa; }
 
@@ -45,31 +35,9 @@
             .tab-item:hover { background: #f1f5f9; }
             .tab-item.active { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
 
-            .section-badge {
-                display: inline-block; padding: 6px 24px; border-radius: 9999px;
-                background: #2e3746; color: white; font-weight: 600;
-                font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                margin-bottom: 1.5rem;
-            }
-
-            .talent-profile-card {
-                background: white; border-radius: 1rem; padding: 2.5rem;
-                border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-                margin-bottom: 3.5rem;
-            }
-
-            .talent-profile-header {
-                display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem;
-            }
-            .talent-profile-photo {
-                width: 72px; height: 72px; border-radius: 9999px;
-                object-fit: cover; border: 2px solid #f8fafc; shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            }
-            .talent-profile-name {
-                font-size: 1.375rem; font-weight: 800; color: #1e293b; line-height: 1.25;
-            }
-            .talent-profile-meta {
-                font-size: 0.875rem; color: #64748b; font-weight: 500;
+            .section-title {
+                display: flex; align-items: center; gap: 12px; font-size: 1.25rem;
+                font-weight: 800; color: #1e293b; margin-top: 40px; margin-bottom: 24px;
             }
 
             /* IDP Donut Charts */
@@ -83,7 +51,6 @@
                 display: flex; justify-content: space-evenly; align-items: center;
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
                 width: 100%;
-
             }
 
             /* Tables */
@@ -92,11 +59,11 @@
                 border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;
             }
             .pdc-custom-table th {
-                background: #f8fafc; padding: 12px 16px; border: 1px solid #e2e8f0;
-                font-size: 0.85rem; font-weight: 700; color: #1e293b; text-align: center;
+                background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0;
+                font-size: 0.85rem; font-weight: 800; color: #1e293b;
             }
             .pdc-custom-table td {
-                padding: 12px 16px; border: 1px solid #e2e8f0; font-size: 0.85rem; color: #4b5563;
+                padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;
             }
 
             .btn-status-action {
@@ -171,23 +138,8 @@
             .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
 
-            /* â•â• MOBILE ONLY â€” does NOT affect desktop â•â• */
-                        .btn-back {
-                padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px;
-                background: white; color: #475569; font-weight: 500; font-size: 0.875rem;
-                display: flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none;
-            }
-            .btn-back:hover { background: #f8fafc; border-color: #cbd5e1; }
-            .hidden { display: none !important; }
-            .mobile-nav-select { display: none; width: 100%; }
-            @media (max-width: 768px) {
-                .nav-tabs { display: none !important; }
-                .mobile-nav-select { display: block; width: 100%; }
-                #nav-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; }
-                .btn-back { padding: 0 16px; height: 42px; font-size: 0.875rem; border-radius: 10px; }
-                .mobile-nav-select select { height: 42px; padding-top: 0; padding-bottom: 0; font-size: 0.875rem; border-radius: 10px; }
-            }
-@media (max-width: 767px) {
+            /* ══ MOBILE ONLY — does NOT affect desktop ══ */
+            @media (max-width: 767px) {
                 .nav-tabs {
                     overflow-x: auto;
                     -webkit-overflow-scrolling: touch;
@@ -204,6 +156,53 @@
                     width: 18px;
                     height: 18px;
                 }
+                .talent-gap-grid {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+                .talent-card {
+                    padding: 16px;
+                    border-radius: 12px;
+                }
+                .talent-photo {
+                    width: 48px;
+                    height: 48px;
+                }
+                .talent-meta h4 {
+                    font-size: 0.95rem;
+                }
+                .section-title {
+                    font-size: 1.05rem;
+                    margin-top: 24px;
+                    margin-bottom: 16px;
+                }
+                .heatmap-container {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .heatmap-table {
+                    min-width: 700px;
+                }
+                .legend {
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                .donut-container {
+                    flex-wrap: wrap;
+                    gap: 16px;
+                    padding: 16px;
+                }
+                .donut-container .relative.w-48.h-48 {
+                    width: 120px !important;
+                    height: 120px !important;
+                }
+                .donut-container .text-3xl {
+                    font-size: 1.25rem !important;
+                }
+                .idp-card-container {
+                    padding: 16px;
+                    border-radius: 12px;
+                }
                 .filter-pills {
                     padding: 3px;
                 }
@@ -211,71 +210,31 @@
                     padding: 6px 20px;
                     font-size: 0.78rem;
                 }
-                .talent-profile-card {
-                    padding: 1.25rem !important;
-                    margin-bottom: 2.5rem !important;
-                    border-radius: 1.25rem !important;
-                }
-                .talent-profile-header {
-                    margin-bottom: 1.5rem !important;
-                    gap: 1rem !important;
-                }
-                .talent-profile-photo {
-                    width: 56px !important;
-                    height: 56px !important;
-                }
-                .talent-profile-name {
-                    font-size: 1.125rem !important;
-                }
-                .talent-profile-meta {
-                    font-size: 0.75rem !important;
-                }
-                .section-badge {
-                    padding: 5px 20px !important;
-                    font-size: 0.75rem !important;
-                    margin-bottom: 1.25rem !important;
-                }
-                .donut-container {
-                    flex-direction: column !important;
-                    gap: 2.5rem !important;
-                }
-                .grid {
-                    display: flex !important;
-                    flex-direction: column !important;
-                    gap: 2rem !important;
-                }
-                .lg\:col-span-5, .lg\:col-span-12, .lg\:col-span-7 {
-                    width: 100% !important;
-                }
                 .pdc-log-table th {
-                    padding: 10px 12px;
-                    font-size: 0.75rem;
+                    padding: 12px 16px;
+                    font-size: 0.8rem;
                 }
                 .pdc-log-table td {
-                    padding: 12px;
+                    padding: 16px;
+                    font-size: 0.8rem;
+                }
+                .pdc-custom-table th {
+                    padding: 8px;
                     font-size: 0.75rem;
                 }
-                .pdc-custom-table th, .pdc-custom-table td {
-                    padding: 8px 10px;
-                    font-size: 0.75rem;
+                .pdc-custom-table td {
+                    padding: 8px;
+                    font-size: 0.78rem;
                 }
             }
         </style>
     </x-slot>
 
-
     <div class="max-w-7xl mx-auto w-full">
 
     {{-- Tab Navigation --}}
-    <div id="nav-wrapper" class="flex flex-col items-start gap-2 mb-10 lg:flex-row lg:justify-between lg:items-center">
-        <a href="{{ route('atasan.dashboard') }}" class="btn-back">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-[#2e3746]">Kembali</span>
-        </a>
-
-
+    <div class="flex justify-between items-center mb-10">
+        <div></div>
         <div class="nav-tabs">
             <div class="tab-item active" onclick="switchSection('kompetensi', this)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
@@ -303,21 +262,8 @@
                 Logbook
             </div>
         </div>
-
-        <div class="mobile-nav-select relative">
-            <select onchange="handleNavSelect(this)" id="mobile-nav-dropdown" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-[15px] rounded-xl py-3.5 pl-4 pr-10 font-bold shadow-[0_2px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-[#2e3746] focus:bg-white appearance-none cursor-pointer transition-all">
-                <option value="kompetensi">Kompetensi</option>
-                <option value="idp">IDP</option>
-                <option value="project">Project Improvement</option>
-                <option value="logbook">Logbook</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-                <svg class="h-6 w-6 text-[#475569]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                </svg>
-            </div>
-        </div>
     </div>
+
     {{-- Main Header --}}
     <div class="text-center mb-12">
         <h2 class="text-2xl font-extrabold text-[#1e293b]">Monitoring Talent</h2>
@@ -325,7 +271,6 @@
     </div>
 
     {{-- ================================= SECTION: KOMPETENSI ================================= --}}
-
     <div id="section-kompetensi" class="w-full">
         <div class="section-title">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -351,123 +296,150 @@
                             $gaps = $overrides->values();
                         } else {
                             $gaps = $details->sortBy('gap_score')->take(3)->values();
-
+                        }
                     }
-                }
-            @endphp
+                @endphp
+                <div class="talent-card">
+                    <div class="talent-header">
+                        <div class="talent-info">
+                            <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="talent-photo" alt="{{ $talent->nama }}">
+                            <div class="talent-meta">
+                                <h4>{{ $talent->nama }}</h4>
+                                <p>{{ optional($talent->position)->position_name ?? 'Officer' }} - {{ optional($talent->department)->nama_department ?? '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="talent-profile-card">
-                {{-- Profile Header --}}
-                <div class="talent-profile-header">
-                    <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" 
-                         class="talent-profile-photo" alt="{{ $talent->nama }}">
-                    <div>
-                        <h4 class="talent-profile-name">{{ $talent->nama }}</h4>
-                        <p class="talent-profile-meta">
-                            {{ optional($talent->position)->position_name ?? 'Officer' }} | 
-                            <span class="italic text-gray-400 font-normal">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                    <div class="mb-4 text-xs font-bold text-gray-500">
+                        <p>MENTOR :
+                            @php
+                                $mIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+                                if (!empty($mIds)) {
+                                    $mNames = \App\Models\User::whereIn('id', $mIds)->pluck('nama')->toArray();
+                                    echo strtoupper(implode(', ', $mNames)) ?: '-';
+                                } else {
+                                    echo strtoupper($talent->mentor->nama ?? '-');
+                                }
+                            @endphp
                         </p>
+                        <p>ATASAN : {{ strtoupper($user->nama ?? '-') }}</p>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                    {{-- TOP 3 GAP --}}
-                    <div class="lg:col-span-5">
-                        <div class="section-badge">TOP 3 GAP Kompetensi</div>
-                        
-                        <div class="space-y-3">
-                            @forelse($gaps as $index => $gap)
-                                <div class="gap-item prio-{{ $index + 1 }}">
-                                    <div class="flex items-center">
-                                        <span class="gap-number">{{ $index + 1 }}</span>
-                                        {{ $gap->competence->name }}
-                                    </div>
-                                    <span class="font-bold text-lg">{{ number_format($gap->gap_score, 1) }}</span>
+                    <span class="top-gap-label">TOP 3 GAP</span>
+                    @forelse($gaps as $index => $gap)
+                        <div class="gap-item prio-{{ $index + 1 }}">
+                            <div class="flex items-center">
+                                <span class="gap-number">{{ $index + 1 }}</span>
+                                {{ $gap->competence->name }}
+                            </div>
+                            <span>{{ number_format($gap->gap_score, 1) }}</span>
+                        </div>
+                    @empty
+                        @for ($i = 1; $i <= 3; $i++)
+                            <div class="gap-item" style="border: 1px solid #e2e8f0; background: #ffffff; color: #94a3b8;">
+                                <div class="flex items-center">
+                                    <span class="gap-number" style="background: #cbd5e1; color: white;">{{ $i }}</span>
+                                    Belum dinilai Atasan
                                 </div>
-                            @empty
-                                @for ($i = 1; $i <= 3; $i++)
-                                    <div class="gap-item" style="border: 1px solid #e2e8f0; background: #ffffff; color: #94a3b8;">
-                                        <div class="flex items-center">
-                                            <span class="gap-number" style="background: #cbd5e1; color: white;">{{ $i }}</span>
-                                            Belum dinilai Atasan
-                                        </div>
-                                        <span>-</span>
-                                    </div>
-                                @endfor
-                            @endforelse
-                        </div>
-
-                        <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                             <div class="text-[11px] font-bold text-gray-400 uppercase mb-2 tracking-wider">Stakeholders</div>
-                             <div class="space-y-1 text-xs">
-                                 <p class="flex justify-between text-gray-600"><span class="font-medium">Mentor:</span> 
-                                    @php
-                                        $mIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                                        if (!empty($mIds)) {
-                                            $mNames = \App\Models\User::whereIn('id', $mIds)->pluck('nama')->toArray();
-                                            echo strtoupper(implode(', ', $mNames)) ?: '-';
-                                        } else {
-                                            echo strtoupper($talent->mentor->nama ?? '-');
-                                        }
-                                    @endphp
-                                 </p>
-                                 <p class="flex justify-between text-gray-600"><span class="font-medium">Atasan:</span> <span>{{ strtoupper($user->nama ?? '-') }}</span></p>
-                             </div>
-                        </div>
-                    </div>
-
-                    {{-- Heatmap / Competency Scores Individual --}}
-                    <div class="lg:col-span-7">
-                        <div class="section-badge">Tabel Skor Kompetensi</div>
-                        
-                        <div class="log-table-container custom-scrollbar overflow-x-auto">
-                            <table class="pdc-log-table min-w-[500px]">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Kompetensi</th>
-                                        <th class="w-20">Standar</th>
-                                        <th class="w-16">Talent</th>
-                                        <th class="w-16">Atasan</th>
-                                        <th class="w-20">GAP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($competencies as $comp)
-                                        @php 
-                                            $standard = $standards[$comp->id] ?? 0;
-                                            $detail = $talent->assessmentSession ? $talent->assessmentSession->details->firstWhere('competence_id', $comp->id) : null;
-                                            $scoreTalent = $detail->score_talent ?? 0;
-                                            $scoreAtasan = $detail->score_atasan ?? 0;
-                                            $gap = $detail->gap_score ?? 0;
-                                            
-                                            $cls = 'gap-ok';
-                                            if ($gap == 0) $cls = 'gap-none';
-                                            elseif ($gap < -1.5) $cls = 'gap-large';
-                                            elseif ($gap < 0) $cls = 'gap-small';
-                                        @endphp
-                                        <tr>
-                                            <td class="font-semibold text-slate-700">{{ $comp->name }}</td>
-                                            <td class="text-center font-bold">{{ $standard }}</td>
-                                            <td class="text-center">{{ $scoreTalent ?: '-' }}</td>
-                                            <td class="text-center">{{ $scoreAtasan ?: '-' }}</td>
-                                            <td class="p-2">
-                                                <span class="gap-badge {{ $cls }} text-[10px] py-1">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                <span>-</span>
+                            </div>
+                        @endfor
+                    @endforelse
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
+
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clip-rule="evenodd" />
+            </svg>
+            Heatmap Kompetensi
+        </div>
+
+        <div class="legend">
+            <span>Keterangan GAP</span>
+            <div class="legend-item"><div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)</div>
+            <div class="legend-item"><div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)</div>
+            <div class="legend-item"><div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5)</div>
+        </div>
+
+        <div class="heatmap-container overflow-x-auto">
+            <table class="heatmap-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="th-main w-[250px]">KOMPETENSI</th>
+                        <th rowspan="2" class="th-main w-[80px]">STANDAR</th>
+                        @foreach ($talents as $talent)
+                            <th colspan="4" class="th-main">{{ strtoupper($talent->nama) }}</th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        @foreach ($talents as $talent)
+                            <th class="th-sub">Skor Talent</th>
+                            <th class="th-sub">Skor Atasan</th>
+                            <th class="th-sub">Final Score</th>
+                            <th class="th-sub">GAP</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($competencies as $comp)
+                        @php $standard = $standards[$comp->id] ?? 0; @endphp
+                        <tr>
+                            <td class="td-left">{{ $comp->name }}</td>
+                            <td>{{ $standard }}</td>
+                            @foreach ($talents as $talent)
+                                @php
+                                    $detail = $talent->assessmentSession ? $talent->assessmentSession->details->firstWhere('competence_id', $comp->id) : null;
+                                    $scoreTalent = $detail->score_talent ?? 0;
+                                    $scoreAtasan = $detail->score_atasan ?? 0;
+                                    $gap = $detail->gap_score ?? 0;
+                                    
+                                    $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
+                                    $cls = 'gap-ok';
+                                    if ($gap == 0) $cls = 'gap-none';
+                                    elseif ($gap < -1.5) $cls = 'gap-large';
+                                    elseif ($gap < 0) $cls = 'gap-small';
+                                @endphp
+                                <td>{{ $scoreTalent ?: '-' }}</td>
+                                <td>{{ $scoreAtasan ?: '-' }}</td>
+                                <td>{{ $finalScore ?: '-' }}</td>
+                                <td class="p-1"><span class="gap-badge {{ $cls }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span></td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                    {{-- Nilai Rata-rata --}}
+                    <tr class="font-bold bg-gray-50">
+                        <td class="td-left">Nilai Rata-Rata</td>
+                        <td>{{ number_format($standards->avg() ?: 0, 1) }}</td>
+                        @foreach ($talents as $talent)
+                            @php
+                                $avgSelf = optional(optional($talent->assessmentSession)->details)->avg('score_talent') ?: 0;
+                                $avgAtasan = optional(optional($talent->assessmentSession)->details)->avg('score_atasan') ?: 0;
+                                $avgGap = optional(optional($talent->assessmentSession)->details)->avg('gap_score') ?: 0;
+                            @endphp
+                            <td>{{ number_format($avgSelf, 1) }}</td>
+                            <td>{{ number_format($avgAtasan, 1) }}</td>
+                            <td>{{ number_format(($avgSelf + $avgAtasan) / 2, 1) }}</td>
+                            <td class="p-1">
+                                @php
+                                    $cls = 'gap-ok';
+                                    if ($avgGap == 0) $cls = 'gap-none';
+                                    elseif ($avgGap < -1.5) $cls = 'gap-large';
+                                    elseif ($avgGap < 0) $cls = 'gap-small';
+                                @endphp
+                                <span class="gap-badge {{ $cls }}">{{ number_format($avgGap, 1) }}</span>
+                            </td>
+                        @endforeach
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {{-- ================================= SECTION: IDP ================================= --}}
     <div id="section-idp" class="hidden w-full">
         @foreach ($talents as $talent)
-
             @php $talentIndex = $loop->iteration; @endphp
             <div class="idp-card-container">
                 @php
@@ -479,19 +451,13 @@
                     <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $idpBg }}">
                         {{ $idpInitials }}
                     </div>
-
                     <div>
-                        <h4 class="talent-profile-name">{{ $talent->nama }}</h4>
-                        <p class="talent-profile-meta">
-                            {{ optional($talent->position)->position_name ?? 'Officer' }} | 
-                            <span class="italic text-gray-400 font-normal">{{ optional($talent->department)->nama_department ?? '-' }}</span>
-                        </p>
+                        <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
+                        <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
                     </div>
                 </div>
 
-                <div class="section-badge">Monitoring IDP (Exposure, Mentoring, Learning)</div>
-
-                <div class="donut-container py-4">
+                <div class="donut-container">
                     @php
                         $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
                         $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
@@ -507,8 +473,8 @@
 
                     @foreach($charts as $chart)
                         @php $pct = $chart['done'] / $chart['total']; $filled = $pct * $circ; $empty = $circ - $filled; @endphp
-                        <div class="flex flex-col items-center gap-4 group">
-                            <div class="relative w-40 h-40 lg:w-48 lg:h-48 drop-shadow-md transform transition-transform group-hover:scale-105">
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="relative w-48 h-48 drop-shadow-sm">
                                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
                                     <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="10" />
                                     <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}" stroke-width="10" stroke-linecap="round" stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" style="transition: stroke-dasharray 0.8s ease;" />
@@ -518,8 +484,8 @@
                                     <span class="text-sm font-bold text-gray-400 mt-[-4px]">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <div class="bg-slate-50 border border-slate-200 px-6 py-2 rounded-full shadow-sm">
-                                <span class="text-[13px] font-bold text-slate-700 uppercase tracking-wide">{{ $chart['label'] }}</span>
+                            <div class="bg-white border border-gray-200 px-5 py-1.5 rounded-[10px] shadow-sm">
+                                <span class="text-sm font-bold text-gray-800">{{ $chart['label'] }}</span>
                             </div>
                         </div>
                     @endforeach
@@ -529,7 +495,6 @@
     </div>
 
     {{-- ================================= SECTION: PROJECT IMPROVEMENT ================================= --}}
-
     <div id="section-project" class="hidden w-full">
         <div class="section-title">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
@@ -553,56 +518,41 @@
                     <div>
                         <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
                         <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
-
                     </div>
                 </div>
 
-                <div class="section-badge">Project Improvement</div>
-
-                <div class="log-table-container custom-scrollbar overflow-x-auto">
-                    <table class="pdc-custom-table w-full">
-                        <thead>
+                <table class="pdc-custom-table">
+                    <thead>
+                        <tr>
+                            <th class="w-1/2">Judul Project Improvement</th>
+                            <th>File</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($talent->improvementProjects as $proj)
                             <tr>
-                                <th class="w-1/2">Judul Project Improvement</th>
-                                <th>File</th>
-                                <th>Status</th>
+                                <td class="font-bold">{{ $proj->title }}</td>
+                                <td>
+                                    <a href="{{ asset('storage/' . $proj->document_path) }}" class="text-blue-500 underline uppercase font-bold text-xs" target="_blank">Lihat File</a>
+                                </td>
+                                <td>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <div class="w-2 h-2 rounded-full {{ $proj->status === 'Verified' ? 'bg-green-500' : 'bg-orange-500' }}"></div>
+                                        <span class="font-bold">{{ $proj->status === 'Verified' ? 'Approve' : ($proj->status ?: 'Pending') }}</span>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($talent->improvementProjects as $proj)
-                                <tr>
-                                    <td class="font-bold text-slate-700">{{ $proj->title }}</td>
-                                    <td class="text-center">
-                                        <a href="{{ asset('storage/' . $proj->document_path) }}" 
-                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-600 hover:text-white transition-colors" 
-                                           target="_blank">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                            </svg>
-                                            LIHAT FILE
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center justify-center gap-2">
-                                            <div class="w-2 h-2 rounded-full {{ $proj->status === 'Verified' ? 'bg-green-500' : 'bg-orange-500' }}"></div>
-                                            <span class="font-bold {{ $proj->status === 'Verified' ? 'text-green-600' : 'text-orange-600' }}">
-                                                {{ $proj->status === 'Verified' ? 'Approve' : ($proj->status ?: 'Pending') }}
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="3" class="text-gray-400 py-10 text-center font-medium italic">Belum ada project improvement yang diunggah.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @empty
+                            <tr><td colspan="3" class="text-gray-400 py-8">Belum ada project improvement yang diunggah.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         @endforeach
     </div>
 
     {{-- ================================= SECTION: LOGBOOK ================================= --}}
-
     <div id="section-logbook" class="hidden w-full">
         <div class="section-title">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
@@ -629,22 +579,9 @@
                     <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $avatarBg2 }}">
                         {{ $initials2 }}
                     </div>
-
                     <div>
-                        <h4 class="talent-profile-name">{{ $talent->nama }}</h4>
-                        <p class="talent-profile-meta">
-                            {{ optional($talent->position)->position_name ?? 'Officer' }} | 
-                            <span class="italic text-gray-400 font-normal">{{ optional($talent->department)->nama_department ?? '-' }}</span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
-                    <div class="section-badge mb-0">LogBook Detail</div>
-                    <div class="filter-pills">
-                        <div class="pill active" onclick="filterLog(1, this)">Exposure</div>
-                        <div class="pill" onclick="filterLog(2, this)">Mentoring</div>
-                        <div class="pill" onclick="filterLog(3, this)">Learning</div>
+                        <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
+                        <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
                     </div>
                 </div>
 
@@ -812,17 +749,8 @@
         @endforeach
     </div>
 
-    </div> {{-- Close logbook-width --}}
-
     <x-slot name="scripts">
         <script>
-            function handleNavSelect(select) {
-                const val = select.value;
-                const fakeEl = { classList: { add: () => {}, remove: () => {} } };
-                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-                switchSection(val, fakeEl);
-            }
-
             function switchSection(targetId, el) {
                 document.getElementById('section-kompetensi').classList.add('hidden');
                 document.getElementById('section-idp').classList.add('hidden');
@@ -853,10 +781,3 @@
     </div>{{-- /max-w-7xl wrapper --}}
 
 </x-atasan.layout>
-
-
-
-
-
-
-

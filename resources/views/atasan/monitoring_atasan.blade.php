@@ -1,4 +1,4 @@
-<x-atasan.layout title="Monitoring – Individual Development Plan" :user="$user">
+﻿<x-atasan.layout title="Monitoring â€“ Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* Custom Scrollbar */
@@ -73,10 +73,17 @@
             }
 
             /* IDP Donut Charts */
+            .idp-card-container {
+                background: #f8fafc; border-radius: 16px; padding: 24px;
+                border: 1px solid #e2e8f0; margin-bottom: 24px;
+                width: 100%;
+            }
             .donut-container {
-                background: white; border-radius: 16px; padding: 0px;
-                display: flex; justify-content: space-around; align-items: center;
-                gap: 2rem;
+                background: white; border-radius: 16px; padding: 30px;
+                display: flex; justify-content: space-evenly; align-items: center;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+                width: 100%;
+
             }
 
             /* Tables */
@@ -164,8 +171,23 @@
             .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
 
-            /* ══ MOBILE ONLY — does NOT affect desktop ══ */
-            @media (max-width: 767px) {
+            /* â•â• MOBILE ONLY â€” does NOT affect desktop â•â• */
+                        .btn-back {
+                padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px;
+                background: white; color: #475569; font-weight: 500; font-size: 0.875rem;
+                display: flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none;
+            }
+            .btn-back:hover { background: #f8fafc; border-color: #cbd5e1; }
+            .hidden { display: none !important; }
+            .mobile-nav-select { display: none; width: 100%; }
+            @media (max-width: 768px) {
+                .nav-tabs { display: none !important; }
+                .mobile-nav-select { display: block; width: 100%; }
+                #nav-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; }
+                .btn-back { padding: 0 16px; height: 42px; font-size: 0.875rem; border-radius: 10px; }
+                .mobile-nav-select select { height: 42px; padding-top: 0; padding-bottom: 0; font-size: 0.875rem; border-radius: 10px; }
+            }
+@media (max-width: 767px) {
                 .nav-tabs {
                     overflow-x: auto;
                     -webkit-overflow-scrolling: touch;
@@ -241,10 +263,19 @@
         </style>
     </x-slot>
 
-    <div class="logbook-width mx-auto px-4 lg:px-0">
-        {{-- Tab Navigation --}}
-    <div class="flex justify-between items-center mb-10">
-        <div></div>
+
+    <div class="max-w-7xl mx-auto w-full">
+
+    {{-- Tab Navigation --}}
+    <div id="nav-wrapper" class="flex flex-col items-start gap-2 mb-10 lg:flex-row lg:justify-between lg:items-center">
+        <a href="{{ route('atasan.dashboard') }}" class="btn-back">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-[#2e3746]">Kembali</span>
+        </a>
+
+
         <div class="nav-tabs">
             <div class="tab-item active" onclick="switchSection('kompetensi', this)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
@@ -272,8 +303,21 @@
                 Logbook
             </div>
         </div>
-    </div>
 
+        <div class="mobile-nav-select relative">
+            <select onchange="handleNavSelect(this)" id="mobile-nav-dropdown" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-[15px] rounded-xl py-3.5 pl-4 pr-10 font-bold shadow-[0_2px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-[#2e3746] focus:bg-white appearance-none cursor-pointer transition-all">
+                <option value="kompetensi">Kompetensi</option>
+                <option value="idp">IDP</option>
+                <option value="project">Project Improvement</option>
+                <option value="logbook">Logbook</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                <svg class="h-6 w-6 text-[#475569]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+    </div>
     {{-- Main Header --}}
     <div class="text-center mb-12">
         <h2 class="text-2xl font-extrabold text-[#1e293b]">Monitoring Talent</h2>
@@ -281,23 +325,33 @@
     </div>
 
     {{-- ================================= SECTION: KOMPETENSI ================================= --}}
-    <div id="section-kompetensi">
-        @foreach ($talents as $talent)
-            @php
-                $details = optional($talent->assessmentSession)->details;
-                $hasAtasanScored = $details && $details->sum('score_atasan') > 0;
-                $gaps = collect();
-                
-                if ($details && $hasAtasanScored) {
-                    $overrides = $details->filter(function($d) {
-                        return str_starts_with($d->notes ?? '', 'priority_');
-                    })->sortBy(function($d) {
-                        return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
-                    });
-                    if ($overrides->count() > 0) {
-                        $gaps = $overrides->values();
-                    } else {
-                        $gaps = $details->sortBy('gap_score')->take(3)->values();
+
+    <div id="section-kompetensi" class="w-full">
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clip-rule="evenodd" />
+            </svg>
+            TOP 3 GAP Kompetensi
+        </div>
+
+        <div class="talent-gap-grid">
+            @foreach ($talents as $talent)
+                @php
+                    $details = optional($talent->assessmentSession)->details;
+                    $hasAtasanScored = $details && $details->sum('score_atasan') > 0;
+                    $gaps = collect();
+                    
+                    if ($details && $hasAtasanScored) {
+                        $overrides = $details->filter(function($d) {
+                            return str_starts_with($d->notes ?? '', 'priority_');
+                        })->sortBy(function($d) {
+                            return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
+                        });
+                        if ($overrides->count() > 0) {
+                            $gaps = $overrides->values();
+                        } else {
+                            $gaps = $details->sortBy('gap_score')->take(3)->values();
+
                     }
                 }
             @endphp
@@ -411,13 +465,21 @@
     </div>
 
     {{-- ================================= SECTION: IDP ================================= --}}
-    <div id="section-idp" class="hidden">
+    <div id="section-idp" class="hidden w-full">
         @foreach ($talents as $talent)
-            <div class="talent-profile-card">
-                {{-- Profile Header --}}
-                <div class="talent-profile-header">
-                    <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" 
-                         class="talent-profile-photo" alt="{{ $talent->nama }}">
+
+            @php $talentIndex = $loop->iteration; @endphp
+            <div class="idp-card-container">
+                @php
+                    $idpInitials = 'T' . $talentIndex;
+                    $idpColors = ['#334155','#0d9488','#f59e0b','#6366f1','#ec4899'];
+                    $idpBg = $idpColors[($talentIndex - 1) % count($idpColors)];
+                @endphp
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $idpBg }}">
+                        {{ $idpInitials }}
+                    </div>
+
                     <div>
                         <h4 class="talent-profile-name">{{ $talent->nama }}</h4>
                         <p class="talent-profile-meta">
@@ -467,19 +529,31 @@
     </div>
 
     {{-- ================================= SECTION: PROJECT IMPROVEMENT ================================= --}}
-    <div id="section-project" class="hidden">
+
+    <div id="section-project" class="hidden w-full">
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+            </svg>
+            Project Improvement
+        </div>
+
         @foreach ($talents as $talent)
-            <div class="talent-profile-card">
-                {{-- Profile Header --}}
-                <div class="talent-profile-header">
-                    <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" 
-                         class="talent-profile-photo" alt="{{ $talent->nama }}">
+            @php $talentIndex = $loop->iteration; @endphp
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
+                @php
+                    $initials = 'T' . $talentIndex;
+                    $avatarColors = ['#334155','#0d9488','#f59e0b','#6366f1','#ec4899'];
+                    $avatarBg = $avatarColors[($talentIndex - 1) % count($avatarColors)];
+                @endphp
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $avatarBg }}">
+                        {{ $initials }}
+                    </div>
                     <div>
-                        <h4 class="talent-profile-name">{{ $talent->nama }}</h4>
-                        <p class="talent-profile-meta">
-                            {{ optional($talent->position)->position_name ?? 'Officer' }} | 
-                            <span class="italic text-gray-400 font-normal">{{ optional($talent->department)->nama_department ?? '-' }}</span>
-                        </p>
+                        <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
+                        <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
+
                     </div>
                 </div>
 
@@ -528,13 +602,34 @@
     </div>
 
     {{-- ================================= SECTION: LOGBOOK ================================= --}}
-    <div id="section-logbook" class="hidden">
+
+    <div id="section-logbook" class="hidden w-full">
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+            </svg>
+            LogBook
+        </div>
+
+        <div class="filter-pills">
+            <div class="pill active" onclick="filterLog(1, this)">Exposure</div>
+            <div class="pill" onclick="filterLog(2, this)">Mentoring</div>
+            <div class="pill" onclick="filterLog(3, this)">Learning</div>
+        </div>
+
         @foreach ($talents as $talent)
-            <div class="talent-profile-card">
-                {{-- Profile Header --}}
-                <div class="talent-profile-header">
-                    <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" 
-                         class="talent-profile-photo" alt="{{ $talent->nama }}">
+            @php $talentIndex = $loop->iteration; @endphp
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
+                @php
+                    $initials2 = 'T' . $talentIndex;
+                    $avatarColors2 = ['#334155','#0d9488','#f59e0b','#6366f1','#ec4899'];
+                    $avatarBg2 = $avatarColors2[($talentIndex - 1) % count($avatarColors2)];
+                @endphp
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $avatarBg2 }}">
+                        {{ $initials2 }}
+                    </div>
+
                     <div>
                         <h4 class="talent-profile-name">{{ $talent->nama }}</h4>
                         <p class="talent-profile-meta">
@@ -721,6 +816,13 @@
 
     <x-slot name="scripts">
         <script>
+            function handleNavSelect(select) {
+                const val = select.value;
+                const fakeEl = { classList: { add: () => {}, remove: () => {} } };
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                switchSection(val, fakeEl);
+            }
+
             function switchSection(targetId, el) {
                 document.getElementById('section-kompetensi').classList.add('hidden');
                 document.getElementById('section-idp').classList.add('hidden');
@@ -748,4 +850,13 @@
         </script>
     </x-slot>
 
+    </div>{{-- /max-w-7xl wrapper --}}
+
 </x-atasan.layout>
+
+
+
+
+
+
+

@@ -906,8 +906,8 @@
         </div>
 
         @foreach ($talents as $talent)
-            <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 mb-20 shadow-sm">
-                <div class="flex justify-between items-center mb-16">
+            <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
+                <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center gap-4 text-left">
                         <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                         <div>
@@ -941,8 +941,21 @@
                         @forelse($talent->improvementProjects as $proj)
                             <tr>
                                 <td class="font-bold">{{ $proj->title }}</td>
-                                <td>
-                                    <a href="{{ asset('storage/' . $proj->document_path) }}" class="text-blue-500 underline uppercase font-bold text-xs" target="_blank">Lihat File</a>
+                                <td class="text-center">
+                                    @if($proj->document_path)
+                                    @php $projFileName = basename($proj->document_path); @endphp
+                                    <a href="{{ asset('storage/' . $proj->document_path) }}"
+                                       target="_blank"
+                                       title="{{ $projFileName }}"
+                                       class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-semibold text-[11px] hover:bg-teal-600 hover:text-white transition-colors max-w-[160px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                        </svg>
+                                        <span class="truncate">{{ $projFileName }}</span>
+                                    </a>
+                                    @else
+                                    <span class="text-gray-400 text-xs italic">-</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="flex items-center justify-center gap-2">
@@ -976,8 +989,8 @@
         </div>
 
         @foreach ($talents as $talent)
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-20 shadow-sm">
-                <div class="flex items-center gap-4 mb-16">
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
+                <div class="flex items-center gap-4 mb-6">
                     <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                     <div>
                         <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>

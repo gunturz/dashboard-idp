@@ -60,7 +60,9 @@
                             @php
                                 $scoreVal = is_array($data) ? $data['score'] : $data;
                                 $gapVal   = is_array($data) ? $data['gap'] : 0;
+                                $targetScore = $scoreVal - $gapVal;
                                 $pct = ($scoreVal / $maxScore) * 100;
+                                $targetPct = ($targetScore / $maxScore) * 100;
 
                                 // Warna indikator GAP (opsional agar menarik)
                                 $textColor = '#64748b'; // default 0
@@ -70,8 +72,11 @@
                             <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2 md:mb-0">
                                 <span class="text-sm text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate" title="{{ $label }}">{{ $label }}</span>
                                 <div class="flex items-center gap-3 flex-1 w-full">
-                                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                                        <div class="bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488;"></div>
+                                    <div class="flex-1 bg-gray-100 rounded-full h-5 relative overflow-hidden">
+                                        <!-- Target score background -->
+                                        <div class="absolute top-0 left-0 h-full rounded-full bg-gray-300" style="width:{{ $targetPct }}%; z-index: 0;"></div>
+                                        <!-- Actual score bar -->
+                                        <div class="absolute top-0 left-0 bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488; z-index: 10;"></div>
                                     </div>
                                     <span class="text-sm font-black w-10 text-right flex-shrink-0" style="color:{{ $textColor }};">
                                         {{ number_format($gapVal, 1) }}
@@ -211,7 +216,7 @@
                         </div>
                         <a href="{{ route('talent.idp_monitoring', 'exposure') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
-                            Uploud
+                            Upload
                         </a>
                     </div>
 
@@ -240,7 +245,7 @@
                         </div>
                         <a href="{{ route('talent.idp_monitoring', 'mentoring') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
-                            Uploud
+                            Upload
                         </a>
                     </div>
 
@@ -270,7 +275,7 @@
                         </div>
                         <a href="{{ route('talent.idp_monitoring', 'learning') }}"
                             class="mt-4 w-full block text-center bg-amber-400 hover:bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] transition active:scale-95">
-                            Uploud
+                            Upload
                         </a>
                     </div>
 

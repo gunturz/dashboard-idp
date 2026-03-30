@@ -98,6 +98,8 @@ Route::middleware('auth')->group(function () {
     // PDC Admin Routes
     Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class , 'dashboard'])
         ->name('pdc_admin.dashboard');
+    Route::get('/pdc-admin/progress-talent', [\App\Http\Controllers\PDCAdminController::class , 'progressTalent'])
+        ->name('pdc_admin.progress_talent');
     Route::get('/pdc-admin/notifikasi', [\App\Http\Controllers\PDCAdminController::class , 'notifikasi'])
         ->name('pdc_admin.notifikasi');
     Route::post('/pdc-admin/notifikasi/mark-all-read', [\App\Http\Controllers\PDCAdminController::class , 'markAllNotificationsRead'])

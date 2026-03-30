@@ -2,44 +2,53 @@
     <x-slot name="styles">
         <style>
             .company-header {
-                font-size: 1.125rem;
-                font-weight: 800;
-                color: #1e293b;
-                margin-bottom: 12px;
-                margin-top: 32px;
-                padding-left: 4px;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #334155;
+                margin-bottom: 0;
+                padding: 16px;
+                background: #f8fafc;
+                border-bottom: 1px solid #e2e8f0;
+                text-align: center;
             }
 
             .pdc-table {
                 width: 100%;
                 border-collapse: collapse;
                 background: white;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                border: 1px solid #e2e8f0;
             }
 
             .pdc-table th {
-                background: #f8fafc;
+                background: #ffffff;
                 color: #1e293b;
                 font-weight: 700;
                 text-align: center;
-                padding: 14px 16px;
-                border: 1px solid #e2e8f0;
+                padding: 12px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
                 font-size: 0.875rem;
                 text-transform: capitalize;
                 white-space: nowrap;
             }
+            .pdc-table th:last-child {
+                border-right: none;
+            }
 
             .pdc-table td {
                 text-align: center;
-                padding: 16px;
-                border: 1px solid #e2e8f0;
+                padding: 14px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
                 font-size: 0.875rem;
                 color: #334155;
                 vertical-align: middle;
-                white-space: nowrap;
+            }
+            .pdc-table td:last-child {
+                border-right: none;
+            }
+            
+            .pdc-table tr:last-child td {
+                border-bottom: none;
             }
 
             .target-position {
@@ -70,105 +79,209 @@
                 display: block;
             }
 
-            .action-link {
-                color: #64748b;
-                font-size: 0.75rem;
-                text-decoration: none;
-                transition: color 0.2s;
+            .summary-card {
+                background: white;
+                border-radius: 12px;
+                padding: 24px;
+                text-align: center;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 140px;
+                border: 2px solid transparent; /* default */
             }
 
-            .action-link:hover {
-                color: #0d9488;
-                text-decoration: underline;
+            .summary-value {
+                font-size: 2.5rem;
+                font-weight: 800;
+                line-height: 1.2;
+                margin-bottom: 8px;
+            }
+
+            .summary-label {
+                font-size: 0.8rem;
+                color: #64748b;
+                font-weight: 500;
+            }
+            
+            /* Specific Card Colors */
+            .card-teal { border-color: #0d9488; }
+            .card-teal .summary-value { color: #0d9488; }
+            
+            .card-green { border-color: #22c55e; }
+            .card-green .summary-value { color: #22c55e; }
+            
+            .card-red { border-color: #ef4444; }
+            .card-red .summary-value { color: #ef4444; }
+
+            .section-title {
+                font-size: 1.125rem;
+                font-weight: 800;
+                color: #1e293b;
+                margin-bottom: 16px;
+            }
+
+            .role-list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 24px;
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                margin-bottom: 12px;
+                font-weight: 600;
+                color: #334155;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            }
+            
+            .role-list-value {
+                color: #64748b;
+                font-weight: 500;
+            }
+
+            .highlight-container {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                padding: 16px;
+                border: 1px solid #e2e8f0;
+            }
+
+            .company-table-wrapper {
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                overflow: hidden;
+                margin-bottom: 24px;
+            }
+            .company-table-wrapper:last-child {
+                margin-bottom: 0;
             }
         </style>
     </x-slot>
 
+    {{-- Title --}}
     <div class="flex items-center gap-3 mb-8">
-        <div class="p-1.5 bg-gray-100 rounded-md border border-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-        </div>
-        <h2 class="text-2xl font-extrabold text-[#2e3746] animate-title">Progress Talent</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+        </svg>
+        <h2 class="text-2xl font-extrabold text-[#2e3746] animate-title">Dashboard</h2>
     </div>
 
-    @foreach($groupedData as $companyId => $companyData)
-        <div class="mb-10">
-            <h3 class="company-header">{{ $companyData['company']->nama_company ?? 'Unassigned' }}</h3>
-            <div class="overflow-x-auto shadow-sm rounded-xl">
-                <table class="pdc-table">
-                    <thead>
-                        <tr>
-                            <th class="w-[20%]">Posisi yang Dituju</th>
-                            <th class="w-[20%]">Talent</th>
-                            <th class="w-[15%]">Departemen</th>
-                            <th class="w-[15%]">Mentor</th>
-                            <th class="w-[15%]">Atasan</th>
-                            <th class="w-[15%]">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($companyData['positions'] as $positionId => $posData)
-                            @foreach($posData['talents'] as $index => $talent)
+    {{-- Summary Cards --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="summary-card card-teal">
+            <div class="summary-value">{{ $totalUsers ?? 0 }}</div>
+            <div class="summary-label">Total User</div>
+        </div>
+        <div class="summary-card card-teal">
+            <div class="summary-value">{{ $onProgressTalent ?? 0 }}</div>
+            <div class="summary-label">On Progress Talent</div>
+        </div>
+        <div class="summary-card card-green">
+            <div class="summary-value">{{ $pendingFinance ?? 0 }}</div>
+            <div class="summary-label">Pending Finance Validation</div>
+        </div>
+        <div class="summary-card card-red">
+            <div class="summary-value">{{ $pendingBOD ?? 0 }}</div>
+            <div class="summary-label">Pending BOD Decision</div>
+        </div>
+    </div>
+
+    {{-- Recent Highlight Progress --}}
+    <div class="mb-10">
+        <h3 class="section-title">Recent Highlight Progress</h3>
+        
+        <div class="highlight-container">
+            @forelse($groupedData as $companyId => $companyData)
+                <div class="company-table-wrapper">
+                    <h4 class="company-header">{{ $companyData['company']->nama_company ?? 'Unassigned' }}</h4>
+                    <div class="overflow-x-auto">
+                        <table class="pdc-table">
+                            <thead>
                                 <tr>
-                                    @if($index === 0)
-                                        <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                            <span class="target-position">
-                                                {{ $posData['targetPosition']->position_name ?? '-' }}
-                                            </span>
-                                            <span class="target-dept">
-                                                {{ optional($posData['targetPosition']->department ?? null)->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
-                                            </span>
-                                        </td>
-                                    @endif
-                                    <td>
-                                        <span class="talent-name">{{ $talent->nama }}</span>
-                                        <span class="talent-role">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
-                                    </td>
-                                    @if($index === 0)
-                                        <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                            {{ optional($talent->department)->nama_department ?? '-' }}
-                                        </td>
-                                    @endif
-                                    <td>
-                                        @php
-                                            $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                                            if (!empty($mentorIds)) {
-                                                $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
-                                                echo implode('<br>', $mentorNames) ?: '-';
-                                            } else {
-                                                echo optional($talent->mentor)->nama ?? '-';
-                                            }
-                                        @endphp
-                                    </td>
-                                    <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
-                                    @if($index === 0)
-                                        <td rowspan="{{ count($posData['talents']) }}" class="bg-white text-center">
-                                            @if($positionId != 0)
-                                                <a href="{{ route('pdc_admin.detail', ['company_id' => $companyId, 'position_id' => $positionId]) }}" class="inline-flex items-center justify-center gap-1.5 bg-[#2e3746] hover:bg-[#1e2a36] text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-[0_2px_4px_rgba(46,55,70,0.15)] active:scale-95 whitespace-nowrap mx-auto">
-                                                    Lihat Detail
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </a>
-                                            @else
-                                                <span class="text-gray-400">-</span>
-                                            @endif
-                                        </td>
-                                    @endif
+                                    <th class="w-[20%]">Posisi yang Dituju</th>
+                                    <th class="w-[20%]">Talent</th>
+                                    <th class="w-[20%]">Departemen</th>
+                                    <th class="w-[20%]">Mentor</th>
+                                    <th class="w-[20%]">Atasan</th>
                                 </tr>
-                            @endforeach
-                        @endforeach
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                @foreach($companyData['positions'] as $positionId => $posData)
+                                    @foreach($posData['talents'] as $index => $talent)
+                                        <tr>
+                                            @if($index === 0)
+                                                <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
+                                                    <span class="target-position">
+                                                        {{ $posData['targetPosition']->position_name ?? '-' }}
+                                                    </span>
+                                                    <span class="target-dept">
+                                                        {{ optional($posData['targetPosition']->department ?? null)->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
+                                                    </span>
+                                                </td>
+                                            @endif
+                                            <td>
+                                                <span class="talent-name">{{ $talent->nama }}</span>
+                                                <span class="talent-role">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
+                                            </td>
+                                            @if($index === 0)
+                                                <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
+                                                    {{ optional($talent->department)->nama_department ?? '-' }}
+                                                </td>
+                                            @endif
+                                            <td>
+                                                @php
+                                                    $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+                                                    if (!empty($mentorIds)) {
+                                                        $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
+                                                        echo implode('<br>', $mentorNames) ?: '-';
+                                                    } else {
+                                                        echo optional($talent->mentor)->nama ?? '-';
+                                                    }
+                                                @endphp
+                                            </td>
+                                            <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-gray-400">
+                    Belum ada data progress talent.
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    {{-- Total User by Role --}}
+    <div>
+        <h3 class="section-title">Total User by Role</h3>
+        <div class="highlight-container bg-[#f8fafc] border-none shadow-none p-4">
+            <div class="role-list-item">
+                <span>Talent</span>
+                <span class="role-list-value">{{ $roleCounts['Talent'] ?? 0 }} Users</span>
+            </div>
+            <div class="role-list-item">
+                <span>Mentor</span>
+                <span class="role-list-value">{{ $roleCounts['Mentor'] ?? 0 }} Users</span>
+            </div>
+            <div class="role-list-item">
+                <span>Atasan</span>
+                <span class="role-list-value">{{ $roleCounts['Atasan'] ?? 0 }} Users</span>
+            </div>
+            <div class="role-list-item">
+                <span>Finance</span>
+                <span class="role-list-value">{{ $roleCounts['Finance'] ?? 0 }} Users</span>
+            </div>
+            <div class="role-list-item">
+                <span>BOD</span>
+                <span class="role-list-value">{{ $roleCounts['BOD'] ?? 0 }} Users</span>
             </div>
         </div>
-    @endforeach
-
-    @if($groupedData->isEmpty())
-        <div class="bg-white p-12 rounded-xl border border-dashed border-gray-300 text-center">
-            <p class="text-gray-400">Belum ada data talent yang terdaftar.</p>
-        </div>
-    @endif
+    </div>
 </x-pdc_admin.layout>

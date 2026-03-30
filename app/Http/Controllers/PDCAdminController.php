@@ -35,6 +35,21 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
+        // Summary Cards
+        $totalUsers = User::count();
+        $onProgressTalent = PromotionPlan::where('status_promotion', 'In Progress')->count();
+        $pendingFinance = \App\Models\ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
+        $pendingBOD = PromotionPlan::where('status_promotion', 'Pending BOD')->count();
+
+        // Role statistics
+        $roleCounts = [
+            'Talent' => User::whereHas('role', fn($q) => $q->where('role_name', 'talent'))->count(),
+            'Mentor' => User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->count(),
+            'Atasan' => User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->count(),
+            'Finance' => User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))->count(),
+            'BOD' => User::whereHas('role', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_director']))->count(),
+        ];
+
         // Fetch all talents with their relationships
         $talents = User::whereHas('role', function ($q) {
             $q->where('role_name', 'talent');
@@ -59,13 +74,47 @@ class PDCAdminController extends Controller
                 ];
             });
 
-        // Data for Development Plan form
+        // Data for Development Plan form (optional, keeping for legacy compatibility)
         $companies = Company::orderBy('nama_company')->get();
         $positions = Position::whereNotIn('position_name', ['Super Admin'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
-        return view('pdc_admin.dashboard', compact('user', 'groupedData', 'companies', 'positions', 'mentors', 'atasans'));
+        return view('pdc_admin.dashboard', compact(
+            'user', 'groupedData', 'companies', 'positions', 'mentors', 'atasans',
+            'totalUsers', 'onProgressTalent', 'pendingFinance', 'pendingBOD', 'roleCounts'
+        ));
+    }
+
+    public function progressTalent()
+    {
+        $user = auth()->user();
+
+        // Fetch all talents with their relationships
+        $talents = User::whereHas('role', function ($q) {
+            $q->where('role_name', 'talent');
+        })
+            ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
+            ->get();
+
+        // Grouping: Company ID -> Target Position ID -> Talents
+        $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
+            return [
+            'company' => $companyTalents->first()->company,
+            'positions' => $companyTalents->groupBy(function ($item) {
+                    return $item->promotion_plan->target_position_id ?? 0;
+                }
+                )->map(function ($positionTalents) {
+                    return [
+                    'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                    'talents' => $positionTalents,
+                    ];
+                }
+                ),
+                ];
+            });
+
+        return view('pdc_admin.progress-talent', compact('user', 'groupedData'));
     }
 
     /**

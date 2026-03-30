@@ -53,12 +53,21 @@
             z-index: 1;
             flex: 1;
             text-align: center;
-            padding: 10px 16px;
-            font-size: 0.875rem;
+            padding: 8px 12px;
+            font-size: 0.7rem;
             font-weight: 500;
             transition: color 0.3s ease;
             cursor: default;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (min-width: 768px) {
+            .subcategory-btn {
+                padding: 10px 16px;
+                font-size: 0.875rem;
+            }
         }
 
         .subcategory-btn.active {
@@ -105,18 +114,30 @@
             transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .result-modal-header {
-            padding: 2rem 2.5rem 1.25rem;
+            padding: 1.5rem 1.5rem 1rem;
             flex-shrink: 0;
         }
         .result-modal-body {
             flex: 1;
             overflow-y: auto;
-            padding: 0 2.5rem;
+            padding: 0 1.5rem;
         }
         .result-modal-footer {
-            padding: 1.25rem 2.5rem 2rem;
+            padding: 1rem 1.5rem 1.5rem;
             flex-shrink: 0;
             border-top: 1px solid #f1f5f9;
+        }
+
+        @media (min-width: 768px) {
+            .result-modal-header {
+                padding: 2rem 2.5rem 1.25rem;
+            }
+            .result-modal-body {
+                padding: 0 2.5rem;
+            }
+            .result-modal-footer {
+                padding: 1.25rem 2.5rem 2rem;
+            }
         }
         .result-modal-overlay.open .result-modal {
             transform: scale(1) translateY(0);
@@ -136,16 +157,23 @@
         .score-4 { color:#1e293b; }
         .score-5 { color:#1e293b; }
         .edit-row-btn {
-            padding: 5px 16px;
-            border-radius: 8px;
+            padding: 4px 10px;
+            border-radius: 6px;
             border: none;
             color: #fff;
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             font-weight: 600;
             cursor: pointer;
             background: #1e293b;
             transition: all 0.2s;
             transform: translateY(0);
+        }
+        @media (min-width: 768px) {
+            .edit-row-btn {
+                padding: 5px 16px;
+                border-radius: 8px;
+                font-size: 0.78rem;
+            }
         }
         .edit-row-btn:hover {
             background: #0f172a;
@@ -192,19 +220,26 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="px-6 py-3 border-b border-gray-100 flex items-center">
             <!-- Left Logo & Title -->
-            <div class="flex items-center space-x-4">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo" class="h-10 object-contain">
-                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Individual Development Plan</h1>
+            <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo" class="h-8 md:h-10 object-contain flex-shrink-0">
                 
-                <div class="h-8 w-px bg-gray-300 mx-2"></div>
+                <h1 class="text-lg md:text-xl font-bold text-slate-800 tracking-tight flex-shrink-0">
+                    <span class="hidden md:inline">Individual Development Plan</span>
+                    <span class="md:hidden">IDP</span>
+                </h1>
                 
-                <h2 class="text-xl text-gray-500 font-medium">Assessment Atasan - {{ $talent->nama }}</h2>
+                <div class="h-6 md:h-8 w-px bg-gray-300 mx-1 md:mx-2 flex-shrink-0"></div>
+                
+                <h2 class="text-sm md:text-xl text-gray-500 font-medium truncate">
+                    <span class="hidden md:inline">Assessment Atasan - {{ $talent->nama }}</span>
+                    <span class="md:hidden">Assessment - {{ $talent->nama }}</span>
+                </h2>
             </div>
             
             <!-- (Optional) Right side Profile / Home Link -->
-            <div class="ml-auto flex items-center">
+            <div class="ml-auto flex items-center flex-shrink-0">
                 <a href="{{ route('atasan.dashboard') }}"
-                    class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit mr-4">
+                    class="px-2 md:px-4 py-1.5 md:py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.75rem] md:text-[0.875rem] flex items-center gap-1 md:gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit md:mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                         <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                     </svg>
@@ -234,11 +269,11 @@
         @endif
 
         <!-- Top Level Categories: Core / Managerial -->
-        <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-6" style="padding: 0;">
-            <button id="tab-core" class="flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm" style="border-radius: 9999px; margin: 0;">
+        <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-6 p-0">
+            <button id="tab-core" class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0">
                 Core Competencies
             </button>
-            <button id="tab-managerial" class="flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 transition" style="border-radius: 9999px; margin: 0;">
+            <button id="tab-managerial" class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition rounded-full m-0">
                 Managerial Competencies
             </button>
         </div>
@@ -261,25 +296,23 @@
             <!-- Hidden inputs akan ditambahkan via JS -->
             <div id="hidden-inputs-container"></div>
             
-            <div id="card-block" class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
-                <h3 id="level-title" class="text-2xl font-bold text-slate-800 mb-6 tracking-tight">Level 1</h3>
+            <div id="card-block" class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-6 md:p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
+                <h3 id="level-title" class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 tracking-tight">Level 1</h3>
             
-            <p id="level-desc" class="text-gray-600 leading-relaxed mb-12 text-[15px] font-medium text-justify">
+            <p id="level-desc" class="text-gray-600 leading-relaxed mb-8 md:mb-12 text-sm md:text-[15px] font-medium text-justify">
                 Memuat data pertanyaan...
             </p>
 
-                <div class="flex items-center justify-end mt-auto">
+                <div class="flex flex-col sm:flex-row items-center justify-end gap-3 mt-auto">
                     {{-- Action Right: Ragu-ragu + Sudah Kompeten --}}
-                    <div class="flex items-center gap-3">
-                        <button type="button" onclick="handleRaguRagu()"
-                            class="px-8 py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
-                            Ragu - ragu
-                        </button>
-                        <button type="button" onclick="handleSudahKompeten()"
-                            class="px-8 py-2.5 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
-                            Sudah Kompeten
-                        </button>
-                    </div>
+                    <button type="button" onclick="handleRaguRagu()"
+                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
+                        Ragu - ragu
+                    </button>
+                    <button type="button" onclick="handleSudahKompeten()"
+                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
+                        Sudah Kompeten
+                    </button>
                 </div>
             </div>
         </form>
@@ -330,13 +363,13 @@
             <div class="result-modal">
 
                 <!-- Modal Header (fixed, tidak scroll) -->
-                <div class="result-modal-header flex items-center justify-between">
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Hasil Penilaian Kompetensi</h2>
-                        <p class="text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit. Klik <strong>Edit</strong> untuk mengubah nilai.</p>
+                <div class="result-modal-header flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                        <h2 class="text-lg md:text-2xl font-bold text-slate-800 tracking-tight truncate">Hasil Penilaian Kompetensi</h2>
+                        <p class="text-xs md:text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit. Klik <strong>Edit</strong> untuk mengubah nilai.</p>
                     </div>
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#f0fdfa;flex-shrink:0;margin-left:1rem">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-[#f0fdfa] flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
@@ -354,10 +387,10 @@
                         <div class="overflow-hidden rounded-xl border border-gray-100">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="text-xs text-gray-400 uppercase tracking-wider" style="background:#f8fafc">
-                                        <th class="px-5 py-3 text-left font-semibold">Kompetensi</th>
-                                        <th class="py-3 text-center font-semibold" style="width:120px">Level</th>
-                                        <th class="px-5 py-3 text-right font-semibold" style="width:90px">Aksi</th>
+                                    <tr class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider bg-[#f8fafc]">
+                                        <th class="px-3 md:px-5 py-2 md:py-3 text-left font-semibold">Kompetensi</th>
+                                        <th class="py-2 md:py-3 text-center font-semibold w-16 md:w-[120px]">Level</th>
+                                        <th class="px-3 md:px-5 py-2 md:py-3 text-right font-semibold w-16 md:w-[90px]">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="result-table-core" class="divide-y divide-gray-50"></tbody>
@@ -374,10 +407,10 @@
                         <div class="overflow-hidden rounded-xl border border-gray-100">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="text-xs text-gray-400 uppercase tracking-wider" style="background:#f8fafc">
-                                        <th class="px-5 py-3 text-left font-semibold">Kompetensi</th>
-                                        <th class="py-3 text-center font-semibold" style="width:120px">Level</th>
-                                        <th class="px-5 py-3 text-right font-semibold" style="width:90px">Aksi</th>
+                                    <tr class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider bg-[#f8fafc]">
+                                        <th class="px-3 md:px-5 py-2 md:py-3 text-left font-semibold">Kompetensi</th>
+                                        <th class="py-2 md:py-3 text-center font-semibold w-16 md:w-[120px]">Level</th>
+                                        <th class="px-3 md:px-5 py-2 md:py-3 text-right font-semibold w-16 md:w-[90px]">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="result-table-managerial" class="divide-y divide-gray-50"></tbody>
@@ -388,10 +421,10 @@
                 </div>
 
                 <!-- Modal Footer (fixed, tidak scroll) -->
-                <div class="result-modal-footer flex items-center justify-between">
+                <div class="result-modal-footer flex flex-col md:flex-row items-center justify-between gap-4">
                     <p class="text-xs text-gray-400">Total: <strong id="result-total-filled" class="text-slate-700">0</strong> kompetensi dinilai</p>
                     <button onclick="showSubmitPopup()"
-                        class="px-10 py-3 text-white font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5"
+                        class="w-full md:w-auto px-6 md:px-10 py-2.5 md:py-3 text-white font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5 text-sm md:text-base"
                         style="background: linear-gradient(135deg, #0f766e, #0d9488);">
                         ✓ &nbsp;Submit Assessment
                     </button>
@@ -509,14 +542,14 @@
             const managerialTab = document.getElementById('tab-managerial');
             
             if (currentTopLevel === 'core') {
-                coreTab.className = 'flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm';
+                coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm';
                 coreTab.style.borderRadius = '9999px';
-                managerialTab.className = 'flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 transition';
+                managerialTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition';
                 managerialTab.style.borderRadius = '9999px';
             } else {
-                coreTab.className = 'flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 transition';
+                coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition';
                 coreTab.style.borderRadius = '9999px';
-                managerialTab.className = 'flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm';
+                managerialTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm';
                 managerialTab.style.borderRadius = '9999px';
             }
 

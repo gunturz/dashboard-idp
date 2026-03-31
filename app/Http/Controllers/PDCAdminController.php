@@ -47,7 +47,7 @@ class PDCAdminController extends Controller
             'Mentor' => User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->count(),
             'Atasan' => User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->count(),
             'Finance' => User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))->count(),
-            'BOD' => User::whereHas('role', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_director']))->count(),
+            'BOD' => User::whereHas('role', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']))->count(),
         ];
 
         // Fetch all talents with their relationships
@@ -179,11 +179,12 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
         $companies = Company::orderBy('nama_company')->get();
+        $departments = \App\Models\Department::orderBy('nama_department')->get();
         $positions = Position::whereNotIn('position_name', ['Super Admin'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
-        return view('pdc_admin.development-plan', compact('user', 'companies', 'positions', 'mentors', 'atasans'));
+        return view('pdc_admin.development-plan', compact('user', 'companies', 'departments', 'positions', 'mentors', 'atasans'));
     }
 
     public function detail($company_id, $position_id)
@@ -333,14 +334,26 @@ class PDCAdminController extends Controller
     public function mentor()
     {
         $user = auth()->user();
+        $talents = \App\Models\User::whereHas('role', function ($q) {
+            $q->where('role_name', 'talent');
+        })->with(['position', 'department', 'company'])->get();
+
         $mentors = \App\Models\User::whereHas('role', function ($q) {
             $q->where('role_name', 'mentor');
-        })->with(['position', 'department'])->get();
+        })->with(['position', 'department', 'company'])->get();
+
+        $finances = \App\Models\User::whereHas('role', function ($q) {
+            $q->where('role_name', 'finance');
+        })->with(['position', 'department', 'company'])->get();
+
+        $bods = \App\Models\User::whereHas('role', function ($q) {
+            $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']);
+        })->with(['position', 'department', 'company'])->get();
 
         $departments = \App\Models\Department::all();
         $positions = \App\Models\Position::all();
 
-        return view('pdc_admin.mentor', compact('user', 'mentors', 'departments', 'positions'));
+        return view('pdc_admin.mentor', compact('user', 'talents', 'mentors', 'finances', 'bods', 'departments', 'positions'));
     }
 
     public function atasan()

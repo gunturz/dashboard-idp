@@ -84,13 +84,19 @@
         </style>
     </x-slot>
 
-    <div class="flex items-center gap-3 mb-8">
-        <div class="p-1.5 bg-gray-100 rounded-md border border-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
+    <div class="flex justify-between items-center mb-8 animate-title">
+        <div class="flex items-center gap-3">
+            <div class="p-1.5 bg-gray-100 rounded-md border border-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-extrabold text-[#2e3746]">Progress Talent</h2>
         </div>
-        <h2 class="text-2xl font-extrabold text-[#2e3746] animate-title">Progress Talent</h2>
+        
+        <a href="{{ route('pdc_admin.development_plan') }}" class="bg-[#2e3746] text-white px-5 py-2 rounded-lg font-semibold text-sm hover:bg-[#1e2737] transition-colors shadow-sm whitespace-nowrap">
+            Development Plan
+        </a>
     </div>
 
     @foreach($groupedData as $companyId => $companyData)
@@ -146,7 +152,7 @@
                                     @if($index === 0)
                                         <td rowspan="{{ count($posData['talents']) }}" class="bg-white text-center">
                                             @if($positionId != 0)
-                                                <a href="{{ route('pdc_admin.detail', ['company_id' => $companyId, 'position_id' => $positionId]) }}" class="inline-flex items-center justify-center gap-1.5 bg-[#2e3746] hover:bg-[#1e2a36] text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-[0_2px_4px_rgba(46,55,70,0.15)] active:scale-95 whitespace-nowrap mx-auto">
+                                                <a href="{{ route('pdc_admin.detail', ['company_id' => $companyId, 'position_id' => $positionId]) }}" class="inline-flex items-center justify-center gap-1.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-[0_2px_4px_rgba(20,184,166,0.3)] active:scale-95 whitespace-nowrap mx-auto">
                                                     Lihat Detail
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />

@@ -162,4 +162,9 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.logbook');
     Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
         ->name('mentor.logbook.update_status');
+    // Finance Routes
+    Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class, 'dashboard'])
+        ->name('finance.dashboard');
+    Route::get('/finance/permintaan-validasi', [\App\Http\Controllers\FinanceDashboardController::class, 'permintaanValidasi'])
+        ->name('finance.permintaan_validasi');
 });

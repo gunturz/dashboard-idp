@@ -36,7 +36,7 @@ class PDCAdminController extends Controller
         $user = auth()->user();
 
         // Summary Cards
-        $totalUsers = User::count();
+        $totalUsers = User::whereDoesntHave('role', fn($q) => $q->where('role_name', 'admin'))->count();
         $onProgressTalent = PromotionPlan::where('status_promotion', 'In Progress')->count();
         $pendingFinance = \App\Models\ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
         $pendingBOD = PromotionPlan::where('status_promotion', 'Pending BOD')->count();
@@ -76,7 +76,7 @@ class PDCAdminController extends Controller
 
         // Data for Development Plan form (optional, keeping for legacy compatibility)
         $companies = Company::orderBy('nama_company')->get();
-        $positions = Position::whereNotIn('position_name', ['Super Admin'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
@@ -180,7 +180,7 @@ class PDCAdminController extends Controller
         $user = auth()->user();
         $companies = Company::orderBy('nama_company')->get();
         $departments = \App\Models\Department::orderBy('nama_department')->get();
-        $positions = Position::whereNotIn('position_name', ['Super Admin'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 

@@ -152,53 +152,53 @@
 
             /* --- FINANCE MODAL STYLES --- */
             .finance-modal-content {
-                max-width: 700px;
+                max-width: 480px;
                 padding: 0;
             }
             .finance-header {
-                padding: 24px 32px;
+                padding: 16px 24px;
                 border-bottom: 1px solid #f1f5f9;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
             }
             .finance-body {
-                padding: 32px;
+                padding: 20px 24px 16px;
             }
             .finance-alert {
                 background: #f0fdfa;
                 border: 1px solid #5eead4;
                 border-radius: 8px;
-                padding: 16px;
+                padding: 10px 12px;
                 display: flex;
-                gap: 16px;
-                margin-bottom: 32px;
+                gap: 10px;
+                margin-bottom: 16px;
             }
             .finance-alert-text {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
                 color: #0f766e;
-                line-height: 1.5;
+                line-height: 1.4;
             }
             .finance-form-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 24px;
-                margin-bottom: 24px;
+                gap: 10px;
+                margin-bottom: 12px;
             }
             .finance-field-label {
-                font-size: 0.85rem;
+                font-size: 0.7rem;
                 font-weight: 800;
                 color: #2e3746;
                 text-transform: uppercase;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
                 display: block;
             }
             .finance-readonly-box {
-                background: #ffffff;
+                background: #f8fafc;
                 border: 1.5px solid #e2e8f0;
-                border-radius: 12px;
-                padding: 12px 16px;
-                font-size: 0.95rem;
+                border-radius: 8px;
+                padding: 7px 12px;
+                font-size: 0.8rem;
                 font-weight: 700;
                 color: #1e293b;
             }
@@ -206,9 +206,9 @@
                 width: 100%;
                 background: #ffffff;
                 border: 1.5px solid #e2e8f0;
-                border-radius: 12px;
-                padding: 12px 16px;
-                font-size: 0.95rem;
+                border-radius: 8px;
+                padding: 7px 12px;
+                font-size: 0.8rem;
                 outline: none;
                 transition: border-color 0.2s;
             }
@@ -216,21 +216,22 @@
                 border-color: #0d9488;
             }
             .finance-textarea {
-                min-height: 120px;
+                min-height: 80px;
                 resize: none;
             }
             .finance-footer {
-                padding: 0 32px 32px;
+                padding: 0 24px 20px;
                 display: flex;
                 justify-content: flex-end;
-                gap: 16px;
+                gap: 10px;
             }
             .btn-finance-cancel {
                 background: #f5f5f1;
                 color: #1e293b;
                 font-weight: 700;
-                padding: 12px 32px;
-                border-radius: 12px;
+                padding: 9px 20px;
+                border-radius: 8px;
+                font-size: 0.8rem;
                 transition: all 0.2s;
             }
             .btn-finance-cancel:hover {
@@ -240,8 +241,9 @@
                 background: #16c60c;
                 color: white;
                 font-weight: 700;
-                padding: 12px 48px;
-                border-radius: 12px;
+                padding: 9px 28px;
+                border-radius: 8px;
+                font-size: 0.8rem;
                 transition: all 0.2s;
             }
             .btn-finance-submit:hover {
@@ -406,6 +408,91 @@
                 font-size: 0.75rem;
                 font-weight: 700;
             }
+            .btn-pilih-aksi {
+                background: #f59e0b;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                transition: all 0.2s;
+            }
+            .btn-pilih-aksi:hover { background: #d97706; }
+            .btn-sudah-dipilih {
+                background: white;
+                color: #94a3b8;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                border: 1.5px solid #e2e8f0;
+                cursor: not-allowed;
+            }
+
+            /* Update Status Modal */
+            .status-modal-icon {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                background: #fef3c7;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+            }
+            .status-modal-title {
+                font-size: 1.35rem;
+                font-weight: 800;
+                color: #1e293b;
+                text-align: center;
+                margin-bottom: 12px;
+            }
+            .status-modal-desc {
+                font-size: 0.875rem;
+                color: #64748b;
+                text-align: center;
+                line-height: 1.6;
+                margin-bottom: 28px;
+            }
+            .status-modal-desc strong { color: #1e293b; }
+            .status-modal-actions {
+                display: flex;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+            .btn-status-reject {
+                flex: 1;
+                background: #ef4444;
+                color: white;
+                font-weight: 700;
+                padding: 14px;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                transition: all 0.2s;
+            }
+            .btn-status-reject:hover { background: #dc2626; }
+            .btn-status-approve {
+                flex: 1;
+                background: #22c55e;
+                color: white;
+                font-weight: 700;
+                padding: 14px;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                transition: all 0.2s;
+            }
+            .btn-status-approve:hover { background: #16a34a; }
+            .btn-status-batal {
+                width: 100%;
+                background: #f1f5f9;
+                color: #475569;
+                font-weight: 700;
+                padding: 14px;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                transition: all 0.2s;
+            }
+            .btn-status-batal:hover { background: #e2e8f0; }
 
             .filter-pills {
                 display: flex;
@@ -896,6 +983,29 @@
         @endforeach
     </div>
 
+    {{-- Modal Update Status Project Improvement --}}
+    <div id="update-status-modal" class="modal-overlay" onclick="closeStatusModalOnOutside(event)">
+        <div class="modal-content" style="max-width:480px; padding: 40px 36px 32px;" onclick="event.stopPropagation()">
+            <div class="status-modal-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h3 class="status-modal-title">Update Status?</h3>
+            <p class="status-modal-desc">Pilih status untuk Project Improvemen <strong id="status-modal-talent-name">-</strong>.<br>Tindakan ini akan langsung memperbarui sistem pada Talent</p>
+            <div class="status-modal-actions">
+                <button class="btn-status-reject" onclick="submitProjectStatus('Rejected')">Reject</button>
+                <button class="btn-status-approve" onclick="submitProjectStatus('Verified')">Approve</button>
+            </div>
+            <button class="btn-status-batal" onclick="closeUpdateStatusModal()">Batal</button>
+            <form id="update-status-form" method="POST" style="display:none;">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" id="status-input-value">
+            </form>
+        </div>
+    </div>
+
     {{-- ================================= SECTION: PROJECT IMPROVEMENT ================================= --}}
     <div id="section-project" class="hidden">
         <div class="section-title">
@@ -921,12 +1031,21 @@
                         $projTitle = $latestProject ? addslashes($latestProject->title) : '';
                         $projFileUrl = $latestProject ? asset('storage/' . $latestProject->document_path) : '';
                         $isSentToFinance = $latestProject && !empty($latestProject->feedback);
+                        $projStatus = $latestProject ? $latestProject->status : null;
+                        $alreadyActed = in_array($projStatus, ['Verified', 'Rejected']);
                     @endphp
-                    @if($isSentToFinance)
-                        <button class="btn-audit opacity-50 cursor-not-allowed" disabled>Sudah terkirim ke Finance</button>
-                    @else
-                        <button class="btn-audit" onclick="openFinanceModal('{{ $talent->nama }}', '{{ optional($talent->department)->nama_department }}', '{{ optional($talent->promotion_plan->targetPosition)->position_name }}', '{{ optional($talent->company)->nama_company }}', {{ $projId }}, '{{ $projTitle }}', '{{ $projFileUrl }}')">Validasi Finance</button>
-                    @endif
+                    <div class="flex items-center gap-3">
+                        @if($isSentToFinance)
+                            <button class="btn-audit opacity-50 cursor-not-allowed" disabled>Validasi Finance</button>
+                        @else
+                            <button class="btn-audit" onclick="openFinanceModal('{{ $talent->nama }}', '{{ optional($talent->department)->nama_department }}', '{{ optional($talent->promotion_plan->targetPosition)->position_name }}', '{{ optional($talent->company)->nama_company }}', {{ $projId }}, '{{ $projTitle }}', '{{ $projFileUrl }}')">Validasi Finance</button>
+                        @endif
+                        @if($alreadyActed)
+                            <button class="btn-sudah-dipilih" disabled>Sudah Dipilih</button>
+                        @else
+                            <button class="btn-pilih-aksi" onclick="openUpdateStatusModal('{{ $talent->nama }}', {{ $projId }})">Pilih Aksi</button>
+                        @endif
+                    </div>
                 </div>
 
                 <table class="pdc-custom-table">
@@ -1520,14 +1639,46 @@
         window.onclick = function(event) {
             const gapModal = document.getElementById('gap-modal');
             const financeModal = document.getElementById('finance-modal');
+            const statusModal = document.getElementById('update-status-modal');
             if (event.target == gapModal) closeGapModal();
             if (event.target == financeModal) closeFinanceModal();
+            if (event.target == statusModal) closeUpdateStatusModal();
+        }
+
+        // --- UPDATE STATUS MODAL FUNCTIONS ---
+        let currentProjectId = null;
+
+        function openUpdateStatusModal(talentName, projId) {
+            if (!projId || projId === 'null') {
+                alert('Talent ini belum memiliki project improvement.');
+                return;
+            }
+            currentProjectId = projId;
+            document.getElementById('status-modal-talent-name').textContent = talentName;
+            document.getElementById('update-status-modal').classList.add('active');
+        }
+
+        function closeUpdateStatusModal() {
+            document.getElementById('update-status-modal').classList.remove('active');
+            currentProjectId = null;
+        }
+
+        function closeStatusModalOnOutside(event) {
+            if (event.target.id === 'update-status-modal') closeUpdateStatusModal();
+        }
+
+        function submitProjectStatus(status) {
+            if (!currentProjectId) return;
+            const form = document.getElementById('update-status-form');
+            form.action = '/pdc-admin/finance-validation/' + currentProjectId;
+            document.getElementById('status-input-value').value = status;
+            form.submit();
         }
     </script>
 
     {{-- ================================= MODAL: FINANCE VALIDATION ================================= --}}
     <div id="finance-modal" class="modal-overlay">
-        <div class="modal-content finance-modal-content">
+        <div class="modal-content finance-modal-content" style="max-height: 95vh; overflow-y: auto;">
             <div class="finance-header">
                 <div class="flex items-center gap-3">
                     <div class="bg-gray-100 p-2 rounded-lg">
@@ -1577,16 +1728,16 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div class="grid grid-cols-2 gap-3 mb-4">
                         <div>
                             <label class="finance-field-label">Judul Project Improvement</label>
                             <input type="text" id="finance-proj-title" class="finance-input bg-gray-50 border-gray-200 text-gray-500 font-semibold cursor-not-allowed" readonly placeholder="Masukkan judul project...">
                         </div>
                         <div>
                             <label class="finance-field-label">Lampiran</label>
-                            <div class="finance-input bg-gray-50 border-gray-200 flex items-center h-full px-3 py-[9px]">
-                                <a id="finance-proj-file" href="#" target="_blank" class="text-blue-600 hover:underline font-semibold flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                            <div class="finance-input bg-gray-50 border-gray-200 flex items-center" style="padding: 7px 12px;">
+                                <a id="finance-proj-file" href="#" target="_blank" class="text-blue-600 hover:underline font-semibold flex items-center gap-1 text-xs">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
                                         <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 0 0-4.242 0l-7 7a3 3 0 0 0 4.241 4.243h.001l.497-.5a.75.75 0 0 1 1.064 1.057l-.498.501-.002.002a4.5 4.5 0 0 1-6.364-6.364l7-7a4.5 4.5 0 0 1 6.368 6.36l-3.455 3.553A2.625 2.625 0 1 1 9.52 9.52l3.45-3.451a.75.75 0 1 1 1.061 1.06l-3.45 3.451a1.125 1.125 0 0 0 1.587 1.595l3.454-3.553a3 3 0 0 0 0-4.242Z" clip-rule="evenodd" />
                                     </svg>
                                     Lihat File

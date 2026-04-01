@@ -199,7 +199,7 @@
                             @endif
                         </td>
                         <td class="text-left text-xs">{{ $project->feedback ?? '—' }}</td>
-                        <td class="text-left"><span class="text-gray-400 text-xs">—</span></td>
+                        <td class="text-left text-xs">{{ $project->finance_feedback ?? '—' }}</td>
                         <td>
                             @if($project->status === 'Verified')
                                 <span class="status-dot status-approve">Approve</span>

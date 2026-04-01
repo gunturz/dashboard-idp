@@ -1,6 +1,7 @@
 @props([
     'title' => 'PDC Admin – Individual Development Plan',
     'user' => null,
+    'hideSidebar' => false,
 ])
 
 <!DOCTYPE html>
@@ -352,6 +353,7 @@
     </div>
 
     {{-- SIDEBAR --}}
+    @if(!$hideSidebar)
     <div class="sidebar" id="sidebar">
         <div class="toggle-btn" onclick="toggleSidebar()">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform duration-300" id="toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -377,14 +379,7 @@
             <span class="sidebar-label">Progress Talent</span>
         </a>
 
-        <a href="{{ route('pdc_admin.development_plan') }}"
-            class="sidebar-item {{ request()->requestUri === '/pdc-admin/development-plan' || request()->routeIs('pdc_admin.development_plan') ? 'active' : '' }}"
-            title="Development Plan">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            <span class="sidebar-label">Development Plan</span>
-        </a>
+
 
         <a href="{{ route('pdc_admin.kompetensi') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.kompetensi') ? 'active' : '' }}" title="Kompetensi">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -393,19 +388,14 @@
             <span class="sidebar-label">Kompetensi</span>
         </a>
 
-        <a href="{{ route('pdc_admin.mentor') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.mentor') ? 'active' : '' }}" title="Mentor">
+        <a href="{{ route('pdc_admin.mentor') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.mentor') ? 'active' : '' }}" title="User Management">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
-            <span class="sidebar-label">Mentor</span>
+            <span class="sidebar-label">User Management</span>
         </a>
 
-        <a href="{{ route('pdc_admin.atasan') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.atasan') ? 'active' : '' }}" title="Atasan">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="sidebar-label">Atasan</span>
-        </a>
+
 
         <a href="{{ route('pdc_admin.finance_validation') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.finance_validation') ? 'active' : '' }}" title="Finance Validation">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -421,9 +411,10 @@
             <span class="sidebar-label">Export</span>
         </a>
     </div>
+    @endif
 
     {{-- MAIN CONTENT --}}
-    <main id="main-content" class="p-8">
+    <main id="main-content" class="p-8 {{ $hideSidebar ? '!ml-0' : '' }}">
         {{ $slot }}
     </main>
 

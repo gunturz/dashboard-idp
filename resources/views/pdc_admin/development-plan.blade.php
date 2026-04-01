@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Development Plan – PDC Admin" :user="$user">
+<x-pdc_admin.layout title="Development Plan – PDC Admin" :user="$user" :hideSidebar="true">
     <x-slot name="styles">
         <style>
             .field-row {
@@ -130,6 +130,25 @@
             }
             .btn-remove-talent:hover { opacity: 1; }
 
+            .btn-back {
+                padding: 8px 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                background: white;
+                color: #475569;
+                font-weight: 500;
+                font-size: 0.875rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.2s;
+                width: fit-content;
+            }
+            .btn-back:hover {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+            }
+
             /* ── Responsive ── */
             @media (max-width: 1024px) {
                 .field-row {
@@ -153,6 +172,19 @@
             }
         </style>
     </x-slot>
+
+    {{-- MAIN CONTAINER --}}
+    <div class="max-w-4xl mx-auto w-full">
+
+        {{-- Back Link --}}
+        <div class="mb-4 px-2">
+            <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-[#2e3746]">Kembali</span>
+            </a>
+        </div>
 
     {{-- Page Header --}}
     <div class="flex items-center gap-2 mb-8 px-2">
@@ -195,6 +227,19 @@
                         <option value="">— Pilih Perusahaan —</option>
                         @foreach($companies as $c)
                             <option value="{{ $c->id }}" {{ old('company_id') == $c->id ? 'selected' : '' }}>{{ $c->nama_company }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            {{-- ── Departemen ── --}}
+            <div class="field-row">
+                <span class="field-label">Departemen</span>
+                <div class="flex-1">
+                    <select name="department_id" id="dp-department" class="dp-select">
+                        <option value="">— Pilih Departemen —</option>
+                        @foreach($departments as $d)
+                            <option value="{{ $d->id }}" {{ old('department_id') == $d->id ? 'selected' : '' }}>{{ $d->nama_department }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -375,4 +420,5 @@
     </script>
     </x-slot>
 
+    </div>
 </x-pdc_admin.layout>

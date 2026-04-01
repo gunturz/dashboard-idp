@@ -270,10 +270,7 @@
                 <span>Mentor</span>
                 <span class="role-list-value">{{ $roleCounts['Mentor'] ?? 0 }} Users</span>
             </div>
-            <div class="role-list-item">
-                <span>Atasan</span>
-                <span class="role-list-value">{{ $roleCounts['Atasan'] ?? 0 }} Users</span>
-            </div>
+
             <div class="role-list-item">
                 <span>Finance</span>
                 <span class="role-list-value">{{ $roleCounts['Finance'] ?? 0 }} Users</span>

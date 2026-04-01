@@ -43,18 +43,25 @@ class PDCAdminController extends Controller
 
         // Role statistics
         $roleCounts = [
-            'Talent' => User::whereHas('role', fn($q) => $q->where('role_name', 'talent'))->count(),
-            'Mentor' => User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->count(),
-            'Atasan' => User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->count(),
-            'Finance' => User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))->count(),
-            'BOD' => User::whereHas('role', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']))->count(),
+            'Talent' => User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))->count(),
+            'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
+            'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
+            'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
+            'BOD' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']))->count(),
         ];
 
-        // Fetch all talents with their relationships
-        $talents = User::whereHas('role', function ($q) {
+        // Fetch the 3 most recent 'In Progress' talents with their relationships
+        $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
+            ->whereHas('promotion_plan', function ($q) {
+                $q->where('status_promotion', 'In Progress');
+            })
+            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
+            ->select('users.*')
+            ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
+            ->take(3)
             ->get();
 
         // Grouping: Company ID -> Target Position ID -> Talents
@@ -76,6 +83,7 @@ class PDCAdminController extends Controller
 
         // Data for Development Plan form (optional, keeping for legacy compatibility)
         $companies = Company::orderBy('nama_company')->get();
+
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
@@ -91,7 +99,7 @@ class PDCAdminController extends Controller
         $user = auth()->user();
 
         // Fetch all talents with their relationships
-        $talents = User::whereHas('role', function ($q) {
+        $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
@@ -123,7 +131,7 @@ class PDCAdminController extends Controller
     public function getTalentsByCompany(Request $request)
     {
         $companyId = $request->company_id;
-        $talents = User::whereHas('role', fn($q) => $q->where('role_name', 'talent'))
+        $talents = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->where('company_id', $companyId)
             ->orderBy('nama')
             ->get(['id', 'nama']);
@@ -180,9 +188,11 @@ class PDCAdminController extends Controller
         $user = auth()->user();
         $companies = Company::orderBy('nama_company')->get();
         $departments = \App\Models\Department::orderBy('nama_department')->get();
+
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+
 
         return view('pdc_admin.development-plan', compact('user', 'companies', 'departments', 'positions', 'mentors', 'atasans'));
     }
@@ -204,7 +214,11 @@ class PDCAdminController extends Controller
         $standards = PositionTargetCompetence::where('position_id', $position_id)
             ->pluck('target_level', 'competence_id');
 
-        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards'));
+        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+            ->where('company_id', $company_id)
+            ->get();
+
+        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
     }
 
     public function detailTalent($talent_id)
@@ -235,7 +249,11 @@ class PDCAdminController extends Controller
             ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
-        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards'));
+        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+            ->where('company_id', $talent->company_id)
+            ->get();
+
+        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
     }
 
     public function financeValidation()
@@ -334,32 +352,33 @@ class PDCAdminController extends Controller
     public function mentor()
     {
         $user = auth()->user();
-        $talents = \App\Models\User::whereHas('role', function ($q) {
+        $talents = \App\Models\User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })->with(['position', 'department', 'company'])->get();
 
-        $mentors = \App\Models\User::whereHas('role', function ($q) {
+        $mentors = \App\Models\User::whereHas('roles', function ($q) {
             $q->where('role_name', 'mentor');
         })->with(['position', 'department', 'company'])->get();
 
-        $finances = \App\Models\User::whereHas('role', function ($q) {
+        $finances = \App\Models\User::whereHas('roles', function ($q) {
             $q->where('role_name', 'finance');
         })->with(['position', 'department', 'company'])->get();
 
-        $bods = \App\Models\User::whereHas('role', function ($q) {
+        $bods = \App\Models\User::whereHas('roles', function ($q) {
             $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']);
         })->with(['position', 'department', 'company'])->get();
 
         $departments = \App\Models\Department::all();
         $positions = \App\Models\Position::all();
+        $rolesData = \App\Models\Role::all(); // Provide all roles for the assign modal
 
-        return view('pdc_admin.mentor', compact('user', 'talents', 'mentors', 'finances', 'bods', 'departments', 'positions'));
+        return view('pdc_admin.mentor', compact('user', 'talents', 'mentors', 'finances', 'bods', 'departments', 'positions', 'rolesData'));
     }
 
     public function atasan()
     {
         $user = auth()->user();
-        $atasans = \App\Models\User::whereHas('role', function ($q) {
+        $atasans = \App\Models\User::whereHas('roles', function ($q) {
             $q->where('role_name', 'atasan');
         })->with(['position', 'department', 'subordinates' => function ($q) {
             $q->with('position', 'promotion_plan.targetPosition');
@@ -396,39 +415,40 @@ class PDCAdminController extends Controller
         if ($id) {
             // Gunakan DB::table langsung agar tidak kena double-hash dari Eloquent cast 'hashed'
             $data = [
-                'nama'          => $request->nama,
-                'position_id'   => $request->position_id,
+                'nama' => $request->nama,
+                'position_id' => $request->position_id,
                 'department_id' => $request->department_id,
-                'email'         => $request->email,
-                'username'      => $request->username,
-                'updated_at'    => now(),
+                'email' => $request->email,
+                'username' => $request->username,
+                'updated_at' => now(),
             ];
             if ($request->filled('password')) {
-                $data['password']       = \Illuminate\Support\Facades\Hash::make($request->password);
+                $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
                 $data['remember_token'] = $request->password;
             }
             \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update($data);
             return back()->with('success', 'Mentor berhasil diperbarui.');
-        } else {
+        }
+        else {
             $role_id = \App\Models\Role::where('role_name', 'mentor')->first()->id ?? null;
             $userId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
-                'nama'           => $request->nama,
-                'email'          => $request->email,
-                'position_id'    => $request->position_id,
-                'department_id'  => $request->department_id,
-                'company_id'     => auth()->user()->company_id,
-                'role_id'        => $role_id,
-                'username'       => $request->username,
-                'password'       => \Illuminate\Support\Facades\Hash::make($request->password),
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'position_id' => $request->position_id,
+                'department_id' => $request->department_id,
+                'company_id' => auth()->user()->company_id,
+                'role_id' => $role_id,
+                'username' => $request->username,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
                 'remember_token' => $request->password,
-                'created_at'     => now(),
-                'updated_at'     => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
-                    'id_user'    => $userId,
-                    'id_role'    => $role_id,
+                    'id_user' => $userId,
+                    'id_role' => $role_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -462,39 +482,40 @@ class PDCAdminController extends Controller
         if ($id) {
             // Gunakan DB::table langsung agar tidak kena double-hash dari Eloquent cast 'hashed'
             $data = [
-                'nama'          => $request->nama,
-                'position_id'   => $request->position_id,
+                'nama' => $request->nama,
+                'position_id' => $request->position_id,
                 'department_id' => $request->department_id,
-                'email'         => $request->email,
-                'username'      => $request->username,
-                'updated_at'    => now(),
+                'email' => $request->email,
+                'username' => $request->username,
+                'updated_at' => now(),
             ];
             if ($request->filled('password')) {
-                $data['password']       = \Illuminate\Support\Facades\Hash::make($request->password);
+                $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
                 $data['remember_token'] = $request->password;
             }
             \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update($data);
             return back()->with('success', 'Atasan berhasil diperbarui.');
-        } else {
+        }
+        else {
             $role_id = \App\Models\Role::where('role_name', 'atasan')->first()->id ?? null;
             $userId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
-                'nama'           => $request->nama,
-                'email'          => $request->email,
-                'position_id'    => $request->position_id,
-                'department_id'  => $request->department_id,
-                'company_id'     => auth()->user()->company_id,
-                'role_id'        => $role_id,
-                'username'       => $request->username,
-                'password'       => \Illuminate\Support\Facades\Hash::make($request->password),
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'position_id' => $request->position_id,
+                'department_id' => $request->department_id,
+                'company_id' => auth()->user()->company_id,
+                'role_id' => $role_id,
+                'username' => $request->username,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
                 'remember_token' => $request->password,
-                'created_at'     => now(),
-                'updated_at'     => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
-                    'id_user'    => $userId,
-                    'id_role'    => $role_id,
+                    'id_user' => $userId,
+                    'id_role' => $role_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -508,13 +529,15 @@ class PDCAdminController extends Controller
         $request->validate([
             'project_id' => 'required',
             'notes' => 'required|string',
+            'assigned_finance_id' => 'required|exists:users,id',
         ]);
 
         $project = \App\Models\ImprovementProject::find($request->project_id);
         if ($project) {
             $project->update([
                 'status' => 'Pending',
-                'feedback' => $request->notes, // Admin notes saved to feedback
+                'feedback' => $request->notes,
+                'verify_by' => $request->assigned_finance_id,
             ]);
 
             return back()->with('success', 'Permintaan validasi Finance berhasil dikirim.');
@@ -556,5 +579,25 @@ class PDCAdminController extends Controller
             \Illuminate\Support\Facades\Log::error('PDCAdmin updateTopGaps error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
+    }
+
+    public function assignRole(Request $request, $id)
+    {
+        $request->validate([
+            'roles' => 'required|array|min:1',
+            'roles.*' => 'exists:role,id'
+        ]);
+
+        $user = \App\Models\User::findOrFail($id);
+
+        // Sync roles pivot table
+        $user->roles()->sync($request->roles);
+
+        // For backward compatibility, set the primary role_id 
+        if (!empty($request->roles)) {
+            $user->update(['role_id' => $request->roles[0]]);
+        }
+
+        return back()->with('success', 'Manajemen Role berhasil diperbarui.');
     }
 }

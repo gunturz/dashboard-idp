@@ -7,15 +7,27 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/role/select', [\App\Http\Controllers\RoleController::class, 'selectRole'])
+    ->middleware(['auth', 'verified'])->name('role.select');
+Route::post('/role/set', [\App\Http\Controllers\RoleController::class, 'setRole'])
+    ->middleware(['auth', 'verified'])->name('role.set');
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    $roleName = $user->role ? strtolower(trim($user->role->role_name)) : null;
-
-
-    // $roleName = $user->role ? strtolower($user->role->role_name) : null;
     
-    // if ($roleName === 'talent') {
-
+    // Attempt to get active role from session, otherwise fallback to primary role
+    $roleName = session('active_role');
+    if (!$roleName) {
+        $roles = $user->roles;
+        if ($roles && $roles->count() > 1) {
+            return redirect()->route('role.select');
+        } elseif ($roles && $roles->count() === 1) {
+            $roleName = strtolower(trim($roles->first()->role_name));
+            session(['active_role' => $roleName]);
+        } else {
+            $roleName = $user->role ? strtolower(trim($user->role->role_name)) : null;
+        }
+    }
 
     // Redirect based on role instead of trying to show a non-existent dashboard view
     if ($roleName === 'kandidat') {
@@ -31,9 +43,6 @@ Route::get('/dashboard', function () {
         else {
             return redirect()->route('talent.competency');
         }
-
-    // $competency = null; // fallback for other roles
-    // return view('dashboard', compact('user', 'competency'));
     }
     elseif ($roleName === 'atasan') {
         return redirect()->route('atasan.dashboard');

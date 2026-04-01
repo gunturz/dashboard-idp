@@ -16,6 +16,7 @@ class ImprovementProject extends Model
         'verify_by',
         'verify_at',
         'feedback',
+        'finance_feedback',
     ];
 
     protected $casts = [
@@ -24,11 +25,11 @@ class ImprovementProject extends Model
 
     public function talent()
     {
-        return $this->belongsTo(User::class, 'user_id_talent');
+        return $this->belongsTo(User::class , 'user_id_talent');
     }
 
     public function verifier()
     {
-        return $this->belongsTo(User::class, 'verify_by');
+        return $this->belongsTo(User::class , 'verify_by');
     }
 }

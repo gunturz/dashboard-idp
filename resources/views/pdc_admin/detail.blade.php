@@ -1735,9 +1735,9 @@
                         </div>
                         <div>
                             <label class="finance-field-label">Lampiran</label>
-                            <div class="finance-input bg-gray-50 border-gray-200 flex items-center" style="padding: 7px 12px;">
-                                <a id="finance-proj-file" href="#" target="_blank" class="text-blue-600 hover:underline font-semibold flex items-center gap-1 text-xs">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
+                            <div class="finance-input bg-gray-50 border-gray-200 flex items-center px-3 py-[9px]">
+                                <a id="finance-proj-file" href="#" target="_blank" class="text-blue-600 hover:underline font-semibold flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                         <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 0 0-4.242 0l-7 7a3 3 0 0 0 4.241 4.243h.001l.497-.5a.75.75 0 0 1 1.064 1.057l-.498.501-.002.002a4.5 4.5 0 0 1-6.364-6.364l7-7a4.5 4.5 0 0 1 6.368 6.36l-3.455 3.553A2.625 2.625 0 1 1 9.52 9.52l3.45-3.451a.75.75 0 1 1 1.061 1.06l-3.45 3.451a1.125 1.125 0 0 0 1.587 1.595l3.454-3.553a3 3 0 0 0 0-4.242Z" clip-rule="evenodd" />
                                     </svg>
                                     Lihat File
@@ -1746,9 +1746,25 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="finance-field-label">Catatan</label>
-                        <textarea name="notes" required class="finance-input finance-textarea" placeholder="cth: Pada slide ke 17 apakah sudah memenuhi standar kriteria untuk melakukan bisnis. . ."></textarea>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col h-full">
+                            <label class="text-[#2e3746] font-extrabold text-sm md:text-base mb-3 tracking-wide uppercase">Catatan</label>
+                            <textarea name="notes" required class="w-full rounded-xl border border-gray-300 px-4 py-3 text-[13px] text-gray-500 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none flex-grow min-h-[130px]" placeholder="cth: Pada slide ke 17 apakah sudah memenuhi standar kriteria untuk melakukan bisnis. . ."></textarea>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-[#2e3746] font-extrabold text-sm md:text-base mb-3 tracking-wide uppercase">Kirim Kepada</label>
+                            <div class="relative">
+                                <select name="assigned_finance_id" required class="w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-[13px] text-gray-500 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 pr-10">
+                                    <option value="" disabled selected>Pilih email finance yang terdaftar</option>
+                                    @foreach($financeUsers as $finUser)
+                                        <option value="{{ $finUser->id }}" class="text-gray-700">{{ $finUser->email }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-teal-600">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

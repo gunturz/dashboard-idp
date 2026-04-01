@@ -57,43 +57,20 @@ class AuthenticatedSessionController extends Controller
             session()->forget('register_non_kandidat');
         }
 
-        $role = strtolower(Auth::user()->role->role_name ?? '');
+        $roles = Auth::user()->roles;
+        if ($roles && $roles->count() > 1) {
+            return redirect()->route('role.select');
+        }
+        
+        if ($roles && $roles->count() === 1) {
+            $role = strtolower($roles->first()->role_name);
+            session(['active_role' => $role]);
+        } else {
+            $role = strtolower(Auth::user()->role->role_name ?? '');
+            session(['active_role' => $role]);
+        }
 
-        // Simple redirect based on role
-        if ($role === 'kandidat') {
-            return redirect()->route('kandidat.dashboard');
-        }
-        elseif ($role === 'talent') {
-            // Check if talent has already completed an assessment
-            $hasAssessed = \Illuminate\Support\Facades\DB::table('assessment_session')
-                ->where('user_id_talent', Auth::id())
-                ->exists();
-
-            if ($hasAssessed) {
-                return redirect()->route('talent.dashboard');
-            }
-            else {
-                return redirect()->route('talent.competency');
-            }
-        }
-        elseif ($role === 'atasan') {
-            return redirect()->route('atasan.dashboard');
-        }
-        elseif ($role === 'mentor') {
-            return redirect()->route('mentor.dashboard');
-        }
-        elseif ($role === 'finance') {
-            return redirect()->route('finance.dashboard');
-        }
-        elseif ($role === 'admin' || $role === 'pdc admin' || $role === 'pdc_admin') {
-            return redirect()->route('pdc_admin.dashboard');
-        }
-        elseif ($role === 'bo_director' || $role === 'bod' || $role === 'board_of_director') {
-            return redirect()->route('bo_director.dashboard');
-        }
-        else {
-            return redirect()->route('dashboard'); // fallback route
-        }
+        return redirect()->intended(route('dashboard'));
     }
 
     /**

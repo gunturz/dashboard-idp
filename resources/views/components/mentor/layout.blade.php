@@ -240,6 +240,14 @@
                             </a>
                         </li>
                         <li class="border-t border-gray-100 mt-2 pt-2">
+                            @if(Auth::user() && Auth::user()->roles->count() > 1)
+                                <a href="{{ route('role.select') }}" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors font-medium mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                    </svg>
+                                    Ganti Role
+                                </a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}" class="w-full">
                                 @csrf
                                 <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors font-medium">
@@ -293,6 +301,14 @@
                             </a>
                         </li>
                         <li class="border-t border-gray-100">
+                            @if(Auth::user() && Auth::user()->roles->count() > 1)
+                                <a href="{{ route('role.select') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#005ba1] hover:bg-gray-50 transition-colors border-b border-gray-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#005ba1]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                    </svg>
+                                    Ganti Role
+                                </a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">

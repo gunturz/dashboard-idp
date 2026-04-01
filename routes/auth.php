@@ -165,8 +165,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
         ->name('mentor.logbook.update_status');
     // Finance Routes
-    Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class, 'dashboard'])
+    Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])
         ->name('finance.dashboard');
-    Route::get('/finance/permintaan-validasi', [\App\Http\Controllers\FinanceDashboardController::class, 'permintaanValidasi'])
+    Route::get('/finance/riwayat', [\App\Http\Controllers\FinanceDashboardController::class , 'riwayat'])
+        ->name('finance.riwayat');
+    Route::get('/finance/permintaan-validasi', [\App\Http\Controllers\FinanceDashboardController::class , 'permintaanValidasi'])
         ->name('finance.permintaan_validasi');
+    Route::patch('/finance/permintaan-validasi/{id}', [\App\Http\Controllers\FinanceDashboardController::class , 'updateFinanceValidation'])
+        ->name('finance.permintaan_validasi.update');
 });

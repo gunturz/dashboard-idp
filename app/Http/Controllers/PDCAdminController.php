@@ -211,7 +211,11 @@ class PDCAdminController extends Controller
         $standards = PositionTargetCompetence::where('position_id', $position_id)
             ->pluck('target_level', 'competence_id');
 
-        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards'));
+        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+            ->where('company_id', $company_id)
+            ->get();
+
+        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
     }
 
     public function detailTalent($talent_id)
@@ -242,7 +246,11 @@ class PDCAdminController extends Controller
             ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
-        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards'));
+        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+            ->where('company_id', $talent->company_id)
+            ->get();
+
+        return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
     }
 
     public function financeValidation()
@@ -404,39 +412,40 @@ class PDCAdminController extends Controller
         if ($id) {
             // Gunakan DB::table langsung agar tidak kena double-hash dari Eloquent cast 'hashed'
             $data = [
-                'nama'          => $request->nama,
-                'position_id'   => $request->position_id,
+                'nama' => $request->nama,
+                'position_id' => $request->position_id,
                 'department_id' => $request->department_id,
-                'email'         => $request->email,
-                'username'      => $request->username,
-                'updated_at'    => now(),
+                'email' => $request->email,
+                'username' => $request->username,
+                'updated_at' => now(),
             ];
             if ($request->filled('password')) {
-                $data['password']       = \Illuminate\Support\Facades\Hash::make($request->password);
+                $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
                 $data['remember_token'] = $request->password;
             }
             \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update($data);
             return back()->with('success', 'Mentor berhasil diperbarui.');
-        } else {
+        }
+        else {
             $role_id = \App\Models\Role::where('role_name', 'mentor')->first()->id ?? null;
             $userId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
-                'nama'           => $request->nama,
-                'email'          => $request->email,
-                'position_id'    => $request->position_id,
-                'department_id'  => $request->department_id,
-                'company_id'     => auth()->user()->company_id,
-                'role_id'        => $role_id,
-                'username'       => $request->username,
-                'password'       => \Illuminate\Support\Facades\Hash::make($request->password),
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'position_id' => $request->position_id,
+                'department_id' => $request->department_id,
+                'company_id' => auth()->user()->company_id,
+                'role_id' => $role_id,
+                'username' => $request->username,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
                 'remember_token' => $request->password,
-                'created_at'     => now(),
-                'updated_at'     => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
-                    'id_user'    => $userId,
-                    'id_role'    => $role_id,
+                    'id_user' => $userId,
+                    'id_role' => $role_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -470,39 +479,40 @@ class PDCAdminController extends Controller
         if ($id) {
             // Gunakan DB::table langsung agar tidak kena double-hash dari Eloquent cast 'hashed'
             $data = [
-                'nama'          => $request->nama,
-                'position_id'   => $request->position_id,
+                'nama' => $request->nama,
+                'position_id' => $request->position_id,
                 'department_id' => $request->department_id,
-                'email'         => $request->email,
-                'username'      => $request->username,
-                'updated_at'    => now(),
+                'email' => $request->email,
+                'username' => $request->username,
+                'updated_at' => now(),
             ];
             if ($request->filled('password')) {
-                $data['password']       = \Illuminate\Support\Facades\Hash::make($request->password);
+                $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
                 $data['remember_token'] = $request->password;
             }
             \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update($data);
             return back()->with('success', 'Atasan berhasil diperbarui.');
-        } else {
+        }
+        else {
             $role_id = \App\Models\Role::where('role_name', 'atasan')->first()->id ?? null;
             $userId = \Illuminate\Support\Facades\DB::table('users')->insertGetId([
-                'nama'           => $request->nama,
-                'email'          => $request->email,
-                'position_id'    => $request->position_id,
-                'department_id'  => $request->department_id,
-                'company_id'     => auth()->user()->company_id,
-                'role_id'        => $role_id,
-                'username'       => $request->username,
-                'password'       => \Illuminate\Support\Facades\Hash::make($request->password),
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'position_id' => $request->position_id,
+                'department_id' => $request->department_id,
+                'company_id' => auth()->user()->company_id,
+                'role_id' => $role_id,
+                'username' => $request->username,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
                 'remember_token' => $request->password,
-                'created_at'     => now(),
-                'updated_at'     => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             if ($role_id) {
                 \Illuminate\Support\Facades\DB::table('user_role')->insert([
-                    'id_user'    => $userId,
-                    'id_role'    => $role_id,
+                    'id_user' => $userId,
+                    'id_role' => $role_id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -516,13 +526,15 @@ class PDCAdminController extends Controller
         $request->validate([
             'project_id' => 'required',
             'notes' => 'required|string',
+            'assigned_finance_id' => 'required|exists:users,id',
         ]);
 
         $project = \App\Models\ImprovementProject::find($request->project_id);
         if ($project) {
             $project->update([
                 'status' => 'Pending',
-                'feedback' => $request->notes, // Admin notes saved to feedback
+                'feedback' => $request->notes,
+                'verify_by' => $request->assigned_finance_id,
             ]);
 
             return back()->with('success', 'Permintaan validasi Finance berhasil dikirim.');

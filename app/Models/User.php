@@ -56,6 +56,20 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class , 'role_id');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role', 'id_user', 'id_role');
+    }
+
+    public function hasRole(string|array $roles): bool
+    {
+        if (is_string($roles)) {
+            $roles = [$roles];
+        }
+
+        return $this->roles->whereIn('role_name', $roles)->isNotEmpty();
+    }
+
     public function promotion_plan()
     {
         return $this->hasOne(PromotionPlan::class , 'user_id_talent');

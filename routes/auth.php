@@ -128,6 +128,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.target_score.update');
     Route::get('/pdc-admin/mentor', [\App\Http\Controllers\PDCAdminController::class , 'mentor'])
         ->name('pdc_admin.mentor');
+    Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class , 'assignRole'])
+        ->name('pdc_admin.assign_role');
     Route::post('/pdc-admin/mentor/store', [\App\Http\Controllers\PDCAdminController::class , 'storeMentor'])
         ->name('pdc_admin.mentor.store');
     Route::get('/pdc-admin/atasan', [\App\Http\Controllers\PDCAdminController::class , 'atasan'])

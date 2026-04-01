@@ -126,6 +126,7 @@
             }
         }
 
+
         /* ── Mobile Menu ── */
         .mobile-menu {
             display: none;
@@ -188,6 +189,7 @@
 <body class="bg-[#f8fafc] min-h-screen pt-[60px] lg:pt-[80px]">
 
     <div class="navbar-outer">
+
         <!-- Button toggle for mobile -->
         <button class="nav-icon-btn mr-3 flex-shrink-0 xl:hidden" onclick="toggleMobileMenu()" aria-label="Menu">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -195,17 +197,8 @@
             </svg>
         </button>
 
-        <a href="{{ route('finance.dashboard') }}" class="flex items-center gap-2 lg:gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-1.5 lg:p-2 rounded-[8px] lg:rounded-[10px] shadow-sm flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14 hidden sm:flex">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
-            </div>
-            <h1 class="text-white text-base lg:text-xl font-bold tracking-wide whitespace-nowrap desktop-logo-text sm:block hidden">
-                Individual Development Plan
-            </h1>
-            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden block truncate max-w-[150px]">
-                IDP Finance
-            </h1>
-        </a>
+
+
 
         {{-- Desktop Navigation Links & Icons --}}
         <div class="flex items-center ml-auto lg:pr-6 pr-0 space-x-6 lg:space-x-8">
@@ -229,6 +222,7 @@
             <div class="flex items-center space-x-3">
             {{-- Notification --}}
             <div class="relative" id="bell-wrapper">
+
                 <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
@@ -244,8 +238,8 @@
                 </div>
             </div>
 
-            {{-- Profile --}}
-            <div class="relative" id="profile-wrapper">
+            {{-- ═══ Desktop: Profile (hidden on mobile) ═══ --}}
+            <div class="relative hidden lg:block" id="profile-wrapper">
                 <button class="nav-icon-btn" aria-label="Profil" id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
@@ -304,7 +298,7 @@
         }
 
         document.addEventListener('click', function(e) {
-            const wrappers = ['bell-wrapper', 'profile-wrapper'];
+            const wrappers = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'];
             const clickedInside = wrappers.some(id => {
                 const el = document.getElementById(id);
                 return el && el.contains(e.target);
@@ -314,10 +308,12 @@
             }
         });
 
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('open');
         }
+
     </script>
     {{ $scripts ?? '' }}
 </body>

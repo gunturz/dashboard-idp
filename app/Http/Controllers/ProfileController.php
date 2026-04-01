@@ -26,27 +26,35 @@ class ProfileController extends Controller
 
         if (in_array($roleName, ['talent', 'kandidat'])) {
             $view = 'talent.profile';
-        } elseif ($roleName === 'mentor') {
+        }
+        elseif ($roleName === 'mentor') {
             $view = 'mentor.profile';
-        } elseif ($roleName === 'atasan') {
+        }
+        elseif ($roleName === 'atasan') {
             $view = 'atasan.profile';
-        } elseif (in_array($roleName, ['admin', 'pdc admin', 'pdc_admin'])) {
+        }
+        elseif (in_array($roleName, ['admin', 'pdc admin', 'pdc_admin'])) {
             $view = 'pdc_admin.profile';
-        } else {
+        }
+        elseif ($roleName === 'finance') {
+            $view = 'finance.profile';
+        }
+        else {
             $view = 'profile.dashboard'; // fallback
         }
 
         return view($view, [
-            'user'          => $user,
+            'user' => $user,
             'notifications' => $this->getNotifications(),
-            'companies'     => Company::all(),
-            'departments'   => Department::all(),
-            'roles'         => Role::all(),
-            'positions'     => Position::all(),
+            'companies' => Company::all(),
+            'departments' => Department::all(),
+            'roles' => Role::all(),
+            'positions' => Position::all(),
         ]);
     }
 
-    private function getNotifications() {
+    private function getNotifications()
+    {
         return collect([
             [
                 'id' => 1,
@@ -78,7 +86,8 @@ class ProfileController extends Controller
         // Handle password hashing
         if (!empty($data['password'])) {
             $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
-        } else {
+        }
+        else {
             unset($data['password']); // Jangan update password jika kosong
         }
 
@@ -89,7 +98,8 @@ class ProfileController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
             }
             $data['foto'] = $request->file('foto')->store('foto-profil', 'public');
-        } elseif ($request->boolean('should_delete_foto')) {
+        }
+        elseif ($request->boolean('should_delete_foto')) {
             // Hapus foto jika diminta (tanpa upload baru)
             if ($user->foto) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);

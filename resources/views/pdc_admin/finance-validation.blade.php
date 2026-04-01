@@ -172,8 +172,8 @@
         <table class="fv-table">
             <thead>
                 <tr>
-                    <th>Talent</th>
-                    <th>Judul Project Improvement</th>
+                    <th style="width: 15%;">Talent</th>
+                    <th style="width: 15%;">Judul Project Improvement</th>
                     <th>File</th>
                     <th>Catatan</th>
                     <th>Feedback dari Finance</th>
@@ -184,7 +184,11 @@
             <tbody>
                 @forelse($projects as $project)
                     <tr>
-                        <td>{{ $project->talent->nama ?? '—' }}</td>
+                        <td class="px-6 py-4 border-r border-gray-300 text-center">
+                            <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
+                            <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->position->position_name ?? '-' }} &rarr; {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}</p>
+                            <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->department->nama_department ?? '-' }}</p>
+                        </td>
                         <td class="text-left">{{ $project->title }}</td>
                         <td>
                             @if($project->document_path)

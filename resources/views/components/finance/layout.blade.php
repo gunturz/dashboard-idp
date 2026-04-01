@@ -207,17 +207,26 @@
             </h1>
         </a>
 
-        {{-- Desktop Navigation Links --}}
-        <div class="hidden xl:flex items-center ml-12 space-x-8">
-            <a href="{{ route('finance.dashboard') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('finance.dashboard') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
-                Dashboard
-            </a>
-            <a href="{{ route('finance.permintaan_validasi') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('finance.permintaan_validasi') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
-                Validasi
-            </a>
-        </div>
+        {{-- Desktop Navigation Links & Icons --}}
+        <div class="flex items-center ml-auto lg:pr-6 pr-0 space-x-6 lg:space-x-8">
+            
+            {{-- Nav Links --}}
+            <div class="hidden xl:flex items-center space-x-8 mr-4">
+                <a href="{{ route('finance.dashboard') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('finance.dashboard') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
+                    Dashboard
+                </a>
+                <a href="{{ route('finance.permintaan_validasi') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('finance.permintaan_validasi') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
+                    Validasi
+                </a>
+                <a href="{{ route('finance.riwayat') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('finance.riwayat') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
+                    Riwayat
+                </a>
+            </div>
 
-        <div class="flex items-center space-x-3 ml-auto lg:pr-6 pr-0">
+            {{-- Divider --}}
+            <div class="hidden xl:block w-px h-8 bg-gray-500 opacity-60"></div>
+
+            <div class="flex items-center space-x-3">
             {{-- Notification --}}
             <div class="relative" id="bell-wrapper">
                 <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
@@ -271,12 +280,14 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 
     {{-- Mobile Nav Menu --}}
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ route('finance.dashboard') }}" class="py-3 text-white font-medium border-b border-gray-600 {{ request()->routeIs('finance.dashboard') ? 'text-white font-bold' : 'text-gray-300' }}">Dashboard</a>
         <a href="{{ route('finance.permintaan_validasi') }}" class="py-3 text-white font-medium border-b border-gray-600 {{ request()->routeIs('finance.permintaan_validasi') ? 'text-white font-bold' : 'text-gray-300' }}">Validasi</a>
+        <a href="{{ route('finance.riwayat') }}" class="py-3 text-white font-medium border-b border-gray-600 {{ request()->routeIs('finance.riwayat') ? 'text-white font-bold' : 'text-gray-300' }}">Riwayat</a>
     </div>
 
     {{-- MAIN CONTENT --}}

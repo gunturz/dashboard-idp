@@ -81,6 +81,21 @@
             }
             .btn-simpan:hover { background: #16a34a; transform: translateY(-1px); }
 
+            .btn-batal {
+                background: #ef4444;
+                color: white;
+                font-weight: 700;
+                font-size: 0.875rem;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 40px;
+                cursor: pointer;
+                transition: all .2s;
+                text-align: center;
+                text-decoration: none;
+            }
+            .btn-batal:hover { background: #dc2626; transform: translateY(-1px); }
+
             .section-divider {
                 border: none;
                 border-top: 2px solid #e8ecf0;
@@ -174,23 +189,10 @@
     </x-slot>
 
     {{-- MAIN CONTAINER --}}
-    <div class="max-w-4xl mx-auto w-full">
-
-        {{-- Back Link --}}
-        <div class="mb-4 px-2">
-            <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-back">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                </svg>
-                <span class="text-[#2e3746]">Kembali</span>
-            </a>
-        </div>
+    <div class="max-w-4xl mx-auto w-full">  
 
     {{-- Page Header --}}
     <div class="flex items-center gap-2 mb-8 px-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-        </svg>
         <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Development Plan</h2>
     </div>
 
@@ -286,7 +288,10 @@
                 </div>
             </div>
 
-            <div class="flex justify-end pb-10">
+            <div class="flex justify-end gap-3 pb-10">
+                <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-batal inline-flex items-center justify-center">
+                    Batal
+                </a>
                 <button type="submit" class="btn-simpan">
                     Simpan
                 </button>

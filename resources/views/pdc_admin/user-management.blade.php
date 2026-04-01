@@ -32,7 +32,7 @@
     </div>
 
     {{-- Summary Cards --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-6 mb-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-6 mb-8">
         <div class="bg-white border-2 border-[#14b8a6] rounded-xl p-5 flex flex-col items-center justify-center shadow-sm">
             <span class="text-3xl font-bold text-[#14b8a6] leading-none mb-1">{{ $talents->count() }}</span>
             <span class="text-xs font-semibold text-gray-500 uppercase mt-1">Talent</span>
@@ -40,6 +40,10 @@
         <div class="bg-white border-2 border-[#14b8a6] rounded-xl p-5 flex flex-col items-center justify-center shadow-sm">
             <span class="text-3xl font-bold text-[#14b8a6] leading-none mb-1">{{ $mentors->count() }}</span>
             <span class="text-xs font-semibold text-gray-500 uppercase mt-1">Mentor</span>
+        </div>
+        <div class="bg-white border-2 border-[#14b8a6] rounded-xl p-5 flex flex-col items-center justify-center shadow-sm">
+            <span class="text-3xl font-bold text-[#14b8a6] leading-none mb-1">{{ $atasans->count() }}</span>
+            <span class="text-xs font-semibold text-gray-500 uppercase mt-1">Atasan</span>
         </div>
         <div class="bg-white border-2 border-[#14b8a6] rounded-xl p-5 flex flex-col items-center justify-center shadow-sm">
             <span class="text-3xl font-bold text-[#14b8a6] leading-none mb-1">{{ $finances->count() }}</span>
@@ -68,6 +72,7 @@
         $userGroups = [
             ['title' => 'Talent', 'users' => $talents, 'showPosisi' => true],
             ['title' => 'Mentor', 'users' => $mentors, 'showPosisi' => true],
+            ['title' => 'Atasan', 'users' => $atasans, 'showPosisi' => true],
             ['title' => 'Finance', 'users' => $finances, 'showPosisi' => false],
             ['title' => 'BOD', 'users' => $bods, 'showPosisi' => false],
         ];

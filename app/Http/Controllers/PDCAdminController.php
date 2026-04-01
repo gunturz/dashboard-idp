@@ -368,11 +368,15 @@ class PDCAdminController extends Controller
             $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']);
         })->with(['position', 'department', 'company'])->get();
 
+        $atasans = \App\Models\User::whereHas('roles', function ($q) {
+            $q->where('role_name', 'atasan');
+        })->with(['position', 'department', 'company'])->get();
+
         $departments = \App\Models\Department::all();
         $positions = \App\Models\Position::all();
         $rolesData = \App\Models\Role::all(); // Provide all roles for the assign modal
 
-        return view('pdc_admin.mentor', compact('user', 'talents', 'mentors', 'finances', 'bods', 'departments', 'positions', 'rolesData'));
+        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'bods', 'atasans', 'departments', 'positions', 'rolesData'));
     }
 
     public function atasan()

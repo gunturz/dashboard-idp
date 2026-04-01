@@ -246,7 +246,7 @@
             <h2 class="text-xl font-bold text-[#3d4f62] mb-4">Learning</h2>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-sm text-left">
+                    <table class="w-full min-w-[1910px] text-sm text-left">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Sumber</th>

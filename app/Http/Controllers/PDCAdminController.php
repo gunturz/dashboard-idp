@@ -586,6 +586,43 @@ class PDCAdminController extends Controller
         }
     }
 
+    public function export()
+    {
+        $user = auth()->user();
+
+        // Fetch all talents with promotion plans
+        $talents = User::whereHas('roles', function ($q) {
+            $q->where('role_name', 'talent');
+        })
+            ->whereHas('promotion_plan')
+            ->with(['company', 'department', 'position', 'promotion_plan.targetPosition'])
+            ->get();
+
+        // Group by target_position_id + company_id
+        $groupedData = collect();
+        foreach ($talents as $talent) {
+            $pp = $talent->promotion_plan;
+            if (!$pp) continue;
+
+            $key = ($pp->target_position_id ?? 0) . '_' . ($talent->company_id ?? 0);
+
+            if (!$groupedData->has($key)) {
+                $groupedData[$key] = [
+                    'targetPosition' => $pp->targetPosition,
+                    'company' => $talent->company,
+                    'talents' => collect(),
+                ];
+            }
+
+            $groupedData[$key]['talents']->push($talent);
+        }
+
+        $companies = Company::orderBy('nama_company')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+
+        return view('pdc_admin.export', compact('user', 'groupedData', 'companies', 'positions'));
+    }
+
     public function assignRole(Request $request, $id)
     {
         $request->validate([

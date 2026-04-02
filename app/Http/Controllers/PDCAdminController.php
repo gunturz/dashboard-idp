@@ -8,6 +8,9 @@ use App\Models\Position;
 use App\Models\Competence;
 use App\Models\PositionTargetCompetence;
 use App\Models\PromotionPlan;
+use App\Models\ImprovementProject;
+use App\Models\Department;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +48,7 @@ class PDCAdminController extends Controller
             ->distinct()
             ->get()
             ->count();
-        $pendingFinance = \App\Models\ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
+        $pendingFinance = ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
         $pendingBOD = PromotionPlan::where('status_promotion', 'Pending BOD')->count();
 
         // Role statistics
@@ -302,14 +305,14 @@ class PDCAdminController extends Controller
         $user = auth()->user();
 
         // Core: IDs 1-5, Managerial: IDs 6-10 (based on seeder order)
-        $coreCompetencies = \App\Models\Competence::with('questions')->whereBetween('id', [1, 5])->get();
-        $managerialCompetencies = \App\Models\Competence::with('questions')->where('id', '>', 5)->get();
-        $allCompetencies = \App\Models\Competence::with('questions')->get();
+        $coreCompetencies = Competence::with('questions')->whereBetween('id', [1, 5])->get();
+        $managerialCompetencies = Competence::with('questions')->where('id', '>', 5)->get();
+        $allCompetencies = Competence::with('questions')->get();
 
-        $positions = \App\Models\Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
 
         // Build a lookup: [position_id][competence_id] => target_level
-        $targetScores = \App\Models\PositionTargetCompetence::all()
+        $targetScores = PositionTargetCompetence::all()
             ->groupBy('position_id')
             ->map(fn($rows) => $rows->pluck('target_level', 'competence_id'));
 
@@ -345,7 +348,7 @@ class PDCAdminController extends Controller
         $scores = $request->input('scores'); // array of competence_id => target_level
         if ($scores) {
             foreach ($scores as $comp_id => $level) {
-                \App\Models\PositionTargetCompetence::updateOrCreate(
+                PositionTargetCompetence::updateOrCreate(
                 ['position_id' => $position_id, 'competence_id' => $comp_id],
                 ['target_level' => $level]
                 );
@@ -363,30 +366,30 @@ class PDCAdminController extends Controller
     public function user_management()
     {
         $user = auth()->user();
-        $talents = \App\Models\User::whereHas('roles', function ($q) {
+        $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })->with(['position', 'department', 'company'])->get();
 
-        $mentors = \App\Models\User::whereHas('roles', function ($q) {
+        $mentors = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'mentor');
         })->with(['position', 'department', 'company'])->get();
 
-        $finances = \App\Models\User::whereHas('roles', function ($q) {
+        $finances = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'finance');
         })->with(['position', 'department', 'company'])->get();
 
-        $bods = \App\Models\User::whereHas('roles', function ($q) {
+        $bods = User::whereHas('roles', function ($q) {
             $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']);
         })->with(['position', 'department', 'company'])->get();
 
-        $atasans = \App\Models\User::whereHas('roles', function ($q) {
+        $atasans = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'atasan');
         })->with(['position', 'department', 'company'])->get();
 
-        $departments = \App\Models\Department::all();
-        $positions = \App\Models\Position::all();
-        $rolesData = \App\Models\Role::all(); // Provide all roles for the assign modal
-        $companies = \App\Models\Company::all();
+        $departments = Department::all();
+        $positions = Position::all();
+        $rolesData = Role::all(); // Provide all roles for the assign modal
+        $companies = Company::all();
 
         return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'bods', 'atasans', 'departments', 'positions', 'rolesData', 'companies'));
     }
@@ -510,7 +513,7 @@ class PDCAdminController extends Controller
     {
         $defaultPassword = 'Password123';
 
-        \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update([
+        DB::table('users')->where('id', $id)->update([
             'password' => \Illuminate\Support\Facades\Hash::make($defaultPassword),
             'updated_at' => now(),
         ]);
@@ -522,27 +525,27 @@ class PDCAdminController extends Controller
     public function companyManagement()
     {
         $user      = auth()->user();
-        $companies = \App\Models\Company::orderBy('nama_company')->get();
+        $companies = Company::orderBy('nama_company')->get();
         return view('pdc_admin.company-management', compact('user', 'companies'));
     }
 
-    public function storeCompany(\Illuminate\Http\Request $request)
+    public function storeCompany(Request $request)
     {
         $request->validate(['nama_company' => 'required|string|max:255']);
-        \App\Models\Company::create(['nama_company' => $request->nama_company]);
+        Company::create(['nama_company' => $request->nama_company]);
         return back()->with('success', 'Perusahaan berhasil ditambahkan.');
     }
 
-    public function updateCompany(\Illuminate\Http\Request $request, $id)
+    public function updateCompany(Request $request, $id)
     {
         $request->validate(['nama_company' => 'required|string|max:255']);
-        \App\Models\Company::findOrFail($id)->update(['nama_company' => $request->nama_company]);
+        Company::findOrFail($id)->update(['nama_company' => $request->nama_company]);
         return back()->with('success', 'Perusahaan berhasil diperbarui.');
     }
 
     public function destroyCompany($id)
     {
-        \App\Models\Company::findOrFail($id)->delete();
+        Company::findOrFail($id)->delete();
         return back()->with('success', 'Perusahaan berhasil dihapus.');
     }
 
@@ -562,13 +565,13 @@ class PDCAdminController extends Controller
         return back()->with('success', 'Departemen berhasil diperbarui.');
     }
 
-    public function storeDepartment(\Illuminate\Http\Request $request)
+    public function storeDepartment(Request $request)
     {
         $request->validate([
             'company_id'      => 'required|exists:company,id',
             'nama_department' => 'required|string|max:255',
         ]);
-        \App\Models\Department::create([
+        Department::create([
             'company_id'      => $request->company_id,
             'nama_department' => $request->nama_department,
         ]);

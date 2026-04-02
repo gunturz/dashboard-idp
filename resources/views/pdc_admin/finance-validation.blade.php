@@ -172,7 +172,7 @@
         <table class="fv-table">
             <thead>
                 <tr>
-                    <th style="width: 15%;">Talent</th>
+                    <th style="width: 20%;">Talent</th>
                     <th style="width: 15%;">Judul Project Improvement</th>
                     <th>File</th>
                     <th>Catatan</th>

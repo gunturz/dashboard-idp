@@ -390,17 +390,8 @@
                 }
             });
 
-            // Update tables visibility
-            document.querySelectorAll('.role-table-container').forEach(container => {
-                if (activeRole === null) {
-                    // Show all if nothing is active
-                    container.classList.remove('hidden');
-                } else if (container.dataset.tableRole === activeRole) {
-                    container.classList.remove('hidden');
-                } else {
-                    container.classList.add('hidden');
-                }
-            });
+            // Terapkan ulang pencarian agar bisa menyembunyikan/menampilkan sesuai role aktif
+            filterUsers();
         }
 
         function filterUsers() {
@@ -408,9 +399,18 @@
             let companyValue = document.getElementById('companyFilter').value.toLowerCase();
             let departmentValue = document.getElementById('departmentFilter').value.toLowerCase();
 
-            // iterasi di setiap tabel group
-            document.querySelectorAll('.um-table tbody').forEach(tbody => {
+            let isAnyFilterActive = searchValue !== "" || companyValue !== "" || departmentValue !== "";
+
+            document.querySelectorAll('.role-table-container').forEach(container => {
+                // Jika sedang memilih role spesifik dan box ini bukan role tersebut, langsung sembunyikan
+                if (activeRole !== null && container.dataset.tableRole !== activeRole) {
+                    container.classList.add('hidden');
+                    return;
+                }
+
+                let tbody = container.querySelector('.um-table tbody');
                 let rows = tbody.querySelectorAll('tr.user-row');
+                let hasVisibleRow = false;
                 
                 rows.forEach(row => {
                     let name = row.querySelector('.col-name')?.innerText.toLowerCase() || "";
@@ -423,10 +423,23 @@
 
                     if (matchSearch && matchCompany && matchDepartment) {
                         row.style.display = '';
+                        hasVisibleRow = true;
                     } else {
                         row.style.display = 'none';
                     }
                 });
+
+                // Tampilkan container jika ada filter aktif dan terdapat baris hasil filter,
+                // atau jika tidak ada filter aktif sama sekali (dan activeRole match di atas)
+                if (isAnyFilterActive) {
+                    if (hasVisibleRow) {
+                        container.classList.remove('hidden');
+                    } else {
+                        container.classList.add('hidden');
+                    }
+                } else {
+                    container.classList.remove('hidden');
+                }
             });
         }
     </script>

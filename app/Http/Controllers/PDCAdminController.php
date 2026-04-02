@@ -37,7 +37,14 @@ class PDCAdminController extends Controller
 
         // Summary Cards
         $totalUsers = User::whereDoesntHave('role', fn($q) => $q->where('role_name', 'admin'))->count();
-        $onProgressTalent = PromotionPlan::where('status_promotion', 'In Progress')->count();
+        $onProgressTalent = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
+            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
+            ->whereNotNull('promotion_plan.target_position_id')
+            ->where('promotion_plan.status_promotion', 'In Progress')
+            ->select('users.company_id', 'promotion_plan.target_position_id')
+            ->distinct()
+            ->get()
+            ->count();
         $pendingFinance = \App\Models\ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
         $pendingBOD = PromotionPlan::where('status_promotion', 'Pending BOD')->count();
 
@@ -55,7 +62,8 @@ class PDCAdminController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-            $q->where('status_promotion', 'In Progress');
+            $q->where('status_promotion', 'In Progress')
+                ->whereNotNull('target_position_id');
         })
             ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
             ->select('users.*')
@@ -453,7 +461,8 @@ class PDCAdminController extends Controller
         $groupedData = collect();
         foreach ($talents as $talent) {
             $pp = $talent->promotion_plan;
-            if (!$pp) continue;
+            if (!$pp)
+                continue;
 
             $key = ($pp->target_position_id ?? 0) . '_' . ($talent->company_id ?? 0);
 
@@ -499,7 +508,7 @@ class PDCAdminController extends Controller
         $defaultPassword = 'Password123';
 
         \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update([
-            'password'   => \Illuminate\Support\Facades\Hash::make($defaultPassword),
+            'password' => \Illuminate\Support\Facades\Hash::make($defaultPassword),
             'updated_at' => now(),
         ]);
 

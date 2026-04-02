@@ -130,12 +130,6 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.user_management');
     Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class , 'assignRole'])
         ->name('pdc_admin.assign_role');
-    Route::post('/pdc-admin/mentor/store', [\App\Http\Controllers\PDCAdminController::class , 'storeMentor'])
-        ->name('pdc_admin.mentor.store');
-    Route::get('/pdc-admin/atasan', [\App\Http\Controllers\PDCAdminController::class , 'atasan'])
-        ->name('pdc_admin.atasan');
-    Route::post('/pdc-admin/atasan/store', [\App\Http\Controllers\PDCAdminController::class , 'storeAtasan'])
-        ->name('pdc_admin.atasan.store');
     Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class, 'requestFinanceValidation'])
         ->name('pdc_admin.finance.request');
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class, 'export'])

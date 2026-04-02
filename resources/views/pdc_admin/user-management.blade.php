@@ -116,21 +116,21 @@
                         <thead>
                             <tr class="bg-white">
                                 @if($group['showMultiRole'])
-                                    {{-- 6 columns: Email, Nama, Perusahaan, Departemen, Posisi, MultiRole, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Departemen</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Posisi saat ini</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:9%">Multi Role</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:8%">Aksi</th>
+                                    {{-- 7 columns: Email, Nama, Perusahaan, Departemen, Posisi, MultiRole, Aksi --}}
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Email</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:16%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Departemen</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Posisi saat ini</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:8%">Multi Role</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Aksi</th>
                                 @else
                                     {{-- 5 columns for Finance/BOD: Email, Nama, Perusahaan, Departemen, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:25%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:25%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Departemen</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:10%">Aksi</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:22%">Email</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:22%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Departemen</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Aksi</th>
                                 @endif
                             </tr>
                         </thead>
@@ -163,8 +163,7 @@
                                         </td>
                                     @endif
                                     <td>
-                                        <div class="flex items-center justify-center gap-2">
-
+                                        <div class="flex flex-row items-center justify-center gap-2">
                                             <button type="button" onclick="openDeleteModal({{ $u->id }})"
                                                 class="flex items-center justify-center w-16 h-8 bg-[#EF4444] hover:bg-[#dc2626] rounded-md transition-colors shadow-sm"
                                                 title="Hapus">

@@ -122,12 +122,13 @@
             padding-top: 10px;
             z-index: 40;
             border-right: 1px solid rgba(255, 255, 255, 0.05);
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
         }
 
         .sidebar.collapsed {
-            width: 80px;
+            width: 72px;
+            overflow: visible;
         }
 
         .sidebar-item {
@@ -145,8 +146,8 @@
         }
 
         .sidebar.collapsed .sidebar-item {
-            padding-left: 0;
-            padding-right: 0;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
             justify-content: center;
             gap: 0;
         }
@@ -161,16 +162,52 @@
             background: rgba(255, 255, 255, 0.12);
         }
 
+        /* Floating Submenu when Collapsed */
+        .sidebar.collapsed .idp-group {
+            position: relative;
+        }
+        .sidebar.collapsed #idp-submenu {
+            display: none !important;
+        }
+        .sidebar.collapsed .idp-group:hover #idp-submenu {
+            display: block !important;
+            position: absolute;
+            left: 72px;
+            top: 0;
+            width: 230px;
+            background: #232a36;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 15px 0 30px rgba(0,0,0,0.3);
+            padding: 10px 0;
+            z-index: 100;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: none;
+        }
+        .sidebar.collapsed .idp-group:hover #idp-submenu .sidebar-item {
+            padding-left: 20px !important;
+            justify-content: flex-start !important;
+            gap: 12px !important;
+        }
+        .sidebar.collapsed .idp-group:hover #idp-submenu .sidebar-label {
+            display: inline-block !important;
+            opacity: 1 !important;
+            width: auto !important;
+            pointer-events: auto !important;
+        }
+        .sidebar.collapsed .idp-group:hover #idp-submenu .sidebar-item {
+            pointer-events: auto !important;
+        }
+
         .sidebar-label {
             transition: opacity 0.2s, transform 0.2s;
             opacity: 1;
         }
 
         .sidebar.collapsed .sidebar-label {
+            display: none !important;
             opacity: 0;
             pointer-events: none;
             width: 0;
-            display: inline-block;
             overflow: hidden;
         }
 
@@ -188,21 +225,26 @@
         .sidebar.collapsed .toggle-btn {
             justify-content: center;
             padding: 12px 0;
-            width: 80px;
+            width: 72px;
         }
 
         .toggle-btn:hover {
             color: white;
         }
 
-        /* Main Content adjustment */
+        .sidebar.no-transition,
+        #main-content.no-transition,
+        #toggle-icon.no-transition {
+            transition: none !important;
+        }
+
         #main-content {
             margin-left: 260px;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #main-content.collapsed {
-            margin-left: 80px;
+            margin-left: 72px;
         }
         
         /* Dropdown panel */
@@ -272,6 +314,30 @@
 </head>
 
 <body class="bg-white min-h-screen pt-[60px] lg:pt-[80px]">
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    .sidebar { width: 72px !important; transition: none !important; }
+                    #main-content { margin-left: 72px !important; transition: none !important; }
+                    #toggle-icon { transform: rotate(180deg) !important; transition: none !important; }
+                    .sidebar-label { display: none !important; }
+                `;
+                document.head.appendChild(style);
+                
+                window.addEventListener('DOMContentLoaded', () => {
+                    const sb = document.getElementById('sidebar');
+                    const mc = document.getElementById('main-content');
+                    const ti = document.getElementById('toggle-icon');
+                    if (sb) sb.classList.add('collapsed');
+                    if (mc) mc.classList.add('collapsed');
+                    if (ti) ti.style.transform = 'rotate(180deg)';
+                    style.remove();
+                });
+            }
+        })();
+    </script>
 
     {{-- Overlay responsive --}}
     <div id="mobile-overlay" class="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-30 hidden lg:hidden" onclick="toggleMobileSidebar()"></div>
@@ -287,6 +353,7 @@
             </svg>
         </div>
         
+        {{-- Dashboard --}}
         <a href="{{ route('pdc_admin.dashboard') }}"
             class="sidebar-item {{ request()->routeIs('pdc_admin.dashboard') ? 'active' : '' }}"
             title="Dashboard">
@@ -296,6 +363,7 @@
             <span class="sidebar-label">Dashboard</span>
         </a>
 
+        {{-- Progress Talent --}}
         <a href="{{ route('pdc_admin.progress_talent') }}"
             class="sidebar-item {{ request()->routeIs('pdc_admin.progress_talent') ? 'active' : '' }}"
             title="Progress Talent">
@@ -305,24 +373,54 @@
             <span class="sidebar-label">Progress Talent</span>
         </a>
 
+        {{-- IDP Management (collapsible group) --}}
+        @php
+            $idpActive = request()->routeIs('pdc_admin.kompetensi') ||
+                         request()->routeIs('pdc_admin.user_management') ||
+                         request()->routeIs('pdc_admin.company_management');
+        @endphp
+        <div class="idp-group">
+            <button onclick="toggleIdpMenu()" type="button"
+                class="sidebar-item w-full {{ $idpActive ? 'active' : '' }}"
+                title="IDP Management" id="idp-toggle-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span class="sidebar-label flex-1 text-left">IDP Management</span>
+                <svg id="idp-chevron" xmlns="http://www.w3.org/2000/svg" class="sidebar-label h-4 w-4 transition-transform duration-200 {{ $idpActive ? 'rotate-180' : '' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            {{-- Sub-items --}}
+            <div id="idp-submenu" class="{{ $idpActive ? '' : 'hidden' }}">
+                <a href="{{ route('pdc_admin.kompetensi') }}"
+                    class="sidebar-item pl-10 text-sm {{ request()->routeIs('pdc_admin.kompetensi') ? 'active' : '' }}"
+                    title="Kompetensi">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="sidebar-label">Kompetensi</span>
+                </a>
+                <a href="{{ route('pdc_admin.company_management') }}"
+                    class="sidebar-item pl-10 text-sm {{ request()->routeIs('pdc_admin.company_management') ? 'active' : '' }}"
+                    title="Company Management">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <span class="sidebar-label">Company Management</span>
+                </a>
+                <a href="{{ route('pdc_admin.user_management') }}"
+                    class="sidebar-item pl-10 text-sm {{ request()->routeIs('pdc_admin.user_management') ? 'active' : '' }}"
+                    title="User Management">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span class="sidebar-label">User Management</span>
+                </a>
+            </div>
+        </div>
 
-
-        <a href="{{ route('pdc_admin.kompetensi') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.kompetensi') ? 'active' : '' }}" title="Kompetensi">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="sidebar-label">Kompetensi</span>
-        </a>
-
-        <a href="{{ route('pdc_admin.user_management') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.user_management') ? 'active' : '' }}" title="User Management">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            <span class="sidebar-label">User Management</span>
-        </a>
-
-
-
+        {{-- Finance Validation --}}
         <a href="{{ route('pdc_admin.finance_validation') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.finance_validation') ? 'active' : '' }}" title="Finance Validation">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -330,7 +428,17 @@
             <span class="sidebar-label">Finance Validation</span>
         </a>
 
-        <a href="{{ route('pdc_admin.export') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.export') ? 'active' : '' }}" title="Export">
+        {{-- BOD Review --}}
+        <a href="#" class="sidebar-item" title="BOD Review">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <span class="sidebar-label">BOD Review</span>
+        </a>
+
+        {{-- Export --}}
+        <a href="{{ route('pdc_admin.export') }}" 
+           class="sidebar-item {{ request()->routeIs('pdc_admin.export') ? 'active' : '' }}" title="Export">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
@@ -362,10 +470,16 @@
             }
         }
 
-        // Persistent sidebar state
+        // Persistent sidebar state check (handled early by inline script, but this keeps it consistent)
         document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const toggleIcon = document.getElementById('toggle-icon');
+            
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
-                toggleSidebar();
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('collapsed');
+                toggleIcon.style.transform = 'rotate(180deg)';
             }
         });
 
@@ -397,6 +511,13 @@
             } else {
                 overlay.classList.add('hidden');
             }
+        }
+
+        function toggleIdpMenu() {
+            const submenu = document.getElementById('idp-submenu');
+            const chevron = document.getElementById('idp-chevron');
+            submenu.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
         }
     </script>
     {{ $scripts ?? '' }}

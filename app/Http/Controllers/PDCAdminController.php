@@ -260,13 +260,16 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
-        $projects = \App\Models\ImprovementProject::with('talent')
-            ->whereNotNull('feedback')
+        $projects = \App\Models\ImprovementProject::with([
+                'talent.position',
+                'talent.department',
+                'talent.promotion_plan.targetPosition',
+            ])
             ->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
             ->get();
 
-        $total = $projects->count();
-        $pending = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
+        $total    = $projects->count();
+        $pending  = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
         $approved = $projects->where('status', 'Verified')->count();
         $rejected = $projects->where('status', 'Rejected')->count();
 
@@ -443,7 +446,7 @@ class PDCAdminController extends Controller
 
         // Fetch all talents with promotion plans
         $talents = User::whereHas('roles', function ($q) {
-            $q->where('role_name', 'talent');
+            $q->where('role_name', 'Talent');
         })
             ->whereHas('promotion_plan')
             ->with(['company', 'department', 'position', 'promotion_plan.targetPosition'])
@@ -505,4 +508,68 @@ class PDCAdminController extends Controller
 
         return back()->with('success', 'Password user berhasil direset ke default.');
     }
+
+    // ── Company Management ──────────────────────────────────────────
+    public function companyManagement()
+    {
+        $user      = auth()->user();
+        $companies = \App\Models\Company::orderBy('nama_company')->get();
+        return view('pdc_admin.company-management', compact('user', 'companies'));
+    }
+
+    public function storeCompany(\Illuminate\Http\Request $request)
+    {
+        $request->validate(['nama_company' => 'required|string|max:255']);
+        \App\Models\Company::create(['nama_company' => $request->nama_company]);
+        return back()->with('success', 'Perusahaan berhasil ditambahkan.');
+    }
+
+    public function updateCompany(\Illuminate\Http\Request $request, $id)
+    {
+        $request->validate(['nama_company' => 'required|string|max:255']);
+        \App\Models\Company::findOrFail($id)->update(['nama_company' => $request->nama_company]);
+        return back()->with('success', 'Perusahaan berhasil diperbarui.');
+    }
+
+    public function destroyCompany($id)
+    {
+        \App\Models\Company::findOrFail($id)->delete();
+        return back()->with('success', 'Perusahaan berhasil dihapus.');
+    }
+
+    public function departmentManagement($companyId)
+    {
+        $user        = auth()->user();
+        $company     = \App\Models\Company::findOrFail($companyId);
+        $departments = \App\Models\Department::where('company_id', $companyId)
+            ->orderBy('nama_department')->get();
+        return view('pdc_admin.department-management', compact('user', 'company', 'departments'));
+    }
+
+    public function updateDepartment(\Illuminate\Http\Request $request, $id)
+    {
+        $request->validate(['nama_department' => 'required|string|max:255']);
+        \App\Models\Department::findOrFail($id)->update(['nama_department' => $request->nama_department]);
+        return back()->with('success', 'Departemen berhasil diperbarui.');
+    }
+
+    public function storeDepartment(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'company_id'      => 'required|exists:company,id',
+            'nama_department' => 'required|string|max:255',
+        ]);
+        \App\Models\Department::create([
+            'company_id'      => $request->company_id,
+            'nama_department' => $request->nama_department,
+        ]);
+        return back()->with('success', 'Departemen berhasil ditambahkan.');
+    }
+
+    public function destroyDepartment($id)
+    {
+        \App\Models\Department::findOrFail($id)->delete();
+        return back()->with('success', 'Departemen berhasil dihapus.');
+    }
 }
+

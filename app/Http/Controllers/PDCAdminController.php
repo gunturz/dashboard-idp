@@ -55,8 +55,8 @@ class PDCAdminController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'In Progress');
-            })
+            $q->where('status_promotion', 'In Progress');
+        })
             ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
             ->select('users.*')
             ->orderBy('promotion_plan.created_at', 'desc')

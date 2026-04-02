@@ -197,7 +197,7 @@
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
                                         ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->nama_company ?? '-'],
                                         ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
-                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $user->role->role_name ?? '-')), 'disabled' => true],
+                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $activeRoleName ?? $user->role->role_name ?? '-')), 'disabled' => true],
                                         ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-', 'disabled' => true],
                                     ];
                                 @endphp

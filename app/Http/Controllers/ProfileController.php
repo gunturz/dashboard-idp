@@ -22,7 +22,8 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user()->load(['company', 'department', 'position', 'role', 'promotion_plan.targetPosition', 'mentor', 'atasan']);
-        $roleName = strtolower(trim($user->role->role_name ?? ''));
+        $activeRole = session('active_role');
+        $roleName = strtolower(trim($activeRole ?: ($user->role->role_name ?? '')));
 
         if (in_array($roleName, ['talent', 'kandidat'])) {
             $view = 'talent.profile';
@@ -50,6 +51,7 @@ class ProfileController extends Controller
             'departments' => Department::all(),
             'roles' => Role::all(),
             'positions' => Position::all(),
+            'activeRoleName' => $roleName,
         ]);
     }
 

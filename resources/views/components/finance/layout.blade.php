@@ -186,7 +186,7 @@
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-[#f8fafc] min-h-screen pt-[60px] lg:pt-[80px]">
+<body class="bg-[#f8fafc] min-h-screen flex flex-col pt-[60px] lg:pt-[80px]">
 
     <div class="navbar-outer">
 
@@ -197,8 +197,18 @@
             </svg>
         </button>
 
-
-
+        {{-- Logo + Title --}}
+        <a href="{{ route('finance.dashboard') }}" class="flex items-center gap-2 lg:gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
+            <div class="bg-white p-1.5 lg:p-2 rounded-[8px] lg:rounded-[10px] shadow-sm flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14 hidden sm:flex">
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-white text-base lg:text-xl font-bold tracking-wide whitespace-nowrap desktop-logo-text sm:block hidden">
+                Individual Development Plan
+            </h1>
+            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden block truncate max-w-[150px]">
+                Finance
+            </h1>
+        </a>
 
         {{-- Desktop Navigation Links & Icons --}}
         <div class="flex items-center ml-auto lg:pr-6 pr-0 space-x-6 lg:space-x-8">
@@ -285,9 +295,18 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 md:mx-auto max-w-7xl lg:mt-8 rounded-xl shadow-sm border border-gray-100">
-        {{ $slot }}
-    </main>
+    <div class="flex-1">
+        <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 md:mx-auto max-w-7xl lg:mt-8 rounded-xl shadow-sm border border-gray-100">
+            {{ $slot }}
+        </main>
+    </div>
+
+    {{-- FOOTER --}}
+    <footer class="mt-8 bg-[#343E4E] py-5 text-center w-full">
+        <span class="text-white text-sm font-medium tracking-wide">
+            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
+        </span>
+    </footer>
 
     <script>
         function toggleDropdown(dropdownId, btnId) {

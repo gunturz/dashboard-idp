@@ -171,19 +171,19 @@
 
     {{-- Summary Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div class="summary-card card-teal">
+        <a href="{{ route('pdc_admin.user_management') }}" class="summary-card card-teal hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
             <div class="summary-value">{{ $totalUsers ?? 0 }}</div>
             <div class="summary-label">Total User</div>
-        </div>
-        <div class="summary-card card-teal">
+        </a>
+        <a href="{{ route('pdc_admin.progress_talent') }}" class="summary-card card-teal hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
             <div class="summary-value">{{ $onProgressTalent ?? 0 }}</div>
-            <div class="summary-label">On Progress Talent</div>
-        </div>
-        <div class="summary-card card-green">
+            <div class="summary-label">On Progress</div>
+        </a>
+        <a href="{{ route('pdc_admin.finance_validation') }}" class="summary-card card-green hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
             <div class="summary-value">{{ $pendingFinance ?? 0 }}</div>
             <div class="summary-label">Pending Finance Validation</div>
-        </div>
-        <div class="summary-card card-red">
+        </a>
+        <div class="summary-card card-red hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
             <div class="summary-value">{{ $pendingBOD ?? 0 }}</div>
             <div class="summary-label">Pending BOD Decision</div>
         </div>

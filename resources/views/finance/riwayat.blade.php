@@ -12,17 +12,14 @@
                 <h2 class="text-[28px] font-extrabold text-[#2e3746]">Riwayat Validasi</h2>
             </div>
             
-            <form action="{{ route('finance.riwayat') }}" method="GET" class="flex items-center gap-3">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari Nama Talent" class="border-[1.5px] border-[#38b2ac] rounded-lg px-4 py-2 w-72 text-sm focus:outline-none focus:ring-1 focus:ring-[#38b2ac] placeholder:text-[#38b2ac] placeholder:text-sm">
-                <button type="submit" class="border-[1.5px] border-[#38b2ac] text-[#38b2ac] bg-white hover:bg-[#38b2ac] hover:text-white transition-colors rounded-lg px-6 py-2 text-sm font-medium">
-                    Search
-                </button>
-            </form>
+            <div class="flex items-center gap-3">
+                <input type="text" id="searchInput" onkeyup="filterHistory()" placeholder="Cari Nama Talent" class="border-[1.5px] border-[#38b2ac] rounded-lg px-4 py-2 w-72 text-sm focus:outline-none focus:ring-1 focus:ring-[#38b2ac] placeholder:text-[#38b2ac] placeholder:text-sm">
+            </div>
         </div>
 
         {{-- Validation History Section Grouped by Position --}}
         @forelse($groupedHistoryProjects as $groupTitle => $projectsGroup)
-        <div class="mb-8 overflow-hidden bg-white border border-gray-300 rounded-xl shadow-sm">
+        <div class="mb-8 overflow-hidden bg-white border border-gray-300 rounded-xl shadow-sm filter-container">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -36,9 +33,9 @@
                     </thead>
                     <tbody class="text-sm">
                         @foreach($projectsGroup as $project)
-                        <tr class="border-b border-gray-300 hover:bg-gray-50 transition-colors">
+                        <tr class="border-b border-gray-300 hover:bg-gray-50 transition-colors filter-row">
                             <td class="px-6 py-4 border-r border-gray-300 text-center">
-                                <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
+                                <p class="font-bold text-gray-800 text-sm talent-name">{{ $project->talent->nama ?? '-' }}</p>
                                 <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->position->position_name ?? '-' }} &rarr; {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}</p>
                                 <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->department->nama_department ?? '-' }}</p>
                             </td>
@@ -83,4 +80,35 @@
         </div>
         @endforelse
     </div>
+
+    <script>
+        function filterHistory() {
+            let searchValue = document.getElementById('searchInput').value.toLowerCase();
+            
+            document.querySelectorAll('.filter-container').forEach(container => {
+                let tbody = container.querySelector('tbody');
+                if (!tbody) return;
+                
+                let rows = tbody.querySelectorAll('tr.filter-row');
+                let hasVisibleRow = false;
+                
+                rows.forEach(row => {
+                    let talentName = row.querySelector('.talent-name')?.innerText.toLowerCase() || "";
+                    
+                    if (talentName.includes(searchValue)) {
+                        row.style.display = '';
+                        hasVisibleRow = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                if (hasVisibleRow) {
+                    container.style.display = '';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </x-finance.layout>

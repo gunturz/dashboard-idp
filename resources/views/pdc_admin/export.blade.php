@@ -323,6 +323,7 @@
                                             @endif
                                             <div class="talent-info">
                                                 <span class="talent-name">{{ $talent->nama }}</span>
+                                                <p class="text-xs text-gray-500 italic mt-1">{{ $talent->position->position_name ?? '-' }} &rarr; {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}</p>
                                                 <span class="talent-dept">
                                                     {{ optional($talent->department)->nama_department ?? '-' }}
                                                 </span>

@@ -349,7 +349,7 @@ class PDCAdminController extends Controller
         return back()->with('success', 'Target Score berhasil diperbarui.');
     }
 
-    public function mentor()
+    public function user_management()
     {
         $user = auth()->user();
         $talents = \App\Models\User::whereHas('roles', function ($q) {
@@ -375,8 +375,9 @@ class PDCAdminController extends Controller
         $departments = \App\Models\Department::all();
         $positions = \App\Models\Position::all();
         $rolesData = \App\Models\Role::all(); // Provide all roles for the assign modal
+        $companies = \App\Models\Company::all();
 
-        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'bods', 'atasans', 'departments', 'positions', 'rolesData'));
+        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'bods', 'atasans', 'departments', 'positions', 'rolesData', 'companies'));
     }
 
     public function atasan()

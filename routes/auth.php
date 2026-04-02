@@ -130,6 +130,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.user_management');
     Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class , 'assignRole'])
         ->name('pdc_admin.assign_role');
+    Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class , 'resetPassword'])
+        ->name('pdc_admin.reset_password');
     Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class, 'requestFinanceValidation'])
         ->name('pdc_admin.finance.request');
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class, 'export'])

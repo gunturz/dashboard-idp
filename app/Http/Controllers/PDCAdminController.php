@@ -493,4 +493,16 @@ class PDCAdminController extends Controller
 
         return back()->with('success', 'Manajemen Role berhasil diperbarui.');
     }
+
+    public function resetPassword($id)
+    {
+        $defaultPassword = 'Password123';
+
+        \Illuminate\Support\Facades\DB::table('users')->where('id', $id)->update([
+            'password'   => \Illuminate\Support\Facades\Hash::make($defaultPassword),
+            'updated_at' => now(),
+        ]);
+
+        return back()->with('success', 'Password user berhasil direset ke default.');
+    }
 }

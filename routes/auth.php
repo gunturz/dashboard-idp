@@ -126,16 +126,12 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.competency.update_questions');
     Route::post('/pdc-admin/kompetensi/target-scores/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateTargetScores'])
         ->name('pdc_admin.target_score.update');
-    Route::get('/pdc-admin/mentor', [\App\Http\Controllers\PDCAdminController::class , 'mentor'])
-        ->name('pdc_admin.mentor');
+    Route::get('/pdc-admin/user-management', [\App\Http\Controllers\PDCAdminController::class , 'user_management'])
+        ->name('pdc_admin.user_management');
     Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class , 'assignRole'])
         ->name('pdc_admin.assign_role');
-    Route::post('/pdc-admin/mentor/store', [\App\Http\Controllers\PDCAdminController::class , 'storeMentor'])
-        ->name('pdc_admin.mentor.store');
-    Route::get('/pdc-admin/atasan', [\App\Http\Controllers\PDCAdminController::class , 'atasan'])
-        ->name('pdc_admin.atasan');
-    Route::post('/pdc-admin/atasan/store', [\App\Http\Controllers\PDCAdminController::class , 'storeAtasan'])
-        ->name('pdc_admin.atasan.store');
+    Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class , 'resetPassword'])
+        ->name('pdc_admin.reset_password');
     Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class, 'requestFinanceValidation'])
         ->name('pdc_admin.finance.request');
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class, 'export'])
@@ -166,6 +162,7 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.logbook');
     Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
         ->name('mentor.logbook.update_status');
+
     // Finance Routes
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])
         ->name('finance.dashboard');

@@ -61,28 +61,28 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="md:col-span-2 relative">
             <input type="text" id="searchInput" onkeyup="filterUsers()"
-                class="w-full border border-[#14b8a6] rounded-lg py-2.5 pl-4 pr-10 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:ring-1 focus:ring-[#14b8a6]"
+                class="peer w-full border border-slate-200 rounded-lg py-2.5 pl-4 pr-10 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:border-[#14b8a6] focus:ring-1 focus:ring-[#14b8a6] transition-colors"
                 placeholder="Cari Nama">
             <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 peer-focus:text-[#14b8a6] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
         </div>
-        <div class="md:col-span-1">
+        <div class="md:col-span-1 relative">
             <select id="companyFilter" onchange="filterUsers()"
-                class="w-full border border-[#14b8a6] rounded-lg py-2.5 px-4 text-sm text-[#2e3746] outline-none focus:ring-1 focus:ring-[#14b8a6] bg-white appearance-none"
-                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2314b8a6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
+                class="w-full border border-slate-200 rounded-lg py-2.5 px-4 text-sm text-[#2e3746] outline-none focus:border-[#14b8a6] focus:ring-1 focus:ring-[#14b8a6] bg-white appearance-none transition-colors"
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
                 <option value="">Semua Perusahaan</option>
                 @foreach($companies as $company)
                     <option value="{{ strtolower($company->nama_company) }}">{{ $company->nama_company }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="md:col-span-1">
+        <div class="md:col-span-1 relative">
             <select id="departmentFilter" onchange="filterUsers()"
-                class="w-full border border-[#14b8a6] rounded-lg py-2.5 px-4 text-sm text-[#2e3746] outline-none focus:ring-1 focus:ring-[#14b8a6] bg-white appearance-none"
-                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2314b8a6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
+                class="w-full border border-slate-200 rounded-lg py-2.5 px-4 text-sm text-[#2e3746] outline-none focus:border-[#14b8a6] focus:ring-1 focus:ring-[#14b8a6] bg-white appearance-none transition-colors"
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
                 <option value="">Semua Departemen</option>
                 @foreach($departments as $department)
                     <option value="{{ strtolower($department->nama_department) }}">{{ $department->nama_department }}</option>

@@ -63,9 +63,9 @@
             <div class="relative search-container w-80">
                 <input type="text" id="searchCompany" onkeyup="filterCompanies()"
                     placeholder="Cari nama perusahaan.."
-                    class="w-full border-2 border-[#14b8a6] rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:ring-1 focus:ring-[#14b8a6]">
+                    class="peer w-full border-[1.5px] border-[#e2e8f0] rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:ring-1 focus:ring-[#14b8a6] focus:border-[#14b8a6] placeholder-[#9ca3af] text-[#475569] transition-colors">
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#9ca3af] peer-focus:text-[#14b8a6] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>

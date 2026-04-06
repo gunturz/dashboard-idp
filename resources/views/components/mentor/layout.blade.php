@@ -165,7 +165,7 @@
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-[#f8fafc] min-h-screen pt-[80px]">
+<body class="bg-[#f8fafc] min-h-screen pt-[80px] flex flex-col">
 
     <div class="navbar-outer">
         {{-- Logo + Title --}}
@@ -263,19 +263,38 @@
             </div>
 
             {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
+            @php
+                // Logika notifikasi (sesuaikan dengan backend sistem notifikasi yang digunakan)
+                $hasUnreadNotif = isset($notifications) && count($notifications) > 0;
+            @endphp
             <div class="relative hidden lg:block" id="bell-wrapper">
                 <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
-                    <span class="notif-badge"></span>
+                    @if($hasUnreadNotif)
+                        <span class="notif-badge"></span>
+                    @endif
                 </button>
-                <div id="bell-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                        <span class="text-sm font-bold text-gray-700">Notifikasi</span>
+                <div id="bell-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[320px] bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                    <div class="px-5 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
+                        <span class="text-[15px] font-extrabold text-[#2e3746]">Notifikasi</span>
+                        <form action="{{ route('mentor.notifikasi.markAllRead') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="text-[13px] font-bold text-[#14b8a6] hover:text-[#0d9488] transition-colors">Tandai semua</button>
+                        </form>
                     </div>
-                    <div class="p-4 text-center text-gray-400 text-xs text-sm">Belum ada notifikasi baru</div>
+                    
+                    @if($hasUnreadNotif)
+                        <div class="p-6 text-center text-[#14b8a6] text-[13px] font-medium">
+                            Ada notifikasi baru
+                        </div>
+                    @endif
+
+                    <div class="px-5 py-3.5 bg-white border-t border-gray-100 text-center">
+                        <a href="{{ route('mentor.notifikasi') }}" class="text-[13px] font-bold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua notifikasi</a>
+                    </div>
                 </div>
             </div>
 
@@ -326,7 +345,7 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main class="p-8 max-w-6xl mx-auto w-full pt-12">
+    <main class="p-8 max-w-6xl mx-auto w-full pt-12 flex-grow">
         {{ $slot }}
     </main>
 
@@ -373,6 +392,13 @@
         });
     </script>
     {{ $scripts ?? '' }}
+
+    {{-- FOOTER --}}
+    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
+        <span class="text-white text-sm font-medium tracking-wide">
+            &copy; 2026 PT. Tiga Serangkai Inti Corpora
+        </span>
+    </footer>
 </body>
 
 </html>

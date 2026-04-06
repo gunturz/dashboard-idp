@@ -216,10 +216,10 @@
                     <table class="w-full text-[13px] text-left">
                         <thead>
                             <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Sumber</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Tanggal</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Platform</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[330px]">Sumber</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[330px]">Tema</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[330px]">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[330px]">Platform</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[190px]">Dokumentasi</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center w-[150px]">Aksi</th>
                             </tr>

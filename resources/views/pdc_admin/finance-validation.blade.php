@@ -186,7 +186,7 @@
                     <th style="width: 22%;">Judul Project Improvement</th>
                     <th style="width: 7%;">File</th>
                     <th style="width: 14%;">Validasi Finance</th>
-                    <th style="width: 25%;">Feedback</th>
+                    <th style="width: 25%;">Feedback dari Finance</th>
                     <th style="width: 16%;">Aksi</th>
                 </tr>
             </thead>
@@ -223,7 +223,7 @@
                                 <span class="status-dot status-pending">Pending</span>
                             @endif
                         </td>
-                        <td class="text-left text-xs text-gray-600">{{ $project->feedback ?? '—' }}</td>
+                        <td class="text-left text-xs text-gray-600">{{ $project->finance_feedback ?? '—' }}</td>
                         <td>
                             @if(in_array($project->status, ['Verified', 'Rejected']))
                                 <button type="button" disabled

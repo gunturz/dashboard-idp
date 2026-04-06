@@ -170,19 +170,32 @@
                                 @php
                                     $akunFields = [
                                         ['label' => 'Username', 'key' => 'username', 'type' => 'text'],
-                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email']
+                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email'],
+                                        ['label' => 'Password', 'key' => 'password', 'type' => 'password', 'placeholder' => 'Abaikan jika tidak diubah']
                                     ];
                                 @endphp
                                 @foreach ($akunFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
                                         <span class="text-sm font-semibold text-[#3d4f62] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
-                                        <input type="{{ $field['type'] }}"
-                                               name="{{ $field['key'] }}"
-                                               value="{{ $field['key'] === 'password' ? '' : ($user->{$field['key']} ?? '') }}"
-                                               placeholder="{{ $field['placeholder'] ?? '' }}"
-                                               {{ $field['disabled'] ?? false ? 'disabled' : '' }}
-                                               class="edit-field prof-input hidden">
+                                                                                @if ($field['type'] === 'password')
+                                            <div class="edit-field hidden relative w-full">
+                                                <input type="password" name="{{ $field['key'] }}" value="" placeholder="{{ $field['placeholder'] ?? '' }}" class="prof-input w-full pr-10">
+                                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <input type="{{ $field['type'] }}"
+                                                   name="{{ $field['key'] }}"
+                                                   value="{{ $user->{$field['key']} ?? '' }}"
+                                                   placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                   {{ $field['disabled'] ?? false ? 'disabled' : '' }}
+                                                   class="edit-field prof-input hidden">
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
@@ -197,8 +210,8 @@
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
                                         ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->nama_company ?? '-'],
                                         ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
-                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $activeRoleName ?? $user->role->role_name ?? '-'))],
-                                        ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => $user->position->position_name ?? '-'],
+                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'readonly', 'val' => ucwords(str_replace('_', ' ', $activeRoleName ?? $user->role->role_name ?? '-'))],
+                                        ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'readonly', 'val' => $user->position->position_name ?? '-'],
                                         ['label' => 'Mentor',             'type' => 'readonly', 'val' => collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-')],
                                         ['label' => 'Atasan',             'type' => 'readonly', 'val' => optional($user->atasan)->nama ?? '-'],
                                         ['label' => 'Posisi Yang Dituju', 'type' => 'readonly', 'val' => optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-'],
@@ -300,12 +313,24 @@
                                     <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
                                         <span class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
-                                        <input type="{{ $field['type'] }}"
-                                               name="{{ $field['key'] }}"
-                                               value="{{ $field['key'] === 'password' ? '' : ($user->{$field['key']} ?? '') }}"
-                                               placeholder="{{ $field['placeholder'] ?? '' }}"
-                                               {{ $field['disabled'] ?? false ? 'disabled' : '' }}
-                                               class="edit-field prof-input hidden">
+                                                                                @if ($field['type'] === 'password')
+                                            <div class="edit-field hidden relative w-full">
+                                                <input type="password" name="{{ $field['key'] }}" value="" placeholder="{{ $field['placeholder'] ?? '' }}" class="prof-input w-full pr-10">
+                                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <input type="{{ $field['type'] }}"
+                                                   name="{{ $field['key'] }}"
+                                                   value="{{ $user->{$field['key']} ?? '' }}"
+                                                   placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                   {{ $field['disabled'] ?? false ? 'disabled' : '' }}
+                                                   class="edit-field prof-input hidden">
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
@@ -355,15 +380,15 @@
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Edit
                     </button>
+                    <button type="button" id="btn-batal"
+                            onclick="exitEditMode()"
+                            class="hidden border border-gray-300 text-gray-600 bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
+                        Batal
+                    </button>
                     <button type="button" id="btn-simpan"
                             onclick="openConfirmModal()"
                             class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Simpan
-                    </button>
-                    <button type="button" id="btn-batal"
-                            onclick="exitEditMode()"
-                            class="hidden border border-gray-300 text-gray-600 bg-white hover:bg-gray-50 hover:text-gray-800 font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
-                        Batal
                     </button>
                 </div>
             </div>
@@ -412,6 +437,19 @@
             if (!inside) document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.add('hidden'));
         });
 
+        function togglePasswordVisibility(btn) {
+            const container = btn.closest('.relative');
+            const input = container.querySelector('input');
+            const icon = container.querySelector('.toggle-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />';
+            }
+        }
+
         // Edit mode
         function enterEditMode() {
             document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));
@@ -432,6 +470,8 @@
             document.getElementById('btn-simpan').classList.add('hidden');
             document.getElementById('btn-batal').classList.add('hidden');
             document.getElementById('foto-input').value = '';
+            // Reset semua field password
+            document.querySelectorAll('input[name="password"]').forEach(el => el.value = '');
         }
 
         // Foto preview
@@ -469,6 +509,37 @@
             closeConfirmModal();
             document.getElementById('profile-form').submit();
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sinkronisasi input antara layout Desktop dan Mobile
+            ['input', 'change'].forEach(evt => {
+                document.addEventListener(evt, function(e) {
+                    if (e.target && e.target.classList.contains('prof-input')) {
+                        const name = e.target.name;
+                        if (name) {
+                            document.querySelectorAll(`.prof-input[name="${name}"]`).forEach(el => {
+                                if (el !== e.target && el.value !== e.target.value) {
+                                    el.value = e.target.value;
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            // Saat submit, nonaktifkan input dari layout yang tidak aktif
+            const form = document.getElementById('profile-form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const isDesktop = window.innerWidth >= 768;
+                    this.querySelectorAll('.md\:hidden input, .md\:hidden select').forEach(el => {
+                        if (isDesktop) el.disabled = true;
+                    });
+                    this.querySelectorAll('.hidden.md\:flex input, .hidden.md\:flex select').forEach(el => {
+                        if (!isDesktop) el.disabled = true;
+                    });
+                });
+            }
+        });
+
         document.getElementById('confirm-modal').addEventListener('click', function(e) {
             if (e.target === this) closeConfirmModal();
         });

@@ -702,7 +702,7 @@
 
     {{-- Header Navigation --}}
     <div class="flex justify-between items-center mb-10">
-        <a href="{{ route('pdc_admin.dashboard') }}" class="btn-back">
+        <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-back">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                 <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
             </svg>
@@ -884,7 +884,7 @@
                                     $scoreTalent = $detail->score_talent ?? 0;
                                     $scoreAtasan = $detail->score_atasan ?? 0;
                                     $gap = $detail->gap_score ?? 0;
-                                    $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
+                                    $finalScore = ($scoreTalent + $scoreAtasan) / 2;
                                     $cls = 'gap-ok';
                                     if ($gap == 0) $cls = 'gap-none';
                                     elseif ($gap < -1.5) $cls = 'gap-large';

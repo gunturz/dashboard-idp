@@ -30,11 +30,10 @@
         </style>
     </x-slot>
 
-    <div class="w-full max-w-4xl mx-auto px-6 pb-8 pt-0 pb-12 -mt-6 flex-grow fade-up fade-up-1">
-
+    <div class="w-full max-w-4xl mx-auto px-6 pt-8 pb-12 flex-grow fade-up fade-up-1">
 
         {{-- Back Link --}}
-        <div class="mb-4">
+        <div class="mb-6">
             <a href="{{ route('atasan.dashboard') }}" class="btn-back">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />

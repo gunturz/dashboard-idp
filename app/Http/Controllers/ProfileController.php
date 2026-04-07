@@ -78,7 +78,10 @@ class ProfileController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
-        \Illuminate\Support\Facades\Log::info('Profile Update Data:', $data);
+        // DEBUG: log raw password input
+        \Illuminate\Support\Facades\Log::info('Profile Update - raw password from request: [' . $request->input('password') . ']');
+        \Illuminate\Support\Facades\Log::info('Profile Update - all input keys: ' . implode(', ', array_keys($request->all())));
+        \Illuminate\Support\Facades\Log::info('Profile Update Data:', array_diff_key($data, ['password' => '']));
 
         // Normalize email to lowercase
         if (!empty($data['email'])) {
@@ -87,9 +90,11 @@ class ProfileController extends Controller
 
         // Handle password hashing
         if (!empty($data['password'])) {
+            \Illuminate\Support\Facades\Log::info('Profile Update - password IS set, hashing now');
             $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
         }
         else {
+            \Illuminate\Support\Facades\Log::info('Profile Update - password is EMPTY, skipping');
             unset($data['password']); // Jangan update password jika kosong
         }
 

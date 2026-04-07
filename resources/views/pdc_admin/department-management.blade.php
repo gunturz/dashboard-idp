@@ -19,23 +19,40 @@
                 font-weight: 600;
                 color: #2e3746;
             }
+            .btn-back {
+                padding: 8px 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                background: white;
+                color: #475569;
+                font-weight: 500;
+                font-size: 0.875rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.2s;
+                width: fit-content;
+            }
+            .btn-back:hover {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+            }
         </style>
     </x-slot>
 
     {{-- Header & Back Button --}}
     <div class="mb-10">
-        <a href="{{ route('pdc_admin.company_management') }}" 
-           class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors shadow-sm mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <a href="{{ route('pdc_admin.company_management') }}" class="btn-back mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
             </svg>
-            Kembali
+            <span class="text-[#2e3746]">Kembali</span>
         </a>
         <h2 class="text-3xl font-black text-[#2e3746] text-center">{{ $company->nama_company }}</h2>
     </div>
 
     {{-- Main Card --}}
-    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-sm p-8 max-w-5xl mx-auto mb-10">
+    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-sm p-8 w-full mb-10">
         <h3 class="text-lg font-bold text-[#2e3746] mb-6">Daftar Departemen</h3>
 
         {{-- Toolbar --}}

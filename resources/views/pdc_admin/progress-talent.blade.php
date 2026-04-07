@@ -84,28 +84,27 @@
         </style>
     </x-slot>
 
-    <div class="flex justify-between items-center mb-8 animate-title">
-        <div class="flex items-center gap-3">
-            <div class="p-1.5 bg-gray-100 rounded-md border border-gray-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-            </div>
+    <div class="mb-4">
+        <div class="flex items-center gap-3 animate-title mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 text-[#2e3746]">
+                <path
+                    d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                <path
+                    d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+            </svg>
             <h2 class="text-2xl font-extrabold text-[#2e3746]">Progress Talent</h2>
         </div>
 
-        <a href="{{ route('pdc_admin.development_plan') }}"
-            class="flex items-center gap-2 bg-[#2e3746] text-white px-5 py-2 rounded-lg font-semibold text-sm hover:bg-[#1e2737] transition-colors shadow-sm whitespace-nowrap">
-
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
-                stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-
-            <span>Development Plan</span>
-        </a>
+        <div class="flex justify-end">
+            <a href="{{ route('pdc_admin.development_plan') }}"
+                class="inline-flex items-center gap-2 bg-[#2e3746] text-white px-5 py-2 rounded-lg font-semibold text-sm hover:bg-[#1e2737] transition-colors shadow-sm whitespace-nowrap">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                    stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Development Plan</span>
+            </a>
+        </div>
     </div>
 
     @foreach ($groupedData as $companyId => $companyData)

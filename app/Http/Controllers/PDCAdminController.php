@@ -489,6 +489,33 @@ class PDCAdminController extends Controller
         return view('pdc_admin.export', compact('user', 'groupedData', 'companies', 'positions'));
     }
 
+    public function exportPdf($talent_id)
+    {
+        $talent = User::with([
+            'company',
+            'department',
+            'position',
+            'mentor',
+            'atasan',
+            'promotion_plan.targetPosition',
+            'assessmentSession.details.competence',
+            'idpActivities.type',
+            'improvementProjects.verifier',
+        ])->findOrFail($talent_id);
+
+        $competencies = \App\Models\Competence::all();
+        $positionId = optional($talent->promotion_plan)->target_position_id;
+        $standards = $positionId
+            ? \App\Models\PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            : collect();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards'));
+        $pdf->setPaper('a4', 'portrait');
+        
+        $filename = 'Talent_Report_' . str_replace(' ', '_', $talent->nama) . '.pdf';
+        return $pdf->download($filename);
+    }
+
     public function assignRole(Request $request, $id)
     {
         $request->validate([

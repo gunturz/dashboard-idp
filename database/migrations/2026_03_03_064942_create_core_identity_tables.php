@@ -20,6 +20,7 @@ return new class extends Migration
 
         Schema::create('department', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('company');
             $table->string('nama_department');
             $table->timestamps();
         });

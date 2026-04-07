@@ -153,6 +153,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.finance.request');
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class, 'export'])
         ->name('pdc_admin.export');
+    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
+        ->name('pdc_admin.export_pdf');
 
     // Atasan Routes
     Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class , 'dashboard'])

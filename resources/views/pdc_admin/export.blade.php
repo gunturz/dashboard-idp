@@ -336,8 +336,7 @@
                                         </div>
                                     </td>
                                     <td class="action-col">
-                                        <a href="#" class="btn-export-pdf"
-                                            onclick="alert('Export PDF untuk {{ $talent->nama }} (coming soon)')">
+                                        <a href="{{ route('pdc_admin.export_pdf', $talent->id) }}" class="btn-export-pdf">
                                             Export PDF
                                         </a>
                                     </td>

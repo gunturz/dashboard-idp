@@ -203,9 +203,6 @@
                 <a href="{{ route('bod.dashboard') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('bod.dashboard') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
                     Dashboard
                 </a>
-                <a href="{{ route('bod.review') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('bod.review') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
-                    Review
-                </a>
                 <a href="{{ route('bod.history') }}" class="text-[17px] font-semibold transition-colors {{ request()->routeIs('bod.history') ? 'text-white border-b-2 border-white pb-1' : 'text-gray-300 hover:text-white' }}">
                     History
                 </a>
@@ -306,7 +303,6 @@
     {{-- Mobile Nav Menu --}}
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ route('bod.dashboard') }}" class="py-3 text-white font-medium border-b border-gray-600 {{ request()->routeIs('bod.dashboard') ? 'text-white font-bold' : 'text-gray-300' }}">Dashboard</a>
-        <a href="{{ route('bod.review') }}" class="py-3 text-white font-medium border-b border-gray-600 {{ request()->routeIs('bod.review') ? 'text-white font-bold' : 'text-gray-300' }}">Review</a>
         <a href="{{ route('bod.history') }}" class="py-3 text-white font-medium border-b border-gray-600 {{ request()->routeIs('bod.history') ? 'text-white font-bold' : 'text-gray-300' }}">History</a>
     </div>
 

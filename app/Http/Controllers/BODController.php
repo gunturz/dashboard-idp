@@ -148,6 +148,30 @@ class BODController extends Controller
     }
 
     /**
+     * BOD Penilaian — assessment form for a single talent.
+     */
+    public function penilaian($talent_id)
+    {
+        $user    = auth()->user();
+        $talent  = User::with([
+            'company',
+            'department',
+            'position',
+            'mentor',
+            'atasan',
+            'promotion_plan.targetPosition',
+            'improvementProjects',
+        ])->findOrFail($talent_id);
+
+        // Get the latest improvement project (if any) for file preview
+        $project = $talent->improvementProjects->last();
+
+        return view('bod.penilaian', compact('user', 'talent', 'project'))
+               ->with('notifications', $this->getNotifications());
+    }
+
+
+    /**
      * BOD History — shows completed/reviewed assessments.
      */
     public function history()

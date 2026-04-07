@@ -12,7 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -109,21 +110,35 @@
             transform: translateY(-1px);
         }
 
-        /* Sidebar */
+        /* ── Sidebar ── */
         .sidebar {
             width: 260px;
-            background: #2e3746;
+            background: linear-gradient(180deg, #232d3a 0%, #2a3444 60%, #243040 100%);
             position: fixed;
             top: 80px;
             bottom: 0;
             left: 0;
             display: flex;
             flex-direction: column;
-            padding-top: 10px;
+            padding-top: 8px;
             z-index: 40;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(20, 184, 166, 0.15);
             transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Glowing right border accent */
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            right: 0;
+            bottom: 10%;
+            width: 2px;
+            background: linear-gradient(180deg, transparent 0%, #14b8a6 30%, #0d9488 70%, transparent 100%);
+            opacity: 0.5;
+            border-radius: 99px;
         }
 
         .sidebar.collapsed {
@@ -131,78 +146,90 @@
             overflow: visible;
         }
 
+        /* Section label */
+        .sidebar-section-label {
+            padding: 4px 20px 6px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(20, 184, 166, 0.5);
+            white-space: nowrap;
+        }
+        .sidebar.collapsed .sidebar-section-label {
+            display: none;
+        }
+
+        /* Sidebar items */
         .sidebar-item {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 12px 28px;
-            color: rgba(255, 255, 255, 0.8);
-            transition: all 0.2s;
+            gap: 14px;
+            padding: 11px 20px 11px 24px;
+            margin: 2px 10px;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.65);
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 500;
             white-space: nowrap;
         }
 
         .sidebar.collapsed .sidebar-item {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
+            padding: 11px 0 !important;
+            margin: 2px 0 !important;
+            border-radius: 0 !important;
             justify-content: center;
             gap: 0;
         }
 
         .sidebar-item:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.08);
+            color: #5eead4;
+            background: rgba(20, 184, 166, 0.08);
+        }
+        .sidebar-item:hover .sidebar-icon {
+            color: #5eead4;
         }
 
+        /* Active state: teal left bar + teal tint */
         .sidebar-item.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            background: rgba(20, 184, 166, 0.14);
+            font-weight: 600;
+        }
+        .sidebar-item.active .sidebar-icon {
+            color: #14b8a6;
+        }
+        .sidebar-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 3px;
+            background: linear-gradient(180deg, #5eead4 0%, #14b8a6 100%);
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 8px rgba(20, 184, 166, 0.7);
+        }
+        .sidebar.collapsed .sidebar-item.active::before {
+            top: 0;
+            bottom: 0;
         }
 
-        /* Floating Submenu when Collapsed */
-        .sidebar.collapsed .idp-group {
-            position: relative;
-        }
-        .sidebar.collapsed #idp-submenu {
-            display: none !important;
-        }
-        .sidebar.collapsed .idp-group:hover #idp-submenu {
-            display: block !important;
-            position: absolute;
-            left: 72px;
-            top: 0;
-            width: 230px;
-            background: #232a36;
-            border-radius: 0 12px 12px 0;
-            box-shadow: 15px 0 30px rgba(0,0,0,0.3);
-            padding: 10px 0;
-            z-index: 100;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-left: none;
-        }
-        .sidebar.collapsed .idp-group:hover #idp-submenu .sidebar-item {
-            padding-left: 20px !important;
-            justify-content: flex-start !important;
-            gap: 12px !important;
-        }
-        .sidebar.collapsed .idp-group:hover #idp-submenu .sidebar-label {
-            display: inline-block !important;
-            opacity: 1 !important;
-            width: auto !important;
-            pointer-events: auto !important;
-        }
-        .sidebar.collapsed .idp-group:hover #idp-submenu .sidebar-item {
-            pointer-events: auto !important;
+        /* Icon color */
+        .sidebar-icon {
+            color: rgba(255, 255, 255, 0.5);
+            transition: color 0.22s;
+            flex-shrink: 0;
         }
 
         .sidebar-label {
-            transition: opacity 0.2s, transform 0.2s;
+            transition: opacity 0.2s;
             opacity: 1;
         }
-
         .sidebar.collapsed .sidebar-label {
             display: none !important;
             opacity: 0;
@@ -216,20 +243,67 @@
             width: 100%;
             display: flex;
             justify-content: flex-end;
-            padding: 12px 20px;
-            color: rgba(255, 255, 255, 0.5);
+            padding: 10px 18px;
+            color: rgba(255, 255, 255, 0.35);
             cursor: pointer;
             transition: color 0.2s;
+            flex-shrink: 0;
         }
-
         .sidebar.collapsed .toggle-btn {
             justify-content: center;
-            padding: 12px 0;
+            padding: 10px 0;
             width: 72px;
         }
-
         .toggle-btn:hover {
+            color: #14b8a6;
+        }
+
+        /* Sidebar footer */
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px 16px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .sidebar.collapsed .sidebar-footer {
+            justify-content: center;
+            padding: 14px 0;
+        }
+        .sidebar-footer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
             color: white;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(20,184,166,0.35);
+        }
+        .sidebar-footer-info {
+            overflow: hidden;
+        }
+        .sidebar-footer-info p {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .sidebar-footer-info span {
+            font-size: 10px;
+            color: #14b8a6;
+            font-weight: 500;
+        }
+        .sidebar.collapsed .sidebar-footer-info {
+            display: none;
         }
 
         .sidebar.no-transition,
@@ -246,7 +320,7 @@
         #main-content.collapsed {
             margin-left: 72px;
         }
-        
+
         /* Dropdown panel */
         .dropdown-panel {
             transform-origin: top right;
@@ -272,39 +346,54 @@
                 width: 260px !important;
                 top: 60px !important;
             }
+
             .sidebar.mobile-open {
                 transform: translateX(0);
             }
+
+            /* Paksa label tampil di mobile meski sidebar punya class collapsed */
             .sidebar.mobile-open .sidebar-label {
+                display: block !important;
                 opacity: 1 !important;
                 width: auto !important;
+                overflow: visible !important;
                 pointer-events: auto !important;
             }
+
             .sidebar.mobile-open .sidebar-item {
-                padding: 12px 28px !important;
+                padding: 11px 20px 11px 24px !important;
+                margin: 2px 10px !important;
+                border-radius: 12px !important;
                 justify-content: flex-start !important;
-                gap: 16px !important;
+                gap: 14px !important;
             }
+
             .sidebar.mobile-open .toggle-btn {
-                display: none; /* Hide desktop toggle on mobile */
+                display: none;
+                /* Hide desktop toggle on mobile */
             }
+
             #main-content {
                 margin-left: 0 !important;
                 padding: 16px !important;
             }
+
             .navbar-outer {
                 height: 60px;
                 padding: 0 16px;
             }
+
             .navbar-outer h1 {
                 font-size: 1.1rem;
                 white-space: normal;
                 line-height: 1.3;
             }
+
             .nav-icon-btn {
                 width: 38px;
                 height: 38px;
             }
+
             .desktop-logo-text {
                 display: none;
             }
@@ -325,7 +414,7 @@
                     .sidebar-label { display: none !important; }
                 `;
                 document.head.appendChild(style);
-                
+
                 window.addEventListener('DOMContentLoaded', () => {
                     const sb = document.getElementById('sidebar');
                     const mc = document.getElementById('main-content');
@@ -340,111 +429,109 @@
     </script>
 
     {{-- Overlay responsive --}}
-    <div id="mobile-overlay" class="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-30 hidden lg:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-30 hidden lg:hidden"
+        onclick="toggleMobileSidebar()"></div>
 
-    @include('components.pdc_admin.navbar', ['user' => $user ?? auth()->user() ])
+    @include('components.pdc_admin.navbar', ['user' => $user ?? auth()->user()])
 
     {{-- SIDEBAR --}}
-    @if(!$hideSidebar)
-    <div class="sidebar" id="sidebar">
-        <div class="toggle-btn" onclick="toggleSidebar()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform duration-300" id="toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
-        </div>
-        
-        {{-- Dashboard --}}
-        <a href="{{ route('pdc_admin.dashboard') }}"
-            class="sidebar-item {{ request()->routeIs('pdc_admin.dashboard') ? 'active' : '' }}"
-            title="Dashboard">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            <span class="sidebar-label">Dashboard</span>
-        </a>
+    @if (!$hideSidebar)
+        <div class="sidebar" id="sidebar">
 
-        {{-- Progress Talent --}}
-        <a href="{{ route('pdc_admin.progress_talent') }}"
-            class="sidebar-item {{ request()->routeIs('pdc_admin.progress_talent') ? 'active' : '' }}"
-            title="Progress Talent">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            <span class="sidebar-label">Progress Talent</span>
-        </a>
-
-        {{-- IDP Management (collapsible group) --}}
-        @php
-            $idpActive = request()->routeIs('pdc_admin.kompetensi') ||
-                         request()->routeIs('pdc_admin.user_management') ||
-                         request()->routeIs('pdc_admin.company_management');
-        @endphp
-        <div class="idp-group">
-            <button onclick="toggleIdpMenu()" type="button"
-                class="sidebar-item w-full {{ $idpActive ? 'active' : '' }}"
-                title="IDP Management" id="idp-toggle-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            {{-- Toggle Collapse --}}
+            <div class="toggle-btn" onclick="toggleSidebar()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300"
+                    id="toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                 </svg>
-                <span class="sidebar-label flex-1 text-left">IDP Management</span>
-                <svg id="idp-chevron" xmlns="http://www.w3.org/2000/svg" class="sidebar-label h-4 w-4 transition-transform duration-200 {{ $idpActive ? 'rotate-180' : '' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-            {{-- Sub-items --}}
-            <div id="idp-submenu" class="{{ $idpActive ? '' : 'hidden' }}">
-                <a href="{{ route('pdc_admin.kompetensi') }}"
-                    class="sidebar-item pl-10 text-sm {{ request()->routeIs('pdc_admin.kompetensi') ? 'active' : '' }}"
-                    title="Kompetensi">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span class="sidebar-label">Kompetensi</span>
-                </a>
-                <a href="{{ route('pdc_admin.company_management') }}"
-                    class="sidebar-item pl-10 text-sm {{ request()->routeIs('pdc_admin.company_management') ? 'active' : '' }}"
-                    title="Company Management">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                    <span class="sidebar-label">Company Management</span>
-                </a>
-                <a href="{{ route('pdc_admin.user_management') }}"
-                    class="sidebar-item pl-10 text-sm {{ request()->routeIs('pdc_admin.user_management') ? 'active' : '' }}"
-                    title="User Management">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <span class="sidebar-label">User Management</span>
-                </a>
             </div>
+
+            {{-- Dashboard --}}
+            <a href="{{ route('pdc_admin.dashboard') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.dashboard') ? 'active' : '' }}" title="Dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span class="sidebar-label">Dashboard</span>
+            </a>
+
+            {{-- Progress Talent --}}
+            <a href="{{ route('pdc_admin.progress_talent') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.progress_talent') ? 'active' : '' }}"
+                title="Progress Talent">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+                <span class="sidebar-label">Progress Talent</span>
+            </a>
+
+            {{-- Kompetensi --}}
+            <a href="{{ route('pdc_admin.kompetensi') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.kompetensi') ? 'active' : '' }}"
+                title="Kompetensi">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="sidebar-label">Kompetensi</span>
+            </a>
+
+            {{-- Company Management --}}
+            <a href="{{ route('pdc_admin.company_management') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.company_management') ? 'active' : '' }}"
+                title="Company Management">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                </svg>
+                <span class="sidebar-label">Company Management</span>
+            </a>
+
+            {{-- User Management --}}
+            <a href="{{ route('pdc_admin.user_management') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.user_management') ? 'active' : '' }}"
+                title="User Management">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                </svg>
+                <span class="sidebar-label">User Management</span>
+            </a>
+
+            {{-- Finance Validation --}}
+            <a href="{{ route('pdc_admin.finance_validation') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.finance_validation') ? 'active' : '' }}"
+                title="Finance Validation">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span class="sidebar-label">Finance Validation</span>
+            </a>
+
+            {{-- BOD Review --}}
+            <a href="#" class="sidebar-item" title="BOD Review">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+                </svg>
+                <span class="sidebar-label">BOD Review</span>
+            </a>
+
+            {{-- Export --}}
+            <a href="{{ route('pdc_admin.export') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.export') ? 'active' : '' }}" title="Export">
+                <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span class="sidebar-label">Export</span>
+            </a>
+
         </div>
-
-        {{-- Finance Validation --}}
-        <a href="{{ route('pdc_admin.finance_validation') }}" class="sidebar-item {{ request()->routeIs('pdc_admin.finance_validation') ? 'active' : '' }}" title="Finance Validation">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="sidebar-label">Finance Validation</span>
-        </a>
-
-        {{-- BOD Review --}}
-        <a href="#" class="sidebar-item" title="BOD Review">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-            <span class="sidebar-label">BOD Review</span>
-        </a>
-
-        {{-- Export --}}
-        <a href="{{ route('pdc_admin.export') }}" 
-           class="sidebar-item {{ request()->routeIs('pdc_admin.export') ? 'active' : '' }}" title="Export">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            <span class="sidebar-label">Export</span>
-        </a>
-    </div>
     @endif
 
     {{-- MAIN CONTENT --}}
@@ -457,10 +544,10 @@
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const toggleIcon = document.getElementById('toggle-icon');
-            
+
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('collapsed');
-            
+
             if (sidebar.classList.contains('collapsed')) {
                 toggleIcon.style.transform = 'rotate(180deg)';
                 localStorage.setItem('sidebarCollapsed', 'true');
@@ -475,7 +562,7 @@
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const toggleIcon = document.getElementById('toggle-icon');
-            
+
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
                 sidebar.classList.add('collapsed');
                 mainContent.classList.add('collapsed');
@@ -504,20 +591,13 @@
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
-            
+
             sidebar.classList.toggle('mobile-open');
             if (sidebar.classList.contains('mobile-open')) {
                 overlay.classList.remove('hidden');
             } else {
                 overlay.classList.add('hidden');
             }
-        }
-
-        function toggleIdpMenu() {
-            const submenu = document.getElementById('idp-submenu');
-            const chevron = document.getElementById('idp-chevron');
-            submenu.classList.toggle('hidden');
-            chevron.classList.toggle('rotate-180');
         }
     </script>
     {{ $scripts ?? '' }}

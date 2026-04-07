@@ -30,14 +30,37 @@
                 font-weight: 500;
             }
 
-            .card-default { border-color: #0d9488; }
-            .card-default .stat-number { color: #0d9488; }
-            .card-pending  { border-color: #f59e0b; }
-            .card-pending .stat-number  { color: #f59e0b; }
-            .card-approved { border-color: #22c55e; }
-            .card-approved .stat-number { color: #22c55e; }
-            .card-rejected { border-color: #ef4444; }
-            .card-rejected .stat-number { color: #ef4444; }
+            .card-default {
+                border-color: #0d9488;
+            }
+
+            .card-default .stat-number {
+                color: #0d9488;
+            }
+
+            .card-pending {
+                border-color: #f59e0b;
+            }
+
+            .card-pending .stat-number {
+                color: #f59e0b;
+            }
+
+            .card-approved {
+                border-color: #22c55e;
+            }
+
+            .card-approved .stat-number {
+                color: #22c55e;
+            }
+
+            .card-rejected {
+                border-color: #ef4444;
+            }
+
+            .card-rejected .stat-number {
+                color: #ef4444;
+            }
 
             /* Table */
             .fv-table-wrapper {
@@ -73,7 +96,9 @@
                 border-right: 1px solid #f1f5f9;
             }
 
-            .fv-table th:last-child { border-right: none; }
+            .fv-table th:last-child {
+                border-right: none;
+            }
 
             .fv-table td {
                 padding: 16px 20px;
@@ -85,9 +110,13 @@
                 vertical-align: middle;
             }
 
-            .fv-table td:last-child { border-right: none; }
+            .fv-table td:last-child {
+                border-right: none;
+            }
 
-            .fv-table tbody tr:hover { background: #fafafa; }
+            .fv-table tbody tr:hover {
+                background: #fafafa;
+            }
 
             /* Status badges */
             .status-dot {
@@ -97,6 +126,7 @@
                 font-size: 0.825rem;
                 font-weight: 600;
             }
+
             .status-dot::before {
                 content: '';
                 width: 9px;
@@ -104,9 +134,18 @@
                 border-radius: 50%;
                 flex-shrink: 0;
             }
-            .status-approve::before { background: #22c55e; }
-            .status-pending::before  { background: #f59e0b; }
-            .status-rejected::before { background: #ef4444; }
+
+            .status-approve::before {
+                background: #22c55e;
+            }
+
+            .status-pending::before {
+                background: #f59e0b;
+            }
+
+            .status-rejected::before {
+                background: #ef4444;
+            }
 
             /* Action buttons */
             .btn-reject {
@@ -120,7 +159,10 @@
                 cursor: pointer;
                 transition: all .15s;
             }
-            .btn-reject:hover { background: #fef2f2; }
+
+            .btn-reject:hover {
+                background: #fef2f2;
+            }
 
             .btn-approve {
                 padding: 6px 18px;
@@ -133,7 +175,10 @@
                 cursor: pointer;
                 transition: all .15s;
             }
-            .btn-approve:hover { background: #f0fdf4; }
+
+            .btn-approve:hover {
+                background: #f0fdf4;
+            }
 
             .file-link {
                 display: inline-flex;
@@ -145,13 +190,21 @@
                 font-weight: 500;
                 transition: color .15s;
             }
-            .file-link:hover { color: #2563eb; text-decoration: underline; }
+
+            .file-link:hover {
+                color: #2563eb;
+                text-decoration: underline;
+            }
         </style>
     </x-slot>
 
-    <div class="flex items-center gap-2 mb-8 px-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.028 2.353 1.118V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.028-2.354-1.118V5z" clip-rule="evenodd" />
+    <div class="flex items-center gap-2 mb-8 px-2 animate-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 text-[#2e3746]">
+            <path
+                d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
+            <path fill-rule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z"
+                clip-rule="evenodd" />
         </svg>
         <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Finance Validation</h2>
     </div>
@@ -203,10 +256,13 @@
                         </td>
                         <td class="text-left">{{ $project->title }}</td>
                         <td>
-                            @if($project->document_path)
-                                <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank" class="file-link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                            @if ($project->document_path)
+                                <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank"
+                                    class="file-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                     </svg>
                                     Lihat
                                 </a>
@@ -215,7 +271,7 @@
                             @endif
                         </td>
                         <td>
-                            @if($project->status === 'Verified')
+                            @if ($project->status === 'Verified')
                                 <span class="status-dot status-approve">Approved</span>
                             @elseif($project->status === 'Rejected')
                                 <span class="status-dot status-rejected">Rejected</span>
@@ -225,7 +281,7 @@
                         </td>
                         <td class="text-left text-xs text-gray-600">{{ $project->finance_feedback ?? '—' }}</td>
                         <td>
-                            @if(in_array($project->status, ['Verified', 'Rejected']))
+                            @if (in_array($project->status, ['Verified', 'Rejected']))
                                 <button type="button" disabled
                                     class="w-full px-4 py-2 text-sm font-semibold text-gray-400 bg-white border border-gray-300 rounded-lg cursor-default">
                                     Sudah Dipilih
@@ -241,7 +297,8 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="py-12 text-gray-400 text-sm text-center">Belum ada permintaan validasi.</td>
+                        <td colspan="6" class="py-12 text-gray-400 text-sm text-center">Belum ada permintaan
+                            validasi.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -286,8 +343,9 @@
     <script>
         function openActionModal(projectId, talentName, actionUrl) {
             document.getElementById('actionModalDesc').innerHTML =
-                'Pilih status untuk Project Improvemen <strong>' + talentName + '</strong>.<br>Tindakan ini akan langsung memperbarui sistem pada Talent';
-            document.getElementById('rejectForm').action  = actionUrl;
+                'Pilih status untuk Project Improvemen <strong>' + talentName +
+                '</strong>.<br>Tindakan ini akan langsung memperbarui sistem pada Talent';
+            document.getElementById('rejectForm').action = actionUrl;
             document.getElementById('approveForm').action = actionUrl;
 
             const modal = document.getElementById('actionModal');

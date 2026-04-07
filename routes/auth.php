@@ -189,4 +189,20 @@ Route::middleware('auth')->group(function () {
         ->name('finance.permintaan_validasi');
     Route::patch('/finance/permintaan-validasi/{id}', [\App\Http\Controllers\FinanceDashboardController::class , 'updateFinanceValidation'])
         ->name('finance.permintaan_validasi.update');
+
+    // BOD (Board of Directors) Routes
+    Route::get('/bod/dashboard', [\App\Http\Controllers\BODController::class, 'dashboard'])
+        ->name('bod.dashboard');
+    Route::get('/bod/review', [\App\Http\Controllers\BODController::class, 'review'])
+        ->name('bod.review');
+    Route::get('/bod/history', [\App\Http\Controllers\BODController::class, 'history'])
+        ->name('bod.history');
+    Route::get('/bod/talent/{talent_id}', [\App\Http\Controllers\BODController::class, 'detailTalent'])
+        ->name('bod.detail_talent');
+    Route::get('/bod/talent/{talent_id}/logbook', [\App\Http\Controllers\BODController::class, 'logbook'])
+        ->name('bod.logbook');
+    Route::get('/bod/notifikasi', [\App\Http\Controllers\BODController::class, 'notifikasi'])
+        ->name('bod.notifikasi');
+    Route::post('/bod/notifikasi/mark-all-read', [\App\Http\Controllers\BODController::class, 'markAllNotificationsRead'])
+        ->name('bod.notifikasi.markAllRead');
 });

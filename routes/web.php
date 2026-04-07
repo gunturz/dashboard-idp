@@ -57,7 +57,7 @@ Route::get('/dashboard', function () {
         return redirect()->route('pdc_admin.dashboard');
     }
     elseif (in_array($roleName, ['bo_director', 'bod', 'board_of_director'])) {
-        return redirect()->route('bo_director.dashboard');
+        return redirect()->route('bod.dashboard');
     }
 
     // Fallback

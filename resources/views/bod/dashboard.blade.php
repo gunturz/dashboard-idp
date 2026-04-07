@@ -1,191 +1,254 @@
 <x-bod.layout title="Dashboard BOD – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
-            .company-header {
+            /* ── Page Title ── */
+            .page-title {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 32px;
+            }
+            .page-title h2 {
+                font-size: 1.4rem;
+                font-weight: 800;
+                color: #2e3746;
+            }
+
+            /* ── Company Section ── */
+            .company-section {
+                margin-bottom: 36px;
+            }
+            .company-section-title {
+                text-align: center;
                 font-size: 1rem;
                 font-weight: 700;
-                color: #334155;
-                margin-bottom: 0;
-                padding: 16px;
-                background: #f8fafc;
-                border-bottom: 1px solid #e2e8f0;
-                text-align: center;
-            }
-
-            .bod-table {
-                width: 100%;
-                border-collapse: collapse;
-                background: white;
-            }
-
-            .bod-table th {
-                background: #ffffff;
                 color: #1e293b;
+                margin-bottom: 16px;
+                position: relative;
+            }
+            .company-section-title::before,
+            .company-section-title::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                width: calc(50% - 80px);
+                height: 1px;
+                background: #e2e8f0;
+            }
+            .company-section-title::before { left: 0; }
+            .company-section-title::after  { right: 0; }
+
+            /* ── Cards Grid ── */
+            .cards-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            @media (max-width: 768px) {
+                .cards-grid { grid-template-columns: 1fr; }
+            }
+
+            /* ── Talent Card ── */
+            .talent-card {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+                transition: box-shadow 0.2s, transform 0.15s;
+                cursor: pointer;
+            }
+            .talent-card:hover {
+                box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+                transform: translateY(-2px);
+            }
+
+            /* ── Card Header ── */
+            .card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 20px;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .card-header-left {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .talent-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #e2e8f0;
+                flex-shrink: 0;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            }
+            .talent-avatar-ph {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 800;
+                font-size: 1.1rem;
+                color: #0284c7;
+                flex-shrink: 0;
+                border: 2px solid #e2e8f0;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            }
+
+            .talent-name-block .name {
+                font-size: 0.95rem;
+                font-weight: 800;
+                color: #1e293b;
+                display: block;
+            }
+            .talent-name-block .role {
+                font-size: 0.75rem;
+                color: #64748b;
+                display: block;
+                margin-top: 1px;
+            }
+
+            /* ── Beri Penilaian Button ── */
+            .btn-penilaian {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                padding: 7px 18px;
+                background: #2e3746;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 0.78rem;
                 font-weight: 700;
-                text-align: center;
-                padding: 12px 16px;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
-                font-size: 0.875rem;
-                text-transform: capitalize;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background 0.2s, transform 0.15s;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .btn-penilaian:hover {
+                background: #1e293b;
+                transform: translateY(-1px);
+                color: white;
+            }
+
+            /* ── Card Info Body ── */
+            .card-info {
+                padding: 14px 20px;
+            }
+            .info-grid {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 6px 16px;
+                align-items: baseline;
+            }
+            .info-label {
+                font-size: 0.78rem;
+                color: #64748b;
+                font-weight: 500;
                 white-space: nowrap;
             }
-            .bod-table th:last-child {
-                border-right: none;
-            }
-
-            .bod-table td {
-                text-align: center;
-                padding: 14px 16px;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
-                font-size: 0.875rem;
-                color: #334155;
-                vertical-align: middle;
-            }
-            .bod-table td:last-child {
-                border-right: none;
-            }
-            
-            .bod-table tr:last-child td {
-                border-bottom: none;
-            }
-
-            .target-position {
-                font-weight: 700;
+            .info-value {
+                font-size: 0.78rem;
                 color: #1e293b;
-                display: block;
-                font-size: 0.95rem;
-            }
-
-            .target-dept {
-                font-size: 0.75rem;
-                color: #64748b;
-                font-style: italic;
-                display: block;
-                margin-top: 2px;
-            }
-
-            .talent-name {
-                font-weight: 700;
-                color: #1e293b;
-                display: block;
-            }
-
-            .talent-role {
-                font-size: 0.75rem;
-                color: #64748b;
-                font-style: italic;
-                display: block;
-            }
-
-            .company-table-wrapper {
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                overflow: hidden;
-                margin-bottom: 24px;
-            }
-            .company-table-wrapper:last-child {
-                margin-bottom: 0;
-            }
-
-            .btn-detail {
-                color: #14b8a6;
-                font-size: 0.8rem;
                 font-weight: 600;
-                text-decoration: none;
-                transition: color 0.2s;
-            }
-            .btn-detail:hover {
-                color: #0d9488;
-                text-decoration: underline;
             }
 
-            .highlight-container {
-                background: white;
-                border-radius: 12px;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-                padding: 16px;
-                border: 1px solid #e2e8f0;
+            /* ── Empty state ── */
+            .empty-state {
+                text-align: center;
+                color: #94a3b8;
+                padding: 48px 16px;
+                font-size: 0.9rem;
             }
         </style>
     </x-slot>
 
-    {{-- Title --}}
-    <div class="flex items-center gap-3 mb-8">
+    {{-- Page Title --}}
+    <div class="page-title">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
         </svg>
-        <h2 class="text-2xl font-extrabold text-[#2e3746] animate-title">Dashboard</h2>
+        <h2>Dashboard</h2>
     </div>
 
-    {{-- Tables grouped by Company --}}
-    <div class="highlight-container">
-        @forelse($groupedData as $companyId => $companyData)
-            <div class="company-table-wrapper">
-                <h4 class="company-header">{{ $companyData['company']->nama_company ?? 'Unassigned' }}</h4>
-                <div class="overflow-x-auto">
-                    <table class="bod-table">
-                        <thead>
-                            <tr>
-                                <th class="w-[16%]">Posisi yang Dituju</th>
-                                <th class="w-[16%]">Talent</th>
-                                <th class="w-[16%]">Departemen</th>
-                                <th class="w-[16%]">Mentor</th>
-                                <th class="w-[16%]">Atasan</th>
-                                <th class="w-[16%]">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($companyData['positions'] as $positionId => $posData)
-                                @foreach($posData['talents'] as $index => $talent)
-                                    <tr>
-                                        @if($index === 0)
-                                            <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                                <span class="target-position">
-                                                    {{ $posData['targetPosition']->position_name ?? '-' }}
-                                                </span>
-                                                <span class="target-dept">
-                                                    {{ optional($posData['targetPosition']->department ?? null)->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
-                                                </span>
-                                            </td>
-                                        @endif
-                                        <td>
-                                            <span class="talent-name">{{ $talent->nama }}</span>
-                                            <span class="talent-role">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
-                                        </td>
-                                        @if($index === 0)
-                                            <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                                {{ optional($talent->department)->nama_department ?? '-' }}
-                                            </td>
-                                        @endif
-                                        <td>
-                                            @php
-                                                $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                                                if (!empty($mentorIds)) {
-                                                    $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
-                                                    echo implode('<br>', $mentorNames) ?: '-';
-                                                } else {
-                                                    echo optional($talent->mentor)->nama ?? '-';
-                                                }
-                                            @endphp
-                                        </td>
-                                        <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
-                                        <td>
-                                            <a href="{{ route('bod.detail_talent', $talent->id) }}" class="btn-detail">Lihat Detail</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+    {{-- Companies & Cards --}}
+    @forelse($groupedData as $companyId => $companyData)
+        <div class="company-section">
+            <div class="company-section-title">
+                {{ $companyData['company']->nama_company ?? 'Unassigned' }}
             </div>
-        @empty
-            <div class="p-8 text-center text-gray-400">
-                Belum ada data progress talent.
+            <div class="cards-grid">
+                @foreach($companyData['positions'] as $positionId => $posData)
+                    @foreach($posData['talents'] as $talent)
+                        @php
+                            $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+                            if (!empty($mentorIds)) {
+                                $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
+                                $mentorDisplay = implode(', ', $mentorNames) ?: '-';
+                            } else {
+                                $mentorDisplay = optional($talent->mentor)->nama ?? '-';
+                            }
+                            $targetPos     = optional($posData['targetPosition'])->position_name ?? '-';
+                            $companyName   = optional($companyData['company'])->nama_company ?? '-';
+                            $atasanName    = optional($talent->atasan)->nama ?? '-';
+                            $currentPos    = optional($talent->position)->position_name ?? 'Officer';
+                            $deptName      = optional($talent->department)->nama_department ?? '-';
+                            $avatarUrl     = $talent->foto
+                                             ? asset('storage/' . $talent->foto)
+                                             : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0284c7&bold=true';
+                        @endphp
+
+                        {{-- Card — whole card clicks → detail, button clicks → penilaian --}}
+                        <div class="talent-card" onclick="window.location='{{ route('bod.detail_talent', $talent->id) }}'">
+                            {{-- Header --}}
+                            <div class="card-header">
+                                <div class="card-header-left">
+                                    <img src="{{ $avatarUrl }}" alt="{{ $talent->nama }}" class="talent-avatar">
+                                    <div class="talent-name-block">
+                                        <span class="name">{{ $talent->nama }}</span>
+                                        <span class="role">{{ $currentPos }} – {{ $deptName }}</span>
+                                    </div>
+                                </div>
+                                <a href="{{ route('bod.penilaian', $talent->id) }}"
+                                   class="btn-penilaian"
+                                   onclick="event.stopPropagation()">
+                                    Beri Penilaian
+                                </a>
             </div>
-        @endforelse
-    </div>
+
+                            {{-- Info Body --}}
+                            <div class="card-info">
+                                <div class="info-grid">
+                                    <span class="info-label">Posisi yang Dituju</span>
+                                    <span class="info-value">{{ $targetPos }}</span>
+
+                                    <span class="info-label">Perusahaan</span>
+                                    <span class="info-value">{{ $companyName }}</span>
+
+                                    <span class="info-label">Mentor</span>
+                                    <span class="info-value">{{ $mentorDisplay }}</span>
+
+                                    <span class="info-label">Atasan</span>
+                                    <span class="info-value">{{ $atasanName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endforeach
+            </div>
+        </div>
+    @empty
+        <div class="empty-state">
+            Belum ada data progress talent.
+        </div>
+    @endforelse
 
 </x-bod.layout>

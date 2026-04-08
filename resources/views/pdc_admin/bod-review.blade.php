@@ -255,7 +255,7 @@
             name="search"
             placeholder="Cari Nama Talent…"
             value="{{ request('search') }}"
-            class="bod-filter-input w-full sm:w-48"
+            class="bod-filter-input flex-1 w-full sm:min-w-[200px]"
             id="bod-search-input"
         >
         <select name="company_id" class="bod-filter-select" id="bod-company-filter" onchange="this.form.submit()">
@@ -326,12 +326,10 @@
                                         <span class="talent-role">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
                                     </td>
 
-                                    {{-- Departemen (rowspan) --}}
-                                    @if ($index === 0)
-                                        <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                            {{ optional($talent->department)->nama_department ?? '-' }}
-                                        </td>
-                                    @endif
+                                    {{-- Departemen --}}
+                                    <td class="bg-white">
+                                        {{ optional($talent->department)->nama_department ?? '-' }}
+                                    </td>
 
                                     {{-- Mentor --}}
                                     <td>

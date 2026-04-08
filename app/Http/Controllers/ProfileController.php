@@ -40,6 +40,9 @@ class ProfileController extends Controller
         elseif ($roleName === 'finance') {
             $view = 'finance.profile';
         }
+        elseif (in_array($roleName, ['bod', 'board_of_director', 'board of director'])) {
+            $view = 'bod.profile';
+        }
         else {
             $view = 'profile.dashboard'; // fallback
         }

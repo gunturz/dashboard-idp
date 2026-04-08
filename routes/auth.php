@@ -133,27 +133,27 @@ Route::middleware('auth')->group(function () {
     Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class , 'resetPassword'])
         ->name('pdc_admin.reset_password');
     // Company Management
-    Route::get('/pdc-admin/company-management', [\App\Http\Controllers\PDCAdminController::class, 'companyManagement'])
+    Route::get('/pdc-admin/company-management', [\App\Http\Controllers\PDCAdminController::class , 'companyManagement'])
         ->name('pdc_admin.company_management');
-    Route::post('/pdc-admin/company', [\App\Http\Controllers\PDCAdminController::class, 'storeCompany'])
+    Route::post('/pdc-admin/company', [\App\Http\Controllers\PDCAdminController::class , 'storeCompany'])
         ->name('pdc_admin.company.store');
-    Route::put('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class, 'updateCompany'])
+    Route::put('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateCompany'])
         ->name('pdc_admin.company.update');
-    Route::delete('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyCompany'])
+    Route::delete('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyCompany'])
         ->name('pdc_admin.company.destroy');
-    Route::get('/pdc-admin/company/{id}/departments', [\App\Http\Controllers\PDCAdminController::class, 'departmentManagement'])
+    Route::get('/pdc-admin/company/{id}/departments', [\App\Http\Controllers\PDCAdminController::class , 'departmentManagement'])
         ->name('pdc_admin.company.departments');
-    Route::post('/pdc-admin/department', [\App\Http\Controllers\PDCAdminController::class, 'storeDepartment'])
+    Route::post('/pdc-admin/department', [\App\Http\Controllers\PDCAdminController::class , 'storeDepartment'])
         ->name('pdc_admin.department.store');
-    Route::put('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class, 'updateDepartment'])
+    Route::put('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateDepartment'])
         ->name('pdc_admin.department.update');
-    Route::delete('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyDepartment'])
+    Route::delete('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyDepartment'])
         ->name('pdc_admin.department.destroy');
-    Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class, 'requestFinanceValidation'])
+    Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class , 'requestFinanceValidation'])
         ->name('pdc_admin.finance.request');
-    Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class, 'export'])
+    Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class , 'export'])
         ->name('pdc_admin.export');
-    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
+    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class , 'exportPdf'])
         ->name('pdc_admin.export_pdf');
 
     // Atasan Routes
@@ -193,20 +193,22 @@ Route::middleware('auth')->group(function () {
         ->name('finance.permintaan_validasi.update');
 
     // BOD (Board of Directors) Routes
-    Route::get('/bod/dashboard', [\App\Http\Controllers\BODController::class, 'dashboard'])
+    Route::get('/bod/dashboard', [\App\Http\Controllers\BODController::class , 'dashboard'])
         ->name('bod.dashboard');
-    Route::get('/bod/review', [\App\Http\Controllers\BODController::class, 'review'])
+    Route::get('/bod/review', [\App\Http\Controllers\BODController::class , 'review'])
         ->name('bod.review');
-    Route::get('/bod/history', [\App\Http\Controllers\BODController::class, 'history'])
+    Route::get('/bod/history', [\App\Http\Controllers\BODController::class , 'history'])
         ->name('bod.history');
-    Route::get('/bod/talent/{talent_id}', [\App\Http\Controllers\BODController::class, 'detailTalent'])
+    Route::get('/bod/talent/{talent_id}', [\App\Http\Controllers\BODController::class , 'detailTalent'])
         ->name('bod.detail_talent');
-    Route::get('/bod/talent/{talent_id}/penilaian', [\App\Http\Controllers\BODController::class, 'penilaian'])
+    Route::get('/bod/talent/{talent_id}/penilaian', [\App\Http\Controllers\BODController::class , 'penilaian'])
         ->name('bod.penilaian');
-    Route::get('/bod/talent/{talent_id}/logbook', [\App\Http\Controllers\BODController::class, 'logbook'])
+    Route::post('/bod/talent/{talent_id}/penilaian', [\App\Http\Controllers\BODController::class , 'simpanPenilaian'])
+        ->name('bod.penilaian.simpan');
+    Route::get('/bod/talent/{talent_id}/logbook', [\App\Http\Controllers\BODController::class , 'logbook'])
         ->name('bod.logbook');
-    Route::get('/bod/notifikasi', [\App\Http\Controllers\BODController::class, 'notifikasi'])
+    Route::get('/bod/notifikasi', [\App\Http\Controllers\BODController::class , 'notifikasi'])
         ->name('bod.notifikasi');
-    Route::post('/bod/notifikasi/mark-all-read', [\App\Http\Controllers\BODController::class, 'markAllNotificationsRead'])
+    Route::post('/bod/notifikasi/mark-all-read', [\App\Http\Controllers\BODController::class , 'markAllNotificationsRead'])
         ->name('bod.notifikasi.markAllRead');
 });

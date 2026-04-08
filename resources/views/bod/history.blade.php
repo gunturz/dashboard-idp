@@ -276,20 +276,30 @@
     <p class="page-title">Riwayat Penilaian</p>
 
     @php
-        $aspects = [
-            ['name' => 'Pemahaman Bisnis & Strategi',          'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan',                           'score' => 4],
-            ['name' => 'Identifikasi Masalah',                 'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',                                   'score' => 4],
-            ['name' => 'Analisis Akar Masalah',                'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",                    'score' => 3],
-            ['name' => 'Solusi yang Ditawarkan',               'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah',                                        'score' => 4],
-            ['name' => 'Rencana Implementasi',                 'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',                                       'score' => 4],
-            ['name' => 'Target Dampak & KPI',                  'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas',                                       'score' => 5],
-            ['name' => 'Risiko & Mitigasi',                    'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi',                                           'score' => 4],
-            ['name' => 'Gaya Presentasi & Penguasaan Materi',  'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',                                              'score' => 3],
-            ['name' => 'Refleksi Peran sebagai GM',            'indicator' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',     'score' => 4],
-            ['name' => 'Nilai Tambah',                         'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',                                         'score' => 3],
+        $aspectNames = [
+            'Pemahaman Bisnis & Strategi',
+            'Identifikasi Masalah',
+            'Analisis Akar Masalah',
+            'Solusi yang Ditawarkan',
+            'Rencana Implementasi',
+            'Target Dampak & KPI',
+            'Risiko & Mitigasi',
+            'Gaya Presentasi & Penguasaan Materi',
+            'Refleksi Peran sebagai GM',
+            'Nilai Tambah',
         ];
-        $totalScore = array_sum(array_column($aspects, 'score'));
-        $maxScore   = count($aspects) * 5;
+        $aspectIndicators = [
+            'Memahami konteks industri, Business proses dan arah perusahaan',
+            'Masalah yang diangkat relevan, kritis, dan berbasis data',
+            "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
+            'Solusi konkret, realistis, dan menjawab akar masalah',
+            'Timeline jelas, tahapan logis, melibatkan stakeholder',
+            'Indikator keberhasilan terukur, baseline–target jelas',
+            'Mengenali risiko dan menyusun strategi antisipasi',
+            'Komunikatif, percaya diri, menjawab pertanyaan',
+            'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
+            'Inisiatif ekstra, kolaborasi, atau insight mendalam',
+        ];
 
         $grouped = $projects->groupBy(fn($p) => optional(optional($p->talent)->company)->nama_company ?? 'Lainnya');
     @endphp
@@ -302,9 +312,17 @@
 
             @foreach($companyProjects as $idx => $project)
                 @php
-                    $talent   = $project->talent;
-                    $cardId   = 'hc-' . $project->id;
-                    $expanded = ($idx === 0);
+                    $talent    = $project->talent;
+                    $cardId    = 'hc-' . $project->id;
+                    $expanded  = false;
+                    $scoreArr  = $project->bod_scores_json ? json_decode($project->bod_scores_json, true) : [];
+                    $totalScore = $project->bod_score ?? 0;
+                    $maxScore   = 50;
+
+                    // Determine rekomendasi dot color
+                    $rekomenColor = 'yellow';
+                    if (str_contains($project->bod_rekomendasi ?? '', 'Ready Now'))       $rekomenColor = 'green';
+                    elseif (str_contains($project->bod_rekomendasi ?? '', 'Not Ready'))   $rekomenColor = 'red';
                 @endphp
 
                 <div class="hist-card">
@@ -316,10 +334,14 @@
                         <div class="hist-meta">
                             <span class="hist-name">{{ optional($talent)->nama ?? '-' }}</span>
                             <span class="hist-role">
-                                {{ optional(optional($talent)->position)->position_name ?? 'Officer' }} –
-                                <em>{{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}</em>
+                                {{ $talent->position->position_name ?? '-' }}
+                                &rarr;
+                                {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
                             </span>
-                            <span class="hist-date">Dikirim: {{ $project->updated_at ? $project->updated_at->translatedFormat('d F Y') : '-' }}</span>
+                            <span class="hist-role">
+                                {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
+                            </span>
+                            <span class="hist-date">Dinilai: {{ $project->bod_tanggal_penilaian ? \Carbon\Carbon::parse($project->bod_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
                         </div>
                         <span class="hist-project-title">{{ $project->title ?? 'Judul Project' }}</span>
                         <span class="badge-done">Done Review</span>
@@ -339,15 +361,15 @@
                                         <tr>
                                             <th style="width:26%;">Aspek yang Dinilai</th>
                                             <th style="width:55%;">Indikator Penilaian</th>
-                                            <th style="width:19%;">Status Aksi</th>
+                                            <th style="width:19%;">Skor</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($aspects as $asp)
+                                        @foreach($aspectNames as $ai => $aspName)
                                             <tr>
-                                                <td>{{ $asp['name'] }}</td>
-                                                <td>{{ $asp['indicator'] }}</td>
-                                                <td><span class="score-ro">{{ $asp['score'] }}</span></td>
+                                                <td>{{ $aspName }}</td>
+                                                <td>{{ $aspectIndicators[$ai] }}</td>
+                                                <td><span class="score-ro">{{ $scoreArr[$ai] ?? '-' }}</span></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -357,21 +379,20 @@
                             {{-- Komentar --}}
                             <div class="komentar-wrap">
                                 <p class="komentar-label">Komentar / Catatan Penilai:</p>
-                                <textarea class="komentar-ta" placeholder="Tambahkan komentar ke talent..">{{ $project->feedback ?? '' }}</textarea>
+                                <textarea class="komentar-ta" readonly>{{ $project->bod_komentar ?? '' }}</textarea>
                             </div>
 
                             {{-- Readiness --}}
                             <div class="readiness-wrap">
-                                <div class="rd-dot green"></div>
+                                <div class="rd-dot {{ $rekomenColor }}"></div>
                                 <div class="rd-text">
-                                    <strong>Ready in 1 – 2 Years</strong>
-                                    <span> (Siap dengan pengembangan terarah)</span>
+                                    <strong>{{ $project->bod_rekomendasi ?? '-' }}</strong>
                                 </div>
                             </div>
 
                             {{-- Skor --}}
                             <div class="skor-wrap">
-                                <span class="skor-lbl">Skor</span>
+                                <span class="skor-lbl">Total Skor</span>
                                 <span class="skor-val">{{ $totalScore }} / {{ $maxScore }}</span>
                             </div>
 

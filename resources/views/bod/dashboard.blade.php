@@ -19,24 +19,21 @@
                 margin-bottom: 36px;
             }
             .company-section-title {
-                text-align: center;
+                display: flex;
+                align-items: center;
+                gap: 16px;
                 font-size: 1rem;
                 font-weight: 700;
                 color: #1e293b;
                 margin-bottom: 16px;
-                position: relative;
             }
             .company-section-title::before,
             .company-section-title::after {
                 content: '';
-                position: absolute;
-                top: 50%;
-                width: calc(50% - 80px);
+                flex: 1;
                 height: 1px;
                 background: #e2e8f0;
             }
-            .company-section-title::before { left: 0; }
-            .company-section-title::after  { right: 0; }
 
             /* ── Cards Grid ── */
             .cards-grid {
@@ -214,7 +211,11 @@
                                     <img src="{{ $avatarUrl }}" alt="{{ $talent->nama }}" class="talent-avatar">
                                     <div class="talent-name-block">
                                         <span class="name">{{ $talent->nama }}</span>
-                                        <span class="role">{{ $currentPos }} – {{ $deptName }}</span>
+                                        <span class="role">
+                                             {{ $talent->position->position_name ?? '-' }}
+                                            &rarr;
+                                            {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                                        </span>
                                     </div>
                                 </div>
                                 <a href="{{ route('bod.penilaian', $talent->id) }}"
@@ -227,8 +228,8 @@
                             {{-- Info Body --}}
                             <div class="card-info">
                                 <div class="info-grid">
-                                    <span class="info-label">Posisi yang Dituju</span>
-                                    <span class="info-value">{{ $targetPos }}</span>
+                                    <span class="info-label">Department</span>
+                                    <span class="info-value">{{ $deptName }}</span>
 
                                     <span class="info-label">Perusahaan</span>
                                     <span class="info-value">{{ $companyName }}</span>

@@ -135,6 +135,7 @@
                     <th>Aktivitas</th>
                     <th>Deskripsi</th>
                     <th>Dokumentasi</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -169,11 +170,21 @@
                                 <span class="text-gray-400 text-xs">-</span>
                             @endif
                         </td>
+                        <td>
+                            <div class="flex items-center justify-center gap-2">
+                                @php
+                                    $st = $act->status ?? 'Pending';
+                                    $isApprove = in_array($st, ['Approve', 'Approved', 'Verified']);
+                                @endphp
+                                <div class="w-2 h-2 rounded-full {{ $isApprove ? 'bg-green-500' : 'bg-orange-400' }}"></div>
+                                <span class="font-semibold">{{ $isApprove ? 'Approved' : $st }}</span>
+                            </div>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="py-10 text-gray-400">Belum ada aktivitas Exposure.</td></tr>
-                    <tr><td colspan="7" class="py-2 text-gray-200 text-xs">-</td></tr>
-                    <tr><td colspan="7" class="py-2 text-gray-200 text-xs">-</td></tr>
+                    <tr><td colspan="8" class="py-10 text-gray-400">Belum ada aktivitas Exposure.</td></tr>
+                    <tr><td colspan="8" class="py-2 text-gray-200 text-xs">-</td></tr>
+                    <tr><td colspan="8" class="py-2 text-gray-200 text-xs">-</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -191,6 +202,7 @@
                     <th>Deskripsi</th>
                     <th>Action Plan</th>
                     <th>Dokumentasi</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -225,11 +237,21 @@
                                 <span class="text-gray-400 text-xs">-</span>
                             @endif
                         </td>
+                        <td>
+                            <div class="flex items-center justify-center gap-2">
+                                @php
+                                    $st = $act->status ?? 'Pending';
+                                    $isApprove = in_array($st, ['Approve', 'Approved', 'Verified']);
+                                @endphp
+                                <div class="w-2 h-2 rounded-full {{ $isApprove ? 'bg-green-500' : 'bg-orange-400' }}"></div>
+                                <span class="font-semibold">{{ $isApprove ? 'Approved' : $st }}</span>
+                            </div>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="py-10 text-gray-400">Belum ada aktivitas Mentoring.</td></tr>
-                    <tr><td colspan="7" class="py-2 text-gray-200 text-xs">-</td></tr>
-                    <tr><td colspan="7" class="py-2 text-gray-200 text-xs">-</td></tr>
+                    <tr><td colspan="8" class="py-10 text-gray-400">Belum ada aktivitas Mentoring.</td></tr>
+                    <tr><td colspan="8" class="py-2 text-gray-200 text-xs">-</td></tr>
+                    <tr><td colspan="8" class="py-2 text-gray-200 text-xs">-</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -240,24 +262,21 @@
         <table class="log-table" style="min-width:860px;">
             <thead>
                 <tr>
-                    <th>Sumber</th>
                     <th>Tema</th>
                     <th>Tanggal</th>
+                    <th>Sumber</th>
                     <th>Platform</th>
-                    <th>Aktivitas</th>
-                    <th>Deskripsi</th>
                     <th>Dokumentasi</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($learningActivities as $act)
                     <tr>
-                        <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
                         <td class="font-semibold text-[#1e293b]">{{ $act->theme ?? '-' }}</td>
                         <td class="whitespace-nowrap">{{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d F Y') : '-' }}</td>
-                        <td>{{ $act->platform ?? '-' }}</td>
                         <td>{{ $act->activity ?? '-' }}</td>
-                        <td>{{ $act->description ?? '-' }}</td>
+                        <td>{{ $act->platform ?? '-' }}</td>
                         <td>
                             @php
                                 $paths = []; $names = [];
@@ -281,11 +300,21 @@
                                 <span class="text-gray-400 text-xs">-</span>
                             @endif
                         </td>
+                        <td>
+                            <div class="flex items-center justify-center gap-2">
+                                @php
+                                    $st = $act->status ?? 'Pending';
+                                    $isApprove = in_array($st, ['Approve', 'Approved', 'Verified']);
+                                @endphp
+                                <div class="w-2 h-2 rounded-full {{ $isApprove ? 'bg-green-500' : 'bg-orange-400' }}"></div>
+                                <span class="font-semibold">{{ $isApprove ? 'Approved' : $st }}</span>
+                            </div>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="py-10 text-gray-400">Belum ada aktivitas Learning.</td></tr>
-                    <tr><td colspan="7" class="py-2 text-gray-200 text-xs">-</td></tr>
-                    <tr><td colspan="7" class="py-2 text-gray-200 text-xs">-</td></tr>
+                    <tr><td colspan="6" class="py-10 text-gray-400">Belum ada aktivitas Learning.</td></tr>
+                    <tr><td colspan="6" class="py-2 text-gray-200 text-xs">-</td></tr>
+                    <tr><td colspan="6" class="py-2 text-gray-200 text-xs">-</td></tr>
                 @endforelse
             </tbody>
         </table>

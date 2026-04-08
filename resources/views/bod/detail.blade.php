@@ -30,7 +30,7 @@
             .profile-info h3 { font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
             .profile-info p { font-size: 0.78rem; color: #64748b; font-style: italic; }
             .profile-meta {
-                display: grid; grid-template-columns: repeat(3, auto); gap: 8px 28px;
+                display: grid; grid-template-columns: repeat(2, auto); gap: 8px 28px;
             }
             .meta-item { font-size: 0.78rem; color: #475569; }
             .meta-item strong { color: #1e293b; font-weight: 700; }
@@ -94,18 +94,7 @@
             .proj-table td { padding:14px 16px; border:1px solid #e2e8f0; font-size:0.85rem; text-align:center; color:#334155; }
 
             /* ── LogBook summary ── */
-            .logbook-summary-card {
-                background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-            }
-            .logbook-hint { font-size: 0.8rem; color: #64748b; margin-bottom: 10px; }
-            .btn-logbook-detail {
-                color: #14b8a6; font-size: 0.8rem; font-weight: 600;
-                text-decoration: none; transition: color 0.2s;
-                display: inline-flex; align-items: center; gap: 4px;
-            }
-            .btn-logbook-detail:hover { color: #0d9488; text-decoration: underline; }
-            .logbook-check-icon { color: #22c55e; }
+            /* Using inline tailwind classes */
 
             @media(max-width:768px) {
                 .profile-meta { grid-template-columns: 1fr 1fr; }
@@ -128,10 +117,16 @@
             alt="{{ $talent->nama }}" class="profile-avatar">
         <div class="profile-info">
             <h3>{{ $talent->nama }}</h3>
-            <p>{{ optional($talent->position)->position_name ?? '-' }}</p>
+            <p>
+                 {{ $talent->position->position_name ?? '-' }}
+                 &rarr;
+                 {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
+            </p>
         </div>
         <div class="profile-meta">
             <div class="meta-item"><strong>Perusahaan</strong><br>{{ optional($talent->company)->nama_company ?? '-' }}</div>
+            <div class="meta-item"><strong>Departemen</strong><br>{{ optional($talent->department)->nama_department ?? '-' }}</div>
+            <div class="meta-item"><strong>Atasan</strong><br>{{ optional($talent->atasan)->nama ?? '-' }}</div>
             <div class="meta-item"><strong>Mentor</strong><br>
                 @php
                     $mIds = optional($talent->promotion_plan)->mentor_ids ?? [];
@@ -140,9 +135,6 @@
                         : (optional($talent->mentor)->nama ?? '-');
                 @endphp
             </div>
-            <div class="meta-item"><strong>Jabatan yang Dituju</strong><br>{{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}</div>
-            <div class="meta-item"><strong>Departemen</strong><br>{{ optional($talent->department)->nama_department ?? '-' }}</div>
-            <div class="meta-item"><strong>Atasan</strong><br>{{ optional($talent->atasan)->nama ?? '-' }}</div>
         </div>
     </div>
 
@@ -342,21 +334,20 @@
         LogBook
     </div>
 
-    <div class="logbook-summary-card">
-        <div class="flex items-start gap-3 mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0 logbook-check-icon" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-            </svg>
-            <span class="font-semibold text-sm text-gray-700">Lihat rekap aktivitas LogBook</span>
+    <div class="bg-[#f8fafc] border border-[#e2e8f0] rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 mt-2 shadow-sm">
+        <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#334155]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span class="font-bold text-[0.95rem] text-[#1e293b]">Lihat rekap aktivitas LogBook Talent</span>
+            </div>
+            <p class="text-[0.8rem] text-[#64748b] ml-7">
+                Pantau progress Exposure, Mentoring, dan Learning pada talent ini secara lengkap klik tombol untuk melihat detail seluruh sesi.
+            </p>
         </div>
-        <p class="logbook-hint">
-            Pantau progress Exposure, Mentoring, dan Learning secara lengkap — dan tambahkan isi aktivitas untuk melindungi data aktual sebagai acuan.
-        </p>
-        <a href="{{ route('bod.logbook', $talent->id) }}" class="btn-logbook-detail">
+        <a href="{{ route('bod.logbook', $talent->id) }}" class="bg-[#10b981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors duration-200 whitespace-nowrap shadow-sm text-center">
             Lihat Detail
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-            </svg>
         </a>
     </div>
 

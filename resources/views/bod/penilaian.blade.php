@@ -267,6 +267,24 @@
             }
             .btn-reset:hover { border-color: #94a3b8; color: #1e293b; }
 
+            .btn-batal {
+                padding: 9px 22px;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 8px;
+                background: white;
+                color: #ef4444;
+                font-size: 0.82rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                font-family: 'Poppins', sans-serif;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .btn-batal:hover { border-color: #ef4444; color: #dc2626; background: #fef2f2; }
+
             .btn-simpan {
                 padding: 9px 26px;
                 border: none;
@@ -366,9 +384,50 @@
             </div>
             <div class="info-row mt-2">
                 <label>Tanggal Penilaian</label>
-                <input type="date" id="tanggal-penilaian" value="{{ now()->format('Y-m-d') }}">
+                <input type="date" id="tanggal-penilaian" value="{{ $project && $project->bod_tanggal_penilaian ? \Carbon\Carbon::parse($project->bod_tanggal_penilaian)->format('Y-m-d') : now()->format('Y-m-d') }}">
             </div>
         </div>
+    </div>
+
+    {{-- Rubrik Skor ── --}}
+    <div class="rubrik-section" style="margin-bottom: 28px;">
+        <p class="section-heading">Rubrik Skor Penilaian</p>
+        <table class="rubrik-table">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width:60px;">Skor</th>
+                    <th style="width:130px;">Kategori</th>
+                    <th>Deskripsi Singkat Penilaian</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="skor-cell">5</td>
+                    <td class="kategori-cell">Sangat Baik</td>
+                    <td>Menunjukkan keunggulan luar biasa, melampaui ekspektasi, analisis & solusi sangat kuat</td>
+                </tr>
+                <tr>
+                    <td class="skor-cell">4</td>
+                    <td class="kategori-cell">Baik</td>
+                    <td>Memenuhi ekspektasi dengan baik, logis dan tepat, ada insight yang relevan</td>
+                </tr>
+                <tr>
+                    <td class="skor-cell">3</td>
+                    <td class="kategori-cell">Cukup</td>
+                    <td>Cukup baik tapi masih bisa dikembangkan, kurang dalam eksplorasi/solusi kurang tajam</td>
+                </tr>
+                <tr>
+                    <td class="skor-cell">2</td>
+                    <td class="kategori-cell">Kurang</td>
+                    <td>Analisis atau solusi belum tepat atau dangkal, banyak asumsi, kurang relevan</td>
+                </tr>
+                <tr>
+                    <td class="skor-cell">1</td>
+                    <td class="kategori-cell">Sangat Kurang</td>
+                    <td>Gagal menangkap inti masalah, solusi tidak relevan, pemahaman rendah</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     {{-- Aspek Penilaian --}}
@@ -419,9 +478,20 @@
     </div>
 
     {{-- Komentar --}}
+    <form id="penilaian-form" method="POST" action="{{ route('bod.penilaian.simpan', $talent->id) }}">
+        @csrf
+        {{-- Hidden fields populated by JS before submit --}}
+        <input type="hidden" name="tanggal_penilaian" id="form-tanggal">
+        <input type="hidden" name="komentar"          id="form-komentar">
+        <input type="hidden" name="rekomendasi"       id="form-rekomendasi">
+        @for($i = 0; $i < 10; $i++)
+            <input type="hidden" name="scores[]" id="form-score-{{ $i }}" value="0">
+        @endfor
+    </form>
+
     <div class="comment-box">
         <div class="comment-box-label">Komentar / Catatan Penilai:</div>
-        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent.."></textarea>
+        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent..">{{ $project->bod_komentar ?? '' }}</textarea>
     </div>
 
     {{-- Rekomendasi Panelis --}}
@@ -435,11 +505,31 @@
                 ['id' => 'r2', 'label' => 'Ready in > 2 Years',  'desc' => 'Masih membutuhkan pengembangan signifikan'],
                 ['id' => 'r3', 'label' => 'Not Ready',           'desc' => 'Belum direkomendasikan untuk jalur suksesi saat ini'],
             ];
+            $rekomenValues = [
+                'r0' => 'Ready Now',
+                'r1' => 'Ready in 1 – 2 Years',
+                'r2' => 'Ready in > 2 Years',
+                'r3' => 'Not Ready',
+            ];
+            
+            // Mencari ID terpilih sebelumnya
+            $rekomenSelectedId = null;
+            $rekomenSelectedText = null;
+            if ($project && $project->bod_rekomendasi) {
+                // Find matching label, some records might have Ready in ... instead of exact label
+                foreach ($rekomenOptions as $opt) {
+                    if (str_contains($project->bod_rekomendasi, $opt['label']) || $project->bod_rekomendasi === $opt['label']) {
+                        $rekomenSelectedId = $opt['id'];
+                        $rekomenSelectedText = $opt['label'];
+                        break;
+                    }
+                }
+            }
         @endphp
 
         @foreach($rekomenOptions as $opt)
-            <div class="rekomen-option" onclick="selectRekomen('{{ $opt['id'] }}')">
-                <div class="rekomen-checkbox" id="{{ $opt['id'] }}"></div>
+            <div class="rekomen-option" onclick="selectRekomen('{{ $opt['id'] }}', '{{ $rekomenValues[$opt['id']] }}')">
+                <div class="rekomen-checkbox {{ $rekomenSelectedId === $opt['id'] ? 'checked' : '' }}" id="{{ $opt['id'] }}"></div>
                 <div class="rekomen-label">
                     <strong>{{ $opt['label'] }}</strong>
                     <span> ({{ $opt['desc'] }})</span>
@@ -450,87 +540,64 @@
 
     {{-- Skor + Buttons --}}
     <div class="skor-footer">
+        <a href="{{ route('bod.history') }}" class="btn-batal bg-red-500 text-white hover:bg-red-600 hover:text-white mr-auto">Batal</a>
         <div class="skor-display">
             <span>Skor</span>
             <div class="skor-count" id="skor-display">0 / 50</div>
         </div>
-        <button class="btn-reset" onclick="resetAll()">Reset</button>
-        <button class="btn-simpan" onclick="simpanPenilaian()">Simpan</button>
-    </div>
-
-    {{-- Rubrik Skor ── --}}
-    <div class="rubrik-section">
-        <p class="section-heading">Rubrik Skor Penilaian</p>
-        <table class="rubrik-table">
-            <thead>
-                <tr>
-                    <th class="text-center" style="width:60px;">Skor</th>
-                    <th style="width:130px;">Kategori</th>
-                    <th>Deskripsi Singkat Penilaian</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="skor-cell">5</td>
-                    <td class="kategori-cell">Sangat Baik</td>
-                    <td>Menunjukkan keunggulan luar biasa, melampaui ekspektasi, analisis & solusi sangat kuat</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">4</td>
-                    <td class="kategori-cell">Baik</td>
-                    <td>Memenuhi ekspektasi dengan baik, logis dan tepat, ada insight yang relevan</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">3</td>
-                    <td class="kategori-cell">Cukup</td>
-                    <td>Cukup baik tapi masih bisa dikembangkan, kurang dalam eksplorasi/solusi kurang tajam</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">2</td>
-                    <td class="kategori-cell">Kurang</td>
-                    <td>Analisis atau solusi belum tepat atau dangkal, banyak asumsi, kurang relevan</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">1</td>
-                    <td class="kategori-cell">Sangat Kurang</td>
-                    <td>Gagal menangkap inti masalah, solusi tidak relevan, pemahaman rendah</td>
-                </tr>
-            </tbody>
-        </table>
+        <button type="button" class="btn-reset" onclick="resetAll()">Reset</button>
+        <button type="button" class="btn-simpan" onclick="doSimpan()">Simpan</button>
     </div>
 
     <x-slot name="scripts">
         <script>
             // scores[rowIndex] = selected score (1-5) or 0
-            const scores = new Array(10).fill(0);
-            const MAX_SCORE = 50; // 10 aspects × 5
+            const scores = {!! $project && $project->bod_scores_json ? $project->bod_scores_json : 'new Array(10).fill(0)' !!};
+            const MAX_SCORE = 50;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                scores.forEach((score, row) => {
+                    // Pastikan score adalah integer
+                    const parsedScore = parseInt(score) || 0;
+                    scores[row] = parsedScore; // Update nilai di array agar selalu int
+                    
+                    if (parsedScore > 0) {
+                        document.querySelectorAll(`.score-btn[data-row="${row}"]`).forEach(btn => {
+                            const s = parseInt(btn.getAttribute('data-score'));
+                            btn.classList.toggle('selected', s === parsedScore);
+                        });
+                    }
+                });
+                updateTotal();
+            });
 
             function selectScore(row, score) {
-                scores[row] = score;
-                // Update button states for that row
+                scores[row] = parseInt(score);
                 document.querySelectorAll(`.score-btn[data-row="${row}"]`).forEach(btn => {
                     const s = parseInt(btn.getAttribute('data-score'));
-                    btn.classList.toggle('selected', s === score);
+                    btn.classList.toggle('selected', s === parseInt(score));
                 });
                 updateTotal();
             }
 
             function updateTotal() {
-                const total = scores.reduce((a, b) => a + b, 0);
+                const total = scores.reduce((a, b) => parseInt(a) + parseInt(b), 0);
                 document.getElementById('skor-display').textContent = total + ' / ' + MAX_SCORE;
             }
 
-            // Single-select rekomendasi
-            let selectedRekomen = null;
-            function selectRekomen(id) {
+            let selectedRekomen     = {!! $rekomenSelectedId ? "'".$rekomenSelectedId."'" : 'null' !!};
+            let selectedRekomenText = {!! $rekomenSelectedText ? "'".$rekomenSelectedText."'" : 'null' !!};
+            function selectRekomen(id, text) {
                 if (selectedRekomen) {
                     document.getElementById(selectedRekomen).classList.remove('checked');
                 }
                 if (selectedRekomen === id) {
-                    selectedRekomen = null;
+                    selectedRekomen     = null;
+                    selectedRekomenText = null;
                     return;
                 }
-                selectedRekomen = id;
+                selectedRekomen     = id;
+                selectedRekomenText = text;
                 document.getElementById(id).classList.add('checked');
             }
 
@@ -540,19 +607,28 @@
                 updateTotal();
                 if (selectedRekomen) {
                     document.getElementById(selectedRekomen).classList.remove('checked');
-                    selectedRekomen = null;
+                    selectedRekomen     = null;
+                    selectedRekomenText = null;
                 }
                 document.getElementById('komentar').value = '';
             }
 
-            function simpanPenilaian() {
+            function doSimpan() {
                 const total = scores.reduce((a, b) => a + b, 0);
                 if (total === 0) {
                     alert('Harap isi minimal satu skor penilaian terlebih dahulu.');
                     return;
                 }
-                alert('Penilaian berhasil disimpan! Total skor: ' + total + ' / ' + MAX_SCORE);
-                window.location = '{{ route("bod.dashboard") }}';
+
+                // Populate hidden form fields
+                scores.forEach((s, i) => {
+                    document.getElementById('form-score-' + i).value = s;
+                });
+                document.getElementById('form-komentar').value    = document.getElementById('komentar').value;
+                document.getElementById('form-rekomendasi').value = selectedRekomenText ?? '';
+                document.getElementById('form-tanggal').value     = document.getElementById('tanggal-penilaian').value;
+
+                document.getElementById('penilaian-form').submit();
             }
         </script>
     </x-slot>

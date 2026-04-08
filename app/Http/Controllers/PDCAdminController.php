@@ -19,20 +19,13 @@ class PDCAdminController extends Controller
 {
     public function notifikasi()
     {
-        $notifications = collect([
-            ['id' => 1, 'is_read' => false, 'title' => 'Validasi', 'desc' => 'Terdapat validasi finance yang menunggu.', 'time' => '10 menit yang lalu', 'type' => 'warning', 'badge' => 'Perhatian'],
-        ]);
-
         return view('pdc_admin.notifikasi', [
             'user' => auth()->user(),
-            'notifications' => $notifications
+            'notifications' => $this->getNotifications()
         ]);
     }
 
-    public function markAllNotificationsRead()
-    {
-        return back();
-    }
+
 
     public function dashboard()
     {
@@ -158,6 +151,8 @@ class PDCAdminController extends Controller
             'company_id' => 'required|exists:company,id',
             'target_position_id' => 'required|exists:position,id',
             'atasan_id' => 'required|exists:users,id',
+            'start_date' => 'required|date',
+            'target_date' => 'required|date|after_or_equal:start_date',
             'talents' => 'required|array|min:1',
             'talents.*.talent_id' => 'required|exists:users,id',
             'talents.*.mentors' => 'required|array|min:1',
@@ -183,8 +178,8 @@ class PDCAdminController extends Controller
                     'target_position_id' => $request->target_position_id,
                     'mentor_ids' => $mentorIds, // all selected mentors
                     'status_promotion' => 'In Progress',
-                    'start_date' => now(),
-                    'target_date' => now()->addYear(),
+                    'start_date' => $request->start_date,
+                    'target_date' => $request->target_date,
                 ]
                 );
             }
@@ -291,11 +286,19 @@ class PDCAdminController extends Controller
     {
         $request->validate(['status' => 'required|in:Verified,Rejected']);
 
-        \App\Models\ImprovementProject::findOrFail($id)->update([
+        $project = \App\Models\ImprovementProject::findOrFail($id);
+        $project->update([
             'status' => $request->status,
             'verify_by' => auth()->id(),
             'verify_at' => now(),
         ]);
+
+        $this->addNotificationToUser(
+            $project->user_id_talent,
+            'Project ' . $request->status,
+            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh Admin.',
+            $request->status == 'Verified' ? 'success' : 'warning'
+        );
 
         return back()->with('success', 'Status berhasil diperbarui.');
     }
@@ -409,6 +412,13 @@ class PDCAdminController extends Controller
                 'feedback' => $request->notes,
                 'verify_by' => $request->assigned_finance_id,
             ]);
+
+            $this->addNotificationToUser(
+                $request->assigned_finance_id,
+                'Permintaan Validasi Finance',
+                'PDC Admin telah meminta validasi untuk Project Improvement <span class="font-semibold">' . $project->title . '</span>.',
+                'info'
+            );
 
             return back()->with('success', 'Permintaan validasi Finance berhasil dikirim.');
         }

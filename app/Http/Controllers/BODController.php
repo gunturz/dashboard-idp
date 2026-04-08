@@ -13,13 +13,7 @@ use Illuminate\Http\Request;
 
 class BODController extends Controller
 {
-    /**
-     * Build BOD notifications (mockup, can be replaced with real data)
-     */
-    private function getNotifications()
-    {
-        return collect([]);
-    }
+
 
     /**
      * BOD Dashboard — shows all talents grouped by company with target position, talent, department, mentor, atasan.
@@ -205,10 +199,14 @@ class BODController extends Controller
     }
 
     /**
-     * Mark all BOD notifications as read.
+     * BOD Profile — personal profile page for the logged-in BOD user.
      */
-    public function markAllNotificationsRead()
+    public function profile()
     {
-        return back();
+        $user = auth()->user()->load('company');
+        return view('bod.profile', compact('user'))
+               ->with('notifications', $this->getNotifications());
     }
+
+
 }

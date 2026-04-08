@@ -126,6 +126,11 @@
             }
             .dp-select:focus { outline: none; border-color: #2dd4bf; }
             
+            .dp-date {
+                background-image: none !important;
+                padding-right: 14px !important;
+            }
+            
             .mentor-stack {
                 display: flex;
                 flex-direction: column;
@@ -276,7 +281,7 @@
             <hr class="section-divider">
 
             {{-- ── Atasan ── --}}
-            <div class="field-row mb-12">
+            <div class="field-row">
                 <span class="field-label">Atasan</span>
                 <div class="flex-1">
                     <select name="atasan_id" id="dp-atasan" class="dp-select">
@@ -284,7 +289,17 @@
                         @foreach($atasans as $a)
                             <option value="{{ $a->id }}" {{ old('atasan_id') == $a->id ? 'selected' : '' }}>{{ $a->nama }}</option>
                         @endforeach
-                    </select>
+                     </select>
+                </div>
+            </div>
+
+            {{-- ── Dates ── --}}
+            <div class="field-row mb-12">
+                <span class="field-label">Start Date</span>
+                <div class="flex-1 flex gap-8 items-center" style="display: flex;">
+                    <input type="date" name="start_date" class="dp-select dp-date" value="{{ old('start_date') }}" required style="width: 100%">
+                    <span class="font-bold text-[#2e3746] text-[0.875rem] whitespace-nowrap">Due Date</span>
+                    <input type="date" name="target_date" class="dp-select dp-date" value="{{ old('target_date') }}" required style="width: 100%">
                 </div>
             </div>
 

@@ -114,6 +114,13 @@ class FinanceDashboardController extends Controller
             'verify_at' => now(),
         ]);
 
+        $this->addNotificationToUser(
+            $project->user_id_talent,
+            'Project ' . $request->status,
+            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh Finance' . ($request->finance_feedback ? ' dengan catatan: ' . $request->finance_feedback : '.'),
+            $request->status == 'Verified' ? 'success' : 'warning'
+        );
+
         return back()->with('success', 'Status validasi berhasil diperbarui.');
     }
 

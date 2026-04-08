@@ -153,7 +153,16 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.finance.request');
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class , 'export'])
         ->name('pdc_admin.export');
-    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class , 'exportPdf'])
+
+    Route::get('/pdc-admin/bod-review', [\App\Http\Controllers\PDCAdminController::class, 'bodReview'])
+        ->name('pdc_admin.bod_review');
+    Route::post('/pdc-admin/bod-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'sendBodReview'])
+        ->name('pdc_admin.bod_review.send');
+    Route::get('/pdc-admin/bod-review/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'bodReviewDetail'])
+        ->name('pdc_admin.bod_review.detail');
+    Route::post('/pdc-admin/bod-review/{talent_id}/complete', [\App\Http\Controllers\PDCAdminController::class, 'bodReviewComplete'])
+        ->name('pdc_admin.bod_review.complete');
+    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
         ->name('pdc_admin.export_pdf');
 
     // Atasan Routes
@@ -191,6 +200,10 @@ Route::middleware('auth')->group(function () {
         ->name('finance.permintaan_validasi');
     Route::patch('/finance/permintaan-validasi/{id}', [\App\Http\Controllers\FinanceDashboardController::class , 'updateFinanceValidation'])
         ->name('finance.permintaan_validasi.update');
+    Route::get('/finance/notifikasi', [\App\Http\Controllers\FinanceDashboardController::class , 'notifikasi'])
+        ->name('finance.notifikasi');
+    Route::post('/finance/notifikasi/mark-all-read', [\App\Http\Controllers\FinanceDashboardController::class , 'markAllNotificationsRead'])
+        ->name('finance.notifikasi.markAllRead');
 
     // BOD (Board of Directors) Routes
     Route::get('/bod/dashboard', [\App\Http\Controllers\BODController::class , 'dashboard'])

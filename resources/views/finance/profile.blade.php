@@ -48,12 +48,12 @@
     <div class="w-full max-w-3xl mx-auto px-6 pb-8 pt-0 flex-grow fade-up">
 
         {{-- Row Back --}}
-        <div class="mb-5">
-            <a href="{{ route('finance.dashboard') }}" class="inline-flex items-center gap-2 text-sm font-bold text-[#EAB308] hover:text-[#CA8A04] transition-colors group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        <div class="mb-6">
+            <a href="{{ route('finance.dashboard') }}" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
-                Kembali
+                <span>Kembali</span>
             </a>
         </div>
 

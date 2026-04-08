@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $companyIds = $this->seedCompany();
 
         // Seed Departments
-        $deptIds = $this->seedDepartments();
+        $deptIds = $this->seedDepartments($companyIds);
 
         // Seed Positions
         $posIds = $this->seedPositions();
@@ -62,14 +62,18 @@ class UserSeeder extends Seeder
     /**
      * Seed departments
      */
-    private function seedDepartments(): array
+    private function seedDepartments(array $companyIds): array
     {
         $departments = ['Human Resources', 'Operations', 'Finance', 'Board of Directors'];
         $deptIds = [];
 
+        // Just use the first company for all test departments
+        $companyId = reset($companyIds);
+
         foreach ($departments as $name) {
             $deptIds[$name] = DB::table('department')->insertGetId([
                 'nama_department' => $name,
+                'company_id' => $companyId,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -192,6 +196,20 @@ class UserSeeder extends Seeder
                 'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
                 'department_id' => $deptIds['Human Resources'],
                 'position_id' => $posIds['General Manager'],
+            ];
+        }
+
+        // 5 User Finance
+        for ($i = 1; $i <= 5; $i++) {
+            $users[] = [
+                'nama' => "Finance $i",
+                'username' => "finance$i",
+                'email' => "finance$i@mail.com",
+                'password' => Hash::make('password123'),
+                'role_id' => $roleIds['finance'],
+                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'department_id' => $deptIds['Finance'],
+                'position_id' => $posIds['Manager'],
             ];
         }
 

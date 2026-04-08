@@ -147,11 +147,37 @@
             @enderror
         </div>
 
-        {{-- ── COMPANY ───────────────────────── --}}
+        {{-- ── ROLE ─────────────────────────────── --}}
         <div style="margin-bottom: 1rem;">
+            <label for="role_id" class="form-label">Role</label>
+            <div class="input-wrapper">
+                <select id="role_id" name="role_id" class="form-select" required
+                    onchange="handleRoleChange(this)">
+                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Pilih role</option>
+                    @foreach ($roles as $rl)
+                        <option value="{{ $rl->id }}" data-rolename="{{ $rl->role_name }}" {{ old('role_id') == $rl->id ? 'selected' : '' }}>
+                            {{ ucwords(str_replace('_', ' ', $rl->role_name)) }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            @error('role_id')
+                <p class="error-message">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    {{ $message }}
+                </p>
+            @enderror
+        </div>
+
+        {{-- ── COMPANY (muncul untuk Finance & BOD) ───────────────────────── --}}
+        <div id="field-company" style="margin-bottom: 1rem; display: none;">
             <label for="company_id" class="form-label">Perusahaan</label>
             <div class="input-wrapper">
-                <select id="company_id" name="company_id" class="form-select" required>
+                <select id="company_id" name="company_id" class="form-select">
                     <option value="" disabled {{ old('company_id') ? '' : 'selected' }}>Pilih nama perusahaan
                     </option>
                     @foreach ($companies as $company)
@@ -173,12 +199,11 @@
             @enderror
         </div>
 
-
-        {{-- ── DEPARTEMEN ───────────────────────── --}}
-        <div style="margin-bottom: 1rem;">
+        {{-- ── DEPARTEMEN (hidden untuk Finance & BOD) ───────────────────────── --}}
+        <div id="field-department" style="margin-bottom: 1rem; display: none;">
             <label for="department_id" class="form-label">Departemen</label>
             <div class="input-wrapper">
-                <select id="department_id" name="department_id" class="form-select" required>
+                <select id="department_id" name="department_id" class="form-select">
                     <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>Pilih nama departemen
                     </option>
                     @foreach ($departments as $dept)
@@ -200,11 +225,11 @@
             @enderror
         </div>
 
-        {{-- ── POSISI SEKARANG ────────────────────── --}}
-        <div style="margin-bottom: 1rem;">
+        {{-- ── POSISI SEKARANG (hidden untuk Finance & BOD) ────────────────────── --}}
+        <div id="field-position" style="margin-bottom: 1rem; display: none;">
             <label for="position_id" class="form-label">Posisi sekarang</label>
             <div class="input-wrapper">
-                <select id="position_id" name="position_id" class="form-select" required>
+                <select id="position_id" name="position_id" class="form-select">
                     <option value="" disabled {{ old('position_id') ? '' : 'selected' }}>Pilih posisi sekarang</option>
                     @foreach ($positions as $pos)
                         <option value="{{ $pos->id }}" {{ old('position_id') == $pos->id ? 'selected' : '' }}>
@@ -214,32 +239,6 @@
                 </select>
             </div>
             @error('position_id')
-                <p class="error-message">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                    </svg>
-                    {{ $message }}
-                </p>
-            @enderror
-        </div>
-
-        {{-- ── ROLE ─────────────────────────────── --}}
-        <div style="margin-bottom: 1rem;">
-            <label for="role_id" class="form-label">Role</label>
-            <div class="input-wrapper">
-                <select id="role_id" name="role_id" class="form-select" required
-                    onchange="handleRoleChange(this)">
-                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Pilih role</option>
-                    @foreach ($roles as $rl)
-                        <option value="{{ $rl->id }}" data-rolename="{{ $rl->role_name }}" {{ old('role_id') == $rl->id ? 'selected' : '' }}>
-                            {{ ucfirst($rl->role_name) }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            @error('role_id')
                 <p class="error-message">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
@@ -339,14 +338,47 @@
     {{-- Script: show/hide field berdasarkan role --}}
     <script>
         function handleRoleChange(selectElement) {
-            const roleName = selectElement.options[selectElement.selectedIndex].dataset.rolename;
+            const roleName = (selectElement.options[selectElement.selectedIndex].dataset.rolename || '').toLowerCase();
             const isTalent = roleName === 'talent';
-            const talentFields = ['field-jabatan-target', 'field-mentor', 'field-atasan'];
+            const isFinanceOrBod = (roleName === 'finance' || roleName === 'board_of_director');
 
+            // Fields khusus talent
+            const talentFields = ['field-jabatan-target', 'field-mentor', 'field-atasan'];
             talentFields.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = isTalent ? 'block' : 'none';
             });
+
+            // Company field: tampil untuk Finance, BOD, dan role lain yang butuh company
+            const companyEl = document.getElementById('field-company');
+            const deptEl = document.getElementById('field-department');
+            const posEl = document.getElementById('field-position');
+
+            if (isFinanceOrBod) {
+                // Finance & BOD: hanya tampilkan Perusahaan
+                if (companyEl) companyEl.style.display = 'block';
+                if (deptEl) deptEl.style.display = 'none';
+                if (posEl) posEl.style.display = 'none';
+
+                // Set required untuk company, remove untuk dept & position
+                document.getElementById('company_id').required = true;
+                document.getElementById('department_id').required = false;
+                document.getElementById('position_id').required = false;
+            } else if (roleName) {
+                // Role lain (talent, mentor, atasan, pdc_admin): tampilkan semua
+                if (companyEl) companyEl.style.display = 'block';
+                if (deptEl) deptEl.style.display = 'block';
+                if (posEl) posEl.style.display = 'block';
+
+                document.getElementById('company_id').required = true;
+                document.getElementById('department_id').required = true;
+                document.getElementById('position_id').required = true;
+            } else {
+                // Belum pilih role: sembunyikan semua
+                if (companyEl) companyEl.style.display = 'none';
+                if (deptEl) deptEl.style.display = 'none';
+                if (posEl) posEl.style.display = 'none';
+            }
 
             // Ubah teks dan ikon tombol
             const label = document.getElementById('btn-label');

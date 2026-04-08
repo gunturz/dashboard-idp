@@ -162,6 +162,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.bod_review.detail');
     Route::post('/pdc-admin/bod-review/{talent_id}/complete', [\App\Http\Controllers\PDCAdminController::class, 'bodReviewComplete'])
         ->name('pdc_admin.bod_review.complete');
+    Route::post('/pdc-admin/bod-review/{talent_id}/toggle-lock', [\App\Http\Controllers\PDCAdminController::class, 'toggleLock'])
+        ->name('pdc_admin.bod_review.toggle_lock');
     Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
         ->name('pdc_admin.export_pdf');
 

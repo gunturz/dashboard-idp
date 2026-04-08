@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PromotionPlan extends Model
 {
     protected $table = 'promotion_plan';
-    protected $fillable = ['user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date'];
+    protected $fillable = ['user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date', 'is_locked'];
 
     protected $casts = [
         'mentor_ids' => 'array',

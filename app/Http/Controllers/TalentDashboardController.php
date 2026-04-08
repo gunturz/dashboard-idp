@@ -108,6 +108,10 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent yang bisa mengakses halaman ini.');
             }
 
+            if (optional($user->promotion_plan)->is_locked) {
+                return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
+            }
+
             // Validasi Input Array Score dari request POST
             // min:0 karena Level 1 + Ragu-ragu = skor 0
             $data = $request->validate([
@@ -191,6 +195,10 @@ class TalentDashboardController extends Controller
             $user = Auth::user();
             if ($user->role->role_name !== 'talent' && $user->role->role_name !== 'talent') {
                 abort(403, 'Hanya talent/talent yang bisa mengakses halaman ini.');
+            }
+
+            if (optional($user->promotion_plan)->is_locked) {
+                return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
             }
 
             // ── Validasi input ──────────────────────────────────────────────
@@ -313,6 +321,11 @@ class TalentDashboardController extends Controller
     public function storeProject(Request $request)
     {
         try {
+            $user = Auth::user();
+            if (optional($user->promotion_plan)->is_locked) {
+                return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
+            }
+
             $request->validate([
                 'judul_project' => 'required|string|max:255',
                 'project_file' => 'required|file|max:10240|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx,zip',
@@ -508,6 +521,11 @@ class TalentDashboardController extends Controller
     {
         try {
             $user = Auth::user();
+
+            if (optional($user->promotion_plan)->is_locked) {
+                return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
+            }
+
             $activity = IdpActivity::with('type')->findOrFail($id);
 
             if ($activity->user_id_talent !== $user->id) {
@@ -640,6 +658,11 @@ class TalentDashboardController extends Controller
     public function destroyIdpMonitoring($id)
     {
         try {
+            $user = Auth::user();
+            if (optional($user->promotion_plan)->is_locked) {
+                return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
+            }
+
             $act = IdpActivity::findOrFail($id);
             if ($act->user_id_talent !== Auth::id()) {
                 abort(403, 'Unauthorized action.');

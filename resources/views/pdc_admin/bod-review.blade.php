@@ -210,6 +210,35 @@
                 text-align: center;
                 margin-top: 20px;
             }
+
+            /* Status badges (Finance Validation) */
+            .status-dot {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.825rem;
+                font-weight: 600;
+            }
+
+            .status-dot::before {
+                content: '';
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+
+            .status-approve::before {
+                background: #22c55e;
+            }
+
+            .status-pending::before {
+                background: #f59e0b;
+            }
+
+            .status-rejected::before {
+                background: #ef4444;
+            }
         </style>
     </x-slot>
 
@@ -299,8 +328,8 @@
                             <th class="w-[20%]">Posisi yang Dituju</th>
                             <th class="w-[18%]">Talent</th>
                             <th class="w-[16%]">Departemen</th>
-                            <th class="w-[15%]">Mentor</th>
-                            <th class="w-[13%]">Atasan</th>
+                            <th class="w-[15%]">Validasi Finance</th>
+                            <th class="w-[13%]">Lock Progress</th>
                             <th class="w-[18%]">Aksi</th>
                         </tr>
                     </thead>
@@ -331,52 +360,69 @@
                                         {{ optional($talent->department)->nama_department ?? '-' }}
                                     </td>
 
-                                    {{-- Mentor --}}
+                                    {{-- Validasi Finance --}}
                                     <td>
                                         @php
-                                            $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                                            if (!empty($mentorIds)) {
-                                                $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
-                                                echo implode('<br>', $mentorNames) ?: '-';
-                                            } else {
-                                                echo optional($talent->mentor)->nama ?? '-';
-                                            }
+                                            $latestProject = $talent->improvementProjects->sortByDesc('created_at')->first();
+                                            $financeStatus = $latestProject ? $latestProject->status : 'Belum Ada';
                                         @endphp
+                                        @if ($financeStatus === 'Verified')
+                                            <span class="status-dot status-approve">Approved</span>
+                                        @elseif($financeStatus === 'Rejected')
+                                            <span class="status-dot status-rejected">Rejected</span>
+                                        @else
+                                            <span class="status-dot status-pending">Pending</span>
+                                        @endif
                                     </td>
 
-                                    {{-- Atasan --}}
-                                    <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
+                                    {{-- Lock Progress --}}
+                                    <td>
+                                        @php
+                                            $isLocked = optional($talent->promotion_plan)->is_locked ?? false;
+                                        @endphp
+                                        <form method="POST" action="{{ route('pdc_admin.bod_review.toggle_lock', $talent->id) }}">
+                                            @csrf
+                                            <button type="submit" class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-semibold rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 {{ $isLocked ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-gray-600 hover:bg-gray-700 focus:ring-gray-500' }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    @if($isLocked)
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                    @else
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                                    @endif
+                                                </svg>
+                                                {{ $isLocked ? 'Locked' : 'Unlocked' }}
+                                            </button>
+                                        </form>
+                                    </td>
 
-                                    {{-- Aksi (rowspan) --}}
-                                    @if ($index === 0)
-                                        <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                            @php
-                                                $alreadySent = in_array(
-                                                    optional($talent->promotion_plan)->status_promotion,
-                                                    ['Pending BOD', 'Approved BOD', 'Rejected BOD']
-                                                );
-                                            @endphp
-                                            @if (!$alreadySent)
-                                                <form method="POST" action="{{ route('pdc_admin.bod_review.send', $talent->id) }}">
-                                                    @csrf
-                                                    <button type="submit" class="btn-kirim-bod">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                        </svg>
-                                                        Kirim BOD
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <a href="{{ route('pdc_admin.bod_review.detail', $talent->id) }}" class="btn-lihat-penilaian">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    {{-- Aksi --}}
+                                    <td class="bg-white">
+                                        @php
+                                            $alreadySent = in_array(
+                                                optional($talent->promotion_plan)->status_promotion,
+                                                ['Pending BOD', 'Approved BOD', 'Rejected BOD']
+                                            );
+                                        @endphp
+                                        @if (!$alreadySent)
+                                            <form method="POST" action="{{ route('pdc_admin.bod_review.send', $talent->id) }}">
+                                                @csrf
+                                                <button type="submit" class="btn-kirim-bod {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                                                     </svg>
-                                                    Lihat Penilaian
-                                                </a>
-                                            @endif
-                                        </td>
-                                    @endif
+                                                    Kirim BOD
+                                                </button>
+                                            </form>
+                                        @else
+                                            <a href="{{ route('pdc_admin.bod_review.detail', $talent->id) }}" class="btn-lihat-penilaian">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                Lihat Penilaian
+                                            </a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         @endforeach

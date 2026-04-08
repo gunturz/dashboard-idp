@@ -57,7 +57,7 @@ class PDCAdminController extends Controller
             'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
             'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
             'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
-            'BOD' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']))->count(),
+            'BOD' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors', 'board_of_director']))->count(),
         ];
 
         // Fetch the 3 most recent 'In Progress' talents with their relationships
@@ -379,7 +379,7 @@ class PDCAdminController extends Controller
         })->with(['position', 'department', 'company'])->get();
 
         $bods = User::whereHas('roles', function ($q) {
-            $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors']);
+            $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors', 'board_of_director']);
         })->with(['position', 'department', 'company'])->get();
 
         $atasans = User::whereHas('roles', function ($q) {
@@ -457,7 +457,7 @@ class PDCAdminController extends Controller
 
         $query = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->whereHas('promotion_plan', fn($q) => $q->whereNotNull('target_position_id'))
-            ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition']);
+            ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition', 'improvementProjects']);
 
         // Filters
         if ($request->filled('search')) {
@@ -520,7 +520,7 @@ class PDCAdminController extends Controller
         ])->findOrFail($talent_id);
 
         // All BOD users for building the evaluation table rows
-        $bodUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bod', 'bo_director', 'board_of_directors']))
+        $bodUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bod', 'bo_director', 'board_of_directors', 'board_of_director']))
             ->with('company')
             ->orderBy('nama')
             ->get();
@@ -547,8 +547,19 @@ class PDCAdminController extends Controller
     public function sendBodReview(Request $request, $talent_id)
     {
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
+        if (!$plan->is_locked) {
+            return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke BOD.');
+        }
         $plan->update(['status_promotion' => 'Pending BOD']);
         return back()->with('success', 'Berhasil dikirim ke BOD untuk review.');
+    }
+
+    public function toggleLock($talent_id)
+    {
+        $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
+        $plan->update(['is_locked' => !$plan->is_locked]);
+        $status = $plan->is_locked ? 'dikunci' : 'dibuka';
+        return back()->with('success', "Progress talent berhasil $status.");
     }
 
     public function export()

@@ -7,6 +7,14 @@ use App\Models\ImprovementProject;
 
 class FinanceDashboardController extends Controller
 {
+    /**
+     * Build Finance notifications (mockup, can be replaced with real data)
+     */
+    private function getNotifications()
+    {
+        return collect([]);
+    }
+
     public function dashboard()
     {
         $user = auth()->user();
@@ -36,7 +44,10 @@ class FinanceDashboardController extends Controller
             return $item->talent->company->nama_company ?? 'Perusahaan Tidak Diketahui';
         });
 
-        return view('finance.dashboard', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected', 'groupedPendingProjects', 'groupedHistoryProjects', 'companies'));
+        $notifications = $this->getNotifications();
+
+        return view('finance.dashboard', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected', 'groupedPendingProjects', 'groupedHistoryProjects', 'companies'))
+            ->with('notifications', $notifications);
     }
 
     public function permintaanValidasi()
@@ -50,7 +61,10 @@ class FinanceDashboardController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('finance.permintaan_validasi', compact('user', 'projects'));
+        $notifications = $this->getNotifications();
+
+        return view('finance.permintaan_validasi', compact('user', 'projects'))
+            ->with('notifications', $notifications);
     }
 
     public function riwayat(Request $request)
@@ -78,7 +92,10 @@ class FinanceDashboardController extends Controller
             return $item->talent->company->nama_company ?? 'Perusahaan Tidak Diketahui';
         });
 
-        return view('finance.riwayat', compact('user', 'projects', 'companies', 'groupedHistoryProjects', 'search'));
+        $notifications = $this->getNotifications();
+
+        return view('finance.riwayat', compact('user', 'projects', 'companies', 'groupedHistoryProjects', 'search'))
+            ->with('notifications', $notifications);
     }
 
     public function updateFinanceValidation(Request $request, $id)
@@ -98,5 +115,24 @@ class FinanceDashboardController extends Controller
         ]);
 
         return back()->with('success', 'Status validasi berhasil diperbarui.');
+    }
+
+    /**
+     * Finance Notifikasi — full notification page.
+     */
+    public function notifikasi()
+    {
+        $user = auth()->user();
+        $notifications = $this->getNotifications();
+
+        return view('finance.notifikasi', compact('user', 'notifications'));
+    }
+
+    /**
+     * Mark all Finance notifications as read.
+     */
+    public function markAllNotificationsRead()
+    {
+        return back();
     }
 }

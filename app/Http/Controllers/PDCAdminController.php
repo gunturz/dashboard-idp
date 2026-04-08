@@ -451,6 +451,106 @@ class PDCAdminController extends Controller
         }
     }
 
+    public function bodReview(Request $request)
+    {
+        $user = auth()->user();
+
+        $query = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
+            ->whereHas('promotion_plan', fn($q) => $q->whereNotNull('target_position_id'))
+            ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition']);
+
+        // Filters
+        if ($request->filled('search')) {
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        }
+        if ($request->filled('company_id')) {
+            $query->where('company_id', $request->company_id);
+        }
+        if ($request->filled('position_id')) {
+            $query->whereHas('promotion_plan', fn($q) => $q->where('target_position_id', $request->position_id));
+        }
+        if ($request->filled('department_id')) {
+            $query->where('department_id', $request->department_id);
+        }
+
+        $talents = $query->get();
+
+        // Stats
+        $totalProjectImprovement = ImprovementProject::count();
+        $belumDinilai = PromotionPlan::whereNotIn('status_promotion', ['Pending BOD', 'Approved BOD', 'Rejected BOD'])->count();
+        $sudahDinilai = PromotionPlan::whereIn('status_promotion', ['Approved BOD', 'Rejected BOD'])->count();
+
+        // Group by company -> target position -> talents
+        $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
+            return [
+                'company'   => $companyTalents->first()->company,
+                'positions' => $companyTalents->groupBy(function ($item) {
+                    return $item->promotion_plan->target_position_id ?? 0;
+                })->map(function ($positionTalents) {
+                    return [
+                        'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                        'talents'        => $positionTalents,
+                    ];
+                }),
+            ];
+        });
+
+        $companies   = Company::orderBy('nama_company')->get();
+        $positions   = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $departments = Department::orderBy('nama_department')->get();
+
+        return view('pdc_admin.bod-review', compact(
+            'user', 'groupedData', 'companies', 'positions', 'departments',
+            'totalProjectImprovement', 'belumDinilai', 'sudahDinilai'
+        ));
+    }
+
+    public function bodReviewDetail($talent_id)
+    {
+        $user = auth()->user();
+
+        $talent = User::with([
+            'company',
+            'department',
+            'position',
+            'mentor',
+            'atasan',
+            'promotion_plan.targetPosition',
+            'improvementProjects',
+        ])->findOrFail($talent_id);
+
+        // All BOD users for building the evaluation table rows
+        $bodUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bod', 'bo_director', 'board_of_directors']))
+            ->with('company')
+            ->orderBy('nama')
+            ->get();
+
+        // All companies for the table
+        $companies = Company::orderBy('nama_company')->get();
+
+        // Latest improvement project for this talent (for score/feedback)
+        $latestProject = $talent->improvementProjects->sortByDesc('updated_at')->first();
+
+        return view('pdc_admin.bod-review-detail', compact(
+            'user', 'talent', 'bodUsers', 'companies', 'latestProject'
+        ));
+    }
+
+    public function bodReviewComplete($talent_id)
+    {
+        $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
+        $plan->update(['status_promotion' => 'Approved BOD']);
+        return redirect()->back()
+            ->with('success', 'Proses penilaian BOD telah diselesaikan.');
+    }
+
+    public function sendBodReview(Request $request, $talent_id)
+    {
+        $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
+        $plan->update(['status_promotion' => 'Pending BOD']);
+        return back()->with('success', 'Berhasil dikirim ke BOD untuk review.');
+    }
+
     public function export()
     {
         $user = auth()->user();

@@ -9,7 +9,7 @@
                     <circle cx="10.5" cy="13.5" r="2.5"></circle>
                     <line x1="12.5" y1="15.5" x2="15" y2="18"></line>
                 </svg>
-                <h2 class="text-[28px] font-extrabold text-[#2e3746]">Riwayat Validasi</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Riwayat Validasi</h2>
             </div>
             
             <div class="flex items-center gap-3">
@@ -17,96 +17,131 @@
             </div>
         </div>
 
-        {{-- Validation History Section Grouped by Position --}}
-        @forelse($groupedHistoryProjects as $groupTitle => $projectsGroup)
-        <div class="mb-8 overflow-hidden bg-white border border-gray-300 rounded-xl shadow-sm filter-container">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-gray-300">
-                            <th class="px-6 py-4 text-sm font-bold text-gray-700 text-center w-1/5 break-words">Talent</th>
-                            <th class="px-6 py-4 text-sm font-bold text-gray-700 text-center border-l w-1/5 break-words border-gray-300">Project</th>
-                            <th class="px-6 py-4 text-sm font-bold text-gray-700 text-center border-l w-1/5 break-words border-gray-300">Catatan dari Admin</th>
-                            <th class="px-6 py-4 text-sm font-bold text-gray-700 text-center border-l w-1/5 break-words border-gray-300">Feedback Finance</th>
-                            <th class="px-6 py-4 text-sm font-bold text-gray-700 text-center border-l w-1/5 break-words border-gray-300">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm">
-                        @foreach($projectsGroup as $project)
-                        <tr class="border-b border-gray-300 hover:bg-gray-50 transition-colors filter-row">
-                            <td class="px-6 py-4 border-r border-gray-300 text-center">
-                                <p class="font-bold text-gray-800 text-sm talent-name">{{ $project->talent->nama ?? '-' }}</p>
-                                <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->position->position_name ?? '-' }} &rarr; {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}</p>
-                                <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->department->nama_department ?? '-' }}</p>
-                            </td>
-                            <td class="px-6 py-4 font-bold text-gray-800 text-center border-r border-gray-300">
-                                {{ $project->title }}
-                            </td>
-                            <td class="px-6 py-4 text-gray-700 text-center border-r border-gray-300">
-                                {{ $project->feedback ?? '-' }}
-                            </td>
-                            <td class="px-6 py-4 text-gray-700 text-center border-r border-gray-300">
-                                {{ $project->finance_feedback ?? '-' }}
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                @if($project->status == 'Verified')
-                                <div class="flex items-center justify-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                                    <span class="font-bold text-green-600">Approved</span>
+        {{-- History Cards --}}
+        <div class="space-y-6">
+            @forelse($projects as $index => $project)
+            <div class="bg-white rounded-xl shadow-[0_4px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden transition-all duration-300 filter-card">
+                {{-- Card Header --}}
+                <div class="p-4 md:p-6 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 select-none hover:bg-gray-50 transition-colors" onclick="toggleAccordion('riwayat-content-{{ $project->id }}', 'riwayat-icon-{{ $project->id }}')">
+                    
+                    {{-- Profile Info --}}
+                    <div class="flex items-center gap-4 w-full md:w-[40%]">
+                        <div class="w-14 h-14 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-200">
+                            <div class="text-indigo-400 w-full h-full flex items-center justify-center font-bold text-xl bg-orange-100 text-orange-800">
+                                {{ collect(explode(' ', $project->talent->nama ?? 'A'))->map(fn($n)=>substr($n,0,1))->take(2)->join('') }}
+                            </div>
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <p class="font-bold text-gray-800 text-sm talent-name">{{ $project->talent->nama ?? '-' }}</p>
+                            <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->position->position_name ?? '-' }} &rarr; {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}</p>
+                            <p class="text-xs text-gray-500 italic mt-1">{{ $project->talent->department->nama_department ?? '-' }}</p>
+                            <p class="text-xs text-gray-500 mt-1">Dikirim: {{ $project->updated_at->format('d F Y') }}</p>
+                        </div>
+                    </div>
+
+                    {{-- Project Title --}}
+                    <div class="w-full md:w-[35%] py-2 md:py-0 md:px-6 md:border-l border-gray-200 flex items-center">
+                        <p class="font-bold text-gray-700 text-sm xl:text-base">{{ $project->title }}</p>
+                    </div>
+
+                    {{-- Badge & Toggle --}}
+                    <div class="flex items-center justify-between md:justify-end gap-6 w-full md:w-[25%] mt-2 md:mt-0">
+                        @if($project->status == 'Verified')
+                        <span class="px-5 py-1.5 rounded-full border-2 border-green-500 text-green-600 text-[13px] font-bold shadow-sm whitespace-nowrap">
+                            Approved
+                        </span>
+                        @elseif($project->status == 'Rejected')
+                        <span class="px-5 py-1.5 rounded-full border-2 border-red-500 text-red-600 text-[13px] font-bold shadow-sm whitespace-nowrap">
+                            Rejected
+                        </span>
+                        @else
+                        <span class="px-5 py-1.5 rounded-full border-2 border-gray-400 text-gray-600 text-[13px] font-bold shadow-sm whitespace-nowrap">
+                            {{ $project->status }}
+                        </span>
+                        @endif
+                        <svg id="riwayat-icon-{{ $project->id }}" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600 transition-transform duration-300 flex-shrink-0 {{ $index === 0 ? 'transform rotate-180' : '' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+
+                {{-- Card Content (Expandable) --}}
+                <div id="riwayat-content-{{ $project->id }}" class="px-4 md:px-6 border-t border-gray-100 bg-white transition-all overflow-hidden {{ $index === 0 ? 'pb-6 pt-5 max-h-[1000px] opacity-100' : 'pb-0 pt-0 max-h-0 opacity-0' }}">
+                    <div class="flex flex-col lg:flex-row gap-5 lg:gap-8 items-start {{ $index === 0 ? '' : 'pb-6 pt-5' }}">
+                        <div class="w-full flex flex-col lg:flex-row gap-5 lg:gap-8 items-start">
+                            <div class="w-full lg:w-auto flex-grow flex flex-col gap-4">
+                                {{-- Catatan dari Admin --}}
+                                @if($project->feedback)
+                                <div>
+                                    <div class="font-bold text-gray-700 text-[13px] mb-1">Catatan dari Admin</div>
+                                    <div class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-[13px] text-gray-700 min-h-[50px]">
+                                        {{ $project->feedback }}
+                                    </div>
                                 </div>
-                                @elseif($project->status == 'Rejected')
-                                <div class="flex items-center justify-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                                    <span class="font-bold text-red-600">Rejected</span>
-                                </div>
-                                @else
-                                <span class="text-gray-500">{{ $project->status }}</span>
                                 @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                {{-- Feedback Finance --}}
+                                <div>
+                                    <div class="font-bold text-gray-700 text-[13px] mb-1">Feedback</div>
+                                    <div class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-[13px] text-gray-700 min-h-[50px]">
+                                        {{ $project->finance_feedback ?? '-' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3 min-w-[220px] w-full lg:w-auto xl:w-[25%] flex-shrink-0 mt-2 lg:mt-0">
+                                @if($project->document_path)
+                                <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank" class="w-full py-2.5 px-4 rounded-lg border border-gray-300 text-gray-800 text-[13px] font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors shadow-sm bg-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                    </svg>
+                                    Preview File
+                                </a>
+                                @else
+                                <button disabled type="button" class="w-full py-2.5 px-4 rounded-lg border border-gray-300 text-gray-400 text-[13px] font-bold flex items-center justify-center gap-2 bg-gray-100">
+                                    Tidak Ada File
+                                </button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            @empty
+            <div class="text-center py-8 text-gray-500 bg-white rounded-xl shadow-[0_4px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-200">
+                Belum ada riwayat validasi.
+            </div>
+            @endforelse
         </div>
-        @empty
-        <div class="mb-8 overflow-hidden bg-white border border-gray-300 rounded-xl shadow-sm">
-            <div class="bg-gray-50 border-b border-gray-300 px-6 py-4 text-center">
-                <h3 class="text-gray-800 font-bold text-lg">Riwayat Validasi</h3>
-            </div>
-            <div class="p-6 text-center text-gray-500">
-                Belum ada riwayat validasi
-            </div>
-        </div>
-        @endforelse
     </div>
 
+    {{-- Scripts --}}
     <script>
+        function toggleAccordion(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+
+            if (content.classList.contains('max-h-0')) {
+                // Expanding
+                content.classList.remove('max-h-0', 'opacity-0', 'pb-0', 'pt-0');
+                content.classList.add('max-h-[1000px]', 'opacity-100', 'pb-6');
+                icon.classList.add('rotate-180');
+            } else {
+                // Collapsing
+                content.classList.add('max-h-0', 'opacity-0', 'pb-0', 'pt-0');
+                content.classList.remove('max-h-[1000px]', 'opacity-100', 'pb-6');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
         function filterHistory() {
             let searchValue = document.getElementById('searchInput').value.toLowerCase();
             
-            document.querySelectorAll('.filter-container').forEach(container => {
-                let tbody = container.querySelector('tbody');
-                if (!tbody) return;
+            document.querySelectorAll('.filter-card').forEach(card => {
+                let talentName = card.querySelector('.talent-name')?.innerText.toLowerCase() || "";
                 
-                let rows = tbody.querySelectorAll('tr.filter-row');
-                let hasVisibleRow = false;
-                
-                rows.forEach(row => {
-                    let talentName = row.querySelector('.talent-name')?.innerText.toLowerCase() || "";
-                    
-                    if (talentName.includes(searchValue)) {
-                        row.style.display = '';
-                        hasVisibleRow = true;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-                
-                if (hasVisibleRow) {
-                    container.style.display = '';
+                if (talentName.includes(searchValue)) {
+                    card.style.display = '';
                 } else {
-                    container.style.display = 'none';
+                    card.style.display = 'none';
                 }
             });
         }

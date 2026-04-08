@@ -201,6 +201,10 @@ Route::middleware('auth')->group(function () {
         ->name('finance.permintaan_validasi');
     Route::patch('/finance/permintaan-validasi/{id}', [\App\Http\Controllers\FinanceDashboardController::class , 'updateFinanceValidation'])
         ->name('finance.permintaan_validasi.update');
+    Route::get('/finance/notifikasi', [\App\Http\Controllers\FinanceDashboardController::class , 'notifikasi'])
+        ->name('finance.notifikasi');
+    Route::post('/finance/notifikasi/mark-all-read', [\App\Http\Controllers\FinanceDashboardController::class , 'markAllNotificationsRead'])
+        ->name('finance.notifikasi.markAllRead');
 
     // BOD (Board of Directors) Routes
     Route::get('/bod/dashboard', [\App\Http\Controllers\BODController::class, 'dashboard'])

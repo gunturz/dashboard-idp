@@ -209,6 +209,8 @@ Route::middleware('auth')->group(function () {
         ->name('bod.history');
     Route::get('/bod/talent/{talent_id}', [\App\Http\Controllers\BODController::class, 'detailTalent'])
         ->name('bod.detail_talent');
+    Route::get('/bod/talent/{talent_id}/penilaian', [\App\Http\Controllers\BODController::class, 'penilaian'])
+        ->name('bod.penilaian');
     Route::get('/bod/talent/{talent_id}/logbook', [\App\Http\Controllers\BODController::class, 'logbook'])
         ->name('bod.logbook');
     Route::get('/bod/notifikasi', [\App\Http\Controllers\BODController::class, 'notifikasi'])

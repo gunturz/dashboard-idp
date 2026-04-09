@@ -11,21 +11,13 @@ class MentorDashboardController extends Controller
 {
     public function notifikasi()
     {
-        // Mockup notifications
-        $notifications = collect([
-            ['id' => 1, 'is_read' => false, 'title' => 'Logbook', 'desc' => 'Ada logbook baru dari mentee.', 'time' => '2 jam yang lalu', 'type' => 'info', 'badge' => 'Baru'],
-        ]);
-
         return view('mentor.notifikasi', [
             'user' => Auth::user(),
-            'notifications' => $notifications
+            'notifications' => $this->getNotifications()
         ]);
     }
 
-    public function markAllNotificationsRead()
-    {
-        return back();
-    }
+
 
     public function dashboard()
     {
@@ -229,6 +221,13 @@ class MentorDashboardController extends Controller
         $activity->update([
             'status' => $request->status,
         ]);
+
+        $this->addNotificationToUser(
+            $activity->user_id_talent,
+            'Logbook ' . $request->status,
+            'Aktivitas logbook Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh mentor Anda.',
+            $request->status == 'Approved' ? 'success' : 'warning'
+        );
 
         return back()->with('success', 'Status aktivitas berhasil diperbarui menjadi ' . $request->status . '.');
     }

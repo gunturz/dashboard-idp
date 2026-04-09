@@ -2,6 +2,7 @@
     'title' => 'PDC Admin – Individual Development Plan',
     'user' => null,
     'hideSidebar' => false,
+    'hideNavbar' => false,
 ])
 
 <!DOCTYPE html>
@@ -402,7 +403,7 @@
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-white min-h-screen pt-[60px] lg:pt-[80px]">
+<body class="bg-white min-h-screen {{ $hideNavbar ? '' : 'pt-[60px] lg:pt-[80px]' }}">
     <script>
         (function() {
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
@@ -431,8 +432,9 @@
     {{-- Overlay responsive --}}
     <div id="mobile-overlay" class="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-30 hidden lg:hidden"
         onclick="toggleMobileSidebar()"></div>
-
-    @include('components.pdc_admin.navbar', ['user' => $user ?? auth()->user()])
+    @if(!$hideNavbar)
+        @include('components.pdc_admin.navbar', ['user' => $user ?? auth()->user(), 'hideSidebar' => $hideSidebar])
+    @endif
 
     {{-- SIDEBAR --}}
     @if (!$hideSidebar)
@@ -592,6 +594,8 @@
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
+
+            if (!sidebar) return;
 
             sidebar.classList.toggle('mobile-open');
             if (sidebar.classList.contains('mobile-open')) {

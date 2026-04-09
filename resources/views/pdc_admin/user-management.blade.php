@@ -122,34 +122,29 @@
                         <thead>
                             <tr class="bg-white">
                                 @if ($group['showMultiRole'])
-                                    {{-- 7 columns: Email, Nama, Perusahaan, Departemen, Posisi, MultiRole, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:16%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Departemen</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Posisi saat ini
-                                    </th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:8%">Multi Role</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Aksi</th>
+                                    {{-- 6 columns: Email, Nama, Perusahaan, Posisi, MultiRole, Aksi --}}
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Email</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Posisi saat ini</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:10%">Multi Role</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
                                 @else
-                                    {{-- 5 columns for Finance/BOD: Email, Nama, Perusahaan, Departemen, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:22%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:22%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Departemen</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:13%">Aksi</th>
+                                    {{-- 4 columns for Finance/BOD: Email, Nama, Perusahaan, Aksi --}}
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Email</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:25%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
                                 @endif
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($group['users'] as $u)
-                                <tr class="bg-white hover:bg-gray-50 transition-colors user-row">
+                                <tr class="bg-white hover:bg-gray-50 transition-colors user-row" data-department="{{ strtolower($u->department->nama_department ?? '') }}">
                                     <td class="text-sm font-medium text-[#475569]">{{ $u->email }}</td>
                                     <td class="col-name text-sm font-bold text-[#2e3746]">{{ $u->nama }}</td>
                                     <td class="col-company text-sm font-medium text-[#475569]">
                                         {{ $u->company->nama_company ?? '—' }}</td>
-                                    <td class="col-department text-sm font-medium text-[#475569]">
-                                        {{ $u->department->nama_department ?? '—' }}</td>
                                     @if ($group['showPosisi'])
                                         <td class="text-sm font-medium text-[#475569]">
                                             {{ $u->position->position_name ?? '—' }}</td>
@@ -198,7 +193,7 @@
                             @empty
                                 <tr>
                                     @php
-                                        $cols = 5;
+                                        $cols = 4;
                                         if ($group['showPosisi']) {
                                             $cols++;
                                         }
@@ -212,6 +207,11 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+                {{-- Pagination Wrapper --}}
+                <div class="px-6 py-4 border-t border-[#e2e8f0] flex items-center justify-between bg-gray-50/50 pagination-wrapper" style="display: none;">
+                    <span class="text-sm text-gray-500 font-medium pagination-info"></span>
+                    <div class="flex gap-1.5 pagination-buttons"></div>
                 </div>
             </div>
         @endforeach
@@ -426,7 +426,7 @@
                 rows.forEach(row => {
                     let name = row.querySelector('.col-name')?.innerText.toLowerCase() || "";
                     let company = row.querySelector('.col-company')?.innerText.toLowerCase() || "";
-                    let department = row.querySelector('.col-department')?.innerText.toLowerCase() || "";
+                    let department = row.dataset.department || "";
 
                     let matchSearch = name.includes(searchValue);
                     let matchCompany = companyValue === "" || company.includes(companyValue) || company ===
@@ -435,12 +435,15 @@
                         department === departmentValue;
 
                     if (matchSearch && matchCompany && matchDepartment) {
-                        row.style.display = '';
+                        visibleRows.push(row);
                         hasVisibleRow = true;
                     } else {
                         row.style.display = 'none';
                     }
                 });
+
+                container.visibleRows = visibleRows;
+                renderTablePage(container, 1);
 
                 // Tampilkan container jika ada filter aktif dan terdapat baris hasil filter,
                 // atau jika tidak ada filter aktif sama sekali (dan activeRole match di atas)
@@ -455,5 +458,86 @@
                 }
             });
         }
+
+        const ITEMS_PER_PAGE = 7;
+
+        function renderTablePage(container, page) {
+            let visibleRows = container.visibleRows || [];
+            let totalRows = visibleRows.length;
+            let totalPages = Math.ceil(totalRows / ITEMS_PER_PAGE) || 1;
+            
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            container.currentPage = page;
+
+            // Sembunyikan semua row dari view ini
+            let allRows = container.querySelectorAll('tr.user-row');
+            allRows.forEach(r => r.style.display = 'none');
+
+            // Tampilkan page ke-N
+            let startIndex = (page - 1) * ITEMS_PER_PAGE;
+            let endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalRows);
+            for (let i = startIndex; i < endIndex; i++) {
+                visibleRows[i].style.display = '';
+            }
+
+            // Tampilkan pagination buttons
+            let paginationWrapper = container.querySelector('.pagination-wrapper');
+            if (!paginationWrapper) return;
+
+            if (totalRows <= ITEMS_PER_PAGE) {
+                paginationWrapper.style.display = 'none';
+            } else {
+                paginationWrapper.style.display = 'flex';
+                let info = paginationWrapper.querySelector('.pagination-info');
+                info.textContent = `Menampilkan ${totalRows === 0 ? 0 : startIndex + 1}-${endIndex} dari ${totalRows}`;
+
+                let btnContainer = paginationWrapper.querySelector('.pagination-buttons');
+                btnContainer.innerHTML = '';
+                
+                // Prev button
+                let prevBtn = document.createElement('button');
+                prevBtn.type = 'button';
+                prevBtn.innerHTML = '&laquo; Prev';
+                prevBtn.className = 'px-3 py-1.5 border rounded-lg text-xs font-semibold transition-colors ' + (page === 1 ? 'text-gray-400 bg-gray-50 border-gray-200 cursor-not-allowed' : 'text-[#14b8a6] bg-white hover:bg-teal-50 border-[#14b8a6]');
+                prevBtn.disabled = page === 1;
+                prevBtn.onclick = () => renderTablePage(container, page - 1);
+                btnContainer.appendChild(prevBtn);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
+                        let btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.textContent = i;
+                        if (i === page) {
+                            btn.className = 'px-3 py-1.5 border rounded-lg text-xs font-bold text-white bg-[#14b8a6] border-[#14b8a6]';
+                        } else {
+                            btn.className = 'px-3 py-1.5 border rounded-lg text-xs font-semibold text-[#14b8a6] bg-white hover:bg-teal-50 border-[#14b8a6] transition-colors';
+                            btn.onclick = () => renderTablePage(container, i);
+                        }
+                        btnContainer.appendChild(btn);
+                    } else if (i === page - 2 || i === page + 2) {
+                        // ellipsis
+                        let span = document.createElement('span');
+                        span.textContent = '...';
+                        span.className = 'px-2 py-1.5 text-xs text-gray-500 font-bold';
+                        btnContainer.appendChild(span);
+                    }
+                }
+
+                // Next button
+                let nextBtn = document.createElement('button');
+                nextBtn.type = 'button';
+                nextBtn.innerHTML = 'Next &raquo;';
+                nextBtn.className = 'px-3 py-1.5 border rounded-lg text-xs font-semibold transition-colors ' + (page === totalPages ? 'text-gray-400 bg-gray-50 border-gray-200 cursor-not-allowed' : 'text-[#14b8a6] bg-white hover:bg-teal-50 border-[#14b8a6]');
+                nextBtn.disabled = page === totalPages;
+                nextBtn.onclick = () => renderTablePage(container, page + 1);
+                btnContainer.appendChild(nextBtn);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            filterUsers();
+        });
     </script>
 </x-pdc_admin.layout>

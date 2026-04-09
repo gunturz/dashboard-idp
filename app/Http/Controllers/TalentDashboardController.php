@@ -299,12 +299,23 @@ class TalentDashboardController extends Controller
                 'platform' => $request->platform ?? '',
             ]);
 
-            // Tambahkan notifikasi ke session
-            $this->addNotification(
+            // Tambahkan notifikasi ke Talent
+            $this->addNotificationToUser(
+                $user->id,
                 'Submit IDP Berhasil',
                 'Formulir <span class="font-semibold">' . ucfirst($tab) . '</span> dengan tema <span class="font-semibold">' . $validated['theme'] . '</span> telah berhasil dikirim dan sedang menunggu tinjauan dari mentor/atasan.',
                 'success'
             );
+
+            // Tambahkan notifikasi ke Verifikator (Mentor)
+            if ($verifyById) {
+                $this->addNotificationToUser(
+                    $verifyById,
+                    'IDP Activity Baru',
+                    $user->nama . ' telah mengirimkan aktivitas IDP baru (<span class="font-semibold">' . ucfirst($tab) . '</span>) untuk diverifikasi.',
+                    'info'
+                );
+            }
 
             return redirect()->route('talent.idp_monitoring', $tab)->with('success', 'IDP Activity berhasil disubmit.');
 
@@ -346,8 +357,9 @@ class TalentDashboardController extends Controller
                 'status' => 'Pending',
             ]);
 
-            // Tambahkan notifikasi ke session
-            $this->addNotification(
+            // Tambahkan notifikasi ke akun Talent sendri
+            $this->addNotificationToUser(
+                Auth::id(),
                 'Submit Project Improvement Berhasil',
                 'Project Improvement berjudul <span class="font-semibold">' . e($request->judul_project) . '</span> telah berhasil disubmit dan sedang menunggu tinjauan.',
                 'success'
@@ -373,17 +385,7 @@ class TalentDashboardController extends Controller
         return view('talent.notifikasi', compact('user', 'notifications'));
     }
 
-    public function markAllNotificationsRead(Request $request)
-    {
-        $notifications = session('user_notifications', []);
-        foreach ($notifications as &$notif) {
-            $notif['is_read'] = true;
-            $notif['badge'] = null;
-        }
-        session(['user_notifications' => $notifications]);
 
-        return redirect()->back()->with('success', 'Semua notifikasi telah ditandai sebagai dibaca.');
-    }
 
     public function logbookDetail()
     {
@@ -463,29 +465,7 @@ class TalentDashboardController extends Controller
         ));
     }
 
-    private function getNotifications()
-    {
-        return collect(session('user_notifications', []));
-    }
 
-    private function addNotification($title, $desc, $type = 'success')
-    {
-        $notifications = session('user_notifications', []);
-
-        // Tambahkan notifikasi baru di awal array
-        array_unshift($notifications, [
-            'id' => time() . rand(100, 999),
-            'title' => $title,
-            'desc' => $desc,
-            'type' => $type,
-            'time' => now()->diffForHumans(),
-            'is_read' => false,
-            'badge' => 'Baru',
-        ]);
-
-        // Simpan ke session (maksimal 20 notifikasi)
-        session(['user_notifications' => array_slice($notifications, 0, 20)]);
-    }
 
     public function editIdpMonitoring($id)
     {

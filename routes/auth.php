@@ -226,4 +226,6 @@ Route::middleware('auth')->group(function () {
         ->name('bod.notifikasi');
     Route::post('/bod/notifikasi/mark-all-read', [\App\Http\Controllers\BODController::class , 'markAllNotificationsRead'])
         ->name('bod.notifikasi.markAllRead');
+    Route::get('/bod/profile', [\App\Http\Controllers\BODController::class, 'profile'])
+        ->name('bod.profile');
 });

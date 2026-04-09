@@ -13,20 +13,13 @@ class AtasanDashboardController extends Controller
 {
     public function notifikasi()
     {
-        $notifications = collect([
-            ['id' => 1, 'is_read' => false, 'title' => 'Monitoring', 'desc' => 'Ada update monitoring dari bawahan.', 'time' => '1 jam yang lalu', 'type' => 'success', 'badge' => 'Penting'],
-        ]);
-
         return view('atasan.notifikasi', [
             'user' => Auth::user(),
-            'notifications' => $notifications
+            'notifications' => $this->getNotifications()
         ]);
     }
 
-    public function markAllNotificationsRead()
-    {
-        return back();
-    }
+
 
     public function dashboard()
     {

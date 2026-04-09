@@ -1,4 +1,6 @@
+
 <x-bod.layout title="Profile" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false" :user="$user" :notifications="$notifications">
+
     <x-slot name="styles">
         <style>
             .section-header {
@@ -9,6 +11,7 @@
                 border-radius: 6px 6px 0 0;
                 margin-bottom: -1px;
             }
+
             .prof-input {
                 border: 1.5px solid #cbd5e1; border-radius: 8px;
                 padding: 0.45rem 0.75rem; font-size: 0.875rem;
@@ -18,11 +21,12 @@
             }
             .prof-input:focus { outline: none; border-color: #2e3746; box-shadow: 0 0 0 3px rgba(46,55,70,0.1); }
             .prof-input:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
-            .modal-backdrop {
+
                 position: fixed; inset: 0; z-index: 100;
                 background: rgba(0,0,0,0.45);
                 display: flex; align-items: center; justify-content: center;
             }
+
             .btn-back {
                 padding: 8px 16px;
                 border: 1px solid #e2e8f0;
@@ -50,12 +54,14 @@
         {{-- Row Back --}}
         <div class="mb-5">
             <a href="{{ route('bod.dashboard') }}" class="btn-back">
+
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
                 <span class="text-[#2e3746]">Kembali</span>
             </a>
         </div>
+
 
         <div class="flex items-center gap-3 mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
@@ -86,6 +92,7 @@
         @endif
 
         {{-- Success banner --}}
+
         @if (session('status') === 'profile-updated')
             <div id="success-banner"
                  class="flex items-center justify-between gap-3 bg-white border border-green-400 text-green-700 rounded-xl px-5 py-3 mb-6 shadow-sm">
@@ -94,6 +101,7 @@
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
                     <span class="text-sm font-semibold">Pengubahan Profile BOD berhasil</span>
+
                 </div>
                 <button onclick="document.getElementById('success-banner').remove()"
                         class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
@@ -109,6 +117,7 @@
             @method('PATCH')
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+
                 {{-- ===== DESKTOP LAYOUT (laptop): foto kiri, data kanan ===== --}}
                 <div class="hidden md:flex gap-8 p-8">
 
@@ -146,10 +155,12 @@
                                 Ganti Foto
                             </label>
                             <input id="foto-input" name="foto" type="file" accept="image/*" class="sr-only" onchange="previewFoto(this)">
+
                             
                             {{-- Input tersembunyi untuk penanda hapus foto --}}
                             <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
                             
+
                             <button type="button" onclick="hapusFoto()"
                                     class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -171,11 +182,14 @@
                                     $akunFields = [
                                         ['label' => 'Username', 'key' => 'username', 'type' => 'text'],
                                         ['label' => 'Email',    'key' => 'email',    'type' => 'email'],
+
                                         ['label' => 'Password', 'key' => 'password', 'type' => 'password', 'placeholder' => 'Abaikan jika tidak diubah']
+
                                     ];
                                 @endphp
                                 @foreach ($akunFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+
                                         <span class="text-sm font-semibold text-[#3d4f62] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
                                         @if ($field['type'] === 'password')
@@ -196,6 +210,7 @@
                                                    {{ $field['disabled'] ?? false ? 'disabled' : '' }}
                                                    class="edit-field prof-input hidden">
                                         @endif
+
                                     </div>
                                 @endforeach
                             </div>
@@ -207,14 +222,17 @@
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @php
                                     $profilFields = [
+
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
                                         ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => optional($user->company)->nama_company ?? '-'],
                                         ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $activeRoleName ?? optional($user->role)->role_name ?? '-')), 'disabled' => true],
                                         ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => optional($user->position)->position_name ?? '-', 'disabled' => true],
+
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+
                                         <span class="text-sm font-semibold text-[#2e3746] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
                                         
@@ -262,7 +280,9 @@
                     </div>
                 </div>
 
+
                 {{-- ===== MOBILE LAYOUT (HP): foto atas, data bawah ===== --}}
+
                 <div class="md:hidden flex flex-col gap-5 p-4">
                     {{-- Foto --}}
                     <div class="flex flex-col items-center gap-4">
@@ -331,6 +351,7 @@
                                                    {{ $field['disabled'] ?? false ? 'disabled' : '' }}
                                                    class="edit-field prof-input hidden">
                                         @endif
+
                                     </div>
                                 @endforeach
                             </div>
@@ -377,23 +398,35 @@
                     </div>
                 </div>
 
+
                 {{-- Footer aksi --}}
+
+
                 <div class="border-t border-gray-100 px-8 py-5 flex justify-end gap-3">
                     <button type="button" id="btn-edit"
                             onclick="enterEditMode()"
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Edit
                     </button>
+
                     <button type="button" id="btn-batal"
                             onclick="exitEditMode()"
                             class="hidden border border-gray-300 text-gray-600 bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
                         Batal
                     </button>
+
                     <button type="button" id="btn-simpan"
                             onclick="openConfirmModal()"
                             class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Simpan
                     </button>
+
+                    <button type="button" id="btn-batal"
+                            onclick="exitEditMode()"
+                            class="hidden bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                        Batal
+                    </button>
+
                 </div>
             </div>
         </form>
@@ -423,6 +456,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         function togglePasswordVisibility(btn) {
@@ -533,4 +567,69 @@
             if (e.target === this) closeConfirmModal();
         });
     </script>
+
+    <x-slot name="scripts">
+        <script>
+            // Edit mode
+            function enterEditMode() {
+                document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.edit-field').forEach(el => el.classList.remove('hidden'));
+                document.getElementById('foto-buttons').classList.remove('hidden');
+                document.querySelectorAll('.foto-buttons-mobile').forEach(el => el.classList.remove('hidden'));
+                document.getElementById('btn-edit').classList.add('hidden');
+                document.getElementById('btn-simpan').classList.remove('hidden');
+                document.getElementById('btn-batal').classList.remove('hidden');
+            }
+
+            function exitEditMode() {
+                document.querySelectorAll('.view-field').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.edit-field').forEach(el => el.classList.add('hidden'));
+                document.getElementById('foto-buttons').classList.add('hidden');
+                document.querySelectorAll('.foto-buttons-mobile').forEach(el => el.classList.add('hidden'));
+                document.getElementById('btn-edit').classList.remove('hidden');
+                document.getElementById('btn-simpan').classList.add('hidden');
+                document.getElementById('btn-batal').classList.add('hidden');
+                document.getElementById('foto-input').value = '';
+            }
+
+            // Foto preview
+            function previewFoto(input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('foto-preview');
+                        const placeholder = document.getElementById('foto-placeholder');
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                        if (placeholder) placeholder.classList.add('hidden');
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function hapusFoto() {
+                const preview = document.getElementById('foto-preview');
+                const placeholder = document.getElementById('foto-placeholder');
+                if (preview) { preview.src = ''; preview.classList.add('hidden'); }
+                if (placeholder) placeholder.classList.remove('hidden');
+                document.getElementById('foto-input').value = '';
+                document.getElementById('should_delete_foto').value = '1';
+            }
+
+            // Modal konfirmasi
+            function openConfirmModal() {
+                document.getElementById('confirm-modal').classList.remove('hidden');
+            }
+            function closeConfirmModal() {
+                document.getElementById('confirm-modal').classList.add('hidden');
+            }
+            function submitForm() {
+                closeConfirmModal();
+                document.getElementById('profile-form').submit();
+            }
+            document.getElementById('confirm-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeConfirmModal();
+            });
+        </script>
+    </x-slot>
 </x-bod.layout>

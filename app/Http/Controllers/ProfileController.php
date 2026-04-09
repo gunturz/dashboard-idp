@@ -58,20 +58,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    private function getNotifications()
-    {
-        return collect([
-            [
-                'id' => 1,
-                'title' => 'Submit IDP Berhasil',
-                'desc' => 'Formulir <span class="font-semibold">Exposure</span> Anda telah berhasil dikirim dan sedang menunggu tinjauan dari mentor/atasan.',
-                'type' => 'success',
-                'time' => '10 menit yang lalu',
-                'is_read' => false,
-                'badge' => 'Baru'
-            ]
-        ]);
-    }
+
 
     /**
      * Update profil user

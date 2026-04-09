@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Detail Progress Talent – Individual Development Plan" :user="$user">
+<x-pdc_admin.layout title="Detail Progress Talent – Individual Development Plan" :user="$user" :hideSidebar="true">
     <x-slot name="styles">
         <style>
             /* Custom Scrollbar */
@@ -521,7 +521,7 @@
             /* --- HEATMAP & COMPETENCY --- */
             .talent-gap-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+                grid-template-columns: 1fr 1fr;
                 gap: 24px;
                 margin-bottom: 48px;
             }
@@ -615,7 +615,7 @@
             .legend-item { display: flex; align-items: center; gap: 4px; }
             .legend-box { width: 12px; height: 12px; border-radius: 2px; }
 
-            .hidden { display: none !important; }
+
             .mobile-nav-select { display: none; width: 100%; margin-top: 12px; }
 
             /* --- Responsive --- */

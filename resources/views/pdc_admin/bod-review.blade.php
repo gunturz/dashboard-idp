@@ -402,8 +402,36 @@
                                                 optional($talent->promotion_plan)->status_promotion,
                                                 ['Pending BOD', 'Approved BOD', 'Rejected BOD']
                                             );
+                                            $isReviewedByBod = optional($talent->improvementProjects->sortByDesc('updated_at')->first())->bod_score !== null;
                                         @endphp
-                                        @if (!$alreadySent)
+                                        @if ($isReviewedByBod)
+                                            {{-- BOD sudah menilai → selalu tampilkan Lihat Penilaian --}}
+                                            <div class="flex items-center justify-center gap-2">
+                                                <a href="{{ route('pdc_admin.bod_review.detail', $talent->id) }}" class="btn-lihat-penilaian">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
+                                                    Lihat Penilaian
+                                                </a>
+                                                @if (optional($talent->promotion_plan)->status_promotion === 'Approved BOD')
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" viewBox="0 0 24 24" fill="currentColor" title="Selesai">
+                                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                                                    </svg>
+                                                @else
+                                                    <div class="w-5"></div>
+                                                @endif
+                                            </div>
+                                        @elseif ($alreadySent && !$isReviewedByBod)
+                                            {{-- Sudah dikirim ke BOD tapi belum dinilai --}}
+                                            <button type="button" class="btn-sudah-bod cursor-not-allowed" disabled title="Menunggu penilaian dari BOD">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Menunggu BOD
+                                            </button>
+                                        @else
+                                            {{-- Belum dikirim ke BOD --}}
                                             <form method="POST" action="{{ route('pdc_admin.bod_review.send', $talent->id) }}">
                                                 @csrf
                                                 <button type="submit" class="btn-kirim-bod {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
@@ -413,14 +441,6 @@
                                                     Kirim BOD
                                                 </button>
                                             </form>
-                                        @else
-                                            <a href="{{ route('pdc_admin.bod_review.detail', $talent->id) }}" class="btn-lihat-penilaian">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                </svg>
-                                                Lihat Penilaian
-                                            </a>
                                         @endif
                                     </td>
                                 </tr>

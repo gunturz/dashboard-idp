@@ -248,7 +248,7 @@
         </div>
     @empty
         <div class="empty-state">
-            Belum ada data progress talent.
+            Belum ada data progress talent yang menunggu penilaian BOD.
         </div>
     @endforelse
 

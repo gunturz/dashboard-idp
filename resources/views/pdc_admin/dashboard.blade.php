@@ -252,7 +252,7 @@
                 </div>
             @empty
                 <div class="p-8 text-center text-gray-400">
-                    Belum ada data progress talent.
+                    Belum ada data progress talent yang menunggu penilaian BOD.
                 </div>
             @endforelse
         </div>

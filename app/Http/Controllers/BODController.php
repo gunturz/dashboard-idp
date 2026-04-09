@@ -33,7 +33,7 @@ class BODController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-            $q->where('status_promotion', 'In Progress')
+            $q->where('status_promotion', 'Pending BOD')
                 ->whereNotNull('target_position_id');
         })
             ->whereDoesntHave('improvementProjects', function ($q) {

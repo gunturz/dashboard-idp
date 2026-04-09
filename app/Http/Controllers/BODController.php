@@ -27,29 +27,34 @@ class BODController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'In Progress')
-                    ->whereNotNull('target_position_id');
-            })
+            $q->where('status_promotion', 'Pending BOD')
+                ->whereNotNull('target_position_id');
+        })
+            ->whereDoesntHave('improvementProjects', function ($q) {
+            $q->whereNotNull('bod_score');
+        })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
         // Group by company -> target position -> talents
         $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
             return [
-                'company' => $companyTalents->first()->company,
-                'positions' => $companyTalents->groupBy(function ($item) {
+            'company' => $companyTalents->first()->company,
+            'positions' => $companyTalents->groupBy(function ($item) {
                     return $item->promotion_plan->target_position_id ?? 0;
-                })->map(function ($positionTalents) {
+                }
+                )->map(function ($positionTalents) {
                     return [
-                        'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                        'talents' => $positionTalents,
+                    'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                    'talents' => $positionTalents,
                     ];
-                }),
-            ];
-        });
+                }
+                ),
+                ];
+            });
 
         return view('bod.dashboard', compact('user', 'groupedData'))
-                ->with('notifications', $this->getNotifications());
+            ->with('notifications', $this->getNotifications());
     }
 
     /**
@@ -72,7 +77,7 @@ class BODController extends Controller
             ->get();
 
         return view('bod.review', compact('user', 'projects'))
-                ->with('notifications', $this->getNotifications());
+            ->with('notifications', $this->getNotifications());
     }
 
     /**
@@ -94,22 +99,22 @@ class BODController extends Controller
         ])->findOrFail($talent_id);
 
         $competencies = Competence::all();
-        $positionId   = optional($talent->promotion_plan)->target_position_id;
-        $standards    = $positionId
-            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+        $positionId = optional($talent->promotion_plan)->target_position_id;
+        $standards = $positionId
+            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         // IDP donut counts
-        $exposureCount  = $talent->idpActivities->where('type_idp', 1)->count();
+        $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
         $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
-        $learningCount  = $talent->idpActivities->where('type_idp', 3)->count();
+        $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
 
         // TOP 3 GAP
         $details = optional($talent->assessmentSession)->details;
-        $gaps    = collect();
+        $gaps = collect();
         if ($details) {
             $overrides = $details->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
-                ->sortBy(fn($d) => (int) explode('|', str_replace('priority_', '', $d->notes))[0]);
+                ->sortBy(fn($d) => (int)explode('|', str_replace('priority_', '', $d->notes))[0]);
             $gaps = $overrides->count() > 0 ? $overrides->values() : $details->sortBy('gap_score')->take(3)->values();
         }
 
@@ -124,16 +129,16 @@ class BODController extends Controller
      */
     public function logbook($talent_id)
     {
-        $user   = auth()->user();
+        $user = auth()->user();
         $talent = User::with([
             'idpActivities.verifier',
             'position',
             'department',
         ])->findOrFail($talent_id);
 
-        $exposureActivities  = $talent->idpActivities->where('type_idp', 1);
+        $exposureActivities = $talent->idpActivities->where('type_idp', 1);
         $mentoringActivities = $talent->idpActivities->where('type_idp', 2);
-        $learningActivities  = $talent->idpActivities->where('type_idp', 3);
+        $learningActivities = $talent->idpActivities->where('type_idp', 3);
 
         return view('bod.logbook', compact(
             'user', 'talent',
@@ -146,8 +151,8 @@ class BODController extends Controller
      */
     public function penilaian($talent_id)
     {
-        $user    = auth()->user();
-        $talent  = User::with([
+        $user = auth()->user();
+        $talent = User::with([
             'company',
             'department',
             'position',
@@ -161,30 +166,59 @@ class BODController extends Controller
         $project = $talent->improvementProjects->last();
 
         return view('bod.penilaian', compact('user', 'talent', 'project'))
-               ->with('notifications', $this->getNotifications());
+            ->with('notifications', $this->getNotifications());
     }
 
+    /**
+     * BOD Simpan Penilaian — store BOD assessment scores to database.
+     */
+    public function simpanPenilaian(\Illuminate\Http\Request $request, $talent_id)
+    {
+        $user = auth()->user();
+        $talent = User::with('improvementProjects')->findOrFail($talent_id);
+        $project = $talent->improvementProjects->last();
+
+        if (!$project) {
+            return redirect()->route('bod.penilaian', $talent_id)
+                ->with('error', 'Talent belum memiliki project improvement.');
+        }
+
+        $scores = $request->input('scores', []); // array of 10 integers
+        $totalScore = array_sum($scores);
+
+        $project->update([
+            'bod_score' => $totalScore,
+            'bod_scores_json' => json_encode($scores),
+            'bod_komentar' => $request->input('komentar'),
+            'bod_rekomendasi' => $request->input('rekomendasi'),
+            'bod_dinilai_oleh' => $user->id,
+            'bod_tanggal_penilaian' => $request->input('tanggal_penilaian', now()->toDateString()),
+        ]);
+
+        return redirect()->route('bod.history')
+            ->with('success', 'Penilaian berhasil disimpan! Total skor: ' . $totalScore . ' / 50');
+    }
 
     /**
-     * BOD History — shows completed/reviewed assessments.
+     * BOD History — shows completed/reviewed assessments by BOD.
      */
     public function history()
     {
         $user = auth()->user();
 
-        // Get projects that have already been reviewed (Verified or Rejected)
+        // Hanya tampilkan project yang sudah dinilai BOD (bod_score tidak null)
         $projects = ImprovementProject::with([
             'talent.position',
             'talent.department',
             'talent.company',
             'talent.promotion_plan.targetPosition',
         ])
-            ->whereIn('status', ['Verified', 'Rejected'])
+            ->whereNotNull('bod_score')
             ->orderBy('updated_at', 'desc')
             ->get();
 
         return view('bod.history', compact('user', 'projects'))
-                ->with('notifications', $this->getNotifications());
+            ->with('notifications', $this->getNotifications());
     }
 
     /**
@@ -192,7 +226,7 @@ class BODController extends Controller
      */
     public function notifikasi()
     {
-        $user          = auth()->user();
+        $user = auth()->user();
         $notifications = $this->getNotifications();
 
         return view('bod.notifikasi', compact('user', 'notifications'));

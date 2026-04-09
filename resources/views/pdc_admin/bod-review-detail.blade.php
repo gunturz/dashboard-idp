@@ -199,7 +199,10 @@
                     $totalRows = max(5, $bodUsers->count());
                 @endphp
                 @for ($i = 0; $i < $totalRows; $i++)
-                    @php $bod = $bodUsers->get($i); @endphp
+                    @php 
+                        $bod = $bodUsers->get($i); 
+                        $isAssessor = $latestProject && $bod && $latestProject->bod_dinilai_oleh == $bod->id;
+                    @endphp
                     <tr>
                         {{-- Penilai BOD --}}
                         <td class="text-left-cell">
@@ -222,27 +225,33 @@
 
                         {{-- Skor --}}
                         <td>
-                            @if ($i === 0 && $latestProject && $latestProject->verify_at)
-                                @php
-                                    // Try to derive a score; fall back to empty
-                                    $skor = null;
-                                @endphp
-                                {{ $skor ?? '' }}
+                            @if ($isAssessor)
+                                <span class="font-bold text-[#1e293b]">{{ $latestProject->bod_score }} / 50</span>
                             @endif
                         </td>
 
                         {{-- Feedback --}}
                         <td>
-                            @if ($i === 0 && $latestProject && $latestProject->feedback)
-                                {{ $latestProject->feedback }}
+                            @if ($isAssessor)
+                                {{ $latestProject->bod_komentar }}
                             @endif
                         </td>
 
                         {{-- Status --}}
                         <td class="text-left-cell">
-                            @if ($i === 0 && $latestProject && $latestProject->status === 'Verified')
-                                <span class="status-text">Ready in 1 – 2 Years</span>
-                                <span class="status-sub">(Siap dengan pengembangan terarah)</span>
+                            @if ($isAssessor && $latestProject->bod_rekomendasi)
+                                @php
+                                    $rekomen = $latestProject->bod_rekomendasi;
+                                    $desc = '';
+                                    if(str_contains($rekomen, 'Ready Now')) $desc = 'Siap dipromosikan dalam < 6 bulan';
+                                    elseif(str_contains($rekomen, '1 – 2')) $desc = 'Siap dengan pengembangan terarah';
+                                    elseif(str_contains($rekomen, '> 2')) $desc = 'Masih membutuhkan pengembangan signifikan';
+                                    elseif(str_contains($rekomen, 'Not Ready')) $desc = 'Belum direkomendasikan untuk jalur suksesi';
+                                @endphp
+                                <span class="status-text">{{ $rekomen }}</span>
+                                @if($desc)
+                                    <span class="status-sub">({{ $desc }})</span>
+                                @endif
                             @endif
                         </td>
                     </tr>

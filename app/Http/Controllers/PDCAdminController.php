@@ -14,6 +14,7 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDCAdminController extends Controller
 {
@@ -267,15 +268,15 @@ class PDCAdminController extends Controller
         $user = auth()->user();
 
         $projects = \App\Models\ImprovementProject::with([
-                'talent.position',
-                'talent.department',
-                'talent.promotion_plan.targetPosition',
-            ])
+            'talent.position',
+            'talent.department',
+            'talent.promotion_plan.targetPosition',
+        ])
             ->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
             ->get();
 
-        $total    = $projects->count();
-        $pending  = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
+        $total = $projects->count();
+        $pending = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
         $approved = $projects->where('status', 'Verified')->count();
         $rejected = $projects->where('status', 'Rejected')->count();
 
@@ -487,26 +488,45 @@ class PDCAdminController extends Controller
 
         // Stats
         $totalProjectImprovement = ImprovementProject::count();
-        $belumDinilai = PromotionPlan::whereNotIn('status_promotion', ['Pending BOD', 'Approved BOD', 'Rejected BOD'])->count();
-        $sudahDinilai = PromotionPlan::whereIn('status_promotion', ['Approved BOD', 'Rejected BOD'])->count();
+
+        $belumDinilai = 0;
+        $sudahDinilai = 0;
+
+        foreach ($talents as $talent) {
+            $alreadySent = in_array(
+                optional($talent->promotion_plan)->status_promotion,
+            ['Pending BOD', 'Approved BOD', 'Rejected BOD']
+            );
+            $isReviewedByBod = optional($talent->improvementProjects->sortByDesc('updated_at')->first())->bod_score !== null;
+
+            if (optional($talent->promotion_plan)->status_promotion === 'Approved BOD') {
+                $sudahDinilai++;
+            }
+
+            if ($alreadySent && !$isReviewedByBod) {
+                $belumDinilai++;
+            }
+        }
 
         // Group by company -> target position -> talents
         $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
             return [
-                'company'   => $companyTalents->first()->company,
-                'positions' => $companyTalents->groupBy(function ($item) {
+            'company' => $companyTalents->first()->company,
+            'positions' => $companyTalents->groupBy(function ($item) {
                     return $item->promotion_plan->target_position_id ?? 0;
-                })->map(function ($positionTalents) {
+                }
+                )->map(function ($positionTalents) {
                     return [
-                        'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                        'talents'        => $positionTalents,
+                    'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                    'talents' => $positionTalents,
                     ];
-                }),
-            ];
-        });
+                }
+                ),
+                ];
+            });
 
-        $companies   = Company::orderBy('nama_company')->get();
-        $positions   = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $companies = Company::orderBy('nama_company')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
         $departments = Department::orderBy('nama_department')->get();
 
         return view('pdc_admin.bod-review', compact(
@@ -550,7 +570,7 @@ class PDCAdminController extends Controller
     {
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
         $plan->update(['status_promotion' => 'Approved BOD']);
-        return redirect()->back()
+        return redirect()->route('pdc_admin.bod_review')
             ->with('success', 'Proses penilaian BOD telah diselesaikan.');
     }
 
@@ -627,12 +647,12 @@ class PDCAdminController extends Controller
         $competencies = \App\Models\Competence::all();
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ? \App\Models\PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ?\App\Models\PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards'));
         $pdf->setPaper('a4', 'portrait');
-        
+
         $filename = 'Talent_Report_' . str_replace(' ', '_', $talent->nama) . '.pdf';
         return $pdf->download($filename);
     }
@@ -672,7 +692,7 @@ class PDCAdminController extends Controller
     // ── Company Management ──────────────────────────────────────────
     public function companyManagement()
     {
-        $user      = auth()->user();
+        $user = auth()->user();
         $companies = Company::orderBy('nama_company')->get();
         return view('pdc_admin.company-management', compact('user', 'companies'));
     }
@@ -699,8 +719,8 @@ class PDCAdminController extends Controller
 
     public function departmentManagement($companyId)
     {
-        $user        = auth()->user();
-        $company     = \App\Models\Company::findOrFail($companyId);
+        $user = auth()->user();
+        $company = \App\Models\Company::findOrFail($companyId);
         $departments = \App\Models\Department::where('company_id', $companyId)
             ->orderBy('nama_department')->get();
         return view('pdc_admin.department-management', compact('user', 'company', 'departments'));
@@ -716,11 +736,11 @@ class PDCAdminController extends Controller
     public function storeDepartment(Request $request)
     {
         $request->validate([
-            'company_id'      => 'required|exists:company,id',
+            'company_id' => 'required|exists:company,id',
             'nama_department' => 'required|string|max:255',
         ]);
         Department::create([
-            'company_id'      => $request->company_id,
+            'company_id' => $request->company_id,
             'nama_department' => $request->nama_department,
         ]);
         return back()->with('success', 'Departemen berhasil ditambahkan.');
@@ -732,4 +752,3 @@ class PDCAdminController extends Controller
         return back()->with('success', 'Departemen berhasil dihapus.');
     }
 }
-

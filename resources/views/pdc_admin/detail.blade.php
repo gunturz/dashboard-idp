@@ -1677,7 +1677,7 @@
     </script>
 
     {{-- ================================= MODAL: FINANCE VALIDATION ================================= --}}
-    <div id="finance-modal" class="modal-overlay">
+    <div id="finance-modal" class="modal-overlay @if($errors->any()) active @endif">
         <div class="modal-content finance-modal-content" style="max-height: 95vh; overflow-y: auto;">
             <div class="finance-header">
                 <div class="flex items-center gap-3">
@@ -1700,6 +1700,17 @@
                 <input type="hidden" name="project_id" id="finance-proj-id">
 
                 <div class="finance-body">
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                            <strong class="font-bold">Oops!</strong>
+                            <span class="block sm:inline">Ada input yang terlewat:</span>
+                            <ul class="mt-2 list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="finance-alert">
                         <div class="bg-yellow-100 p-2 rounded-lg shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1770,7 +1781,7 @@
 
                 <div class="finance-footer">
                     <button type="button" onclick="closeFinanceModal()" class="btn-finance-cancel">Batal</button>
-                    <button type="submit" class="btn-finance-submit" onclick="this.innerHTML='Mengirim...'; this.form.submit();">Kirim</button>
+                    <button type="submit" class="btn-finance-submit" onclick="this.innerHTML='Mengirim...';">Kirim</button>
                 </div>
             </form>
         </div>

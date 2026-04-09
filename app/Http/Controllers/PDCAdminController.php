@@ -89,8 +89,8 @@ class PDCAdminController extends Controller
         $companies = Company::orderBy('nama_company')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
         return view('pdc_admin.dashboard', compact(
             'user', 'groupedData', 'companies', 'positions', 'mentors', 'atasans',
@@ -196,8 +196,8 @@ class PDCAdminController extends Controller
         $departments = \App\Models\Department::orderBy('nama_department')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
 
         return view('pdc_admin.development-plan', compact('user', 'companies', 'departments', 'positions', 'mentors', 'atasans'));
@@ -220,7 +220,7 @@ class PDCAdminController extends Controller
         $standards = PositionTargetCompetence::where('position_id', $position_id)
             ->pluck('target_level', 'competence_id');
 
-        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+        $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
             ->where('company_id', $company_id)
             ->get();
 
@@ -255,7 +255,7 @@ class PDCAdminController extends Controller
             ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
-        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+        $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
             ->where('company_id', $talent->company_id)
             ->get();
 

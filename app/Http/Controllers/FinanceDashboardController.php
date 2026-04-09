@@ -10,7 +10,7 @@ class FinanceDashboardController extends Controller
     /**
      * Build Finance notifications (mockup, can be replaced with real data)
      */
-    private function getNotifications()
+    protected function getNotifications()
     {
         return collect([]);
     }
@@ -138,7 +138,7 @@ class FinanceDashboardController extends Controller
     /**
      * Mark all Finance notifications as read.
      */
-    public function markAllNotificationsRead()
+    public function markAllNotificationsRead(Request $request)
     {
         return back();
     }

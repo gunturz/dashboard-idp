@@ -22,29 +22,19 @@
             .prof-input:focus { outline: none; border-color: #2e3746; box-shadow: 0 0 0 3px rgba(46,55,70,0.1); }
             .prof-input:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
 
+            .modal-backdrop {
                 position: fixed; inset: 0; z-index: 100;
                 background: rgba(0,0,0,0.45);
                 display: flex; align-items: center; justify-content: center;
             }
 
             .btn-back {
-                padding: 8px 16px;
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                background: white;
-                color: #475569;
-                font-weight: 500;
-                font-size: 0.875rem;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                transition: all 0.2s;
-                width: fit-content;
+                display: inline-flex; align-items: center; gap: 8px;
+                padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 10px;
+                background: white; color: #475569; font-weight: 600; font-size: 0.85rem;
+                text-decoration: none; transition: all 0.2s; width: fit-content;
             }
-            .btn-back:hover {
-                background: #f8fafc;
-                border-color: #cbd5e1;
-            }
+            .btn-back:hover { background: #f8fafc; border-color: #cbd5e1; color: #1e293b; }
         </style>
     </x-slot>
 
@@ -54,14 +44,12 @@
         {{-- Row Back --}}
         <div class="mb-5">
             <a href="{{ route('bod.dashboard') }}" class="btn-back">
-
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
-                <span class="text-[#2e3746]">Kembali</span>
+                Kembali
             </a>
         </div>
-
 
         <div class="flex items-center gap-3 mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">

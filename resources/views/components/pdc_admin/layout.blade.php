@@ -605,6 +605,9 @@
             }
         }
     </script>
+    <script>
+        // Custom scripts block has been removed for SweetAlert
+    </script>
     {{ $scripts ?? '' }}
 </body>
 

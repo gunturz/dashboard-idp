@@ -90,8 +90,8 @@ class PDCAdminController extends Controller
         $companies = Company::orderBy('nama_company')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
         return view('pdc_admin.dashboard', compact(
             'user', 'groupedData', 'companies', 'positions', 'mentors', 'atasans',
@@ -194,11 +194,11 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
         $companies = Company::orderBy('nama_company')->get();
-        $departments = \App\Models\Department::orderBy('nama_department')->get();
+        $departments = Department::orderBy('nama_department')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
 
         return view('pdc_admin.development-plan', compact('user', 'companies', 'departments', 'positions', 'mentors', 'atasans'));
@@ -221,7 +221,7 @@ class PDCAdminController extends Controller
         $standards = PositionTargetCompetence::where('position_id', $position_id)
             ->pluck('target_level', 'competence_id');
 
-        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+        $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
             ->where('company_id', $company_id)
             ->get();
 
@@ -256,7 +256,7 @@ class PDCAdminController extends Controller
             ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
-        $financeUsers = User::whereHas('role', fn($q) => $q->where('role_name', 'finance'))
+        $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
             ->where('company_id', $talent->company_id)
             ->get();
 
@@ -267,7 +267,7 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
-        $projects = \App\Models\ImprovementProject::with([
+        $projects = ImprovementProject::with([
             'talent.position',
             'talent.department',
             'talent.promotion_plan.targetPosition',
@@ -287,7 +287,7 @@ class PDCAdminController extends Controller
     {
         $request->validate(['status' => 'required|in:Verified,Rejected']);
 
-        $project = \App\Models\ImprovementProject::findOrFail($id);
+        $project = ImprovementProject::findOrFail($id);
         $project->update([
             'status' => $request->status,
             'verify_by' => auth()->id(),
@@ -406,7 +406,7 @@ class PDCAdminController extends Controller
             'assigned_finance_id' => 'required|exists:users,id',
         ]);
 
-        $project = \App\Models\ImprovementProject::find($request->project_id);
+        $project = ImprovementProject::find($request->project_id);
         if ($project) {
             $project->update([
                 'status' => 'Pending',
@@ -644,13 +644,13 @@ class PDCAdminController extends Controller
             'improvementProjects.verifier',
         ])->findOrFail($talent_id);
 
-        $competencies = \App\Models\Competence::all();
+        $competencies = Competence::all();
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ?\App\Models\PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards'));
+        $pdf = Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards'));
         $pdf->setPaper('a4', 'portrait');
 
         $filename = 'Talent_Report_' . str_replace(' ', '_', $talent->nama) . '.pdf';
@@ -664,7 +664,7 @@ class PDCAdminController extends Controller
             'roles.*' => 'exists:role,id'
         ]);
 
-        $user = \App\Models\User::findOrFail($id);
+        $user = User::findOrFail($id);
 
         // Sync roles pivot table
         $user->roles()->sync($request->roles);
@@ -720,16 +720,16 @@ class PDCAdminController extends Controller
     public function departmentManagement($companyId)
     {
         $user = auth()->user();
-        $company = \App\Models\Company::findOrFail($companyId);
-        $departments = \App\Models\Department::where('company_id', $companyId)
+        $company = Company::findOrFail($companyId);
+        $departments = Department::where('company_id', $companyId)
             ->orderBy('nama_department')->get();
         return view('pdc_admin.department-management', compact('user', 'company', 'departments'));
     }
 
-    public function updateDepartment(\Illuminate\Http\Request $request, $id)
+    public function updateDepartment(Request $request, $id)
     {
         $request->validate(['nama_department' => 'required|string|max:255']);
-        \App\Models\Department::findOrFail($id)->update(['nama_department' => $request->nama_department]);
+        Department::findOrFail($id)->update(['nama_department' => $request->nama_department]);
         return back()->with('success', 'Departemen berhasil diperbarui.');
     }
 
@@ -748,7 +748,7 @@ class PDCAdminController extends Controller
 
     public function destroyDepartment($id)
     {
-        \App\Models\Department::findOrFail($id)->delete();
+        Department::findOrFail($id)->delete();
         return back()->with('success', 'Departemen berhasil dihapus.');
     }
 }

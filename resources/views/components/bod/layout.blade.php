@@ -150,10 +150,6 @@
                         <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
                             <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
                         </span>
-                    @else
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
-                        </span>
                     @endif
                 </button>
 

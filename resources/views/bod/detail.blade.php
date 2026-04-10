@@ -17,23 +17,30 @@
 
             /* ── Profile header card ── */
             .profile-card {
-                background: white; border: 1px solid #e2e8f0; border-radius: 16px;
-                padding: 20px 24px; margin-bottom: 28px;
-                display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+                background: #2e3746; border: none; border-radius: 16px;
+                padding: 24px; margin-bottom: 28px;
+                display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+                box-shadow: 0 4px 12px rgba(46, 55, 70, 0.15);
+                color: white;
+            }
+            .profile-col-1 {
+                display: flex; align-items: center; gap: 16px;
+                border-right: 1px dashed rgba(255, 255, 255, 0.2); padding-right: 16px;
+            }
+            .profile-col-general {
+                display: flex; flex-direction: column; justify-content: center; gap: 12px;
+            }
+            .profile-col-general:nth-child(2) {
+                border-right: 1px dashed rgba(255, 255, 255, 0.2); padding-right: 16px;
             }
             .profile-avatar {
                 width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
-                border: 2px solid #e2e8f0; flex-shrink: 0;
+                border: 2px solid rgba(255, 255, 255, 0.3); flex-shrink: 0;
             }
-            .profile-info { flex: 1; }
-            .profile-info h3 { font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
-            .profile-info p { font-size: 0.78rem; color: #64748b; font-style: italic; }
-            .profile-meta {
-                display: grid; grid-template-columns: repeat(2, auto); gap: 8px 28px;
-            }
-            .meta-item { font-size: 0.78rem; color: #475569; }
-            .meta-item strong { color: #1e293b; font-weight: 700; }
+            .profile-info h3 { font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 2px; }
+            .profile-info p { font-size: 0.78rem; color: #cbd5e1; font-style: italic; }
+            .meta-item { font-size: 0.78rem; color: #cbd5e1; }
+            .meta-item strong { color: white; font-weight: 700; }
 
             /* ── Section title ── */
             .section-title {
@@ -97,7 +104,8 @@
             /* Using inline tailwind classes */
 
             @media(max-width:768px) {
-                .profile-meta { grid-template-columns: 1fr 1fr; }
+                .profile-card { grid-template-columns: 1fr; gap: 16px; }
+                .profile-col-1, .profile-col-general:nth-child(2) { border-right: none; padding-right: 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.2); padding-bottom: 16px; }
                 .donut-container { flex-direction: column; }
             }
         </style>
@@ -113,20 +121,23 @@
 
     {{-- Profile Card --}}
     <div class="profile-card">
-        <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0284c7' }}"
-            alt="{{ $talent->nama }}" class="profile-avatar">
-        <div class="profile-info">
-            <h3>{{ $talent->nama }}</h3>
-            <p>
-                 {{ $talent->position->position_name ?? '-' }}
-                 &rarr;
-                 {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
-            </p>
+        {{-- Kolom 1: Profil --}}
+        <div class="profile-col-1">
+            <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0284c7' }}"
+                alt="{{ $talent->nama }}" class="profile-avatar">
+            <div class="profile-info">
+                <h3>{{ $talent->nama }}</h3>
+                <p>
+                     {{ $talent->position->position_name ?? '-' }}
+                     &rarr;
+                     {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                </p>
+            </div>
         </div>
-        <div class="profile-meta">
+
+        {{-- Kolom 2: Perusahaan & Mentor --}}
+        <div class="profile-col-general">
             <div class="meta-item"><strong>Perusahaan</strong><br>{{ optional($talent->company)->nama_company ?? '-' }}</div>
-            <div class="meta-item"><strong>Departemen</strong><br>{{ optional($talent->department)->nama_department ?? '-' }}</div>
-            <div class="meta-item"><strong>Atasan</strong><br>{{ optional($talent->atasan)->nama ?? '-' }}</div>
             <div class="meta-item"><strong>Mentor</strong><br>
                 @php
                     $mIds = optional($talent->promotion_plan)->mentor_ids ?? [];
@@ -135,6 +146,12 @@
                         : (optional($talent->mentor)->nama ?? '-');
                 @endphp
             </div>
+        </div>
+
+        {{-- Kolom 3: Departemen & Atasan --}}
+        <div class="profile-col-general">
+            <div class="meta-item"><strong>Departemen</strong><br>{{ optional($talent->department)->nama_department ?? '-' }}</div>
+            <div class="meta-item"><strong>Atasan</strong><br>{{ optional($talent->atasan)->nama ?? '-' }}</div>
         </div>
     </div>
 

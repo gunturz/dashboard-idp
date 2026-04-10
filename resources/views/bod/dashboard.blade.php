@@ -45,6 +45,13 @@
                 .cards-grid { grid-template-columns: 1fr; }
             }
 
+            /* ── Talent Item Wrapper ── */
+            .talent-item-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
             /* ── Talent Card ── */
             .talent-card {
                 background: white;
@@ -52,12 +59,11 @@
                 border-radius: 16px;
                 overflow: hidden;
                 box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-                transition: box-shadow 0.2s, transform 0.15s;
+                transition: box-shadow 0.2s;
                 cursor: pointer;
             }
             .talent-card:hover {
                 box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-                transform: translateY(-2px);
             }
 
             /* ── Card Header ── */
@@ -112,13 +118,13 @@
                 margin-top: 1px;
             }
 
-            /* ── Beri Penilaian Button ── */
-            .btn-penilaian {
+            /* ── Lihat Detail Button ── */
+            .btn-lihat-detail {
                 display: inline-flex;
                 align-items: center;
                 gap: 5px;
                 padding: 7px 18px;
-                background: #2e3746;
+                background: #0d9488;
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -126,14 +132,47 @@
                 font-weight: 700;
                 cursor: pointer;
                 text-decoration: none;
-                transition: background 0.2s, transform 0.15s;
+                transition: all 0.2s ease;
                 white-space: nowrap;
                 flex-shrink: 0;
             }
-            .btn-penilaian:hover {
-                background: #1e293b;
-                transform: translateY(-1px);
+            .btn-lihat-detail:hover {
+                background: #0f766e;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
                 color: white;
+            }
+            .btn-lihat-detail:active {
+                transform: translateY(0) scale(0.95);
+                box-shadow: none;
+            }
+
+            /* ── Beri Penilaian Button (separated) ── */
+            .btn-penilaian-separated {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: 12px 18px;
+                background: #2e3746;
+                color: white;
+                border: none;
+                font-size: 0.82rem;
+                font-weight: 700;
+                cursor: pointer;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                border-radius: 12px;
+            }
+            .btn-penilaian-separated:hover {
+                background: #1e293b;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(46, 55, 70, 0.3);
+                color: white;
+            }
+            .btn-penilaian-separated:active {
+                transform: translateY(0) scale(0.98);
+                box-shadow: none;
             }
 
             /* ── Card Info Body ── */
@@ -203,44 +242,52 @@
                                              : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0284c7&bold=true';
                         @endphp
 
-                        {{-- Card — whole card clicks → detail, button clicks → penilaian --}}
-                        <div class="talent-card" onclick="window.location='{{ route('bod.detail_talent', $talent->id) }}'">
-                            {{-- Header --}}
-                            <div class="card-header">
-                                <div class="card-header-left">
-                                    <img src="{{ $avatarUrl }}" alt="{{ $talent->nama }}" class="talent-avatar">
-                                    <div class="talent-name-block">
-                                        <span class="name">{{ $talent->nama }}</span>
-                                        <span class="role">
-                                             {{ $talent->position->position_name ?? '-' }}
-                                            &rarr;
-                                            {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
-                                        </span>
+                        <div class="talent-item-wrapper">
+                            {{-- Card — whole card clicks → detail --}}
+                            <div class="talent-card" onclick="window.location='{{ route('bod.detail_talent', $talent->id) }}'">
+                                {{-- Header --}}
+                                <div class="card-header">
+                                    <div class="card-header-left">
+                                        <img src="{{ $avatarUrl }}" alt="{{ $talent->nama }}" class="talent-avatar">
+                                        <div class="talent-name-block">
+                                            <span class="name">{{ $talent->nama }}</span>
+                                            <span class="role">
+                                                 {{ $talent->position->position_name ?? '-' }}
+                                                &rarr;
+                                                {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('bod.detail_talent', $talent->id) }}"
+                                       class="btn-lihat-detail"
+                                       onclick="event.stopPropagation()">
+                                        Lihat Detail
+                                    </a>
+                                </div>
+
+                                {{-- Info Body --}}
+                                <div class="card-info">
+                                    <div class="info-grid">
+                                        <span class="info-label">Department</span>
+                                        <span class="info-value">{{ $deptName }}</span>
+
+                                        <span class="info-label">Perusahaan</span>
+                                        <span class="info-value">{{ $companyName }}</span>
+
+                                        <span class="info-label">Mentor</span>
+                                        <span class="info-value">{{ $mentorDisplay }}</span>
+
+                                        <span class="info-label">Atasan</span>
+                                        <span class="info-value">{{ $atasanName }}</span>
                                     </div>
                                 </div>
-                                <a href="{{ route('bod.penilaian', $talent->id) }}"
-                                   class="btn-penilaian"
-                                   onclick="event.stopPropagation()">
-                                    Beri Penilaian
-                                </a>
-            </div>
-
-                            {{-- Info Body --}}
-                            <div class="card-info">
-                                <div class="info-grid">
-                                    <span class="info-label">Department</span>
-                                    <span class="info-value">{{ $deptName }}</span>
-
-                                    <span class="info-label">Perusahaan</span>
-                                    <span class="info-value">{{ $companyName }}</span>
-
-                                    <span class="info-label">Mentor</span>
-                                    <span class="info-value">{{ $mentorDisplay }}</span>
-
-                                    <span class="info-label">Atasan</span>
-                                    <span class="info-value">{{ $atasanName }}</span>
-                                </div>
                             </div>
+                            
+                            {{-- Beri Penilaian Button (Separated) --}}
+                            <a href="{{ route('bod.penilaian', $talent->id) }}"
+                               class="btn-penilaian-separated">
+                                Beri Penilaian
+                            </a>
                         </div>
                     @endforeach
                 @endforeach

@@ -751,4 +751,11 @@ class PDCAdminController extends Controller
         Department::findOrFail($id)->delete();
         return back()->with('success', 'Departemen berhasil dihapus.');
     }
+
+    public function logbookDetail($id)
+    {
+        $user = auth()->user();
+        $activity = \App\Models\IDPActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
+        return view('pdc_admin.logbook-detail', compact('user', 'activity'));
+    }
 }

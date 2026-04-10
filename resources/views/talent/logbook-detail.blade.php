@@ -72,7 +72,7 @@
                                     @if(in_array($data['status'], ['Approve', 'Approved']))
                                         <span class="inline-flex items-center gap-1 text-emerald-600 font-bold px-3 py-1 rounded-full text-[11px] bg-emerald-50"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Approved</span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 text-orange-500 font-bold px-3 py-1 rounded-full text-[11px] bg-orange-50"><span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $data['status'] }}</span>
+                                        <span class="inline-flex items-center gap-1 text-red-500 font-bold px-3 py-1 rounded-full text-[11px] bg-red-50"><span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> {{ $data['status'] }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 border-l border-gray-100">
@@ -110,10 +110,10 @@
                                             </svg>
                                         </a>
                                         {{-- Delete Button --}}
-                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST" onsubmit="{{ optional($user->promotion_plan)->is_locked ? 'return false;' : 'return confirm(\'Apakah Anda yakin ingin menghapus data logbook ini?\');' }}">
+                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-700 transition' }}" title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                                            <button type="button" onclick="{{ optional($user->promotion_plan)->is_locked ? 'return false;' : 'confirmDeleteLogbook(this)' }}" class="text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-700 transition' }}" title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -194,10 +194,10 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </a>
-                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST" onsubmit="{{ optional($user->promotion_plan)->is_locked ? 'return false;' : 'return confirm(\'Apakah Anda yakin ingin menghapus data logbook ini?\');' }}">
+                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-700 transition' }}" title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                                            <button type="button" onclick="{{ optional($user->promotion_plan)->is_locked ? 'return false;' : 'confirmDeleteLogbook(this)' }}" class="text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-700 transition' }}" title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -276,10 +276,10 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </a>
-                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST" onsubmit="{{ optional($user->promotion_plan)->is_locked ? 'return false;' : 'return confirm(\'Apakah Anda yakin ingin menghapus data logbook ini?\');' }}">
+                                        <form action="{{ route('talent.idp_monitoring.destroy', $data['id']) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-700 transition' }}" title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                                            <button type="button" onclick="{{ optional($user->promotion_plan)->is_locked ? 'return false;' : 'confirmDeleteLogbook(this)' }}" class="text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:text-red-700 transition' }}" title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -331,5 +331,48 @@
             modal.classList.add('opacity-0'); content.classList.add('scale-95');
             setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
+
+        /* Delete Modal JS */
+        let currentDeleteForm = null;
+
+        function confirmDeleteLogbook(btn) {
+            currentDeleteForm = btn.closest('form');
+            const modal = document.getElementById('deleteLogbookModal');
+            const content = document.getElementById('deleteLogbookModalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteLogbookModal');
+            const content = document.getElementById('deleteLogbookModalContent');
+            modal.classList.add('opacity-0'); content.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); currentDeleteForm = null; }, 300);
+        }
+
+        document.getElementById('confirmDeleteBtn')?.addEventListener('click', function() {
+            if (currentDeleteForm) {
+                currentDeleteForm.submit();
+            }
+        });
     </script>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteLogbookModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 transform scale-95 transition-transform duration-300" id="deleteLogbookModalContent">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Hapus Aktivitas?</h3>
+                <p class="text-sm text-gray-500 mb-6 w-11/12 mx-auto">Apakah Anda yakin ingin menghapus data logbook ini? Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="flex gap-3 w-full mt-2">
+                    <button type="button" onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors">Batal</button>
+                    <button type="button" id="confirmDeleteBtn" class="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 shadow-sm shadow-red-200 transition-all">Yakin, Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-talent.layout>

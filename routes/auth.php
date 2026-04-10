@@ -116,6 +116,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.development_plan');
     Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
         ->name('pdc_admin.detail.talent');
+    Route::get('/pdc-admin/logbook-detail/{id}', [\App\Http\Controllers\PDCAdminController::class , 'logbookDetail'])
+        ->name('pdc_admin.logbook.detail');
     Route::get('/pdc-admin/finance-validation', [\App\Http\Controllers\PDCAdminController::class , 'financeValidation'])
         ->name('pdc_admin.finance_validation');
     Route::patch('/pdc-admin/finance-validation/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateFinanceValidation'])

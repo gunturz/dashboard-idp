@@ -1115,7 +1115,7 @@
                                     <tr>
                                         <th>Mentor</th>
                                         <th>Tema</th>
-                                        <th>Tanggal Pengiriman</th>
+                                        <th>Tanggal Pengiriman/Update</th>
                                         <th>Tanggal Pelaksanaan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -1142,50 +1142,13 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openLogbookDetail(this)" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
-                                                        Detail
-                                                    </button>
-                                                    <div class="hidden logbook-detail-html">
-                                                        <div class="space-y-3 text-left">
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $act->verifier->nama ?? '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tema</span><div class="text-[14px] text-gray-800">{{ $act->theme }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Pengiriman</span><div class="text-[14px] text-gray-800">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d F Y') : '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Pelaksanaan</span><div class="text-[14px] text-gray-800">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Lokasi</span><div class="text-[14px] text-gray-800">{{ $act->location }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Aktivitas</span><div class="text-[14px] text-gray-800">{{ $act->activity }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Deskripsi</span><div class="text-[14px] text-gray-800">{{ $act->description ?? '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Dokumentasi</span>
-                                                                @php
-                                                                    $dPaths = []; $dNames = [];
-                                                                    if($act->document_path){
-                                                                        if(str_starts_with($act->document_path, '["')) {
-                                                                            $dPaths = json_decode($act->document_path, true);
-                                                                            $dNames = explode(', ', $act->file_name);
-                                                                        } else {
-                                                                            $dPaths = [$act->document_path]; $dNames = [$act->file_name];
-                                                                        }
-                                                                    }
-                                                                @endphp
-                                                                @if(count($dPaths) > 0)
-                                                                    <div class="flex flex-col gap-1 mt-1">
-                                                                        @foreach($dPaths as $di => $dp)
-                                                                            <a href="{{ asset('storage/'.$dp) }}" target="_blank" class="text-xs text-teal-600 hover:underline flex items-center gap-1">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                                                                                {{ $dNames[$di] ?? 'Dokumen' }}
-                                                                            </a>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @else
-                                                                    <span class="text-gray-400 text-xs">-</span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                        </svg>
-                                                    </button>
+                                                        </svg> 
+                                                        Detail
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1234,50 +1197,13 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openLogbookDetail(this)" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
-                                                        Detail
-                                                    </button>
-                                                    <div class="hidden logbook-detail-html">
-                                                        <div class="space-y-3 text-left">
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $act->verifier->nama ?? '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tema</span><div class="text-[14px] text-gray-800">{{ $act->theme }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Pengiriman</span><div class="text-[14px] text-gray-800">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d F Y') : '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Pelaksanaan</span><div class="text-[14px] text-gray-800">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Lokasi</span><div class="text-[14px] text-gray-800">{{ $act->location }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Deskripsi</span><div class="text-[14px] text-gray-800">{{ $act->description ?? '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Action Plan</span><div class="text-[14px] text-gray-800">{{ $act->action_plan ?? '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Dokumentasi</span>
-                                                                @php
-                                                                    $dPaths = []; $dNames = [];
-                                                                    if($act->document_path){
-                                                                        if(str_starts_with($act->document_path, '["')) {
-                                                                            $dPaths = json_decode($act->document_path, true);
-                                                                            $dNames = explode(', ', $act->file_name);
-                                                                        } else {
-                                                                            $dPaths = [$act->document_path]; $dNames = [$act->file_name];
-                                                                        }
-                                                                    }
-                                                                @endphp
-                                                                @if(count($dPaths) > 0)
-                                                                    <div class="flex flex-col gap-1 mt-1">
-                                                                        @foreach($dPaths as $di => $dp)
-                                                                            <a href="{{ asset('storage/'.$dp) }}" target="_blank" class="text-xs text-teal-600 hover:underline flex items-center gap-1">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                                                                                {{ $dNames[$di] ?? 'Dokumen' }}
-                                                                            </a>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @else
-                                                                    <span class="text-gray-400 text-xs">-</span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                        </svg>
-                                                    </button>
+                                                        </svg> 
+                                                        Detail
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1320,49 +1246,13 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openLogbookDetail(this)" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
-                                                        Detail
-                                                    </button>
-                                                    <div class="hidden logbook-detail-html">
-                                                        <div class="space-y-3 text-left">
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Sumber</span><div class="text-[14px] text-gray-800">{{ $act->activity }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tema</span><div class="text-[14px] text-gray-800">{{ $act->theme }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Pengiriman</span><div class="text-[14px] text-gray-800">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d F Y') : '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Pelaksanaan</span><div class="text-[14px] text-gray-800">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Platform</span><div class="text-[14px] text-gray-800">{{ $act->platform }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Deskripsi</span><div class="text-[14px] text-gray-800">{{ $act->description ?? '-' }}</div></div>
-                                                            <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Dokumentasi</span>
-                                                                @php
-                                                                    $dPaths = []; $dNames = [];
-                                                                    if($act->document_path){
-                                                                        if(str_starts_with($act->document_path, '["')) {
-                                                                            $dPaths = json_decode($act->document_path, true);
-                                                                            $dNames = explode(', ', $act->file_name);
-                                                                        } else {
-                                                                            $dPaths = [$act->document_path]; $dNames = [$act->file_name];
-                                                                        }
-                                                                    }
-                                                                @endphp
-                                                                @if(count($dPaths) > 0)
-                                                                    <div class="flex flex-col gap-1 mt-1">
-                                                                        @foreach($dPaths as $di => $dp)
-                                                                            <a href="{{ asset('storage/'.$dp) }}" target="_blank" class="text-xs text-teal-600 hover:underline flex items-center gap-1">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                                                                                {{ $dNames[$di] ?? 'Dokumen' }}
-                                                                            </a>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @else
-                                                                    <span class="text-gray-400 text-xs">-</span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                        </svg>
-                                                    </button>
+                                                        </svg> 
+                                                        Detail
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1800,35 +1690,5 @@
         </div>
     </div>
 
-    <!-- Generic Logbook Detail Modal -->
-    <div id="logbookDetailModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
-        <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[500px] p-7 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="logbookDetailModalContent">
-            <div class="flex justify-between items-start mb-4 border-b border-gray-100 pb-4">
-                <h3 class="text-xl font-bold text-[#1e293b]">Detail Logbook</h3>
-                <button onclick="closeLogbookDetailModal()" class="text-gray-400 hover:text-gray-600 bg-gray-50 rounded-full p-2 hover:bg-gray-200 transition">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
-            <div class="text-sm" id="detailModalBody"></div>
-            <div class="mt-6 pt-4 border-t border-gray-100">
-                <button onclick="closeLogbookDetailModal()" class="w-full bg-[#f1f5f9] text-[#64748b] font-bold py-2.5 rounded-xl hover:bg-gray-200 transition-colors">Tutup</button>
-            </div>
-        </div>
-    </div>
-    <script>
-        function openLogbookDetail(btn) {
-            const htmlContent = btn.nextElementSibling.innerHTML;
-            document.getElementById('detailModalBody').innerHTML = htmlContent;
-            const modal = document.getElementById('logbookDetailModal');
-            const content = document.getElementById('logbookDetailModalContent');
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
-        }
-        function closeLogbookDetailModal() {
-            const modal = document.getElementById('logbookDetailModal');
-            const content = document.getElementById('logbookDetailModalContent');
-            modal.classList.add('opacity-0'); content.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); }, 300);
-        }
-    </script>
+
 </x-pdc_admin.layout>

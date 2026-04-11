@@ -154,17 +154,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class , 'export'])
         ->name('pdc_admin.export');
 
-    Route::get('/pdc-admin/bod-review', [\App\Http\Controllers\PDCAdminController::class, 'bodReview'])
-        ->name('pdc_admin.bod_review');
-    Route::post('/pdc-admin/bod-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'sendBodReview'])
-        ->name('pdc_admin.bod_review.send');
-    Route::get('/pdc-admin/bod-review/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'bodReviewDetail'])
-        ->name('pdc_admin.bod_review.detail');
-    Route::post('/pdc-admin/bod-review/{talent_id}/complete', [\App\Http\Controllers\PDCAdminController::class, 'bodReviewComplete'])
-        ->name('pdc_admin.bod_review.complete');
-    Route::post('/pdc-admin/bod-review/{talent_id}/toggle-lock', [\App\Http\Controllers\PDCAdminController::class, 'toggleLock'])
-        ->name('pdc_admin.bod_review.toggle_lock');
-    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
+    Route::get('/pdc-admin/panelis-review', [\App\Http\Controllers\PDCAdminController::class , 'panelisReview'])
+        ->name('pdc_admin.panelis_review');
+    Route::post('/pdc-admin/panelis-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'sendPanelisReview'])
+        ->name('pdc_admin.panelis_review.send');
+    Route::get('/pdc-admin/panelis-review/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'panelisReviewDetail'])
+        ->name('pdc_admin.panelis_review.detail');
+    Route::post('/pdc-admin/panelis-review/{talent_id}/complete', [\App\Http\Controllers\PDCAdminController::class , 'panelisReviewComplete'])
+        ->name('pdc_admin.panelis_review.complete');
+    Route::post('/pdc-admin/panelis-review/{talent_id}/toggle-lock', [\App\Http\Controllers\PDCAdminController::class , 'toggleLock'])
+        ->name('pdc_admin.panelis_review.toggle_lock');
+    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class , 'exportPdf'])
         ->name('pdc_admin.export_pdf');
 
     // Atasan Routes
@@ -207,25 +207,25 @@ Route::middleware('auth')->group(function () {
     Route::post('/finance/notifikasi/mark-all-read', [\App\Http\Controllers\FinanceDashboardController::class , 'markAllNotificationsRead'])
         ->name('finance.notifikasi.markAllRead');
 
-    // BOD (Board of Directors) Routes
-    Route::get('/bod/dashboard', [\App\Http\Controllers\BODController::class , 'dashboard'])
-        ->name('bod.dashboard');
-    Route::get('/bod/review', [\App\Http\Controllers\BODController::class , 'review'])
-        ->name('bod.review');
-    Route::get('/bod/history', [\App\Http\Controllers\BODController::class , 'history'])
-        ->name('bod.history');
-    Route::get('/bod/talent/{talent_id}', [\App\Http\Controllers\BODController::class , 'detailTalent'])
-        ->name('bod.detail_talent');
-    Route::get('/bod/talent/{talent_id}/penilaian', [\App\Http\Controllers\BODController::class , 'penilaian'])
-        ->name('bod.penilaian');
-    Route::post('/bod/talent/{talent_id}/penilaian', [\App\Http\Controllers\BODController::class , 'simpanPenilaian'])
-        ->name('bod.penilaian.simpan');
-    Route::get('/bod/talent/{talent_id}/logbook', [\App\Http\Controllers\BODController::class , 'logbook'])
-        ->name('bod.logbook');
-    Route::get('/bod/notifikasi', [\App\Http\Controllers\BODController::class , 'notifikasi'])
-        ->name('bod.notifikasi');
-    Route::post('/bod/notifikasi/mark-all-read', [\App\Http\Controllers\BODController::class , 'markAllNotificationsRead'])
-        ->name('bod.notifikasi.markAllRead');
-    Route::get('/bod/profile', [\App\Http\Controllers\BODController::class, 'profile'])
-        ->name('bod.profile');
+    // Panelis Routes
+    Route::get('/panelis/dashboard', [\App\Http\Controllers\PanelisController::class , 'dashboard'])
+        ->name('panelis.dashboard');
+    Route::get('/panelis/review', [\App\Http\Controllers\PanelisController::class , 'review'])
+        ->name('panelis.review');
+    Route::get('/panelis/history', [\App\Http\Controllers\PanelisController::class , 'history'])
+        ->name('panelis.history');
+    Route::get('/panelis/talent/{talent_id}', [\App\Http\Controllers\PanelisController::class , 'detailTalent'])
+        ->name('panelis.detail_talent');
+    Route::get('/panelis/talent/{talent_id}/penilaian', [\App\Http\Controllers\PanelisController::class , 'penilaian'])
+        ->name('panelis.penilaian');
+    Route::post('/panelis/talent/{talent_id}/penilaian', [\App\Http\Controllers\PanelisController::class , 'simpanPenilaian'])
+        ->name('panelis.penilaian.simpan');
+    Route::get('/panelis/talent/{talent_id}/logbook', [\App\Http\Controllers\PanelisController::class , 'logbook'])
+        ->name('panelis.logbook');
+    Route::get('/panelis/notifikasi', [\App\Http\Controllers\PanelisController::class , 'notifikasi'])
+        ->name('panelis.notifikasi');
+    Route::post('/panelis/notifikasi/mark-all-read', [\App\Http\Controllers\PanelisController::class , 'markAllNotificationsRead'])
+        ->name('panelis.notifikasi.markAllRead');
+    Route::get('/panelis/profile', [\App\Http\Controllers\PanelisController::class , 'profile'])
+        ->name('panelis.profile');
 });

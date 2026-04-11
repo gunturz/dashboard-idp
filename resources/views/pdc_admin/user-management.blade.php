@@ -44,7 +44,7 @@
             'Mentor' => $mentors->count(),
             'Atasan' => $atasans->count(),
             'Finance' => $finances->count(),
-            'BOD' => $bods->count(),
+            'Panelis' => $panelisUsers->count(),
         ];
     @endphp
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-6 mb-8">
@@ -103,7 +103,7 @@
             ['title' => 'Mentor', 'users' => $mentors, 'showPosisi' => true, 'showMultiRole' => true],
             ['title' => 'Atasan', 'users' => $atasans, 'showPosisi' => true, 'showMultiRole' => true],
             ['title' => 'Finance', 'users' => $finances, 'showPosisi' => false, 'showMultiRole' => false],
-            ['title' => 'BOD', 'users' => $bods, 'showPosisi' => false, 'showMultiRole' => false],
+            ['title' => 'Panelis', 'users' => $panelisUsers, 'showPosisi' => false, 'showMultiRole' => false],
         ];
     @endphp
 
@@ -130,7 +130,7 @@
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:10%">Multi Role</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
                                 @else
-                                    {{-- 4 columns for Finance/BOD: Email, Nama, Perusahaan, Aksi --}}
+                                    {{-- 4 columns for Finance/Panelis: Email, Nama, Perusahaan, Aksi --}}
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Email</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Nama Lengkap</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:25%">Perusahaan</th>

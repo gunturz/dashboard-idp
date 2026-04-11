@@ -29,7 +29,7 @@ class RegisteredUserController extends Controller
             ->whereNotIn('position_name', ['Super Admin'])
             ->get();
         $targetPositions = DB::table('position')
-            ->whereNotIn('position_name', ['Super Admin', 'Board of Directors'])
+            ->whereNotIn('position_name', ['Super Admin', 'panelis'])
             ->get();
 
         return view('auth.register', compact('mentors', 'atasans', 'companies', 'departments', 'roles', 'positions', 'targetPositions'));

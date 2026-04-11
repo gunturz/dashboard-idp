@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
      */
     private function seedDepartments(array $companyIds): array
     {
-        $departments = ['Human Resources', 'Operations', 'Finance', 'Board of Directors'];
+        $departments = ['Human Resources', 'Operations', 'Finance'];
         $deptIds = [];
 
         // Just use the first company for all test departments
@@ -93,7 +93,7 @@ class UserSeeder extends Seeder
             ['Officer', 3],
             ['Manager', 4],
             ['General Manager', 5],
-            ['Board of Directors', 6],
+            ['Panelis', 6],
             ['Super Admin', 7],
         ];
         $posIds = [];
@@ -115,7 +115,7 @@ class UserSeeder extends Seeder
      */
     private function seedRoles(): array
     {
-        $roles = ['admin', 'talent', 'atasan', 'mentor', 'finance', 'board_of_director'];
+        $roles = ['admin', 'talent', 'atasan', 'mentor', 'finance', 'panelis'];
         $roleIds = [];
 
         foreach ($roles as $r) {
@@ -150,10 +150,10 @@ class UserSeeder extends Seeder
                 'username' => 'rizky.pratama',
                 'email' => 'rizky@mail.com',
                 'password' => Hash::make('password123'),
-                'role_id' => $roleIds['board_of_director'],
+                'role_id' => $roleIds['panelis'],
                 'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
-                'department_id' => $deptIds['Board of Directors'],
-                'position_id' => $posIds['Board of Directors'],
+                'department_id' => $deptIds['Human Resources'],
+                'position_id' => $posIds['Panelis'],
             ],
         ];
 

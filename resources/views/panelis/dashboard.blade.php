@@ -1,4 +1,4 @@
-<x-bod.layout title="Dashboard BOD – Individual Development Plan" :user="$user" :notifications="$notifications">
+<x-panelis.layout title="Dashboard Panelis – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             /* ── Page Title ── */
@@ -244,7 +244,7 @@
 
                         <div class="talent-item-wrapper">
                             {{-- Card — whole card clicks → detail --}}
-                            <div class="talent-card" onclick="window.location='{{ route('bod.detail_talent', $talent->id) }}'">
+                            <div class="talent-card" onclick="window.location='{{ route('panelis.detail_talent', $talent->id) }}'">
                                 {{-- Header --}}
                                 <div class="card-header">
                                     <div class="card-header-left">
@@ -258,7 +258,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <a href="{{ route('bod.detail_talent', $talent->id) }}"
+                                    <a href="{{ route('panelis.detail_talent', $talent->id) }}"
                                        class="btn-lihat-detail"
                                        onclick="event.stopPropagation()">
                                         Lihat Detail
@@ -284,7 +284,7 @@
                             </div>
                             
                             {{-- Beri Penilaian Button (Separated) --}}
-                            <a href="{{ route('bod.penilaian', $talent->id) }}"
+                            <a href="{{ route('panelis.penilaian', $talent->id) }}"
                                class="btn-penilaian-separated">
                                 Beri Penilaian
                             </a>
@@ -295,8 +295,8 @@
         </div>
     @empty
         <div class="empty-state">
-            Belum ada data progress talent yang menunggu penilaian BOD.
+            Belum ada data progress talent yang menunggu penilaian Panelis.
         </div>
     @endforelse
 
-</x-bod.layout>
+</x-panelis.layout>

@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('improvement_project', function (Blueprint $table) {
-            $table->integer('bod_score')->nullable();
-            $table->json('bod_scores_json')->nullable();
-            $table->text('bod_komentar')->nullable();
-            $table->text('bod_rekomendasi')->nullable();
-            $table->string('bod_dinilai_oleh')->nullable();
-            $table->date('bod_tanggal_penilaian')->nullable();
+            $table->integer('panelis_score')->nullable();
+            $table->json('panelis_scores_json')->nullable();
+            $table->text('panelis_komentar')->nullable();
+            $table->text('panelis_rekomendasi')->nullable();
+            $table->string('panelis_dinilai_oleh')->nullable();
+            $table->date('panelis_tanggal_penilaian')->nullable();
         });
     }
 
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('improvement_project', function (Blueprint $table) {
-            $cols = ['bod_score', 'bod_scores_json', 'bod_komentar', 'bod_rekomendasi', 'bod_dinilai_oleh', 'bod_tanggal_penilaian'];
+            $cols = ['panelis_score', 'panelis_scores_json', 'panelis_komentar', 'panelis_rekomendasi', 'panelis_dinilai_oleh', 'panelis_tanggal_penilaian'];
             foreach ($cols as $col) {
                 if (Schema::hasColumn('improvement_project', $col)) {
                     $table->dropColumn($col);

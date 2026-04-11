@@ -1,5 +1,5 @@
 @props([
-    'title' => 'BOD – Individual Development Plan',
+    'title' => 'Panelis – Individual Development Plan',
     'user' => null,
     'notifications' => null,
 ])
@@ -103,7 +103,7 @@
         </button>
 
         {{-- Logo + Title --}}
-        <a href="{{ route('bod.dashboard') }}"
+        <a href="{{ route('panelis.dashboard') }}"
             class="flex items-center gap-3 hover:opacity-90 transition-opacity flex-shrink-0">
             <div class="hidden sm:flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 bg-white rounded-xl shadow-md flex-shrink-0 ring-2 ring-white/20">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 lg:w-9 lg:h-9 object-contain">
@@ -112,19 +112,19 @@
                 <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
                     Development Plan</h1>
             </div>
-            <h1 class="text-white font-bold text-base sm:hidden">BOD</h1>
+            <h1 class="text-white font-bold text-base sm:hidden">Panelis</h1>
         </a>
 
         {{-- Desktop Nav Links --}}
         <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
-            <a href="{{ route('bod.dashboard') }}"
+            <a href="{{ route('panelis.dashboard') }}"
                 class="text-sm font-semibold transition-colors pb-0.5
-                {{ request()->routeIs('bod.dashboard') ? 'text-white border-b-2 border-[#14b8a6]' : 'text-white/60 hover:text-white' }}">
+                {{ request()->routeIs('panelis.dashboard') ? 'text-white border-b-2 border-[#14b8a6]' : 'text-white/60 hover:text-white' }}">
                 Dashboard
             </a>
-            <a href="{{ route('bod.history') }}"
+            <a href="{{ route('panelis.history') }}"
                 class="text-sm font-semibold transition-colors pb-0.5
-                {{ request()->routeIs('bod.history') ? 'text-white border-b-2 border-[#14b8a6]' : 'text-white/60 hover:text-white' }}">
+                {{ request()->routeIs('panelis.history') ? 'text-white border-b-2 border-[#14b8a6]' : 'text-white/60 hover:text-white' }}">
                 History
             </a>
         </div>
@@ -164,7 +164,7 @@
                             </svg>
                             <span class="text-sm font-bold text-white">Notifikasi</span>
                         </div>
-                        <form action="{{ route('bod.notifikasi.markAllRead') }}" method="POST" class="m-0">
+                        <form action="{{ route('panelis.notifikasi.markAllRead') }}" method="POST" class="m-0">
                             @csrf
                             <button type="submit" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
                                 Tandai semua
@@ -176,7 +176,7 @@
                         <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
                             @foreach($unreadNotifications->take(3) as $notif)
                                 <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
-                                    onclick="window.location='{{ route('bod.notifikasi') }}'">
+                                    onclick="window.location='{{ route('panelis.notifikasi') }}'">
                                     <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -202,7 +202,7 @@
                     @endif
 
                     <div class="px-5 py-3 border-t border-gray-100 text-center">
-                        <a href="{{ route('bod.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
+                        <a href="{{ route('panelis.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
                             Lihat semua notifikasi →
                         </a>
                     </div>
@@ -233,7 +233,7 @@
                     <div class="hidden lg:block text-left">
                         <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">
                             {{ $nama }}</p>
-                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">BOD</p>
+                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Panelis</p>
                     </div>
 
                     {{-- Chevron (desktop) --}}
@@ -257,7 +257,7 @@
                             <div class="overflow-hidden">
                                 <p class="text-sm font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}</p>
                                 <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
-                                <span class="inline-block mt-1 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">BOD</span>
+                                <span class="inline-block mt-1 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">Panelis</span>
                             </div>
                         </div>
                     </div>
@@ -265,7 +265,7 @@
                     {{-- Menu Items --}}
                     <ul class="py-1.5">
                         <li>
-                            <a href="{{ route('bod.profile') }}"
+                            <a href="{{ route('panelis.profile') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -303,19 +303,19 @@
 
     {{-- Mobile Nav Menu --}}
     <div class="mobile-menu" id="mobile-menu">
-        <a href="{{ route('bod.dashboard') }}"
+        <a href="{{ route('panelis.dashboard') }}"
             class="py-3 text-sm font-semibold border-b border-white/10
-            {{ request()->routeIs('bod.dashboard') ? 'text-white' : 'text-white/60' }}">
+            {{ request()->routeIs('panelis.dashboard') ? 'text-white' : 'text-white/60' }}">
             Dashboard
         </a>
-        <a href="{{ route('bod.history') }}"
+        <a href="{{ route('panelis.history') }}"
             class="py-3 text-sm font-semibold border-b border-white/10
-            {{ request()->routeIs('bod.history') ? 'text-white' : 'text-white/60' }}">
+            {{ request()->routeIs('panelis.history') ? 'text-white' : 'text-white/60' }}">
             History
         </a>
-        <a href="{{ route('bod.profile') }}"
+        <a href="{{ route('panelis.profile') }}"
             class="py-3 text-sm font-semibold border-b border-white/10
-            {{ request()->routeIs('bod.profile') ? 'text-white' : 'text-white/60' }}">
+            {{ request()->routeIs('panelis.profile') ? 'text-white' : 'text-white/60' }}">
             Profil Saya
         </a>
         <form method="POST" action="{{ route('logout') }}" class="mt-2">

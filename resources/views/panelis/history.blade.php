@@ -1,4 +1,4 @@
-<x-bod.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user" :notifications="$notifications">
+<x-panelis.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             .page-title {
@@ -315,14 +315,14 @@
                     $talent    = $project->talent;
                     $cardId    = 'hc-' . $project->id;
                     $expanded  = false;
-                    $scoreArr  = $project->bod_scores_json ? json_decode($project->bod_scores_json, true) : [];
-                    $totalScore = $project->bod_score ?? 0;
+                    $scoreArr  = $project->panelis_scores_json ? json_decode($project->panelis_scores_json, true) : [];
+                    $totalScore = $project->panelis_score ?? 0;
                     $maxScore   = 50;
 
                     // Determine rekomendasi dot color
                     $rekomenColor = 'yellow';
-                    if (str_contains($project->bod_rekomendasi ?? '', 'Ready Now'))       $rekomenColor = 'green';
-                    elseif (str_contains($project->bod_rekomendasi ?? '', 'Not Ready'))   $rekomenColor = 'red';
+                    if (str_contains($project->panelis_rekomendasi ?? '', 'Ready Now'))       $rekomenColor = 'green';
+                    elseif (str_contains($project->panelis_rekomendasi ?? '', 'Not Ready'))   $rekomenColor = 'red';
                 @endphp
 
                 <div class="hist-card">
@@ -341,7 +341,7 @@
                             <span class="hist-role">
                                 {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
                             </span>
-                            <span class="hist-date">Dinilai: {{ $project->bod_tanggal_penilaian ? \Carbon\Carbon::parse($project->bod_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
+                            <span class="hist-date">Dinilai: {{ $project->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($project->panelis_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
                         </div>
                         <span class="hist-project-title">{{ $project->title ?? 'Judul Project' }}</span>
                         <span class="badge-done">Done Review</span>
@@ -379,14 +379,14 @@
                             {{-- Komentar --}}
                             <div class="komentar-wrap">
                                 <p class="komentar-label">Komentar / Catatan Penilai:</p>
-                                <textarea class="komentar-ta" readonly>{{ $project->bod_komentar ?? '' }}</textarea>
+                                <textarea class="komentar-ta" readonly>{{ $project->panelis_komentar ?? '' }}</textarea>
                             </div>
 
                             {{-- Readiness --}}
                             <div class="readiness-wrap">
                                 <div class="rd-dot {{ $rekomenColor }}"></div>
                                 <div class="rd-text">
-                                    <strong>{{ $project->bod_rekomendasi ?? '-' }}</strong>
+                                    <strong>{{ $project->panelis_rekomendasi ?? '-' }}</strong>
                                 </div>
                             </div>
 
@@ -403,7 +403,7 @@
                                 @else
                                     <span class="btn-preview" style="opacity:0.4;cursor:default;">Preview File</span>
                                 @endif
-                                <a href="{{ route('bod.penilaian', optional($talent)->id) }}" class="btn-edit">Edit</a>
+                                <a href="{{ route('panelis.penilaian', optional($talent)->id) }}" class="btn-edit">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -424,4 +424,4 @@
         </script>
     </x-slot>
 
-</x-bod.layout>
+</x-panelis.layout>

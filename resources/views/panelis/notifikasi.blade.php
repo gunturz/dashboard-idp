@@ -1,4 +1,4 @@
-<x-bod.layout title="Notifikasi – BOD Individual Development Plan" :user="$user" :notifications="$notifications">
+<x-panelis.layout title="Notifikasi – Panelis Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             .notif-card {
@@ -78,7 +78,7 @@
                 </svg>
                 <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Notifikasi</h2>
             </div>
-            <form action="{{ route('bod.notifikasi.markAllRead') }}" method="POST">
+            <form action="{{ route('panelis.notifikasi.markAllRead') }}" method="POST">
                 @csrf
                 <button type="submit" class="text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors">
                     Tandai semua dibaca
@@ -138,4 +138,4 @@
 
     </div>
 
-</x-bod.layout>
+</x-panelis.layout>

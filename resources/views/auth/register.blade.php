@@ -173,7 +173,7 @@
             @enderror
         </div>
 
-        {{-- ── COMPANY (muncul untuk Finance & BOD) ───────────────────────── --}}
+        {{-- ── COMPANY (muncul untuk Finance & panelis) ───────────────────────── --}}
         <div id="field-company" style="margin-bottom: 1rem; display: none;">
             <label for="company_id" class="form-label">Perusahaan</label>
             <div class="input-wrapper">
@@ -199,7 +199,7 @@
             @enderror
         </div>
 
-        {{-- ── DEPARTEMEN (hidden untuk Finance & BOD) ───────────────────────── --}}
+        {{-- ── DEPARTEMEN (hidden untuk Finance & panelis) ───────────────────────── --}}
         <div id="field-department" style="margin-bottom: 1rem; display: none;">
             <label for="department_id" class="form-label">Departemen</label>
             <div class="input-wrapper">
@@ -225,7 +225,7 @@
             @enderror
         </div>
 
-        {{-- ── POSISI SEKARANG (hidden untuk Finance & BOD) ────────────────────── --}}
+        {{-- ── POSISI SEKARANG (hidden untuk Finance & panelis) ────────────────────── --}}
         <div id="field-position" style="margin-bottom: 1rem; display: none;">
             <label for="position_id" class="form-label">Posisi sekarang</label>
             <div class="input-wrapper">
@@ -340,7 +340,7 @@
         function handleRoleChange(selectElement) {
             const roleName = (selectElement.options[selectElement.selectedIndex].dataset.rolename || '').toLowerCase();
             const isTalent = roleName === 'talent';
-            const isFinanceOrBod = (roleName === 'finance' || roleName === 'board_of_director');
+            const isFinanceOrpanelis = (roleName === 'finance' || roleName === 'board_of_director');
 
             // Fields khusus talent
             const talentFields = ['field-jabatan-target', 'field-mentor', 'field-atasan'];
@@ -349,13 +349,13 @@
                 if (el) el.style.display = isTalent ? 'block' : 'none';
             });
 
-            // Company field: tampil untuk Finance, BOD, dan role lain yang butuh company
+            // Company field: tampil untuk Finance, panelis, dan role lain yang butuh company
             const companyEl = document.getElementById('field-company');
             const deptEl = document.getElementById('field-department');
             const posEl = document.getElementById('field-position');
 
-            if (isFinanceOrBod) {
-                // Finance & BOD: hanya tampilkan Perusahaan
+            if (isFinanceOrpanelis) {
+                // Finance & panelis: hanya tampilkan Perusahaan
                 if (companyEl) companyEl.style.display = 'block';
                 if (deptEl) deptEl.style.display = 'none';
                 if (posEl) posEl.style.display = 'none';

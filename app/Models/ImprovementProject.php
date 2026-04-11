@@ -17,12 +17,12 @@ class ImprovementProject extends Model
         'verify_at',
         'feedback',
         'finance_feedback',
-        'bod_score',
-        'bod_scores_json',
-        'bod_komentar',
-        'bod_rekomendasi',
-        'bod_dinilai_oleh',
-        'bod_tanggal_penilaian',
+        'panelis_score',
+        'panelis_scores_json',
+        'panelis_komentar',
+        'panelis_rekomendasi',
+        'panelis_dinilai_oleh',
+        'panelis_tanggal_penilaian',
     ];
 
     protected $casts = [

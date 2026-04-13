@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_role', 'id_user', 'id_role');
+        return $this->belongsToMany(Role::class , 'user_role', 'id_user', 'id_role');
     }
 
     public function hasRole(string|array $roles): bool
@@ -98,6 +98,11 @@ class User extends Authenticatable
     public function improvementProjects()
     {
         return $this->hasMany(ImprovementProject::class , 'user_id_talent');
+    }
+
+    public function panelisAssessments()
+    {
+        return $this->hasMany(PanelisAssessment::class , 'user_id_talent');
     }
 
     public function getMenteesAttribute()

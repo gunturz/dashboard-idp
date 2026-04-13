@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id_talent')->constrained('users'); // FK user_id(kandidat) [cite: 153]
             $table->foreignId('target_position_id')->constrained('position'); // Key target position_id [cite: 161]
             $table->json('mentor_ids')->nullable(); // Array of mentor user IDs
-            $table->enum('status_promotion', ['Draft', 'In Progress', 'Ready', 'Promoted']); // Key status_promotion [cite: 168]
+            $table->enum('status_promotion', ['Draft', 'In Progress', 'Pending Panelis', 'Approved Panelis', 'Rejected Panelis', 'Ready', 'Promoted']); // Key status_promotion [cite: 168]
             $table->date('start_date'); // Key start date [cite: 175]
             $table->date('target_date'); // Key target_date [cite: 182]
             $table->timestamps();

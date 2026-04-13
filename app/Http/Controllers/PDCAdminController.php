@@ -43,7 +43,7 @@ class PDCAdminController extends Controller
             ->get()
             ->count();
         $pendingFinance = ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
-        $pendingBOD = PromotionPlan::where('status_promotion', 'Pending BOD')->count();
+        $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
 
         // Role statistics
         $roleCounts = [
@@ -51,7 +51,7 @@ class PDCAdminController extends Controller
             'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
             'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
             'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
-            'BOD' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors', 'board_of_director']))->count(),
+            'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
         ];
 
         // Fetch the 3 most recent 'In Progress' talents with their relationships
@@ -89,13 +89,13 @@ class PDCAdminController extends Controller
         // Data for Development Plan form (optional, keeping for legacy compatibility)
         $companies = Company::orderBy('nama_company')->get();
 
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
         return view('pdc_admin.dashboard', compact(
             'user', 'groupedData', 'companies', 'positions', 'mentors', 'atasans',
-            'totalUsers', 'onProgressTalent', 'pendingFinance', 'pendingBOD', 'roleCounts'
+            'totalUsers', 'onProgressTalent', 'pendingFinance', 'pendingPanelis', 'roleCounts'
         ));
     }
 
@@ -196,7 +196,7 @@ class PDCAdminController extends Controller
         $companies = Company::orderBy('nama_company')->get();
         $departments = Department::orderBy('nama_department')->get();
 
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
@@ -313,7 +313,7 @@ class PDCAdminController extends Controller
         $managerialCompetencies = Competence::with('questions')->where('id', '>', 5)->get();
         $allCompetencies = Competence::with('questions')->get();
 
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
 
         // Build a lookup: [position_id][competence_id] => target_level
         $targetScores = PositionTargetCompetence::all()
@@ -382,8 +382,8 @@ class PDCAdminController extends Controller
             $q->where('role_name', 'finance');
         })->with(['position', 'department', 'company'])->get();
 
-        $bods = User::whereHas('roles', function ($q) {
-            $q->whereIn('role_name', ['bo_director', 'bod', 'board_of_directors', 'board_of_director']);
+        $panelisUsers = User::whereHas('roles', function ($q) {
+            $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']);
         })->with(['position', 'department', 'company'])->get();
 
         $atasans = User::whereHas('roles', function ($q) {
@@ -395,7 +395,7 @@ class PDCAdminController extends Controller
         $rolesData = Role::all(); // Provide all roles for the assign modal
         $companies = Company::all();
 
-        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'bods', 'atasans', 'departments', 'positions', 'rolesData', 'companies'));
+        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'positions', 'rolesData', 'companies'));
     }
 
     public function requestFinanceValidation(Request $request)
@@ -462,7 +462,7 @@ class PDCAdminController extends Controller
         }
     }
 
-    public function bodReview(Request $request)
+    public function panelisReview(Request $request)
     {
         $user = auth()->user();
 
@@ -495,15 +495,15 @@ class PDCAdminController extends Controller
         foreach ($talents as $talent) {
             $alreadySent = in_array(
                 optional($talent->promotion_plan)->status_promotion,
-            ['Pending BOD', 'Approved BOD', 'Rejected BOD']
+            ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
             );
-            $isReviewedByBod = optional($talent->improvementProjects->sortByDesc('updated_at')->first())->bod_score !== null;
+            $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->exists();
 
-            if (optional($talent->promotion_plan)->status_promotion === 'Approved BOD') {
+            if (optional($talent->promotion_plan)->status_promotion === 'Approved Panelis') {
                 $sudahDinilai++;
             }
 
-            if ($alreadySent && !$isReviewedByBod) {
+            if ($alreadySent && !$isReviewedByPanelis) {
                 $belumDinilai++;
             }
         }
@@ -526,16 +526,16 @@ class PDCAdminController extends Controller
             });
 
         $companies = Company::orderBy('nama_company')->get();
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $departments = Department::orderBy('nama_department')->get();
 
-        return view('pdc_admin.bod-review', compact(
+        return view('pdc_admin.panelis-review', compact(
             'user', 'groupedData', 'companies', 'positions', 'departments',
             'totalProjectImprovement', 'belumDinilai', 'sudahDinilai'
         ));
     }
 
-    public function bodReviewDetail($talent_id)
+    public function panelisReviewDetail($talent_id)
     {
         $user = auth()->user();
 
@@ -549,8 +549,8 @@ class PDCAdminController extends Controller
             'improvementProjects',
         ])->findOrFail($talent_id);
 
-        // All BOD users for building the evaluation table rows
-        $bodUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bod', 'bo_director', 'board_of_directors', 'board_of_director']))
+        // All Panelis users for building the evaluation table rows
+        $panelisUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['panelis', 'bo_director', 'board_of_directors', 'board_of_director', 'panelis']))
             ->with('company')
             ->orderBy('nama')
             ->get();
@@ -561,27 +561,27 @@ class PDCAdminController extends Controller
         // Latest improvement project for this talent (for score/feedback)
         $latestProject = $talent->improvementProjects->sortByDesc('updated_at')->first();
 
-        return view('pdc_admin.bod-review-detail', compact(
-            'user', 'talent', 'bodUsers', 'companies', 'latestProject'
+        return view('pdc_admin.panelis-review-detail', compact(
+            'user', 'talent', 'panelisUsers', 'companies', 'latestProject'
         ));
     }
 
-    public function bodReviewComplete($talent_id)
+    public function panelisReviewComplete($talent_id)
     {
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
-        $plan->update(['status_promotion' => 'Approved BOD']);
-        return redirect()->route('pdc_admin.bod_review')
-            ->with('success', 'Proses penilaian BOD telah diselesaikan.');
+        $plan->update(['status_promotion' => 'Approved Panelis']);
+        return redirect()->route('pdc_admin.panelis_review')
+            ->with('success', 'Proses penilaian Panelis telah diselesaikan.');
     }
 
-    public function sendBodReview(Request $request, $talent_id)
+    public function sendPanelisReview(Request $request, $talent_id)
     {
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
         if (!$plan->is_locked) {
-            return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke BOD.');
+            return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke Panelis.');
         }
-        $plan->update(['status_promotion' => 'Pending BOD']);
-        return back()->with('success', 'Berhasil dikirim ke BOD untuk review.');
+        $plan->update(['status_promotion' => 'Pending Panelis']);
+        return back()->with('success', 'Berhasil dikirim ke Panelis untuk review.');
     }
 
     public function toggleLock($talent_id)
@@ -625,7 +625,7 @@ class PDCAdminController extends Controller
         }
 
         $companies = Company::orderBy('nama_company')->get();
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'Board of Directors'])->orderBy('grade_level')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
 
         return view('pdc_admin.export', compact('user', 'groupedData', 'companies', 'positions'));
     }
@@ -713,8 +713,26 @@ class PDCAdminController extends Controller
 
     public function destroyCompany($id)
     {
-        Company::findOrFail($id)->delete();
-        return back()->with('success', 'Perusahaan berhasil dihapus.');
+        try {
+            // Cek apakah ada User yang masih terdaftar di Perusahaan ini
+            $userCount = User::where('company_id', $id)->count();
+            if ($userCount > 0) {
+                return back()->with('error', "Gagal menghapus! Terdapat {$userCount} akun pengguna (Talent/Admin/dll) di Perusahaan ini. Pastikan kosong sebelum dihapus.");
+            }
+
+            DB::transaction(function () use ($id) {
+                // Hapus semua departemen yang menginduk ke perusahaan ini
+                Department::where('company_id', $id)->delete();
+
+                // Hapus perusahaannya
+                Company::findOrFail($id)->delete();
+            });
+
+            return back()->with('success', 'Perusahaan beserta seluruh Departemen di dalamnya berhasil dihapus.');
+        }
+        catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
     }
 
     public function departmentManagement($companyId)
@@ -748,8 +766,19 @@ class PDCAdminController extends Controller
 
     public function destroyDepartment($id)
     {
-        Department::findOrFail($id)->delete();
-        return back()->with('success', 'Departemen berhasil dihapus.');
+        try {
+            // Cek apakah ada User yang masih terdaftar di Departemen ini
+            $userCount = User::where('department_id', $id)->count();
+            if ($userCount > 0) {
+                return back()->with('error', "Gagal menghapus! Terdapat {$userCount} akun pengguna di Departemen ini. Pindahkan atau hapus akun mereka terlebih dahulu.");
+            }
+
+            Department::findOrFail($id)->delete();
+            return back()->with('success', 'Departemen berhasil dihapus.');
+        }
+        catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
     }
 
     public function logbookDetail($id)

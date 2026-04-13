@@ -1,4 +1,4 @@
-<x-bod.layout title="Review BOD – Individual Development Plan" :user="$user">
+<x-panelis.layout title="Review Panelis – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* ── Review Card ── */
@@ -521,4 +521,4 @@
         </script>
     </x-slot>
 
-</x-bod.layout>
+</x-panelis.layout>

@@ -233,6 +233,24 @@
             <span id="cat-4" class="subcategory-btn unfilled">Teamwork</span>
         </div>
 
+        <!-- Block Error/Session Display -->
+        @if(session('error'))
+            <div class="w-full max-w-6xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
+                <strong class="font-bold">Gagal!</strong>
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+        @endif
+        @if($errors->any())
+            <div class="w-full max-w-6xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
+                <strong class="font-bold">Oops, Data tidak valid:</strong>
+                <ul class="list-disc list-inside mt-1 text-sm">
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Main Card Block -->
         <form id="assessment-form" method="POST" action="{{ route('talent.competency.store') }}">
             @csrf
@@ -410,28 +428,36 @@
     <script>
         // Data dari database
         const competenciesData = @json($competencies->keyBy('id'));
+        const competenciesArray = Object.values(competenciesData);
+
+        function getCompetencySafely(index, defaultName, defaultId) {
+            if (competenciesArray[index]) {
+                return { name: competenciesArray[index].name, id: competenciesArray[index].id };
+            }
+            return { name: defaultName, id: defaultId };
+        }
 
         const topTabs = {
             core: {
                 id: 'tab-core',
                 name: 'Core Competencies',
                 categories: [
-                    { name: 'Integrity', id: 1 },
-                    { name: 'Communication', id: 2 },
-                    { name: 'Innovation & Creativity', id: 3 },
-                    { name: 'Customer Orientation', id: 4 },
-                    { name: 'Teamwork', id: 5 }
+                    getCompetencySafely(0, 'Integrity', 1),
+                    getCompetencySafely(1, 'Communication', 2),
+                    getCompetencySafely(2, 'Innovation & Creativity', 3),
+                    getCompetencySafely(3, 'Customer Orientation', 4),
+                    getCompetencySafely(4, 'Teamwork', 5)
                 ]
             },
             managerial: {
                 id: 'tab-managerial',
                 name: 'Managerial Competencies',
                 categories: [
-                    { name: 'Leadership', id: 6 },
-                    { name: 'Business Acumen', id: 7 },
-                    { name: 'Problem Solving & Decission Making', id: 8 },
-                    { name: 'Acievement Orientation', id: 9 },
-                    { name: 'Strategic Thinking', id: 10 }
+                    getCompetencySafely(5, 'Leadership', 6),
+                    getCompetencySafely(6, 'Business Acumen', 7),
+                    getCompetencySafely(7, 'Problem Solving & Decission Making', 8),
+                    getCompetencySafely(8, 'Acievement Orientation', 9),
+                    getCompetencySafely(9, 'Strategic Thinking', 10)
                 ]
             }
         };

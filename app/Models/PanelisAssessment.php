@@ -4,29 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ImprovementProject extends Model
+class PanelisAssessment extends Model
 {
-    protected $table = 'improvement_project';
+    protected $table = 'panelis_assessments';
 
     protected $fillable = [
         'user_id_talent',
-        'title',
-        'document_path',
-        'status',
-        'verify_by',
-        'verify_at',
-        'feedback',
-        'finance_feedback',
+        'panelis_id',
         'panelis_score',
         'panelis_scores_json',
         'panelis_komentar',
         'panelis_rekomendasi',
-        'panelis_dinilai_oleh',
         'panelis_tanggal_penilaian',
     ];
 
     protected $casts = [
-        'verify_at' => 'datetime',
+        'panelis_scores_json' => 'array',
+        'panelis_tanggal_penilaian' => 'date',
     ];
 
     public function talent()
@@ -34,8 +28,8 @@ class ImprovementProject extends Model
         return $this->belongsTo(User::class , 'user_id_talent');
     }
 
-    public function verifier()
+    public function panelis()
     {
-        return $this->belongsTo(User::class , 'verify_by');
+        return $this->belongsTo(User::class , 'panelis_id');
     }
 }

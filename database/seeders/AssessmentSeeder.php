@@ -44,19 +44,44 @@ class AssessmentSeeder extends Seeder
             ]
         ]);
 
-        // Standar Kompetensi per Posisi (Contoh untuk Position 2/Manager)
-        DB::table('position_target_competence')->insert([
-            ['position_id' => 2, 'competence_id' => 1, 'target_level' => 5],
-            ['position_id' => 2, 'competence_id' => 2, 'target_level' => 4],
-            ['position_id' => 2, 'competence_id' => 3, 'target_level' => 3],
-            ['position_id' => 2, 'competence_id' => 4, 'target_level' => 3],
-            ['position_id' => 2, 'competence_id' => 5, 'target_level' => 4],
-            ['position_id' => 2, 'competence_id' => 6, 'target_level' => 4],
-            ['position_id' => 2, 'competence_id' => 7, 'target_level' => 4],
-            ['position_id' => 2, 'competence_id' => 8, 'target_level' => 4],
-            ['position_id' => 2, 'competence_id' => 9, 'target_level' => 4],
-            ['position_id' => 2, 'competence_id' => 10, 'target_level' => 4],
-        ]);
+        // Standar Kompetensi per Posisi (Sesuai Matriks)
+        $targetScores = [
+            // STAFF (position_id = 1)
+            1 => [1 => 5, 2 => 2, 3 => 2, 4 => 2, 5 => 2, 6 => 2, 7 => 2, 8 => 2, 9 => 2, 10 => 2],
+
+            // SUPERVISOR (position_id = 2)
+            // Sesuai kolom OFFICER/SUPERVISOR
+            2 => [1 => 5, 2 => 3, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 3, 9 => 4, 10 => 4],
+
+            // OFFICER (position_id = 3)
+            // Sesuai kolom OFFICER/SUPERVISOR
+            3 => [1 => 5, 2 => 3, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 3, 9 => 4, 10 => 4],
+
+            // MANAGER (position_id = 4)
+            // Sesuai kolom MANAGER
+            4 => [1 => 5, 2 => 3, 3 => 3, 4 => 3, 5 => 4, 6 => 4, 7 => 4, 8 => 4, 9 => 4, 10 => 4],
+
+            // GENERAL MANAGER (position_id = 5)
+            // Sesuai kolom MD/GENERAL MANAGER
+            5 => [1 => 5, 2 => 4, 3 => 4, 4 => 4, 5 => 5, 6 => 5, 7 => 5, 8 => 5, 9 => 5, 10 => 5],
+
+            // PANELIS/BOD (position_id = 6)
+            // Sesuai kolom BOD
+            6 => [1 => 5, 2 => 5, 3 => 5, 4 => 5, 5 => 5, 6 => 5, 7 => 5, 8 => 5, 9 => 5, 10 => 5],
+        ];
+
+        $inserts = [];
+        foreach ($targetScores as $posId => $scores) {
+            foreach ($scores as $compId => $level) {
+                $inserts[] = [
+                    'position_id' => $posId,
+                    'competence_id' => $compId,
+                    'target_level' => $level,
+                ];
+            }
+        }
+
+        DB::table('position_target_competence')->insert($inserts);
 
         // Pertanyaan Kompetensi (Questions)
         $questions = [

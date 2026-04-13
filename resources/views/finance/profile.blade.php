@@ -225,7 +225,7 @@
                                                    value="{{ $user->{$field['key']} ?? '' }}"
                                                    class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ ($field['disabled'] ?? false) ? 'disabled' : '' }}>
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ ($field['disabled'] ?? false) ? 'disabled' : '' }} {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -344,7 +344,7 @@
                                         @if (($field['type'] ?? '') === 'text')
                                             <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}" class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ ($field['disabled'] ?? false) ? 'disabled' : '' }}>
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ ($field['disabled'] ?? false) ? 'disabled' : '' }} {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -434,6 +434,23 @@
             });
             if (!inside) document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.add('hidden'));
         });
+
+        
+        // --- AJAX Load Department ---
+        function loadDepartmentsByCompanyProfile(selectElement) {
+            const companyId = selectElement.value;
+            const deptSelects = document.querySelectorAll('select[name="department_id"]');
+            deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Memuat...</option>');
+            if(!companyId) return;
+            fetch(`{{ route('register.departments_by_company') }}?company_id=${companyId}`)
+            .then(r=>r.json())
+            .then(data=>{
+                let html = '<option value="" disabled selected>Pilih Departemen</option>';
+                if(data.length===0) html='<option value="" disabled selected>Tidak ada</option>';
+                else data.forEach(d=> html+=`<option value="${d.id}">${d.nama_department}</option>`);
+                deptSelects.forEach(s=>s.innerHTML=html);
+            }).catch(()=>deptSelects.forEach(s=>s.innerHTML='<option value="" disabled selected>Error</option>'));
+        }
 
         // Edit mode
         function enterEditMode() {

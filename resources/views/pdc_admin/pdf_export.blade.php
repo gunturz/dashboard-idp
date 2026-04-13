@@ -201,7 +201,7 @@
             padding: 12px !important;
         }
 
-        .bod-review-header {
+        .panelis-review-header {
             background-color: #7f8c8d !important;
             color: white;
         }
@@ -517,8 +517,8 @@
                                 </td>
                             </tr>
 
-                            <!-- Header Kolom Review BOD -->
-                            <tr class="bod-review-header">
+                            <!-- Header Kolom Review Panelis -->
+                            <tr class="panelis-review-header">
                                 <th width="25%">Reviewer / Verifikator</th>
                                 <th width="20%">Status Proyek</th>
                                 <th width="35%">Feedback</th>

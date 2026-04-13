@@ -242,5 +242,13 @@ class BODController extends Controller
                ->with('notifications', $this->getNotifications());
     }
 
+    public function logbookItemDetail($id)
+    {
+        $user = auth()->user();
+        $activity = \App\Models\IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
+        return view('bod.logbook-item', compact('user', 'activity'))
+               ->with('notifications', $this->getNotifications());
+    }
+
 
 }

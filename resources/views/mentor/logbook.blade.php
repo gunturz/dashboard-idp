@@ -84,7 +84,8 @@
                             <tr class="border-b border-gray-200">
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Mentor</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pengiriman/Update</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pelaksanaan</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -93,12 +94,13 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-5 py-3 font-medium text-gray-700 border-r border-gray-100 text-center">{{ $data['mentor'] }}</td>
                                 <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                                 <td class="px-5 py-3 text-center align-middle whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button type="button" onclick="openLogbookDetail(this)" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
+                                        <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                        </button>
+                                        </a>
                                         <div class="hidden logbook-detail-html">
                                             <div class="space-y-3 text-left">
                                                 <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $data['mentor'] }}</div></div>
@@ -135,7 +137,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="8" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada aktivitas Exposure diproses.</td></tr>
+                            <tr><td colspan="9" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada aktivitas Exposure diproses.</td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -155,7 +157,8 @@
                             <tr class="border-b border-gray-200">
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Mentor</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pengiriman/Update</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pelaksanaan</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -164,12 +167,13 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-5 py-3 font-medium text-gray-700 border-r border-gray-100 text-center">{{ $data['mentor'] }}</td>
                                 <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                                 <td class="px-5 py-3 text-center align-middle whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button type="button" onclick="openLogbookDetail(this)" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
+                                        <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                        </button>
+                                        </a>
                                         <div class="hidden logbook-detail-html">
                                             <div class="space-y-3 text-left">
                                                 <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $data['mentor'] }}</div></div>
@@ -206,7 +210,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="8" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada aktivitas Mentoring diproses.</td></tr>
+                            <tr><td colspan="9" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada aktivitas Mentoring diproses.</td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -226,7 +230,8 @@
                             <tr class="border-b border-gray-200">
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[330px]">Sumber</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pengiriman/Update</th>
+                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pelaksanaan</th>
                                 <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -235,12 +240,13 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-5 py-3 font-medium text-gray-700 border-r border-gray-100 text-center">{{ $data['sumber'] ?: '-' }}</td>
                                 <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) ?: '-' }}</td>
+                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                                 <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal'] ? date('d M Y', strtotime($data['tanggal'])) : '-' }}</td>
                                 <td class="px-5 py-3 text-center align-middle whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button type="button" onclick="openLogbookDetail(this)" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
+                                        <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                        </button>
+                                        </a>
                                         <div class="hidden logbook-detail-html">
                                             <div class="space-y-3 text-left">
                                                 <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Sumber</span><div class="text-[14px] text-gray-800">{{ $data['sumber'] }}</div></div>
@@ -275,7 +281,7 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="6" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada aktivitas Learning diproses.</td></tr>
+                            <tr><td colspan="7" class="px-6 py-8 text-center text-gray-500 text-sm">Belum ada aktivitas Learning diproses.</td></tr>
                             @endforelse
                         </tbody>
                     </table>

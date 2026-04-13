@@ -57,7 +57,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Mentor</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tema</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pengiriman/Update</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pelaksanaan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center text-left">Aksi</th>
                             </tr>
@@ -67,6 +68,7 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-6 py-4 font-medium text-gray-700 whitespace-nowrap border-r border-gray-100">{{ $data['mentor'] }}</td>
                                 <td class="px-6 py-4 text-gray-600 border-r border-gray-100" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                                 <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                                 <td class="px-6 py-4 text-left border-r border-gray-100">
                                     @if(in_array($data['status'], ['Approve', 'Approved']))
@@ -77,9 +79,9 @@
                                 </td>
                                 <td class="px-6 py-4 border-l border-gray-100">
                                     <div class="flex items-center justify-center gap-3">
-                                        <button type="button" onclick="openLogbookDetail(this)" class="text-teal-500 hover:text-teal-700 transition flex items-center gap-1 font-bold text-xs bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100" title="Detail">
+                                        <a href="{{ route('talent.logbook.item', $data['id']) }}" class="text-teal-500 hover:text-teal-700 transition flex items-center gap-1 font-bold text-xs bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg> Detail
-                                        </button>
+                                        </a>
                                         <div class="hidden logbook-detail-html">
                                             <div class="space-y-3">
                                                 <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $data['mentor'] }}</div></div>
@@ -124,7 +126,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Exposure yang dicatat.</td>
+                                <td colspan="10" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Exposure yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -143,7 +145,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Mentor</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tema</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pengiriman/Update</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pelaksanaan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center text-left">Aksi</th>
                             </tr>
@@ -153,6 +156,7 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-6 py-4 font-medium text-gray-700 whitespace-nowrap border-r border-gray-100">{{ $data['mentor'] }}</td>
                                 <td class="px-6 py-4 text-gray-600 border-r border-gray-100" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                                 <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                                 <td class="px-6 py-4 text-left border-r border-gray-100">
                                     @if(in_array($data['status'], ['Approve', 'Approved']))
@@ -163,9 +167,9 @@
                                 </td>
                                 <td class="px-6 py-4 border-l border-gray-100">
                                     <div class="flex items-center justify-center gap-3">
-                                        <button type="button" onclick="openLogbookDetail(this)" class="text-teal-500 hover:text-teal-700 transition flex items-center gap-1 font-bold text-xs bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100" title="Detail">
+                                        <a href="{{ route('talent.logbook.item', $data['id']) }}" class="text-teal-500 hover:text-teal-700 transition flex items-center gap-1 font-bold text-xs bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg> Detail
-                                        </button>
+                                        </a>
                                         <div class="hidden logbook-detail-html">
                                             <div class="space-y-3">
                                                 <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $data['mentor'] }}</div></div>
@@ -208,7 +212,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                <td colspan="10" class="px-6 py-8 text-left text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -227,7 +231,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Sumber</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tema</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pengiriman/Update</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pelaksanaan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center text-left">Aksi</th>
                             </tr>
@@ -237,6 +242,7 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-6 py-4 font-medium text-gray-700 whitespace-nowrap border-r border-gray-100">{{ $data['sumber'] }}</td>
                                 <td class="px-6 py-4 text-gray-600 border-r border-gray-100" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                                 <td class="px-6 py-4 text-gray-500 whitespace-nowrap border-r border-gray-100">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                                 <td class="px-6 py-4 text-left border-r border-gray-100">
                                     @if(in_array($data['status'], ['Approve', 'Approved']))
@@ -247,9 +253,9 @@
                                 </td>
                                 <td class="px-6 py-4 border-l border-gray-100">
                                     <div class="flex items-center justify-center gap-3">
-                                        <button type="button" onclick="openLogbookDetail(this)" class="text-teal-500 hover:text-teal-700 transition flex items-center gap-1 font-bold text-xs bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100" title="Detail">
+                                        <a href="{{ route('talent.logbook.item', $data['id']) }}" class="text-teal-500 hover:text-teal-700 transition flex items-center gap-1 font-bold text-xs bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg> Detail
-                                        </button>
+                                        </a>
                                         <div class="hidden logbook-detail-html">
                                             <div class="space-y-3">
                                                 <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Sumber</span><div class="text-[14px] text-gray-800">{{ $data['sumber'] }}</div></div>

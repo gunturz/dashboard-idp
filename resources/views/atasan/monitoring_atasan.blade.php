@@ -593,7 +593,7 @@
                             <table class="pdc-log-table w-full">
                                 <thead>
                                     <tr>
-                                        <th>Mentor</th><th>Tema</th><th>Tanggal</th><th>Status</th><th>Aksi</th>
+                                        <th>Mentor</th><th>Tema</th><th>Tanggal Pengiriman/Update</th><th>Tanggal Pelaksanaan</th><th>Status</th><th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -602,6 +602,7 @@
                                         <tr>
                                             <td class="text-center font-medium">{{ $act->verifier->nama ?? '-' }}</td>
                                             <td class="text-center font-bold text-[#1e293b]" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($act->theme, 35) }}</td>
+                                            <td class="text-center whitespace-nowrap">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d F Y') : '-' }}</td>
                                             <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
                                             <td class="text-center">
                                                 @if(in_array($act->status, ['Approve', 'Approved']))
@@ -612,9 +613,9 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openLogbookDetail(this)" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
+                                                    <a href="{{ route('atasan.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
                                                         Detail
-                                                    </button>
+                                                    </a>
                                                     <div class="hidden logbook-detail-html">
                                                         <div class="space-y-3 text-left">
                                                             <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $act->verifier->nama ?? '-' }}</div></div>
@@ -654,7 +655,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="8" class="py-12 px-6 text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td></tr>
+                                        <tr><td colspan="6" class="py-12 px-6 text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -667,7 +668,7 @@
                             <table class="pdc-log-table w-full">
                                 <thead>
                                     <tr>
-                                        <th>Mentor</th><th>Tema</th><th>Tanggal</th><th>Status</th><th>Aksi</th>
+                                        <th>Mentor</th><th>Tema</th><th>Tanggal Pengiriman/Update</th><th>Tanggal Pelaksanaan</th><th>Status</th><th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -676,6 +677,7 @@
                                         <tr>
                                             <td class="text-center font-medium">{{ $act->verifier->nama ?? '-' }}</td>
                                             <td class="text-center font-bold text-[#1e293b]" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($act->theme, 35) }}</td>
+                                            <td class="text-center whitespace-nowrap">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d F Y') : '-' }}</td>
                                             <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
                                             <td class="text-center">
                                                 @if(in_array($act->status, ['Approve', 'Approved']))
@@ -686,9 +688,9 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openLogbookDetail(this)" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
+                                                    <a href="{{ route('atasan.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
                                                         Detail
-                                                    </button>
+                                                    </a>
                                                     <div class="hidden logbook-detail-html">
                                                         <div class="space-y-3 text-left">
                                                             <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Mentor</span><div class="text-[14px] text-gray-800">{{ $act->verifier->nama ?? '-' }}</div></div>
@@ -728,7 +730,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="8" class="py-12 px-6 text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td></tr>
+                                        <tr><td colspan="6" class="py-12 px-6 text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -741,7 +743,7 @@
                             <table class="pdc-log-table w-full">
                                 <thead>
                                     <tr>
-                                        <th>Sumber</th><th>Tema</th><th>Tanggal</th><th>Status</th><th>Aksi</th>
+                                        <th>Sumber</th><th>Tema</th><th>Tanggal Pengiriman/Update</th><th>Tanggal Pelaksanaan</th><th>Status</th><th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -750,6 +752,7 @@
                                         <tr>
                                             <td class="text-center font-medium">{{ $act->activity }}</td>
                                             <td class="text-center font-bold text-[#1e293b]" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($act->theme, 35) }}</td>
+                                            <td class="text-center whitespace-nowrap">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d F Y') : '-' }}</td>
                                             <td class="text-center whitespace-nowrap">{{ \Carbon\Carbon::parse($act->activity_date)->format('d F Y') }}</td>
                                             <td class="text-center">
                                                 <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
@@ -758,9 +761,9 @@
                                             </td>
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openLogbookDetail(this)" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
+                                                    <a href="{{ route('atasan.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
                                                         Detail
-                                                    </button>
+                                                    </a>
                                                     <div class="hidden logbook-detail-html">
                                                         <div class="space-y-3 text-left">
                                                             <div class="p-3 bg-gray-50 rounded-lg"><span class="block text-xs font-bold text-gray-500 uppercase mb-1">Sumber</span><div class="text-[14px] text-gray-800">{{ $act->activity }}</div></div>
@@ -799,7 +802,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="7" class="py-12 px-6 text-gray-400">Belum ada aktivitas Learning yang dicatat.</td></tr>
+                                        <tr><td colspan="6" class="py-12 px-6 text-gray-400">Belum ada aktivitas Learning yang dicatat.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>

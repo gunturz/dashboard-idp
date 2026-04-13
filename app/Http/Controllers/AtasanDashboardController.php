@@ -174,4 +174,11 @@ class AtasanDashboardController extends Controller
 
         return redirect()->route('atasan.dashboard')->with('success', 'Assessment berhasil disimpan.');
     }
+
+    public function logbookItemDetail($id)
+    {
+        $user = Auth::user();
+        $activity = \App\Models\IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
+        return view('atasan.logbook-item', compact('user', 'activity'));
+    }
 }

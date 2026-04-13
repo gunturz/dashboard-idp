@@ -1,4 +1,4 @@
-<x-bod.layout title="LogBook BOD – Individual Development Plan" :user="$user">
+<x-panelis.layout title="LogBook Panelis – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* ── Back button ── */
@@ -101,7 +101,7 @@
     </x-slot>
 
     {{-- Back to talent detail, with anchor to logbook section --}}
-    <a href="{{ route('bod.detail_talent', $talent->id) }}#logbook-section" class="btn-back">
+    <a href="{{ route('panelis.detail_talent', $talent->id) }}#logbook-section" class="btn-back">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
             <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
         </svg>
@@ -170,7 +170,7 @@
                                             @php
                                                 $dPaths = []; $dNames = [];
                                                 if($act->document_path){
-                                                    if(str_starts_with($act->document_path, '["')) {
+                                                    if(strpos($act->document_path, '[') === 0) {
                                                         $dPaths = json_decode($act->document_path, true);
                                                         $dNames = explode(', ', $act->file_name);
                                                     } else {
@@ -252,7 +252,7 @@
                                             @php
                                                 $dPaths = []; $dNames = [];
                                                 if($act->document_path){
-                                                    if(str_starts_with($act->document_path, '["')) {
+                                                    if(strpos($act->document_path, '[') === 0) {
                                                         $dPaths = json_decode($act->document_path, true);
                                                         $dNames = explode(', ', $act->file_name);
                                                     } else {
@@ -326,7 +326,7 @@
                                             @php
                                                 $dPaths = []; $dNames = [];
                                                 if($act->document_path){
-                                                    if(str_starts_with($act->document_path, '["')) {
+                                                    if(strpos($act->document_path, '[') === 0) {
                                                         $dPaths = json_decode($act->document_path, true);
                                                         $dNames = explode(', ', $act->file_name);
                                                     } else {
@@ -361,6 +361,22 @@
         </table>
     </div>
 
+    <!-- Generic Logbook Detail Modal -->
+    <div id="logbookDetailModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[500px] p-7 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="logbookDetailModalContent">
+            <div class="flex justify-between items-start mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-xl font-bold text-[#1e293b]">Detail Logbook</h3>
+                <button onclick="closeLogbookDetailModal()" class="text-gray-400 hover:text-gray-600 bg-gray-50 rounded-full p-2 hover:bg-gray-200 transition">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="text-sm" id="detailModalBody"></div>
+            <div class="mt-6 pt-4 border-t border-gray-100">
+                <button onclick="closeLogbookDetailModal()" class="w-full bg-[#f1f5f9] text-[#64748b] font-bold py-2.5 rounded-xl hover:bg-gray-200 transition-colors">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <x-slot name="scripts">
         <script>
             function switchTab(tab) {
@@ -381,39 +397,22 @@
                     switchTab(hash);
                 }
             });
+
+            function openLogbookDetail(btn) {
+                const htmlContent = btn.nextElementSibling.innerHTML;
+                document.getElementById('detailModalBody').innerHTML = htmlContent;
+                const modal = document.getElementById('logbookDetailModal');
+                const content = document.getElementById('logbookDetailModalContent');
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
+            }
+
+            function closeLogbookDetailModal() {
+                const modal = document.getElementById('logbookDetailModal');
+                const content = document.getElementById('logbookDetailModalContent');
+                modal.classList.add('opacity-0'); content.classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            }
         </script>
     </x-slot>
-
-
-    <!-- Generic Logbook Detail Modal -->
-    <div id="logbookDetailModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
-        <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[500px] p-7 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="logbookDetailModalContent">
-            <div class="flex justify-between items-start mb-4 border-b border-gray-100 pb-4">
-                <h3 class="text-xl font-bold text-[#1e293b]">Detail Logbook</h3>
-                <button onclick="closeLogbookDetailModal()" class="text-gray-400 hover:text-gray-600 bg-gray-50 rounded-full p-2 hover:bg-gray-200 transition">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
-            <div class="text-sm" id="detailModalBody"></div>
-            <div class="mt-6 pt-4 border-t border-gray-100">
-                <button onclick="closeLogbookDetailModal()" class="w-full bg-[#f1f5f9] text-[#64748b] font-bold py-2.5 rounded-xl hover:bg-gray-200 transition-colors">Tutup</button>
-            </div>
-        </div>
-    </div>
-    <script>
-        function openLogbookDetail(btn) {
-            const htmlContent = btn.nextElementSibling.innerHTML;
-            document.getElementById('detailModalBody').innerHTML = htmlContent;
-            const modal = document.getElementById('logbookDetailModal');
-            const content = document.getElementById('logbookDetailModalContent');
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); }, 10);
-        }
-        function closeLogbookDetailModal() {
-            const modal = document.getElementById('logbookDetailModal');
-            const content = document.getElementById('logbookDetailModalContent');
-            modal.classList.add('opacity-0'); content.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); }, 300);
-        }
-    </script>
-</x-bod.layout>
+</x-panelis.layout>

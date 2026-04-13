@@ -409,6 +409,22 @@
             if (!inside) document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.add('hidden'));
         });
 
+        
+        // --- AJAX Load Department ---
+        function loadDepartmentsByCompanyProfile(companyId) {
+            const deptSelects = document.querySelectorAll('select[name="department_id"]');
+            deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Memuat...</option>');
+            if(!companyId) return;
+            fetch(`{{ route('register.departments_by_company') }}?company_id=${companyId}`)
+            .then(r=>r.json())
+            .then(data=>{
+                let html = '<option value="" disabled selected>Pilih Departemen</option>';
+                if(data.length===0) html='<option value="" disabled selected>Tidak ada</option>';
+                else data.forEach(d=> html+=`<option value="${d.id}">${d.nama_department}</option>`);
+                deptSelects.forEach(s=>s.innerHTML=html);
+            }).catch(()=>deptSelects.forEach(s=>s.innerHTML='<option value="" disabled selected>Error</option>'));
+        }
+
         // Edit mode
         function enterEditMode() {
             document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));

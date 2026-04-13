@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Lihat Penilaian BOD – Individual Development Plan" :user="$user" :hideSidebar="true">
+<x-pdc_admin.layout title="Lihat Penilaian Panelis – Individual Development Plan" :user="$user" :hideSidebar="true">
     <x-slot name="styles">
         <style>
 
@@ -177,7 +177,7 @@
     {{-- ── Section Title ── --}}
     @php
         $projectTitle = optional($latestProject)->title
-            ?? ('Penilaian BOD – ' . (optional($talent->company)->nama_company ?? '-'));
+            ?? ('Penilaian Panelis – ' . (optional($talent->company)->nama_company ?? '-'));
     @endphp
     <h3 class="section-title">{{ $projectTitle }}</h3>
 
@@ -186,7 +186,7 @@
         <table class="penilaian-table">
             <thead>
                 <tr>
-                    <th class="w-[22%]">Penilai BOD</th>
+                    <th class="w-[22%]">Penilai Panelis</th>
                     <th class="w-[26%]">Perusahaan</th>
                     <th class="w-[12%]">Skor</th>
                     <th class="w-[15%]">Feedback</th>
@@ -195,29 +195,30 @@
             </thead>
             <tbody>
                 @php
-                    // Build rows: BOD users (or at least 5 placeholder rows)
-                    $totalRows = max(5, $bodUsers->count());
+                    // Build rows: Panelis users (or at least 5 placeholder rows)
+                    $totalRows = max(5, $panelisUsers->count());
                 @endphp
                 @for ($i = 0; $i < $totalRows; $i++)
                     @php 
-                        $bod = $bodUsers->get($i); 
-                        $isAssessor = $latestProject && $bod && $latestProject->bod_dinilai_oleh == $bod->id;
+                        $panelis = $panelisUsers->get($i); 
+                        $assessment = $panelis ? \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->where('panelis_id', $panelis->id)->first() : null;
+                        $isAssessor = $assessment !== null;
                     @endphp
                     <tr>
-                        {{-- Penilai BOD --}}
+                        {{-- Penilai Panelis --}}
                         <td class="text-left-cell">
-                            @if ($bod)
-                                <span class="font-semibold text-[#1e293b]">{{ $bod->nama }}</span>
-                                @if ($bod->position)
-                                    <span class="block text-xs text-[#64748b] italic">{{ $bod->position->position_name }}</span>
+                            @if ($panelis)
+                                <span class="font-semibold text-[#1e293b]">{{ $panelis->nama }}</span>
+                                @if ($panelis->position)
+                                    <span class="block text-xs text-[#64748b] italic">{{ $panelis->position->position_name }}</span>
                                 @endif
                             @endif
                         </td>
 
                         {{-- Perusahaan --}}
                         <td>
-                            @if ($bod && optional($bod->company)->nama_company)
-                                {{ $bod->company->nama_company }}
+                            @if ($panelis && optional($panelis->company)->nama_company)
+                                {{ $panelis->company->nama_company }}
                             @elseif ($i === 0 && optional($latestProject)->talent)
                                 {{ optional($talent->company)->nama_company ?? '' }}
                             @endif
@@ -226,22 +227,22 @@
                         {{-- Skor --}}
                         <td>
                             @if ($isAssessor)
-                                <span class="font-bold text-[#1e293b]">{{ $latestProject->bod_score }} / 50</span>
+                                <span class="font-bold text-[#1e293b]">{{ $assessment->panelis_score ?? 0 }} / 50</span>
                             @endif
                         </td>
 
                         {{-- Feedback --}}
                         <td>
                             @if ($isAssessor)
-                                {{ $latestProject->bod_komentar }}
+                                {{ $assessment->panelis_komentar }}
                             @endif
                         </td>
 
                         {{-- Status --}}
                         <td class="text-left-cell">
-                            @if ($isAssessor && $latestProject->bod_rekomendasi)
+                            @if ($isAssessor && $assessment->panelis_rekomendasi)
                                 @php
-                                    $rekomen = $latestProject->bod_rekomendasi;
+                                    $rekomen = $assessment->panelis_rekomendasi;
                                     $desc = '';
                                     if(str_contains($rekomen, 'Ready Now')) $desc = 'Siap dipromosikan dalam < 6 bulan';
                                     elseif(str_contains($rekomen, '1 – 2')) $desc = 'Siap dengan pengembangan terarah';
@@ -262,10 +263,10 @@
 
     {{-- ── Bottom Actions ── --}}
     <div class="flex justify-end gap-3">
-        <a href="{{ route('pdc_admin.bod_review') }}" class="btn-batal" id="batal-bod-detail">Kembali</a>
+        <a href="{{ route('pdc_admin.panelis_review') }}" class="btn-batal" id="batal-panelis-detail">Kembali</a>
         
         @php
-            $isComplete = in_array(optional($talent->promotion_plan)->status_promotion, ['Approved BOD', 'Rejected BOD']);
+            $isComplete = in_array(optional($talent->promotion_plan)->status_promotion, ['Approved Panelis', 'Rejected Panelis']);
         @endphp
 
         @if ($isComplete)
@@ -276,9 +277,9 @@
                 Semua Penilaian Sudah Selesai
             </button>
         @else
-            <form method="POST" action="{{ route('pdc_admin.bod_review.complete', $talent->id) }}" id="form-selesai-bod">
+            <form method="POST" action="{{ route('pdc_admin.panelis_review.complete', $talent->id) }}" id="form-selesai-panelis">
                 @csrf
-                <button type="submit" class="btn-selesai" id="selesai-bod-detail">
+                <button type="submit" class="btn-selesai" id="selesai-panelis-detail">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>

@@ -7,24 +7,26 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/role/select', [\App\Http\Controllers\RoleController::class, 'selectRole'])
+Route::get('/role/select', [\App\Http\Controllers\RoleController::class , 'selectRole'])
     ->middleware(['auth', 'verified'])->name('role.select');
-Route::post('/role/set', [\App\Http\Controllers\RoleController::class, 'setRole'])
+Route::post('/role/set', [\App\Http\Controllers\RoleController::class , 'setRole'])
     ->middleware(['auth', 'verified'])->name('role.set');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    
+
     // Attempt to get active role from session, otherwise fallback to primary role
     $roleName = session('active_role');
     if (!$roleName) {
         $roles = $user->roles;
         if ($roles && $roles->count() > 1) {
             return redirect()->route('role.select');
-        } elseif ($roles && $roles->count() === 1) {
+        }
+        elseif ($roles && $roles->count() === 1) {
             $roleName = strtolower(trim($roles->first()->role_name));
             session(['active_role' => $roleName]);
-        } else {
+        }
+        else {
             $roleName = $user->role ? strtolower(trim($user->role->role_name)) : null;
         }
     }
@@ -56,8 +58,8 @@ Route::get('/dashboard', function () {
     elseif (in_array($roleName, ['admin', 'pdc admin', 'pdc_admin'])) {
         return redirect()->route('pdc_admin.dashboard');
     }
-    elseif (in_array($roleName, ['bo_director', 'bod', 'board_of_director'])) {
-        return redirect()->route('bod.dashboard');
+    elseif (in_array($roleName, ['Panelis', 'panelis', 'panelist', 'Panelist'])) {
+        return redirect()->route('panelis.dashboard');
     }
 
     // Fallback

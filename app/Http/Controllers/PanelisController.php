@@ -6,33 +6,37 @@ use App\Models\User;
 use App\Models\Company;
 use App\Models\PromotionPlan;
 use App\Models\ImprovementProject;
+use App\Models\PanelisAssessment;
 use App\Models\Competence;
 use App\Models\PositionTargetCompetence;
 use App\Models\IdpActivity;
 use Illuminate\Http\Request;
 
-class BODController extends Controller
+class PanelisController extends Controller
 {
 
 
     /**
-     * BOD Dashboard — shows all talents grouped by company with target position, talent, department, mentor, atasan.
+     * Panelis Dashboard — shows all talents grouped by company with target position, talent, department, mentor, atasan.
      */
     public function dashboard()
     {
         $user = auth()->user();
 
-        // Fetch all talents that have active promotion plans
+        // IDs talent yang sudah dinilai oleh panelis yang sedang login
+        $alreadyAssessedTalentIds = PanelisAssessment::where('panelis_id', $user->id)
+            ->pluck('user_id_talent')
+            ->toArray();
+
+        // Fetch talents with status Pending Panelis yang BELUM dinilai oleh panelis ini
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-            $q->where('status_promotion', 'Pending BOD')
+            $q->where('status_promotion', 'Pending Panelis')
                 ->whereNotNull('target_position_id');
         })
-            ->whereDoesntHave('improvementProjects', function ($q) {
-            $q->whereNotNull('bod_score');
-        })
+            ->whereNotIn('id', $alreadyAssessedTalentIds)
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
@@ -53,12 +57,12 @@ class BODController extends Controller
                 ];
             });
 
-        return view('bod.dashboard', compact('user', 'groupedData'))
+        return view('panelis.dashboard', compact('user', 'groupedData'))
             ->with('notifications', $this->getNotifications());
     }
 
     /**
-     * BOD Review — shows improvement projects pending BOD review (assessment-based review).
+     * Panelis Review — shows improvement projects pending Panelis review (assessment-based review).
      */
     public function review()
     {
@@ -76,12 +80,12 @@ class BODController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('bod.review', compact('user', 'projects'))
+        return view('panelis.review', compact('user', 'projects'))
             ->with('notifications', $this->getNotifications());
     }
 
     /**
-     * BOD Talent Detail — full detail view for a single talent (Image 1).
+     * Panelis Talent Detail — full detail view for a single talent (Image 1).
      */
     public function detailTalent($talent_id)
     {
@@ -118,14 +122,14 @@ class BODController extends Controller
             $gaps = $overrides->count() > 0 ? $overrides->values() : $details->sortBy('gap_score')->take(3)->values();
         }
 
-        return view('bod.detail', compact(
+        return view('panelis.detail', compact(
             'user', 'talent', 'competencies', 'standards', 'gaps',
             'exposureCount', 'mentoringCount', 'learningCount'
         ))->with('notifications', $this->getNotifications());
     }
 
     /**
-     * BOD Logbook Detail — logbook tabs page for a single talent (Images 2-4).
+     * Panelis Logbook Detail — logbook tabs page for a single talent (Images 2-4).
      */
     public function logbook($talent_id)
     {
@@ -140,14 +144,14 @@ class BODController extends Controller
         $mentoringActivities = $talent->idpActivities->where('type_idp', 2);
         $learningActivities = $talent->idpActivities->where('type_idp', 3);
 
-        return view('bod.logbook', compact(
+        return view('panelis.logbook', compact(
             'user', 'talent',
             'exposureActivities', 'mentoringActivities', 'learningActivities'
         ))->with('notifications', $this->getNotifications());
     }
 
     /**
-     * BOD Penilaian — assessment form for a single talent.
+     * Panelis Penilaian — assessment form for a single talent.
      */
     public function penilaian($talent_id)
     {
@@ -165,81 +169,86 @@ class BODController extends Controller
         // Get the latest improvement project (if any) for file preview
         $project = $talent->improvementProjects->last();
 
-        return view('bod.penilaian', compact('user', 'talent', 'project'))
+        // Cek apakah panelis ini sudah pernah menilai talent ini
+        $existingAssessment = PanelisAssessment::where('user_id_talent', $talent_id)
+            ->where('panelis_id', $user->id)
+            ->first();
+
+        return view('panelis.penilaian', compact('user', 'talent', 'project', 'existingAssessment'))
             ->with('notifications', $this->getNotifications());
     }
 
     /**
-     * BOD Simpan Penilaian — store BOD assessment scores to database.
+     * Panelis Simpan Penilaian — store Panelis assessment scores to database.
      */
     public function simpanPenilaian(\Illuminate\Http\Request $request, $talent_id)
     {
         $user = auth()->user();
-        $talent = User::with('improvementProjects')->findOrFail($talent_id);
-        $project = $talent->improvementProjects->last();
 
-        if (!$project) {
-            return redirect()->route('bod.penilaian', $talent_id)
-                ->with('error', 'Talent belum memiliki project improvement.');
-        }
-
-        $scores = $request->input('scores', []); // array of 10 integers
+        $scores = $request->input('scores', []); // array of integers
         $totalScore = array_sum($scores);
 
-        $project->update([
-            'bod_score' => $totalScore,
-            'bod_scores_json' => json_encode($scores),
-            'bod_komentar' => $request->input('komentar'),
-            'bod_rekomendasi' => $request->input('rekomendasi'),
-            'bod_dinilai_oleh' => $user->id,
-            'bod_tanggal_penilaian' => $request->input('tanggal_penilaian', now()->toDateString()),
-        ]);
+        // Simpan / update penilaian panelis ini untuk talent ini (per panelis per talent)
+        PanelisAssessment::updateOrCreate(
+        [
+            'user_id_talent' => $talent_id,
+            'panelis_id' => $user->id,
+        ],
+        [
+            'panelis_score' => $totalScore,
+            'panelis_scores_json' => $scores,
+            'panelis_komentar' => $request->input('komentar'),
+            'panelis_rekomendasi' => $request->input('rekomendasi'),
+            'panelis_tanggal_penilaian' => $request->input('tanggal_penilaian', now()->toDateString()),
+        ]
+        );
 
-        return redirect()->route('bod.history')
-            ->with('success', 'Penilaian berhasil disimpan! Total skor: ' . $totalScore . ' / 50');
+        return redirect()->route('panelis.history')
+            ->with('success', 'Penilaian berhasil disimpan! Total skor: ' . $totalScore);
     }
 
     /**
-     * BOD History — shows completed/reviewed assessments by BOD.
+     * Panelis History — shows completed/reviewed assessments by Panelis.
      */
     public function history()
     {
         $user = auth()->user();
 
-        // Hanya tampilkan project yang sudah dinilai BOD (bod_score tidak null)
-        $projects = ImprovementProject::with([
+        // Tampilkan hanya penilaian yang dibuat oleh panelis ini
+        $assessments = PanelisAssessment::where('panelis_id', $user->id)
+            ->with([
             'talent.position',
             'talent.department',
             'talent.company',
             'talent.promotion_plan.targetPosition',
+            'talent.improvementProjects',
         ])
-            ->whereNotNull('bod_score')
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('bod.history', compact('user', 'projects'))
+        return view('panelis.history', compact('user', 'assessments'))
             ->with('notifications', $this->getNotifications());
     }
 
     /**
-     * BOD Notifikasi — full notification page.
+     * Panelis Notifikasi — full notification page.
      */
     public function notifikasi()
     {
         $user = auth()->user();
         $notifications = $this->getNotifications();
 
-        return view('bod.notifikasi', compact('user', 'notifications'));
+        return view('panelis.notifikasi', compact('user', 'notifications'));
     }
 
     /**
-     * BOD Profile — personal profile page for the logged-in BOD user.
+     * Panelis Profile — personal profile page for the logged-in Panelis user.
      */
     public function profile()
     {
         $user = auth()->user()->load('company');
-        return view('bod.profile', compact('user'))
-               ->with('notifications', $this->getNotifications());
+        return view('panelis.profile', compact('user'))
+            ->with('notifications', $this->getNotifications());
     }
 
 

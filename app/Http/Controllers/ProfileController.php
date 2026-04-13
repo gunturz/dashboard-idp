@@ -40,8 +40,8 @@ class ProfileController extends Controller
         elseif ($roleName === 'finance') {
             $view = 'finance.profile';
         }
-        elseif (in_array($roleName, ['bod', 'board_of_director', 'board of director'])) {
-            $view = 'bod.profile';
+        elseif (in_array($roleName, ['Panelis', 'panelis', 'panelist', 'Panelist'])) {
+            $view = 'panelis.profile';
         }
         else {
             $view = 'profile.dashboard'; // fallback
@@ -51,7 +51,7 @@ class ProfileController extends Controller
             'user' => $user,
             'notifications' => $this->getNotifications(),
             'companies' => Company::all(),
-            'departments' => Department::all(),
+            'departments' => $user->company_id ?Department::where('company_id', $user->company_id)->orderBy('nama_department')->get() : collect(),
             'roles' => Role::all(),
             'positions' => Position::all(),
             'activeRoleName' => $roleName,

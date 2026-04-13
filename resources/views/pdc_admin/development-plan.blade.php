@@ -243,11 +243,8 @@
             <div class="field-row">
                 <span class="field-label">Departemen</span>
                 <div class="flex-1">
-                    <select name="department_id" id="dp-department" class="dp-select">
+                    <select name="department_id" id="dp-department" class="dp-select" data-old="{{ old('department_id') }}">
                         <option value="">— Pilih Departemen —</option>
-                        @foreach($departments as $d)
-                            <option value="{{ $d->id }}" {{ old('department_id') == $d->id ? 'selected' : '' }}>{{ $d->nama_department }}</option>
-                        @endforeach
                     </select>
                 </div>
             </div>
@@ -361,10 +358,37 @@
 
     async function loadTalentsByCompany(companyId) {
         cachedTalents = [];
+        const deptSelect = document.getElementById('dp-department');
+        
         if (!companyId) {
             document.querySelectorAll('.talent-select').forEach(s => { s.innerHTML = '<option value="">— Pilih Talent —</option>'; });
+            deptSelect.innerHTML = '<option value="">— Pilih Departemen —</option>';
             return;
         }
+
+        // Fetch Departments
+        fetch(`/register/departments?company_id=${companyId}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const oldDeptVal = deptSelect.getAttribute('data-old') || deptSelect.value;
+            deptSelect.innerHTML = '<option value="">— Pilih Departemen —</option>';
+            data.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.nama_department;
+                if (d.id == oldDeptVal) {
+                    opt.selected = true;
+                }
+                deptSelect.appendChild(opt);
+            });
+            // Clear data-old so it doesn't persistently override future manual selections 
+            // if we select a different company later.
+            deptSelect.removeAttribute('data-old');
+        })
+        .catch(err => console.error('Error fetching departments:', err));
+
         const resp = await fetch(`/pdc-admin/talents-by-company?company_id=${companyId}`, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         });

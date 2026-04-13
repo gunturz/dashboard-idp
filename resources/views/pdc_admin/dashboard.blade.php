@@ -184,8 +184,8 @@
             <div class="summary-label">Pending Finance Validation</div>
         </a>
         <div class="summary-card card-red hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
-            <div class="summary-value">{{ $pendingBOD ?? 0 }}</div>
-            <div class="summary-label">Pending BOD Decision</div>
+            <div class="summary-value">{{ $pendingPanelis ?? 0 }}</div>
+            <div class="summary-label">Pending Panelis Decision</div>
         </div>
     </div>
 
@@ -252,7 +252,7 @@
                 </div>
             @empty
                 <div class="p-8 text-center text-gray-400">
-                    Belum ada data progress talent yang menunggu penilaian BOD.
+                    Belum ada data progress talent yang menunggu penilaian Panelis.
                 </div>
             @endforelse
         </div>
@@ -280,8 +280,8 @@
                 <span class="role-list-value">{{ $roleCounts['Finance'] ?? 0 }} Users</span>
             </div>
             <div class="role-list-item">
-                <span>BOD</span>
-                <span class="role-list-value">{{ $roleCounts['BOD'] ?? 0 }} Users</span>
+                <span>Panelis</span>
+                <span class="role-list-value">{{ $roleCounts['Panelis'] ?? 0 }} Users</span>
             </div>
         </div>
     </div>

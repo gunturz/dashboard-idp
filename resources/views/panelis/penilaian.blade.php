@@ -1,4 +1,4 @@
-<x-bod.layout title="Penilaian BOD – Individual Development Plan" :user="$user" :notifications="$notifications">
+<x-panelis.layout title="Penilaian Panelis – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             /* ── Back button ── */
@@ -347,7 +347,7 @@
     </x-slot>
 
     {{-- Back --}}
-    <a href="{{ route('bod.dashboard') }}" class="btn-back">
+    <a href="{{ route('panelis.dashboard') }}" class="btn-back">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
         </svg>
@@ -355,7 +355,7 @@
     </a>
 
     {{-- Title --}}
-    <p class="penilaian-title">Penilaian BOD</p>
+    <p class="penilaian-title">Penilaian Panelis</p>
 
     {{-- Info Card (dark) --}}
     <div class="info-card">
@@ -384,7 +384,7 @@
             </div>
             <div class="info-row mt-2">
                 <label>Tanggal Penilaian</label>
-                <input type="date" id="tanggal-penilaian" value="{{ $project && $project->bod_tanggal_penilaian ? \Carbon\Carbon::parse($project->bod_tanggal_penilaian)->format('Y-m-d') : now()->format('Y-m-d') }}">
+                <input type="date" id="tanggal-penilaian" value="{{ $existingAssessment && $existingAssessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($existingAssessment->panelis_tanggal_penilaian)->format('Y-m-d') : now()->format('Y-m-d') }}">
             </div>
         </div>
     </div>
@@ -478,7 +478,7 @@
     </div>
 
     {{-- Komentar --}}
-    <form id="penilaian-form" method="POST" action="{{ route('bod.penilaian.simpan', $talent->id) }}">
+    <form id="penilaian-form" method="POST" action="{{ route('panelis.penilaian.simpan', $talent->id) }}">
         @csrf
         {{-- Hidden fields populated by JS before submit --}}
         <input type="hidden" name="tanggal_penilaian" id="form-tanggal">
@@ -491,7 +491,7 @@
 
     <div class="comment-box">
         <div class="comment-box-label">Komentar / Catatan Penilai:</div>
-        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent..">{{ $project->bod_komentar ?? '' }}</textarea>
+        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent..">{{ $existingAssessment->panelis_komentar ?? '' }}</textarea>
     </div>
 
     {{-- Rekomendasi Panelis --}}
@@ -515,10 +515,10 @@
             // Mencari ID terpilih sebelumnya
             $rekomenSelectedId = null;
             $rekomenSelectedText = null;
-            if ($project && $project->bod_rekomendasi) {
+            if ($existingAssessment && $existingAssessment->panelis_rekomendasi) {
                 // Find matching label, some records might have Ready in ... instead of exact label
                 foreach ($rekomenOptions as $opt) {
-                    if (str_contains($project->bod_rekomendasi, $opt['label']) || $project->bod_rekomendasi === $opt['label']) {
+                    if (str_contains($existingAssessment->panelis_rekomendasi, $opt['label']) || $existingAssessment->panelis_rekomendasi === $opt['label']) {
                         $rekomenSelectedId = $opt['id'];
                         $rekomenSelectedText = $opt['label'];
                         break;
@@ -540,7 +540,7 @@
 
     {{-- Skor + Buttons --}}
     <div class="skor-footer">
-        <a href="{{ route('bod.history') }}" class="btn-batal bg-red-500 text-white hover:bg-red-600 hover:text-white mr-auto">Batal</a>
+        <a href="{{ route('panelis.history') }}" class="btn-batal bg-red-500 text-white hover:bg-red-600 hover:text-white mr-auto">Batal</a>
         <div class="skor-display">
             <span>Skor</span>
             <div class="skor-count" id="skor-display">0 / 50</div>
@@ -552,7 +552,7 @@
     <x-slot name="scripts">
         <script>
             // scores[rowIndex] = selected score (1-5) or 0
-            const scores = {!! $project && $project->bod_scores_json ? $project->bod_scores_json : 'new Array(10).fill(0)' !!};
+            const scores = {!! $existingAssessment && $existingAssessment->panelis_scores_json ? json_encode($existingAssessment->panelis_scores_json) : 'new Array(10).fill(0)' !!};
             const MAX_SCORE = 50;
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -633,4 +633,4 @@
         </script>
     </x-slot>
 
-</x-bod.layout>
+</x-panelis.layout>

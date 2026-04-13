@@ -1,4 +1,4 @@
-<x-bod.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user" :notifications="$notifications">
+<x-panelis.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             .page-title {
@@ -301,28 +301,29 @@
             'Inisiatif ekstra, kolaborasi, atau insight mendalam',
         ];
 
-        $grouped = $projects->groupBy(fn($p) => optional(optional($p->talent)->company)->nama_company ?? 'Lainnya');
+        $grouped = $assessments->groupBy(fn($a) => optional(optional($a->talent)->company)->nama_company ?? 'Lainnya');
     @endphp
 
-    @if($projects->isEmpty())
+    @if($assessments->isEmpty())
         <div class="empty-state">Belum ada riwayat penilaian.</div>
     @else
         @foreach($grouped as $companyName => $companyProjects)
             <div class="company-divider">{{ $companyName }}</div>
 
-            @foreach($companyProjects as $idx => $project)
+            @foreach($companyProjects as $idx => $assessment)
                 @php
-                    $talent    = $project->talent;
-                    $cardId    = 'hc-' . $project->id;
+                    $talent    = $assessment->talent;
+                    $latestProject = $talent ? $talent->improvementProjects->sortByDesc('updated_at')->first() : null;
+                    $cardId    = 'hc-' . $assessment->id;
                     $expanded  = false;
-                    $scoreArr  = $project->bod_scores_json ? json_decode($project->bod_scores_json, true) : [];
-                    $totalScore = $project->bod_score ?? 0;
+                    $scoreArr  = $assessment->panelis_scores_json ?? [];
+                    $totalScore = $assessment->panelis_score ?? 0;
                     $maxScore   = 50;
 
                     // Determine rekomendasi dot color
                     $rekomenColor = 'yellow';
-                    if (str_contains($project->bod_rekomendasi ?? '', 'Ready Now'))       $rekomenColor = 'green';
-                    elseif (str_contains($project->bod_rekomendasi ?? '', 'Not Ready'))   $rekomenColor = 'red';
+                    if (str_contains($assessment->panelis_rekomendasi ?? '', 'Ready Now'))       $rekomenColor = 'green';
+                    elseif (str_contains($assessment->panelis_rekomendasi ?? '', 'Not Ready'))   $rekomenColor = 'red';
                 @endphp
 
                 <div class="hist-card">
@@ -341,9 +342,9 @@
                             <span class="hist-role">
                                 {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
                             </span>
-                            <span class="hist-date">Dinilai: {{ $project->bod_tanggal_penilaian ? \Carbon\Carbon::parse($project->bod_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
+                            <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
                         </div>
-                        <span class="hist-project-title">{{ $project->title ?? 'Judul Project' }}</span>
+                        <span class="hist-project-title">{{ $latestProject->title ?? 'Judul Project' }}</span>
                         <span class="badge-done">Done Review</span>
                         <svg class="hist-arrow {{ $expanded ? 'open' : '' }}" id="arr-{{ $cardId }}"
                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -379,14 +380,14 @@
                             {{-- Komentar --}}
                             <div class="komentar-wrap">
                                 <p class="komentar-label">Komentar / Catatan Penilai:</p>
-                                <textarea class="komentar-ta" readonly>{{ $project->bod_komentar ?? '' }}</textarea>
+                                <textarea class="komentar-ta" readonly>{{ $assessment->panelis_komentar ?? '' }}</textarea>
                             </div>
 
                             {{-- Readiness --}}
                             <div class="readiness-wrap">
                                 <div class="rd-dot {{ $rekomenColor }}"></div>
                                 <div class="rd-text">
-                                    <strong>{{ $project->bod_rekomendasi ?? '-' }}</strong>
+                                    <strong>{{ $assessment->panelis_rekomendasi ?? '-' }}</strong>
                                 </div>
                             </div>
 
@@ -398,12 +399,12 @@
 
                             {{-- Actions --}}
                             <div class="actions-wrap">
-                                @if($project->document_path)
-                                    <a href="{{ asset('storage/'.$project->document_path) }}" target="_blank" class="btn-preview">Preview File</a>
+                                @if($latestProject && $latestProject->document_path)
+                                    <a href="{{ asset('storage/'.$latestProject->document_path) }}" target="_blank" class="btn-preview">Preview File</a>
                                 @else
                                     <span class="btn-preview" style="opacity:0.4;cursor:default;">Preview File</span>
                                 @endif
-                                <a href="{{ route('bod.penilaian', optional($talent)->id) }}" class="btn-edit">Edit</a>
+                                <a href="{{ route('panelis.penilaian', optional($talent)->id) }}" class="btn-edit">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -424,4 +425,4 @@
         </script>
     </x-slot>
 
-</x-bod.layout>
+</x-panelis.layout>

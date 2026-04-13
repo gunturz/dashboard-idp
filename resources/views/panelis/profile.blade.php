@@ -1,5 +1,5 @@
 
-<x-bod.layout title="Profile" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false" :user="$user" :notifications="$notifications">
+<x-panelis.layout title="Profile" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false" :user="$user" :notifications="$notifications">
 
     <x-slot name="styles">
         <style>
@@ -43,7 +43,7 @@
 
         {{-- Row Back --}}
         <div class="mb-5">
-            <a href="{{ route('bod.dashboard') }}" class="btn-back">
+            <a href="{{ route('panelis.dashboard') }}" class="btn-back">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
@@ -55,7 +55,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
             </svg>
-            <h1 class="text-2xl font-bold text-[#2e3746]">Profile BOD</h1>
+            <h1 class="text-2xl font-bold text-[#2e3746]">Profile Panelis</h1>
         </div>
 
         {{-- Error Display --}}
@@ -88,7 +88,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    <span class="text-sm font-semibold">Pengubahan Profile BOD berhasil</span>
+                    <span class="text-sm font-semibold">Pengubahan Profile Panelis berhasil</span>
 
                 </div>
                 <button onclick="document.getElementById('success-banner').remove()"
@@ -213,6 +213,7 @@
 
                                         ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
                                         ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => optional($user->company)->nama_company ?? '-'],
+                                        ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => optional($user->department)->nama_department ?? '-'],
                                         ['label' => 'Role',               'key' => 'role_id',            'type' => 'select', 'options' => $roles ?? [],       'val' => ucwords(str_replace('_', ' ', $activeRoleName ?? optional($user->role)->role_name ?? '-')), 'disabled' => true],
                                         ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'select', 'options' => $positions ?? [],   'val' => optional($user->position)->position_name ?? '-', 'disabled' => true],
 
@@ -234,7 +235,7 @@
                                                    value="{{ $user->{$field['key']} ?? '' }}"
                                                    class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -360,7 +361,7 @@
                                         @elseif (($field['type'] ?? '') === 'text')
                                             <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}" class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -458,6 +459,28 @@
                 input.type = 'password';
                 icon.innerHTML = '<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />';
             }
+        }
+
+        
+        // AJAX Load Department for Edit Profile
+        function loadDepartmentsByCompanyProfile(selectElement) {
+            const companyId = selectElement.value;
+            const deptSelects = document.querySelectorAll('select[name="department_id"]');
+            deptSelects.forEach(s => {
+                s.innerHTML = '<option value="" disabled selected>Memuat...</option>';
+            });
+
+            if(!companyId) return;
+
+            fetch(`/register/departments?company_id=${companyId}`)
+            .then(r => r.json())
+            .then(data => {
+                let html = '<option value="" disabled selected>Pilih Departemen</option>';
+                if(data.length === 0) html = '<option value="" disabled selected>Tidak ada</option>';
+                else data.forEach(d => html += `<option value="${d.id}">${d.nama_department}</option>`);
+                deptSelects.forEach(s => s.innerHTML = html);
+            })
+            .catch(() => deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Error</option>'));
         }
 
         // Edit mode
@@ -558,7 +581,29 @@
 
     <x-slot name="scripts">
         <script>
-            // Edit mode
+            
+        // AJAX Load Department for Edit Profile
+        function loadDepartmentsByCompanyProfile(selectElement) {
+            const companyId = selectElement.value;
+            const deptSelects = document.querySelectorAll('select[name="department_id"]');
+            deptSelects.forEach(s => {
+                s.innerHTML = '<option value="" disabled selected>Memuat...</option>';
+            });
+
+            if(!companyId) return;
+
+            fetch(`/register/departments?company_id=${companyId}`)
+            .then(r => r.json())
+            .then(data => {
+                let html = '<option value="" disabled selected>Pilih Departemen</option>';
+                if(data.length === 0) html = '<option value="" disabled selected>Tidak ada</option>';
+                else data.forEach(d => html += `<option value="${d.id}">${d.nama_department}</option>`);
+                deptSelects.forEach(s => s.innerHTML = html);
+            })
+            .catch(() => deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Error</option>'));
+        }
+
+        // Edit mode
             function enterEditMode() {
                 document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));
                 document.querySelectorAll('.edit-field').forEach(el => el.classList.remove('hidden'));
@@ -620,4 +665,4 @@
             });
         </script>
     </x-slot>
-</x-bod.layout>
+</x-panelis.layout>

@@ -23,16 +23,33 @@ class RegisteredUserController extends Controller
         $mentors = User::whereHas('role', fn($q) => $q->where('role_name', 'mentor'))->get();
         $atasans = User::whereHas('role', fn($q) => $q->where('role_name', 'atasan'))->get();
         $companies = DB::table('company')->get();
-        $departments = DB::table('department')->get();
+        // NOTE: departments are loaded dynamically via AJAX based on selected company
+        $departments = collect();
         $roles = DB::table('role')->whereNotIn('role_name', ['admin'])->get();
         $positions = DB::table('position')
             ->whereNotIn('position_name', ['Super Admin'])
             ->get();
         $targetPositions = DB::table('position')
-            ->whereNotIn('position_name', ['Super Admin', 'Board of Directors'])
+            ->whereNotIn('position_name', ['Super Admin', 'panelis'])
             ->get();
 
         return view('auth.register', compact('mentors', 'atasans', 'companies', 'departments', 'roles', 'positions', 'targetPositions'));
+    }
+
+    /**
+     * Return departments filtered by company for AJAX request.
+     */
+    public function getDepartmentsByCompany(Request $request)
+    {
+        $companyId = $request->query('company_id');
+        if (!$companyId) {
+            return response()->json([]);
+        }
+        $departments = DB::table('department')
+            ->where('company_id', $companyId)
+            ->orderBy('nama_department')
+            ->get(['id', 'nama_department']);
+        return response()->json($departments);
     }
 
     /**
@@ -107,7 +124,8 @@ class RegisteredUserController extends Controller
             // Redirect ke halaman login dengan pesan sukses
             return redirect()->route('login')->with('status', 'Pendaftaran akun berhasil! Silakan masuk.');
 
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->withErrors(['email' => 'Proses pendaftaran gagal: ' . $e->getMessage()]);
         }

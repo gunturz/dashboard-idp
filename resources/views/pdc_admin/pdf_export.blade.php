@@ -191,8 +191,8 @@
         }
 
         .project-title-row {
-            background-color: #3498db !important;
-            color: white;
+            background-color: transparent !important;
+            color: #2c3e50;
         }
 
         .project-title-row td {
@@ -508,45 +508,85 @@
                 <!-- Project Improvement -->
                 <div class="section">
                     <div class="section-title">Project Improvement</div>
+                    @php
+                        $bodUsers = \App\Models\User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bod', 'bo_director', 'board_of_directors', 'board_of_director']))
+                            ->with('company')
+                            ->orderBy('nama')
+                            ->get();
+                        $totalRows = max(5, $bodUsers->count());
+                    @endphp
+
                     @forelse($talent->improvementProjects as $proj)
                         <table style="margin-bottom: 25px;">
-                            <!-- Baris Judul Project (Header Biru) -->
+                            <!-- Baris Judul Project -->
                             <tr class="project-title-row">
-                                <td colspan="4" style="text-align: center; text-transform: uppercase;">
-                                    {{ $proj->title }}
+                                <td colspan="5" style="vertical-align: top; text-align: left; height: 75px; padding: 12px;">
+                                    <div style="font-size: 10px; font-weight: normal; color: #7f8c8d; margin-bottom: -15px;">Judul :</div>
+                                    <div style="text-transform: uppercase; text-align: center; margin-top: 15px; font-weight: bold; width: 100%;">
+                                        {{ $proj->title }}
+                                    </div>
                                 </td>
                             </tr>
 
                             <!-- Header Kolom Review BOD -->
                             <tr class="bod-review-header">
-                                <th width="25%">Reviewer / Verifikator</th>
-                                <th width="20%">Status Proyek</th>
+                                <th width="5%" class="text-center">No</th>
+                                <th width="30%">Nama BOD</th>
+                                <th width="10%" class="text-center">Score</th>
                                 <th width="35%">Feedback</th>
-                                <th width="20%" class="text-center">Decision</th>
+                                <th width="20%" class="text-center">Status</th>
                             </tr>
 
                             <!-- Review -->
-                            <tr>
-                                <td>
-                                    @if($proj->verifier)
-                                        <strong>{{ $proj->verifier->nama }}</strong><br>
-                                        <small>{{ optional($proj->verifier->position)->position_name ?? '-' }}</small>
-                                    @else
-                                        <strong>Menunggu Reviewer</strong>
-                                    @endif
-                                </td>
-                                <td>{{ env('APP_NAME', 'PDC App') }}</td>
-                                <td>{{ $proj->feedback ?: 'Belum ada feedback dari reviewer.' }}</td>
-                                <td class="text-center">
-                                    @if(in_array($proj->status, ['Approved', 'Verified']))
-                                        <span class="decision-approved">✓ APPROVED</span>
-                                    @elseif($proj->status == 'Rejected')
-                                        <span class="decision-rejected">✗ REJECTED</span>
-                                    @else
-                                        <span class="decision-pending">⏳ PENDING</span>
-                                    @endif
-                                </td>
-                            </tr>
+                            @php
+                                $noBOD = 1;
+                                $hasReviewData = false;
+                            @endphp
+                            @for ($i = 0; $i < $bodUsers->count(); $i++)
+                                @php 
+                                    $bod = $bodUsers->get($i); 
+                                    $hasScoreThisBod = ($i === 0 && ($proj->verify_at || $proj->feedback || $proj->status === 'Verified'));
+                                @endphp
+                                
+                                @if ($hasScoreThisBod)
+                                    @php $hasReviewData = true; @endphp
+                                    <tr>
+                                        <td class="text-center">{{ $noBOD++ }}</td>
+                                        <td>
+                                            @if ($bod)
+                                                <strong>{{ $bod->nama }}</strong><br>
+                                                @if (optional($bod->company)->nama_company)
+                                                    <em style="font-size: 11px; color: #555;">{{ $bod->company->nama_company }}</em>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($proj->verify_at)
+                                                
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($proj->feedback)
+                                                {{ $proj->feedback }}
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($proj->status === 'Verified')
+                                                <span style="font-weight: bold; color: #1e293b; display: block;">Ready in 1 – 2 Years</span>
+                                                <em style="font-size: 10px; color: #64748b; display: block;">(Siap dengan pengembangan terarah)</em>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endfor
+
+                            @if (!$hasReviewData)
+                                <tr>
+                                    <td colspan="5" class="text-center" style="padding: 20px; color: #7f8c8d; font-style: italic;">
+                                        Belum ada BOD yang memberikan nilai.
+                                    </td>
+                                </tr>
+                            @endif
                         </table>
                     @empty
                         <p class="text-center" style="font-size: 12px; padding: 20px;">Belum ada Project Improvement yang

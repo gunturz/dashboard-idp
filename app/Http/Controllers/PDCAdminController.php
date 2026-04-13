@@ -497,7 +497,7 @@ class PDCAdminController extends Controller
                 optional($talent->promotion_plan)->status_promotion,
             ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
             );
-            $isReviewedByPanelis = optional($talent->improvementProjects->sortByDesc('updated_at')->first())->panelis_score !== null;
+            $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->exists();
 
             if (optional($talent->promotion_plan)->status_promotion === 'Approved Panelis') {
                 $sudahDinilai++;
@@ -713,8 +713,26 @@ class PDCAdminController extends Controller
 
     public function destroyCompany($id)
     {
-        Company::findOrFail($id)->delete();
-        return back()->with('success', 'Perusahaan berhasil dihapus.');
+        try {
+            // Cek apakah ada User yang masih terdaftar di Perusahaan ini
+            $userCount = User::where('company_id', $id)->count();
+            if ($userCount > 0) {
+                return back()->with('error', "Gagal menghapus! Terdapat {$userCount} akun pengguna (Talent/Admin/dll) di Perusahaan ini. Pastikan kosong sebelum dihapus.");
+            }
+
+            DB::transaction(function () use ($id) {
+                // Hapus semua departemen yang menginduk ke perusahaan ini
+                Department::where('company_id', $id)->delete();
+
+                // Hapus perusahaannya
+                Company::findOrFail($id)->delete();
+            });
+
+            return back()->with('success', 'Perusahaan beserta seluruh Departemen di dalamnya berhasil dihapus.');
+        }
+        catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
     }
 
     public function departmentManagement($companyId)
@@ -748,7 +766,25 @@ class PDCAdminController extends Controller
 
     public function destroyDepartment($id)
     {
-        Department::findOrFail($id)->delete();
-        return back()->with('success', 'Departemen berhasil dihapus.');
+        try {
+            // Cek apakah ada User yang masih terdaftar di Departemen ini
+            $userCount = User::where('department_id', $id)->count();
+            if ($userCount > 0) {
+                return back()->with('error', "Gagal menghapus! Terdapat {$userCount} akun pengguna di Departemen ini. Pindahkan atau hapus akun mereka terlebih dahulu.");
+            }
+
+            Department::findOrFail($id)->delete();
+            return back()->with('success', 'Departemen berhasil dihapus.');
+        }
+        catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
+    }
+
+    public function logbookDetail($id)
+    {
+        $user = auth()->user();
+        $activity = \App\Models\IDPActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
+        return view('pdc_admin.logbook-detail', compact('user', 'activity'));
     }
 }

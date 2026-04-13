@@ -30,6 +30,8 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class , 'store']);
 
+
+
     Route::get('forgot-password', [PasswordResetLinkController::class , 'create'])
         ->name('password.request');
 
@@ -43,7 +45,12 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
+// API: fetch departments filtered by company — accessible to both guest and logged-in users
+Route::get('register/departments', [\App\Http\Controllers\Auth\RegisteredUserController::class , 'getDepartmentsByCompany'])
+    ->name('register.departments_by_company');
+
 Route::middleware('auth')->group(function () {
+
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
@@ -116,6 +123,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.development_plan');
     Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
         ->name('pdc_admin.detail.talent');
+    Route::get('/pdc-admin/logbook-detail/{id}', [\App\Http\Controllers\PDCAdminController::class , 'logbookDetail'])
+        ->name('pdc_admin.logbook.detail');
     Route::get('/pdc-admin/finance-validation', [\App\Http\Controllers\PDCAdminController::class , 'financeValidation'])
         ->name('pdc_admin.finance_validation');
     Route::patch('/pdc-admin/finance-validation/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateFinanceValidation'])
@@ -226,6 +235,6 @@ Route::middleware('auth')->group(function () {
         ->name('panelis.notifikasi');
     Route::post('/panelis/notifikasi/mark-all-read', [\App\Http\Controllers\PanelisController::class , 'markAllNotificationsRead'])
         ->name('panelis.notifikasi.markAllRead');
-    Route::get('/panelis/profile', [\App\Http\Controllers\PanelisController::class , 'profile'])
+    Route::get('/panelis/profile', [\App\Http\Controllers\ProfileController::class , 'edit'])
         ->name('panelis.profile');
 });

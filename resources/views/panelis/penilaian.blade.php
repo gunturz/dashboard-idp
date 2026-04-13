@@ -384,7 +384,7 @@
             </div>
             <div class="info-row mt-2">
                 <label>Tanggal Penilaian</label>
-                <input type="date" id="tanggal-penilaian" value="{{ $project && $project->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($project->panelis_tanggal_penilaian)->format('Y-m-d') : now()->format('Y-m-d') }}">
+                <input type="date" id="tanggal-penilaian" value="{{ $existingAssessment && $existingAssessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($existingAssessment->panelis_tanggal_penilaian)->format('Y-m-d') : now()->format('Y-m-d') }}">
             </div>
         </div>
     </div>
@@ -491,7 +491,7 @@
 
     <div class="comment-box">
         <div class="comment-box-label">Komentar / Catatan Penilai:</div>
-        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent..">{{ $project->panelis_komentar ?? '' }}</textarea>
+        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent..">{{ $existingAssessment->panelis_komentar ?? '' }}</textarea>
     </div>
 
     {{-- Rekomendasi Panelis --}}
@@ -515,10 +515,10 @@
             // Mencari ID terpilih sebelumnya
             $rekomenSelectedId = null;
             $rekomenSelectedText = null;
-            if ($project && $project->panelis_rekomendasi) {
+            if ($existingAssessment && $existingAssessment->panelis_rekomendasi) {
                 // Find matching label, some records might have Ready in ... instead of exact label
                 foreach ($rekomenOptions as $opt) {
-                    if (str_contains($project->panelis_rekomendasi, $opt['label']) || $project->panelis_rekomendasi === $opt['label']) {
+                    if (str_contains($existingAssessment->panelis_rekomendasi, $opt['label']) || $existingAssessment->panelis_rekomendasi === $opt['label']) {
                         $rekomenSelectedId = $opt['id'];
                         $rekomenSelectedText = $opt['label'];
                         break;
@@ -552,7 +552,7 @@
     <x-slot name="scripts">
         <script>
             // scores[rowIndex] = selected score (1-5) or 0
-            const scores = {!! $project && $project->panelis_scores_json ? $project->panelis_scores_json : 'new Array(10).fill(0)' !!};
+            const scores = {!! $existingAssessment && $existingAssessment->panelis_scores_json ? json_encode($existingAssessment->panelis_scores_json) : 'new Array(10).fill(0)' !!};
             const MAX_SCORE = 50;
 
             document.addEventListener('DOMContentLoaded', function() {

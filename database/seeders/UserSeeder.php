@@ -60,23 +60,27 @@ class UserSeeder extends Seeder
     }
 
     /**
-     * Seed departments
+     * Seed departments — one set per company, keyed by first company for user seeding
      */
     private function seedDepartments(array $companyIds): array
     {
-        $departments = ['Human Resources', 'Operations', 'Finance'];
+        $departmentNames = ['Human Resources', 'Operations', 'Finance'];
         $deptIds = [];
 
-        // Just use the first company for all test departments
-        $companyId = reset($companyIds);
+        foreach ($companyIds as $companyName => $companyId) {
+            foreach ($departmentNames as $name) {
+                $insertedId = DB::table('department')->insertGetId([
+                    'nama_department' => $name,
+                    'company_id' => $companyId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
-        foreach ($departments as $name) {
-            $deptIds[$name] = DB::table('department')->insertGetId([
-                'nama_department' => $name,
-                'company_id' => $companyId,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+                // Key by name only for the FIRST company (so seedUsers can reference them)
+                if (!isset($deptIds[$name])) {
+                    $deptIds[$name] = $insertedId;
+                }
+            }
         }
 
         return $deptIds;

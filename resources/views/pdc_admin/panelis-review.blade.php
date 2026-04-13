@@ -402,7 +402,7 @@
                                                 optional($talent->promotion_plan)->status_promotion,
                                                 ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
                                             );
-                                            $isReviewedByPanelis = optional($talent->improvementProjects->sortByDesc('updated_at')->first())->panelis_score !== null;
+                                            $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->exists();
                                         @endphp
                                         @if ($isReviewedByPanelis)
                                             {{-- Panelis sudah menilai → selalu tampilkan Lihat Penilaian --}}

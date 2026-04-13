@@ -201,7 +201,8 @@
                 @for ($i = 0; $i < $totalRows; $i++)
                     @php 
                         $panelis = $panelisUsers->get($i); 
-                        $isAssessor = $latestProject && $panelis && $latestProject->panelis_dinilai_oleh == $panelis->id;
+                        $assessment = $panelis ? \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->where('panelis_id', $panelis->id)->first() : null;
+                        $isAssessor = $assessment !== null;
                     @endphp
                     <tr>
                         {{-- Penilai Panelis --}}
@@ -226,22 +227,22 @@
                         {{-- Skor --}}
                         <td>
                             @if ($isAssessor)
-                                <span class="font-bold text-[#1e293b]">{{ $latestProject->panelis_score }} / 50</span>
+                                <span class="font-bold text-[#1e293b]">{{ $assessment->panelis_score ?? 0 }} / 50</span>
                             @endif
                         </td>
 
                         {{-- Feedback --}}
                         <td>
                             @if ($isAssessor)
-                                {{ $latestProject->panelis_komentar }}
+                                {{ $assessment->panelis_komentar }}
                             @endif
                         </td>
 
                         {{-- Status --}}
                         <td class="text-left-cell">
-                            @if ($isAssessor && $latestProject->panelis_rekomendasi)
+                            @if ($isAssessor && $assessment->panelis_rekomendasi)
                                 @php
-                                    $rekomen = $latestProject->panelis_rekomendasi;
+                                    $rekomen = $assessment->panelis_rekomendasi;
                                     $desc = '';
                                     if(str_contains($rekomen, 'Ready Now')) $desc = 'Siap dipromosikan dalam < 6 bulan';
                                     elseif(str_contains($rekomen, '1 – 2')) $desc = 'Siap dengan pengembangan terarah';

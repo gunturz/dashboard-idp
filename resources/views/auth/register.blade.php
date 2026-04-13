@@ -177,7 +177,7 @@
         <div id="field-company" style="margin-bottom: 1rem; display: none;">
             <label for="company_id" class="form-label">Perusahaan</label>
             <div class="input-wrapper">
-                <select id="company_id" name="company_id" class="form-select">
+                <select id="company_id" name="company_id" class="form-select" onchange="loadDepartmentsByCompany(this.value)">
                     <option value="" disabled {{ old('company_id') ? '' : 'selected' }}>Pilih nama perusahaan
                     </option>
                     @foreach ($companies as $company)
@@ -204,7 +204,7 @@
             <label for="department_id" class="form-label">Departemen</label>
             <div class="input-wrapper">
                 <select id="department_id" name="department_id" class="form-select">
-                    <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>Pilih nama departemen
+                    <option value="" disabled selected>Pilih nama departemen
                     </option>
                     @foreach ($departments as $dept)
                         <option value="{{ $dept->id }}" {{ old('department_id') == $dept->id ? 'selected' : '' }}>
@@ -250,75 +250,6 @@
             @enderror
         </div>
 
-        <!-- {{-- ── POSISI YANG DITUJU (hanya tampil untuk Talent) ── --}}
-        <div id="field-jabatan-target"
-            style="margin-bottom: 1rem; display: none;">
-            <label for="jabatan_target" class="form-label">Posisi yang dituju</label>
-            <div class="input-wrapper">
-                <select id="jabatan_target" name="jabatan_target" class="form-select">
-                    <option value="" disabled {{ old('jabatan_target') ? '' : 'selected' }}>Pilih posisi yang dituju
-                    </option>
-                    @foreach ($targetPositions as $pos)
-                        <option value="{{ $pos->id }}" {{ old('jabatan_target') == $pos->id ? 'selected' : '' }}>
-                            {{ $pos->position_name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-
-        {{-- ── MENTOR (hanya tampil untuk Talent) ───────── --}}
-        <div id="field-mentor"
-            style="margin-bottom: 1rem; display: none;">
-            <label for="mentor_id" class="form-label">Mentor</label>
-            <div class="input-wrapper">
-                <select id="mentor_id" name="mentor_id" class="form-select">
-                    <option value="" disabled {{ old('mentor_id') ? '' : 'selected' }}>Pilih mentor</option>
-                    @foreach ($mentors as $mentor)
-                        <option value="{{ $mentor->id }}" {{ old('mentor_id') == $mentor->id ? 'selected' : '' }}>
-                            {{ $mentor->nama }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            @error('mentor_id')
-                <p class="error-message">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                    </svg>
-                    {{ $message }}
-                </p>
-            @enderror
-        </div>
-
-        {{-- ── ATASAN (hanya tampil untuk Talent) ───────── --}}
-        <div id="field-atasan"
-            style="margin-bottom: 1rem; display: none;">
-            <label for="atasan_id" class="form-label">Atasan</label>
-            <div class="input-wrapper">
-                <select id="atasan_id" name="atasan_id" class="form-select">
-                    <option value="" disabled {{ old('atasan_id') ? '' : 'selected' }}>Pilih atasan</option>
-                    @foreach ($atasans as $atasan)
-                        <option value="{{ $atasan->id }}" {{ old('atasan_id') == $atasan->id ? 'selected' : '' }}>
-                            {{ $atasan->nama }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            @error('atasan_id')
-                <p class="error-message">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" style="width:13px;height:13px;flex-shrink:0">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                    </svg>
-                    {{ $message }}
-                </p>
-            @enderror
-        </div> -->
-
         {{-- ── TOMBOL DAFTAR / NEXT ──────────────────────── --}}
         <button type="submit" id="register-btn" class="btn-login">
             <svg id="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -340,7 +271,8 @@
         function handleRoleChange(selectElement) {
             const roleName = (selectElement.options[selectElement.selectedIndex].dataset.rolename || '').toLowerCase();
             const isTalent = roleName === 'talent';
-            const isFinanceOrpanelis = (roleName === 'finance' || roleName === 'board_of_director');
+            const isFinance = roleName === 'finance';
+            const isPanelis = (roleName === 'panelis');
 
             // Fields khusus talent
             const talentFields = ['field-jabatan-target', 'field-mentor', 'field-atasan'];
@@ -354,13 +286,23 @@
             const deptEl = document.getElementById('field-department');
             const posEl = document.getElementById('field-position');
 
-            if (isFinanceOrpanelis) {
-                // Finance & panelis: hanya tampilkan Perusahaan
+            if (isFinance) {
+                // Finance: hanya tampilkan Perusahaan
                 if (companyEl) companyEl.style.display = 'block';
                 if (deptEl) deptEl.style.display = 'none';
                 if (posEl) posEl.style.display = 'none';
 
                 // Set required untuk company, remove untuk dept & position
+                document.getElementById('company_id').required = true;
+                document.getElementById('department_id').required = false;
+                document.getElementById('position_id').required = false;
+            } else if (isPanelis) {
+                // Panelis: tampilkan Perusahaan dan Posisi, sembunyikan Departemen
+                if (companyEl) companyEl.style.display = 'block';
+                if (deptEl) deptEl.style.display = 'none';
+                if (posEl) posEl.style.display = 'none';
+
+                // Set required untuk company dan position, remove untuk dept
                 document.getElementById('company_id').required = true;
                 document.getElementById('department_id').required = false;
                 document.getElementById('position_id').required = false;
@@ -388,11 +330,49 @@
             if (warningEl) warningEl.style.display = isTalent ? 'none' : 'block';
         }
 
+        // Load departments via AJAX when company changes
+        function loadDepartmentsByCompany(companyId) {
+            const deptSelect = document.getElementById('department_id');
+            deptSelect.innerHTML = '<option value="" disabled selected>Memuat...</option>';
+
+            if (!companyId) {
+                deptSelect.innerHTML = '<option value="" disabled selected>Pilih nama departemen</option>';
+                return;
+            }
+
+            fetch(`{{ route('register.departments_by_company') }}?company_id=${companyId}`)
+                .then(res => res.json())
+                .then(data => {
+                    deptSelect.innerHTML = '<option value="" disabled selected>Pilih nama departemen</option>';
+                    data.forEach(dept => {
+                        const opt = document.createElement('option');
+                        opt.value = dept.id;
+                        opt.textContent = dept.nama_department;
+                        // Re-select old value if validation failed and came back
+                        if (dept.id == '{{ old('department_id') }}') {
+                            opt.selected = true;
+                        }
+                        deptSelect.appendChild(opt);
+                    });
+                    if (data.length === 0) {
+                        deptSelect.innerHTML = '<option value="" disabled selected>Tidak ada departemen untuk perusahaan ini</option>';
+                    }
+                })
+                .catch(() => {
+                    deptSelect.innerHTML = '<option value="" disabled selected>Gagal memuat departemen</option>';
+                });
+        }
+
         // Trigger saat halaman dimuat (untuk kasus old() value setelah validasi error)
         document.addEventListener('DOMContentLoaded', function() {
             const roleSelect = document.getElementById('role_id');
             if (roleSelect && roleSelect.value) {
                 handleRoleChange(roleSelect);
+            }
+            // If company was previously selected (e.g. validation error), reload departments
+            const companySelect = document.getElementById('company_id');
+            if (companySelect && companySelect.value) {
+                loadDepartmentsByCompany(companySelect.value);
             }
         });
     </script>

@@ -99,6 +99,8 @@ Route::middleware('auth')->group(function () {
         ->name('talent.notifikasi.markAllRead');
     Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class , 'logbookDetail'])
         ->name('talent.logbook.detail');
+    Route::get('/talent/logbook-item/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'logbookItemDetail'])
+        ->name('talent.logbook.item');
     Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class , 'storeProject'])
         ->name('talent.project.store');
 
@@ -189,6 +191,8 @@ Route::middleware('auth')->group(function () {
         ->name('atasan.competency_atasan.page');
     Route::post('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'storeAssessment'])
         ->name('atasan.competency_atasan.store');
+    Route::get('/atasan/logbook-item/{id}', [\App\Http\Controllers\AtasanDashboardController::class , 'logbookItemDetail'])
+        ->name('atasan.logbook.detail');
 
     // Mentor Routes
     Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class , 'dashboard'])
@@ -201,6 +205,8 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.logbook');
     Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
         ->name('mentor.logbook.update_status');
+    Route::get('/mentor/logbook-item/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
+        ->name('mentor.logbook.detail');
 
     // Finance Routes
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])

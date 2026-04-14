@@ -3,6 +3,20 @@
     'user' => null,
 ])
 
+@php
+    $rawNotifAtasan = \App\Models\AppNotification::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+    $unreadNotifications = $rawNotifAtasan->where('is_read', false)->map(function ($n) {
+        return ['title' => $n->title, 'desc' => $n->desc, 'time' => $n->created_at->diffForHumans()];
+    });
+    $hasUnreadNotif = $unreadNotifications->count() > 0;
+
+    $nama = $user->nama ?? ($user->name ?? 'User');
+    $nameParts = explode(' ', $nama);
+    $initials = count($nameParts) >= 2 
+        ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) 
+        : strtoupper(substr($nameParts[0], 0, 2));
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -129,15 +143,17 @@
     <div class="navbar-outer">
         {{-- Logo + Title --}}
         <a href="{{ route('atasan.dashboard') }}" class="flex items-center gap-2 lg:gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-1.5 lg:p-2 rounded-[8px] lg:rounded-[10px] shadow-sm flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14">
+            <div class="bg-white p-1.5 lg:p-2 rounded-[8px] lg:rounded-[10px] shadow-sm flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14 hidden sm:flex">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
             </div>
             {{-- Desktop: Full title --}}
             <h1 class="text-white text-base lg:text-xl font-bold tracking-wide whitespace-nowrap hidden sm:block">
                 Individual Development Plan
             </h1>
-            {{-- Mobile: Short title --}}
-            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden block truncate max-w-[150px]">
+            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
+                <div class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
+                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
+                </div>
                 IDP Atasan
             </h1>
         </a>
@@ -160,80 +176,109 @@
 
             <!-- Mobile Dropdown Menu -->
             <div class="relative block lg:hidden" id="mobile-menu-wrapper">
-                <button class="flex items-center justify-center p-2 text-white hover:bg-white/10 rounded-[8px] transition-all cursor-pointer" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
                 <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
-                    <div class="px-5 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative">
+                    {{-- Dropdown Header --}}
+                    <div class="px-5 py-5 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
                         <div class="flex items-center gap-3.5">
-                            @php
-                                $nameParts = explode(' ', $user->nama ?? ($user->name ?? 'User'));
-                                $initials = count($nameParts) >= 2 ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) : strtoupper(substr($nameParts[0], 0, 2));
-                            @endphp
-                            <div class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#003865]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
+                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
                                 {{ $initials }}
                             </div>
-                            <div class="flex flex-col">
-                                <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? ($user->name ?? 'User') }}</span>
-                                <a href="{{ route('profile.edit') }}" class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
-                                    Lihat Profil
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </a>
+                            <div class="overflow-hidden">
+                                <p class="text-[14px] font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}</p>
+                                <p class="text-[11px] text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
+                                <span class="inline-block mt-1.5 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Atasan</span>
                             </div>
                         </div>
                     </div>
-
-                    <ul class="py-3 px-3">
-                        <li class="mb-1">
-                            <a href="{{ route('atasan.dashboard') }}" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('atasan.dashboard') ? 'active' : '' }}">
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="mb-1">
-                            <a href="{{ route('atasan.monitoring') }}" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('atasan.monitoring') ? 'active' : '' }}">
-                                Monitoring
-                            </a>
-                        </li>
-                        <li class="border-t border-gray-100 mt-2 pt-2">
-                            @if(Auth::user() && Auth::user()->roles->count() > 1)
-                                <a href="{{ route('role.select') }}" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors font-medium mb-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    
+                    <div class="py-2.5">
+                        {{-- Quick Action: Notifikasi --}}
+                        <div class="px-3 mb-1">
+                            <a href="{{ route('atasan.notifikasi') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
-                                    Ganti Role
+                                    @if($hasUnreadNotif)
+                                        <span class="absolute top-1 right-1 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
+                                    @endif
+                                </div>
+                                <span class="font-medium">Notifikasi</span>
+                                @if($hasUnreadNotif)
+                                    <span class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
+                                @endif
+                            </a>
+                        </div>
+
+                        <div class="mx-4 border-t border-gray-100 my-1.5"></div>
+
+                        {{-- Section: Dashboard Menu --}}
+                        <div class="px-3 space-y-0.5">
+                            <a href="{{ route('atasan.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('atasan.dashboard') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Dashboard</span>
+                            </a>
+                            <a href="{{ route('atasan.monitoring') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('atasan.monitoring') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Monitoring</span>
+                            </a>
+                        </div>
+
+                        <div class="mx-4 border-t border-gray-100 my-1.5"></div>
+
+                        {{-- Section: Account --}}
+                        <div class="px-3">
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Lihat Profil</span>
+                            </a>
+                            @if(Auth::user()->roles->count() > 1)
+                                <a href="{{ route('role.select') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-medium">Ganti Role</span>
                                 </a>
                             @endif
-                            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                            <form method="POST" action="{{ route('logout') }}" class="m-0">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors font-medium">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Keluar
+                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-medium">Keluar</span>
                                 </button>
                             </form>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
             <div class="relative hidden lg:block" id="bell-wrapper">
-                @php
-                    $rawNotif = \App\Models\AppNotification::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
-                    $unreadNotifications = $rawNotif->where('is_read', false)->map(function ($n) {
-                        return [
-                            'title' => $n->title,
-                            'desc'  => $n->desc,
-                            'time'  => $n->created_at->diffForHumans(),
-                        ];
-                    });
-                    $hasUnreadNotif = $unreadNotifications->count() > 0;
-                @endphp
                 <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
                     class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
@@ -305,17 +350,12 @@
                 <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
                     class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     
-                    @php
-                        $namaLengkap = $user->nama ?? ($user->name ?? 'User');
-                        $partsProfile = explode(' ', trim($namaLengkap));
-                        $initialsProfile = strtoupper(substr($partsProfile[0], 0, 1) . (isset($partsProfile[1]) ? substr($partsProfile[1], 0, 1) : ''));
-                    @endphp
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                        {{ $initialsProfile }}
+                        {{ $initials }}
                     </div>
 
                     <div class="hidden lg:block text-left">
-                        <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">{{ $namaLengkap }}</p>
+                        <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">{{ $nama }}</p>
                         <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Atasan</p>
                     </div>
 
@@ -328,10 +368,10 @@
                     <div class="px-4 py-4 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
                         <div class="flex items-center gap-3">
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                                {{ $initialsProfile }}
+                                {{ $initials }}
                             </div>
                             <div class="overflow-hidden">
-                                <p class="text-sm font-bold text-white truncate">{{ $namaLengkap }}</p>
+                                <p class="text-sm font-bold text-white truncate">{{ $nama }}</p>
                                 <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
                                 <span class="inline-block mt-1 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">Atasan</span>
                             </div>
@@ -383,7 +423,7 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main class="px-8 py-8 w-full">
+    <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 lg:mx-6 lg:mt-6 rounded-xl shadow-sm border border-gray-100">
         {{ $slot }}
     </main>
 

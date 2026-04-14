@@ -3,6 +3,19 @@
     'user' => null,
 ])
 
+@php
+    $unreadNotifications = isset($notifications) && $notifications
+        ? (is_array($notifications) ? collect($notifications)->where('is_read', false) : $notifications->where('is_read', false))
+        : collect();
+    $hasUnreadNotif = $unreadNotifications->count() > 0;
+
+    $nama = $user->nama ?? ($user->name ?? 'Mentor');
+    $nameParts = explode(' ', $nama);
+    $initials = count($nameParts) >= 2 
+        ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) 
+        : strtoupper(substr($nameParts[0], 0, 2));
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -170,9 +183,9 @@
                 <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
                     Development Plan</h1>
             </div>
-            <h1 class="text-white font-bold text-base sm:hidden flex items-center gap-2">
-                <div class="flex items-center justify-center w-8 h-8 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
-                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-5 h-5 object-contain">
+            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
+                <div class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
+                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
                 </div>
                 IDP Mentor
             </h1>
@@ -194,89 +207,110 @@
 
             {{-- ═══ Mobile Hamburger Menu (visible only on mobile <1024px) ═══ --}}
             <div class="relative block lg:hidden" id="mobile-menu-wrapper">
-                <button class="flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 transition-colors mr-1 cursor-pointer" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
                 <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
-                    <!-- Header Component adapted from image -->
-                    <div class="px-5 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative">
+                    {{-- Dropdown Header --}}
+                    <div class="px-5 py-5 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
                         <div class="flex items-center gap-3.5">
-                            @if ($user->foto ?? false)
-                                <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="w-[52px] h-[52px] rounded-full object-cover outline outline-1 outline-[#003865]/10 ring-[3px] ring-white shadow-sm">
-                            @else
-                                @php
-                                    $nameParts = explode(' ', $user->nama ?? $user->name ?? '-');
-                                    $initials = count($nameParts) >= 2 ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) : strtoupper(substr($nameParts[0], 0, 2));
-                                @endphp
-                                <div class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#003865]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
-                                    {{ $initials }}
-                                </div>
-                            @endif
-                            <div class="flex flex-col">
-                                <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? $user->name ?? '-' }}</span>
-                                <a href="{{ route('profile.edit') }}" class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
-                                    Lihat Profil
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </a>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
+                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                {{ $initials }}
+                            </div>
+                            <div class="overflow-hidden">
+                                <p class="text-[14px] font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}</p>
+                                <p class="text-[11px] text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
+                                <span class="inline-block mt-1.5 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Mentor</span>
                             </div>
                         </div>
                     </div>
                     
-                    <ul class="py-3 px-3">
-                        <li class="mb-1">
-                            <a href="{{ route('mentor.notifikasi') }}" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium">
-                                <span>Notifikasi</span>
-                                @if (isset($notifications) && collect($notifications)->where('is_read', false)->count() > 0)
-                                    <span class="bg-[#f97316] text-white text-[12px] font-bold px-3.5 py-1 rounded-[12px] shadow-sm tracking-wide">{{ collect($notifications)->where('is_read', false)->count() }}</span>
+                    <div class="py-2.5">
+                        {{-- Quick Action: Notifikasi --}}
+                        <div class="px-3 mb-1">
+                            <a href="{{ route('mentor.notifikasi') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                    </svg>
+                                    @if($hasUnreadNotif)
+                                        <span class="absolute top-1 right-1 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
+                                    @endif
+                                </div>
+                                <span class="font-medium">Notifikasi</span>
+                                @if($hasUnreadNotif)
+                                    <span class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
                                 @endif
                             </a>
-                        </li>
-                        <li class="mb-1">
-                            <a href="{{ route('mentor.dashboard') }}" class="nav-menu-link flex items-center w-full px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('mentor.dashboard') ? 'active' : '' }}">
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="mb-1">
-                            <a href="{{ route('mentor.logbook') }}" class="nav-menu-link flex items-center w-full px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('mentor.logbook') ? 'active' : '' }}">
-                                Logbook
-                            </a>
-                        </li>
-                        <li class="border-t border-gray-100 mt-2 pt-2">
-                            @if(Auth::user() && Auth::user()->roles->count() > 1)
-                                <a href="{{ route('role.select') }}" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors font-medium mb-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                        </div>
+
+                        <div class="mx-4 border-t border-gray-100 my-1.5"></div>
+
+                        {{-- Section: Dashboard Menu --}}
+                        <div class="px-3 space-y-0.5">
+                            <a href="{{ route('mentor.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('mentor.dashboard') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
-                                    Ganti Role
+                                </div>
+                                <span class="font-medium">Dashboard</span>
+                            </a>
+                            <a href="{{ route('mentor.logbook') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('mentor.logbook') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Logbook</span>
+                            </a>
+                        </div>
+
+                        <div class="mx-4 border-t border-gray-100 my-1.5"></div>
+
+                        {{-- Section: Account --}}
+                        <div class="px-3">
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Lihat Profil</span>
+                            </a>
+                            @if(Auth::user()->roles->count() > 1)
+                                <a href="{{ route('role.select') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-medium">Ganti Role</span>
                                 </a>
                             @endif
-                            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                            <form method="POST" action="{{ route('logout') }}" class="m-0">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors font-medium">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Keluar
+                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors group">
+                                    <div class="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-medium">Keluar</span>
                                 </button>
                             </form>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
             {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
             <div class="relative hidden lg:block" id="bell-wrapper">
-                @php
-                    $unreadNotifications = isset($notifications) && $notifications
-                        ? (is_array($notifications) ? collect($notifications)->where('is_read', false) : $notifications->where('is_read', false))
-                        : collect();
-                    $hasUnreadNotif = $unreadNotifications->count() > 0;
-                @endphp
                 <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
                     class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
@@ -347,13 +381,6 @@
 
             {{-- ═══ Desktop: Profile (hidden on mobile) ═══ --}}
             <div class="relative hidden lg:block" id="profile-wrapper">
-                @php
-                    $nama = $user->nama ?? ($user->name ?? 'Mentor');
-                    $parts = explode(' ', trim($nama));
-                    $initials = strtoupper(
-                        substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''),
-                    );
-                @endphp
                 <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
                     class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
@@ -436,7 +463,7 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main class="p-8 w-full pt-12 flex-grow">
+    <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 lg:mx-6 lg:mt-6 rounded-xl shadow-sm border border-gray-100">
         {{ $slot }}
     </main>
 

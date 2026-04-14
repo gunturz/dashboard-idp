@@ -19,23 +19,49 @@
 
             /* ══ MOBILE ONLY — does NOT affect desktop ══ */
             @media (max-width: 767px) {
+                .custom-scrollbar { max-width: calc(100vw - 1.5rem); }
                 .logbook-container { padding: 16px !important; border-radius: 12px !important; }
                 .talent-selector-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
                 .talent-selector-row select { font-size: 14px !important; }
                 .profile-row { gap: 12px !important; margin-bottom: 24px !important; }
                 .profile-row img { width: 56px !important; height: 56px !important; }
                 .profile-row h3 { font-size: 18px !important; }
-                .section-badge { padding: 6px 20px !important; font-size: 13px !important; }
-                .table-card { border-radius: 10px !important; }
-                .table-responsive { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
-                .table-responsive table { min-width: 800px !important; }
-                .table-responsive th, .table-responsive td { padding: 10px 12px !important; font-size: 12px !important; }
-                .btn-action { padding: 8px 16px !important; }
+            }
+
+            .log-table-container {
+                background: white;
+                border-radius: 16px;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+            .pdc-log-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .pdc-log-table th {
+                padding: 24px 32px;
+                background: #f8fafc;
+                font-weight: 800;
+                color: #475569;
+                font-size: 0.95rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+            .pdc-log-table td {
+                padding: 32px;
+                color: #64748b;
+                font-size: 0.9rem;
+                border-top: 1px solid #f1f5f9;
+            }
+            .pdc-log-table tr:hover {
+                background: #fafafa;
             }
         </style>
     </x-slot>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 logbook-container">
+    <div class="logbook-container w-full">
         {{-- Talent Selector --}}
         <div class="mb-6 flex items-center gap-6 talent-selector-row">
             <label class="text-[15px] font-bold text-gray-700 whitespace-nowrap">Talent</label>
@@ -72,31 +98,34 @@
             </div>
         </div>
 
+        {{-- Tab Navigation --}}
+        <div class="flex gap-2 p-1.5 bg-gray-100 rounded-full w-fit mb-8 shadow-inner overflow-x-auto">
+            <button id="tab-exposure" onclick="switchTab('exposure')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 bg-[#2e3746] text-white shadow-sm whitespace-nowrap">Exposure</button>
+            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Mentoring</button>
+            <button id="tab-learning" onclick="switchTab('learning')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Learning</button>
+        </div>
+
         {{-- Exposure Section --}}
-        <div class="mb-12">
-            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px] section-badge">
-                Exposure
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-card">
-                <div class="overflow-x-auto custom-scrollbar pb-2 table-responsive">
-                    <table class="w-full text-[13px] text-left table-fixed">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Mentor</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pengiriman/Update</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pelaksanaan</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse($exposureData as $data)
-                            <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="px-5 py-3 font-medium text-gray-700 border-r border-gray-100 text-center">{{ $data['mentor'] }}</td>
-                                <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
-                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
-                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap">
+        <div id="panel-exposure" class="mb-12">
+            <div class="log-table-container custom-scrollbar overflow-x-auto">
+                <table class="pdc-log-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Mentor</th>
+                            <th>Tema</th>
+                            <th>Tanggal Pengiriman/Update</th>
+                            <th>Tanggal Pelaksanaan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($exposureData as $data)
+                        <tr>
+                            <td class="text-center font-medium">{{ $data['mentor'] }}</td>
+                            <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                            <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                            <td class="text-center whitespace-nowrap">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
+                            <td class="text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -146,30 +175,26 @@
         </div>
 
         {{-- Mentoring Section --}}
-        <div class="mb-12">
-            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px] section-badge">
-                Mentoring
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-card">
-                <div class="overflow-x-auto custom-scrollbar pb-2 table-responsive">
-                    <table class="w-full text-[13px] text-left table-fixed">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[220px]">Mentor</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pengiriman/Update</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pelaksanaan</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse($mentoringData as $data)
-                            <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="px-5 py-3 font-medium text-gray-700 border-r border-gray-100 text-center">{{ $data['mentor'] }}</td>
-                                <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
-                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
-                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap">
+        <div id="panel-mentoring" class="mb-12 hidden">
+            <div class="log-table-container custom-scrollbar overflow-x-auto">
+                <table class="pdc-log-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Mentor</th>
+                            <th>Tema</th>
+                            <th>Tanggal Pengiriman/Update</th>
+                            <th>Tanggal Pelaksanaan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($mentoringData as $data)
+                        <tr>
+                            <td class="text-center font-medium">{{ $data['mentor'] }}</td>
+                            <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                            <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                            <td class="text-center whitespace-nowrap">{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
+                            <td class="text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -219,30 +244,26 @@
         </div>
 
         {{-- Learning Section --}}
-        <div class="mb-12">
-            <div class="bg-[#2e3746] text-white font-semibold py-2 px-8 rounded-full inline-block mb-4 shadow-sm text-[15px] section-badge">
-                Learning
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden table-card">
-                <div class="overflow-x-auto custom-scrollbar pb-2 table-responsive">
-                    <table class="w-full text-[13px] text-left table-fixed">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center min-w-[330px]">Sumber</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tema</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pengiriman/Update</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Tanggal Pelaksanaan</th>
-                                <th class="px-5 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse($learningData as $data)
-                            <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="px-5 py-3 font-medium text-gray-700 border-r border-gray-100 text-center">{{ $data['sumber'] ?: '-' }}</td>
-                                <td class="px-5 py-3 text-gray-700 font-semibold border-r border-gray-100 text-center" style="min-width: 15rem">{{ \Illuminate\Support\Str::limit($data['tema'], 35) ?: '-' }}</td>
-                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                <td class="px-5 py-3 text-gray-500 border-r border-gray-100 text-center whitespace-nowrap">{{ $data['tanggal'] ? date('d M Y', strtotime($data['tanggal'])) : '-' }}</td>
-                                <td class="px-5 py-3 text-center align-middle whitespace-nowrap">
+        <div id="panel-learning" class="mb-12 hidden">
+            <div class="log-table-container custom-scrollbar overflow-x-auto">
+                <table class="pdc-log-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Sumber</th>
+                            <th>Tema</th>
+                            <th>Tanggal Pengiriman/Update</th>
+                            <th>Tanggal Pelaksanaan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($learningData as $data)
+                        <tr>
+                            <td class="text-center font-medium">{{ $data['sumber'] ?: '-' }}</td>
+                            <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'], 35) ?: '-' }}</td>
+                            <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                            <td class="text-center whitespace-nowrap">{{ $data['tanggal'] ? date('d M Y', strtotime($data['tanggal'])) : '-' }}</td>
+                            <td class="text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -388,6 +409,32 @@
         </div>
     </div>
     <script>
+        function switchTab(tab) {
+            ['exposure', 'mentoring', 'learning'].forEach(t => {
+                const panel = document.getElementById('panel-' + t);
+                if (panel) panel.classList.add('hidden');
+                const btn = document.getElementById('tab-' + t);
+                if (btn) {
+                    btn.classList.remove('bg-[#2e3746]', 'text-white', 'shadow-sm');
+                    btn.classList.add('text-gray-500', 'hover:text-gray-900');
+                }
+            });
+            const activePanel = document.getElementById('panel-' + tab);
+            if (activePanel) activePanel.classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-' + tab);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-500', 'hover:text-gray-900');
+                activeBtn.classList.add('bg-[#2e3746]', 'text-white', 'shadow-sm');
+            }
+            history.replaceState(null, null, '#' + tab);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const hash = window.location.hash.replace('#', '');
+            if (['exposure', 'mentoring', 'learning'].includes(hash)) {
+                switchTab(hash);
+            }
+        });
         function openLogbookDetail(btn) {
             const htmlContent = btn.nextElementSibling.innerHTML;
             document.getElementById('detailModalBody').innerHTML = htmlContent;

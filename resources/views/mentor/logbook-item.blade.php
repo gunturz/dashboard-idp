@@ -32,12 +32,12 @@
                 </div>
 
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tanggal Pengiriman/Update</span>
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tgl. Pengiriman/Update</span>
                     <div class="text-[15px] text-gray-800 font-bold">{{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->format('d F Y') : '-' }}</div>
                 </div>
 
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tanggal Pelaksanaan</span>
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tgl. Pelaksanaan</span>
                     <div class="text-[15px] text-gray-800 font-bold">{{ \Carbon\Carbon::parse($activity->activity_date)->format('d F Y') }}</div>
                 </div>
 

@@ -116,39 +116,7 @@
             transform: translateY(-110%);
         }
 
-        /* ── Navbar notification badge ── */
-        .notif-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 9px;
-            height: 9px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 1.5px solid white;
-        }
-
-        /* ── Icon buttons (bell & user) ── */
-        .nav-icon-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #2e3746;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.15s;
-            position: relative;
-        }
-
-        .nav-icon-btn:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
+        /* ── Navbar padding ── */
 
         /* ── Dropdown panel ── */
         .dropdown-panel {
@@ -170,20 +138,22 @@
 
         /* ── Nav menu links (active bold) ── */
         .nav-menu-link {
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 500;
-            transition: color 0.2s, font-weight 0.2s;
+            transition: color 0.2s, border-color 0.2s;
         }
 
         .nav-menu-link.active {
-            color: #ffffff;
-            font-weight: 700;
+            color: #ffffff !important;
+            border-bottom-width: 2px !important;
+            border-bottom-color: #14b8a6 !important;
+            border-bottom-style: solid !important;
         }
 
         /* Mobile Dropdown Nav Links Overlay */
         .dropdown-panel .nav-menu-link {
             color: #475569;
             font-weight: 500;
+            border-bottom: none;
+            padding-bottom: 0.75rem;
         }
         .dropdown-panel .nav-menu-link:hover {
             color: #005ba1;
@@ -193,6 +163,7 @@
             color: #005ba1;
             font-weight: 700;
             background-color: #f8fafc;
+            border-bottom: none;
         }
 
         /* ── Mobile profile collapsible ── */

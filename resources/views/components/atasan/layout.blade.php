@@ -51,38 +51,7 @@
             transform: translateY(-110%);
         }
 
-        .nav-icon-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #2e3746;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.15s;
-            position: relative;
-        }
-
-        .nav-icon-btn:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 9px;
-            height: 9px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 1.5px solid white;
-        }
-
+        /* ── Dropdown panel ── */
         .dropdown-panel {
             transform-origin: top right;
             animation: dropIn 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -93,28 +62,19 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .nav-link-item {
-            padding: 0 16px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-            text-decoration: none;
+        /* ── Nav menu links (active bold) ── */
+        .nav-menu-link {
+            transition: color 0.2s, border-color 0.2s;
         }
 
-        .nav-link-item:hover {
-            color: white;
+        .nav-menu-link.active {
+            color: #ffffff !important;
+            border-bottom-width: 2px !important;
+            border-bottom-color: #14b8a6 !important;
+            border-bottom-style: solid !important;
         }
 
-        .nav-link-item.active {
-            color: white;
-            font-weight: 700;
-        }
-
-        /* ── Mobile Dropdown Nav Links Overlay ── */
+        /* Mobile Dropdown Nav Links Overlay */
         .dropdown-panel .mobile-nav-link {
             color: #475569;
             font-weight: 500;
@@ -182,21 +142,23 @@
             </h1>
         </a>
 
-        {{-- Desktop Nav Links (hidden on mobile) --}}
-        <div class="hidden lg:flex items-center ml-auto h-full gap-6 mr-6">
+        {{-- Desktop Nav Links --}}
+        <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
             <a href="{{ route('atasan.dashboard') }}"
-               class="nav-link-item {{ request()->routeIs('atasan.dashboard') ? 'active' : '' }}">
+                class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150
+                {{ request()->routeIs('atasan.dashboard') ? 'active' : '' }}">
                 Dashboard
             </a>
             <a href="{{ route('atasan.monitoring') }}"
-               class="nav-link-item {{ request()->routeIs('atasan.monitoring') ? 'active' : '' }}">
+                class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150
+                {{ request()->routeIs('atasan.monitoring') ? 'active' : '' }}">
                 Monitoring
             </a>
         </div>
 
         <div class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto">
 
-            {{-- ═══ Mobile Hamburger Menu (visible only on mobile <1024px) ═══ --}}
+            <!-- Mobile Dropdown Menu -->
             <div class="relative block lg:hidden" id="mobile-menu-wrapper">
                 <button class="flex items-center justify-center p-2 text-white hover:bg-white/10 rounded-[8px] transition-all cursor-pointer" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -204,18 +166,17 @@
                     </svg>
                 </button>
                 <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
-                    {{-- User profile header --}}
                     <div class="px-5 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative">
                         <div class="flex items-center gap-3.5">
                             @php
-                                $nameParts = explode(' ', $user->nama ?? $user->name);
+                                $nameParts = explode(' ', $user->nama ?? ($user->name ?? 'User'));
                                 $initials = count($nameParts) >= 2 ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) : strtoupper(substr($nameParts[0], 0, 2));
                             @endphp
                             <div class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#003865]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
                                 {{ $initials }}
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? $user->name }}</span>
+                                <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? ($user->name ?? 'User') }}</span>
                                 <a href="{{ route('profile.edit') }}" class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
                                     Lihat Profil
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -226,15 +187,14 @@
                         </div>
                     </div>
 
-                    {{-- Navigation menu items --}}
                     <ul class="py-3 px-3">
                         <li class="mb-1">
-                            <a href="{{ route('atasan.dashboard') }}" class="mobile-nav-link flex items-center w-full px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('atasan.dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('atasan.dashboard') }}" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('atasan.dashboard') ? 'active' : '' }}">
                                 Dashboard
                             </a>
                         </li>
                         <li class="mb-1">
-                            <a href="{{ route('atasan.monitoring') }}" class="mobile-nav-link flex items-center w-full px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('atasan.monitoring') ? 'active' : '' }}">
+                            <a href="{{ route('atasan.monitoring') }}" class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap {{ request()->routeIs('atasan.monitoring') ? 'active' : '' }}">
                                 Monitoring
                             </a>
                         </li>
@@ -262,78 +222,157 @@
             </div>
 
             {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
-            @php
-                // Logika notifikasi (sesuaikan dengan backend sistem notifikasi yang digunakan)
-                $hasUnreadNotif = isset($notifications) && count($notifications) > 0;
-            @endphp
             <div class="relative hidden lg:block" id="bell-wrapper">
-                <button class="nav-icon-btn" aria-label="Notifikasi" id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                @php
+                    $rawNotif = \App\Models\AppNotification::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+                    $unreadNotifications = $rawNotif->where('is_read', false)->map(function ($n) {
+                        return [
+                            'title' => $n->title,
+                            'desc'  => $n->desc,
+                            'time'  => $n->created_at->diffForHumans(),
+                        ];
+                    });
+                    $hasUnreadNotif = $unreadNotifications->count() > 0;
+                @endphp
+                <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
+                    class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                     @if($hasUnreadNotif)
-                        <span class="notif-badge"></span>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
+                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                        </span>
                     @endif
                 </button>
-                <div id="bell-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[320px] bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-5 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
-                        <span class="text-[15px] font-extrabold text-[#2e3746]">Notifikasi</span>
+
+                <div id="bell-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                    <div class="px-5 py-3.5 bg-gradient-to-r from-[#2e3746] to-[#38475a] flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                                <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                            </svg>
+                            <span class="text-sm font-bold text-white">Notifikasi</span>
+                        </div>
                         <form action="{{ route('atasan.notifikasi.markAllRead') }}" method="POST" class="m-0">
                             @csrf
-                            <button type="submit" class="text-[13px] font-bold text-[#14b8a6] hover:text-[#0d9488] transition-colors">Tandai semua</button>
+                            <button type="submit" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
+                                Tandai semua
+                            </button>
                         </form>
                     </div>
-                    
+
                     @if($hasUnreadNotif)
-                        <div class="p-6 text-center text-[#14b8a6] text-[13px] font-medium">
-                            Ada notifikasi baru
+                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
+                            @foreach($unreadNotifications->take(3) as $notif)
+                                <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer" onclick="window.location='{{ route('atasan.notifikasi') }}'">
+                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}</p>
+                                        <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? $notif['time'] !!}</p>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="flex flex-col items-center py-10 text-center px-4">
+                            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi</p>
+                            <p class="text-gray-400 text-xs mt-1">Anda sudah up to date!</p>
                         </div>
                     @endif
 
-                    <div class="px-5 py-3.5 bg-white border-t border-gray-100 text-center">
-                        <a href="{{ route('atasan.notifikasi') }}" class="text-[13px] font-bold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua notifikasi</a>
+                    <div class="px-5 py-3 border-t border-gray-100 text-center">
+                        <a href="{{ route('atasan.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
+                            Lihat semua notifikasi →
+                        </a>
                     </div>
                 </div>
             </div>
 
             {{-- ═══ Desktop: Profile (hidden on mobile) ═══ --}}
             <div class="relative hidden lg:block" id="profile-wrapper">
-                <button class="nav-icon-btn" aria-label="Profil" id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
+                    class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
+                    
+                    @php
+                        $namaLengkap = $user->nama ?? ($user->name ?? 'User');
+                        $partsProfile = explode(' ', trim($namaLengkap));
+                        $initialsProfile = strtoupper(substr($partsProfile[0], 0, 1) . (isset($partsProfile[1]) ? substr($partsProfile[1], 0, 1) : ''));
+                    @endphp
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                        {{ $initialsProfile }}
+                    </div>
+
+                    <div class="hidden lg:block text-left">
+                        <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">{{ $namaLengkap }}</p>
+                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Atasan</p>
+                    </div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/60 hidden lg:block flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div id="profile-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
-                        <p class="text-sm font-bold text-gray-800 truncate">{{ $user->nama ?? $user->name }}</p>
-                        <p class="text-xs text-gray-400 mt-0.5 truncate">{{ $user->email }}</p>
+
+                <div id="profile-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                    <div class="px-4 py-4 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                {{ $initialsProfile }}
+                            </div>
+                            <div class="overflow-hidden">
+                                <p class="text-sm font-bold text-white truncate">{{ $namaLengkap }}</p>
+                                <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
+                                <span class="inline-block mt-1 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">Atasan</span>
+                            </div>
+                        </div>
                     </div>
-                    <ul class="py-1">
+
+                    <ul class="py-1.5">
                         <li>
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                                </svg>
-                                Lihat Profil
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <span>Lihat Profil</span>
                             </a>
                         </li>
-                        <li class="border-t border-gray-100">
-                            @if(Auth::user() && Auth::user()->roles->count() > 1)
-                                <a href="{{ route('role.select') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-[#005ba1] hover:bg-gray-50 transition-colors border-b border-gray-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#005ba1]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                    </svg>
-                                    Ganti Role
+                        <li class="mx-3 border-t border-gray-100 my-1"></li>
+                        @if(Auth::user()->roles->count() > 1)
+                            <li>
+                                <a href="{{ route('role.select') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
+                                    <div class="w-7 h-7 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                        </svg>
+                                    </div>
+                                    <span>Ganti Role</span>
                                 </a>
-                            @endif
+                            </li>
+                            <li class="mx-3 border-t border-gray-100 my-1"></li>
+                        @endif
+                        <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Keluar
+                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors group">
+                                    <div class="w-7 h-7 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-red-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                    </div>
+                                    <span>Keluar</span>
                                 </button>
                             </form>
                         </li>

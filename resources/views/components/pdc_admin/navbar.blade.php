@@ -43,6 +43,17 @@
 
             {{-- Notification Bell --}}
             <div class="relative" id="bell-wrapper">
+                @php
+                    $rawNotif = \App\Models\AppNotification::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+                    $unreadNotifications = $rawNotif->where('is_read', false)->map(function ($n) {
+                        return [
+                            'title' => $n->title,
+                            'desc'  => $n->desc,
+                            'time'  => $n->created_at->diffForHumans(),
+                        ];
+                    });
+                    $hasUnreadNotif = $unreadNotifications->count() > 0;
+                @endphp
                 <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
                     class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20"
@@ -52,9 +63,11 @@
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                     {{-- Pulse Badge --}}
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                        <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
-                    </span>
+                    @if($hasUnreadNotif)
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
+                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                        </span>
+                    @endif
                 </button>
 
                 {{-- Bell Dropdown --}}
@@ -71,20 +84,49 @@
                             </svg>
                             <span class="text-sm font-bold text-white">Notifikasi</span>
                         </div>
-                        <span
-                            class="text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">0
-                            baru</span>
+                        <form action="{{ route('pdc_admin.notifikasi.markAllRead') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
+                                Tandai semua
+                            </button>
+                        </form>
                     </div>
-                    <div class="flex flex-col items-center py-10 text-center px-4">
-                        <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
+
+                    @if($hasUnreadNotif)
+                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
+                            @foreach($unreadNotifications->take(3) as $notif)
+                                <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                                    onclick="window.location='{{ route('pdc_admin.notifikasi') }}'">
+                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}</p>
+                                        <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? $notif['time'] !!}</p>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="flex flex-col items-center py-10 text-center px-4">
+                            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi</p>
+                            <p class="text-gray-400 text-xs mt-1">Anda sudah up to date!</p>
                         </div>
-                        <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi</p>
-                        <p class="text-gray-400 text-xs mt-1">Anda sudah up to date!</p>
+                    @endif
+
+                    <div class="px-5 py-3 border-t border-gray-100 text-center">
+                        <a href="{{ route('pdc_admin.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
+                            Lihat semua notifikasi →
+                        </a>
                     </div>
                 </div>
             </div>

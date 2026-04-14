@@ -130,7 +130,9 @@
         </div>
 
         {{-- ── Right: Actions ── --}}
-        <div class="flex items-center gap-2 pl-4 border-l border-white/20 flex-shrink-0">
+        <div class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0">
+            
+            <div class="hidden"></div>
 
             {{-- Notification Bell --}}
             @php
@@ -328,7 +330,7 @@
 
     {{-- MAIN CONTENT --}}
     <div class="flex-1">
-        <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 md:mx-auto max-w-7xl lg:mt-8 rounded-xl shadow-sm border border-gray-100">
+        <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 md:mx-auto w-full lg:mt-8 rounded-xl shadow-sm border border-gray-100">
             {{ $slot }}
         </main>
     </div>

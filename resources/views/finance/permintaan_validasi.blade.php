@@ -83,14 +83,36 @@
                                     Tidak Ada File
                                 </button>
                                 @endif
-                                <div class="flex gap-3">
-                                    <button type="submit" name="status" value="Verified" class="w-1/2 bg-[#34a853] hover:bg-green-600 text-white font-bold text-[13px] py-1.5 rounded-lg transition-colors shadow-sm h-full flex items-center justify-center">
-                                        Approved
-                                    </button>
-                                    <button type="submit" name="status" value="Rejected" class="w-1/2 bg-[#ea4335] hover:bg-red-600 text-white font-bold text-[13px] py-1.5 rounded-lg transition-colors shadow-sm h-full flex items-center justify-center">
-                                        Rejected
-                                    </button>
-                                </div>
+                                @php
+                                    $finDecision = null;
+                                    if ($project->finance_feedback) {
+                                        if (str_starts_with($project->finance_feedback, '[Approved]')) $finDecision = 'Approved';
+                                        elseif (str_starts_with($project->finance_feedback, '[Rejected]')) $finDecision = 'Rejected';
+                                    }
+                                @endphp
+                                @if($finDecision)
+                                    {{-- Sudah diputuskan, tampilkan badge & tombol ubah --}}
+                                    <div class="w-full flex flex-col gap-2">
+                                        <div class="w-full py-2 px-3 rounded-lg border-2 {{ $finDecision === 'Approved' ? 'border-green-400 bg-green-50 text-green-700' : 'border-red-400 bg-red-50 text-red-700' }} text-[13px] font-bold flex items-center justify-center gap-2">
+                                            @if($finDecision === 'Approved')
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                            @else
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                                            @endif
+                                            Keputusan: {{ $finDecision }}
+                                        </div>
+                                        <p class="text-[11px] text-gray-400 text-center italic">Keputusan akhir ditentukan oleh PDC Admin.</p>
+                                    </div>
+                                @else
+                                    <div class="flex gap-3">
+                                        <button type="submit" name="finance_decision" value="Approved" class="w-1/2 bg-[#34a853] hover:bg-green-600 text-white font-bold text-[13px] py-1.5 rounded-lg transition-colors shadow-sm h-full flex items-center justify-center">
+                                            Approved
+                                        </button>
+                                        <button type="submit" name="finance_decision" value="Rejected" class="w-1/2 bg-[#ea4335] hover:bg-red-600 text-white font-bold text-[13px] py-1.5 rounded-lg transition-colors shadow-sm h-full flex items-center justify-center">
+                                            Rejected
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
                         </form>
                     </div>

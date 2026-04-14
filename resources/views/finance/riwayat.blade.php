@@ -46,44 +46,53 @@
 
                     {{-- Badge & Toggle --}}
                     <div class="flex items-center justify-between md:justify-end gap-6 w-full md:w-[25%] mt-2 md:mt-0">
-                        @if($project->status == 'Verified')
+                        @php
+                            $finBadgeDecision = null;
+                            if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) $finBadgeDecision = 'Approved';
+                            elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) $finBadgeDecision = 'Rejected';
+                            // Feedback teks tanpa prefix
+                            $cleanFeedback = $project->finance_feedback
+                                ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback)
+                                : null;
+                        @endphp
+                        @if($finBadgeDecision === 'Approved')
                         <span class="px-5 py-1.5 rounded-full border-2 border-green-500 text-green-600 text-[13px] font-bold shadow-sm whitespace-nowrap">
-                            Approved
+                            ✓ Approved
                         </span>
-                        @elseif($project->status == 'Rejected')
+                        @elseif($finBadgeDecision === 'Rejected')
                         <span class="px-5 py-1.5 rounded-full border-2 border-red-500 text-red-600 text-[13px] font-bold shadow-sm whitespace-nowrap">
-                            Rejected
+                            ✕ Rejected
                         </span>
                         @else
                         <span class="px-5 py-1.5 rounded-full border-2 border-gray-400 text-gray-600 text-[13px] font-bold shadow-sm whitespace-nowrap">
-                            {{ $project->status }}
+                            Menunggu
                         </span>
                         @endif
-                        <svg id="riwayat-icon-{{ $project->id }}" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600 transition-transform duration-300 flex-shrink-0 {{ $index === 0 ? 'transform rotate-180' : '' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg id="riwayat-icon-{{ $project->id }}" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
                 </div>
 
                 {{-- Card Content (Expandable) --}}
-                <div id="riwayat-content-{{ $project->id }}" class="px-4 md:px-6 border-t border-gray-100 bg-white transition-all overflow-hidden {{ $index === 0 ? 'pb-6 pt-5 max-h-[1000px] opacity-100' : 'pb-0 pt-0 max-h-0 opacity-0' }}">
-                    <div class="flex flex-col lg:flex-row gap-5 lg:gap-8 items-start {{ $index === 0 ? '' : 'pb-6 pt-5' }}">
+                <div id="riwayat-content-{{ $project->id }}" class="px-4 md:px-6 border-t border-gray-100 bg-white transition-all overflow-hidden pb-0 pt-0 max-h-0 opacity-0">
+                    <div class="flex flex-col lg:flex-row gap-5 lg:gap-8 items-start pb-6 pt-5">
                         <div class="w-full flex flex-col lg:flex-row gap-5 lg:gap-8 items-start">
                             <div class="w-full lg:w-auto flex-grow flex flex-col gap-4">
                                 {{-- Catatan dari Admin --}}
                                 @if($project->feedback)
                                 <div>
-                                    <div class="font-bold text-gray-700 text-[13px] mb-1">Catatan dari Admin</div>
+                                    <div class="font-bold text-gray-700 text-[13px] mb-1">Catatan dari Admin PDC</div>
                                     <div class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-[13px] text-gray-700 min-h-[50px]">
                                         {{ $project->feedback }}
                                     </div>
                                 </div>
                                 @endif
-                                {{-- Feedback Finance --}}
+                                {{-- Feedback Finance (tanpa prefix) --}}
                                 <div>
-                                    <div class="font-bold text-gray-700 text-[13px] mb-1">Feedback</div>
+                                    <div class="font-bold text-gray-700 text-[13px] mb-1">Feedback Finance</div>
                                     <div class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-[13px] text-gray-700 min-h-[50px]">
-                                        {{ $project->finance_feedback ?? '-' }}
+                                        {{ $cleanFeedback ?: '-' }}
                                     </div>
                                 </div>
                             </div>
@@ -122,12 +131,12 @@
             if (content.classList.contains('max-h-0')) {
                 // Expanding
                 content.classList.remove('max-h-0', 'opacity-0', 'pb-0', 'pt-0');
-                content.classList.add('max-h-[1000px]', 'opacity-100', 'pb-6');
+                content.classList.add('max-h-[1000px]', 'opacity-100', 'pb-6', 'pt-5');
                 icon.classList.add('rotate-180');
             } else {
                 // Collapsing
                 content.classList.add('max-h-0', 'opacity-0', 'pb-0', 'pt-0');
-                content.classList.remove('max-h-[1000px]', 'opacity-100', 'pb-6');
+                content.classList.remove('max-h-[1000px]', 'opacity-100', 'pb-6', 'pt-5');
                 icon.classList.remove('rotate-180');
             }
         }

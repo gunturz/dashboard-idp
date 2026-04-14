@@ -631,38 +631,53 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
+        // Specific order as requested by user
+        $desiredOrder = [
+            'PT. Tiga Serangkai Inti Corpora',
+            'PT. Tiga Serangkai Pustaka Mandiri',
+            'PT. Wangsa Jatra Lestari',
+            'PT. K33 Distribusi',
+            'Assalam Hypermarket'
+        ];
+
+        $companies = Company::all()->sortBy(function($company) use ($desiredOrder) {
+            $pos = array_search($company->nama_company, $desiredOrder);
+            return $pos !== false ? $pos : 999;
+        });
+
         // Fetch all talents with promotion plans
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'Talent');
         })
             ->whereHas('promotion_plan')
-            ->with(['company', 'department', 'position', 'promotion_plan.targetPosition'])
+            ->with(['company', 'department', 'position', 'promotion_plan.targetPosition', 'improvementProjects'])
             ->get();
 
-        // Group by target_position_id + company_id
+        // Initialize groupedData with ALL companies
         $groupedData = collect();
-        foreach ($talents as $talent) {
-            $pp = $talent->promotion_plan;
-            if (!$pp)
-                continue;
-
-            $key = ($pp->target_position_id ?? 0) . '_' . ($talent->company_id ?? 0);
-
-            if (!$groupedData->has($key)) {
-                $groupedData[$key] = [
-                    'targetPosition' => $pp->targetPosition,
-                    'company' => $talent->company,
-                    'talents' => collect(),
-                ];
-            }
-
-            $groupedData[$key]['talents']->push($talent);
+        foreach ($companies as $comp) {
+            $groupedData[$comp->id] = [
+                'company' => $comp,
+                'talents' => collect(),
+            ];
         }
 
-        $companies = Company::orderBy('nama_company')->get();
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
+        // Populate talents into the initialized groups
+        foreach ($talents as $talent) {
+            $company_id = $talent->company_id;
+            if ($company_id && $groupedData->has($company_id)) {
+                $groupedData[$company_id]['talents']->push($talent);
+            }
+        }
 
-        return view('pdc_admin.export', compact('user', 'groupedData', 'companies', 'positions'));
+        // Attach panelis review status manually to avoid huge queries
+        $panelisAssessedTalentIds = \App\Models\PanelisAssessment::whereIn('user_id_talent', $talents->pluck('id'))->pluck('user_id_talent')->toArray();
+
+        foreach ($talents as $talent) {
+            $talent->is_reviewed_by_panelis = in_array($talent->id, $panelisAssessedTalentIds);
+        }
+
+        return view('pdc_admin.export', compact('user', 'groupedData', 'companies'));
     }
 
     public function exportPdf($talent_id)

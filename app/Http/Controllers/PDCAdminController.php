@@ -280,7 +280,9 @@ class PDCAdminController extends Controller
         $approved = $projects->where('status', 'Verified')->count();
         $rejected = $projects->where('status', 'Rejected')->count();
 
-        return view('pdc_admin.finance-validation', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected'));
+        $financeUsers = \App\Models\User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->get();
+
+        return view('pdc_admin.finance-validation', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected', 'financeUsers'));
     }
 
     public function updateFinanceValidation(Request $request, $id)
@@ -288,16 +290,29 @@ class PDCAdminController extends Controller
         $request->validate(['status' => 'required|in:Verified,Rejected']);
 
         $project = ImprovementProject::findOrFail($id);
-        $project->update([
+
+        $updateData = [
             'status' => $request->status,
             'verify_by' => auth()->id(),
             'verify_at' => now(),
-        ]);
+        ];
+
+        // Simpan feedback PDC Admin jika diisi (tambahkan ke kolom 'feedback' agar tidak menghapus 'finance_feedback')
+        if ($request->filled('pdc_feedback')) {
+            $existing = $project->feedback ? $project->feedback . "\n\n" : "";
+            $updateData['feedback'] = $existing . "[Admin PDC: " . $request->pdc_feedback . "]";
+        }
+
+        $project->update($updateData);
+
+        $feedbackNote = $request->filled('pdc_feedback')
+            ? ' Catatan: <em>' . e($request->pdc_feedback) . '</em>'
+            : '';
 
         $this->addNotificationToUser(
             $project->user_id_talent,
             'Project ' . $request->status,
-            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh Admin.',
+            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh PDC Admin.' . $feedbackNote,
             $request->status == 'Verified' ? 'success' : 'warning'
         );
 
@@ -529,9 +544,16 @@ class PDCAdminController extends Controller
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $departments = Department::orderBy('nama_department')->get();
 
+        $panelisUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director']))
+            ->with(['company', 'position'])
+            ->orderBy('nama')
+            ->get();
+        $panelisCompanies = $panelisUsers->pluck('company')->unique('id')->filter()->values();
+
         return view('pdc_admin.panelis-review', compact(
             'user', 'groupedData', 'companies', 'positions', 'departments',
-            'totalProjectImprovement', 'belumDinilai', 'sudahDinilai'
+            'totalProjectImprovement', 'belumDinilai', 'sudahDinilai',
+            'panelisUsers', 'panelisCompanies'
         ));
     }
 
@@ -580,6 +602,19 @@ class PDCAdminController extends Controller
         if (!$plan->is_locked) {
             return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke Panelis.');
         }
+
+        $request->validate([
+            'panelis_ids' => 'required|array|min:1',
+            'panelis_ids.*' => 'exists:users,id'
+        ]);
+
+        foreach ($request->panelis_ids as $panelis_id) {
+            \App\Models\PanelisAssessment::updateOrCreate([
+                'user_id_talent' => $talent_id,
+                'panelis_id' => $panelis_id,
+            ]);
+        }
+
         $plan->update(['status_promotion' => 'Pending Panelis']);
         return back()->with('success', 'Berhasil dikirim ke Panelis untuk review.');
     }

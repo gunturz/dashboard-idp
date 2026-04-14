@@ -1025,27 +1025,7 @@
                             <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
                         </div>
                     </div>
-                    @php
-                        $latestProject = $talent->improvementProjects->first();
-                        $projId = $latestProject ? $latestProject->id : 'null';
-                        $projTitle = $latestProject ? addslashes($latestProject->title) : '';
-                        $projFileUrl = $latestProject ? asset('storage/' . $latestProject->document_path) : '';
-                        $isSentToFinance = $latestProject && !empty($latestProject->feedback);
-                        $projStatus = $latestProject ? $latestProject->status : null;
-                        $alreadyActed = in_array($projStatus, ['Verified', 'Rejected']);
-                    @endphp
-                    <div class="flex items-center gap-3">
-                        @if($isSentToFinance)
-                            <button class="btn-audit opacity-50 cursor-not-allowed" disabled>Validasi Finance</button>
-                        @else
-                            <button class="btn-audit" onclick="openFinanceModal('{{ $talent->nama }}', '{{ optional($talent->department)->nama_department }}', '{{ optional($talent->promotion_plan->targetPosition)->position_name }}', '{{ optional($talent->company)->nama_company }}', {{ $projId }}, '{{ $projTitle }}', '{{ $projFileUrl }}')">Validasi Finance</button>
-                        @endif
-                        @if($alreadyActed)
-                            <button class="btn-sudah-dipilih" disabled>Sudah Dipilih</button>
-                        @else
-                            <button class="btn-pilih-aksi" onclick="openUpdateStatusModal('{{ $talent->nama }}', {{ $projId }})">Pilih Aksi</button>
-                        @endif
-                    </div>
+
                 </div>
 
                 <table class="pdc-custom-table">

@@ -541,18 +541,7 @@
     <main id="main-content" class="p-8 {{ $hideSidebar ? '!ml-0' : '' }}">
         
         {{-- GLOBAL FLASH MESSAGES --}}
-        @if (session('success'))
-            <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl shadow-sm relative" role="alert">
-                <span class="block sm:inline">{!! session('success') !!}</span>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl shadow-sm relative" role="alert">
-                <strong class="font-bold">Galat!</strong>
-                <span class="block sm:inline">{!! session('error') !!}</span>
-            </div>
-        @endif
+        {{-- Flash messages are handled inside individual views, e.g., panelis-review.blade.php --}}
 
         {{ $slot }}
     </main>

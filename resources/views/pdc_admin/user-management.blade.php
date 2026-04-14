@@ -422,6 +422,7 @@
                 let tbody = container.querySelector('.um-table tbody');
                 let rows = tbody.querySelectorAll('tr.user-row');
                 let hasVisibleRow = false;
+                let visibleRows = [];
 
                 rows.forEach(row => {
                     let name = row.querySelector('.col-name')?.innerText.toLowerCase() || "";

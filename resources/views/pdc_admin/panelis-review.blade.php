@@ -239,6 +239,38 @@
             .status-rejected::before {
                 background: #ef4444;
             }
+
+            /* ── Send Panelis Modal ── */
+            #panelisWizardModal {
+                display: none;
+            }
+            .modal-step {
+                display: none;
+            }
+            .modal-step.active {
+                display: block;
+            }
+            .checkbox-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 14px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.2s;
+                margin-bottom: 8px;
+            }
+            .checkbox-item:hover {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+            }
+            .checkbox-item input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+                accent-color: #14b8a6;
+            }
         </style>
     </x-slot>
 
@@ -402,7 +434,7 @@
                                                 optional($talent->promotion_plan)->status_promotion,
                                                 ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
                                             );
-                                            $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->exists();
+                                            $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->whereNotNull('panelis_score')->exists();
                                         @endphp
                                         @if ($isReviewedByPanelis)
                                             {{-- Panelis sudah menilai → selalu tampilkan Lihat Penilaian --}}
@@ -432,15 +464,12 @@
                                             </button>
                                         @else
                                             {{-- Belum dikirim ke Panelis --}}
-                                            <form method="POST" action="{{ route('pdc_admin.panelis_review.send', $talent->id) }}">
-                                                @csrf
-                                                <button type="submit" class="btn-kirim-panelis {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                    </svg>
-                                                    Kirim Panelis
-                                                </button>
-                                            </form>
+                                            <button type="button" onclick="openPanelisModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}')" class="btn-kirim-panelis {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                                </svg>
+                                                Kirim Panelis
+                                            </button>
                                         @endif
                                     </td>
                                 </tr>
@@ -462,6 +491,88 @@
         </div>
     @endforelse
 
+    {{-- ── Kirim Panelis Wizard Modal ── --}}
+    <div id="panelisWizardModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            {{-- Background overlay --}}
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closePanelisModal()"></div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            {{-- Modal panel --}}
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle w-full" style="max-width: 460px;">
+                <form id="wizardForm" method="POST" action="">
+                    @csrf
+                    
+                    {{-- HEADER --}}
+                    <div class="bg-white px-6 pt-6 pb-4 flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Kirim Panelis</h3>
+                            <p class="text-sm text-gray-600 mt-0.5" id="wizardSubtitle">Pilih Perusahaan</p>
+                        </div>
+                        <button type="button" class="text-gray-400 hover:text-gray-600 transition-colors mt-1" onclick="closePanelisModal()">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- BODY --}}
+                    <div class="px-6 pb-2" style="min-height: 280px;">
+                        
+                        {{-- STEP 1: Pilih Perusahaan --}}
+                        <div id="step-1" class="modal-step active">
+                            <div class="flex justify-end mb-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="selectAllCompanies" onchange="toggleAllCompanies(this)" class="w-4 h-4 rounded border-gray-400 text-teal-600 focus:ring-teal-500">
+                                    <span class="text-sm text-gray-600">Pilih semua</span>
+                                </label>
+                            </div>
+                            <div class="space-y-2 max-h-72 overflow-y-auto">
+                                @forelse($companies as $comp)
+                                    <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(:checked)]:border-teal-500 [&:has(:checked)]:bg-teal-50">
+                                        <input type="checkbox" name="selected_companies[]" value="{{ $comp->id }}" class="w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 company-checkbox" onchange="updateCompanySelectAll()">
+                                        <span class="text-sm font-medium text-gray-800">{{ $comp->nama_company }}</span>
+                                    </label>
+                                @empty
+                                    <div class="text-sm text-gray-500 italic">Belum ada data perusahaan.</div>
+                                @endforelse
+                            </div>
+                            <div id="step-1-error" class="hidden text-red-500 text-xs mt-2">* Pilih minimal satu perusahaan.</div>
+                        </div>
+
+                        {{-- STEP 2: Pilih Panelis per Perusahaan (Generated by JS) --}}
+                        <div id="step-2-container"></div>
+
+                        {{-- STEP 3: Confirmation --}}
+                        <div id="step-final" class="modal-step">
+                            <div id="final-panelis-list" class="space-y-3 max-h-72 overflow-y-auto pr-1">
+                                {{-- JS populated --}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- FOOTER --}}
+                    <div class="px-6 py-4 flex justify-end gap-3">
+                        <button type="button" id="btn-cancel" class="px-5 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 focus:outline-none transition-colors" onclick="closePanelisModal()">
+                            Batal
+                        </button>
+                        <button type="button" id="btn-prev" class="hidden px-5 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 focus:outline-none transition-colors" onclick="prevStep()">
+                            Sebelumnya
+                        </button>
+                        <button type="button" id="btn-next" class="px-6 py-2 text-sm font-bold text-white bg-teal-500 rounded-xl hover:bg-teal-600 focus:outline-none transition-colors" onclick="nextStep()">
+                            Next
+                        </button>
+                        <button type="submit" id="btn-submit" class="hidden px-6 py-2 text-sm font-bold text-white bg-teal-500 rounded-xl hover:bg-teal-600 focus:outline-none transition-colors">
+                            Kirim
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <x-slot name="scripts">
         <script>
             // Submit search on Enter
@@ -471,6 +582,218 @@
                     document.getElementById('panelis-filter-form').submit();
                 }
             });
+
+            // ── Modal Logic ──
+            const panelisUsers = @json($panelisUsers);
+            const panelisCompanies = @json($companies);
+            
+            let currentStep = 0; // 0 = company select, 1...n = per company select, n+1 = final
+            let selectedCompanyIds = [];
+            let totalSteps = 0;
+
+            const modal = document.getElementById('panelisWizardModal');
+            const step1 = document.getElementById('step-1');
+            const step2Container = document.getElementById('step-2-container');
+            const stepFinal = document.getElementById('step-final');
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnSubmit = document.getElementById('btn-submit');
+            const btnCancel = document.getElementById('btn-cancel');
+            const wizardForm = document.getElementById('wizardForm');
+
+            function openPanelisModal(talentId, talentName) {
+                wizardForm.action = `/pdc-admin/panelis-review/send/${talentId}`;
+                
+                // Reset form
+                wizardForm.reset();
+                document.querySelectorAll('.company-checkbox').forEach(cb => cb.checked = false);
+                document.getElementById('selectAllCompanies').checked = false;
+                step2Container.innerHTML = '';
+                document.getElementById('final-panelis-list').innerHTML = '';
+                document.getElementById('step-1-error').classList.add('hidden');
+                
+                currentStep = 0;
+                updateView();
+                modal.style.display = 'block';
+            }
+
+            function closePanelisModal() {
+                modal.style.display = 'none';
+            }
+
+            function updateView() {
+                // Hide all steps
+                step1.classList.remove('active');
+                stepFinal.classList.remove('active');
+                document.querySelectorAll('.company-step').forEach(el => el.classList.remove('active'));
+
+                let subtitle = document.getElementById('wizardSubtitle');
+
+                // Show step
+                if (currentStep === 0) {
+                    subtitle.innerText = 'Pilih Perusahaan';
+                    step1.classList.add('active');
+                    btnPrev.classList.add('hidden');
+                    btnNext.classList.remove('hidden');
+                    btnSubmit.classList.add('hidden');
+                    btnCancel.classList.remove('hidden');
+                } else if (currentStep > 0 && currentStep <= selectedCompanyIds.length) {
+                    subtitle.innerText = 'Pilih Panelis';
+                    document.getElementById(`step-comp-${selectedCompanyIds[currentStep - 1]}`).classList.add('active');
+                    btnPrev.classList.remove('hidden');
+                    btnNext.classList.remove('hidden');
+                    btnSubmit.classList.add('hidden');
+                    btnCancel.classList.add('hidden');
+                } else if (currentStep === selectedCompanyIds.length + 1) {
+                    subtitle.innerText = 'Konfirmasi Panelis';
+                    populateFinalSummary();
+                    stepFinal.classList.add('active');
+                    btnPrev.classList.remove('hidden');
+                    btnNext.classList.add('hidden');
+                    btnSubmit.classList.remove('hidden');
+                    btnCancel.classList.add('hidden');
+                }
+            }
+
+            function nextStep() {
+                if (currentStep === 0) {
+                    // Validation: MUST select at least one company
+                    const checkedComps = document.querySelectorAll('.company-checkbox:checked');
+                    if (checkedComps.length === 0) {
+                        document.getElementById('step-1-error').classList.remove('hidden');
+                        return;
+                    }
+                    document.getElementById('step-1-error').classList.add('hidden');
+                    
+                    selectedCompanyIds = Array.from(checkedComps).map(cb => cb.value);
+                    generateCompanySteps();
+                }
+                currentStep++;
+                updateView();
+            }
+
+            function prevStep() {
+                currentStep--;
+                updateView();
+            }
+
+            function toggleAllCompanies(selectAllCb) {
+                const checkboxes = document.querySelectorAll('.company-checkbox');
+                checkboxes.forEach(cb => cb.checked = selectAllCb.checked);
+            }
+
+            function updateCompanySelectAll() {
+                const all = document.querySelectorAll('.company-checkbox');
+                const checked = document.querySelectorAll('.company-checkbox:checked');
+                document.getElementById('selectAllCompanies').checked = (all.length > 0 && all.length === checked.length);
+            }
+
+            function generateCompanySteps() {
+                // Preserve previous selections if revisiting, otherwise rebuild container
+                const currentSelections = getSelectedPanelisIds();
+                step2Container.innerHTML = '';
+
+                selectedCompanyIds.forEach((compId, index) => {
+                    const companyName = panelisCompanies.find(c => c.id == compId)?.nama_company || 'Unknown Company';
+                    const compPanelis = panelisUsers.filter(u => u.company_id == compId);
+                    
+                    let htmlList = '';
+                    let selectAllHtml = '';
+                    if (compPanelis.length === 0) {
+                        htmlList = `<div class="text-sm text-gray-500 italic px-2">Tidak ada panelis di perusahaan ini.</div>`;
+                    } else {
+                        selectAllHtml = `
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="selectAllPanelis_${compId}" onchange="toggleAllPanelis(this, ${compId})" class="w-4 h-4 rounded border-gray-400 text-teal-600 focus:ring-teal-500">
+                                <span class="text-sm text-gray-600">Pilih semua</span>
+                            </label>
+                        `;
+                        compPanelis.forEach(panelis => {
+                            const isChecked = currentSelections.includes(panelis.id.toString()) ? 'checked' : '';
+                            const roleName = panelis.position?.position_name || 'Panelis';
+                            htmlList += `
+                                <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(:checked)]:border-teal-500 [&:has(:checked)]:bg-teal-50">
+                                    <input type="checkbox" name="panelis_ids[]" value="${panelis.id}" class="w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 panelis-checkbox-${compId} panelis-checkbox-global" ${isChecked} onchange="updatePanelisSelectAll(${compId})">
+                                    <span class="text-sm font-medium text-gray-800">${panelis.nama} - ${roleName}</span>
+                                </label>
+                            `;
+                        });
+                    }
+
+                    const stepHtml = `
+                        <div id="step-comp-${compId}" class="modal-step company-step">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-base font-bold text-gray-900">${companyName}</h4>
+                                <div>${selectAllHtml}</div>
+                            </div>
+                            <div class="space-y-2 max-h-72 overflow-y-auto">
+                                ${htmlList}
+                            </div>
+                        </div>
+                    `;
+                    step2Container.insertAdjacentHTML('beforeend', stepHtml);
+                });
+            }
+
+            function toggleAllPanelis(selectAllCb, compId) {
+                const checkboxes = document.querySelectorAll(`.panelis-checkbox-${compId}`);
+                checkboxes.forEach(cb => cb.checked = selectAllCb.checked);
+            }
+
+            function updatePanelisSelectAll(compId) {
+                const all = document.querySelectorAll(`.panelis-checkbox-${compId}`);
+                const checked = document.querySelectorAll(`.panelis-checkbox-${compId}:checked`);
+                const sa = document.getElementById(`selectAllPanelis_${compId}`);
+                if(sa) sa.checked = (all.length > 0 && all.length === checked.length);
+            }
+
+            function getSelectedPanelisIds() {
+                const checkboxes = document.querySelectorAll('.panelis-checkbox-global:checked');
+                return Array.from(checkboxes).map(cb => cb.value);
+            }
+
+            function populateFinalSummary() {
+                const container = document.getElementById('final-panelis-list');
+                container.innerHTML = '';
+                
+                const selectedIds = getSelectedPanelisIds();
+                if (selectedIds.length === 0) {
+                    container.innerHTML = '<div class="text-gray-500 italic">Tidak ada panelis yang dipilih. Data tidak dapat dikirim.</div>';
+                    btnSubmit.disabled = true;
+                    btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    btnSubmit.disabled = false;
+                    btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+                    
+                    selectedCompanyIds.forEach(compId => {
+                        const compPanelis = panelisUsers.filter(u => u.company_id == compId && selectedIds.includes(u.id.toString()));
+                        if (compPanelis.length > 0) {
+                            const companyName = panelisCompanies.find(c => c.id == compId)?.nama_company || 'Unknown Company';
+                            
+                            let listHtml = '';
+                            compPanelis.forEach(p => {
+                                const roleName = p.position?.position_name || 'Panelis';
+                                listHtml += `
+                                    <div class="px-4 py-2.5 border-b border-gray-100 last:border-0">
+                                        <span class="text-sm font-medium text-gray-800">${p.nama} - ${roleName}</span>
+                                    </div>
+                                `;
+                            });
+                            
+                            container.innerHTML += `
+                                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                                    <div class="bg-gray-50 border-b border-gray-200 px-4 py-3">
+                                        <h5 class="text-sm font-bold text-gray-900">${companyName}</h5>
+                                    </div>
+                                    <div class="bg-white">
+                                        ${listHtml}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            }
         </script>
     </x-slot>
 </x-pdc_admin.layout>

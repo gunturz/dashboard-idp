@@ -423,6 +423,7 @@ class TalentDashboardController extends Controller
                     'id' => $act->id,
                     'mentor' => $act->verifier ? $act->verifier->nama : '-',
                     'tema' => $act->theme,
+                    'tanggal_update' => $act->updated_at,
                     'tanggal' => $act->activity_date,
                     'lokasi' => $act->location,
                     'aktivitas' => $act->activity,
@@ -437,6 +438,7 @@ class TalentDashboardController extends Controller
                     'id' => $act->id,
                     'mentor' => $act->verifier ? $act->verifier->nama : '-',
                     'tema' => $act->theme,
+                    'tanggal_update' => $act->updated_at,
                     'tanggal' => $act->activity_date,
                     'lokasi' => $act->location,
                     'deskripsi' => $act->description,
@@ -451,6 +453,7 @@ class TalentDashboardController extends Controller
                     'id' => $act->id,
                     'sumber' => $act->activity,
                     'tema' => $act->theme,
+                    'tanggal_update' => $act->updated_at,
                     'tanggal' => $act->activity_date,
                     'platform' => $act->platform,
                     'file_paths' => $docPaths,
@@ -466,6 +469,20 @@ class TalentDashboardController extends Controller
     }
 
 
+
+    public function logbookItemDetail($id)
+    {
+        $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
+        $notifications = $this->getNotifications();
+        
+        $activity = \App\Models\IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
+
+        if ($activity->user_id_talent !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('talent.logbook-item', compact('user', 'activity', 'notifications'));
+    }
 
     public function editIdpMonitoring($id)
     {

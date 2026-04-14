@@ -156,6 +156,7 @@ class MentorDashboardController extends Controller
                             'id' => $act->id,
                             'mentor' => $act->verifier ? $act->verifier->nama : '-',
                             'tema' => $act->theme,
+                            'tanggal_update' => $act->updated_at,
                             'tanggal' => $act->activity_date,
                             'lokasi' => $act->location,
                             'aktivitas' => $act->activity,
@@ -170,6 +171,7 @@ class MentorDashboardController extends Controller
                             'id' => $act->id,
                             'mentor' => $act->verifier ? $act->verifier->nama : '-',
                             'tema' => $act->theme,
+                            'tanggal_update' => $act->updated_at,
                             'tanggal' => $act->activity_date,
                             'lokasi' => $act->location,
                             'deskripsi' => $act->description,
@@ -184,6 +186,7 @@ class MentorDashboardController extends Controller
                             'id' => $act->id,
                             'sumber' => $act->activity,
                             'tema' => $act->theme,
+                            'tanggal_update' => $act->updated_at,
                             'tanggal' => $act->activity_date,
                             'platform' => $act->platform,
                             'file_paths' => $docPaths,
@@ -230,5 +233,12 @@ class MentorDashboardController extends Controller
         );
 
         return back()->with('success', 'Status aktivitas berhasil diperbarui menjadi ' . $request->status . '.');
+    }
+
+    public function logbookItemDetail($id)
+    {
+        $user = Auth::user();
+        $activity = IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
+        return view('mentor.logbook-item', compact('user', 'activity'));
     }
 }

@@ -280,7 +280,9 @@ class PDCAdminController extends Controller
         $approved = $projects->where('status', 'Verified')->count();
         $rejected = $projects->where('status', 'Rejected')->count();
 
-        return view('pdc_admin.finance-validation', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected'));
+        $financeUsers = \App\Models\User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->get();
+
+        return view('pdc_admin.finance-validation', compact('user', 'projects', 'total', 'pending', 'approved', 'rejected', 'financeUsers'));
     }
 
     public function updateFinanceValidation(Request $request, $id)
@@ -288,16 +290,29 @@ class PDCAdminController extends Controller
         $request->validate(['status' => 'required|in:Verified,Rejected']);
 
         $project = ImprovementProject::findOrFail($id);
-        $project->update([
+
+        $updateData = [
             'status' => $request->status,
             'verify_by' => auth()->id(),
             'verify_at' => now(),
-        ]);
+        ];
+
+        // Simpan feedback PDC Admin jika diisi (tambahkan ke kolom 'feedback' agar tidak menghapus 'finance_feedback')
+        if ($request->filled('pdc_feedback')) {
+            $existing = $project->feedback ? $project->feedback . "\n\n" : "";
+            $updateData['feedback'] = $existing . "[Admin PDC: " . $request->pdc_feedback . "]";
+        }
+
+        $project->update($updateData);
+
+        $feedbackNote = $request->filled('pdc_feedback')
+            ? ' Catatan: <em>' . e($request->pdc_feedback) . '</em>'
+            : '';
 
         $this->addNotificationToUser(
             $project->user_id_talent,
             'Project ' . $request->status,
-            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh Admin.',
+            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh PDC Admin.' . $feedbackNote,
             $request->status == 'Verified' ? 'success' : 'warning'
         );
 

@@ -529,9 +529,16 @@ class PDCAdminController extends Controller
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $departments = Department::orderBy('nama_department')->get();
 
+        $panelisUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director']))
+            ->with(['company', 'position'])
+            ->orderBy('nama')
+            ->get();
+        $panelisCompanies = $panelisUsers->pluck('company')->unique('id')->filter()->values();
+
         return view('pdc_admin.panelis-review', compact(
             'user', 'groupedData', 'companies', 'positions', 'departments',
-            'totalProjectImprovement', 'belumDinilai', 'sudahDinilai'
+            'totalProjectImprovement', 'belumDinilai', 'sudahDinilai',
+            'panelisUsers', 'panelisCompanies'
         ));
     }
 
@@ -580,6 +587,19 @@ class PDCAdminController extends Controller
         if (!$plan->is_locked) {
             return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke Panelis.');
         }
+
+        $request->validate([
+            'panelis_ids' => 'required|array|min:1',
+            'panelis_ids.*' => 'exists:users,id'
+        ]);
+
+        foreach ($request->panelis_ids as $panelis_id) {
+            \App\Models\PanelisAssessment::updateOrCreate([
+                'user_id_talent' => $talent_id,
+                'panelis_id' => $panelis_id,
+            ]);
+        }
+
         $plan->update(['status_promotion' => 'Pending Panelis']);
         return back()->with('success', 'Berhasil dikirim ke Panelis untuk review.');
     }

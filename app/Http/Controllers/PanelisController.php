@@ -23,12 +23,13 @@ class PanelisController extends Controller
     {
         $user = auth()->user();
 
-        // IDs talent yang sudah dinilai oleh panelis yang sedang login
+        // IDs talent yang sudah dinilai SELESAI oleh panelis yang sedang login
         $alreadyAssessedTalentIds = PanelisAssessment::where('panelis_id', $user->id)
+            ->whereNotNull('panelis_score')
             ->pluck('user_id_talent')
             ->toArray();
 
-        // Fetch talents with status Pending Panelis yang BELUM dinilai oleh panelis ini
+        // Fetch talents with status Pending Panelis yang di-assign ke panelis ini
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
@@ -37,6 +38,10 @@ class PanelisController extends Controller
                 ->whereNotNull('target_position_id');
         })
             ->whereNotIn('id', $alreadyAssessedTalentIds)
+            // Hanya talent khusus untuk panelis ini (assignment)
+            ->whereHas('panelisAssessments', function ($q) use ($user) {
+                $q->where('panelis_id', $user->id);
+            })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 

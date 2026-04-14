@@ -22,7 +22,7 @@
             .notif-unread {
                 background-color: #f0fdf4;
                 border-color: #86efac;
-            }
+            }`
             .notif-icon-wrap {
                 flex-shrink: 0;
                 width: 48px;

@@ -22,17 +22,19 @@ class FinanceDashboardController extends Controller
         $projects = ImprovementProject::with(['talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
-            ->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
             ->orderBy('updated_at', 'desc')
             ->get();
 
         $total = $projects->count();
-        $pending = $projects->whereIn('status', ['Pending', 'On Progress'])->count();
-        $approved = $projects->where('status', 'Verified')->count();
-        $rejected = $projects->where('status', 'Rejected')->count();
+        // Pending = Finance belum memberi keputusan
+        $pending = $projects->filter(fn($p) => !$p->finance_feedback || (!str_starts_with($p->finance_feedback, '[Approved]') && !str_starts_with($p->finance_feedback, '[Rejected]')))->count();
+        $approved = $projects->filter(fn($p) => str_starts_with($p->finance_feedback ?? '', '[Approved]'))->count();
+        $rejected = $projects->filter(fn($p) => str_starts_with($p->finance_feedback ?? '', '[Rejected]'))->count();
 
-        $pendingProjects = $projects->whereIn('status', ['Pending', 'On Progress']);
-        $historyProjects = $projects->whereIn('status', ['Verified', 'Rejected']);
+        // Belum beri keputusan
+        $pendingProjects = $projects->filter(fn($p) => !str_starts_with($p->finance_feedback ?? '', '[Approved]') && !str_starts_with($p->finance_feedback ?? '', '[Rejected]'));
+        // Sudah beri keputusan
+        $historyProjects = $projects->filter(fn($p) => str_starts_with($p->finance_feedback ?? '', '[Approved]') || str_starts_with($p->finance_feedback ?? '', '[Rejected]'));
 
         $companies = $projects->pluck('talent.company.nama_company')->filter()->unique()->values();
 
@@ -54,10 +56,18 @@ class FinanceDashboardController extends Controller
     {
         $user = auth()->user();
 
-        $projects = ImprovementProject::with(['talent.position', 'talent.department'])
-            ->whereIn('status', ['Pending', 'On Progress'])
+        // Tampilkan semua project yang dikirim ke finance ini (feedback = ada), belum ada keputusan dari Finance
+        $projects = ImprovementProject::with(['talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
+            ->where(function ($q) {
+            $q->whereNull('finance_feedback')
+                ->orWhere(function ($q2) {
+                $q2->where('finance_feedback', 'not like', '[Approved]%')
+                    ->where('finance_feedback', 'not like', '[Rejected]%');
+            }
+            );
+        })
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -72,10 +82,14 @@ class FinanceDashboardController extends Controller
         $user = auth()->user();
         $search = $request->input('search');
 
+        // Riwayat = project yang sudah diberi keputusan oleh Finance (ada [Approved] atau [Rejected] di finance_feedback)
         $projectsQuery = ImprovementProject::with(['talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
-            ->whereIn('status', ['Verified', 'Rejected'])
             ->where('verify_by', $user->id)
+            ->where(function ($q) {
+            $q->where('finance_feedback', 'like', '[Approved]%')
+                ->orWhere('finance_feedback', 'like', '[Rejected]%');
+        })
             ->orderBy('updated_at', 'desc');
 
         if ($search) {
@@ -101,27 +115,34 @@ class FinanceDashboardController extends Controller
     public function updateFinanceValidation(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:Verified,Rejected',
+            'finance_decision' => 'required|in:Approved,Rejected',
             'finance_feedback' => 'nullable|string'
         ]);
 
         $project = ImprovementProject::findOrFail($id);
 
+        // Finance hanya menyimpan keputusan & feedback ke finance_feedback
+        // Format: '[Approved] catatan...' atau '[Rejected] catatan...'
+        $decision = $request->finance_decision;
+        $feedbackText = $request->finance_feedback ?? '';
+        $stored = '[' . $decision . ']' . ($feedbackText ? ' ' . $feedbackText : '');
+
         $project->update([
-            'status' => $request->status,
-            'finance_feedback' => $request->finance_feedback, // feedback dari finance
-            'verify_by' => auth()->id(),
-            'verify_at' => now(),
+            'finance_feedback' => $stored,
+            // TIDAK mengubah 'status' — keputusan final ada di tangan PDC Admin
         ]);
 
-        $this->addNotificationToUser(
-            $project->user_id_talent,
-            'Project ' . $request->status,
-            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh Finance' . ($request->finance_feedback ? ' dengan catatan: ' . $request->finance_feedback : '.'),
-            $request->status == 'Verified' ? 'success' : 'warning'
-        );
+        // Notifikasi ke PDC Admin (verify_by) bahwa Finance sudah memberi keputusan
+        if ($project->verify_by) {
+            $this->addNotificationToUser(
+                $project->verify_by,
+                'Finance telah memberikan keputusan',
+                'Finance telah memilih <span class="font-semibold">' . $decision . '</span> untuk Project Improvement milik <strong>' . ($project->talent->nama ?? '-') . '</strong>.',
+                $decision === 'Approved' ? 'success' : 'warning'
+            );
+        }
 
-        return back()->with('success', 'Status validasi berhasil diperbarui.');
+        return redirect()->route('finance.riwayat')->with('success', 'Keputusan validasi finance berhasil disimpan.');
     }
 
     /**

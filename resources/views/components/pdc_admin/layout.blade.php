@@ -538,7 +538,7 @@
     @endif
 
     {{-- MAIN CONTENT --}}
-    <main id="main-content" class="p-8 {{ $hideSidebar ? '!ml-0' : '' }}">
+    <main id="main-content" class="px-4 lg:px-6 py-8 {{ $hideSidebar ? '!ml-0' : '' }}">
         
         {{-- GLOBAL FLASH MESSAGES --}}
         {{-- Flash messages are handled inside individual views, e.g., panelis-review.blade.php --}}

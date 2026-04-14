@@ -8,109 +8,145 @@
             <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
                 Development Plan</h1>
         </div>
-        <h1 class="text-white font-bold text-base sm:hidden flex items-center gap-2">
-            <div class="flex items-center justify-center w-8 h-8 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-5 h-5 object-contain">
+        <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
+            <div class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
             </div>
             IDP Talent
         </h1>
     </a>
-
 
     <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
         <a href="{{ route('talent.dashboard') }}#Kompetensi" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="Kompetensi">Kompetensi</a>
         <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="IDP Monitoring">IDP</a>
         <a href="{{ route('talent.dashboard') }}#Project Improvement" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="Project Improvement">Project Improvement</a>
         <a href="{{ route('talent.dashboard') }}#LogBook" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="LogBook">LogBook</a>
-
     </div>
+
+    @php
+        $nama = $user->nama ?? ($user->name ?? 'Talent');
+        $parts = explode(' ', trim($nama));
+        $initials = strtoupper(
+            substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''),
+        );
+
+        $unreadNotifications = isset($notifications) && $notifications
+            ? (is_array($notifications) ? collect($notifications)->where('is_read', false) : $notifications->where('is_read', false))
+            : collect();
+        $hasUnreadNotif = $unreadNotifications->count() > 0;
+    @endphp
 
     <div class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto">
         <!-- Mobile Dropdown Menu -->
         <div class="relative block lg:hidden" id="mobile-menu-wrapper">
-            <button class="flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 transition-colors mr-1 cursor-pointer" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <button class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
             <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
-                <!-- Header Component adapted from image -->
-                <div class="px-5 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative">
+                {{-- Dropdown Header --}}
+                <div class="px-5 py-5 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
                     <div class="flex items-center gap-3.5">
-                        @if ($user->foto ?? false)
-                            <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="w-[52px] h-[52px] rounded-full object-cover outline outline-1 outline-[#003865]/10 ring-[3px] ring-white shadow-sm">
-                        @else
-                            @php
-                                $nameParts = explode(' ', $user->nama ?? $user->name);
-                                $initials = count($nameParts) >= 2 ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) : strtoupper(substr($nameParts[0], 0, 2));
-                            @endphp
-                            <div class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#003865]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
-                                {{ $initials }}
-                            </div>
-                        @endif
-                        <div class="flex flex-col">
-                            <span class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? $user->name }}</span>
-                            <a href="{{ route('profile.edit') }}" class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
-                                Lihat Profil
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </a>
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
+                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                            {{ $initials }}
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="text-[14px] font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}</p>
+                            <p class="text-[11px] text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
+                            <span class="inline-block mt-1.5 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Talent</span>
                         </div>
                     </div>
                 </div>
                 
-                <ul class="py-3 px-3">
-                    <li class="mb-1">
-                        <a href="{{ route('talent.notifikasi') }}" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium">
-                            <span>Notifikasi</span>
-                            @if ($notifications->where('is_read', false)->count() > 0)
-                                <span class="bg-[#f97316] text-white text-[12px] font-bold px-3.5 py-1 rounded-[12px] shadow-sm tracking-wide">{{ $notifications->where('is_read', false)->count() }}</span>
+                <div class="py-2.5">
+                    {{-- Quick Action: Notifikasi --}}
+                    <div class="px-3 mb-1">
+                        <a href="{{ route('talent.notifikasi') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                </svg>
+                                @if($hasUnreadNotif)
+                                    <span class="absolute top-1 right-1 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
+                                @endif
+                            </div>
+                            <span class="font-medium">Notifikasi</span>
+                            @if($hasUnreadNotif)
+                                <span class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
                             @endif
                         </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#Kompetensi" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="Kompetensi">
-                            Kompetensi
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="IDP Monitoring">
-                            IDP Monitoring
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#Project Improvement" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="Project Improvement">
-                            Project Improvement
-                        </a>
-                    </li>
-                    <li class="mb-1">
-                        <a href="{{ route('talent.dashboard') }}#LogBook" class="nav-menu-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap" data-section="LogBook">
-                            LogBook
-                        </a>
-                    </li>
-                    <li class="border-t border-gray-100 mt-2 pt-2">
-                        <form method="POST" action="{{ route('logout') }}" class="w-full">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors font-medium">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </div>
+
+                    <div class="mx-4 border-t border-gray-100 my-1.5"></div>
+
+                    {{-- Section: Dashboard Menu --}}
+                    <div class="px-3 space-y-0.5">
+                        <a href="{{ route('talent.dashboard') }}#Kompetensi" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                Keluar
+                            </div>
+                            <span class="font-medium">Kompetensi</span>
+                        </a>
+                        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <span class="font-medium">IDP Monitoring</span>
+                        </a>
+                        <a href="{{ route('talent.dashboard') }}#Project Improvement" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <span class="font-medium">Project Improvement</span>
+                        </a>
+                        <a href="{{ route('talent.dashboard') }}#LogBook" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <span class="font-medium">LogBook</span>
+                        </a>
+                    </div>
+
+                    <div class="mx-4 border-t border-gray-100 my-1.5"></div>
+
+                    {{-- Section: Account --}}
+                    <div class="px-3">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                            <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <span class="font-medium">Lihat Profil</span>
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="m-0">
+                            @csrf
+                            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors group">
+                                <div class="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Keluar</span>
                             </button>
                         </form>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="relative hidden lg:block" id="bell-wrapper">
-            @php
-                $unreadNotifications = isset($notifications) && $notifications
-                    ? (is_array($notifications) ? collect($notifications)->where('is_read', false) : $notifications->where('is_read', false))
-                    : collect();
-                $hasUnreadNotif = $unreadNotifications->count() > 0;
-            @endphp
             <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
                 class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
@@ -180,13 +216,6 @@
         </div>
 
         <div class="relative hidden lg:block" id="profile-wrapper">
-            @php
-                $nama = $user->nama ?? ($user->name ?? 'Talent');
-                $parts = explode(' ', trim($nama));
-                $initials = strtoupper(
-                    substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''),
-                );
-            @endphp
             <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
                 class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"

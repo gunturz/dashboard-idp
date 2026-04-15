@@ -1,5 +1,5 @@
 <x-finance.layout title="Riwayat Validasi" :user="$user">
-    <div class="max-w-7xl mx-auto">
+    <div>
         
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div class="flex items-center gap-3">

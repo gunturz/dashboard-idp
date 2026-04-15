@@ -25,7 +25,7 @@
     </x-slot>
 
 
-    <div class="max-w-7xl mx-auto px-3 md:px-6 pt-4 pb-6 fade-up overflow-x-hidden">
+    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up">
         {{-- Back Link --}}
         <div class="mb-5">
             <a href="{{ route('panelis.detail_talent', $talent->id) }}#logbook-section"
@@ -62,8 +62,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Mentor</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tema</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pengiriman/Update</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pelaksanaan</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tgl. Pengiriman/Update</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tgl. Pelaksanaan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center">Aksi</th>
                             </tr>
@@ -116,8 +116,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Mentor</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tema</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pengiriman/Update</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pelaksanaan</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tgl. Pengiriman/Update</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tgl. Pelaksanaan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center text-left">Aksi</th>
                             </tr>
@@ -169,8 +169,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Sumber</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tema</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pengiriman/Update</th>
-                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tanggal Pelaksanaan</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tgl. Pengiriman/Update</th>
+                                <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Tgl. Pelaksanaan</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left">Status</th>
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-center text-left">Aksi</th>
                             </tr>

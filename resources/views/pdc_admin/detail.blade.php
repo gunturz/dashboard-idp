@@ -1150,7 +1150,7 @@
                                     <tr>
                                         <th>Mentor</th>
                                         <th>Tema</th>
-                                        <th>Tanggal Pengiriman</th>
+                                        <th>Tanggal Pengiriman/Update</th>
                                         <th>Tanggal Pelaksanaan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -1205,7 +1205,7 @@
                                     <tr>
                                         <th>Sumber</th>
                                         <th>Tema</th>
-                                        <th>Tanggal Pengiriman</th>
+                                        <th>Tanggal Pengiriman/Update</th>
                                         <th>Tanggal Pelaksanaan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>

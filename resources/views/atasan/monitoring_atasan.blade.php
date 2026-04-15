@@ -43,8 +43,12 @@
             /* IDP Donut Charts */
             .idp-card-container {
                 background: #f8fafc; border-radius: 16px; padding: 24px;
-                border: 1px solid #e2e8f0; margin-bottom: 24px;
+                border: 1px solid #e2e8f0;
                 width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
             }
             .donut-container {
                 background: white; border-radius: 16px; padding: 30px;
@@ -89,7 +93,7 @@
 
             /* Heatmap */
             .talent-gap-grid {
-                display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+                display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 24px; margin-bottom: 48px;
             }
             .talent-card {
@@ -229,8 +233,6 @@
             }
         </style>
     </x-slot>
-
-    <div class="max-w-7xl mx-auto w-full">
 
     {{-- Tab Navigation --}}
     <div class="flex justify-between items-center mb-10">
@@ -439,18 +441,11 @@
 
     {{-- ================================= SECTION: IDP ================================= --}}
     <div id="section-idp" class="hidden w-full">
-        @foreach ($talents as $talent)
-            @php $talentIndex = $loop->iteration; @endphp
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+            @foreach ($talents as $talent)
             <div class="idp-card-container">
-                @php
-                    $idpInitials = 'T' . $talentIndex;
-                    $idpColors = ['#334155','#0d9488','#f59e0b','#6366f1','#ec4899'];
-                    $idpBg = $idpColors[($talentIndex - 1) % count($idpColors)];
-                @endphp
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $idpBg }}">
-                        {{ $idpInitials }}
-                    </div>
+                    <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                     <div>
                         <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
                         <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
@@ -492,6 +487,7 @@
                 </div>
             </div>
         @endforeach
+        </div>
     </div>
 
     {{-- ================================= SECTION: PROJECT IMPROVEMENT ================================= --}}
@@ -503,21 +499,16 @@
             Project Improvement
         </div>
 
-        @foreach ($talents as $talent)
-            @php $talentIndex = $loop->iteration; @endphp
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
-                @php
-                    $initials = 'T' . $talentIndex;
-                    $avatarColors = ['#334155','#0d9488','#f59e0b','#6366f1','#ec4899'];
-                    $avatarBg = $avatarColors[($talentIndex - 1) % count($avatarColors)];
-                @endphp
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $avatarBg }}">
-                        {{ $initials }}
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
-                        <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-8">
+            @foreach ($talents as $talent)
+                <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-10">
+                    <div class="flex items-center gap-4 text-left">
+                        <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
+                        <div>
+                            <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
+                            <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -550,6 +541,7 @@
                 </table>
             </div>
         @endforeach
+        </div>
     </div>
 
     {{-- ================================= SECTION: LOGBOOK ================================= --}}
@@ -567,18 +559,11 @@
             <div class="pill" onclick="filterLog(3, this)">Learning</div>
         </div>
 
-        @foreach ($talents as $talent)
-            @php $talentIndex = $loop->iteration; @endphp
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
-                @php
-                    $initials2 = 'T' . $talentIndex;
-                    $avatarColors2 = ['#334155','#0d9488','#f59e0b','#6366f1','#ec4899'];
-                    $avatarBg2 = $avatarColors2[($talentIndex - 1) % count($avatarColors2)];
-                @endphp
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-base flex-shrink-0" style="background: {{ $avatarBg2 }}">
-                        {{ $initials2 }}
-                    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-8">
+            @foreach ($talents as $talent)
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between">
+                <div class="flex items-center gap-4 mb-10">
+                    <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                     <div>
                         <h4 class="text-lg font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
                         <p class="text-xs text-gray-400 italic">{{ optional($talent->position)->position_name }} - {{ optional($talent->department)->nama_department }}</p>
@@ -593,7 +578,7 @@
                             <table class="pdc-log-table w-full">
                                 <thead>
                                     <tr>
-                                        <th>Mentor</th><th>Tema</th><th>Tanggal Pengiriman/Update</th><th>Tanggal Pelaksanaan</th><th>Status</th><th>Aksi</th>
+                                        <th>Mentor</th><th>Tema</th><th>Tgl. Pengiriman/Update</th><th>Tgl. Pelaksanaan</th><th>Status</th><th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -614,6 +599,10 @@
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
                                                     <a href="{{ route('atasan.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg> 
                                                         Detail
                                                     </a>
                                                     <div class="hidden logbook-detail-html">
@@ -668,7 +657,7 @@
                             <table class="pdc-log-table w-full">
                                 <thead>
                                     <tr>
-                                        <th>Mentor</th><th>Tema</th><th>Tanggal Pengiriman/Update</th><th>Tanggal Pelaksanaan</th><th>Status</th><th>Aksi</th>
+                                        <th>Mentor</th><th>Tema</th><th>Tgl. Pengiriman/Update</th><th>Tgl. Pelaksanaan</th><th>Status</th><th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -689,6 +678,10 @@
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
                                                     <a href="{{ route('atasan.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg> 
                                                         Detail
                                                     </a>
                                                     <div class="hidden logbook-detail-html">
@@ -743,7 +736,7 @@
                             <table class="pdc-log-table w-full">
                                 <thead>
                                     <tr>
-                                        <th>Sumber</th><th>Tema</th><th>Tanggal Pengiriman/Update</th><th>Tanggal Pelaksanaan</th><th>Status</th><th>Aksi</th>
+                                        <th>Sumber</th><th>Tema</th><th>Tgl. Pengiriman/Update</th><th>Tgl. Pelaksanaan</th><th>Status</th><th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -762,6 +755,10 @@
                                             <td class="text-center">
                                                 <div class="flex items-center justify-center gap-2">
                                                     <a href="{{ route('atasan.logbook.detail', $act->id) }}" class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" title="Detail">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg> 
                                                         Detail
                                                     </a>
                                                     <div class="hidden logbook-detail-html">
@@ -812,6 +809,7 @@
                 </div>
             </div>
         @endforeach
+        </div>
     </div>
 
     <x-slot name="scripts">
@@ -842,9 +840,6 @@
             }
         </script>
     </x-slot>
-
-    </div>{{-- /max-w-7xl wrapper --}}
-
 
     <!-- Generic Logbook Detail Modal -->
     <div id="logbookDetailModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">

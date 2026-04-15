@@ -193,6 +193,12 @@ Route::middleware('auth')->group(function () {
         ->name('atasan.competency_atasan.store');
     Route::get('/atasan/logbook-item/{id}', [\App\Http\Controllers\AtasanDashboardController::class , 'logbookItemDetail'])
         ->name('atasan.logbook.detail');
+    Route::get('/atasan/riwayat', [\App\Http\Controllers\AtasanDashboardController::class , 'riwayat'])
+        ->name('atasan.riwayat');
+    Route::get('/atasan/monitoring/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'monitoringDetail'])
+        ->name('atasan.monitoring.detail');
+    Route::get('/atasan/monitoring/{talentId}/logbook', [\App\Http\Controllers\AtasanDashboardController::class , 'talentLogbookDetail'])
+        ->name('atasan.monitoring.logbook');
 
     // Mentor Routes
     Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class , 'dashboard'])

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Competence;
 use App\Models\PositionTargetCompetence;
+use App\Models\IdpType;
 
 class AtasanDashboardController extends Controller
 {
@@ -180,5 +181,105 @@ class AtasanDashboardController extends Controller
         $user = Auth::user();
         $activity = \App\Models\IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
         return view('atasan.logbook-item', compact('user', 'activity'));
+    }
+
+    public function riwayat(Request $request)
+    {
+        $user = Auth::user()->load(['company', 'department', 'position', 'role']);
+        $search = $request->input('search');
+
+        $talentsQuery = User::where('atasan_id', $user->id)
+            ->with([
+                'position',
+                'department',
+                'promotion_plan.targetPosition',
+                'assessmentSession.details.competence',
+                'improvementProjects'
+            ]);
+
+        if ($search) {
+            $talentsQuery->where('nama', 'like', '%' . $search . '%');
+        }
+
+        $talents = $talentsQuery->get();
+        $competencies = Competence::orderBy('id')->get();
+
+        return view('atasan.riwayat', compact('user', 'talents', 'competencies', 'search'));
+    }
+
+    public function monitoringDetail($talentId)
+    {
+        $user = Auth::user()->load(['company', 'department', 'position', 'role']);
+        $talent = User::where('atasan_id', $user->id)
+            ->with([
+                'position',
+                'department',
+                'company',
+                'mentor',
+                'atasan',
+                'promotion_plan.targetPosition',
+                'assessmentSession.details.competence',
+                'idpActivities.type',
+                'improvementProjects'
+            ])
+            ->findOrFail($talentId);
+
+        $competencies = Competence::orderBy('id')->get();
+        
+        $positionId = optional($talent->promotion_plan)->target_position_id ?? $talent->position_id;
+        $standards = PositionTargetCompetence::where('position_id', $positionId)
+            ->pluck('target_level', 'competence_id');
+
+        return view('atasan.monitoring_detail_talent', compact('user', 'talent', 'competencies', 'standards'));
+    }
+
+    public function talentLogbookDetail($talentId)
+    {
+        $user = Auth::user()->load(['company', 'department', 'position', 'role']);
+        $talent = User::where('atasan_id', $user->id)
+            ->with([
+                'idpActivities.type',
+                'idpActivities.verifier',
+            ])
+            ->findOrFail($talentId);
+
+        $activities = $talent->idpActivities;
+        $idpTypes = IdpType::all();
+
+        // Process data for tabs (similar to talent dashboard)
+        $exposureData = $activities->where('type_idp', 1)->map(function ($act) {
+            return [
+                'id' => $act->id,
+                'mentor' => $act->verifier->nama ?? '-',
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
+            ];
+        });
+
+        $mentoringData = $activities->where('type_idp', 2)->map(function ($act) {
+            return [
+                'id' => $act->id,
+                'mentor' => $act->verifier->nama ?? '-',
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
+            ];
+        });
+
+        $learningData = $activities->where('type_idp', 3)->map(function ($act) {
+            return [
+                'id' => $act->id,
+                'sumber' => $act->location,
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
+            ];
+        });
+
+        return view('atasan.logbook_detail_talent', compact('user', 'talent', 'exposureData', 'mentoringData', 'learningData'));
     }
 }

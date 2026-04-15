@@ -8,50 +8,47 @@
             <h1 class="text-[1.3rem] font-bold text-slate-800">Progress Archive</h1>
         </div>
 
-        <div class="bg-slate-200 rounded-full p-1.5 flex overflow-x-auto whitespace-nowrap mb-6 hide-scroll" id="companyTabs">
-            @php $firstCompId = null; @endphp
-            @foreach ($groupedData as $compId => $group)
-                @if ($firstCompId === null) @php $firstCompId = $compId; @endphp @endif
-                @php
-                    $comp = $group['company'];
-                    $compName = $comp->nama_company ?? 'Unknown Company';
-                    // Format display name: No dot in PT and force wrap after Tiga Serangkai
-                    $displayName = str_replace('PT. ', 'PT ', $compName);
-                    $displayName = str_replace('PT Tiga Serangkai ', "PT Tiga Serangkai\n", $displayName);
-                    $lines = explode("\n", $displayName);
-                @endphp
-                <button
-                    class="company-tab rounded-[30px] px-6 py-1 text-[13px] font-semibold {{ $compId === $firstCompId ? 'bg-[#313B4D] text-white' : 'text-slate-600' }} focus:outline-none focus:ring-0 flex flex-col items-center justify-center text-center leading-[1.2] min-h-[64px] min-w-[170px] flex-shrink-0 border border-transparent"
-                    data-target="company-{{ $compId }}"
-                    onclick="switchTab('company-{{ $compId }}', this, '{{ addslashes($compName) }}')">
-                    @foreach($lines as $line)
-                        <span class="block">{{ trim($line) }}</span>
-                    @endforeach
-                </button>
-            @endforeach
-        </div>
-
         <!-- Filter Bar -->
-        <div class="flex flex-col md:flex-row gap-4 mb-8">
-            <div class="relative w-full md:w-1/3">
-                <input type="text" id="searchInput" placeholder="Cari Nama" class="w-full rounded-lg border border-slate-300 shadow-sm pl-4 pr-10 py-2.5 focus:ring-teal-500 focus:border-teal-500 bg-white text-sm" onkeyup="filterTalents()">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="relative w-full">
+                <input type="text" id="searchInput" placeholder="Cari Nama" class="w-full rounded-lg border border-slate-300 shadow-sm pl-4 pr-10 py-2.5 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 bg-white text-sm" onkeyup="filterTalents()">
                 <div class="absolute right-3 top-2.5 text-teal-500">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
             
-            <select id="periodFilter" class="w-full md:w-1/3 rounded-lg border border-slate-300 py-2.5 shadow-sm focus:ring-teal-500 focus:border-teal-500 bg-white text-slate-600 text-sm appearance-none bg-no-repeat bg-[right_0.5rem_center] bg-[length:1.5em_1.5em]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%2314b8a6%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E'); padding-right: 2.5rem;" onchange="filterTalents()">
+            <select id="companyFilter" class="w-full rounded-lg border border-slate-300 py-2.5 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 bg-white text-slate-600 text-sm appearance-none bg-no-repeat bg-[right_0.5rem_center] bg-[length:1.5em_1.5em]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%2314b8a6%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E'); padding-right: 2.5rem;" onchange="filterTalents()">
+                <option value="">Semua Perusahaan</option>
+                @php
+                    $uniqueCompanies = collect();
+                    foreach ($groupedData as $group) {
+                        if (isset($group['company']) && $group['company']) {
+                            $uniqueCompanies->push($group['company']->nama_company);
+                        }
+                    }
+                    $uniqueCompanies = $uniqueCompanies->unique()->sortBy(function($name) {
+                        if (strpos($name, 'PT. Tiga Serangkai Inti Corpora') !== false) return 1;
+                        if (strpos($name, 'PT. Tiga Serangkai Pustaka Mandiri') !== false) return 2;
+                        return 3 . '-' . $name;
+                    })->values();
+                @endphp
+                @foreach($uniqueCompanies as $comp)
+                    <option value="{{ $comp }}">{{ $comp }}</option>
+                @endforeach
+            </select>
+
+            <select id="periodFilter" class="w-full rounded-lg border border-slate-300 py-2.5 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 bg-white text-slate-600 text-sm appearance-none bg-no-repeat bg-[right_0.5rem_center] bg-[length:1.5em_1.5em]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%2314b8a6%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E'); padding-right: 2.5rem;" onchange="filterTalents()">
                 <option value="">Semua Periode</option>
                 <!-- Add dynamic options if needed -->
             </select>
 
-            <select id="departmentFilter" class="w-full md:w-1/3 rounded-lg border border-slate-300 py-2.5 shadow-sm focus:ring-teal-500 focus:border-teal-500 bg-white text-slate-600 text-sm appearance-none bg-no-repeat bg-[right_0.5rem_center] bg-[length:1.5em_1.5em]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%2314b8a6%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E'); padding-right: 2.5rem;" onchange="filterTalents()">
+            <select id="departmentFilter" class="w-full rounded-lg border border-slate-300 py-2.5 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 bg-white text-slate-600 text-sm appearance-none bg-no-repeat bg-[right_0.5rem_center] bg-[length:1.5em_1.5em]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%2314b8a6%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E'); padding-right: 2.5rem;" onchange="filterTalents()">
                 <option value="">Semua Departemen</option>
                 @php
                     $uniqueDepartments = collect();
                     foreach ($groupedData as $group) {
                         foreach ($group['talents'] as $talent) {
-                            if ($talent->department) {
+                            if (isset($talent->department) && $talent->department) {
                                 $uniqueDepartments->push($talent->department->nama_department);
                             }
                         }
@@ -64,46 +61,56 @@
             </select>
         </div>
 
-        <h2 id="overview-header" class="text-[1.35rem] font-bold text-center text-[#313B4D] mb-8 mt-4">
+        <div class="w-full max-w-5xl mx-auto" id="allTalentsList">
+            <div id="empty-state" class="hidden text-center text-slate-500 py-10 bg-white rounded-xl shadow-sm border border-slate-200 mb-6">
+                Tidak ada talent yang sesuai dengan pencarian Anda.
+            </div>
+
             @php 
-                $firstCompName = $groupedData[$firstCompId]['company']->nama_company ?? 'Unknown Company';
+                $totalTalents = 0; 
+                // Group data sort specifically for the view
+                $sortedGroupedData = collect($groupedData)->sortBy(function($group) {
+                    $name = $group['company']->nama_company ?? '';
+                    if (strpos($name, 'PT. Tiga Serangkai Inti Corpora') !== false) return 1;
+                    if (strpos($name, 'PT. Tiga Serangkai Pustaka Mandiri') !== false) return 2;
+                    return 3 . '-' . $name;
+                });
             @endphp
-            {{ $firstCompName }}
-        </h2>
-
-        <div class="tab-contents">
-            @foreach ($groupedData as $compId => $group)
-                <div id="company-{{ $compId }}" class="talent-list w-full max-w-5xl mx-auto" style="display: {{ $compId === $firstCompId ? 'block' : 'none' }}">
-                    
-                    @if(count($group['talents']) === 0)
-                        <div class="text-center text-slate-500 py-10 bg-white rounded-xl shadow-sm border border-slate-200">
-                            Tidak ada talent di perusahaan ini.
-                        </div>
-                    @endif
-
-                    @foreach ($group['talents'] as $talent)
-                        @php
-                            $startDate = optional($talent->promotion_plan)->start_date ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat('d F Y') : '-';
-                            $dueDate = optional($talent->promotion_plan)->target_date ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y') : '-';
-                            
-                            $deptName = $talent->department->nama_department ?? '-';
-                        @endphp
+            @foreach ($sortedGroupedData as $compId => $group)
+                @php $compName = $group['company']->nama_company ?? 'Unknown Company'; @endphp
+                @if(count($group['talents']) > 0)
+                    <div class="company-section bg-white rounded-[20px] shadow border border-slate-200 p-6 sm:p-8 mb-10" data-company-section="{{ $compName }}">
+                        <h2 class="text-lg font-bold text-center text-[#313B4D] mb-6 pb-4 border-b border-slate-200">
+                            {{ $compName }}
+                        </h2>
+                        @foreach ($group['talents'] as $talent)
+                    @php
+                        $totalTalents++;
+                        $startDate = optional($talent->promotion_plan)->start_date ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat('d F Y') : '-';
+                        $dueDate = optional($talent->promotion_plan)->target_date ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y') : '-';
                         
-                        <div class="talent-card bg-[#F8F9FA] sm:bg-white rounded-[20px] shadow-sm border border-slate-200 p-6 mb-6 transition-all" data-name="{{ strtolower($talent->nama) }}" data-department="{{ $deptName }}">
-                            <div class="flex flex-col lg:flex-row justify-between gap-6 pb-6 border-b border-slate-200 bg-white rounded-xl p-4 sm:p-0 sm:bg-transparent shadow-sm sm:shadow-none sm:border-b-accent">
-                                
-                                <!-- Left side user info -->
-                                <div class="flex-1">
-                                    <table class="w-full text-sm">
-                                        <tbody>
-                                            <tr>
-                                                <td class="py-2.5 text-[#1e293b] font-bold w-40 align-top">Nama</td>
-                                                <td class="py-2.5 text-slate-600 align-top">{{ $talent->nama }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="py-2.5 text-[#1e293b] font-bold align-top">Departemen</td>
-                                                <td class="py-2.5 text-slate-600 align-top">{{ $deptName }}</td>
-                                            </tr>
+                        $deptName = $talent->department->nama_department ?? '-';
+                    @endphp
+                        
+                    <div class="talent-card bg-[#F8F9FA] sm:bg-white rounded-[20px] shadow-sm border border-slate-200 p-6 mb-6 transition-all" data-name="{{ strtolower($talent->nama) }}" data-department="{{ $deptName }}" data-company="{{ $compName }}">
+                        <div class="flex flex-col lg:flex-row justify-between gap-6 pb-6 border-b border-slate-200 bg-white rounded-xl p-4 sm:p-0 sm:bg-transparent shadow-sm sm:shadow-none sm:border-b-accent">
+                            
+                            <!-- Left side user info -->
+                            <div class="flex-1">
+                                <table class="w-full text-sm">
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-2.5 text-[#1e293b] font-bold w-40 align-top">Nama</td>
+                                            <td class="py-2.5 text-slate-600 align-top">{{ $talent->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2.5 text-[#1e293b] font-bold align-top">Perusahaan</td>
+                                            <td class="py-2.5 text-slate-600 align-top">{{ $compName }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2.5 text-[#1e293b] font-bold align-top">Departemen</td>
+                                            <td class="py-2.5 text-slate-600 align-top">{{ $deptName }}</td>
+                                        </tr>
                                             <tr>
                                                 <td class="py-2.5 text-[#1e293b] font-bold align-top">Posisi yang dituju</td>
                                                 <td class="py-2.5 text-slate-600 align-top">{{ optional($talent->promotion_plan)->targetPosition->position_name ?? '-' }}</td>
@@ -159,66 +166,68 @@
                                     Export
                                 </a>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             @endforeach
+
+            @if($totalTalents === 0)
+                <div class="text-center text-slate-500 py-10 bg-white rounded-xl shadow-sm border border-slate-200 mt-6">
+                    Belum ada data progress archive.
+                </div>
+            @endif
         </div>
     </div>
 
     <x-slot name="scripts">
         <script>
-            function switchTab(targetId, tabElement, companyName) {
-                // Remove active classes
-                document.querySelectorAll('.company-tab').forEach(el => {
-                    el.classList.remove('bg-[#313B4D]', 'text-white');
-                    el.classList.add('text-slate-600');
-                });
-                
-                // Add active classes to clicked tab
-                tabElement.classList.add('bg-[#313B4D]', 'text-white');
-                tabElement.classList.remove('text-slate-600');
-
-                // Hide all lists
-                document.querySelectorAll('.talent-list').forEach(el => {
-                    el.style.display = 'none';
-                });
-                
-                // Show target list
-                const targetList = document.getElementById(targetId);
-                targetList.style.display = 'block';
-
-                // Update section header
-                document.getElementById('overview-header').innerText = companyName;
-
-                // Apply filters to newly visible list
-                filterTalents();
-            }
-
             function filterTalents() {
                 const searchTxt = document.getElementById('searchInput').value.toLowerCase();
+                const compVal = document.getElementById('companyFilter').value;
                 const deptVal = document.getElementById('departmentFilter').value;
                 
-                // Only filter within the visible list
-                document.querySelectorAll('.talent-list').forEach(list => {
-                    if (list.style.display === 'block') {
-                        const cards = list.querySelectorAll('.talent-card');
-                        cards.forEach(card => {
-                            const name = card.getAttribute('data-name');
-                            const dept = card.getAttribute('data-department');
-                            
-                            const matchName = name.includes(searchTxt);
-                            const matchDept = deptVal === '' || dept === deptVal;
+                let visibleCount = 0;
 
-                            if (matchName && matchDept) {
-                                card.style.display = 'block';
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        });
+                document.querySelectorAll('.company-section').forEach(section => {
+                    const sectionComp = section.getAttribute('data-company-section');
+                    let sectionHasVisibleTalent = false;
+
+                    // If company filter is active and does not match the section's company
+                    if (compVal !== '' && sectionComp !== compVal) {
+                        section.style.display = 'none';
+                        return; // Skip to next section
                     }
+
+                    const cards = section.querySelectorAll('.talent-card');
+                    cards.forEach(card => {
+                        const name = card.getAttribute('data-name') || '';
+                        const dept = card.getAttribute('data-department') || '';
+                        
+                        const matchName = name.includes(searchTxt);
+                        const matchDept = deptVal === '' || dept === deptVal;
+
+                        if (matchName && matchDept) {
+                            card.style.display = 'block';
+                            sectionHasVisibleTalent = true;
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    // Hide the section completely if all its cards are filtered out
+                    section.style.display = sectionHasVisibleTalent ? 'block' : 'none';
                 });
+                
+                const emptyState = document.getElementById('empty-state');
+                if (emptyState) {
+                    emptyState.style.display = visibleCount === 0 && document.querySelectorAll('.talent-card').length > 0 ? 'block' : 'none';
+                }
             }
+
+            // Init filters on load
+            document.addEventListener('DOMContentLoaded', filterTalents);
         </script>
         <style>
             .hide-scroll::-webkit-scrollbar {

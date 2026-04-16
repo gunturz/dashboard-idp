@@ -44,20 +44,20 @@
             .search-input {
                 width: 100%;
                 padding: 10px 40px 10px 14px;
-                border: 1.5px solid #14b8a6;
+                border: 1.5px solid #e2e8f0;
                 border-radius: 8px;
                 font-size: 0.875rem;
                 color: #475569;
                 background: #fff;
                 outline: none;
-                transition: box-shadow 0.2s;
+                transition: all 0.2s;
                 box-sizing: border-box;
             }
 
             .search-input::placeholder { color: #94a3b8; }
 
             .search-input:focus {
-                box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+                border-color: #14b8a6;
             }
 
             .search-icon {
@@ -65,12 +65,17 @@
                 right: 12px;
                 top: 50%;
                 transform: translateY(-50%);
-                color: #14b8a6;
+                color: #94a3b8;
                 background: none;
                 border: none;
                 cursor: pointer;
                 padding: 0;
                 display: flex;
+                transition: color 0.2s;
+            }
+
+            .search-input:focus + .search-icon {
+                color: #14b8a6;
             }
 
             /* Dropdown select */

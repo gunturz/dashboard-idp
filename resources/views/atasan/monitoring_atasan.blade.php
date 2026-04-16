@@ -441,7 +441,7 @@
 
     {{-- ================================= SECTION: IDP ================================= --}}
     <div id="section-idp" class="hidden w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        <div class="flex flex-col gap-6 w-full">
             @foreach ($talents as $talent)
             <div class="idp-card-container">
                 <div class="flex items-center gap-4 mb-6">
@@ -499,7 +499,7 @@
             Project Improvement
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-8">
+        <div class="flex flex-col gap-6 w-full mb-8">
             @foreach ($talents as $talent)
                 <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-10">
@@ -559,7 +559,7 @@
             <div class="pill" onclick="filterLog(3, this)">Learning</div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-8">
+        <div class="flex flex-col gap-6 w-full mb-8">
             @foreach ($talents as $talent)
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between">
                 <div class="flex items-center gap-4 mb-10">

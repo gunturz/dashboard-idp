@@ -358,7 +358,7 @@
         .steps-header { text-align: center; margin-bottom: 70px; }
         .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2px;
             max-width: 1100px;
             margin: 0 auto;
@@ -654,11 +654,26 @@
         }
 
         /* ─── GRID DIVIDER LINES ─── */
-        .steps-grid > .step-card:not(:last-child) {
+        .steps-grid > .step-card {
             border-right: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        @media (max-width: 768px) {
-            .steps-grid > .step-card:not(:last-child) { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .steps-grid > .step-card:nth-child(3n) {
+            border-right: none;
+        }
+        .steps-grid > .step-card:nth-last-child(-n+3) {
+            border-bottom: none;
+        }
+        @media (max-width: 900px) {
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid > .step-card { border-right: 1px solid rgba(255,255,255,0.05) !important; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+            .steps-grid > .step-card:nth-child(2n) { border-right: none !important; }
+            .steps-grid > .step-card:nth-last-child(-n+2) { border-bottom: none !important; }
+        }
+        @media (max-width: 600px) {
+            .steps-grid { grid-template-columns: 1fr; }
+            .steps-grid > .step-card { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+            .steps-grid > .step-card:last-child { border-bottom: none !important; }
         }
     </style>
 </head>

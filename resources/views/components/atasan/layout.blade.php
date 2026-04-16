@@ -170,6 +170,11 @@
                 {{ request()->routeIs('atasan.monitoring') ? 'active' : '' }}">
                 Monitoring
             </a>
+            <a href="{{ route('atasan.riwayat') }}"
+                class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150
+                {{ request()->routeIs('atasan.riwayat') ? 'active' : '' }}">
+                Riwayat
+            </a>
         </div>
 
         <div class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto">
@@ -236,6 +241,14 @@
                                     </svg>
                                 </div>
                                 <span class="font-medium">Monitoring</span>
+                            </a>
+                            <a href="{{ route('atasan.riwayat') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('atasan.riwayat') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Riwayat</span>
                             </a>
                         </div>
 

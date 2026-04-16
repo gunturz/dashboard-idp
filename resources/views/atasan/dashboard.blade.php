@@ -294,7 +294,7 @@
 
     {{-- Talent Cards Grid --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        @foreach ($talents as $talent)
+        @forelse ($talents as $talent)
             @php
                 $session = $talent->assessmentSession;
                 $details = $session ? $session->details : collect();
@@ -373,7 +373,17 @@
                     @endif
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="col-span-1 lg:col-span-2 text-center py-16 bg-white rounded-2xl border-2 border-dashed border-gray-200 shadow-sm flex flex-col items-center justify-center">
+                <div class="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Anda sudah mengisi assessment talent</h3>
+                <p class="text-gray-500 text-sm">Anda dapat memeriksa hasilnya di halaman <a href="{{ route('atasan.riwayat') }}" class="text-[#005ba1] font-semibold hover:underline">Riwayat</a>.</p>
+            </div>
+        @endforelse
     </div>
 
 

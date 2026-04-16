@@ -2,11 +2,11 @@
 
     <div class="px-2 pb-10">
         {{-- Page Header --}}
-        <div class="flex items-center gap-3 mb-6 mt-2">
-            <svg class="w-8 h-8 text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="flex items-center gap-2 mb-8 px-2 animate-title">
+            <svg class="w-8 h-8 text-[#2e3746]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3.75v5.25m-3-3 3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"></path>
             </svg>
-            <h1 class="text-[1.3rem] font-bold text-slate-800">Progress Archive</h1>
+            <h1 class="text-2xl font-bold text-[#2e3746] animate-title">Progress Archive</h1>
         </div>
 
         {{-- Filter Bar --}}
@@ -119,7 +119,7 @@
                                 $dueDate = optional($talent->promotion_plan)->target_date
                                     ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y')
                                     : '-';
-                                $currentPos = $talent->current_position ?? '-';
+                                $currentPos = $talent->position->position_name ?? '-' ;
                                 $targetPos  = optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
                                 $periodLabel = '';
                                 if (optional($talent->promotion_plan)->start_date && optional($talent->promotion_plan)->target_date) {
@@ -134,7 +134,8 @@
                                 data-period="{{ $periodLabel }}">
                                 <td class="px-6 py-4">
                                     <p class="font-bold text-slate-800">{{ $talent->nama }}</p>
-                                    <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} – {{ $targetPos }}</p>
+                                    <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr; {{ $targetPos }}
+                                    </p>
                                 </td>
                                 <td class="px-6 py-4 text-slate-600">{{ $compName }}</td>
                                 <td class="px-6 py-4 text-center text-slate-600">{{ $startDate }}</td>

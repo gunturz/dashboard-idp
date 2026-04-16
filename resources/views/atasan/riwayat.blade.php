@@ -333,8 +333,16 @@
                                  class="profile-img" alt="{{ $talent->nama }}">
                             <div class="profile-info">
                                 <span class="name">{{ $talent->nama }}</span>
-                                <span class="role">{{ optional($talent->position)->position_name ?? '-' }} • {{ optional($talent->department)->nama_department ?? '-' }}</span>
+                                <span class="role">{{ $talent->position->position_name ?? '-' }}
+                                &rarr;
+                                {{ $talent->promotion_plan->targetPosition
+                                    ->position_name ?? '?' }}
+                                </span>
+                                <br>
+                                <span class="role">{{ optional($talent->department)->nama_department ?? '-' }}    
+                                </span>
                                 @if($session)
+                                    <br>
                                     <span class="date">Dikirim: {{ $session->created_at->translatedFormat('d F Y') }}</span>
                                 @else
                                     <span class="date text-amber-500 font-medium italic">Belum Assessment</span>
@@ -470,5 +478,17 @@
                 }
             });
         }
+
+        // Auto-buka lonceng notifikasi setelah beri nilai
+        @if(session('open_bell_notif'))
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    const bellBtn = document.getElementById('bell-btn');
+                    if (bellBtn && typeof toggleDropdown === 'function') {
+                        toggleDropdown('bell-dropdown', 'bell-btn');
+                    }
+                }, 100);
+            });
+        @endif
     </script>
 </x-atasan.layout>

@@ -203,12 +203,16 @@ class AtasanDashboardController extends Controller
     public function riwayat(Request $request)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
-        $search = $request->input('search');
+        $search      = $request->input('search');
+        $filterPeriode    = $request->input('periode');
+        $filterPerusahaan = $request->input('perusahaan');
+        $filterDepartemen = $request->input('departemen');
 
         $talentsQuery = User::where('atasan_id', $user->id)
             ->with([
             'position',
             'department',
+            'company',
             'promotion_plan.targetPosition',
             'assessmentSession.details.competence',
             'improvementProjects'
@@ -221,7 +225,35 @@ class AtasanDashboardController extends Controller
         $talents = $talentsQuery->get();
         $competencies = Competence::orderBy('id')->get();
 
-        return view('atasan.riwayat', compact('user', 'talents', 'competencies', 'search'));
+        // Build filter options
+        $periodeOptions = $talents
+            ->filter(fn($t) => $t->promotion_plan && $t->promotion_plan->start_date && $t->promotion_plan->target_date)
+            ->map(fn($t) => $t->promotion_plan->start_date->format('Y') . '/' . $t->promotion_plan->target_date->format('Y'))
+            ->unique()->values();
+
+        $perusahaanOptions = $talents->map(fn($t) => $t->company?->nama_perusahaan ?? null)->filter()->unique()->values();
+        $departemenOptions = $talents->map(fn($t) => $t->department?->nama_department ?? null)->filter()->unique()->values();
+
+        // Apply filters in PHP
+        if ($filterPeriode) {
+            $talents = $talents->filter(function ($t) use ($filterPeriode) {
+                if (!$t->promotion_plan || !$t->promotion_plan->start_date || !$t->promotion_plan->target_date) return false;
+                $key = $t->promotion_plan->start_date->format('Y') . '/' . $t->promotion_plan->target_date->format('Y');
+                return $key === $filterPeriode;
+            })->values();
+        }
+        if ($filterPerusahaan) {
+            $talents = $talents->filter(fn($t) => ($t->company?->nama_perusahaan ?? '') === $filterPerusahaan)->values();
+        }
+        if ($filterDepartemen) {
+            $talents = $talents->filter(fn($t) => ($t->department?->nama_department ?? '') === $filterDepartemen)->values();
+        }
+
+        return view('atasan.riwayat', compact(
+            'user', 'talents', 'competencies', 'search',
+            'filterPeriode', 'filterPerusahaan', 'filterDepartemen',
+            'periodeOptions', 'perusahaanOptions', 'departemenOptions'
+        ));
     }
 
     public function monitoringDetail($talentId)

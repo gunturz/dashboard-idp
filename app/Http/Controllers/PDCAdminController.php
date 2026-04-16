@@ -640,7 +640,7 @@ class PDCAdminController extends Controller
             'Assalam Hypermarket'
         ];
 
-        $companies = Company::all()->sortBy(function($company) use ($desiredOrder) {
+        $companies = Company::all()->sortBy(function ($company) use ($desiredOrder) {
             $pos = array_search($company->nama_company, $desiredOrder);
             return $pos !== false ? $pos : 999;
         });

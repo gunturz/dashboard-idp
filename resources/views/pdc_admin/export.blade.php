@@ -119,7 +119,7 @@
                                 $dueDate = optional($talent->promotion_plan)->target_date
                                     ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y')
                                     : '-';
-                                $currentPos = $talent->current_position ?? '-';
+                                $currentPos = $talent->position->position_name ?? '-' ;
                                 $targetPos  = optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
                                 $periodLabel = '';
                                 if (optional($talent->promotion_plan)->start_date && optional($talent->promotion_plan)->target_date) {
@@ -134,7 +134,8 @@
                                 data-period="{{ $periodLabel }}">
                                 <td class="px-6 py-4">
                                     <p class="font-bold text-slate-800">{{ $talent->nama }}</p>
-                                    <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} – {{ $targetPos }}</p>
+                                    <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr; {{ $targetPos }}
+                                    </p>
                                 </td>
                                 <td class="px-6 py-4 text-slate-600">{{ $compName }}</td>
                                 <td class="px-6 py-4 text-center text-slate-600">{{ $startDate }}</td>

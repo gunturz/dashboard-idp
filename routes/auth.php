@@ -215,6 +215,8 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.logbook.update_status');
     Route::get('/mentor/logbook-item/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
         ->name('mentor.logbook.detail');
+    Route::get('/mentor/riwayat', [\App\Http\Controllers\MentorDashboardController::class , 'riwayat'])
+        ->name('mentor.riwayat');
 
     // Finance Routes
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])

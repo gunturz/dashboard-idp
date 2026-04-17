@@ -121,12 +121,17 @@ class TalentDashboardController extends Controller
 
             DB::beginTransaction();
 
+            if (empty($user->atasan_id)) {
+                DB::rollBack();
+                return back()->with('error', 'Gagal memproses penilaian kompetensi: Atasan penilai Anda belum ditentukan. Silakan hubungi Admin PDC.');
+            }
+
             $bulanTahun = now()->format('F Y');
 
             // 1. Buat Header / Sesi Assessment Baru
             $assessmentId = DB::table('assessment_session')->insertGetId([
                 'user_id_talent' => $user->id,
-                'user_id_atasan' => $user->atasan_id ?? $user->id,
+                'user_id_atasan' => $user->atasan_id,
                 'period' => "Assessment {$bulanTahun}",
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -474,7 +479,7 @@ class TalentDashboardController extends Controller
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
         $notifications = $this->getNotifications();
-        
+
         $activity = \App\Models\IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
 
         if ($activity->user_id_talent !== $user->id) {

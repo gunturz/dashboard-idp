@@ -103,9 +103,12 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
-        // Fetch all talents with their relationships
+        // Fetch all talents except those who are already completed ('Approved Panelis')
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
+        })
+            ->whereDoesntHave('promotion_plan', function ($q) {
+            $q->where('status_promotion', 'Approved Panelis');
         })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
@@ -645,11 +648,13 @@ class PDCAdminController extends Controller
             return $pos !== false ? $pos : 999;
         });
 
-        // Fetch all talents with promotion plans
+        // Fetch only talents whose promotion plan is completed ('Approved Panelis')
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'Talent');
         })
-            ->whereHas('promotion_plan')
+            ->whereHas('promotion_plan', function ($q) {
+            $q->where('status_promotion', 'Approved Panelis');
+        })
             ->with(['company', 'department', 'position', 'promotion_plan.targetPosition', 'improvementProjects'])
             ->get();
 
@@ -694,13 +699,14 @@ class PDCAdminController extends Controller
             'assessmentSession.details.competence',
             'idpActivities.type',
             'improvementProjects.verifier',
+            'panelisAssessments.panelis.company',
         ])->findOrFail($talent_id);
 
         $competencies = Competence::all();
 
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         // Build top 3 GAP list
@@ -708,22 +714,25 @@ class PDCAdminController extends Controller
         $gaps = collect();
         if ($sess && $sess->details->count()) {
             $overrides = $sess->details->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
-                ->sortBy(fn($d) => (int) explode('|', str_replace('priority_', '', $d->notes))[0]);
+                ->sortBy(fn($d) => (int)explode('|', str_replace('priority_', '', $d->notes))[0]);
             $gaps = $overrides->count() > 0
                 ? $overrides->values()
                 : $sess->details->sortBy('gap_score')->take(3)->values();
         }
 
         // IDP activity counts
-        $exposureCount  = 0;
+        $exposureCount = 0;
         $mentoringCount = 0;
-        $learningCount  = 0;
+        $learningCount = 0;
         if ($talent->idpActivities) {
             foreach ($talent->idpActivities as $act) {
-                $typeName = strtolower(optional($act->type)->name ?? '');
-                if (str_contains($typeName, 'exposure'))  $exposureCount++;
-                elseif (str_contains($typeName, 'mentor')) $mentoringCount++;
-                elseif (str_contains($typeName, 'learn'))  $learningCount++;
+                $typeName = strtolower(optional($act->type)->type_name ?? '');
+                if (str_contains($typeName, 'exposure'))
+                    $exposureCount++;
+                elseif (str_contains($typeName, 'mentor'))
+                    $mentoringCount++;
+                elseif (str_contains($typeName, 'learn'))
+                    $learningCount++;
             }
         }
 

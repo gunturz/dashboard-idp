@@ -64,13 +64,13 @@
 
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Deskripsi</span>
-                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium">{{ $activity->description ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->description ?? '-' }}</div>
                 </div>
 
                 @if($activity->type_idp == 2)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Action Plan</span>
-                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium">{{ $activity->action_plan ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->action_plan ?? '-' }}</div>
                 </div>
                 @endif
 

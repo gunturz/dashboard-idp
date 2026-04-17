@@ -203,6 +203,107 @@ class MentorDashboardController extends Controller
         ));
     }
 
+    public function riwayat(Request $request)
+    {
+        $user = Auth::user();
+        $mentees = $user->mentees;
+
+        $talentId = $request->get('talent_id');
+        $selectedTalent = null;
+
+        $exposureData = [];
+        $mentoringData = [];
+        $learningData = [];
+
+        if ($mentees->isNotEmpty()) {
+            if ($talentId) {
+                // Cari talent berdasarkan id
+                $selectedTalent = $mentees->firstWhere('id', $talentId);
+            }
+            if (!$selectedTalent) {
+                // Default ke mentee pertama
+                $selectedTalent = $mentees->first();
+            }
+
+            if ($selectedTalent) {
+                $activities = IdpActivity::with(['type', 'verifier'])
+                    ->where('user_id_talent', $selectedTalent->id)
+                    ->where(function ($q) use ($user) {
+                        $q->where('verify_by', $user->id)
+                            ->orWhereHas('type', function ($qType) {
+                                $qType->where('type_name', 'Learning');
+                            });
+                    })
+                    ->whereIn('status', ['Approve', 'Approved'])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                foreach ($activities as $act) {
+                    $typeName = $act->type ? $act->type->type_name : '';
+
+                    // Decode list file path
+                    $docPaths = [];
+                    $docNames = [];
+                    if ($act->document_path) {
+                        if (str_starts_with($act->document_path, '["')) {
+                            $docPaths = json_decode($act->document_path, true) ?? [];
+                            $docNames = $act->file_name ? explode(', ', $act->file_name) : [];
+                        } else {
+                            $docPaths = [$act->document_path];
+                            $docNames = [$act->file_name ?? ''];
+                        }
+                    }
+
+                    if ($typeName === 'Exposure') {
+                        $exposureData[] = [
+                            'id' => $act->id,
+                            'mentor' => $act->verifier ? $act->verifier->nama : '-',
+                            'tema' => $act->theme,
+                            'tanggal_update' => $act->updated_at,
+                            'tanggal' => $act->activity_date,
+                            'lokasi' => $act->location,
+                            'aktivitas' => $act->activity,
+                            'deskripsi' => $act->description,
+                            'file_paths' => $docPaths,
+                            'file_names' => $docNames,
+                            'status' => $act->status,
+                        ];
+                    } elseif ($typeName === 'Mentoring') {
+                        $mentoringData[] = [
+                            'id' => $act->id,
+                            'mentor' => $act->verifier ? $act->verifier->nama : '-',
+                            'tema' => $act->theme,
+                            'tanggal_update' => $act->updated_at,
+                            'tanggal' => $act->activity_date,
+                            'lokasi' => $act->location,
+                            'deskripsi' => $act->description,
+                            'action_plan' => $act->action_plan,
+                            'file_paths' => $docPaths,
+                            'file_names' => $docNames,
+                            'status' => $act->status,
+                        ];
+                    } elseif ($typeName === 'Learning') {
+                        $learningData[] = [
+                            'id' => $act->id,
+                            'sumber' => $act->activity,
+                            'tema' => $act->theme,
+                            'tanggal_update' => $act->updated_at,
+                            'tanggal' => $act->activity_date,
+                            'platform' => $act->platform,
+                            'file_paths' => $docPaths,
+                            'file_names' => $docNames,
+                            'status' => $act->status,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return view('mentor.riwayat', compact(
+            'user', 'mentees', 'selectedTalent', 'exposureData', 'mentoringData', 'learningData'
+        ));
+    }
+
     public function updateLogbookStatus(Request $request, $id)
     {
         $request->validate([

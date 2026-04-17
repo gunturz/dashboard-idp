@@ -473,7 +473,7 @@
                                             $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->whereNotNull('panelis_score')->exists();
                                         @endphp
                                         @if ($isReviewedByPanelis)
-                                            {{-- Panelis sudah menilai → selalu tampilkan Lihat Penilaian --}}
+                                            {{-- Panelis sudah menilai → tampilkan Lihat Penilaian --}}
                                             <div class="flex items-center justify-center gap-2">
                                                 <a href="{{ route('pdc_admin.panelis_review.detail', $talent->id) }}" class="btn-prem btn-ghost text-xs px-3 py-1.5">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -482,13 +482,6 @@
                                                     </svg>
                                                     Lihat Penilaian
                                                 </a>
-                                                @if (optional($talent->promotion_plan)->status_promotion === 'Approved Panelis')
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" viewBox="0 0 24 24" fill="currentColor" title="Selesai">
-                                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-                                                    </svg>
-                                                @else
-                                                    <div class="w-5"></div>
-                                                @endif
                                             </div>
                                         @elseif ($alreadySent && !$isReviewedByPanelis)
                                             {{-- Sudah dikirim ke Panelis tapi belum dinilai --}}

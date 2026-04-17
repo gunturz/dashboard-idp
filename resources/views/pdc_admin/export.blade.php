@@ -139,7 +139,7 @@
                                 <td>{{ $dueDate }}</td>
                                 <td>
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route('pdc_admin.detail.talent', $talent->id) }}"
+                                        <a href="{{ route('pdc_admin.export.detail', $talent->id) }}"
                                             class="inline-block px-4 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-100 transition-colors whitespace-nowrap">
                                             Lihat Detail
                                         </a>

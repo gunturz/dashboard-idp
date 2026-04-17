@@ -1,4 +1,4 @@
-<x-mentor.layout title="Validasi – Individual Development Plan" :user="$user">
+<x-mentor.layout title="Riwayat – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             .section-pill {
@@ -95,43 +95,6 @@
             }
             .btn-detail:hover { color: #2e3746; }
 
-            .btn-pilih-aksi {
-                background: #eab308;
-                color: white;
-                font-size: 0.75rem;
-                font-weight: 700;
-                padding: 5px 14px;
-                border-radius: 6px;
-                border: none;
-                cursor: pointer;
-                transition: background 0.15s;
-            }
-            .btn-pilih-aksi:hover { background: #ca8a04; }
-
-            .btn-approved {
-                display: inline-flex;
-                align-items: center;
-                font-size: 0.75rem;
-                font-weight: 700;
-                color: #15803d;
-                background: #dcfce7;
-                border: 1px solid #bbf7d0;
-                padding: 4px 12px;
-                border-radius: 6px;
-            }
-
-            .btn-rejected {
-                display: inline-flex;
-                align-items: center;
-                font-size: 0.75rem;
-                font-weight: 700;
-                color: #b91c1c;
-                background: #fee2e2;
-                border: 1px solid #fecaca;
-                padding: 4px 12px;
-                border-radius: 6px;
-            }
-
             @media (max-width: 767px) {
                 main { padding: 16px !important; }
                 .val-table th, .val-table td { padding: 10px 10px; font-size: 0.78rem; }
@@ -209,16 +172,10 @@
                         <td>{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td>{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                         <td>
-                            @if($data['status'] === 'Pending')
-                                <span class="status-dot status-pending">Pending</span>
-                            @elseif(in_array($data['status'], ['Approve','Approved']))
-                                <span class="status-dot status-approved">Approved</span>
-                            @else
-                                <span class="status-dot status-rejected">Rejected</span>
-                            @endif
+                            <span class="status-dot status-approved">Approved</span>
                         </td>
                         <td>
-                            <div class="flex items-center justify-center gap-3">
+                            <div class="flex items-center justify-center">
                                 <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="btn-detail">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -226,15 +183,6 @@
                                     </svg>
                                     Detail
                                 </a>
-                                @if($data['status'] === 'Pending')
-                                    <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="btn-pilih-aksi">
-                                        Pilih Aksi
-                                    </button>
-                                @elseif(in_array($data['status'], ['Approve','Approved']))
-                                    <span class="btn-approved">Approved</span>
-                                @else
-                                    <span class="btn-rejected">Rejected</span>
-                                @endif
                             </div>
                         </td>
                     </tr>
@@ -269,16 +217,10 @@
                         <td>{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td>{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                         <td>
-                            @if($data['status'] === 'Pending')
-                                <span class="status-dot status-pending">Pending</span>
-                            @elseif(in_array($data['status'], ['Approve','Approved']))
-                                <span class="status-dot status-approved">Approved</span>
-                            @else
-                                <span class="status-dot status-rejected">Rejected</span>
-                            @endif
+                            <span class="status-dot status-approved">Approved</span>
                         </td>
                         <td>
-                            <div class="flex items-center justify-center gap-3">
+                            <div class="flex items-center justify-center">
                                 <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="btn-detail">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -286,15 +228,6 @@
                                     </svg>
                                     Detail
                                 </a>
-                                @if($data['status'] === 'Pending')
-                                    <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="btn-pilih-aksi">
-                                        Pilih Aksi
-                                    </button>
-                                @elseif(in_array($data['status'], ['Approve','Approved']))
-                                    <span class="btn-approved">Approved</span>
-                                @else
-                                    <span class="btn-rejected">Rejected</span>
-                                @endif
                             </div>
                         </td>
                     </tr>
@@ -329,16 +262,10 @@
                         <td>{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td>{{ $data['tanggal'] ? date('d M Y', strtotime($data['tanggal'])) : '-' }}</td>
                         <td>
-                            @if($data['status'] === 'Pending')
-                                <span class="status-dot status-pending">Pending</span>
-                            @elseif(in_array($data['status'], ['Approve','Approved']))
-                                <span class="status-dot status-approved">Approved</span>
-                            @else
-                                <span class="status-dot status-rejected">Rejected</span>
-                            @endif
+                            <span class="status-dot status-approved">Approved</span>
                         </td>
                         <td>
-                            <div class="flex items-center justify-center gap-3">
+                            <div class="flex items-center justify-center">
                                 <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="btn-detail">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -346,15 +273,6 @@
                                     </svg>
                                     Detail
                                 </a>
-                                @if($data['status'] === 'Pending')
-                                    <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="btn-pilih-aksi">
-                                        Pilih Aksi
-                                    </button>
-                                @elseif(in_array($data['status'], ['Approve','Approved']))
-                                    <span class="btn-approved">Approved</span>
-                                @else
-                                    <span class="btn-rejected">Rejected</span>
-                                @endif
                             </div>
                         </td>
                     </tr>
@@ -367,70 +285,11 @@
             </table>
         </div>
 
-        @else
-        <div class="text-center py-20">
-            <h3 class="text-xl font-bold text-slate-700 mb-2">Pilih Talent</h3>
-            <p class="text-gray-500 text-sm">Silakan pilih talent pada menu dropdown di atas untuk melihat data validasi.</p>
-        </div>
         @endif
-    </div>
-
-    {{-- Modal Confirm Aksi --}}
-    <div id="statusModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
-        <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[360px] p-7 text-center transform scale-95 transition-transform duration-300" id="statusModalContent">
-            <div class="mx-auto flex h-[68px] w-[68px] items-center justify-center rounded-full bg-[#eab308] mb-5 shadow-[0_4px_12px_rgba(234,179,8,0.3)]">
-                <span class="text-white font-black text-4xl leading-none -mt-1">!</span>
-            </div>
-            <h3 class="text-xl font-bold text-[#1e293b] mb-2 tracking-tight">Update Status Tugas?</h3>
-            <p class="text-[13px] text-gray-500 leading-relaxed mb-6 font-medium px-2">
-                Pilih status untuk tugas <span id="modalTalentName" class="font-bold text-gray-700">Talent</span>. Tindakan ini akan langsung memperbarui logbook sistem.
-            </p>
-            <form id="statusModalForm" method="POST" action="">
-                @csrf
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <button type="submit" name="status" value="Rejected" class="w-full bg-[#ef4444] text-white font-bold py-2.5 rounded-lg hover:bg-red-600 transition-colors shadow-[0_2px_8px_rgba(239,68,68,0.3)]">
-                        Reject
-                    </button>
-                    <button type="submit" name="status" value="Approved" class="w-full bg-[#10b981] text-white font-bold py-2.5 rounded-lg hover:bg-emerald-600 transition-colors shadow-[0_2px_8px_rgba(16,185,129,0.3)]">
-                        Approve
-                    </button>
-                </div>
-            </form>
-            <button onclick="closeStatusModal()" type="button" class="w-full bg-[#f1f5f9] text-[#64748b] font-bold py-2.5 rounded-lg hover:bg-gray-200 transition-colors">
-                Batal
-            </button>
-        </div>
     </div>
 
     <x-slot name="scripts">
         <script>
-            // Logbook Status Modal Logic
-            const baseStatusUrl = "{{ url('/mentor/logbook') }}";
-
-            function openStatusModal(id, talentName) {
-                const modal = document.getElementById('statusModal');
-                const modalContent = document.getElementById('statusModalContent');
-                const form = document.getElementById('statusModalForm');
-                const nameSpan = document.getElementById('modalTalentName');
-
-                form.action = `${baseStatusUrl}/${id}/status`;
-                nameSpan.textContent = talentName;
-
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
-                }, 10);
-            }
-
-            function closeStatusModal() {
-                const modal = document.getElementById('statusModal');
-                const modalContent = document.getElementById('statusModalContent');
-                modal.classList.add('opacity-0');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => { modal.classList.add('hidden'); }, 300);
-            }
-
             // Custom Dropdown Talent Logic
             function toggleTalentDropdown() {
                 const menu = document.getElementById('dropdown-menu');

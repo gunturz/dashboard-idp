@@ -385,15 +385,15 @@
                 const labelSpan = card.querySelector('.role-label');
 
                 if (card.dataset.role === activeRole) {
-                    card.classList.remove('bg-white', 'border-[#14b8a6]', 'hover:bg-teal-50');
-                    card.classList.add('bg-[#5bb4a5]', 'border-[#5bb4a5]');
+                    card.classList.remove('bg-white', 'hover:bg-teal-50');
+                    card.classList.add('bg-[#14b8a6]', 'shadow-md');
                     countSpan.classList.remove('text-[#14b8a6]');
                     countSpan.classList.add('text-white');
                     labelSpan.classList.remove('text-gray-500');
                     labelSpan.classList.add('text-white');
                 } else {
-                    card.classList.add('bg-white', 'border-[#14b8a6]', 'hover:bg-teal-50');
-                    card.classList.remove('bg-[#5bb4a5]', 'border-[#5bb4a5]');
+                    card.classList.add('bg-white', 'hover:bg-teal-50');
+                    card.classList.remove('bg-[#14b8a6]', 'shadow-md');
                     countSpan.classList.add('text-[#14b8a6]');
                     countSpan.classList.remove('text-white');
                     labelSpan.classList.add('text-gray-500');

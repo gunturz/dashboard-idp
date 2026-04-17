@@ -164,6 +164,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.finance.request');
     Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class , 'export'])
         ->name('pdc_admin.export');
+    Route::get('/pdc-admin/export/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'exportDetail'])
+        ->name('pdc_admin.export.detail');
 
     Route::get('/pdc-admin/panelis-review', [\App\Http\Controllers\PDCAdminController::class , 'panelisReview'])
         ->name('pdc_admin.panelis_review');

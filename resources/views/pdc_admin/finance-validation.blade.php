@@ -198,40 +198,94 @@
         </style>
     </x-slot>
 
-    <div class="flex items-center gap-2 mb-8 px-2 animate-title">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 text-[#2e3746]">
-            <path
-                d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 0 1-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004ZM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 0 1-.921.42Z" />
-            <path fill-rule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a3.836 3.836 0 0 0-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 0 1-.921-.421l-.879-.66a.75.75 0 0 0-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 0 0 1.5 0v-.81a4.124 4.124 0 0 0 1.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 0 0-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 0 0 .933-1.175l-.415-.33a3.836 3.836 0 0 0-1.719-.755V6Z"
-                clip-rule="evenodd" />
-        </svg>
-        <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Finance Validation</h2>
+    {{-- ── Page Header ── --}}
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 01-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004zM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 01-.921.42z"/>
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v.816a3.836 3.836 0 00-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 01-.921-.421l-.879-.66a.75.75 0 00-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 001.5 0v-.81a4.124 4.124 0 001.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 00-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 00.933-1.175l-.415-.33a3.836 3.836 0 00-1.719-.755V6z" clip-rule="evenodd"/>
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Finance Validation</div>
+            <div class="page-header-sub">Kelola validasi project improvement talent</div>
+        </div>
     </div>
 
     {{-- Summary Cards --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-        <div class="stat-card card-default">
-            <div class="stat-number">{{ $total }}</div>
-            <div class="stat-label">Total</div>
+    <div class="prem-stat-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="prem-stat prem-stat-teal">
+            <div class="prem-stat-icon si-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="prem-stat-value">{{ $total }}</div>
+            <div class="prem-stat-label">Total Permintaan</div>
         </div>
-        <div class="stat-card card-pending">
-            <div class="stat-number">{{ $pending }}</div>
-            <div class="stat-label">Pending</div>
+        <div class="prem-stat prem-stat-amber">
+            <div class="prem-stat-icon si-amber">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="prem-stat-value">{{ $pending }}</div>
+            <div class="prem-stat-label">Pending</div>
         </div>
-        <div class="stat-card card-approved">
-            <div class="stat-number">{{ $approved }}</div>
-            <div class="stat-label">Approved</div>
+        <div class="prem-stat prem-stat-green">
+            <div class="prem-stat-icon si-green">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="prem-stat-value">{{ $approved }}</div>
+            <div class="prem-stat-label">Approved</div>
         </div>
-        <div class="stat-card card-rejected">
-            <div class="stat-number">{{ $rejected }}</div>
-            <div class="stat-label">Rejected</div>
+        <div class="prem-stat prem-stat-red">
+            <div class="prem-stat-icon si-red">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="prem-stat-value">{{ $rejected }}</div>
+            <div class="prem-stat-label">Rejected</div>
         </div>
     </div>
 
+    {{-- ── Filter Bar ── --}}
+    <div class="flex flex-col sm:flex-row items-center gap-4 mt-8 mb-6">
+        {{-- Live Search --}}
+        <div class="relative w-full sm:w-[40%]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent atau Project…" 
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" 
+                oninput="filterFinanceList()">
+        </div>
+
+        {{-- Status Filter --}}
+        <div class="relative w-full sm:w-[30%]">
+            <select id="live-status-filter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all" 
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" 
+                onchange="filterFinanceList()">
+                <option value="">Semua Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="verified">Verified</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
+
+        {{-- Reset Button --}}
+        <button type="button" onclick="resetFinanceFilters()" class="btn-prem btn-ghost w-full sm:w-auto mt-2 sm:mt-0" id="reset-filter-btn" style="display:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            Reset
+        </button>
+    </div>
+
     {{-- Table --}}
-    <div class="fv-table-wrapper">
-        <div class="fv-table-title">Daftar Permintaan Validasi</div>
+    <div class="prem-card">
+        <div class="prem-card-header">
+            <span class="prem-card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM9.75 17.25a.75.75 0 00-1.5 0V18a.75.75 0 001.5 0v-.75zm2.25-3a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0v-3a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0V18a.75.75 0 001.5 0v-4.5z" clip-rule="evenodd"/></svg>
+                Daftar Permintaan Validasi
+            </span>
+        </div>
+        <div class="overflow-x-auto">
         <table class="fv-table">
             <thead>
                 <tr>
@@ -245,7 +299,16 @@
             </thead>
             <tbody>
                 @forelse($projects as $project)
-                    <tr>
+                    @php
+                        $finDec = 'Pending';
+                        if ($project->finance_feedback) {
+                            if (str_starts_with($project->finance_feedback, '[Approved]')) $finDec = 'Approved';
+                            elseif (str_starts_with($project->finance_feedback, '[Rejected]')) $finDec = 'Rejected';
+                        }
+                    @endphp
+                    <tr class="finance-row" 
+                        data-search="{{ strtolower($project->talent->nama . ' ' . $project->title) }}" 
+                        data-status="{{ strtolower($finDec) }}">
                         <td>
                             <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
                             <p class="text-xs text-gray-500 italic mt-1">
@@ -344,8 +407,8 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
-    {{-- Action Modal (PDC Admin: ubah status Project Improvement) --}}
+        </div>{{-- /overflow-x-auto --}}
+    </div>{{-- /prem-card --}}
     <div id="actionModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-[440px] shadow-2xl overflow-hidden">
             {{-- Header --}}
@@ -377,7 +440,7 @@
                     @method('PATCH')
                     <input type="hidden" name="status" value="Verified">
                     <button type="submit"
-                        class="w-full py-3 text-sm font-bold text-white bg-[#22c55e] hover:bg-[#16a34a] rounded-xl transition-colors shadow-sm">
+                        class="w-full py-3 text-sm font-bold text-white bg-[#14b8a6] hover:bg-[#0d9488] rounded-xl transition-colors shadow-sm">
                         ✓ Approve
                     </button>
                 </form>
@@ -495,7 +558,7 @@
                 </div>
 
                 <div class="px-6 pb-6 pt-2 flex justify-end gap-3">
-                    <button type="button" onclick="closeFinanceModal()" class="px-5 py-2.5 text-sm font-bold text-[#1e293b] bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">Batal</button>
+                    <button type="button" onclick="closeFinanceModal()" class="px-5 py-2.5 text-sm font-bold text-[#475569] bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">Batal</button>
                     <button type="submit" class="px-6 py-2.5 text-sm font-bold text-white bg-[#16c60c] hover:bg-[#14b00a] shadow-lg shadow-green-500/30 rounded-xl transition-all hover:-translate-y-px" onclick="this.innerHTML='Mengirim...';">Kirim</button>
                 </div>
             </form>
@@ -503,6 +566,31 @@
     </div>
 
     <script>
+        function filterFinanceList() {
+            const search = document.getElementById('live-search-input').value.toLowerCase();
+            const status = document.getElementById('live-status-filter').value.toLowerCase();
+            const rows = document.querySelectorAll('.finance-row');
+            const resetBtn = document.getElementById('reset-filter-btn');
+
+            resetBtn.style.display = (search || status) ? 'inline-flex' : 'none';
+
+            rows.forEach(row => {
+                const rowText = row.dataset.search;
+                const rowStatus = row.dataset.status;
+
+                const matchSearch = !search || rowText.includes(search);
+                const matchStatus = !status || rowStatus === status;
+
+                row.style.display = (matchSearch && matchStatus) ? '' : 'none';
+            });
+        }
+
+        function resetFinanceFilters() {
+            document.getElementById('live-search-input').value = '';
+            document.getElementById('live-status-filter').value = '';
+            filterFinanceList();
+        }
+
         function openActionModal(projectId, talentName, actionUrl) {
             document.getElementById('actionModalDesc').innerHTML =
                 'Pilih status untuk project improvement milik <strong>' + talentName +

@@ -2,31 +2,37 @@
 
     <div class="px-2 pb-10">
         {{-- Page Header --}}
-        <div class="flex items-center gap-2 mb-8 px-2 animate-title">
-            <svg class="w-8 h-8 text-[#2e3746]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3.75v5.25m-3-3 3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"></path>
-            </svg>
-            <h1 class="text-2xl font-bold text-[#2e3746] animate-title">Progress Archive</h1>
+        <div class="page-header animate-title mb-8">
+            <div class="page-header-icon shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
+                    <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                    <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <div class="page-header-title">Progress Archive</div>
+                <div class="page-header-sub">Arsip rekam jejak pengembangan talent serta kemudahan export data PDF.</div>
+            </div>
         </div>
 
         {{-- Filter Bar --}}
         <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
             {{-- Search --}}
             <div class="relative w-full sm:w-[40%]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
                 <input type="text" id="searchInput" placeholder="Cari Nama"
-                    class="w-full rounded-lg border border-slate-300 shadow-sm pl-4 pr-10 py-2.5 text-sm bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 placeholder-slate-400"
-                    onkeyup="filterTalents()">
-                <div class="absolute right-3 top-2.5 text-teal-500">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
+                    class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                    oninput="filterTalents()">
             </div>
 
             {{-- Period Filter --}}
             <div class="relative w-full sm:w-[30%]">
                 <select id="periodFilter"
-                    class="w-full rounded-lg border border-slate-300 py-2.5 pl-4 pr-10 text-sm bg-white text-slate-600 appearance-none focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                    class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
+                    style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
                     onchange="filterTalents()">
                     <option value="">Semua Periode</option>
                     @php
@@ -47,17 +53,13 @@
                         <option value="{{ $period }}">{{ $period }}</option>
                     @endforeach
                 </select>
-                <div class="pointer-events-none absolute right-3 top-3 text-teal-500">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
             </div>
 
             {{-- Company Filter --}}
             <div class="relative w-full sm:w-[30%]">
                 <select id="companyFilter"
-                    class="w-full rounded-lg border border-slate-300 py-2.5 pl-4 pr-10 text-sm bg-white text-slate-600 appearance-none focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                    class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
+                    style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
                     onchange="filterTalents()">
                     <option value="">Semua Perusahaan</option>
                     @php
@@ -77,11 +79,6 @@
                         <option value="{{ $comp }}">{{ $comp }}</option>
                     @endforeach
                 </select>
-                <div class="pointer-events-none absolute right-3 top-3 text-teal-500">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
             </div>
         </div>
 
@@ -96,15 +93,15 @@
             $totalRows = 0;
         @endphp
 
-        <div class="overflow-x-auto rounded-xl border border-slate-300 shadow-sm bg-white">
-            <table class="min-w-full text-sm" id="archiveTable">
+        <div class="prem-card overflow-x-auto">
+            <table class="prem-table" id="archiveTable" style="width: 100%; table-layout: auto;">
                 <thead>
-                    <tr class="bg-slate-50 border-b-2 border-slate-300">
-                        <th class="px-6 py-4 text-center font-semibold text-slate-700 w-[22%]">Talent</th>
-                        <th class="px-6 py-4 text-center font-semibold text-slate-700 w-[22%]">Perusahaan</th>
-                        <th class="px-6 py-4 text-center font-semibold text-slate-700 w-[16%]">Start Date</th>
-                        <th class="px-6 py-4 text-center font-semibold text-slate-700 w-[16%]">Due Date</th>
-                        <th class="px-6 py-4 text-center font-semibold text-slate-700 w-[24%]">Aksi</th>
+                    <tr>
+                        <th style="width: 22%">Talent</th>
+                        <th style="width: 22%">Perusahaan</th>
+                        <th style="width: 16%">Start Date</th>
+                        <th style="width: 16%">Due Date</th>
+                        <th style="width: 24%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="archiveTbody">
@@ -132,15 +129,15 @@
                                 data-name="{{ strtolower($talent->nama) }}"
                                 data-company="{{ $compName }}"
                                 data-period="{{ $periodLabel }}">
-                                <td class="px-6 py-4">
-                                    <p class="font-bold text-slate-800">{{ $talent->nama }}</p>
+                                <td>
+                                    <p class="font-bold text-[#2e3746]">{{ $talent->nama }}</p>
                                     <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr; {{ $targetPos }}
                                     </p>
                                 </td>
-                                <td class="px-6 py-4 text-slate-600">{{ $compName }}</td>
-                                <td class="px-6 py-4 text-center text-slate-600">{{ $startDate }}</td>
-                                <td class="px-6 py-4 text-center text-slate-600">{{ $dueDate }}</td>
-                                <td class="px-6 py-4">
+                                <td>{{ $compName }}</td>
+                                <td>{{ $startDate }}</td>
+                                <td>{{ $dueDate }}</td>
+                                <td>
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('pdc_admin.detail.talent', $talent->id) }}"
                                             class="inline-block px-4 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-100 transition-colors whitespace-nowrap">
@@ -158,7 +155,7 @@
 
                     {{-- Empty state row --}}
                     <tr id="emptyRow" class="hidden">
-                        <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                        <td colspan="5" class="py-12 text-center text-slate-500 italic">
                             Tidak ada talent yang sesuai dengan pencarian Anda.
                         </td>
                     </tr>
@@ -208,10 +205,7 @@
             document.addEventListener('DOMContentLoaded', filterTalents);
         </script>
         <style>
-            #archiveTable th { letter-spacing: 0.01em; }
-            #archiveTable tbody tr:last-child { border-bottom: none; }
-            #archiveTable th, #archiveTable td { border-right: 1px solid #cbd5e1; }
-            #archiveTable th:last-child, #archiveTable td:last-child { border-right: none; }
+            .archive-row td { vertical-align: middle; }
         </style>
     </x-slot>
 

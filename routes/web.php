@@ -39,15 +39,7 @@ Route::get('/dashboard', function () {
         return redirect()->route('kandidat.dashboard');
     }
     elseif ($roleName === 'talent') {
-        $hasAssessed = \Illuminate\Support\Facades\DB::table('assessment_session')
-            ->where('user_id_talent', $user->id)
-            ->exists();
-        if ($hasAssessed) {
-            return redirect()->route('talent.dashboard');
-        }
-        else {
-            return redirect()->route('talent.competency');
-        }
+        return redirect()->route('talent.dashboard');
     }
     elseif ($roleName === 'atasan') {
         return redirect()->route('atasan.dashboard');

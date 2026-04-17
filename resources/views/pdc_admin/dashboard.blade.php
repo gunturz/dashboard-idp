@@ -1,288 +1,385 @@
 <x-pdc_admin.layout title="Dashboard PDC Admin – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
-            .company-header {
-                font-size: 1rem;
-                font-weight: 700;
-                color: #334155;
-                margin-bottom: 0;
-                padding: 16px;
-                background: #f8fafc;
-                border-bottom: 1px solid #e2e8f0;
-                text-align: center;
-            }
-
-            .pdc-table {
-                width: 100%;
-                border-collapse: collapse;
-                background: white;
-            }
-
-            .pdc-table th {
-                background: #ffffff;
-                color: #1e293b;
-                font-weight: 700;
-                text-align: center;
-                padding: 12px 16px;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
-                font-size: 0.875rem;
-                text-transform: capitalize;
-                white-space: nowrap;
-            }
-            .pdc-table th:last-child {
-                border-right: none;
-            }
-
-            .pdc-table td {
-                text-align: center;
-                padding: 14px 16px;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
-                font-size: 0.875rem;
-                color: #334155;
-                vertical-align: middle;
-            }
-            .pdc-table td:last-child {
-                border-right: none;
-            }
-            
-            .pdc-table tr:last-child td {
-                border-bottom: none;
-            }
-
-            .target-position {
-                font-weight: 700;
-                color: #1e293b;
-                display: block;
-                font-size: 0.95rem;
-            }
-
-            .target-dept {
-                font-size: 0.75rem;
-                color: #64748b;
-                font-style: italic;
-                display: block;
-                margin-top: 2px;
-            }
-
-            .talent-name {
-                font-weight: 700;
-                color: #1e293b;
-                display: block;
-            }
-
-            .talent-role {
-                font-size: 0.75rem;
-                color: #64748b;
-                font-style: italic;
-                display: block;
-            }
-
-            .summary-card {
-                background: white;
-                border-radius: 12px;
-                padding: 24px;
-                text-align: center;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            /* ══ Page Header ══ */
+            .dash-header {
                 display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: 140px;
-                border: 2px solid transparent; /* default */
-            }
-
-            .summary-value {
-                font-size: 2.5rem;
-                font-weight: 800;
-                line-height: 1.2;
-                margin-bottom: 8px;
-            }
-
-            .summary-label {
-                font-size: 0.8rem;
-                color: #64748b;
-                font-weight: 500;
-            }
-            
-            /* Specific Card Colors */
-            .card-teal { border-color: #0d9488; }
-            .card-teal .summary-value { color: #0d9488; }
-            
-            .card-green { border-color: #22c55e; }
-            .card-green .summary-value { color: #22c55e; }
-            
-            .card-red { border-color: #ef4444; }
-            .card-red .summary-value { color: #ef4444; }
-
-            .section-title {
-                font-size: 1.125rem;
-                font-weight: 800;
-                color: #1e293b;
-                margin-bottom: 16px;
-            }
-
-            .role-list-item {
-                display: flex;
-                justify-content: space-between;
                 align-items: center;
-                padding: 16px 24px;
-                background: white;
-                border: 1px solid #e2e8f0;
-                border-radius: 12px;
-                margin-bottom: 12px;
-                font-weight: 600;
-                color: #334155;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+                gap: 14px;
+                margin-bottom: 28px;
             }
-            
-            .role-list-value {
-                color: #64748b;
-                font-weight: 500;
+            .dash-header-icon {
+                width: 48px; height: 48px;
+                border-radius: 14px;
+                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+                display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 4px 14px rgba(46,55,70,0.25);
+                flex-shrink: 0;
             }
+            .dash-header-icon svg { color: white; width: 24px; height: 24px; }
+            .dash-header-title { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
+            .dash-header-sub { font-size: 0.8rem; color: #64748b; margin-top: 2px; font-weight: 400; }
+            .dash-header-date { margin-left: auto; font-size: 0.78rem; color: #94a3b8; font-weight: 500; text-align: right; }
+            .dash-header-date span { display: block; font-size: 1rem; font-weight: 700; color: #475569; }
+            .animate-title { animation: titleReveal 0.6s cubic-bezier(0.4,0,0.2,1) both; }
+            @keyframes titleReveal { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
 
-            .highlight-container {
-                background: white;
-                border-radius: 12px;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-                padding: 16px;
-                border: 1px solid #e2e8f0;
-            }
+            /* ══ Vue App ══ */
+            #pdc-dashboard-app { width: 100%; }
 
-            .company-table-wrapper {
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                overflow: hidden;
-                margin-bottom: 24px;
-            }
-            .company-table-wrapper:last-child {
-                margin-bottom: 0;
-            }
+            /* ══ Main Grid ══ */
+            .main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; margin-bottom: 24px; }
+            @media(max-width:1024px){.main-grid{grid-template-columns:1fr}}
+
+            /* ══ Glass Card ══ */
+            .glass-card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,.04); overflow:hidden; }
+            .card-header { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #e2e8f0; gap:12px; flex-wrap:wrap; }
+            .card-title { display:flex; align-items:center; gap:8px; font-size:.9rem; font-weight:700; color:#1e293b; }
+            .card-title svg { width:18px; height:18px; color:#14b8a6; flex-shrink:0; }
+            .card-badge { font-size:.65rem; font-weight:700; letter-spacing:.05em; color:#14b8a6; background:rgba(20,184,166,.1); border:1px solid rgba(20,184,166,.25); border-radius:99px; padding:2px 10px; animation:pulseBadge 2s ease infinite; }
+            @keyframes pulseBadge{0%,100%{opacity:1}50%{opacity:.6}}
+
+            /* ══ Chart ══ */
+            .chart-container { position:relative; display:flex; align-items:center; justify-content:center; padding:20px 20px 8px; }
+            .chart-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; pointer-events:none; }
+            .chart-total { font-size:1.8rem; font-weight:800; color:#1e293b; line-height:1; }
+            .chart-total-label { font-size:.7rem; color:#64748b; font-weight:500; margin-top:2px; }
+
+            .legend-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; padding:12px 20px 16px; }
+            .legend-item { display:flex; align-items:center; gap:7px; font-size:.78rem; color:#334155; }
+            .legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+            .legend-label { flex:1; color:#64748b; }
+            .legend-val { font-weight:700; color:#1e293b; }
+
+            /* ══ Role List ══ */
+            .role-list { padding: 12px 16px 16px; display:flex; flex-direction:column; gap:8px; }
+            .role-item { display:flex; align-items:center; gap:10px; padding:10px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,.02); }
+            .role-item-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+            .role-item-name { flex:1; font-size:.85rem; font-weight:600; color:#334155; }
+            .role-item-count { font-size:.85rem; font-weight:700; color:#64748b; }
+
+            /* ══ Table Card ══ */
+            .search-box { display:flex; align-items:center; gap:8px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:6px 12px; }
+            .search-box svg { width:15px; height:15px; color:#94a3b8; flex-shrink:0; }
+            .search-input { border:none; background:transparent; font-size:.8rem; color:#334155; outline:none; width:150px; }
+            .search-input::placeholder { color:#94a3b8; }
+
+            .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 20px; color:#94a3b8; gap:12px; font-size:.85rem; font-weight:500; }
+            .empty-state svg { width:40px; height:40px; }
+
+            .table-scroll { overflow-x: auto; }
+            .highlight-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+            .highlight-table th { background:#f8fafc; color:#475569; font-weight:700; text-align:left; padding:10px 16px; border-bottom:1px solid #e2e8f0; white-space:nowrap; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; }
+            .highlight-table td { padding:11px 16px; border-bottom:1px solid #f1f5f9; vertical-align:middle; color:#334155; }
+            .table-row { transition:background .15s; }
+            .table-row:hover td { background:#f0fdfa !important; }
+            .row-even td { background:#fafbfc; }
+            .td-position { font-weight:700; color:#1e293b; }
+            .td-sub { font-size:.7rem; color:#94a3b8; margin-top:2px; font-style:italic; }
+            .td-name { font-weight:600; color:#1e293b; }
+            .td-muted { color:#64748b; }
         </style>
     </x-slot>
 
-    {{-- Title --}}
-    <div class="flex items-center gap-3 mb-8 animate-title">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-        </svg>
-        <h2 class="text-2xl font-extrabold text-[#2e3746] animate-title">Dashboard</h2>
-    </div>
-
-    {{-- Summary Cards --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <a href="{{ route('pdc_admin.user_management') }}" class="summary-card card-teal hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
-            <div class="summary-value">{{ $totalUsers ?? 0 }}</div>
-            <div class="summary-label">Total User</div>
-        </a>
-        <a href="{{ route('pdc_admin.progress_talent') }}" class="summary-card card-teal hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
-            <div class="summary-value">{{ $onProgressTalent ?? 0 }}</div>
-            <div class="summary-label">On Progress</div>
-        </a>
-        <a href="{{ route('pdc_admin.finance_validation') }}" class="summary-card card-green hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
-            <div class="summary-value">{{ $pendingFinance ?? 0 }}</div>
-            <div class="summary-label">Pending Finance Validation</div>
-        </a>
-        <div class="summary-card card-red hover:shadow-lg hover:bg-gray-100 transition-shadow duration-200">
-            <div class="summary-value">{{ $pendingPanelis ?? 0 }}</div>
-            <div class="summary-label">Pending Panelis Decision</div>
+    {{-- ── Page Header ── --}}
+    <div class="dash-header animate-title">
+        <div class="dash-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"/>
+                <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z"/>
+            </svg>
+        </div>
+        <div>
+            <div class="dash-header-title">Dashboard</div>
+            <div class="dash-header-sub">Individual Development Plan – PDC Admin</div>
+        </div>
+        <div class="dash-header-date hidden md:block">
+            Hari ini
+            <span>{{ now()->translatedFormat('d F Y') }}</span>
         </div>
     </div>
 
-    {{-- Recent Highlight Progress --}}
-    <div class="mb-10">
-        <h3 class="section-title">Recent Highlight Progress</h3>
-        
-        <div class="highlight-container">
-            @forelse($groupedData as $companyId => $companyData)
-                <div class="company-table-wrapper">
-                    <h4 class="company-header">{{ $companyData['company']->nama_company ?? 'Unassigned' }}</h4>
-                    <div class="overflow-x-auto">
-                        <table class="pdc-table">
-                            <thead>
-                                <tr>
-                                    <th class="w-[20%]">Posisi yang Dituju</th>
-                                    <th class="w-[20%]">Talent</th>
-                                    <th class="w-[20%]">Departemen</th>
-                                    <th class="w-[20%]">Mentor</th>
-                                    <th class="w-[20%]">Atasan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($companyData['positions'] as $positionId => $posData)
-                                    @foreach($posData['talents'] as $index => $talent)
-                                        <tr>
-                                            @if($index === 0)
-                                                <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                                    <span class="target-position">
-                                                        {{ $posData['targetPosition']->position_name ?? '-' }}
-                                                    </span>
-                                                    <span class="target-dept">
-                                                        {{ optional($posData['targetPosition']->department ?? null)->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
-                                                    </span>
-                                                </td>
-                                            @endif
-                                            <td>
-                                                <span class="talent-name">{{ $talent->nama }}</span>
-                                                <span class="talent-role">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
-                                            </td>
-                                            @if($index === 0)
-                                                <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                                    {{ optional($talent->department)->nama_department ?? '-' }}
-                                                </td>
-                                            @endif
-                                            <td>
-                                                @php
-                                                    $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                                                    if (!empty($mentorIds)) {
-                                                        $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
-                                                        echo implode('<br>', $mentorNames) ?: '-';
-                                                    } else {
-                                                        echo optional($talent->mentor)->nama ?? '-';
-                                                    }
-                                                @endphp
-                                            </td>
-                                            <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
-                                        </tr>
-                                    @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
+    {{-- ── Main Dashboard Content ── --}}
+    <div id="pdc-dashboard-wrapper">
+        <!-- Stats Grid -->
+        <div class="prem-stat-grid" style="grid-template-columns: repeat(4, 1fr);">
+            @php
+                $tableRows = [];
+                if (isset($groupedData)) {
+                    foreach ($groupedData as $companyId => $companyData) {
+                        foreach ($companyData['positions'] as $positionId => $posData) {
+                            foreach ($posData['talents'] as $index => $talent) {
+                                $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+                                if (!empty($mentorIds)) {
+                                    $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->toArray();
+                                    $mentorStr = implode(', ', $mentorNames) ?: '-';
+                                } else {
+                                    $mentorStr = optional($talent->mentor)->nama ?? '-';
+                                }
+                                $tableRows[] = [
+                                    'position' => optional($posData['targetPosition'])->position_name ?? '-',
+                                    'dept'     => optional($talent->department)->nama_department ?? '-',
+                                    'talent'   => $talent->nama,
+                                    'role'     => optional($talent->position)->position_name ?? 'Officer',
+                                    'mentor'   => $mentorStr,
+                                    'atasan'   => optional($talent->atasan)->nama ?? '-',
+                                ];
+                            }
+                        }
+                    }
+                }
+
+                $statCards = [
+                    [
+                        'label' => 'Total User',
+                        'value' => (int)($totalUsers ?? 0),
+                        'href' => route('pdc_admin.user_management'),
+                        'colorClass' => 'prem-stat-teal',
+                        'iconBg' => 'si-teal',
+                        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>'
+                    ],
+                    [
+                        'label' => 'On Progress',
+                        'value' => (int)($onProgressTalent ?? 0),
+                        'href' => route('pdc_admin.progress_talent'),
+                        'colorClass' => 'prem-stat-blue',
+                        'iconBg' => 'si-blue',
+                        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>'
+                    ],
+                    [
+                        'label' => 'Pending Finance',
+                        'value' => (int)($pendingFinance ?? 0),
+                        'href' => route('pdc_admin.finance_validation'),
+                        'colorClass' => 'prem-stat-green',
+                        'iconBg' => 'si-green',
+                        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>'
+                    ],
+                    [
+                        'label' => 'Pending Panelis',
+                        'value' => (int)($pendingPanelis ?? 0),
+                        'href' => route('pdc_admin.panelis_review'),
+                        'colorClass' => 'prem-stat-amber',
+                        'iconBg' => 'si-amber',
+                        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>'
+                    ],
+                ];
+
+                $palette = ['#14b8a6','#3b82f6','#8b5cf6','#f59e0b','#ef4444'];
+                $roleLabels = ['Talent','Mentor','Atasan','Finance','Panelis'];
+                $roleChartData = [];
+                foreach($roleLabels as $idx => $r) {
+                    $roleChartData[] = [
+                        'label' => $r,
+                        'value' => $roleCounts[$r] ?? 0,
+                        'color' => $palette[$idx]
+                    ];
+                }
+                $roleChartDataJson = json_encode($roleChartData);
+            @endphp
+
+            @foreach($statCards as $card)
+                <a href="{{ $card['href'] }}" class="prem-stat clickable {{ $card['colorClass'] }}">
+                    <div class="prem-stat-icon {{ $card['iconBg'] }}">{!! $card['icon'] !!}</div>
+                    <div class="prem-stat-value animate-counter" data-target="{{ $card['value'] }}">0</div>
+                    <div class="prem-stat-label">{{ $card['label'] }}</div>
+                </a>
+            @endforeach
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid mt-6">
+            <!-- Left: Chart + Role Breakdown -->
+            <div>
+                <div class="glass-card" style="padding-bottom:8px">
+                    <div class="card-header">
+                        <span class="card-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"/>
+                            </svg>
+                            Distribusi User
+                        </span>
+                        <span class="card-badge">Live</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="donutCanvas" width="240" height="240"></canvas>
+                        <div class="chart-center">
+                            <div class="chart-total animate-counter" data-target="{{ (int)($totalUsers ?? 0) }}">0</div>
+                            <div class="chart-total-label">Total User</div>
+                        </div>
+                    </div>
+                    <div class="role-list" style="padding-top:8px;">
+                        @foreach($roleChartData as $item)
+                        <div class="role-item">
+                            <span class="role-item-dot" style="background: {{ $item['color'] }}"></span>
+                            <span class="role-item-name">{{ $item['label'] }}</span>
+                            <span class="role-item-count">{{ $item['value'] }} users</span>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
-            @empty
-                <div class="p-8 text-center text-gray-400">
-                    Belum ada data progress talent yang menunggu penilaian Panelis.
+            </div>
+
+            <!-- Right: Progress Table -->
+            <div class="glass-card" style="display:flex;flex-direction:column">
+                <div class="card-header">
+                    <span class="card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M5.566 4.657A4.505 4.505 0 016.75 4.5h10.5c.41 0 .806.055 1.183.157A3 3 0 0015.75 3h-7.5a3 3 0 00-2.684 1.657zM2.25 12a3 3 0 013-3h13.5a3 3 0 013 3v6a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-6zM5.25 7.5c-.41 0-.806.055-1.184.157A3 3 0 016.75 6h10.5a3 3 0 012.683 1.657A4.505 4.505 0 0018.75 7.5H5.25z"/>
+                        </svg>
+                        Recent Highlight Progress
+                    </span>
+                    <div class="search-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input type="text" id="tableSearchInput" placeholder="Cari talent..." class="search-input" />
+                    </div>
                 </div>
-            @endforelse
+
+                @if(count($tableRows) === 0)
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                    </svg>
+                    <p>Belum ada data progress talent</p>
+                </div>
+                @else
+                <div class="table-scroll">
+                    <table class="highlight-table">
+                        <thead>
+                            <tr>
+                                <th>Posisi Dituju</th>
+                                <th>Talent</th>
+                                <th>Departemen</th>
+                                <th>Mentor</th>
+                                <th>Atasan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="highlightTbody">
+                            @foreach($tableRows as $idx => $row)
+                            <tr class="table-row {{ $idx % 2 === 0 ? 'row-even' : '' }}" data-talent="{{ strtolower($row['talent'] ?? '') }}" data-position="{{ strtolower($row['position'] ?? '') }}" data-mentor="{{ strtolower($row['mentor'] ?? '') }}">
+                                <td>
+                                    <div class="td-position">{{ $row['position'] }}</div>
+                                    <div class="td-sub">{{ $row['dept'] }}</div>
+                                </td>
+                                <td>
+                                    <div class="td-name">{{ $row['talent'] }}</div>
+                                    <div class="td-sub">{{ $row['role'] }}</div>
+                                </td>
+                                <td class="td-muted">{{ $row['dept'] }}</td>
+                                <td class="td-muted">{{ $row['mentor'] }}</td>
+                                <td class="td-muted">{{ $row['atasan'] }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Add empty state for search filtering -->
+                <div id="searchEmptyState" class="empty-state" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <p>Tidak ada baris yang cocok dengan pencarian.</p>
+                </div>
+                @endif
+            </div>
         </div>
     </div>
 
-    {{-- Total User by Role --}}
-    <div>
-        <h3 class="section-title">Total User by Role</h3>
-        <div class="highlight-container bg-[#f8fafc] border-none shadow-none p-4">
-            <div class="role-list-item">
-                <span>Talent</span>
-                <span class="role-list-value">{{ $roleCounts['Talent'] ?? 0 }} Users</span>
-            </div>
-            <div class="role-list-item">
-                <span>Mentor</span>
-                <span class="role-list-value">{{ $roleCounts['Mentor'] ?? 0 }} Users</span>
-            </div>
-            <div class="role-list-item">
-                <span>Atasan</span>
-                <span class="role-list-value">{{ $roleCounts['Atasan'] ?? 0 }} Users</span>
-            </div>
+    <x-slot name="scripts">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ── Animated Counter ─────────────────────────────────────────────────
+        const counters = document.querySelectorAll('.animate-counter');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target') || '0', 10);
+            const duration = 1100;
+            const start = performance.now();
+            const step = (now) => {
+                const p = Math.min((now - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - p, 3);
+                counter.innerText = Math.round(ease * target);
+                if (p < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        });
 
-            <div class="role-list-item">
-                <span>Finance</span>
-                <span class="role-list-value">{{ $roleCounts['Finance'] ?? 0 }} Users</span>
-            </div>
-            <div class="role-list-item">
-                <span>Panelis</span>
-                <span class="role-list-value">{{ $roleCounts['Panelis'] ?? 0 }} Users</span>
-            </div>
-        </div>
-    </div>
+        // ── Draw Donut Canvas ──────────────────────────────────────────────
+        const canvas = document.getElementById('donutCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            const roleChartData = {!! $roleChartDataJson ?? '[]' !!};
+            
+            const W = canvas.width, H = canvas.height;
+            const cx = W/2, cy = H/2;
+            const R = Math.min(W,H)/2 - 14;
+            const r = R * 0.60;
+
+            const total = roleChartData.reduce((s,d)=>s+(d.value||0),0) || 1;
+            ctx.clearRect(0,0,W,H);
+            let startAngle = -Math.PI/2;
+            const gap = 0.025;
+
+            roleChartData.forEach(seg => {
+                if (!seg.value) return;
+                const slice = (seg.value / total) * (2 * Math.PI) - gap;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, R, startAngle, startAngle + slice);
+                ctx.closePath();
+                const g = ctx.createLinearGradient(cx-R,cy-R,cx+R,cy+R);
+                g.addColorStop(0, seg.color+'cc');
+                g.addColorStop(1, seg.color);
+                ctx.fillStyle = g;
+                ctx.shadowColor = seg.color+'55';
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                startAngle += slice + gap;
+            });
+
+            // Inner hole
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2*Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowBlur = 0;
+            ctx.fill();
+        }
+
+        // ── Table Search ───────────────────────────────────────────────────
+        const searchInput = document.getElementById('tableSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const q = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('#highlightTbody tr');
+                let found = 0;
+                rows.forEach(row => {
+                    const talent = row.getAttribute('data-talent') || '';
+                    const position = row.getAttribute('data-position') || '';
+                    const mentor = row.getAttribute('data-mentor') || '';
+                    
+                    if (talent.includes(q) || position.includes(q) || mentor.includes(q)) {
+                        row.style.display = '';
+                        found++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                const searchEmptyState = document.getElementById('searchEmptyState');
+                const highlightTbody = document.getElementById('highlightTbody');
+                if (searchEmptyState && highlightTbody) {
+                    if (found === 0) {
+                        highlightTbody.parentElement.style.display = 'none';
+                        searchEmptyState.style.display = 'flex';
+                    } else {
+                        highlightTbody.parentElement.style.display = '';
+                        searchEmptyState.style.display = 'none';
+                    }
+                }
+            });
+        }
+    });
+    </script>
+    </x-slot>
+
 </x-pdc_admin.layout>

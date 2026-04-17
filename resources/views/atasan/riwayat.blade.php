@@ -25,97 +25,6 @@
                 margin: 0;
             }
 
-            /* ── Filter Bar ─────────────────────────────────────── */
-            .filter-bar {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                margin-bottom: 24px;
-                width: 100%;
-            }
-
-            /* Search box */
-            .search-box {
-                position: relative;
-                flex: 1;           /* ambil sisa ruang bersama dropdown */
-                min-width: 0;
-            }
-
-            .search-input {
-                width: 100%;
-                padding: 10px 40px 10px 14px;
-                border: 1.5px solid #e2e8f0;
-                border-radius: 8px;
-                font-size: 0.875rem;
-                color: #475569;
-                background: #fff;
-                outline: none;
-                transition: all 0.2s;
-                box-sizing: border-box;
-            }
-
-            .search-input::placeholder { color: #94a3b8; }
-
-            .search-input:focus {
-                border-color: #14b8a6;
-            }
-
-            .search-icon {
-                position: absolute;
-                right: 12px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #94a3b8;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 0;
-                display: flex;
-                transition: color 0.2s;
-            }
-
-            .search-input:focus + .search-icon {
-                color: #14b8a6;
-            }
-
-            /* Dropdown select */
-            .filter-select-wrap {
-                position: relative;
-                flex: 1;           /* sama-sama tumbuh mengisi lebar */
-                min-width: 0;
-            }
-
-            .filter-select {
-                width: 100%;
-                appearance: none;
-                -webkit-appearance: none;
-                padding: 10px 36px 10px 14px;
-                border: 1.5px solid #e2e8f0;
-                border-radius: 8px;
-                font-size: 0.875rem;
-                color: #475569;
-                background: #fff;
-                cursor: pointer;
-                outline: none;
-                transition: border-color 0.2s;
-                box-sizing: border-box;
-            }
-
-            .filter-select:focus { border-color: #14b8a6; }
-
-            .filter-select-wrap::after {
-                content: '';
-                position: absolute;
-                right: 13px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 0;
-                height: 0;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-top: 6px solid #64748b;
-                pointer-events: none;
-            }
 
             /* ── Table ──────────────────────────────────────────── */
             .table-wrapper {
@@ -237,57 +146,55 @@
         </div>
 
         {{-- ── Filter Bar ──────────────────────────────── --}}
-        <form method="GET" action="{{ route('atasan.riwayat') }}" class="filter-bar" id="filter-form">
+        <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
 
             {{-- Cari Nama --}}
-            <div class="search-box">
+            <div class="relative w-full sm:w-[35%]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
                 <input
                     type="text"
-                    name="search"
-                    value="{{ $search }}"
                     placeholder="Cari Nama"
-                    class="search-input"
                     autocomplete="off"
-                    id="search-input"
+                    id="live-search-input"
+                    class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                    oninput="filterRiwayat()"
                 >
-                <button type="submit" class="search-icon" aria-label="Cari">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
             </div>
 
             {{-- Semua Periode --}}
-            <div class="filter-select-wrap">
-                <select name="periode" class="filter-select" onchange="document.getElementById('filter-form').submit()">
+            <div class="relative w-full sm:w-[21%]">
+                <select id="filter-periode" class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" onchange="filterRiwayat()">
                     <option value="">Semua Periode</option>
                     @foreach($periodeOptions as $opt)
-                        <option value="{{ $opt }}" {{ $filterPeriode === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                        <option value="{{ $opt }}">{{ $opt }}</option>
                     @endforeach
                 </select>
             </div>
 
             {{-- Semua Perusahaan --}}
-            <div class="filter-select-wrap">
-                <select name="perusahaan" class="filter-select" onchange="document.getElementById('filter-form').submit()">
+            <div class="relative w-full sm:w-[21%]">
+                <select id="filter-perusahaan" class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" onchange="filterRiwayat()">
                     <option value="">Semua Perusahaan</option>
                     @foreach($perusahaanOptions as $opt)
-                        <option value="{{ $opt }}" {{ $filterPerusahaan === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                        <option value="{{ $opt }}">{{ $opt }}</option>
                     @endforeach
                 </select>
             </div>
 
             {{-- Semua Departemen --}}
-            <div class="filter-select-wrap">
-                <select name="departemen" class="filter-select" onchange="document.getElementById('filter-form').submit()">
+            <div class="relative w-full sm:w-[21%]">
+                <select id="filter-departemen" class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" onchange="filterRiwayat()">
                     <option value="">Semua Departemen</option>
                     @foreach($departemenOptions as $opt)
-                        <option value="{{ $opt }}" {{ $filterDepartemen === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                        <option value="{{ $opt }}">{{ $opt }}</option>
                     @endforeach
                 </select>
             </div>
 
-        </form>
+        </div>
 
         {{-- ── Table ───────────────────────────────────── --}}
         <div class="table-wrapper">
@@ -302,7 +209,7 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="riwayat-tbody">
                     @forelse($talents as $talent)
                         @php
                             $plan       = $talent->promotion_plan;
@@ -310,8 +217,19 @@
                             $targetDate = $plan?->target_date;
                             $posName    = $talent->position?->position_name ?? '-';
                             $targetPos  = $plan?->targetPosition?->position_name ?? '?';
+                            $compName   = $talent->company?->nama_perusahaan ?? '-';
+                            $deptName   = $talent->department?->nama_department ?? '-';
+                            
+                            $periodeLabel = '';
+                            if ($startDate && $targetDate) {
+                                $periodeLabel = $startDate->format('Y') . ' – ' . $targetDate->format('Y');
+                            }
                         @endphp
-                        <tr>
+                        <tr class="riwayat-row-item" 
+                            data-name="{{ strtolower($talent->nama) }}" 
+                            data-periode="{{ $periodeLabel }}"
+                            data-perusahaan="{{ $compName }}"
+                            data-departemen="{{ $deptName }}">
                             {{-- Talent --}}
                             <td>
                                 <span class="talent-name">{{ $talent->nama }}</span>
@@ -319,10 +237,10 @@
                             </td>
 
                             {{-- Perusahaan --}}
-                            <td>{{ $talent->company?->nama_perusahaan ?? '-' }}</td>
+                            <td>{{ $compName }}</td>
 
                             {{-- Departemen --}}
-                            <td>{{ $talent->department?->nama_department ?? '-' }}</td>
+                            <td>{{ $deptName }}</td>
 
                             {{-- Start Date --}}
                             <td>
@@ -342,7 +260,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr id="empty-row">
                             <td colspan="6">
                                 <div class="empty-state">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -353,24 +271,72 @@
                             </td>
                         </tr>
                     @endforelse
+                    
+                    {{-- Hidden empty row for JS filtering --}}
+                    <tr id="js-empty-row" class="hidden">
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <p>Tidak ada data yang sesuai dengan filter.</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
     </div>
 
-    {{-- Auto-open bell notif setelah beri nilai --}}
-    @if(session('open_bell_notif'))
+    <x-slot name="scripts">
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    const bellBtn = document.getElementById('bell-btn');
-                    if (bellBtn && typeof toggleDropdown === 'function') {
-                        toggleDropdown('bell-dropdown', 'bell-btn');
+            function filterRiwayat() {
+                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
+                const periode = document.getElementById('filter-periode').value;
+                const perusahaan = document.getElementById('filter-perusahaan').value;
+                const departemen = document.getElementById('filter-departemen').value;
+                
+                const rows = document.querySelectorAll('.riwayat-row-item');
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+                    const rowName = row.getAttribute('data-name') || '';
+                    const rowPeriode = row.getAttribute('data-periode') || '';
+                    const rowPerusahaan = row.getAttribute('data-perusahaan') || '';
+                    const rowDepartemen = row.getAttribute('data-departemen') || '';
+
+                    const matchName = rowName.includes(searchTxt);
+                    const matchPeriode = periode === '' || rowPeriode === periode;
+                    const matchPerusahaan = perusahaan === '' || rowPerusahaan === perusahaan;
+                    const matchDepartemen = departemen === '' || rowDepartemen === departemen;
+
+                    if (matchName && matchPeriode && matchPerusahaan && matchDepartemen) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
                     }
-                }, 100);
-            });
+                });
+
+                const emptyRow = document.getElementById('js-empty-row');
+                if (emptyRow) {
+                    emptyRow.classList.toggle('hidden', visibleCount > 0);
+                }
+            }
+
+            {{-- Auto-open bell notif setelah beri nilai --}}
+            @if(session('open_bell_notif'))
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(() => {
+                        const bellBtn = document.getElementById('bell-btn');
+                        if (bellBtn && typeof toggleDropdown === 'function') {
+                            toggleDropdown('bell-dropdown', 'bell-btn');
+                        }
+                    }, 100);
+                });
+            @endif
         </script>
-    @endif
+    </x-slot>
 
 </x-atasan.layout>

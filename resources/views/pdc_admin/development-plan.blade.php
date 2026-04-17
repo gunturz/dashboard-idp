@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Development Plan – PDC Admin" :user="$user" :hideSidebar="true">
+<x-pdc_admin.layout title="Development Plan – PDC Admin" :user="$user">
     <x-slot name="styles">
         <style>
             .field-row {
@@ -69,7 +69,7 @@
             .btn-add-talent:hover { border-color: #cbd5e1; background: #f8fafc; }
 
             .btn-simpan {
-                background: #22c55e;
+                background: #14b8a6;
                 color: white;
                 font-weight: 700;
                 font-size: 0.875rem;
@@ -79,11 +79,11 @@
                 cursor: pointer;
                 transition: all .2s;
             }
-            .btn-simpan:hover { background: #16a34a; transform: translateY(-1px); }
+            .btn-simpan:hover { background: #0d9488; transform: translateY(-1px); }
 
             .btn-batal {
-                background: #ef4444;
-                color: white;
+                background: #F4F1EA;
+                color: #2e3746;
                 font-weight: 700;
                 font-size: 0.875rem;
                 border: none;
@@ -94,7 +94,7 @@
                 text-align: center;
                 text-decoration: none;
             }
-            .btn-batal:hover { background: #dc2626; transform: translateY(-1px); }
+            .btn-batal:hover { background: #eadecc; transform: translateY(-1px); }
 
             .section-divider {
                 border: none;
@@ -194,11 +194,20 @@
     </x-slot>
 
     {{-- MAIN CONTAINER --}}
-    <div class="max-w-4xl mx-auto w-full">  
+    <div class="mx-auto w-full">  
 
     {{-- Page Header --}}
-    <div class="flex items-center gap-2 mb-8 px-2">
-        <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Development Plan</h2>
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd" />
+                <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963 5.23 5.23 0 00-3.434-1.279h-1.875a.375.375 0 01-.375-.375V5.25z" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Setup Development Plan</div>
+            <div class="page-header-sub">Atur perusahaan, talent, mentor, dan tanggal untuk program baru.</div>
+        </div>
     </div>
 
     {{-- Success banner --}}
@@ -222,7 +231,7 @@
     @endif
 
     {{-- Form Card --}}
-    <div class="bg-white px-2">
+    <div class="prem-card p-8">
         <form method="POST" action="{{ route('pdc_admin.development_plan.store') }}" id="dev-plan-form">
             @csrf
             

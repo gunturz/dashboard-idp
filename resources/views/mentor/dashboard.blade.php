@@ -12,9 +12,6 @@
                 justify-content: center;
                 min-height: 130px;
                 border: 2px solid transparent;
-                transition: box-shadow 0.2s, background 0.2s;
-            }
-            .summary-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); background: #f8fafc; }
             .summary-value { font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
             .summary-label { font-size: 0.8rem; color: #64748b; font-weight: 500; }
             .card-teal { border-color: #0d9488; }
@@ -74,12 +71,26 @@
 
     {{-- Daftar Talent Table --}}
     <div class="mb-8">
-        <div class="flex items-center gap-2.5 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-            </svg>
-            <h2 class="text-xl font-bold text-[#2e3746]">Daftar Talent</h2>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div class="flex items-center gap-2.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                </svg>
+                <h2 class="text-xl font-bold text-[#2e3746]">Daftar Talent</h2>
+            </div>
+
+            {{-- Live Search --}}
+            <div class="relative w-full sm:w-80">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                    class="w-full border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                    oninput="filterMentees()">
+            </div>
         </div>
+
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
             @if($totalMentee > 0)
             <div class="overflow-x-auto">
@@ -94,9 +105,9 @@
                             <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-gray-100" id="mentee-tbody">
                         @foreach($menteesList as $mentee)
-                        <tr class="hover:bg-gray-50/60 transition-colors">
+                        <tr class="mentee-row-item hover:bg-gray-50/60 transition-colors" data-name="{{ strtolower($mentee['name']) }}">
                             {{-- Foto + Nama + Jabatan --}}
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
@@ -185,9 +196,9 @@
         </div>
     </div>
 
-    <div class="space-y-6">
+    <div class="space-y-6" id="mentee-accordion">
         @foreach($menteesList as $mentee)
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden accordion-card">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden accordion-card mentee-card-item" data-name="{{ strtolower($mentee['name']) }}">
                 <!-- Header -->
                 <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-gray-50 transition-colors accordion-header" onclick="toggleAccordion(this)">
                     <div class="flex items-center gap-4">
@@ -209,15 +220,15 @@
                     
                     <!-- Stats Section 3 state cards-->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 stats-grid">
-                        <div class="border-[1.5px] border-yellow-400 rounded-xl py-6 flex flex-col items-center justify-center shadow-[0_2px_8px_rgba(250,204,21,0.1)] transition-shadow hover:shadow-md stats-card">
+                        <div class="border-[1.5px] border-yellow-400 rounded-xl py-6 flex flex-col items-center justify-center shadow-[0_2px_8px_rgba(250,204,21,0.1)] stats-card">
                             <span class="text-yellow-400 font-bold text-4xl mb-1">{{ $mentee['status']['pending'] }}</span>
                             <span class="text-gray-400 text-[13px] font-medium">Feedback Pending</span>
                         </div>
-                        <div class="border-[1.5px] border-green-500 rounded-xl py-6 flex flex-col items-center justify-center shadow-[0_2px_8px_rgba(34,197,94,0.1)] transition-shadow hover:shadow-md stats-card">
+                        <div class="border-[1.5px] border-green-500 rounded-xl py-6 flex flex-col items-center justify-center shadow-[0_2px_8px_rgba(34,197,94,0.1)] stats-card">
                             <span class="text-green-500 font-bold text-4xl mb-1">{{ $mentee['status']['approved'] }}</span>
                             <span class="text-gray-400 text-[13px] font-medium">Approved</span>
                         </div>
-                        <div class="border-[1.5px] border-red-500 rounded-xl py-6 flex flex-col items-center justify-center shadow-[0_2px_8px_rgba(239,68,68,0.1)] transition-shadow hover:shadow-md stats-card">
+                        <div class="border-[1.5px] border-red-500 rounded-xl py-6 flex flex-col items-center justify-center shadow-[0_2px_8px_rgba(239,68,68,0.1)] stats-card">
                             <span class="text-red-500 font-bold text-4xl mb-1">{{ $mentee['status']['rejected'] }}</span>
                             <span class="text-gray-400 text-[13px] font-medium">Rejected</span>
                         </div>
@@ -343,6 +354,24 @@
                     content.classList.add('hidden');
                     icon.classList.remove('rotate-180');
                 }
+            }
+
+            function filterMentees() {
+                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
+                
+                // Filter Table Rows
+                const tableRows = document.querySelectorAll('.mentee-row-item');
+                tableRows.forEach(row => {
+                    const name = row.getAttribute('data-name') || '';
+                    row.style.display = name.includes(searchTxt) ? '' : 'none';
+                });
+
+                // Filter Accordion Cards
+                const cards = document.querySelectorAll('.mentee-card-item');
+                cards.forEach(card => {
+                    const name = card.getAttribute('data-name') || '';
+                    card.style.display = name.includes(searchTxt) ? '' : 'none';
+                });
             }
         </script>
     </x-slot>

@@ -173,8 +173,8 @@
                 </div>
 
                 <div class="flex justify-end gap-3">
-                    <button type="button" class="bg-[#f5f0e6] text-[#2e3746] font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#e8e2d4] transition-colors" id="btn-cancel" onclick="closeManageModal()">Tutup</button>
-                    <button type="submit" class="bg-[#4ade80] text-white font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#22c55e] transition-colors" id="btn-submit">Tambah</button>
+                    <button type="button" class="bg-[#F4F1EA] text-[#2e3746] font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#eadecc] transition-colors" id="btn-cancel" onclick="closeManageModal()">Tutup</button>
+                    <button type="submit" class="bg-[#14b8a6] text-white font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#0d9488] transition-colors" id="btn-submit">Tambah</button>
                 </div>
             </form>
         </div>

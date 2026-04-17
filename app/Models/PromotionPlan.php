@@ -10,7 +10,9 @@ class PromotionPlan extends Model
     protected $fillable = ['user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date', 'is_locked'];
 
     protected $casts = [
-        'mentor_ids' => 'array',
+        'mentor_ids'  => 'array',
+        'start_date'  => 'date',
+        'target_date' => 'date',
     ];
 
     protected $attributes = [

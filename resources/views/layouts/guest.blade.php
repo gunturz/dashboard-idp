@@ -36,7 +36,7 @@
         .login-bg {
             background-image:
                 linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%),
-                url("{{ asset('asset/Gambar%20TS.png') }}");
+                url("{{ asset('asset/Gambar%20TS.jpg') }}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -49,12 +49,13 @@
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            padding: 3rem 2.5rem;
+            padding: 3.5rem 2.5rem;
             width: 100%;
             max-width: 440px;
             max-height: 90vh;
@@ -63,7 +64,7 @@
             z-index: 10;
             animation: slideUp 0.6s ease-out;
             scrollbar-width: thin;
-            scrollbar-color: #e2e8f0 transparent;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
 
         .login-card::-webkit-scrollbar {
@@ -93,13 +94,30 @@
 
 
         .login-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            color: #1e293b;
+            color: #ffffff;
             text-align: center;
-            line-height: 1.35;
-            letter-spacing: -0.3px;
+            line-height: 1.3;
+            letter-spacing: -0.5px;
             margin-bottom: 1.75rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .login-logo-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-logo-wrapper img {
+            height: 64px;
+            width: 64px;
+            object-fit: contain;
+            background: white;
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         .login-subtitle {
@@ -114,10 +132,10 @@
 
         .form-label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 600;
-            color: #475569;
-            margin-bottom: 0.45rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0.5rem;
             letter-spacing: 0.2px;
         }
 
@@ -138,15 +156,16 @@
 
         .form-input {
             width: 100%;
-            padding: 0.7rem 1rem 0.7rem 2.6rem;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.875rem;
-            color: #1e293b;
-            background: #f8fafc;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
+            font-size: 0.9rem;
+            color: #ffffff;
+            background: rgba(255,255,255,0.08);
             transition: all 0.25s ease;
             outline: none;
             box-sizing: border-box;
+            backdrop-filter: blur(5px);
         }
 
         .form-input::placeholder {
@@ -156,11 +175,22 @@
 
         .form-input:focus {
             border-color: #22c55e;
-            background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
         }
 
-        .form-input:focus+.input-icon,
+        /* Fix for Browser Autofill (Putih saat ngetik/isi otomatis) */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 50px #2e3746 inset !important; /* Gunakan warna gelap yg konsisten */
+            -webkit-text-fill-color: #ffffff !important;
+            caret-color: #ffffff;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .form-input:focus + .input-icon,
         .input-wrapper:focus-within .input-icon {
             color: #22c55e;
         }
@@ -207,33 +237,34 @@
 
         .btn-login {
             width: 100%;
-            padding: 0.9rem 1.5rem;
-            background: linear-gradient(135deg, #10b981, #059669);
+            padding: 0.95rem 1.5rem;
+            background: linear-gradient(135deg, #0d9488, #10b981);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
             letter-spacing: 0.5px;
             margin-top: 2rem;
         }
 
         .btn-login:hover {
-            background: linear-gradient(135deg, #16a34a, #15803d);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, #0f766e, #059669);
+            box-shadow: 0 15px 25px -5px rgba(13, 148, 136, 0.5);
+            transform: translateY(-2px);
         }
 
         .btn-login:active {
             transform: translateY(0);
-            box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+            background: linear-gradient(135deg, #115e59, #065f46);
+            box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
         }
 
         .btn-login svg {
@@ -278,15 +309,15 @@
         /* ── SELECT DROPDOWN ── */
         .form-select {
             width: 100%;
-            padding: 0.7rem 2.4rem 0.7rem 1rem;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.875rem;
-            color: #1e293b;
-            background: #f8fafc;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+            padding: 0.8rem 2.4rem 0.8rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            font-size: 0.9rem;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 0.75rem center;
+            background-position: right 1rem center;
             background-size: 16px;
             appearance: none;
             -webkit-appearance: none;
@@ -294,17 +325,22 @@
             outline: none;
             cursor: pointer;
             box-sizing: border-box;
+            backdrop-filter: blur(5px);
         }
 
         .form-select:focus {
             border-color: #22c55e;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+        }
+
+        .form-select option {
+            background-color: #1e293b; /* Background gelap saat list dropdown terbuka */
+            color: #ffffff;
         }
 
         .form-select option[value=''][disabled] {
-            color: #cbd5e1;
-            font-style: italic;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .session-status {
@@ -398,6 +434,9 @@
         <div class="login-card">
             <!-- Title hanya muncul di halaman login -->
             @if (request()->routeIs('login'))
+                <div class="login-logo-wrapper">
+                    <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo">
+                </div>
                 <h1 class="login-title">Individual<br>Development Plan</h1>
             @endif
 

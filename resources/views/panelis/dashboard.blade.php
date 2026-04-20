@@ -208,16 +208,29 @@
     </x-slot>
 
     {{-- Page Title --}}
-    <div class="page-title">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-        </svg>
-        <h2>Dashboard</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div class="page-title !mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            <h2>Dashboard</h2>
+        </div>
+
+        {{-- Live Search --}}
+        <div class="relative w-full sm:w-80">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                oninput="filterTalents()">
+        </div>
     </div>
 
     {{-- Companies & Cards --}}
     @forelse($groupedData as $companyId => $companyData)
-        <div class="company-section">
+        <div class="company-section" data-company-id="{{ $companyId }}">
             <div class="company-section-title">
                 {{ $companyData['company']->nama_company ?? 'Unassigned' }}
             </div>
@@ -242,7 +255,7 @@
                                              : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0284c7&bold=true';
                         @endphp
 
-                        <div class="talent-item-wrapper">
+                        <div class="talent-item-wrapper talent-card-item" data-name="{{ strtolower($talent->nama) }}">
                             {{-- Card — whole card clicks → detail --}}
                             <div class="talent-card" onclick="window.location='{{ route('panelis.detail_talent', $talent->id) }}'">
                                 {{-- Header --}}
@@ -298,5 +311,27 @@
             Belum ada data progress talent yang menunggu penilaian Panelis.
         </div>
     @endforelse
+
+    <x-slot name="scripts">
+        <script>
+            function filterTalents() {
+                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
+                const items = document.querySelectorAll('.talent-card-item');
+
+                items.forEach(item => {
+                    const name = item.getAttribute('data-name') || '';
+                    item.style.display = name.includes(searchTxt) ? '' : 'none';
+                });
+
+                // Hide company sections that have no visible talents
+                document.querySelectorAll('.company-section').forEach(section => {
+                    const visibleItems = section.querySelectorAll('.talent-card-item[style="display: "]');
+                    // Note: if style.display is empty string, it's visible. But we need to check if it's NOT none.
+                    const anyVisible = Array.from(section.querySelectorAll('.talent-card-item')).some(i => i.style.display !== 'none');
+                    section.style.display = anyVisible ? '' : 'none';
+                });
+            }
+        </script>
+    </x-slot>
 
 </x-panelis.layout>

@@ -40,41 +40,48 @@
         </style>
     </x-slot>
 
-    {{-- Header & Back Button --}}
-    <div class="mb-10">
-        <a href="{{ route('pdc_admin.company_management') }}" class="btn-back mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+    {{-- Page Header --}}
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z" />
             </svg>
-            <span class="text-[#2e3746]">Kembali</span>
-        </a>
-        <h2 class="text-3xl font-black text-[#2e3746] text-center">{{ $company->nama_company }}</h2>
+        </div>
+        <div>
+            <div class="page-header-title">{{ $company->nama_company }}</div>
+            <div class="page-header-sub">Manajemen struktur departemen di perusahaan ini.</div>
+        </div>
+        <div class="page-header-actions">
+            <a href="{{ route('pdc_admin.company_management') }}" class="btn-prem btn-dark px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                Kembali
+            </a>
+        </div>
+    </div>
+
+    {{-- Toolbar --}}
+    <div class="flex items-center justify-between gap-4 mb-6">
+        <div class="relative w-full sm:w-80">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="searchDept" oninput="filterDepts()"
+                placeholder="Cari nama departemen.."
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
+        </div>
+        <button onclick="openAddDeptModal()"
+            class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#2e3746] hover:bg-[#1f2937] rounded-xl transition-colors shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Tambah Departemen
+        </button>
     </div>
 
     {{-- Main Card --}}
-    <div class="bg-white border border-[#e2e8f0] rounded-2xl shadow-sm p-8 w-full mb-10">
+    <div class="prem-card p-8 w-full mb-10">
         <h3 class="text-lg font-bold text-[#2e3746] mb-6">Daftar Departemen</h3>
-
-        {{-- Toolbar --}}
-        <div class="flex items-center justify-between gap-4 mb-8">
-            <div class="relative w-80">
-                <input type="text" id="searchDept" onkeyup="filterDepts()"
-                    placeholder="Cari nama departemen.."
-                    class="w-full border-2 border-[#14b8a6] rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:ring-1 focus:ring-[#14b8a6]">
-                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
-            <button onclick="openAddDeptModal()"
-                class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#2e3746] hover:bg-[#1f2937] rounded-xl transition-colors shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                Tambah Departemen
-            </button>
-        </div>
 
         {{-- Dept List --}}
         <div class="space-y-3" id="deptList">
@@ -121,7 +128,7 @@
                         Batal
                     </button>
                     <button type="submit"
-                        class="flex-1 py-3 text-sm font-bold text-white bg-[#22c55e] hover:bg-[#16a34a] rounded-xl transition-colors shadow-sm">
+                        class="flex-1 py-3 text-sm font-bold text-white bg-[#14b8a6] hover:bg-[#0d9488] rounded-xl transition-colors shadow-sm">
                         Simpan
                     </button>
                 </div>
@@ -145,7 +152,7 @@
                         Batal
                     </button>
                     <button type="submit"
-                        class="flex-1 py-3 text-sm font-bold text-white bg-[#22c55e] hover:bg-[#16a34a] rounded-xl transition-colors shadow-sm">
+                        class="flex-1 py-3 text-sm font-bold text-white bg-[#14b8a6] hover:bg-[#0d9488] rounded-xl transition-colors shadow-sm">
                         Simpan
                     </button>
                 </div>
@@ -168,7 +175,7 @@
                 @method('DELETE')
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('deleteDeptModal')"
-                        class="flex-1 py-3 text-sm font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+                        class="flex-1 py-3 text-sm font-semibold text-gray-500 bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">
                         Batal
                     </button>
                     <button type="submit"

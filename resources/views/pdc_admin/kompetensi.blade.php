@@ -196,7 +196,7 @@
             }
 
             .btn-simpan-ts {
-                background: #16a34a;
+                background: #14b8a6;
                 color: white;
                 font-weight: 700;
                 font-size: 0.8rem;
@@ -207,10 +207,10 @@
                 cursor: pointer;
                 transition: background 0.2s;
             }
-            .btn-simpan-ts:hover { background: #15803d; }
+            .btn-simpan-ts:hover { background: #0d9488; }
 
             .btn-batal-ts {
-                background: #f5f0e6;
+                background: #F4F1EA;
                 color: #2e3746;
                 font-weight: 700;
                 font-size: 0.8rem;
@@ -221,7 +221,7 @@
                 cursor: pointer;
                 transition: background 0.2s;
             }
-            .btn-batal-ts:hover { background: #e8e2d4; }
+            .btn-batal-ts:hover { background: #eadecc; }
 
             .btn-edit-ts {
                 background: #2e3746;
@@ -260,11 +260,16 @@
     </x-slot>
 
     {{-- Page Header --}}
-    <div class="flex items-center gap-2 mb-6 animate-title">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-        </svg>
-        <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Kompetensi</h2>
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Kompetensi</div>
+            <div class="page-header-sub">Kelola pertanyaan assessment dan atur Target Score posisi pekerjaan.</div>
+        </div>
     </div>
 
     {{-- Top Tabs --}}

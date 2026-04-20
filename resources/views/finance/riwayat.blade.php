@@ -12,8 +12,13 @@
                 <h2 class="text-2xl font-bold text-gray-800">Riwayat Validasi</h2>
             </div>
             
-            <div class="flex items-center gap-3">
-                <input type="text" id="searchInput" onkeyup="filterHistory()" placeholder="Cari Nama Talent" class="border-[1.5px] border-[#38b2ac] rounded-lg px-4 py-2 w-72 text-sm focus:outline-none focus:ring-1 focus:ring-[#38b2ac] placeholder:text-[#38b2ac] placeholder:text-sm">
+            {{-- Live Search --}}
+            <div class="relative w-full sm:w-80">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="searchInput" oninput="filterHistory()" placeholder="Cari Nama Talent" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
             </div>
         </div>
 

@@ -155,7 +155,7 @@
             inset: 0;
             background-image:
                 linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(15,118,110,0.25) 50%, rgba(15,23,42,0.95) 100%),
-                url("{{ asset('asset/Gambar%20TS.jpg') }}");
+                url("{{ asset('asset/Gambar%20TS.png') }}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;

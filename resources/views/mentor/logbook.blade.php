@@ -164,7 +164,7 @@
                                 {{ $m->nama }}
                             </a>
                         @empty
-                            <div class="block py-3.5 px-4 text-gray-400 italic">Belum ada mentee</div>
+                            <div class="block py-3.5 px-4 text-gray-400 italic">Belum ada Talent</div>
                         @endforelse
                     </div>
                 </div>

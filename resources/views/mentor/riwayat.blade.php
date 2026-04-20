@@ -172,7 +172,11 @@
                         <td>{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td>{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                         <td>
-                            <span class="status-dot status-approved">Approved</span>
+                            @if(in_array($data['status'], ['Approve','Approved']))
+                                <span class="status-dot status-approved">Approved</span>
+                            @else
+                                <span class="status-dot status-rejected">Rejected</span>
+                            @endif
                         </td>
                         <td>
                             <div class="flex items-center justify-center">
@@ -217,7 +221,11 @@
                         <td>{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td>{{ date('d M Y', strtotime($data['tanggal'])) }}</td>
                         <td>
-                            <span class="status-dot status-approved">Approved</span>
+                            @if(in_array($data['status'], ['Approve','Approved']))
+                                <span class="status-dot status-approved">Approved</span>
+                            @else
+                                <span class="status-dot status-rejected">Rejected</span>
+                            @endif
                         </td>
                         <td>
                             <div class="flex items-center justify-center">
@@ -262,7 +270,11 @@
                         <td>{{ $data['tanggal_update'] ? date('d M Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td>{{ $data['tanggal'] ? date('d M Y', strtotime($data['tanggal'])) : '-' }}</td>
                         <td>
-                            <span class="status-dot status-approved">Approved</span>
+                            @if(in_array($data['status'], ['Approve','Approved']))
+                                <span class="status-dot status-approved">Approved</span>
+                            @else
+                                <span class="status-dot status-rejected">Rejected</span>
+                            @endif
                         </td>
                         <td>
                             <div class="flex items-center justify-center">

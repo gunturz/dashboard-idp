@@ -14,12 +14,8 @@
                 background: white;
                 min-width: 160px;
                 flex: 1;
-                transition: box-shadow 0.2s, transform 0.2s;
             }
-            .panelis-stat-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            }
+
             .panelis-stat-card.teal  { border-color: #14b8a6; }
             .panelis-stat-card.amber { border-color: #f59e0b; }
             .panelis-stat-card.green { border-color: #22c55e; }
@@ -275,12 +271,17 @@
     </x-slot>
 
     {{-- ── Page Header ── --}}
-    <div class="flex items-center gap-3 animate-title mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-8 w-8 text-[#2e3746]">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
-        </svg>
-        <h2 class="text-2xl font-extrabold text-[#2e3746]">Panelis Review</h2>
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
+                <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm9.586 4.594a.75.75 0 0 0-1.172-.938l-2.476 3.096-.908-.907a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.116-.062l3-3.75Z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Panelis Review</div>
+            <div class="page-header-sub">Pantau & kirim talent untuk penilaian panelis</div>
+        </div>
     </div>
 
     {{-- ── Success Message ── --}}
@@ -294,103 +295,138 @@
     @endif
 
     {{-- ── Summary Cards ── --}}
-    <div class="flex flex-wrap gap-4 mb-7">
-        <div class="panelis-stat-card teal">
-            <div class="panelis-stat-num">{{ $totalProjectImprovement }}</div>
-            <div class="panelis-stat-label">Project<br>Improvement</div>
+    <div class="prem-stat-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="prem-stat prem-stat-teal">
+            <div class="prem-stat-icon si-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.36-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm3 0v.25c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-.25a1.5 1.5 0 0 0-1.5-1.5h-1.5a1.5 1.5 0 0 0-1.5 1.5Z" clip-rule="evenodd" /><path d="M3 16.02v2.73a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-2.73a26.12 26.12 0 0 1-9 1.73 26.12 26.12 0 0 1-9-1.73Z" /></svg>
+            </div>
+            <div class="prem-stat-value">{{ $totalProjectImprovement }}</div>
+            <div class="prem-stat-label">Project Improvement</div>
         </div>
-        <div class="panelis-stat-card amber">
-            <div class="panelis-stat-num">{{ $belumDinilai }}</div>
-            <div class="panelis-stat-label">Belum Dinilai Panelis</div>
+        <div class="prem-stat prem-stat-amber">
+            <div class="prem-stat-icon si-amber">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" /></svg>
+            </div>
+            <div class="prem-stat-value">{{ $belumDinilai }}</div>
+            <div class="prem-stat-label">Belum Dinilai Panelis</div>
         </div>
-        <div class="panelis-stat-card green">
-            <div class="panelis-stat-num">{{ $sudahDinilai }}</div>
-            <div class="panelis-stat-label">Sudah Dinilai Panelis</div>
+        <div class="prem-stat prem-stat-green">
+            <div class="prem-stat-icon si-green">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 11.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" /></svg>
+            </div>
+            <div class="prem-stat-value">{{ $sudahDinilai }}</div>
+            <div class="prem-stat-label">Sudah Dinilai Panelis</div>
         </div>
     </div>
 
     {{-- ── Filters ── --}}
-    <form method="GET" action="{{ route('pdc_admin.panelis_review') }}" class="flex flex-wrap gap-2 mb-6" id="panelis-filter-form">
-        <input
-            type="text"
-            name="search"
-            placeholder="Cari Nama Talent…"
-            value="{{ request('search') }}"
-            class="panelis-filter-input flex-1 w-full sm:min-w-[200px]"
-            id="panelis-search-input"
-        >
-        <select name="company_id" class="panelis-filter-select" id="panelis-company-filter" onchange="this.form.submit()">
-            <option value="">Semua Perusahaan</option>
-            @foreach ($companies as $company)
-                <option value="{{ $company->id }}" {{ request('company_id') == $company->id ? 'selected' : '' }}>
-                    {{ $company->nama_company }}
-                </option>
-            @endforeach
-        </select>
-        <select name="position_id" class="panelis-filter-select" id="panelis-position-filter" onchange="this.form.submit()">
-            <option value="">Semua Jabatan</option>
-            @foreach ($positions as $pos)
-                <option value="{{ $pos->id }}" {{ request('position_id') == $pos->id ? 'selected' : '' }}>
-                    {{ $pos->position_name }}
-                </option>
-            @endforeach
-        </select>
-        <select name="department_id" class="panelis-filter-select" id="panelis-department-filter" onchange="this.form.submit()">
-            <option value="">Semua Departemen</option>
-            @foreach ($departments as $dept)
-                <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
-                    {{ $dept->nama_department }}
-                </option>
-            @endforeach
-        </select>
-        {{-- Hidden submit on search blur --}}
-        <button type="submit" class="hidden" id="panelis-search-btn"></button>
-    </form>
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-6 mt-8" id="panelis-filter-bar">
+        {{-- Live Search --}}
+        <div class="relative w-full sm:w-[25%]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" 
+                oninput="filterPanelisList()">
+        </div>
+
+        {{-- Perusahaan --}}
+        <div class="relative w-full sm:w-[20%]">
+            <select id="live-company-filter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all" 
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" 
+                onchange="filterPanelisList()">
+                <option value="">Semua Perusahaan</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}">{{ $company->nama_company }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Jabatan --}}
+        <div class="relative w-full sm:w-[20%]">
+            <select id="live-position-filter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all" 
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" 
+                onchange="filterPanelisList()">
+                <option value="">Semua Jabatan</option>
+                @foreach ($positions as $pos)
+                    <option value="{{ $pos->id }}">{{ $pos->position_name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Departemen --}}
+        <div class="relative w-full sm:w-[20%]">
+            <select id="live-department-filter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all" 
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" 
+                onchange="filterPanelisList()">
+                <option value="">Semua Departemen</option>
+                @foreach ($departments as $dept)
+                    <option value="{{ $dept->id }}">{{ $dept->nama_department }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Reset Button --}}
+        <button type="button" onclick="resetPanelisFilters()" class="btn-prem btn-ghost w-full sm:w-auto mt-2 sm:mt-0" id="reset-filter-btn" style="white-space:nowrap; display:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-1 inline-block">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Reset
+        </button>
+    </div>
 
     {{-- ── Data Table grouped by Company ── --}}
     @forelse ($groupedData as $companyId => $companyData)
-        <div class="mb-10">
-            <h3 class="company-header">
+        <div class="mb-8 company-section" data-company-id="{{ $companyId }}">
+            <h3 class="company-section-title">
                 {{ $companyData['company']->nama_company ?? 'Unassigned' }}
             </h3>
-            <div class="overflow-x-auto rounded-xl shadow-sm">
-                <table class="panelis-table">
-                    <thead>
-                        <tr>
-                            <th class="w-[20%]">Posisi yang Dituju</th>
-                            <th class="w-[18%]">Talent</th>
-                            <th class="w-[16%]">Departemen</th>
-                            <th class="w-[15%]">Validasi Finance</th>
-                            <th class="w-[13%]">Lock Progress</th>
-                            <th class="w-[18%]">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($companyData['positions'] as $positionId => $posData)
-                            @foreach ($posData['talents'] as $index => $talent)
-                                <tr>
-                                    {{-- Posisi (rowspan) --}}
-                                    @if ($index === 0)
-                                        <td rowspan="{{ count($posData['talents']) }}" class="bg-white">
-                                            <span class="target-position">
-                                                {{ optional($posData['targetPosition'])->position_name ?? '-' }}
-                                            </span>
-                                            <span class="target-dept">
-                                                {{ optional($posData['targetPosition'])->department->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
-                                            </span>
+            <div class="prem-card">
+                <div class="overflow-x-auto">
+                    <table class="prem-table">
+                        <thead>
+                            <tr>
+                                <th class="w-[20%] text-left pl-6">Posisi yang Dituju</th>
+                                <th class="w-[18%]">Talent</th>
+                                <th class="w-[16%]">Departemen</th>
+                                <th class="w-[15%]">Validasi Finance</th>
+                                <th class="w-[13%]">Lock Progress</th>
+                                <th class="w-[18%]">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($companyData['positions'] as $positionId => $posData)
+                                @foreach ($posData['talents'] as $index => $talent)
+                                    <tr class="talent-row" 
+                                        data-name="{{ strtolower($talent->nama) }}" 
+                                        data-company="{{ $talent->company_id }}" 
+                                        data-position="{{ $positionId }}" 
+                                        data-dept="{{ $talent->department_id }}"
+                                        data-pos-group="{{ $companyId }}-{{ $positionId }}">
+                                        {{-- Posisi (rowspan) --}}
+                                        @if ($index === 0)
+                                            <td rowspan="{{ count($posData['talents']) }}" class="text-left pl-6">
+                                                <span class="font-bold text-[#1e293b] block text-sm">
+                                                    {{ optional($posData['targetPosition'])->position_name ?? '-' }}
+                                                </span>
+                                                <span class="text-xs text-[#64748b] italic block mt-0.5">
+                                                    {{ optional($posData['targetPosition'])->department->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
+                                                </span>
+                                            </td>
+                                        @endif
+
+                                        {{-- Talent --}}
+                                        <td>
+                                            <span class="font-bold text-[#1e293b] block text-sm">{{ $talent->nama }}</span>
+                                            <span class="text-xs text-[#64748b] italic block mt-0.5">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
                                         </td>
-                                    @endif
 
-                                    {{-- Talent --}}
-                                    <td>
-                                        <span class="talent-name">{{ $talent->nama }}</span>
-                                        <span class="talent-role">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
-                                    </td>
-
-                                    {{-- Departemen --}}
-                                    <td class="bg-white">
-                                        {{ optional($talent->department)->nama_department ?? '-' }}
-                                    </td>
+                                        {{-- Departemen --}}
+                                        <td>
+                                            <span class="text-sm text-[#475569]">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                                        </td>
 
                                     {{-- Validasi Finance --}}
                                     <td>
@@ -399,11 +435,11 @@
                                             $financeStatus = $latestProject ? $latestProject->status : 'Belum Ada';
                                         @endphp
                                         @if ($financeStatus === 'Verified')
-                                            <span class="status-dot status-approve">Approved</span>
+                                            <span class="badge badge-green">Approved</span>
                                         @elseif($financeStatus === 'Rejected')
-                                            <span class="status-dot status-rejected">Rejected</span>
+                                            <span class="badge badge-red">Rejected</span>
                                         @else
-                                            <span class="status-dot status-pending">Pending</span>
+                                            <span class="badge badge-amber">Pending</span>
                                         @endif
                                     </td>
 
@@ -414,8 +450,8 @@
                                         @endphp
                                         <form method="POST" action="{{ route('pdc_admin.panelis_review.toggle_lock', $talent->id) }}">
                                             @csrf
-                                            <button type="submit" class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-semibold rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 {{ $isLocked ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-gray-600 hover:bg-gray-700 focus:ring-gray-500' }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <button type="submit" class="btn-prem {{ $isLocked ? 'btn-red' : 'btn-dark' }} text-[11px] px-2.5 py-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     @if($isLocked)
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                                     @else
@@ -428,7 +464,7 @@
                                     </td>
 
                                     {{-- Aksi --}}
-                                    <td class="bg-white">
+                                    <td>
                                         @php
                                             $alreadySent = in_array(
                                                 optional($talent->promotion_plan)->status_promotion,
@@ -439,7 +475,7 @@
                                         @if ($isReviewedByPanelis)
                                             {{-- Panelis sudah menilai → tampilkan Lihat Penilaian --}}
                                             <div class="flex items-center justify-center gap-2">
-                                                <a href="{{ route('pdc_admin.panelis_review.detail', $talent->id) }}" class="btn-lihat-penilaian">
+                                                <a href="{{ route('pdc_admin.panelis_review.detail', $talent->id) }}" class="btn-prem btn-ghost text-xs px-3 py-1.5">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -449,15 +485,15 @@
                                             </div>
                                         @elseif ($alreadySent && !$isReviewedByPanelis)
                                             {{-- Sudah dikirim ke Panelis tapi belum dinilai --}}
-                                            <button type="button" class="btn-sudah-panelis cursor-not-allowed" disabled title="Menunggu penilaian dari Panelis">
+                                            <button type="button" class="btn-prem btn-ghost text-xs px-3 py-1.5 opacity-60 cursor-not-allowed mx-auto" disabled title="Menunggu penilaian dari Panelis">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
-                                                Menunggu Panelis
+                                                Menunggu
                                             </button>
                                         @else
                                             {{-- Belum dikirim ke Panelis --}}
-                                            <button type="button" onclick="openPanelisModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}')" class="btn-kirim-panelis {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
+                                            <button type="button" onclick="openPanelisModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}')" class="btn-prem btn-teal text-xs px-3 py-1.5 mx-auto {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}" {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                                                 </svg>
@@ -470,17 +506,16 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+                </div>{{-- /overflow-x-auto --}}
+            </div>{{-- /prem-card --}}
         </div>
     @empty
-        <div class="empty-state">
-            <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-            </div>
-            <p class="text-gray-500 font-semibold">Belum ada data talent untuk Panelis Review.</p>
-            <p class="text-gray-400 text-sm mt-1">Data akan muncul setelah talent memiliki development plan aktif.</p>
+        <div class="empty-prem" style="margin-top: 40px">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3>Belum Ada Data Talent</h3>
+            <p>Data akan muncul setelah talent memiliki development plan aktif.</p>
         </div>
     @endforelse
 
@@ -568,15 +603,85 @@
 
     <x-slot name="scripts">
         <script>
-            // Submit search on Enter
-            document.getElementById('panelis-search-input').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    document.getElementById('panelis-filter-form').submit();
-                }
-            });
+            function filterPanelisList() {
+                const search = document.getElementById('live-search-input').value.toLowerCase();
+                const companyId = document.getElementById('live-company-filter').value;
+                const positionId = document.getElementById('live-position-filter').value;
+                const departmentId = document.getElementById('live-department-filter').value;
+                
+                const rows = document.querySelectorAll('.talent-row');
+                const resetBtn = document.getElementById('reset-filter-btn');
+                
+                // Show/hide reset button
+                resetBtn.style.display = (search || companyId || positionId || departmentId) ? 'inline-flex' : 'none';
 
-            // ── Modal Logic ──
+                // Track results per position group to handle rowspan
+                const groupVisibility = {};
+
+                rows.forEach(row => {
+                    const name = row.dataset.name;
+                    const rowComp = row.dataset.company;
+                    const rowPos = row.dataset.position;
+                    const rowDept = row.dataset.dept;
+                    const groupKey = row.dataset.pos-group;
+
+                    const matchSearch = !search || name.includes(search);
+                    const matchComp = !companyId || rowComp === companyId;
+                    const matchPos = !positionId || rowPos === positionId;
+                    const matchDept = !departmentId || rowDept === departmentId;
+
+                    if (matchSearch && matchComp && matchPos && matchDept) {
+                        row.style.display = '';
+                        if (!groupVisibility[groupKey]) groupVisibility[groupKey] = [];
+                        groupVisibility[groupKey].push(row);
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Adjust rowspans and move the position cell if needed
+                for (const groupKey in groupVisibility) {
+                    const visibleRows = groupVisibility[groupKey];
+                    const firstRow = visibleRows[0];
+                    
+                    // Hide all potential position cells in this group first
+                    const allInGroup = document.querySelectorAll(`.talent-row[data-pos-group="${groupKey}"]`);
+                    allInGroup.forEach(r => {
+                        const posCell = r.querySelector('td[rowspan]');
+                        if (posCell) posCell.style.display = 'none';
+                    });
+
+                    // Show position cell on the NEW first visible row and set its rowspan
+                    let posCell = firstRow.querySelector('td[rowspan]');
+                    if (!posCell) {
+                        // If the first visible row wasn't the original index 0, it doesn't have the cell.
+                        // We need to 'find' it from the original index 0 of this group.
+                        const originalFirst = allInGroup[0];
+                        posCell = originalFirst.querySelector('td[rowspan]');
+                        // Move it conceptually or just show it (here we just ensure the cell is available/shown)
+                        firstRow.prepend(posCell);
+                    }
+                    posCell.style.display = '';
+                    posCell.setAttribute('rowspan', visibleRows.length);
+                }
+
+                // Hide empty company sections
+                document.querySelectorAll('.company-section').forEach(section => {
+                    const hasVisible = section.querySelector('.talent-row[style="display: ;"]') || 
+                                       section.querySelector('.talent-row:not([style*="display: none"])');
+                    section.style.display = hasVisible ? '' : 'none';
+                });
+            }
+
+            function resetPanelisFilters() {
+                document.getElementById('live-search-input').value = '';
+                document.getElementById('live-company-filter').value = '';
+                document.getElementById('live-position-filter').value = '';
+                document.getElementById('live-department-filter').value = '';
+                filterPanelisList();
+            }
+
+            // ... Modal logic below ...
             const panelisUsers = @json($panelisUsers);
             const panelisCompanies = @json($companies);
             

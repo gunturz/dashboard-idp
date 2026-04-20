@@ -267,9 +267,22 @@
     </div>
 
     {{-- Main Header --}}
-    <div class="text-center mb-12">
-        <h2 class="text-2xl font-extrabold text-[#1e293b]">Monitoring Talent</h2>
-        <p class="text-xs font-bold text-gray-400 mt-1 uppercase">{{ $talents->count() }} TALENT</p>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
+        <div class="text-left">
+            <h2 class="text-2xl font-extrabold text-[#1e293b]">Monitoring Talent</h2>
+            <p class="text-xs font-bold text-gray-400 mt-1 uppercase">{{ $talents->count() }} TALENT</p>
+        </div>
+
+        {{-- Live Search --}}
+        <div class="relative w-full sm:w-80">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                class="w-full border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                oninput="globalFilterTalents()">
+        </div>
     </div>
 
     {{-- ================================= SECTION: KOMPETENSI ================================= --}}
@@ -301,7 +314,7 @@
                         }
                     }
                 @endphp
-                <div class="talent-card">
+                <div class="talent-card talent-card-item" data-name="{{ strtolower($talent->nama) }}">
                     <div class="talent-header">
                         <div class="talent-info">
                             <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="talent-photo" alt="{{ $talent->nama }}">
@@ -443,7 +456,7 @@
     <div id="section-idp" class="hidden w-full">
         <div class="flex flex-col gap-6 w-full">
             @foreach ($talents as $talent)
-            <div class="idp-card-container">
+            <div class="idp-card-container idp-card-item" data-name="{{ strtolower($talent->nama) }}">
                 <div class="flex items-center gap-4 mb-6">
                     <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                     <div>
@@ -501,7 +514,7 @@
 
         <div class="flex flex-col gap-6 w-full mb-8">
             @foreach ($talents as $talent)
-                <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between">
+            <div class="bg-white border text-center border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between project-card-item" data-name="{{ strtolower($talent->nama) }}">
                 <div class="flex justify-between items-center mb-10">
                     <div class="flex items-center gap-4 text-left">
                         <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
@@ -561,7 +574,7 @@
 
         <div class="flex flex-col gap-6 w-full mb-8">
             @foreach ($talents as $talent)
-                <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between">
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm h-full flex flex-col justify-between logbook-card-item" data-name="{{ strtolower($talent->nama) }}">
                 <div class="flex items-center gap-4 mb-10">
                     <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}" class="w-14 h-14 rounded-full" alt="">
                     <div>
@@ -836,6 +849,20 @@
                     } else {
                         tableDiv.classList.add('hidden');
                     }
+                });
+            }
+
+            function globalFilterTalents() {
+                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
+                
+                // Filter all card types
+                const selectos = ['.talent-card-item', '.idp-card-item', '.project-card-item', '.logbook-card-item'];
+                
+                selectos.forEach(selector => {
+                    document.querySelectorAll(selector).forEach(item => {
+                        const name = item.getAttribute('data-name') || '';
+                        item.style.display = name.includes(searchTxt) ? '' : 'none';
+                    });
                 });
             }
         </script>

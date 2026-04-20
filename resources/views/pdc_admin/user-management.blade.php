@@ -29,32 +29,39 @@
     </x-slot>
 
     {{-- Page Header --}}
-    <div class="flex items-center gap-3 mb-8 animate-title">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 text-[#2e3746]">
-            <path
-                d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
-        </svg>
-        <h2 class="text-2xl font-bold text-[#2e3746]">User Management</h2>
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">User Management</div>
+            <div class="page-header-sub">Kelola pengguna sistem, peran, dan pengaturan akses keamanan.</div>
+        </div>
     </div>
 
     {{-- Summary Cards --}}
     @php
         $summaryCards = [
-            'Talent' => $talents->count(),
-            'Mentor' => $mentors->count(),
-            'Atasan' => $atasans->count(),
-            'Finance' => $finances->count(),
-            'Panelis' => $panelisUsers->count(),
+            ['name' => 'Talent',  'count' => $talents->count(),      'color' => 'teal',   'icon' => '<path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />'],
+            ['name' => 'Mentor',  'count' => $mentors->count(),      'color' => 'blue',   'icon' => '<path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.22 4.622 1 1 0 01-.89.89 8.969 8.969 0 00-4.66 1.48L10 17z" />'],
+            ['name' => 'Atasan',  'count' => $atasans->count(),      'color' => 'purple', 'icon' => '<path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />'],
+            ['name' => 'Finance', 'count' => $finances->count(),     'color' => 'green',  'icon' => '<path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>'],
+            ['name' => 'Panelis', 'count' => $panelisUsers->count(), 'color' => 'amber',  'icon' => '<path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />'],
         ];
     @endphp
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-6 mb-8">
-        @foreach ($summaryCards as $roleName => $count)
-            <div onclick="filterRole('{{ $roleName }}')" data-role="{{ $roleName }}"
-                class="role-card cursor-pointer border-2 rounded-xl p-6 min-h-[140px] flex flex-col items-center justify-center shadow-sm transition-colors bg-white border-[#14b8a6] hover:bg-teal-50">
-                <span
-                    class="role-count text-[2.5rem] font-extrabold text-[#14b8a6] leading-none mb-2">{{ $count }}</span>
-                <span
-                    class="role-label text-[0.8rem] font-medium text-gray-500 uppercase mt-1">{{ $roleName }}</span>
+    <div class="prem-stat-grid" style="grid-template-columns: repeat(5, 1fr);">
+        @foreach ($summaryCards as $card)
+            <div onclick="filterRole('{{ $card['name'] }}')" data-role="{{ $card['name'] }}"
+                class="prem-stat clickable prem-stat-{{ $card['color'] }} role-card transition-all" style="border-width: 2px;">
+                <div class="prem-stat-icon si-{{ $card['color'] }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        {!! $card['icon'] !!}
+                    </svg>
+                </div>
+                <div class="prem-stat-value" style="font-size: 1.8rem;">{{ $card['count'] }}</div>
+                <div class="prem-stat-label">{{ $card['name'] }}</div>
             </div>
         @endforeach
     </div>
@@ -62,20 +69,17 @@
     {{-- Filter Bar --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="md:col-span-2 relative">
-            <input type="text" id="searchInput" onkeyup="filterUsers()"
-                class="peer w-full border border-slate-200 rounded-lg py-2.5 pl-4 pr-10 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:border-[#14b8a6] focus:ring-1 focus:ring-[#14b8a6] transition-colors"
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="searchInput" oninput="filterUsers()"
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
                 placeholder="Cari Nama">
-            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </div>
         </div>
         <div class="md:col-span-1 relative">
             <select id="companyFilter" onchange="filterUsers()"
-                class="w-full border border-slate-200 rounded-lg py-2.5 px-4 text-sm text-[#2e3746] outline-none focus:border-[#14b8a6] focus:ring-1 focus:ring-[#14b8a6] bg-white appearance-none transition-colors"
+                class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
                 <option value="">Semua Perusahaan</option>
                 @foreach ($companies as $company)
@@ -85,7 +89,7 @@
         </div>
         <div class="md:col-span-1 relative">
             <select id="departmentFilter" onchange="filterUsers()"
-                class="w-full border border-slate-200 rounded-lg py-2.5 px-4 text-sm text-[#2e3746] outline-none focus:border-[#14b8a6] focus:ring-1 focus:ring-[#14b8a6] bg-white appearance-none transition-colors"
+                class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
                 <option value="">Semua Departemen</option>
                 @foreach ($departments as $department)
@@ -252,7 +256,7 @@
                 </div>
                 <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
                     <button type="button" onclick="closeRoleModal()"
-                        class="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">Batal</button>
+                        class="px-5 py-2.5 text-sm font-medium text-[#475569] bg-[#F4F1EA] rounded-xl hover:bg-[#eadecc] transition-colors">Batal</button>
                     <button type="submit"
                         class="px-5 py-2.5 text-sm font-bold text-white bg-[#14b8a6] rounded-xl hover:bg-[#0d9488] transition-colors shadow-sm">Simpan</button>
                 </div>
@@ -274,7 +278,7 @@
 
                 <div class="flex gap-4 w-full">
                     <button type="button" onclick="closeResetPasswordModal()"
-                        class="flex-1 py-2.5 px-4 text-sm font-semibold text-gray-900 bg-white border border-gray-400 rounded-xl hover:bg-gray-50 transition-colors">Batalkan</button>
+                        class="flex-1 py-2.5 px-4 text-sm font-semibold text-[#475569] bg-[#F4F1EA] rounded-xl hover:bg-[#eadecc] transition-colors">Batalkan</button>
                     <button type="submit"
                         class="flex-1 py-2.5 px-4 text-sm font-semibold text-white bg-[#4e5a6a] rounded-xl hover:bg-[#3d4756] transition-colors shadow-sm">Ya,
                         Yakin</button>
@@ -288,20 +292,20 @@
         <form id="deleteForm" method="POST" action="" class="w-full max-w-[400px]">
             @csrf
             @method('DELETE')
-            <div
-                class="bg-white rounded-2xl w-full shadow-2xl p-8 flex flex-col items-center text-center transform transition-all">
-                <div class="w-20 h-20 rounded-full bg-[#E5B224] flex items-center justify-center mb-5">
-                    <span class="text-white text-5xl font-bold">!</span>
+            <div class="bg-white rounded-2xl w-full flex flex-col items-center shadow-2xl p-8 text-center transform transition-all">
+                <div class="w-16 h-16 rounded-full bg-[#EF4444] flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
                 </div>
-                <h3 class="text-2xl font-black text-gray-900 mb-2">Konfirmasi</h3>
-                <p class="text-gray-900 text-[15px] mb-8">Apakah Anda yakin untuk menghapus user?</p>
+                <h3 class="text-2xl font-black text-gray-900 mb-2">Hapus User?</h3>
+                <p class="text-gray-500 text-[15px] mb-8">Data user ini akan dihapus secara permanen dan tidak dapat dikembalikan.</p>
 
                 <div class="flex gap-4 w-full">
                     <button type="button" onclick="closeDeleteModal()"
-                        class="flex-1 py-2.5 px-4 text-sm font-semibold text-gray-900 bg-white border border-gray-400 rounded-xl hover:bg-gray-50 transition-colors">Batalkan</button>
+                        class="flex-1 py-3 px-4 text-sm font-semibold text-[#475569] bg-[#F4F1EA] rounded-xl hover:bg-[#eadecc] transition-colors">Batalkan</button>
                     <button type="submit"
-                        class="flex-1 py-2.5 px-4 text-sm font-semibold text-white bg-[#4e5a6a] rounded-xl hover:bg-[#3d4756] transition-colors shadow-sm">Ya,
-                        Yakin</button>
+                        class="flex-1 py-3 px-4 text-sm font-bold text-white bg-[#EF4444] rounded-xl hover:bg-[#dc2626] transition-colors shadow-sm">Ya, Hapus</button>
                 </div>
             </div>
         </form>
@@ -381,23 +385,14 @@
 
             // Update cards styling
             document.querySelectorAll('.role-card').forEach(card => {
-                const countSpan = card.querySelector('.role-count');
-                const labelSpan = card.querySelector('.role-label');
-
                 if (card.dataset.role === activeRole) {
-                    card.classList.remove('bg-white', 'hover:bg-teal-50');
-                    card.classList.add('bg-[#14b8a6]', 'shadow-md');
-                    countSpan.classList.remove('text-[#14b8a6]');
-                    countSpan.classList.add('text-white');
-                    labelSpan.classList.remove('text-gray-500');
-                    labelSpan.classList.add('text-white');
+                    card.style.borderColor = '#14b8a6';
+                    card.style.boxShadow = '0 8px 24px rgba(20,184,166,0.18)';
+                    card.style.transform = 'translateY(-4px)';
                 } else {
-                    card.classList.add('bg-white', 'hover:bg-teal-50');
-                    card.classList.remove('bg-[#14b8a6]', 'shadow-md');
-                    countSpan.classList.add('text-[#14b8a6]');
-                    countSpan.classList.remove('text-white');
-                    labelSpan.classList.add('text-gray-500');
-                    labelSpan.classList.remove('text-white');
+                    card.style.borderColor = '#e2e8f0';
+                    card.style.boxShadow = '';
+                    card.style.transform = '';
                 }
             });
 

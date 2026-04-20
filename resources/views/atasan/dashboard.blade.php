@@ -12,12 +12,6 @@
                 justify-content: center;
                 min-height: 140px;
                 border: 2px solid transparent; /* default */
-                transition: all 0.2s;
-            }
-
-            .summary-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 24px rgba(0,0,0,0.1);
             }
 
             .summary-value {
@@ -293,7 +287,22 @@
     </div>
 
     {{-- Talent Cards Grid --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h3 class="text-xl font-bold text-[#1e293b]">Daftar Talent</h3>
+        
+        {{-- Live Search --}}
+        <div class="relative w-full sm:w-80">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                class="w-full border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                oninput="filterTalents()">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8" id="talent-grid">
         @forelse ($talents as $talent)
             @php
                 $session = $talent->assessmentSession;
@@ -302,7 +311,7 @@
                 $positionId = optional($talent->promotion_plan)->target_position_id ?? $talent->position_id;
                 $standards = $allStandards[$positionId] ?? collect();
             @endphp
-            <div class="talent-card">
+            <div class="talent-card talent-card-item" data-name="{{ strtolower($talent->nama) }}">
                 <div class="card-header">
                     <div class="card-header-left">
                         <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}"
@@ -387,5 +396,19 @@
     </div>
 
 
+
+    <x-slot name="scripts">
+        <script>
+            function filterTalents() {
+                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
+                const cards = document.querySelectorAll('.talent-card-item');
+
+                cards.forEach(card => {
+                    const name = card.getAttribute('data-name') || '';
+                    card.style.display = name.includes(searchTxt) ? '' : 'none';
+                });
+            }
+        </script>
+    </x-slot>
 
 </x-atasan.layout>

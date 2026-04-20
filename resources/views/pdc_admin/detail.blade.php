@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Detail Progress Talent – Individual Development Plan" :user="$user" :hideSidebar="true">
+<x-pdc_admin.layout title="Detail Progress Talent – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* Custom Scrollbar */
@@ -700,16 +700,28 @@
         </div>
     </div>
 
-    {{-- Header Navigation --}}
-    <div class="flex justify-between items-center mb-10">
-        <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-back">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+    {{-- ── Page Header ── --}}
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9z" clip-rule="evenodd" />
             </svg>
-            <span class="text-[#2e3746]">Kembali</span>
-        </a>
+        </div>
+        <div>
+            <div class="page-header-title">{{ $targetPosition->position_name }} - {{ $company->nama_company }}</div>
+            <div class="page-header-sub">Kelola detail progress untuk {{ $talents->count() }} talent terdaftar</div>
+        </div>
+        <div class="page-header-actions">
+            <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-prem btn-dark px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                Kembali
+            </a>
+        </div>
+    </div>
 
-        <div class="nav-tabs">
+    {{-- Header Navigation Tabs --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div class="nav-tabs md:flex hidden">
             <div class="tab-item active" onclick="switchSection('kompetensi', this)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -737,7 +749,7 @@
             </div>
         </div>
 
-        <div class="mobile-nav-select relative">
+        <div class="mobile-nav-select md:hidden w-full relative">
             <select onchange="handleNavSelect(this)" id="mobile-nav-dropdown" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-[15px] rounded-xl py-3.5 pl-4 pr-10 font-bold shadow-[0_2px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-[#2e3746] focus:bg-white appearance-none cursor-pointer transition-all">
                 <option value="kompetensi">Kompetensi</option>
                 <option value="idp">IDP</option>
@@ -750,12 +762,6 @@
                 </svg>
             </div>
         </div>
-    </div>
-
-    {{-- Main Header --}}
-    <div class="text-center mb-12">
-        <h2 class="text-2xl font-extrabold text-[#1e293b]">{{ $targetPosition->position_name }} - {{ $company->nama_company }}</h2>
-        <p class="text-xs font-bold text-gray-400 mt-1 uppercase">{{ $talents->count() }} TALENT</p>
     </div>
 
     {{-- ================================= SECTION: KOMPETENSI ================================= --}}

@@ -198,7 +198,6 @@
                             </svg>
                             Distribusi User
                         </span>
-                        <span class="card-badge">Live</span>
                     </div>
                     <div class="chart-container">
                         <canvas id="donutCanvas" width="240" height="240"></canvas>

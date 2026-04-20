@@ -34,13 +34,8 @@ class PDCAdminController extends Controller
 
         // Summary Cards
         $totalUsers = User::whereDoesntHave('role', fn($q) => $q->where('role_name', 'admin'))->count();
-        $onProgressTalent = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
-            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
-            ->whereNotNull('promotion_plan.target_position_id')
-            ->where('promotion_plan.status_promotion', 'In Progress')
-            ->select('users.company_id', 'promotion_plan.target_position_id')
-            ->distinct()
-            ->get()
+        $onProgressTalent = PromotionPlan::where('status_promotion', 'In Progress')
+            ->whereNotNull('target_position_id')
             ->count();
         $pendingFinance = ImprovementProject::whereIn('status', ['Pending', 'On Progress'])->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
@@ -54,7 +49,7 @@ class PDCAdminController extends Controller
             'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
         ];
 
-        // Fetch the 3 most recent 'In Progress' talents with their relationships
+        // Fetch the 5 most recent 'In Progress' talents with their relationships
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
@@ -66,7 +61,7 @@ class PDCAdminController extends Controller
             ->select('users.*')
             ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
-            ->take(3)
+            ->take(5)
             ->get();
 
         // Grouping: Company ID -> Target Position ID -> Talents

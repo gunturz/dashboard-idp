@@ -15,66 +15,47 @@
                 @if($activity->type_idp == 1 || $activity->type_idp == 2)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Mentor</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->verifier->nama ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->verifier->nama ?? '-' }}</div>
                 </div>
                 @endif
 
                 @if($activity->type_idp == 3)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Sumber</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->activity ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->activity ?? '-' }}</div>
                 </div>
                 @endif
 
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tema</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->theme ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->theme ?? '-' }}</div>
                 </div>
 
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tgl. Pengiriman/Update</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->format('d F Y') : '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->format('d F Y') : '-' }}</div>
                 </div>
 
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tgl. Pelaksanaan</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ \Carbon\Carbon::parse($activity->activity_date)->format('d F Y') }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ \Carbon\Carbon::parse($activity->activity_date)->format('d F Y') }}</div>
                 </div>
 
                 @if($activity->type_idp == 1 || $activity->type_idp == 2)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Lokasi</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->location ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->location ?? '-' }}</div>
                 </div>
                 @endif
 
                 @if($activity->type_idp == 3)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Platform</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->platform ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->platform ?? '-' }}</div>
                 </div>
                 @endif
 
-                @if($activity->type_idp == 1)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Aktivitas</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->activity ?? '-' }}</div>
-                </div>
-                @endif
-
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Deskripsi</span>
-                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->description ?? '-' }}</div>
-                </div>
-
-                @if($activity->type_idp == 2)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Action Plan</span>
-                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->action_plan ?? '-' }}</div>
-                </div>
-                @endif
-
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-2">Dokumentasi</span>
                     @php
                         $dPaths = []; $dNames = [];
@@ -88,18 +69,41 @@
                         }
                     @endphp
                     @if(count($dPaths) > 0)
-                        <div class="flex flex-wrap gap-3">
+                        <div class="flex flex-wrap gap-2">
                             @foreach($dPaths as $di => $dp)
-                                <a href="{{ asset('storage/'.$dp) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[13px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                                    {{ $dNames[$di] ?? 'File Dokumentasi ' . ($di+1) }}
+                                <a href="{{ asset('storage/'.$dp) }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                    {{ $dNames[$di] ?? 'File ' . ($di+1) }}
                                 </a>
                             @endforeach
                         </div>
                     @else
-                        <span class="text-[14px] text-gray-400 font-medium whitespace-nowrap">- Tidak ada file dokumentasi</span>
+                        <span class="text-[13px] text-gray-400 font-medium whitespace-nowrap">- Tidak ada file</span>
                     @endif
                 </div>
+
+                @if($activity->type_idp == 1)
+                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Aktivitas</span>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->activity ?? '-' }}</div>
+                </div>
+                @endif
+
+                @if($activity->type_idp != 3)
+                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Deskripsi</span>
+                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->description ?? '-' }}</div>
+                </div>
+                @endif
+
+                @if($activity->type_idp == 2)
+                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Action Plan</span>
+                    <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->action_plan ?? '-' }}</div>
+                </div>
+                @endif
+
+
             </div>
         </div>
     </div>

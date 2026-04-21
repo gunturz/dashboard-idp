@@ -283,6 +283,17 @@
                     </div>
 
                 </div>
+
+                {{-- Lihat Logbook Button --}}
+                <div class="mt-5 pt-5 border-t border-gray-200">
+                    <a href="{{ route('talent.logbook.detail') }}"
+                        class="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-semibold py-3 px-6 rounded-[10px] text-base transition-all active:scale-95 shadow-[0_8px_20px_-4px_rgba(13,148,136,0.4)] hover:shadow-[0_12px_25px_-4px_rgba(13,148,136,0.5)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Lihat Logbook
+                    </a>
+                </div>
             </div>
         </div> {{-- /wrapper IDP Monitoring cards --}}
 
@@ -420,15 +431,15 @@
             </div>
         </div> {{-- /wrapper Project Improvement --}}
 
-        {{-- ══════════════════════════════ LOGBOOK ══════════════════════════════ --}}
+        {{-- ══════════════════════════════ RIWAYAT ══════════════════════════════ --}}
         <div class="space-y-1">
-            <div class="flex items-center gap-2.5 px-2" id="LogBook">
+            <div class="flex items-center gap-2.5 px-2" id="Riwayat">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path
                         d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                 </svg>
-                <h2 class="text-xl font-bold text-[#2e3746] animate-title">LogBook</h2>
+                <h2 class="text-xl font-bold text-[#2e3746] animate-title">Riwayat</h2>
             </div>
 
             <div
@@ -438,21 +449,19 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2e3746]" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <h3 class="text-base font-bold text-[#2e3746] animate-title">Lihat rekap aktivitas LogBook kamu
-                        </h3>
+                        <h3 class="text-base font-bold text-[#2e3746] animate-title">Riwayat Program IDP</h3>
                     </div>
-                    <p class="text-sm text-gray-500 font-medium">Pantau progress Exposure, Mentoring, dan Learning
-                        secara lengkap klik tombol untuk melihat detail seluruh sesi.</p>
+                    <p class="text-sm text-gray-500 font-medium">Lihat ringkasan perjalanan program IDP Anda — mulai dari kompetensi, aktivitas logbook, hingga pencapaian yang telah dikompletasi.</p>
                 </div>
-                <a href="{{ route('talent.logbook.detail') }}"
+                <a href="{{ route('talent.riwayat') }}"
                     class="w-full md:w-auto text-center bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
-                    Lihat Detail
+                    Lihat Riwayat
                 </a>
             </div>
         </div>
-    </div> {{-- /wrapper LogBook --}}
+    </div> {{-- /wrapper Riwayat --}}
     
     </div> <!-- Tutup w-full px-6 flex-grow wrapper -->
 

@@ -27,7 +27,7 @@
             --green-2:   #059669;
             --emerald:   #34d399;
             --white:     #ffffff;
-            --off-white: #f8fafc;
+            --off-white: #ffffffff;
         }
 
         html { scroll-behavior: smooth; }
@@ -114,7 +114,7 @@
             border-radius: 99px;
             font-size: 0.82rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.85);
+            color: rgba(255, 255, 255, 1);
             text-decoration: none;
             transition: all 0.25s;
         }
@@ -154,34 +154,13 @@
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(15,118,110,0.25) 50%, rgba(15,23,42,0.95) 100%),
+                linear-gradient(135deg, rgba(15, 23, 42, 0.90) 0%, rgba(15, 23, 42, 0.40) 50%, rgba(15, 23, 42, 0.95) 100%),
                 url("{{ asset('asset/Gambar%20TS.png') }}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
-        .hero-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(13,148,136,0.18) 0%, transparent 70%);
-        }
 
-        /* Floating orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: floatOrb 8s ease-in-out infinite;
-            pointer-events: none;
-        }
-        .orb-1 { width: 400px; height: 400px; background: rgba(13,148,136,0.15); top: 10%; left: -10%; animation-delay: 0s; }
-        .orb-2 { width: 350px; height: 350px; background: rgba(16,185,129,0.12); bottom: 5%; right: -8%; animation-delay: -3s; }
-        .orb-3 { width: 250px; height: 250px; background: rgba(52,211,153,0.1); top: 40%; right: 15%; animation-delay: -6s; }
-        @keyframes floatOrb {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-30px) scale(1.05); }
-        }
 
         .hero-content {
             position: relative;
@@ -231,7 +210,7 @@
         .hero-desc {
             font-size: 1.05rem;
             font-weight: 400;
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 1);
             line-height: 1.75;
             max-width: 580px;
             margin: 0 auto 40px;
@@ -281,7 +260,7 @@
             border-radius: 99px;
             font-size: 0.9rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 1);
             text-decoration: none;
             backdrop-filter: blur(10px);
             background: rgba(255,255,255,0.05);
@@ -344,67 +323,129 @@
         }
         .section-sub {
             font-size: 0.95rem;
-            color: rgba(255,255,255,0.55);
+            color: rgba(255, 255, 255, 1);
             line-height: 1.7;
             max-width: 520px;
             margin: 0 auto;
         }
 
-        /* ─── HOW IT WORKS ─── */
+        /* ─── HOW IT WORKS – TIMELINE ─── */
         .steps-section {
             padding: 100px 2rem;
             background: linear-gradient(180deg, var(--dark) 0%, #0d1526 100%);
         }
         .steps-header { text-align: center; margin-bottom: 70px; }
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            max-width: 1100px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.04);
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.07);
-        }
-        .step-card {
-            padding: 40px 32px;
-            background: rgba(15,23,42,0.8);
+
+        .timeline {
             position: relative;
-            transition: background 0.3s;
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
-        .step-card:hover { background: rgba(13,148,136,0.07); }
-        .step-card::before {
+        .timeline::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--teal), var(--green));
-            opacity: 0;
-            transition: opacity 0.3s;
+            left: 36px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(13,148,136,0.5) 10%, rgba(13,148,136,0.5) 90%, transparent);
         }
-        .step-card:hover::before { opacity: 1; }
-        .step-num {
-            font-size: 3rem;
-            font-weight: 900;
-            color: rgba(13,148,136,0.15);
-            line-height: 1;
-            margin-bottom: 16px;
-            font-variant-numeric: tabular-nums;
+
+        .tl-item {
+            display: flex;
+            gap: 28px;
+            padding: 0 0 40px 0;
+            position: relative;
         }
-        .step-icon {
-            width: 48px; height: 48px;
-            background: linear-gradient(135deg, rgba(13,148,136,0.2), rgba(16,185,129,0.1));
-            border-radius: 14px;
+        .tl-item:last-child { padding-bottom: 0; }
+
+        .tl-dot {
+            flex-shrink: 0;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(15,23,42,0.95);
+            border: 1.5px solid rgba(13,148,136,0.45);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            border: 1px solid rgba(13,148,136,0.3);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 0 6px rgba(13,148,136,0.05);
+            transition: all 0.3s;
         }
-        .step-icon svg { width: 24px; height: 24px; color: var(--emerald); }
-        .step-title { font-size: 1.05rem; font-weight: 800; color: var(--white); margin-bottom: 10px; }
-        .step-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+        .tl-dot svg { width: 28px; height: 28px; color: var(--emerald); }
+        .tl-item:hover .tl-dot {
+            border-color: var(--teal);
+            background: rgba(13,148,136,0.1);
+            box-shadow: 0 0 0 8px rgba(13,148,136,0.08), 0 0 20px rgba(13,148,136,0.15);
+        }
+
+        .tl-body {
+            flex: 1;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 18px;
+            padding: 24px 28px;
+            margin-top: 12px;
+            position: relative;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        .tl-body::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--teal), var(--green));
+            border-radius: 3px 0 0 3px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tl-item:hover .tl-body {
+            border-color: rgba(13,148,136,0.25);
+            background: rgba(13,148,136,0.04);
+            transform: translateX(4px);
+        }
+        .tl-item:hover .tl-body::before { opacity: 1; }
+
+        .tl-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.63rem;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--emerald);
+            margin-bottom: 8px;
+        }
+        .tl-label .tl-dot-mini {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--emerald);
+        }
+        .tl-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        .tl-desc {
+            font-size: 0.83rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
+            .timeline::before { left: 28px; }
+            .tl-dot { width: 56px; height: 56px; }
+            .tl-dot svg { width: 22px; height: 22px; }
+            .tl-body { padding: 18px 20px; }
+        }
 
         /* ─── FEATURES ─── */
         .features-section {
@@ -530,14 +571,7 @@
             position: relative;
             overflow: hidden;
         }
-        .cta-glow {
-            position: absolute;
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, rgba(13,148,136,0.12) 0%, transparent 70%);
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-        }
+
         .cta-inner {
             position: relative;
             z-index: 2;
@@ -697,9 +731,7 @@
     <!-- ─── HERO ─── -->
     <section class="hero" id="hero">
         <div class="hero-bg"></div>
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+
 
         <div style="position: relative; z-index: 2; width: 100%;">
             <div class="hero-content">
@@ -709,7 +741,7 @@
                 </div>
 
                 <h1 class="hero-title">
-                    Sistem Pengelolaan <span class="highlight">Individual<br>Development Plan</span>
+                    Sistem Pengelolaan<br>Individual<br>Development Plan</span>
                 </h1>
 
                 <p class="hero-desc">
@@ -742,55 +774,80 @@
             <h2 class="section-title">Alur Pengembangan Talent</h2>
             <p class="section-sub">Proses sistematis dari penilaian awal hingga pengembangan penuh.</p>
         </div>
-        <div class="steps-grid">
-            <div class="step-card reveal">
-                <div class="step-num">01</div>
-                <div class="step-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" /></svg>
+        <div class="timeline">
+
+            <div class="tl-item reveal">
+                <div class="tl-dot">
+                    <!-- Clipboard check - Registrasi -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z" clip-rule="evenodd" /></svg>
                 </div>
-                <div class="step-title">Registrasi & Seleksi</div>
-                <div class="step-desc">Kandidat mendaftar dan mengikuti proses seleksi untuk menjadi Talent program IDP.</div>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-num">02</div>
-                <div class="step-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                <div class="tl-body">
+                    <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 1</div>
+                    <div class="tl-title">Registrasi &amp; Seleksi</div>
+                    <div class="tl-desc">Kandidat mendaftar dan mengikuti proses seleksi untuk menjadi Talent program IDP.</div>
                 </div>
-                <div class="step-title">Asesmen Kompetensi</div>
-                <div class="step-desc">Self-assessment dilengkapi penilaian 360° dari Atasan dan Panelis untuk gap analysis.</div>
             </div>
-            <div class="step-card reveal">
-                <div class="step-num">03</div>
-                <div class="step-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.644 1.59a.75.75 0 01.712 0l9.75 5.25a.75.75 0 010 1.32l-9.75 5.25a.75.75 0 01-.712 0l-9.75-5.25a.75.75 0 010-1.32l9.75-5.25z" /><path d="M3.265 10.602l7.668 4.129a2.25 2.25 0 002.134 0l7.668-4.13 1.37.739a.75.75 0 010 1.32l-9.75 5.25a.75.75 0 01-.71 0l-9.75-5.25a.75.75 0 010-1.32l1.37-.738z" /></svg>
+
+            <div class="tl-item reveal">
+                <div class="tl-dot">
+                    <!-- Chart bar - Asesmen -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z" /></svg>
                 </div>
-                <div class="step-title">Penyusunan IDP</div>
-                <div class="step-desc">Talent menyusun rencana pengembangan melalui jalur Exposure, Mentoring, dan Learning.</div>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-num">04</div>
-                <div class="step-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" /></svg>
+                <div class="tl-body">
+                    <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 2</div>
+                    <div class="tl-title">Asesmen Kompetensi</div>
+                    <div class="tl-desc">Self-assessment dilengkapi penilaian 360° dari Atasan dan Panelis untuk gap analysis.</div>
                 </div>
-                <div class="step-title">Logbook & Aktivitas</div>
-                <div class="step-desc">Talent mencatat setiap aktivitas pengembangan di logbook untuk diverifikasi Mentor dan Atasan.</div>
             </div>
-            <div class="step-card reveal">
-                <div class="step-num">05</div>
-                <div class="step-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" /></svg>
+
+            <div class="tl-item reveal">
+                <div class="tl-dot">
+                    <!-- Document text - Penyusunan IDP -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75-6.75a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" /></svg>
                 </div>
-                <div class="step-title">Monitoring Progress</div>
-                <div class="step-desc">Atasan memantau perkembangan talent secara real-time dengan heatmap dan grafik interaktif.</div>
-            </div>
-            <div class="step-card reveal">
-                <div class="step-num">06</div>
-                <div class="step-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.491 4.491 0 01-3.497-1.307 4.491 4.491 0 01-1.307-3.497A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+                <div class="tl-body">
+                    <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 3</div>
+                    <div class="tl-title">Penyusunan IDP</div>
+                    <div class="tl-desc">Talent menyusun rencana pengembangan melalui jalur Exposure, Mentoring, dan Learning.</div>
                 </div>
-                <div class="step-title">Evaluasi & BOD Review</div>
-                <div class="step-desc">Panelis dan BOD melakukan evaluasi akhir dan memberikan rekomendasi promosi talent.</div>
             </div>
+
+            <div class="tl-item reveal">
+                <div class="tl-dot">
+                    <!-- Pencil square - Logbook -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" /><path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" /></svg>
+                </div>
+                <div class="tl-body">
+                    <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 4</div>
+                    <div class="tl-title">Logbook &amp; Aktivitas</div>
+                    <div class="tl-desc">Talent mencatat setiap aktivitas pengembangan di logbook untuk diverifikasi Mentor dan Atasan.</div>
+                </div>
+            </div>
+
+            <div class="tl-item reveal">
+                <div class="tl-dot">
+                    <!-- Presentation chart line - Monitoring -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 2.25a.75.75 0 000 1.5H3v10.5a3 3 0 003 3h1.21l-1.172 3.513a.75.75 0 001.424.474l.329-.987h8.418l.33.987a.75.75 0 001.422-.474l-1.17-3.513H18a3 3 0 003-3V3.75h.75a.75.75 0 000-1.5H2.25zm6.04 16.5l.5-1.5h6.42l.5 1.5H8.29zm7.46-12a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0V7.5zm-3 2.25a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0V9.75zm-3 2.25a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0V12z" clip-rule="evenodd" /></svg>
+                </div>
+                <div class="tl-body">
+                    <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 5</div>
+                    <div class="tl-title">Monitoring Progress</div>
+                    <div class="tl-desc">Atasan memantau perkembangan talent secara real-time dengan heatmap dan grafik interaktif.</div>
+                </div>
+            </div>
+
+            <div class="tl-item reveal">
+                <div class="tl-dot">
+                    <!-- Trophy - Evaluasi & Panelis Review -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 00-.584.859 6.753 6.753 0 006.138 5.6 6.73 6.73 0 002.743 1.346A6.707 6.707 0 019.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 000 4.5h9.75a2.25 2.25 0 000-4.5h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 01-1.112-3.173 6.73 6.73 0 002.743-1.347 6.753 6.753 0 006.139-5.6.75.75 0 00-.585-.858 47.077 47.077 0 00-3.07-.543V2.62a.75.75 0 00-.658-.744 49.798 49.798 0 00-6.093-.377.75.75 0 00-.657.744zm0 2.629c0 1.196.312 2.32.857 3.294A5.266 5.266 0 013.16 5.337a45.6 45.6 0 012.006-.343v.256zm13.5 0v-.256c.674.1 1.343.214 2.006.343a5.265 5.265 0 01-2.863 3.207 6.72 6.72 0 00.857-3.294z" clip-rule="evenodd" /></svg>
+                </div>
+                <div class="tl-body">
+                    <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 6</div>
+                    <div class="tl-title">Evaluasi &amp; Panelis Review</div>
+                    <div class="tl-desc">Panelis melakukan evaluasi akhir dan memberikan rekomendasi promosi talent.</div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -904,7 +961,6 @@
 
     <!-- ─── CTA ─── -->
     <section class="cta-section">
-        <div class="cta-glow"></div>
         <div class="cta-inner reveal">
             <div class="section-tag" style="margin-bottom: 24px;">Mulai Sekarang</div>
             <h2 class="cta-title">

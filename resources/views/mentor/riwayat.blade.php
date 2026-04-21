@@ -150,9 +150,16 @@
             </div>
         </div>
 
+        {{-- Tab Navigation --}}
+        <div class="flex gap-2 p-1.5 bg-gray-100 rounded-full w-fit mb-8 shadow-inner overflow-x-auto">
+            <button id="tab-exposure" onclick="switchTab('exposure')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 bg-[#2e3746] text-white shadow-sm whitespace-nowrap">Exposure</button>
+            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Mentoring</button>
+            <button id="tab-learning" onclick="switchTab('learning')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Learning</button>
+        </div>
+
         {{-- ═══ EXPOSURE ═══ --}}
-        <div class="section-pill">Exposure</div>
-        <div class="val-table-wrap">
+        <div id="panel-exposure">
+            <div class="val-table-wrap">
             <table class="val-table">
                 <thead>
                     <tr>
@@ -198,9 +205,10 @@
                 </tbody>
             </table>
         </div>
+        </div>
 
         {{-- ═══ MENTORING ═══ --}}
-        <div class="section-pill">Mentoring</div>
+        <div id="panel-mentoring" class="hidden">
         <div class="val-table-wrap">
             <table class="val-table">
                 <thead>
@@ -247,9 +255,10 @@
                 </tbody>
             </table>
         </div>
+        </div>
 
         {{-- ═══ LEARNING ═══ --}}
-        <div class="section-pill">Learning</div>
+        <div id="panel-learning" class="hidden">
         <div class="val-table-wrap">
             <table class="val-table">
                 <thead>
@@ -295,6 +304,7 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
         </div>
 
         @endif
@@ -349,6 +359,36 @@
                     }
                 }
             });
+
+            function switchTab(tab) {
+                ['exposure', 'mentoring', 'learning'].forEach(t => {
+                    const panel = document.getElementById('panel-' + t);
+                    const btn = document.getElementById('tab-' + t);
+                    if (panel) panel.classList.add('hidden');
+                    if (btn) {
+                        btn.classList.remove('bg-[#2e3746]', 'text-white', 'shadow-sm');
+                        btn.classList.add('text-gray-500', 'hover:text-gray-900');
+                    }
+                });
+                const activePanel = document.getElementById('panel-' + tab);
+                const activeBtn = document.getElementById('tab-' + tab);
+                if (activePanel) activePanel.classList.remove('hidden');
+                if (activeBtn) {
+                    activeBtn.classList.remove('text-gray-500', 'hover:text-gray-900');
+                    activeBtn.classList.add('bg-[#2e3746]', 'text-white', 'shadow-sm');
+                }
+                // Save state in hash
+                history.replaceState(null, null, '#' + tab);
+            }
+
+            // Restore tab from hash on load
+            document.addEventListener('DOMContentLoaded', function() {
+                const hash = window.location.hash.replace('#', '');
+                if (['exposure', 'mentoring', 'learning'].includes(hash)) {
+                    switchTab(hash);
+                }
+            });
         </script>
+
     </x-slot>
 </x-mentor.layout>

@@ -307,7 +307,7 @@
                 const path = window.location.pathname;
                 if (path.includes('/talent/logbook')) {
                     links.forEach(l => {
-                        if (l.getAttribute('data-section') === 'LogBook') l.classList.add('active');
+                        if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
                         else l.classList.remove('active');
                     });
                     return;
@@ -356,7 +356,7 @@
 
             if (path.includes('/talent/logbook')) {
                 links.forEach(l => {
-                    if (l.getAttribute('data-section') === 'LogBook') l.classList.add('active');
+                    if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
                     else l.classList.remove('active');
                 });
             } else if (path.includes('/talent/idp-monitoring')) {

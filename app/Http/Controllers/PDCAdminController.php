@@ -59,9 +59,9 @@ class PDCAdminController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'In Progress')
-                    ->whereNotNull('target_position_id');
-            })
+            $q->where('status_promotion', 'In Progress')
+                ->whereNotNull('target_position_id');
+        })
             ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
             ->select('users.*')
             ->orderBy('promotion_plan.created_at', 'desc')
@@ -72,19 +72,19 @@ class PDCAdminController extends Controller
         // Grouping: Company ID -> Target Position ID -> Talents
         $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
             return [
-                'company' => $companyTalents->first()->company,
-                'positions' => $companyTalents->groupBy(
-                    function ($item) {
-                        return $item->promotion_plan->target_position_id ?? 0;
-                    }
-                )->map(
-                    function ($positionTalents) {
-                        return [
-                            'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                            'talents' => $positionTalents,
-                        ];
-                    }
-                ),
+            'company' => $companyTalents->first()->company,
+            'positions' => $companyTalents->groupBy(
+                function ($item) {
+                return $item->promotion_plan->target_position_id ?? 0;
+            }
+            )->map(
+                function ($positionTalents) {
+                return [
+                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                'talents' => $positionTalents,
+                ];
+            }
+            ),
             ];
         });
 
@@ -114,32 +114,35 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
-        // Fetch all talents except those who are already completed ('Approved Panelis')
+        // Tampilkan talent yang SUDAH dibuatkan Development Plan oleh PDC Admin
+        // (punya promotion_plan dengan target_position_id terpilih)
+        // Sembunyikan yang belum punya plan atau sudah 'Approved Panelis'
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
-            ->whereDoesntHave('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'Approved Panelis');
-            })
+            ->whereHas('promotion_plan', function ($q) {
+            $q->whereNotNull('target_position_id')
+                ->where('status_promotion', '!=', 'Approved Panelis');
+        })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
         // Grouping: Company ID -> Target Position ID -> Talents
         $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
             return [
-                'company' => $companyTalents->first()->company,
-                'positions' => $companyTalents->groupBy(
-                    function ($item) {
-                        return $item->promotion_plan->target_position_id ?? 0;
-                    }
-                )->map(
-                    function ($positionTalents) {
-                        return [
-                            'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                            'talents' => $positionTalents,
-                        ];
-                    }
-                ),
+            'company' => $companyTalents->first()->company,
+            'positions' => $companyTalents->groupBy(
+                function ($item) {
+                return $item->promotion_plan->target_position_id ?? 0;
+            }
+            )->map(
+                function ($positionTalents) {
+                return [
+                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                'talents' => $positionTalents,
+                ];
+            }
+            ),
             ];
         });
 
@@ -190,14 +193,14 @@ class PDCAdminController extends Controller
 
                 // Create or update promotion_plan with ALL mentor IDs
                 PromotionPlan::updateOrCreate(
-                    ['user_id_talent' => $talentId],
-                    [
-                        'target_position_id' => $request->target_position_id,
-                        'mentor_ids' => $mentorIds, // all selected mentors
-                        'status_promotion' => 'In Progress',
-                        'start_date' => $request->start_date,
-                        'target_date' => $request->target_date,
-                    ]
+                ['user_id_talent' => $talentId],
+                [
+                    'target_position_id' => $request->target_position_id,
+                    'mentor_ids' => $mentorIds, // all selected mentors
+                    'status_promotion' => 'In Progress',
+                    'start_date' => $request->start_date,
+                    'target_date' => $request->target_date,
+                ]
                 );
             }
         });
@@ -228,8 +231,8 @@ class PDCAdminController extends Controller
 
         $talents = User::where('company_id', $company_id)
             ->whereHas('promotion_plan', function ($q) use ($position_id) {
-                $q->where('target_position_id', $position_id);
-            })
+            $q->where('target_position_id', $position_id);
+        })
             ->with(['department', 'position', 'mentor', 'atasan', 'assessmentSession.details.competence', 'idpActivities.type', 'improvementProjects.verifier'])
             ->get();
 
@@ -269,7 +272,7 @@ class PDCAdminController extends Controller
 
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
@@ -365,7 +368,8 @@ class PDCAdminController extends Controller
 
             if ($id) {
                 \App\Models\Question::where('id', $id)->update(['question_text' => $text]);
-            } elseif ($text) {
+            }
+            elseif ($text) {
                 \App\Models\Question::create([
                     'competence_id' => $competenceId,
                     'level' => $level,
@@ -383,8 +387,8 @@ class PDCAdminController extends Controller
         if ($scores) {
             foreach ($scores as $comp_id => $level) {
                 PositionTargetCompetence::updateOrCreate(
-                    ['position_id' => $position_id, 'competence_id' => $comp_id],
-                    ['target_level' => $level]
+                ['position_id' => $position_id, 'competence_id' => $comp_id],
+                ['target_level' => $level]
                 );
             }
         }
@@ -426,6 +430,53 @@ class PDCAdminController extends Controller
         $companies = Company::all();
 
         return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'positions', 'rolesData', 'companies'));
+    }
+
+    public function destroyUser($id)
+    {
+        $targetUser = User::findOrFail($id);
+
+        // Cek jika user yang akan dihapus adalah super admin / diri sendiri
+        if ($targetUser->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($targetUser) {
+            $id = $targetUser->id;
+
+            // Nullify Atasan/Mentor assignments pada user lain
+            User::where('atasan_id', $id)->update(['atasan_id' => null]);
+            User::where('mentor_id', $id)->update(['mentor_id' => null]);
+
+            // Untuk Project & Aktivitas yang divalidasi oleh HR/Finance/Atasan
+            \App\Models\ImprovementProject::where('verify_by', $id)->update(['verify_by' => null]);
+            \App\Models\IdpActivity::where('verify_by', $id)->update(['verify_by' => null]);
+            \App\Models\AssessmentSession::where('user_id_atasan', $id)->update(['user_id_atasan' => null]);
+
+            // Hapus session jika dia adalah talent (ini akan butuh hapus details dulu)
+            $sessions = \App\Models\AssessmentSession::where('user_id_talent', $id)->get();
+            foreach ($sessions as $session) {
+                \App\Models\DetailAssessment::where('assessment_id', $session->id)->delete();
+                $session->delete();
+            }
+
+            // Hapus data yang dependen langsung karena dia sebagai Talent
+            \App\Models\ImprovementProject::where('user_id_talent', $id)->delete();
+            \App\Models\IdpActivity::where('user_id_talent', $id)->delete();
+            \App\Models\PanelisAssessment::where('user_id_talent', $id)->delete();
+            \App\Models\PromotionPlan::where('user_id_talent', $id)->delete();
+
+            // Jika user adalah Panelis
+            \App\Models\PanelisAssessment::where('panelis_id', $id)->delete();
+
+            // Hapus role (pivot)
+            $targetUser->roles()->detach();
+
+            // Selesaikan hapus
+            $targetUser->delete();
+        });
+
+        return back()->with('success', 'User berhasil dihapus beserta data terkait.');
     }
 
     public function requestFinanceValidation(Request $request)
@@ -485,7 +536,8 @@ class PDCAdminController extends Controller
             }
 
             return response()->json(['success' => true]);
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('PDCAdmin updateTopGaps error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
@@ -497,7 +549,7 @@ class PDCAdminController extends Controller
 
         $query = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->whereHas('promotion_plan', fn($q) => $q->whereNotNull('target_position_id')
-                ->where('status_promotion', '!=', 'Approved Panelis'))
+        ->where('status_promotion', '!=', 'Approved Panelis'))
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition', 'improvementProjects']);
 
         // Filters
@@ -525,7 +577,7 @@ class PDCAdminController extends Controller
         foreach ($talents as $talent) {
             $alreadySent = in_array(
                 optional($talent->promotion_plan)->status_promotion,
-                ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
+            ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
             );
             $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->exists();
 
@@ -541,19 +593,19 @@ class PDCAdminController extends Controller
         // Group by company -> target position -> talents
         $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
             return [
-                'company' => $companyTalents->first()->company,
-                'positions' => $companyTalents->groupBy(
-                    function ($item) {
-                        return $item->promotion_plan->target_position_id ?? 0;
-                    }
-                )->map(
-                    function ($positionTalents) {
-                        return [
-                            'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                            'talents' => $positionTalents,
-                        ];
-                    }
-                ),
+            'company' => $companyTalents->first()->company,
+            'positions' => $companyTalents->groupBy(
+                function ($item) {
+                return $item->promotion_plan->target_position_id ?? 0;
+            }
+            )->map(
+                function ($positionTalents) {
+                return [
+                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                'talents' => $positionTalents,
+                ];
+            }
+            ),
             ];
         });
 
@@ -678,8 +730,8 @@ class PDCAdminController extends Controller
             $q->where('role_name', 'Talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'Approved Panelis');
-            })
+            $q->where('status_promotion', 'Approved Panelis');
+        })
             ->with(['company', 'department', 'position', 'promotion_plan.targetPosition', 'improvementProjects'])
             ->get();
 
@@ -731,7 +783,7 @@ class PDCAdminController extends Controller
 
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         // Build top 3 GAP list
@@ -791,7 +843,7 @@ class PDCAdminController extends Controller
         $competencies = Competence::all();
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         $pdf = Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards'));
@@ -873,7 +925,8 @@ class PDCAdminController extends Controller
             });
 
             return back()->with('success', 'Perusahaan beserta seluruh Departemen di dalamnya berhasil dihapus.');
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
         }
     }
@@ -918,7 +971,8 @@ class PDCAdminController extends Controller
 
             Department::findOrFail($id)->delete();
             return back()->with('success', 'Departemen berhasil dihapus.');
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
         }
     }

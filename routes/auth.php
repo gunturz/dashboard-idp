@@ -30,6 +30,12 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class , 'store']);
 
+    Route::get('auth/google', [AuthenticatedSessionController::class , 'redirectToGoogle'])
+        ->name('auth.google.redirect');
+
+    Route::get('auth/google/callback', [AuthenticatedSessionController::class , 'handleGoogleCallback'])
+        ->name('auth.google.callback');
+
 
 
     Route::get('forgot-password', [PasswordResetLinkController::class , 'create'])
@@ -143,6 +149,8 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.assign_role');
     Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class , 'resetPassword'])
         ->name('pdc_admin.reset_password');
+    Route::delete('/pdc-admin/user/{id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyUser'])
+        ->name('pdc_admin.user.destroy');
     // Company Management
     Route::get('/pdc-admin/company-management', [\App\Http\Controllers\PDCAdminController::class , 'companyManagement'])
         ->name('pdc_admin.company_management');

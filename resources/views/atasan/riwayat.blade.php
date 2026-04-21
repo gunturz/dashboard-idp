@@ -217,7 +217,7 @@
                             $targetDate = $plan?->target_date;
                             $posName    = $talent->position?->position_name ?? '-';
                             $targetPos  = $plan?->targetPosition?->position_name ?? '?';
-                            $compName   = $talent->company?->nama_perusahaan ?? '-';
+                            $compName   = $talent->company?->nama_company ?? '-';
                             $deptName   = $talent->department?->nama_department ?? '-';
                             
                             $periodeLabel = '';

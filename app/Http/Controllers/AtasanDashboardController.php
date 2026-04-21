@@ -231,7 +231,7 @@ class AtasanDashboardController extends Controller
             ->map(fn($t) => $t->promotion_plan->start_date->format('Y') . '/' . $t->promotion_plan->target_date->format('Y'))
             ->unique()->values();
 
-        $perusahaanOptions = $talents->map(fn($t) => $t->company?->nama_perusahaan ?? null)->filter()->unique()->values();
+        $perusahaanOptions = $talents->map(fn($t) => $t->company?->nama_company ?? null)->filter()->unique()->values();
         $departemenOptions = $talents->map(fn($t) => $t->department?->nama_department ?? null)->filter()->unique()->values();
 
         // Apply filters in PHP

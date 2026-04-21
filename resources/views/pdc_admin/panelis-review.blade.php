@@ -391,7 +391,7 @@
                                 <th class="w-[20%] text-left pl-6">Posisi yang Dituju</th>
                                 <th class="w-[18%]">Talent</th>
                                 <th class="w-[16%]">Departemen</th>
-                                <th class="w-[15%]">Validasi Finance</th>
+                                <th class="w-[15%]">Validasi PDC</th>
                                 <th class="w-[13%]">Lock Progress</th>
                                 <th class="w-[18%]">Aksi</th>
                             </tr>

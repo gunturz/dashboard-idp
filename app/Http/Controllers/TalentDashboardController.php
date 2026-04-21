@@ -691,4 +691,69 @@ class TalentDashboardController extends Controller
             throw $e;
         }
     }
+    public function riwayatDetail($id)
+    {
+        try {
+            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan', 'promotion_plan.targetPosition']);
+            if ($user->role->role_name !== 'talent') {
+                abort(403);
+            }
+
+            $notifications = $this->getNotifications();
+
+            // Sesi Assessment yang dipilih
+            $session = DB::table('assessment_session')
+                ->where('id', $id)
+                ->where('user_id_talent', $user->id)
+                ->first();
+
+            if (!$session) {
+                abort(404, 'Data riwayat tidak ditemukan.');
+            }
+
+            // Data Kompetensi dari sesi ini
+            $details = DB::table('detail_assessment')
+                ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
+                ->where('assessment_id', $session->id)
+                ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan', 'detail_assessment.gap_score')
+                ->get();
+
+            $kompetensiData = [];
+            foreach ($details as $d) {
+                $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
+                $kompetensiData[$d->name] = [
+                    'score' => $avg,
+                    'gap'   => $d->gap_score ?? 0
+                ];
+            }
+
+            // IDP Monitoring (Aktivitas)
+            $idpActivities = IdpActivity::with('type')
+                ->where('user_id_talent', $user->id)
+                ->get();
+
+            $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
+            $learningCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Learning')->count();
+            $mentoringCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Mentoring')->count();
+
+            // Project Improvement
+            $projects = ImprovementProject::where('user_id_talent', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('talent.riwayat-detail', compact(
+                'user',
+                'notifications',
+                'session',
+                'kompetensiData',
+                'exposureCount',
+                'learningCount',
+                'mentoringCount',
+                'projects'
+            ));
+        } catch (\Exception $e) {
+            Log::error('talent riwayatDetail error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }

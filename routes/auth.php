@@ -81,6 +81,8 @@ Route::middleware('auth')->group(function () {
         ->name('talent.dashboard');
     Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class , 'riwayat'])
         ->name('talent.riwayat');
+    Route::get('/talent/riwayat/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'riwayatDetail'])
+        ->name('talent.riwayat.detail');
     Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'competency'])
         ->name('talent.competency');
     Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'storeCompetency'])

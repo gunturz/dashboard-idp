@@ -25,38 +25,43 @@
     </x-slot>
 
 
-    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up">
-        {{-- Back Link --}}
-        <div class="mb-5">
-            <a href="{{ route('panelis.detail_talent', $talent->id) }}#logbook-section"
-                class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit">
+    <div class="px-3 md:px-0">
+        {{-- Kembali Button --}}
+        <div class="mb-6">
+            <a href="{{ route('panelis.detail_talent', $talent->id) }}#logbook-section" class="btn-prem btn-ghost w-fit">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
-                <span class="text-[#2e3746]">Kembali</span>
+                Kembali
             </a>
         </div>
 
-        <div class="flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-            </svg>
-            <h1 class="text-2xl font-bold text-[#2e3746]">LogBook : {{ $talent->nama }}</h1>
+        {{-- ── Page Header ── --}}
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="page-header-title">LogBook Talent : {{ $talent->nama }}</h1>
+                <p class="page-header-sub">Rekap detail seluruh aktivitas pengembangan yang telah dilaksanakan oleh talent</p>
+            </div>
         </div>
 
         {{-- Tab Navigation --}}
-        <div class="flex gap-2 p-1.5 bg-gray-100 rounded-full w-fit mb-8 shadow-inner overflow-x-auto">
-            <button id="tab-exposure" onclick="switchTab('exposure')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 bg-[#2e3746] text-white shadow-sm whitespace-nowrap">Exposure</button>
-            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Mentoring</button>
-            <button id="tab-learning" onclick="switchTab('learning')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Learning</button>
+        <div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
+            <button id="tab-exposure" onclick="switchTab('exposure')" class="btn-prem btn-dark tab-btn active">Exposure</button>
+            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="btn-prem btn-ghost tab-btn">Mentoring</button>
+            <button id="tab-learning" onclick="switchTab('learning')" class="btn-prem btn-ghost tab-btn">Learning</button>
         </div>
 
 
         {{-- Exposure Section --}}
-        <div id="panel-exposure" class="mb-12">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-sm text-left table-fixed">
+        <div id="panel-exposure" class="tab-panel mb-12">
+            <div class="prem-card">
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table mb-0">
 
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
@@ -108,10 +113,10 @@
 
 
         {{-- Mentoring Section --}}
-        <div id="panel-mentoring" class="mb-12 hidden">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-sm text-left table-fixed">
+        <div id="panel-mentoring" class="tab-panel mb-12 hidden">
+            <div class="prem-card">
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table mb-0">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Mentor</th>
@@ -148,10 +153,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-gray-500">Belum ada aktivitas Mentoring yang dicatat.</td>
-                            </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -161,10 +162,10 @@
 
 
         {{-- Learning Section --}}
-        <div id="panel-learning" class="mb-12 hidden">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-sm text-left table-fixed">
+        <div id="panel-learning" class="tab-panel mb-12 hidden">
+            <div class="prem-card">
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table mb-0">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="px-6 py-4 font-bold text-[#3d4f62] whitespace-nowrap text-left min-w-[220px]">Sumber</th>
@@ -192,10 +193,6 @@
                                         </a>
                                     </div>
                                 </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-gray-500">Belum ada aktivitas Learning yang dicatat.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -226,22 +223,33 @@
             function switchTab(tab) {
                 // Hide all panels
                 ['exposure', 'mentoring', 'learning'].forEach(t => {
-                    document.getElementById('panel-' + t).classList.add('hidden');
+                    const p = document.getElementById('panel-' + t);
+                    if (p) p.classList.add('hidden');
+                    
                     let btn = document.getElementById('tab-' + t);
-                    btn.classList.remove('bg-[#2e3746]', 'text-white', 'shadow-sm');
-                    btn.classList.add('text-gray-500', 'hover:text-gray-900');
+                    if (btn) {
+                        btn.classList.remove('btn-dark', 'active');
+                        btn.classList.add('btn-ghost');
+                    }
                 });
                 
                 // Show selected panel
-                document.getElementById('panel-' + tab).classList.remove('hidden');
+                const activePanel = document.getElementById('panel-' + tab);
+                if (activePanel) activePanel.classList.remove('hidden');
                 
                 // Highlight selected tab
                 let activeBtn = document.getElementById('tab-' + tab);
-                activeBtn.classList.remove('text-gray-500', 'hover:text-gray-900');
-                activeBtn.classList.add('bg-[#2e3746]', 'text-white', 'shadow-sm');
+                if (activeBtn) {
+                    activeBtn.classList.remove('btn-ghost');
+                    activeBtn.classList.add('btn-dark', 'active');
+                }
 
                 // Update URL hash without causing scroll
-                history.replaceState(null, null, '#' + tab);
+                if (history.pushState) {
+                    history.pushState(null, null, '#' + tab);
+                } else {
+                    window.location.hash = '#' + tab;
+                }
             }
 
             // Check URL hash for initial tab

@@ -129,6 +129,122 @@
            MOBILE ONLY STYLES — does NOT affect desktop (≥1024px)
            ══════════════════════════════════════════════════════ */
 
+        /* ══════════════════════════════════════════════════════
+           PREMIUM DESIGN SYSTEM (Standardized with PDC Admin)
+           ══════════════════════════════════════════════════════ */
+        
+        /* ── Title Animation ── */
+        @keyframes titleReveal {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-title { animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+        /* ══ Premium Stats Cards ══ */
+        .prem-stat-grid { display: grid; gap: 20px; margin-bottom: 24px; }
+        .prem-stat {
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;
+            padding: 20px 20px 18px; display: flex; flex-direction: column;
+            align-items: flex-start; gap: 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+            overflow: hidden; text-decoration: none;
+        }
+        .prem-stat.clickable { cursor: pointer; }
+        a.prem-stat:hover, button.prem-stat:hover, .prem-stat.clickable:hover {
+            transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09); border-color: #e2e8f0;
+        }
+        .prem-stat::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3.5px; border-radius: 16px 16px 0 0;
+        }
+        
+        /* Colors – accent always visible */
+        .prem-stat-teal::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+        .prem-stat-blue::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .prem-stat-amber::before { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+        .prem-stat-green::before { background: linear-gradient(90deg, #10b981, #34d399); }
+        .prem-stat-purple::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .prem-stat-red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+        .prem-stat-icon {
+            width: 46px; height: 46px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-bottom: 14px;
+        }
+        .prem-stat-icon svg { width: 22px; height: 22px; }
+        .si-teal { background: rgba(20, 184, 166, 0.12); color: #14b8a6; }
+        .si-blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+        .si-amber { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+        .si-green { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+        .si-purple { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+        .si-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+        .prem-stat-value { font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin-bottom: 4px; }
+        .prem-stat-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
+
+        /* ══ Page Header (PDC Style) ══ */
+        .dash-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+        .dash-header-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(46,55,70,0.25); flex-shrink: 0;
+            color: white;
+        }
+        .dash-header-icon svg { width: 24px; height: 24px; }
+        .dash-header-title { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
+        .dash-header-sub { font-size: 0.8rem; color: #64748b; margin-top: 2px; font-weight: 400; }
+        .dash-header-date { margin-left: auto; font-size: 0.78rem; color: #94a3b8; font-weight: 500; text-align: right; }
+        .dash-header-date span { display: block; font-size: 1rem; font-weight: 700; color: #475569; }
+
+        /* Generic Page Header */
+        .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+        .page-header-icon {
+            width: 52px; height: 52px; border-radius: 16px;
+            background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25); flex-shrink: 0; color: white;
+        }
+        .page-header-icon svg { width: 26px; height: 26px; }
+        .page-header-title { font-size: 1.5rem; font-weight: 800; color: #1e293b; line-height: 1.15; }
+        .page-header-sub { font-size: 0.8rem; color: #64748b; margin-top: 3px; font-weight: 400; }
+
+        /* ══ Premium Card & Table ══ */
+        .prem-card {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .04); overflow: hidden; margin-bottom: 24px;
+        }
+        .prem-card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border-bottom: 1px solid #e2e8f0; gap: 12px; flex-wrap: wrap;
+        }
+        .prem-card-title { display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; color: #1e293b; }
+        .prem-card-title svg { width: 18px; height: 18px; color: #14b8a6; flex-shrink: 0; }
+
+        .highlight-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+        .highlight-table th { background:#f8fafc; color:#475569; font-weight:700; text-align:left; padding:10px 16px; border-bottom:1px solid #e2e8f0; white-space:nowrap; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; }
+        .highlight-table td { padding:11px 16px; border-bottom:1px solid #f1f5f9; vertical-align:middle; color:#334155; }
+        .table-row:hover td { background:#f0fdfa !important; }
+
+        /* ══ Premium Buttons ══ */
+        .btn-prem {
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            font-size: 0.8rem; font-weight: 700; padding: 8px 16px; border-radius: 10px;
+            border: none; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none; white-space: nowrap;
+        }
+        .btn-prem:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
+        .btn-prem svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        .btn-teal { background: #14b8a6; color: white; }
+        .btn-teal:hover { background: #0d9488; }
+        .btn-dark { background: #2e3746; color: white; }
+        .btn-dark:hover { background: #1e242e; }
+        .btn-ghost { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+        .btn-ghost:hover { background: #f1f5f9; color: #1e293b; }
+
+        /* ══ Glass Card ══ */
+        .glass-card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,.04); overflow:hidden; }
+
         @media (max-width: 1023px) {
             .navbar-outer {
                 padding: 12px 16px;
@@ -161,6 +277,9 @@
             main {
                 padding: 16px !important;
             }
+            .dash-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .dash-header-date { margin-left: 0; text-align: left; }
+            .prem-stat-grid { grid-template-columns: 1fr !important; }
         }
     </style>
     {{ $styles ?? '' }}

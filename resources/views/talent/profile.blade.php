@@ -57,11 +57,16 @@
             </a>
         </div>
 
-        <div class="flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-            </svg>
-            <h1 class="text-2xl font-bold text-[#2e3746]">Profile Talent</h1>
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <div>
+                <div class="page-header-title">Profile Talent</div>
+                <div class="page-header-sub">Atur informasi data diri dan keamanan akun Anda</div>
+            </div>
         </div>
 
         {{-- Error Display --}}

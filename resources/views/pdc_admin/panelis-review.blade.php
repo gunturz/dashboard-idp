@@ -267,6 +267,10 @@
                 cursor: pointer;
                 accent-color: #14b8a6;
             }
+
+            .talent-row.group-hovered td {
+                background: #f0fdfa !important;
+            }
         </style>
     </x-slot>
 
@@ -623,7 +627,7 @@
                     const rowComp = row.dataset.company;
                     const rowPos = row.dataset.position;
                     const rowDept = row.dataset.dept;
-                    const groupKey = row.dataset.pos-group;
+                    const groupKey = row.dataset.posGroup;
 
                     const matchSearch = !search || name.includes(search);
                     const matchComp = !companyId || rowComp === companyId;
@@ -680,6 +684,28 @@
                 document.getElementById('live-department-filter').value = '';
                 filterPanelisList();
             }
+
+            function initGroupHover() {
+                const rows = document.querySelectorAll('.talent-row');
+                rows.forEach(row => {
+                    row.addEventListener('mouseenter', () => {
+                        const group = row.dataset.posGroup;
+                        if (!group) return;
+                        document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => {
+                            r.classList.add('group-hovered');
+                        });
+                    });
+                    row.addEventListener('mouseleave', () => {
+                        const group = row.dataset.posGroup;
+                        if (!group) return;
+                        document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => {
+                            r.classList.remove('group-hovered');
+                        });
+                    });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', initGroupHover);
 
             // ... Modal logic below ...
             const panelisUsers = @json($panelisUsers);

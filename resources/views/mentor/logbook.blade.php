@@ -141,6 +141,18 @@
     </x-slot>
 
     <div class="w-full">
+        {{-- ── Page Header ── --}}
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="page-header-title">LogBook Talent</h1>
+                <p class="page-header-sub">Validasi seluruh aktivitas pengembangan yang telah dilaksanakan oleh talent</p>
+            </div>
+        </div>
         {{-- Talent Selector --}}
         <div class="mb-6 flex items-center gap-6 talent-selector-row" style="position: relative; z-index: 50;">
             <label class="text-[15px] font-bold text-gray-700 whitespace-nowrap">Talent</label>
@@ -188,16 +200,17 @@
         </div>
 
         {{-- Tab Navigation --}}
-        <div class="flex gap-2 p-1.5 bg-gray-100 rounded-full w-fit mb-8 shadow-inner overflow-x-auto">
-            <button id="tab-exposure" onclick="switchTab('exposure')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 bg-[#2e3746] text-white shadow-sm whitespace-nowrap">Exposure</button>
-            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Mentoring</button>
-            <button id="tab-learning" onclick="switchTab('learning')" class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Learning</button>
+        <div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
+            <button id="tab-exposure" onclick="switchTab('exposure')" class="btn-prem btn-dark tab-btn active">Exposure</button>
+            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="btn-prem btn-ghost tab-btn">Mentoring</button>
+            <button id="tab-learning" onclick="switchTab('learning')" class="btn-prem btn-ghost tab-btn">Learning</button>
         </div>
 
         {{-- ═══ EXPOSURE ═══ --}}
         <div id="panel-exposure">
-            <div class="val-table-wrap">
-            <table class="val-table">
+            <div class="prem-card">
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table mb-0">
                 <thead>
                     <tr>
                         <th>Mentor</th>
@@ -257,8 +270,9 @@
 
         {{-- ═══ MENTORING ═══ --}}
         <div id="panel-mentoring" class="hidden">
-        <div class="val-table-wrap">
-            <table class="val-table">
+            <div class="prem-card">
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table mb-0">
                 <thead>
                     <tr>
                         <th>Mentor</th>
@@ -306,20 +320,19 @@
                             </div>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="py-8 text-center text-gray-400 text-sm italic">Belum ada aktivitas Mentoring.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        @endforelse
+                    </tbody>
+                </table>
+                </div>
+            </div>
         </div>
         </div>
 
         {{-- ═══ LEARNING ═══ --}}
         <div id="panel-learning" class="hidden">
-        <div class="val-table-wrap">
-            <table class="val-table">
+            <div class="prem-card">
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table mb-0">
                 <thead>
                     <tr>
                         <th>Sumber</th>
@@ -367,13 +380,11 @@
                             </div>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="py-8 text-center text-gray-400 text-sm italic">Belum ada aktivitas Learning.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        @endforelse
+                    </tbody>
+                </table>
+                </div>
+            </div>
         </div>
         </div>
 
@@ -495,19 +506,23 @@
                     const btn = document.getElementById('tab-' + t);
                     if (panel) panel.classList.add('hidden');
                     if (btn) {
-                        btn.classList.remove('bg-[#2e3746]', 'text-white', 'shadow-sm');
-                        btn.classList.add('text-gray-500', 'hover:text-gray-900');
+                        btn.classList.remove('btn-dark', 'active');
+                        btn.classList.add('btn-ghost');
                     }
                 });
                 const activePanel = document.getElementById('panel-' + tab);
                 const activeBtn = document.getElementById('tab-' + tab);
                 if (activePanel) activePanel.classList.remove('hidden');
                 if (activeBtn) {
-                    activeBtn.classList.remove('text-gray-500', 'hover:text-gray-900');
-                    activeBtn.classList.add('bg-[#2e3746]', 'text-white', 'shadow-sm');
+                    activeBtn.classList.remove('btn-ghost');
+                    activeBtn.classList.add('btn-dark', 'active');
                 }
-                // Save state in hash
-                history.replaceState(null, null, '#' + tab);
+                // Update URL hash without jumping
+                if (history.pushState) {
+                    history.pushState(null, null, '#' + tab);
+                } else {
+                    window.location.hash = '#' + tab;
+                }
             }
 
             // Restore tab from hash on load

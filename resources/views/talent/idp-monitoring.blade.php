@@ -268,6 +268,59 @@
                 text-align: center;
             }
         }
+
+        /* ── Page Header (Admin Style) ── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .page-header-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25);
+            flex-shrink: 0;
+            color: white;
+        }
+        .page-header-icon svg { width: 26px; height: 26px; }
+        .page-header-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.15;
+        }
+        .page-header-sub {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        /* ── Section Title (Admin Style) ── */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #1e293b;
+            padding: 4px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background: linear-gradient(180deg, #14b8a6, #0d9488);
+            border-radius: 99px;
+        }
     </style>
 </head>
 
@@ -292,13 +345,17 @@
         </div>
 
         {{-- Custom Title --}}
-        <div class="flex items-center gap-2.5 px-2 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
-                fill="currentColor">
-                <path
-                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-            </svg>
-            <h2 class="text-xl font-bold text-[#2e3746] animate-title">IDP Monitoring</h2>
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" />
+                    <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                </svg>
+            </div>
+            <div>
+                <div class="page-header-title">IDP Monitoring</div>
+                <div class="page-header-sub">Kelola progres rencana pengembangan individu Anda</div>
+            </div>
         </div>
 
         {{-- Main Gray Container Background (Wrapper) --}}

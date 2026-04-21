@@ -183,6 +183,26 @@
         .confirm-overlay.open .confirm-box {
             transform: scale(1) translateY(0);
         }
+
+        /* ── Section Title (Admin Style) ── */
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1e293b;
+            padding: 4px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #14b8a6, #0d9488);
+            border-radius: 99px;
+        }
     </style>
 </head>
 
@@ -257,8 +277,9 @@
             <!-- Hidden inputs akan ditambahkan via JS -->
             <div id="hidden-inputs-container"></div>
             
+            
             <div id="card-block" class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
-                <h3 id="level-title" class="text-2xl font-bold text-slate-800 mb-6 tracking-tight">Level 1</h3>
+                <h3 id="level-title" class="section-title text-2xl mb-6">Level 1</h3>
             
             <p id="level-desc" class="text-gray-600 leading-relaxed mb-12 text-[15px] font-medium text-justify">
                 Memuat data pertanyaan...

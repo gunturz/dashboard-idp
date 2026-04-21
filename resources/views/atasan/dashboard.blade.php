@@ -1,98 +1,60 @@
 <x-atasan.layout title="Dashboard Atasan – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
-            .summary-card {
-                background: white;
-                border-radius: 12px;
-                padding: 24px;
-                text-align: center;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: 140px;
-                border: 2px solid transparent; /* default */
-            }
-
-            .summary-value {
-                font-size: 2.5rem;
-                font-weight: 800;
-                line-height: 1.2;
-                margin-bottom: 8px;
-            }
-
-            .summary-label {
-                font-size: 0.8rem;
-                color: #64748b;
-                font-weight: 500;
-            }
-
-            /* Specific Card Colors */
-            .card-teal { border-color: #0d9488; }
-            .card-teal .summary-value { color: #0d9488; }
-            
-            .card-green { border-color: #22c55e; }
-            .card-green .summary-value { color: #22c55e; }
-            
-            .card-amber { border-color: #f59e0b; }
-            .card-amber .summary-value { color: #f59e0b; }
-
+            /* ══ Talent Card Refinement ══ */
             .talent-card {
                 background: white;
                 border: 1px solid #e2e8f0;
-                border-radius: 16px;
+                border-radius: 20px;
                 overflow: hidden;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-                transition: box-shadow 0.2s;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 display: flex;
                 flex-direction: column;
+                height: 100%;
             }
-            .talent-card:hover {
-                box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            }
-
             .card-header {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 16px 20px;
+                padding: 20px 24px;
                 border-bottom: 1px solid #f1f5f9;
             }
 
             .card-header-left {
                 display: flex;
                 align-items: center;
-                gap: 14px;
+                gap: 16px;
             }
 
             .talent-avatar {
-                width: 48px;
-                height: 48px;
+                width: 64px;
+                height: 64px;
                 border-radius: 50%;
                 object-fit: cover;
-                border: 2px solid #e2e8f0;
+                border: 2px solid #f1f5f9;
                 flex-shrink: 0;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             }
 
             .talent-name-block .name {
-                font-size: 0.95rem;
+                font-size: 1rem;
                 font-weight: 800;
                 color: #1e293b;
                 display: block;
+                line-height: 1.2;
             }
+
             .talent-name-block .role {
                 font-size: 0.75rem;
                 color: #64748b;
                 display: flex;
                 align-items: center;
                 gap: 4px;
-                margin-top: 1px;
-                flex-wrap: wrap;
+                margin-top: 3px;
             }
 
             .card-info {
-                padding: 14px 20px;
+                padding: 20px 24px;
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
@@ -100,39 +62,45 @@
 
             .competency-table {
                 width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 16px;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-bottom: 20px;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid #f1f5f9;
             }
 
             .competency-table th {
                 background: #f8fafc;
-                padding: 10px 16px;
-                font-size: 0.78rem;
+                padding: 12px 14px;
+                font-size: 0.72rem;
                 font-weight: 800;
-                color: #1e293b;
-                text-align: center;
-                border: 1px solid #e2e8f0;
-            }
-
-            .competency-table th:first-child {
-                text-align: left;
+                color: #475569;
+                text-transform: uppercase;
+                letter-spacing: 0.025em;
+                border-bottom: 1px solid #f1f5f9;
             }
 
             .competency-table td {
-                padding: 10px 16px;
-                font-size: 0.8rem;
-                color: #475569;
-                border: 1px solid #e2e8f0;
+                padding: 12px 14px;
+                font-size: 0.82rem;
+                color: #334155;
+                border-bottom: 1px solid #f1f5f9;
                 text-align: center;
+            }
+
+            .competency-table tr:last-child td {
+                border-bottom: none;
             }
 
             .competency-table td:first-child {
                 text-align: left;
-                font-weight: 500;
+                font-weight: 600;
+                color: #1e293b;
             }
 
             .btn-assessment {
-                display: flex;
+                display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 width: 100%;
@@ -140,22 +108,21 @@
                 border-radius: 12px;
                 font-size: 0.85rem;
                 font-weight: 700;
-                text-align: center;
                 transition: all 0.2s;
-                cursor: pointer;
                 border: none;
                 margin-top: auto;
+                text-decoration: none;
             }
 
             .btn-assessment-active {
                 background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
                 color: white;
-                text-decoration: none;
+                box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
             }
 
             .btn-assessment-active:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+                box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
             }
 
             .btn-assessment-done {
@@ -165,143 +132,92 @@
                 cursor: default;
             }
 
-            /* ══ MOBILE ONLY — does NOT affect desktop ══ */
             @media (max-width: 767px) {
-                .summary-card {
-                    padding: 20px 16px;
-                    border-radius: 12px;
-                    min-height: 120px;
-                }
-                .summary-value {
-                    font-size: 2rem;
-                }
-                .summary-label {
-                    font-size: 0.85rem;
-                }
-                .talent-card {
-                    border-radius: 12px;
-                }
                 .card-header {
-                    padding: 14px 16px;
+                    padding: 16px;
                 }
-                .card-header-left {
-                    gap: 12px;
-                }
-                .talent-avatar {
-                    width: 44px;
-                    height: 44px;
-                }
-                .talent-name-block .name {
-                    font-size: 0.9rem;
-                }
-                .talent-name-block .role {
-                    font-size: 0.7rem;
-                }
+
                 .card-info {
-                    padding: 12px 16px;
+                    padding: 16px;
                 }
-                .competency-table th {
-                    padding: 8px 10px;
-                    font-size: 0.7rem;
+
+                .talent-avatar {
+                    width: 48px;
+                    height: 48px;
                 }
-                .competency-table td {
-                    padding: 8px 10px;
-                    font-size: 0.75rem;
+
+                .prem-stat-grid {
+                    grid-template-columns: 1fr !important;
                 }
-                .btn-assessment {
-                    padding: 10px;
-                    font-size: 0.8rem;
-                    border-radius: 10px;
-                }
-            }
-
-            /* Modal */
-            .modal-overlay {
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.4);
-                backdrop-filter: blur(4px);
-                z-index: 100;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.3s;
-            }
-
-            .modal-overlay.active {
-                opacity: 1;
-                pointer-events: auto;
-            }
-
-            .modal-box {
-                background: white;
-                width: 100%;
-                max-width: 550px;
-                max-height: 90vh;
-                border-radius: 20px;
-                padding: 32px;
-                overflow-y: auto;
-                transform: translateY(20px);
-                transition: transform 0.3s;
-            }
-
-            .modal-overlay.active .modal-box {
-                transform: translateY(0);
-            }
-
-            .score-input {
-                width: 64px;
-                text-align: center;
-                border: 1.5px solid #e2e8f0;
-                border-radius: 8px;
-                padding: 8px;
-                font-size: 0.875rem;
-                font-weight: 700;
-                color: #1e293b;
-                outline: none;
-                transition: border-color 0.2s;
-            }
-
-            .score-input:focus {
-                border-color: #f59e0b;
             }
         </style>
     </x-slot>
 
-    {{-- Summary Cards --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div class="summary-card card-teal">
-            <div class="summary-value">{{ $totalTalents }}</div>
-            <div class="summary-label">Talent</div>
-        </div>
-        <div class="summary-card card-amber">
-            <div class="summary-value">{{ $assessmentPending }}</div>
-            <div class="summary-label">Assessment Pending</div>
-        </div>
-        <div class="summary-card card-green">
-            <div class="summary-value">{{ $onTrack }}</div>
-            <div class="summary-label">On track</div>
-        </div>
-    </div>
-
-    {{-- Talent Cards Grid --}}
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h3 class="text-xl font-bold text-[#1e293b]">Daftar Talent</h3>
-        
-        {{-- Live Search --}}
-        <div class="relative w-full sm:w-80">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    {{-- ── Page Header ── --}}
+    <div class="dash-header animate-title">
+        <div class="dash-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
+                <path
+                    d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z" />
             </svg>
-            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
-                class="w-full border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                oninput="filterTalents()">
+        </div>
+        <div>
+            <div class="dash-header-title">Dashboard Atasan</div>
+            <div class="dash-header-sub">Pantau perkembangan kompetensi dan progress talent Anda</div>
+        </div>
+        <div class="dash-header-date hidden md:block">
+            Hari ini
+            <span>{{ now()->translatedFormat('d F Y') }}</span>
         </div>
     </div>
 
+    {{-- ── Summary Cards ── --}}
+    <div class="prem-stat-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="prem-stat prem-stat-teal">
+            <div class="prem-stat-icon si-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path
+                        d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
+                </svg>
+            </div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $totalTalents }}">0</div>
+            <div class="prem-stat-label">Total Talent</div>
+        </div>
+        <div class="prem-stat prem-stat-amber">
+            <div class="prem-stat-icon si-amber">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path fill-rule="evenodd"
+                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $assessmentPending }}">0</div>
+            <div class="prem-stat-label">Assessment Pending</div>
+        </div>
+        <div class="prem-stat prem-stat-green">
+            <div class="prem-stat-icon si-green">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $onTrack }}">0</div>
+            <div class="prem-stat-label">On Track</div>
+        </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 mt-10">
+        <div>
+            <h3 class="text-xl font-bold text-[#1e293b]">Daftar Talent</h3>
+            <p class="text-xs text-gray-500 mt-0.5 font-medium">Kelola dan lihat perkembangan kompetensi setiap talent
+            </p>
+        </div>
+    </div>
+
+    {{-- ── Talent Cards Grid ── --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8" id="talent-grid">
         @forelse ($talents as $talent)
             @php
@@ -314,21 +230,34 @@
             <div class="talent-card talent-card-item" data-name="{{ strtolower($talent->nama) }}">
                 <div class="card-header">
                     <div class="card-header-left">
-                        <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random' }}"
-                             class="talent-avatar" alt="{{ $talent->nama }}">
+                        <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0369a1&bold=true' }}"
+                            class="talent-avatar" alt="{{ $talent->nama }}">
                         <div class="talent-name-block">
                             <span class="name">{{ $talent->nama }}</span>
                             <span class="role">
-                                {{ optional($talent->position)->position_name ?? '-' }}
-                                @if(optional($talent->promotion_plan)->targetPosition)
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-400 mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                <span
+                                    class="text-gray-500">{{ optional($talent->position)->position_name ?? '-' }}</span>
+                                @if (optional($talent->promotion_plan)->targetPosition)
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-300 mx-1"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
-                                    <span class="text-[#0d9488] font-semibold">{{ $talent->promotion_plan->targetPosition->position_name }}</span>
+                                    <span
+                                        class="text-gray-500">{{ $talent->promotion_plan->targetPosition->position_name }}</span>
                                 @endif
-                                <span class="ml-2 font-medium not-italic text-xs bg-gray-100 px-2 py-0.5 rounded-full">{{ optional($talent->department)->nama_department ?? '-' }}</span>
                             </span>
+                            <div class="mt-1.5">
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                            </div>
                         </div>
+                    </div>
+                    <div class="hidden sm:block">
+                        @if ($hasAtasanScored)
+                            <span
+                                class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-widest">Done</span>
+                        @endif
                     </div>
                 </div>
 
@@ -337,9 +266,9 @@
                     <table class="competency-table">
                         <thead>
                             <tr>
-                                <th>Kompetensi</th>
-                                <th>Standar</th>
-                                <th>Skor Talent</th>
+                                <th>Item Kompetensi</th>
+                                <th style="width: 80px;">Target</th>
+                                <th style="width: 100px;">Talent</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -351,8 +280,14 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $comp->name }}</td>
-                                    <td>{{ $standard }}</td>
-                                    <td>{{ $scoreTalent ?: '-' }}</td>
+                                    <td class="font-bold text-gray-800">{{ $standard }}</td>
+                                    <td>
+                                        @if ($scoreTalent)
+                                            <span class="font-bold text-[#0d9488]">{{ $scoreTalent }}</span>
+                                        @else
+                                            <span class="text-gray-300">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -361,54 +296,78 @@
                     {{-- Assessment Button --}}
                     @if ($details->isNotEmpty())
                         @if ($hasAtasanScored)
-                            <div class="btn-assessment btn-assessment-done">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            <div class="btn-assessment btn-assessment-done gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-emerald-500"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
                                 </svg>
-                                Anda sudah mengisi Assessment ini
+                                <span>Assessment Selesai</span>
                             </div>
                         @else
-                            <a href="{{ route('atasan.competency_atasan.page', $talent->id) }}" class="btn-assessment btn-assessment-active">
-                                Isi Assessment
+                            <a href="{{ route('atasan.competency_atasan.page', $talent->id) }}"
+                                class="btn-assessment btn-assessment-active">
+                                Mulai Isi Assessment
                             </a>
                         @endif
                     @else
-                        <div class="btn-assessment btn-assessment-done">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <div class="btn-assessment btn-assessment-done gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-amber-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Talent belum melakukan assessment
+                            <span>Talent belum submit assessment</span>
                         </div>
                     @endif
                 </div>
             </div>
         @empty
-            <div class="col-span-1 lg:col-span-2 text-center py-16 bg-white rounded-2xl border-2 border-dashed border-gray-200 shadow-sm flex flex-col items-center justify-center">
-                <div class="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div
+                class="col-span-1 lg:col-span-2 text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
+                <div
+                    class="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mb-5 ring-8 ring-emerald-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Anda sudah mengisi assessment talent</h3>
-                <p class="text-gray-500 text-sm">Anda dapat memeriksa hasilnya di halaman <a href="{{ route('atasan.riwayat') }}" class="text-[#005ba1] font-semibold hover:underline">Riwayat</a>.</p>
+                <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Beres!</h3>
+                <p class="text-slate-500 text-sm max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh
+                    talent di tim Anda. Kerja bagus!</p>
+                <a href="{{ route('atasan.riwayat') }}"
+                    class="mt-6 px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 transition-all shadow-sm">Buka
+                    Halaman Riwayat</a>
             </div>
         @endforelse
     </div>
 
-
-
     <x-slot name="scripts">
         <script>
-            function filterTalents() {
-                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
-                const cards = document.querySelectorAll('.talent-card-item');
+            // ── Statistical Counter Animation ──
+            document.querySelectorAll('.animate-counter').forEach(el => {
+                const target = parseInt(el.dataset.target);
+                if (target === 0) {
+                    el.textContent = '0';
+                    return;
+                }
+                let current = 0;
+                const duration = 1000;
+                const step = target / (duration / 16);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        el.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        el.textContent = Math.floor(current);
+                    }
+                }, 16);
+            });
 
-                cards.forEach(card => {
-                    const name = card.getAttribute('data-name') || '';
-                    card.style.display = name.includes(searchTxt) ? '' : 'none';
-                });
-            }
+
         </script>
     </x-slot>
-
 </x-atasan.layout>

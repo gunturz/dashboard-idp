@@ -1,4 +1,11 @@
 <x-pdc_admin.layout title="Progress Talent – Individual Development Plan" :user="$user">
+    <x-slot name="styles">
+        <style>
+            .talent-row.group-hovered td {
+                background: #f0fdfa !important;
+            }
+        </style>
+    </x-slot>
 
     {{-- ── Page Header ── --}}
     <div class="page-header animate-title">
@@ -188,7 +195,7 @@
 
                 rows.forEach(row => {
                     const name = row.dataset.name;
-                    const groupKey = row.dataset.pos-group;
+                    const groupKey = row.dataset.posGroup;
 
                     if (!search || name.includes(search)) {
                         row.style.display = '';
@@ -241,6 +248,28 @@
                 document.getElementById('live-search-input').value = '';
                 filterProgressTalent();
             }
+
+            function initGroupHover() {
+                const rows = document.querySelectorAll('.talent-row');
+                rows.forEach(row => {
+                    row.addEventListener('mouseenter', () => {
+                        const group = row.dataset.posGroup;
+                        if (!group) return;
+                        document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => {
+                            r.classList.add('group-hovered');
+                        });
+                    });
+                    row.addEventListener('mouseleave', () => {
+                        const group = row.dataset.posGroup;
+                        if (!group) return;
+                        document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => {
+                            r.classList.remove('group-hovered');
+                        });
+                    });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', initGroupHover);
         </script>
     </x-slot>
 

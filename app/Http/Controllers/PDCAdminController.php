@@ -150,11 +150,91 @@ class PDCAdminController extends Controller
     public function getTalentsByCompany(Request $request)
     {
         $companyId = $request->company_id;
-        $talents = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
-            ->where('company_id', $companyId)
+        $departmentId = $request->department_id;
+        $targetPositionId = $request->target_position_id;
+
+        $query = User::query()
+            ->whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
+            ->with('position:id,position_name,grade_level');
+
+        if ($companyId) {
+            $query->where('company_id', $companyId);
+        }
+
+        if ($departmentId) {
+            $query->where('department_id', $departmentId);
+        }
+
+        if ($targetPositionId) {
+            $sourcePositionId = $this->resolvePreviousPositionId((int) $targetPositionId);
+
+            if ($sourcePositionId) {
+                $query->where('position_id', $sourcePositionId);
+            } else {
+                $query->whereRaw('1 = 0');
+            }
+        }
+
+        $talents = $query
             ->orderBy('nama')
-            ->get(['id', 'nama']);
+            ->get(['id', 'nama', 'position_id'])
+            ->map(fn($talent) => [
+                'id' => $talent->id,
+                'nama' => $talent->nama,
+                'position_id' => $talent->position_id,
+                'position_name' => optional($talent->position)->position_name,
+            ]);
+
         return response()->json($talents);
+    }
+
+    protected function resolvePreviousPositionId(int $targetPositionId): ?int
+    {
+        $targetPosition = Position::find($targetPositionId);
+        if (!$targetPosition) {
+            return null;
+        }
+
+        $normalizedTarget = $this->normalizePositionName($targetPosition->position_name);
+        $orderedNames = [
+            'staff',
+            'supervisor',
+            'officer',
+            'manager',
+            'general manager',
+        ];
+
+        $targetIndex = array_search($normalizedTarget, $orderedNames, true);
+        if ($targetIndex !== false) {
+            if ($targetIndex === 0) {
+                return null;
+            }
+
+            $previousName = $orderedNames[$targetIndex - 1];
+
+            return Position::query()
+                ->get(['id', 'position_name'])
+                ->first(fn($position) => $this->normalizePositionName($position->position_name) === $previousName)
+                ?->id;
+        }
+
+        if ($targetPosition->grade_level !== null) {
+            return Position::where('grade_level', '<', $targetPosition->grade_level)
+                ->orderByDesc('grade_level')
+                ->value('id');
+        }
+
+        return null;
+    }
+
+    protected function normalizePositionName(?string $name): string
+    {
+        $name = strtolower(trim((string) $name));
+        $name = str_replace(['mgr', 'manajer', 'manager'], 'manager', $name);
+        $name = str_replace(['gm', 'general manager'], 'general manager', $name);
+        $name = preg_replace('/\s+/', ' ', $name);
+
+        return $name;
     }
 
     /**
@@ -164,6 +244,7 @@ class PDCAdminController extends Controller
     {
         $request->validate([
             'company_id' => 'required|exists:company,id',
+            'department_id' => 'nullable|exists:department,id',
             'target_position_id' => 'required|exists:position,id',
             'atasan_id' => 'required|exists:users,id',
             'start_date' => 'required|date',
@@ -173,6 +254,65 @@ class PDCAdminController extends Controller
             'talents.*.mentors' => 'required|array|min:1',
             'talents.*.mentors.*' => 'required|exists:users,id',
         ]);
+
+        $sourcePositionId = $this->resolvePreviousPositionId((int) $request->target_position_id);
+        if (!$sourcePositionId) {
+            return back()->withErrors([
+                'target_position_id' => 'Posisi yang dituju tidak memiliki urutan posisi sebelumnya yang valid.',
+            ])->withInput();
+        }
+
+        $selectedTalentIds = collect($request->talents)
+            ->pluck('talent_id')
+            ->filter()
+            ->values();
+
+        $validTalentIds = User::query()
+            ->whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
+            ->where('company_id', $request->company_id)
+            ->when($request->filled('department_id'), fn($q) => $q->where('department_id', $request->department_id))
+            ->where('position_id', $sourcePositionId)
+            ->whereIn('id', $selectedTalentIds)
+            ->pluck('id');
+
+        if ($validTalentIds->count() !== $selectedTalentIds->count()) {
+            return back()->withErrors([
+                'talents' => 'Talent yang dipilih harus sesuai perusahaan, departemen, dan urutan posisi sebelum posisi target.',
+            ])->withInput();
+        }
+
+        $validAtasan = User::query()
+            ->where('id', $request->atasan_id)
+            ->whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))
+            ->where('company_id', $request->company_id)
+            ->when($request->filled('department_id'), fn($q) => $q->where('department_id', $request->department_id))
+            ->exists();
+
+        if (!$validAtasan) {
+            return back()->withErrors([
+                'atasan_id' => 'Atasan harus sesuai perusahaan dan departemen yang dipilih.',
+            ])->withInput();
+        }
+
+        $selectedMentorIds = collect($request->talents)
+            ->pluck('mentors')
+            ->flatten()
+            ->filter()
+            ->unique()
+            ->values();
+
+        $validMentorIds = User::query()
+            ->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))
+            ->where('company_id', $request->company_id)
+            ->when($request->filled('department_id'), fn($q) => $q->where('department_id', $request->department_id))
+            ->whereIn('id', $selectedMentorIds)
+            ->pluck('id');
+
+        if ($validMentorIds->count() !== $selectedMentorIds->count()) {
+            return back()->withErrors([
+                'talents' => 'Mentor yang dipilih harus sesuai perusahaan dan departemen yang dipilih.',
+            ])->withInput();
+        }
 
         DB::transaction(function () use ($request) {
             foreach ($request->talents as $talentData) {
@@ -466,6 +606,9 @@ class PDCAdminController extends Controller
 
             // Hapus role (pivot)
             $targetUser->roles()->detach();
+
+            // Hapus data dependen lainnya
+            \Illuminate\Support\Facades\DB::table('password_resets')->where('user_id', $id)->delete();
 
             // Selesaikan hapus
             $targetUser->delete();

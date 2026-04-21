@@ -239,7 +239,7 @@
             <div class="field-row">
                 <span class="field-label">Perusahaan</span>
                 <div class="flex-1">
-                    <select name="company_id" id="dp-company" class="dp-select" onchange="loadTalentsByCompany(this.value)">
+                    <select name="company_id" id="dp-company" class="dp-select" onchange="handleTalentFilterChange()">
                         <option value="">— Pilih Perusahaan —</option>
                         @foreach($companies as $c)
                             <option value="{{ $c->id }}" {{ old('company_id') == $c->id ? 'selected' : '' }}>{{ $c->nama_company }}</option>
@@ -252,7 +252,7 @@
             <div class="field-row">
                 <span class="field-label">Departemen</span>
                 <div class="flex-1">
-                    <select name="department_id" id="dp-department" class="dp-select" data-old="{{ old('department_id') }}">
+                    <select name="department_id" id="dp-department" class="dp-select" data-old="{{ old('department_id') }}" onchange="handleTalentFilterChange()">
                         <option value="">— Pilih Departemen —</option>
                     </select>
                 </div>
@@ -262,7 +262,7 @@
             <div class="field-row">
                 <span class="field-label">Posisi yang dituju</span>
                 <div class="flex-1">
-                    <select name="target_position_id" id="dp-position" class="dp-select">
+                    <select name="target_position_id" id="dp-position" class="dp-select" onchange="handleTalentFilterChange()">
                         <option value="">— Pilih Posisi —</option>
                         @foreach($positions as $p)
                             <option value="{{ $p->id }}" {{ old('target_position_id') == $p->id ? 'selected' : '' }}>{{ $p->position_name }}</option>
@@ -356,8 +356,34 @@
 
     <x-slot name="scripts">
     <script>
+    @php
+        $mentorUsersJson = json_encode(
+            $mentors->map(function ($m) {
+                return [
+                    'id' => $m->id,
+                    'nama' => $m->nama,
+                    'company_id' => $m->company_id,
+                    'department_id' => $m->department_id,
+                ];
+            })->values()->all()
+        );
+
+        $atasanUsersJson = json_encode(
+            $atasans->map(function ($a) {
+                return [
+                    'id' => $a->id,
+                    'nama' => $a->nama,
+                    'company_id' => $a->company_id,
+                    'department_id' => $a->department_id,
+                ];
+            })->values()->all()
+        );
+    @endphp
+
     let talentRowIndex = 0;
     let cachedTalents = [];
+    const mentorUsers = {!! $mentorUsersJson !!};
+    const atasanUsers = {!! $atasanUsersJson !!};
 
     const mentorOptions = `
         @foreach($mentors as $m)
@@ -365,9 +391,60 @@
         @endforeach
     `.trim();
 
+    function handleTalentFilterChange() {
+        const companyId = document.getElementById('dp-company')?.value || '';
+        loadTalentsByCompany(companyId);
+        refreshMentorOptions();
+        refreshAtasanOptions();
+    }
+
+    function getFilteredUsers(users) {
+        const companyId = document.getElementById('dp-company')?.value || '';
+        const departmentId = document.getElementById('dp-department')?.value || '';
+
+        return users.filter(user => {
+            if (!companyId) return false;
+            if (String(user.company_id ?? '') !== String(companyId)) return false;
+            if (departmentId && String(user.department_id ?? '') !== String(departmentId)) return false;
+            return true;
+        });
+    }
+
+    function buildOptions(users, placeholder) {
+        return [`<option value="">${placeholder}</option>`]
+            .concat(users.map(user => `<option value="${user.id}">${user.nama}</option>`))
+            .join('');
+    }
+
+    function refreshMentorOptions() {
+        const filteredMentors = getFilteredUsers(mentorUsers);
+        const mentorHtml = buildOptions(filteredMentors, ' Pilih Mentor');
+
+        document.querySelectorAll('.mentor-stack select').forEach(select => {
+            const currentValue = select.value;
+            select.innerHTML = mentorHtml;
+            if (filteredMentors.some(user => String(user.id) === String(currentValue))) {
+                select.value = currentValue;
+            }
+        });
+    }
+
+    function refreshAtasanOptions() {
+        const atasanSelect = document.getElementById('dp-atasan');
+        if (!atasanSelect) return;
+
+        const filteredAtasans = getFilteredUsers(atasanUsers);
+        const currentValue = atasanSelect.value;
+        atasanSelect.innerHTML = buildOptions(filteredAtasans, ' Pilih Atasan');
+        if (filteredAtasans.some(user => String(user.id) === String(currentValue))) {
+            atasanSelect.value = currentValue;
+        }
+    }
+
     async function loadTalentsByCompany(companyId) {
         cachedTalents = [];
         const deptSelect = document.getElementById('dp-department');
+        const positionSelect = document.getElementById('dp-position');
         
         if (!companyId) {
             document.querySelectorAll('.talent-select').forEach(s => { s.innerHTML = '<option value="">— Pilih Talent —</option>'; });
@@ -376,7 +453,7 @@
         }
 
         // Fetch Departments
-        fetch(`/register/departments?company_id=${companyId}`, {
+        await fetch(`/register/departments?company_id=${companyId}`, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
         .then(res => res.json())
@@ -398,7 +475,15 @@
         })
         .catch(err => console.error('Error fetching departments:', err));
 
-        const resp = await fetch(`/pdc-admin/talents-by-company?company_id=${companyId}`, {
+        const params = new URLSearchParams({ company_id: companyId });
+        if (deptSelect.value) {
+            params.set('department_id', deptSelect.value);
+        }
+        if (positionSelect?.value) {
+            params.set('target_position_id', positionSelect.value);
+        }
+
+        const resp = await fetch(`/pdc-admin/talents-by-company?${params.toString()}`, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         });
         cachedTalents = await resp.json();
@@ -432,6 +517,7 @@
         const block = wrapper.firstElementChild;
         container.appendChild(block);
         refreshTalentSelect(block.querySelector('.talent-select'));
+        refreshMentorOptions();
     }
 
     function removeTalentRow(btn) {
@@ -461,10 +547,13 @@
             </button>
         `;
         stack.appendChild(div);
+        refreshMentorOptions();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         addTalentRow();
+        refreshAtasanOptions();
+        refreshMentorOptions();
 
         // If there was an old company_id (after validation fail), pre-load talents
         const oldCompanyId = document.getElementById('dp-company')?.value;

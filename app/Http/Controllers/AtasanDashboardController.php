@@ -124,13 +124,20 @@ class AtasanDashboardController extends Controller
     public function assessmentPage($talentId)
     {
         $user = Auth::user();
-        $talent = User::where('atasan_id', $user->id)->findOrFail($talentId);
+        $talent = User::where('atasan_id', $user->id)
+            ->with(['promotion_plan.targetPosition', 'position'])
+            ->findOrFail($talentId);
 
         $competencies = Competence::with(['questions' => function ($q) {
             $q->orderBy('level');
         }])->get();
 
-        return view('atasan.competency_atasan', compact('user', 'talent', 'competencies'));
+        $positionId = optional($talent->promotion_plan)->target_position_id ?? $talent->position_id;
+        $targetLevels = $positionId
+            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            : collect();
+
+        return view('atasan.competency_atasan', compact('user', 'talent', 'competencies', 'targetLevels'));
     }
 
     public function storeAssessment(Request $request, $talentId)

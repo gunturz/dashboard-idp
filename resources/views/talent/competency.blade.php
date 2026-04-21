@@ -429,6 +429,8 @@
         // Data dari database
         const competenciesData = @json($competencies->keyBy('id'));
         const competenciesArray = Object.values(competenciesData);
+        // Target level per kompetensi dari PDC Admin (competence_id -> target_level)
+        const targetLevels = @json($targetLevels);
 
         function getCompetencySafely(index, defaultName, defaultId) {
             if (competenciesArray[index]) {
@@ -470,7 +472,13 @@
         let currentTopLevel = 'core';
         let currentCategoryIndex = 0;
         let currentLevel = 1;
-        const maxLevel = 5;
+
+        // Fungsi mendapatkan maxLevel untuk kompeteni yang sedang aktif
+        function getMaxLevelForCurrentCat() {
+            const currentCat = topTabs[currentTopLevel].categories[currentCategoryIndex];
+            const tl = parseInt(targetLevels[currentCat.id]);
+            return (!isNaN(tl) && tl >= 1 && tl <= 5) ? tl : 5;
+        }
 
         const activeTopTabClass = "flex-1 text-center py-3 font-semibold text-white bg-teal-primary rounded-full transition shadow-sm";
         const inactiveTopTabClass = "flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 rounded-full transition";
@@ -532,7 +540,8 @@
             });
 
             // Update Text Title
-            document.getElementById('level-title').textContent = 'Level ' + currentLevel;
+            const maxLvl = getMaxLevelForCurrentCat();
+            document.getElementById('level-title').textContent = 'Level ' + currentLevel + ' / ' + maxLvl;
 
             // Update Deskripsi dengan pertanyaan dari database
             const currentCat = currentCatList[currentCategoryIndex];
@@ -626,13 +635,14 @@
         }
 
         function handleSudahKompeten() {
-            if (currentLevel < maxLevel) {
-                // Masih ada level berikutnya → lanjut level
+            const maxLvl = getMaxLevelForCurrentCat();
+            if (currentLevel < maxLvl) {
+                // Masih ada level berikutnya dalam batas target → lanjut level
                 currentLevel++;
                 updateUI();
             } else {
-                // Level 5 selesai → tampilkan konfirmasi dengan skor 5
-                showConfirmPopup(5);
+                // Sudah di level maksimal target → tampilkan konfirmasi dengan skor = maxLvl
+                showConfirmPopup(maxLvl);
             }
         }
 

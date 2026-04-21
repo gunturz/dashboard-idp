@@ -234,54 +234,47 @@
         </style>
     </x-slot>
 
-    {{-- Tab Navigation --}}
-    <div class="flex justify-between items-center mb-10">
-        <div></div>
-        <div class="nav-tabs">
-            <div class="tab-item active" onclick="switchSection('kompetensi', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+    {{-- ── Page Header ── --}}
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+        </div>
+        <div>
+            <h1 class="page-header-title">Monitoring Talent</h1>
+            <p class="page-header-sub">Pantau seleruh progres pengembangan talent tim Anda dalam satu dashboard terintegrasi</p>
+        </div>
+    </div>
+
+    {{-- ── Tab Navigation & Search ── --}}
+    <div class="flex flex-col lg:flex-row lg:items-center gap-6 mb-10">
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 custom-scrollbar">
+            <button class="btn-prem btn-dark tab-item active" onclick="switchSection('kompetensi', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
                 Kompetensi
-            </div>
-            <div class="tab-item" onclick="switchSection('idp', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 24 24" fill="currentColor">
+            </button>
+            <button class="btn-prem btn-ghost tab-item" onclick="switchSection('idp', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
                     <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
                 </svg>
                 IDP
-            </div>
-            <div class="tab-item" onclick="switchSection('project', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            </button>
+            <button class="btn-prem btn-ghost tab-item" onclick="switchSection('project', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                 </svg>
-                Project Improvement
-            </div>
-            <div class="tab-item" onclick="switchSection('logbook', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                Project
+            </button>
+            <button class="btn-prem btn-ghost tab-item" onclick="switchSection('logbook', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
                 Logbook
-            </div>
-        </div>
-    </div>
-
-    {{-- Main Header --}}
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
-        <div class="text-left">
-            <h2 class="text-2xl font-extrabold text-[#1e293b]">Monitoring Talent</h2>
-            <p class="text-xs font-bold text-gray-400 mt-1 uppercase">{{ $talents->count() }} TALENT</p>
-        </div>
-
-        {{-- Live Search --}}
-        <div class="relative w-full sm:w-80">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
-                class="w-full border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                oninput="globalFilterTalents()">
+            </button>
         </div>
     </div>
 
@@ -560,8 +553,8 @@
     {{-- ================================= SECTION: LOGBOOK ================================= --}}
     <div id="section-logbook" class="hidden w-full">
         <div class="section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 24 24" fill="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
             LogBook
         </div>
@@ -835,8 +828,12 @@
 
                 document.getElementById('section-' + targetId).classList.remove('hidden');
 
-                document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
-                el.classList.add('active');
+                document.querySelectorAll('.tab-item').forEach(tab => {
+                    tab.classList.remove('btn-dark', 'active');
+                    tab.classList.add('btn-ghost');
+                });
+                el.classList.add('btn-dark', 'active');
+                el.classList.remove('btn-ghost');
             }
 
             function filterLog(typeId, el) {
@@ -852,19 +849,7 @@
                 });
             }
 
-            function globalFilterTalents() {
-                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
-                
-                // Filter all card types
-                const selectos = ['.talent-card-item', '.idp-card-item', '.project-card-item', '.logbook-card-item'];
-                
-                selectos.forEach(selector => {
-                    document.querySelectorAll(selector).forEach(item => {
-                        const name = item.getAttribute('data-name') || '';
-                        item.style.display = name.includes(searchTxt) ? '' : 'none';
-                    });
-                });
-            }
+
         </script>
     </x-slot>
 

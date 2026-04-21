@@ -668,4 +668,27 @@ class TalentDashboardController extends Controller
             return back()->with('error', 'Gagal menghapus data logbook.');
         }
     }
+
+    public function riwayat()
+    {
+        try {
+            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
+            if ($user->role->role_name !== 'talent') {
+                abort(403);
+            }
+
+            $notifications = $this->getNotifications();
+
+            // Ambil semua sesi assessment (IDP cycles) milik talent ini
+            $sessions = DB::table('assessment_session')
+                ->where('user_id_talent', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('talent.riwayat', compact('user', 'notifications', 'sessions'));
+        } catch (\Exception $e) {
+            Log::error('talent riwayat error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }

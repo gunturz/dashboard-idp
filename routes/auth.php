@@ -79,6 +79,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class , 'index'])
         ->name('talent.dashboard');
+    Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class , 'riwayat'])
+        ->name('talent.riwayat');
     Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'competency'])
         ->name('talent.competency');
     Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'storeCompetency'])

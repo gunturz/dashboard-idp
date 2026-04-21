@@ -194,14 +194,76 @@
             }
         }
 
-        /* ── Mobile: prevent horizontal page scroll ── */
-        @media (max-width: 767px) {
-            html, body {
-                overflow-x: hidden !important;
-                max-width: 100vw;
+            /* ── Mobile: prevent horizontal page scroll ── */
+            @media (max-width: 767px) {
+                html, body {
+                    overflow-x: hidden !important;
+                    max-width: 100vw;
+                }
             }
-        }
-    </style>
+
+            /* ── Page Header (Admin Style) ── */
+            .page-header {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 28px;
+            }
+            .page-header-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25);
+                flex-shrink: 0;
+                color: white;
+            }
+            .page-header-icon svg { width: 26px; height: 26px; }
+            .page-header-title {
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: #1e293b;
+                line-height: 1.15;
+            }
+            .page-header-sub {
+                font-size: 0.8rem;
+                color: #64748b;
+                margin-top: 3px;
+                font-weight: 400;
+            }
+
+            /* ── Section Title (Admin Style) ── */
+            .section-title {
+                font-size: 1.1rem;
+                font-weight: 800;
+                color: #1e293b;
+                padding: 4px 0 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 12px;
+            }
+            .section-title::before {
+                content: '';
+                display: inline-block;
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 9999px;
+            }
+
+            /* ── Premium Card Style ── */
+            .prem-card {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+                overflow: hidden;
+            }
+        </style>
     
     {{ $styles ?? '' }}
 </head>
@@ -305,7 +367,7 @@
             function updateActiveOnScroll() {
                 // If on separate pages, keep those highlighted
                 const path = window.location.pathname;
-                if (path.includes('/talent/logbook')) {
+                if (path.includes('/talent/riwayat')) {
                     links.forEach(l => {
                         if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
                         else l.classList.remove('active');
@@ -354,7 +416,7 @@
             const hash = decodeURIComponent(window.location.hash.replace('#', ''));
             const path = window.location.pathname;
 
-            if (path.includes('/talent/logbook')) {
+            if (path.includes('/talent/riwayat')) {
                 links.forEach(l => {
                     if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
                     else l.classList.remove('active');

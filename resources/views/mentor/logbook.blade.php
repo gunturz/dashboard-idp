@@ -316,6 +316,7 @@
             </table>
         </div>
         </div>
+        </div>
 
         {{-- ═══ MENTORING ═══ --}}
         <div id="panel-mentoring" class="hidden">
@@ -379,7 +380,6 @@
                 </div>
             </div>
         </div>
-        </div>
 
         {{-- ═══ LEARNING ═══ --}}
         <div id="panel-learning" class="hidden">
@@ -442,7 +442,6 @@
                 </table>
                 </div>
             </div>
-        </div>
         </div>
 
         @else

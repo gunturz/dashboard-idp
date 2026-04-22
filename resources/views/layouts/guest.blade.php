@@ -64,7 +64,7 @@
             z-index: 10;
             animation: slideUp 0.6s ease-out;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.2) transparent;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
         }
 
         .login-card::-webkit-scrollbar {
@@ -101,7 +101,7 @@
             line-height: 1.3;
             letter-spacing: -0.5px;
             margin-bottom: 1.75rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .login-logo-wrapper {
@@ -117,7 +117,7 @@
             background: white;
             padding: 8px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         .login-subtitle {
@@ -134,7 +134,7 @@
             display: block;
             font-size: 0.82rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             margin-bottom: 0.5rem;
             letter-spacing: 0.2px;
         }
@@ -157,11 +157,11 @@
         .form-input {
             width: 100%;
             padding: 0.8rem 1rem 0.8rem 2.8rem;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 14px;
             font-size: 0.9rem;
             color: #ffffff;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             transition: all 0.25s ease;
             outline: none;
             box-sizing: border-box;
@@ -181,16 +181,17 @@
 
         /* Fix for Browser Autofill (Putih saat ngetik/isi otomatis) */
         input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 50px #2e3746 inset !important; /* Gunakan warna gelap yg konsisten */
+            -webkit-box-shadow: 0 0 0 50px #2e3746 inset !important;
+            /* Gunakan warna gelap yg konsisten */
             -webkit-text-fill-color: #ffffff !important;
             caret-color: #ffffff;
             transition: background-color 5000s ease-in-out 0s;
         }
 
-        .form-input:focus + .input-icon,
+        .form-input:focus+.input-icon,
         .input-wrapper:focus-within .input-icon {
             color: #22c55e;
         }
@@ -398,7 +399,8 @@
         }
 
         .form-select option {
-            background-color: #1e293b; /* Background gelap saat list dropdown terbuka */
+            background-color: #1e293b;
+            /* Background gelap saat list dropdown terbuka */
             color: #ffffff;
             font-style: normal;
         }

@@ -32,7 +32,7 @@
             @media(max-width:1024px){.main-grid{grid-template-columns:1fr}}
 
             /* ══ Glass Card ══ */
-            .glass-card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,.04); overflow:hidden; }
+            .glass-card { background:#f9fafb; border:1px solid #e2e8f0; border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,.04); overflow:hidden; }
             .card-header { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #e2e8f0; gap:12px; flex-wrap:wrap; }
             .card-title { display:flex; align-items:center; gap:8px; font-size:.9rem; font-weight:700; color:#1e293b; }
             .card-title svg { width:18px; height:18px; color:#14b8a6; flex-shrink:0; }

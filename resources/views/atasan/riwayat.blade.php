@@ -31,7 +31,7 @@
                 border: 1px solid #d1d5db;
                 border-radius: 12px;
                 overflow: hidden;
-                background: #fff;
+                background: #f9fafb;
             }
 
             .riwayat-table {
@@ -148,15 +148,6 @@
     </div>
 
     <div class="prem-card">
-        <div class="prem-card-header">
-            <div class="prem-card-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836c-.149.598.019 1.225.44 1.645a4.5 4.5 0 1 1-6.136-6.136 1.125 1.125 0 1 1 1.591 1.591 2.25 2.25 0 1 0 2.688 2.688l.708-2.836c.149-.598-.019-1.225-.44-1.645a4.5 4.5 0 1 1 6.136 6.136 1.125 1.125 0 1 1-1.591-1.591 2.25 2.25 0 1 0-2.688-2.688l-.709 2.836Z" clip-rule="evenodd" />
-                </svg>
-                Filter Riwayat
-            </div>
-        </div>
-
         <div class="p-6">
             <div class="flex flex-col md:flex-row gap-4 mb-8">
                 {{-- Cari Nama --}}
@@ -207,7 +198,7 @@
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                <tbody id="riwayat-tbody">
+                    <tbody id="riwayat-tbody">
                     @forelse($talents as $talent)
                         @php
                             $plan       = $talent->promotion_plan;
@@ -285,7 +276,6 @@
             </table>
         </div>
     </div>
-</div>
 
     <x-slot name="scripts">
         <script>

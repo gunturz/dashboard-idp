@@ -2,7 +2,7 @@
     <x-slot name="styles">
         <style>
             .summary-card {
-                background: white;
+                background: #f9fafb;
                 border-radius: 12px;
                 padding: 24px;
                 text-align: center;
@@ -93,7 +93,7 @@
 
         @if($totalPending > 0)
         <!-- Banner Approval Validation - Image 1 View -->
-        <div class="mb-4 bg-white border border-gray-300 rounded-lg shadow-sm py-3 px-5 flex items-center justify-between">
+        <div class="mb-4 bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-3 px-5 flex items-center justify-between">
             <div class="text-[#475569] font-medium text-[14px]">
                 Ada <span class="font-bold text-[#2e3746]">{{ $totalPending }} Permintaan</span> yang menunggu validasi anda
             </div>
@@ -103,7 +103,7 @@
         </div>
         @endif
 
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
             @if($totalMentee > 0)
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse">

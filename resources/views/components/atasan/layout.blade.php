@@ -126,13 +126,27 @@
         }
 
         /* ══════════════════════════════════════════════════════
-           MOBILE ONLY STYLES — does NOT affect desktop (≥1024px)
-           ══════════════════════════════════════════════════════ */
-
-        /* ══════════════════════════════════════════════════════
            PREMIUM DESIGN SYSTEM (Standardized with PDC Admin)
            ══════════════════════════════════════════════════════ */
-        
+
+        /* ── Background Decoration ── */
+        .bg-decoration {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background-color: #ffffff;
+        }
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
+            background-size: 32px 32px;
+            opacity: 0.3;
+        }
+
         /* ── Title Animation ── */
         @keyframes titleReveal {
             from { opacity: 0; transform: translateX(-20px); }
@@ -143,7 +157,7 @@
         /* ══ Premium Stats Cards ══ */
         .prem-stat-grid { display: grid; gap: 20px; margin-bottom: 24px; }
         .prem-stat {
-            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;
+            background: #f9fafb; border: 1px solid #e2e8f0; border-radius: 16px;
             padding: 20px 20px 18px; display: flex; flex-direction: column;
             align-items: flex-start; gap: 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
@@ -210,7 +224,7 @@
 
         /* ══ Premium Card & Table ══ */
         .prem-card {
-            background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
+            background: #f9fafb; border: 1px solid #e2e8f0; border-radius: 20px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, .04); overflow: hidden; margin-bottom: 24px;
         }
         .prem-card-header {
@@ -243,88 +257,30 @@
         .btn-ghost:hover { background: #f1f5f9; color: #1e293b; }
 
         /* ══ Glass Card ══ */
-        .glass-card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,.04); overflow:hidden; }
+        .glass-card { background:#f9fafb; border:1px solid #e2e8f0; border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,.04); overflow:hidden; }
 
         @media (max-width: 1023px) {
-            .navbar-outer {
-                padding: 12px 16px;
-            }
-
-            .nav-icon-btn {
-                width: 38px;
-                height: 38px;
-            }
-
-            .notif-badge {
-                width: 7px;
-                height: 7px;
-            }
-
-            body {
-                padding-top: 60px !important;
-            }
+            .navbar-outer { padding: 12px 16px; }
+            .nav-icon-btn { width: 38px; height: 38px; }
+            .notif-badge { width: 7px; height: 7px; }
+            body { padding-top: 60px !important; }
         }
 
         /* Prevent horizontal scroll on mobile */
         @media (max-width: 767px) {
-
-            html,
-            body {
-                overflow-x: hidden !important;
-                max-width: 100vw;
-            }
-
-            main {
-                padding: 16px !important;
-            }
+            html, body { overflow-x: hidden !important; max-width: 100vw; }
+            main { padding: 16px !important; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 10px; }
             .dash-header-date { margin-left: 0; text-align: left; }
             .prem-stat-grid { grid-template-columns: 1fr !important; }
-                /* ── Background Decoration ── */
-            .bg-decoration {
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                overflow: hidden;
-                pointer-events: none;
-                background-color: #f0f4f8;
-                background-image: 
-                    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-                    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 100px, transparent 50%);
-            }
-            .bg-decoration::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
-                background-size: 32px 32px;
-                opacity: 0.3;
-            }
-            .bg-blob {
-                position: absolute;
-                border-radius: 50%;
-                filter: blur(120px);
-                opacity: 0.35;
-                animation: blob-float 35s infinite alternate ease-in-out;
-            }
-            @keyframes blob-float {
-                0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-                33% { transform: translate(60px, -80px) scale(1.2) rotate(120deg); }
-                66% { transform: translate(-40px, 40px) scale(0.8) rotate(240deg); }
-                100% { transform: translate(0, 0) scale(1) rotate(360deg); }
-            }
+        }
         </style>
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-[#f8fafc] min-h-screen pt-[80px] flex flex-col relative">
+<body class="bg-[#ffffff] min-h-screen pt-[80px] flex flex-col relative">
 
-    {{-- DECORATIVE BACKGROUND --}}
     <div class="bg-decoration">
-        <div class="bg-blob w-[800px] h-[800px] bg-blue-200/30 -top-64 -left-64"></div>
-        <div class="bg-blob w-[600px] h-[600px] bg-indigo-200/30 top-1/2 -right-32" style="animation-delay: -5s;"></div>
-        <div class="bg-blob w-[900px] h-[900px] bg-sky-200/20 -bottom-48 left-1/4" style="animation-delay: -10s;"></div>
-        <div class="bg-blob w-[500px] h-[500px] bg-blue-100/40 top-1/4 left-1/2" style="animation-delay: -15s;"></div>
     </div>
 
     <div class="navbar-outer">
@@ -711,7 +667,7 @@
 
     {{-- MAIN CONTENT --}}
     <main id="main-content"
-        class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white/90 backdrop-blur-md mt-4 mx-4 lg:mx-6 lg:mt-6 rounded-2xl shadow-sm border border-white/20">
+        class="p-4 lg:p-8 min-h-[calc(100vh-80px)]">
         {{ $slot }}
     </main>
 

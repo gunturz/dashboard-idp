@@ -1,6 +1,6 @@
 @props([
     'title' => 'Individual Development Plan',
-    'bodyClass' => 'bg-[#f8fafc] min-h-screen flex flex-col pt-[80px] relative',
+    'bodyClass' => 'bg-[#ffffff] min-h-screen flex flex-col pt-[80px] relative',
     'showProfileCard' => true,
     'mobileCollapsible' => false,
     'user' => null,
@@ -268,24 +268,17 @@
 
             /* ── Premium Card Style ── */
             .prem-card {
-                background: rgba(255, 255, 255, 0.9);
+                background: #f9fafb;
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
                 border: 1px solid rgba(226, 232, 240, 0.8);
                 border-radius: 24px;
-                box-shadow: 
-                    0 4px 6px -1px rgba(0, 0, 0, 0.02),
-                    0 10px 15px -3px rgba(0, 0, 0, 0.01);
                 overflow: hidden;
                 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .prem-card:hover {
-                background: #ffffff;
-                box-shadow: 
-                    0 20px 25px -5px rgba(0, 0, 0, 0.04),
-                    0 10px 10px -5px rgba(0, 0, 0, 0.01);
-                border-color: rgba(16, 185, 129, 0.3);
+                background: #f9fafb;
                 transform: translateY(-2px);
             }
 
@@ -296,10 +289,7 @@
                 z-index: -1;
                 overflow: hidden;
                 pointer-events: none;
-                background-color: #f0f4f8;
-                background-image: 
-                    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-                    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 100px, transparent 50%);
+                background-color: #ffffff;
             }
 
             .bg-decoration::before {
@@ -310,21 +300,6 @@
                 background-size: 32px 32px;
                 opacity: 0.3;
             }
-
-            .bg-blob {
-                position: absolute;
-                border-radius: 50%;
-                filter: blur(120px);
-                opacity: 0.35;
-                animation: blob-float 35s infinite alternate ease-in-out;
-            }
-
-            @keyframes blob-float {
-                0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-                33% { transform: translate(60px, -80px) scale(1.2) rotate(120deg); }
-                66% { transform: translate(-40px, 40px) scale(0.8) rotate(240deg); }
-                100% { transform: translate(0, 0) scale(1) rotate(360deg); }
-            }
         </style>
     
     {{ $styles ?? '' }}
@@ -332,12 +307,7 @@
 
 <body class="{{ $bodyClass }}">
 
-    {{-- DECORATIVE BACKGROUND --}}
     <div class="bg-decoration">
-        <div class="bg-blob w-[800px] h-[800px] bg-blue-200/30 -top-64 -left-64"></div>
-        <div class="bg-blob w-[600px] h-[600px] bg-indigo-200/30 top-1/2 -right-32" style="animation-delay: -5s;"></div>
-        <div class="bg-blob w-[900px] h-[900px] bg-sky-200/20 -bottom-48 left-1/4" style="animation-delay: -10s;"></div>
-        <div class="bg-blob w-[500px] h-[500px] bg-blue-100/40 top-1/4 left-1/2" style="animation-delay: -15s;"></div>
     </div>
 
     {{-- NAVBAR --}}

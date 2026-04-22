@@ -45,10 +45,9 @@
 
             /* ── Premium Card & Table ── */
             .prem-card {
-                background: white;
+                background: #f9fafb;
                 border: 1px solid #e2e8f0;
                 border-radius: 24px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
                 overflow: hidden;
             }
 
@@ -86,9 +85,7 @@
 
             .highlight-table td:last-child { border-right: none; }
 
-            .highlight-table tr:hover {
-                background: #fafcfd;
-            }
+            /* Row hover removed per request */
 
             .talent-name-main {
                 display: block;
@@ -126,9 +123,9 @@
                 box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
             }
 
-            .btn-emerald:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            /* Button hover effect simplified */
+            .btn-emerald:active {
+                transform: scale(0.98);
             }
 
             .btn-back-prem {
@@ -139,11 +136,9 @@
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             }
 
-            .btn-back-prem:hover {
-                background: #f8fafc;
-                border-color: #cbd5e1;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            /* Back button hover simplified */
+            .btn-back-prem:active {
+                transform: scale(0.98);
             }
 
             .animate-reveal {

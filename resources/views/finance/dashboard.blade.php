@@ -13,19 +13,19 @@
 
         {{-- 4 Summary Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-xl border-2 border-teal-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-gray-50 rounded-xl border-2 border-teal-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                 <span class="text-4xl font-extrabold text-teal-500 mb-2">{{ $total }}</span>
                 <span class="text-xs text-gray-500 font-medium">Total Request</span>
             </div>
-            <div class="bg-white rounded-xl border-2 border-yellow-400 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-gray-50 rounded-xl border-2 border-yellow-400 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                 <span class="text-4xl font-extrabold text-yellow-400 mb-2">{{ $pending }}</span>
                 <span class="text-xs text-gray-500 font-medium">Pending Review</span>
             </div>
-            <div class="bg-white rounded-xl border-2 border-green-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-gray-50 rounded-xl border-2 border-green-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                 <span class="text-4xl font-extrabold text-green-500 mb-2">{{ $approved }}</span>
                 <span class="text-xs text-gray-500 font-medium">Approved</span>
             </div>
-            <div class="bg-white rounded-xl border-2 border-red-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+            <div class="bg-gray-50 rounded-xl border-2 border-red-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                 <span class="text-4xl font-extrabold text-red-500 mb-2">{{ $rejected }}</span>
                 <span class="text-xs text-gray-500 font-medium">Rejected</span>
             </div>
@@ -34,7 +34,7 @@
 
 
         {{-- Notification Alert --}}
-        <div class="bg-white border text-sm border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between shadow-sm mb-8">
+        <div class="bg-gray-50 border text-sm border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between shadow-sm mb-8">
             <p class="text-gray-700 font-medium mb-3 sm:mb-0">
                 Ada <span class="font-bold">{{ $pending }} Permintaan</span> yang menunggu validasi anda
             </p>
@@ -45,7 +45,7 @@
 
         {{-- Menunggu Validasi Tables Grouped by Position --}}
         @forelse($groupedPendingProjects as $groupTitle => $projectsGroup)
-        <div class="mb-8 overflow-hidden bg-white border border-gray-300 rounded-xl shadow-sm">
+        <div class="mb-8 overflow-hidden bg-gray-50 border border-gray-300 rounded-xl shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -84,7 +84,7 @@
             </div>
         </div>
         @empty
-        <div class="mb-8 overflow-hidden bg-white border border-gray-300 rounded-xl shadow-sm">
+        <div class="mb-8 overflow-hidden bg-gray-50 border border-gray-300 rounded-xl shadow-sm">
             <div class="bg-gray-50 border-b border-gray-300 px-6 py-4 text-center">
                 <h3 class="text-gray-800 font-bold text-lg">Daftar Permintaan </h3>
             </div>

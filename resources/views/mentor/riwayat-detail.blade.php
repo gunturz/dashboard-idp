@@ -85,7 +85,7 @@
                 @if($activity->type_idp == 1)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Aktivitas</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->activity ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->activity ?? '-' }}</div>
                 </div>
                 @endif
 

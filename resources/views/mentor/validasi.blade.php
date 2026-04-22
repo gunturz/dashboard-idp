@@ -202,6 +202,16 @@
     </x-slot>
 
     <div class="w-full">
+        {{-- Flash Messages --}}
+        @if(session('success'))
+        <div id="flash-success" class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-xl shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {{ session('success') }}
+        </div>
+        @endif
+
         {{-- Talent Selector --}}
         <div class="mb-6 flex items-center gap-6 talent-selector-row" style="position: relative; z-index: 50;">
             <label class="text-[15px] font-bold text-gray-700 whitespace-nowrap">Talent</label>
@@ -288,7 +298,7 @@
                         </td>
                         <td>
                             <div class="flex items-center justify-center gap-3">
-                                <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="btn-detail">
+                                <a href="{{ route('mentor.riwayat.detail', $data['id']) }}" class="btn-detail">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -351,7 +361,7 @@
                         </td>
                         <td>
                             <div class="flex items-center justify-center gap-3">
-                                <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="btn-detail">
+                                <a href="{{ route('mentor.riwayat.detail', $data['id']) }}" class="btn-detail">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -414,7 +424,7 @@
                         </td>
                         <td>
                             <div class="flex items-center justify-center gap-3">
-                                <a href="{{ route('mentor.logbook.detail', $data['id']) }}" class="btn-detail">
+                                <a href="{{ route('mentor.riwayat.detail', $data['id']) }}" class="btn-detail">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -482,7 +492,7 @@
     <x-slot name="scripts">
         <script>
             // Logbook Status Modal Logic
-            const baseStatusUrl = "{{ url('/mentor/logbook') }}";
+            const baseStatusUrl = "{{ url('/mentor/validasi') }}";
 
             function openStatusModal(id, talentName) {
                 const modal = document.getElementById('statusModal');
@@ -586,6 +596,16 @@
                 const hash = window.location.hash.replace('#', '');
                 if (['exposure', 'mentoring', 'learning'].includes(hash)) {
                     switchTab(hash);
+                }
+
+                // Auto-dismiss flash success
+                const flash = document.getElementById('flash-success');
+                if (flash) {
+                    setTimeout(() => {
+                        flash.style.transition = 'opacity 0.6s ease';
+                        flash.style.opacity = '0';
+                        setTimeout(() => flash.remove(), 600);
+                    }, 4000);
                 }
             });
         </script>

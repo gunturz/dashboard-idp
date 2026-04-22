@@ -270,8 +270,8 @@
                 class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150 {{ request()->routeIs('mentor.dashboard') ? 'active' : '' }}">
                 Dashboard
             </a>
-            <a href="{{ route('mentor.logbook') }}"
-                class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150 {{ request()->routeIs('mentor.logbook') ? 'active' : '' }}">
+            <a href="{{ route('mentor.validasi') }}"
+                class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150 {{ request()->routeIs('mentor.validasi') ? 'active' : '' }}">
                 Validasi
             </a>
             <a href="{{ route('mentor.riwayat') }}"
@@ -355,8 +355,8 @@
                                 </div>
                                 <span class="font-medium">Dashboard</span>
                             </a>
-                            <a href="{{ route('mentor.logbook') }}"
-                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('mentor.logbook') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                            <a href="{{ route('mentor.validasi') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('mentor.validasi') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
                                 <div
                                     class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"

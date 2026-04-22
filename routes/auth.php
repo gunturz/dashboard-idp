@@ -229,12 +229,12 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.notifikasi');
     Route::post('/mentor/notifikasi/mark-all-read', [\App\Http\Controllers\MentorDashboardController::class , 'markAllNotificationsRead'])
         ->name('mentor.notifikasi.markAllRead');
-    Route::get('/mentor/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
-        ->name('mentor.logbook');
-    Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
-        ->name('mentor.logbook.update_status');
-    Route::get('/mentor/logbook-item/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
-        ->name('mentor.logbook.detail');
+    Route::get('/mentor/validasi', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
+        ->name('mentor.validasi');
+    Route::post('/mentor/validasi/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
+        ->name('mentor.validasi.update_status');
+    Route::get('/mentor/riwayat-detail/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
+        ->name('mentor.riwayat.detail');
     Route::get('/mentor/riwayat', [\App\Http\Controllers\MentorDashboardController::class , 'riwayat'])
         ->name('mentor.riwayat');
 

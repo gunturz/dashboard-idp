@@ -98,7 +98,7 @@
             <div class="text-[#475569] font-medium text-[14px]">
                 Ada <span class="font-bold text-[#2e3746]">{{ $totalPending }} Permintaan</span> yang menunggu validasi anda
             </div>
-            <a href="{{ route('mentor.logbook') }}" class="bg-[#facc15] hover:bg-[#eab308] text-[#1e293b] font-bold text-[13px] px-5 py-2.5 rounded-lg transition-colors inline-block shadow-sm">
+            <a href="{{ route('mentor.validasi') }}" class="bg-[#facc15] hover:bg-[#eab308] text-[#1e293b] font-bold text-[13px] px-5 py-2.5 rounded-lg transition-colors inline-block shadow-sm">
                 Review Sekarang
             </a>
         </div>
@@ -190,13 +190,24 @@
                             </td>
                             {{-- Aksi --}}
                             <td class="px-5 py-4 text-center">
-                                <a href="{{ route('mentor.logbook', ['talent_id' => $mentee['id']]) }}"
-                                    class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    Validasi
-                                </a>
+                                @if($mentee['status']['pending'] > 0)
+                                    <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}"
+                                        class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Validasi
+                                    </a>
+                                @else
+                                    <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}"
+                                        class="inline-flex items-center gap-1.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Lihat Validasi
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

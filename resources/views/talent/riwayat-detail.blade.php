@@ -20,17 +20,21 @@
 
             /* ── Common Premium Styles ── */
             .btn-back-prem {
-                background: white;
+                background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
                 border: 1px solid #e2e8f0;
                 color: #475569;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-                transition: all 0.2s;
+                box-shadow: 
+                    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                    inset 0 0 10px rgba(255, 255, 255, 0.5);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .btn-back-prem:hover {
-                background: #f8fafc;
-                transform: translateY(-2px);
+                background: #ffffff;
+                transform: translateY(-2px) scale(1.02);
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                border-color: #cbd5e1;
+                color: #1e293b;
             }
         </style>
     </x-slot>
@@ -193,10 +197,10 @@
                                     <td class="text-center px-4 py-3">
                                         @php
                                             $statusThemes = [
-                                                'Pending' => ['text' => 'text-orange-500', 'dot' => 'bg-orange-400'],
-                                                'Verified' => ['text' => 'text-green-600', 'dot' => 'bg-green-500'],
-                                                'On Progress' => ['text' => 'text-blue-500', 'dot' => 'bg-blue-400'],
-                                                'Rejected' => ['text' => 'text-red-500', 'dot' => 'bg-red-400'],
+                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-gradient-to-br from-orange-400 to-orange-500 shadow-[0_0_8px_rgba(251,146,60,0.4)]'],
+                                                'Verified' => ['text' => 'text-green-600', 'dot' => 'bg-gradient-to-br from-green-400 to-green-600 shadow-[0_0_8px_rgba(74,222,128,0.4)]'],
+                                                'On Progress' => ['text' => 'text-blue-600', 'dot' => 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-[0_0_8px_rgba(96,165,250,0.4)]'],
+                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-gradient-to-br from-red-400 to-red-600 shadow-[0_0_8px_rgba(248,113,113,0.4)]'],
                                             ];
                                             $theme = $statusThemes[$project->status] ?? ['text' => 'text-gray-500', 'dot' => 'bg-gray-400'];
                                         @endphp

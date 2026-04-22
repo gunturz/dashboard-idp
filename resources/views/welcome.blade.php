@@ -158,6 +158,9 @@
         }
 
         .btn-nav-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 9px 24px;
             background: linear-gradient(135deg, var(--teal), var(--green));
             border-radius: 99px;
@@ -905,6 +908,10 @@
                 text-align: center;
             }
 
+            .footer-logo .footer-text {
+                text-align: left;
+            }
+
             .footer-links {
                 justify-content: center;
             }
@@ -973,7 +980,13 @@
         </a>
         <div class="nav-cta">
             <a href="{{ route('register') }}" class="btn-nav-ghost">Daftar</a>
-            <a href="{{ route('login') }}" class="btn-nav-primary">Masuk →</a>
+            <a href="{{ route('login') }}" class="btn-nav-primary">Masuk
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" style="width:18px;height:18px;rotate:180deg;">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+            </a>
         </div>
     </nav>
 
@@ -993,22 +1006,31 @@
                     pengembangan kompetensi talent secara terstruktur dan berbasis data.
                 </p>
 
-                <div class="hero-actions">
+                <div class="hero-actions" style="flex-direction: column; gap: 14px;">
                     <a href="{{ route('login') }}" class="btn-hero-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                            stroke="currentColor" style="width:18px;height:18px;">
+                            stroke="currentColor" style="width:18px;height:18px;rotate:180deg;">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                         </svg>
                         Masuk ke Dashboard
                     </a>
-                    <a href="#fitur" class="btn-hero-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" style="width:16px;height:16px;">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                        Lihat Fitur
-                    </a>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                        <a href="{{ route('register') }}" class="btn-hero-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" style="width:16px;height:16px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                            </svg>
+                            Daftar Sekarang
+                        </a>
+                        <a href="#fitur" class="btn-hero-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" style="width:16px;height:16px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            Lihat Fitur
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1199,7 +1221,8 @@
                         </svg>
                     </div>
                     <div class="feature-title">Project Improvement</div>
-                    <div class="feature-desc">Kelola dan pantau project improvement talent lengkap dengan upload dokumen
+                    <div class="feature-desc">Kelola dan pantau project improvement talent lengkap dengan upload
+                        dokumen
                         dan tracking status persetujuan.</div>
                 </div>
 
@@ -1238,10 +1261,12 @@
                         style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(16, 185, 129, 0.1)); border: 1px solid rgba(13, 148, 136, 0.3); color: #10b981;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                             style="width:28px;height:28px;">
-                            <circle cx="11" cy="11" r="8" fill="none" stroke="#10b981" stroke-width="2" />
+                            <circle cx="11" cy="11" r="8" fill="none" stroke="#10b981"
+                                stroke-width="2" />
                             <path
                                 d="M11 6.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM7.5 14.5a3.5 3.5 0 0 1 7 0v0.5h-7v-0.5z" />
-                            <path d="M16.5 16.5l4.5 4.5" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" />
+                            <path d="M16.5 16.5l4.5 4.5" stroke="#10b981" stroke-width="2.5"
+                                stroke-linecap="round" />
                         </svg>
                     </div>
                     <div class="role-name">Talent</div>
@@ -1325,7 +1350,6 @@
     <!-- ─── CTA ─── -->
     <section class="cta-section">
         <div class="cta-inner reveal">
-            <div class="section-tag" style="margin-bottom: 24px;">Mulai Sekarang</div>
             <h2 class="cta-title">
                 Siap Memulai Perjalanan<br>
                 <span
@@ -1338,15 +1362,15 @@
             </p>
             <div class="cta-btns">
                 <a href="{{ route('login') }}" class="btn-hero-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" style="width:18px;height:18px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor" style="width:18px;height:18px;rotate:180deg;">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                     </svg>
                     Masuk ke Dashboard
                 </a>
                 <a href="{{ route('register') }}" class="btn-hero-secondary">
-                    Daftar Akun Baru →
+                    Daftar Akun Baru
                 </a>
             </div>
         </div>
@@ -1388,7 +1412,10 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        }, {
+            threshold: 0.12,
+            rootMargin: '0px 0px -40px 0px'
+        });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
@@ -1396,7 +1423,12 @@
         document.querySelectorAll('a[href^="#"]').forEach(a => {
             a.addEventListener('click', e => {
                 const target = document.querySelector(a.getAttribute('href'));
-                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
     </script>

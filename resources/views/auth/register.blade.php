@@ -252,11 +252,6 @@
 
         {{-- ── TOMBOL DAFTAR / NEXT ──────────────────────── --}}
         <button type="submit" id="register-btn" class="btn-login">
-            <svg id="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="2.5" stroke="currentColor" style="width:18px;height:18px;">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
             <span id="btn-label">Daftar</span>
         </button>
 
@@ -321,10 +316,6 @@
                 if (deptEl) deptEl.style.display = 'none';
                 if (posEl) posEl.style.display = 'none';
             }
-
-            // Ubah teks dan ikon tombol
-            const label = document.getElementById('btn-label');
-            if (label) label.textContent = isTalent ? 'Next' : 'Daftar';
 
             const warningEl = document.getElementById('non-kandidat-warning');
             if (warningEl) warningEl.style.display = isTalent ? 'none' : 'block';

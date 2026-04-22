@@ -62,7 +62,12 @@ class RegisteredUserController extends Controller
         $request->validate([
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required', 
+                'confirmed', 
+                'min:8', 
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+            ],
             'nama' => ['required', 'string', 'max:255'],
             'company_id' => ['required', 'exists:company,id'],
             'department_id' => ['nullable', 'exists:department,id'],
@@ -71,6 +76,19 @@ class RegisteredUserController extends Controller
             'jabatan_target' => ['nullable', 'exists:position,id'],
             'mentor_id' => ['nullable', 'exists:users,id'],
             'atasan_id' => ['nullable', 'exists:users,id'],
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'username.unique' => 'Username tersebut telah digunakan.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email tersebut telah digunakan.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal harus 8 karakter.',
+            'password.regex' => 'Password harus mengandung minimal satu huruf kapital, huruf kecil, dan angka.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'nama.required' => 'Nama lengkap wajib diisi.',
+            'company_id.required' => 'Perusahaan wajib dipilih.',
+            'role_id.required' => 'Role wajib dipilih.',
         ]);
 
         DB::beginTransaction();

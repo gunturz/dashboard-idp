@@ -117,8 +117,13 @@
                         </svg>
                         <p class="text-sm font-semibold text-gray-500">Anda belum mengisi assessment kompetensi.</p>
                         <a href="{{ route('talent.competency') }}"
-                            class="mt-3 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Isi
-                            Kompetensi</a>
+                            class="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
+                            style="background: linear-gradient(135deg, #0d9488, #10b981);">
+                            Isi Kompetensi
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
                     </div>
                 @elseif(!$atasanHasScored)
                     <div class="flex flex-col items-center justify-center py-6">

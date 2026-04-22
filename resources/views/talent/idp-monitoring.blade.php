@@ -1,334 +1,135 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDP Monitoring – Individual Development Plan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* ── Scrollbar ── */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 99px;
-        }
-
-        /* ── Title Animation ── */
-        @keyframes titleReveal {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .animate-title {
-            animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-
-        /* ── Smooth entrance ── */
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            animation: fadeSlideUp 0.5s ease both;
-        }
-
-        .fade-up-1 {
-            animation-delay: 0.05s;
-        }
-
-        .fade-up-2 {
-            animation-delay: 0.12s;
-        }
-
-        /* ── Navbar outer wrapper ── */
-        .navbar-outer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            background: #2e3746;
-            padding: 1rem 1.75rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .navbar-outer.nav-hidden {
-            transform: translateY(-110%);
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 9px;
-            height: 9px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 1.5px solid white;
-        }
-
-        .nav-icon-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #2e3746;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.15s;
-            position: relative;
-        }
-
-        .nav-icon-btn:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
-
-        /* ── Form Items ── */
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 0.55rem 1rem;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            outline: none;
-            transition: border-color 0.2s;
-            background-color: #ffffff;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
-        }
-
-        /* ── Tab bar ── */
-        .tab-bar {
-            display: flex;
-            background: #e2e8f0;
-            border-radius: 9999px;
-            padding: 5px;
-            gap: 4px;
-            width: fit-content;
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-btn {
-            padding: 0.55rem 1.75rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            color: #64748b;
-            background: transparent;
-            white-space: nowrap;
-        }
-
-        .tab-active {
-            background-color: #2e3746;
-            color: #ffffff;
-            box-shadow: 0 2px 12px rgba(46,55,70,0.22);
-        }
-
-        .tab-inactive {
-            background: transparent;
-            color: #64748b;
-        }
-
-        .tab-inactive:hover {
-            background-color: #cbd5e1;
-            color: #2e3746;
-        }
-
-        .upload-btn {
-            border: 1.5px solid #cbd5e1;
-            padding: 0.4rem 1.2rem;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.875rem;
-            color: #2e3746;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-            background-color: white;
-        }
-
-        .upload-btn:hover {
-            background-color: #f0fdf4;
-            color: #16a34a;
-            border-color: #22c55e;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 2.5rem;
-            border-radius: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.875rem;
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #16a34a, #15803d);
-            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
-        }
-
-        /* Main Gray Container matches the image */
-        .wrapper-bg {
-            background-color: #f3f4f6;
-            /* Gray 100 */
-        }
-
-        .form-bg {
-            background-color: #ffffff;
-            /* White Form Box */
-            border-radius: 10px;
-        }
-
-        /* ── Responsive Navbar & Padding Fix ── */
-        @media (max-width: 1024px) {
-            .navbar-outer {
-                padding: 12px 16px;
-            }
-            .nav-icon-btn {
-                width: 38px;
-                height: 38px;
-            }
-            .notif-badge {
-                width: 7px;
-                height: 7px;
-            }
-            body.pt-\[80px\] {
-                padding-top: 60px !important;
-            }
-        }
-
-        /* ── Responsive Tab Bar ── */
-        @media (max-width: 640px) {
-            .tab-bar {
+<x-talent.layout title="IDP Monitoring – Individual Development Plan" :user="$user ?? auth()->user()" :notifications="$notifications ?? collect([])" :mobileCollapsible="true">
+    <x-slot name="styles">
+        <style>
+            /* ── Form Items ── */
+            .form-input,
+            .form-textarea {
                 width: 100%;
-                justify-content: space-between;
-                padding: 4px;
-                margin-bottom: 1.25rem;
+                padding: 0.55rem 1rem;
+                border: 1.5px solid #cbd5e1;
+                border-radius: 6px;
+                font-size: 0.875rem;
+                outline: none;
+                transition: border-color 0.2s;
+                background-color: #ffffff;
             }
+
+            .form-input:focus,
+            .form-textarea:focus {
+                border-color: #22c55e;
+                box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+            }
+
+            /* ── Tab bar ── */
+            .tab-bar {
+                display: flex;
+                background: #e2e8f0;
+                border-radius: 9999px;
+                padding: 5px;
+                gap: 4px;
+                width: fit-content;
+                margin-bottom: 1.5rem;
+            }
+
             .tab-btn {
-                padding: 0.45rem 0.25rem;
-                font-size: 0.75rem;
-                flex: 1;
-                text-align: center;
+                padding: 0.55rem 1.75rem;
+                font-weight: 600;
+                font-size: 0.9rem;
+                border-radius: 9999px;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-decoration: none;
+                color: #64748b;
+                background: transparent;
+                white-space: nowrap;
             }
-        }
 
-        /* ── Page Header (Admin Style) ── */
-        .page-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-        .page-header-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25);
-            flex-shrink: 0;
-            color: white;
-        }
-        .page-header-icon svg { width: 26px; height: 26px; }
-        .page-header-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #1e293b;
-            line-height: 1.15;
-        }
-        .page-header-sub {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-top: 3px;
-            font-weight: 400;
-        }
+            .tab-active {
+                background-color: #2e3746;
+                color: #ffffff;
+                box-shadow: 0 2px 12px rgba(46,55,70,0.22);
+            }
 
-        /* ── Section Title (Admin Style) ── */
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #1e293b;
-            padding: 4px 0 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .section-title::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 18px;
-            background: linear-gradient(180deg, #14b8a6, #0d9488);
-            border-radius: 99px;
-        }
-    </style>
-</head>
+            .tab-inactive {
+                background: transparent;
+                color: #64748b;
+            }
 
-<body class="bg-white min-h-screen flex flex-col pt-[80px]">
+            .tab-inactive:hover {
+                background-color: #cbd5e1;
+                color: #2e3746;
+            }
 
-    {{-- ══════════════════════════════ NAVBAR & PROFILE ══════════════════════════════ --}}
-    @include('components.talent.navbar', ['user' => $user ?? auth()->user(), 'notifications' => $notifications ?? collect([])])
-    @include('components.talent.profile-card', ['user' => $user ?? auth()->user()])
+            .upload-btn {
+                border: 1.5px solid #cbd5e1;
+                padding: 0.4rem 1.2rem;
+                border-radius: 6px;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.875rem;
+                color: #2e3746;
+                cursor: pointer;
+                transition: all 0.2s;
+                font-weight: 500;
+                background-color: white;
+            }
+
+            .upload-btn:hover {
+                background-color: #f0fdf4;
+                color: #16a34a;
+                border-color: #22c55e;
+            }
+
+            .submit-btn {
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                font-weight: 600;
+                padding: 0.5rem 2.5rem;
+                border-radius: 10px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                font-size: 0.875rem;
+                box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+            }
+
+            .submit-btn:hover {
+                background: linear-gradient(135deg, #16a34a, #15803d);
+                box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+                transform: translateY(-1px);
+            }
+
+            .submit-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+            }
+
+            /* Main Gray Container matches the image */
+            .wrapper-bg {
+                background-color: #f3f4f6;
+            }
+
+            .form-bg {
+                background-color: #ffffff;
+                border-radius: 10px;
+            }
+
+            /* ── Responsive Tab Bar ── */
+            @media (max-width: 640px) {
+                .tab-bar {
+                    width: 100%;
+                    justify-content: space-between;
+                    padding: 4px;
+                    margin-bottom: 1.25rem;
+                }
+                .tab-btn {
+                    padding: 0.45rem 0.25rem;
+                    font-size: 0.75rem;
+                    flex: 1;
+                    text-align: center;
+                }
+            }
+        </style>
+    </x-slot>
 
     {{-- ══════════════════════════════ FORM AREA ══════════════════════════════ --}}
     <div class="w-full max-w-5xl mx-auto px-4 md:px-6 pt-6 md:pt-10 pb-12 flex-grow fade-up fade-up-2">
@@ -561,266 +362,219 @@
         </div>
     </div>
 
-    {{-- FOOTER --}}
-    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
-        <span class="text-white text-sm font-medium tracking-wide">
-            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
-        </span>
-    </footer>
+    <x-slot name="scripts">
+        <script>
+            function switchIdpTab(tab) {
+                // 1. Update Buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                });
+                document.getElementById('tab-btn-' + tab).classList.remove('tab-inactive');
+                document.getElementById('tab-btn-' + tab).classList.add('tab-active');
 
-    <script>
-        function toggleDropdown(dropdownId, btnId) {
-            const dropdown = document.getElementById(dropdownId);
-            const isHidden = dropdown.classList.contains('hidden');
-            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-            if (isHidden) {
-                dropdown.classList.remove('hidden');
-            }
-        }
+                // 2. Hide all field groups
+                document.getElementById('fields-exp-men').classList.add('hidden');
+                document.getElementById('fields-learning').classList.add('hidden');
+                document.getElementById('fields-mentoring').classList.add('hidden');
+                document.getElementById('fields-exposure').classList.add('hidden');
 
-        document.addEventListener('click', function(e) {
-            const wrappers = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'];
-            const clickedInside = wrappers.some(id => {
-                const el = document.getElementById(id);
-                return el && el.contains(e.target);
-            });
-            if (!clickedInside) {
-                document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-            }
-        });
+                // 3. Show relevant field groups & update required attributes
+                const form = document.getElementById('idp-form');
+                const tabTypeInput = document.getElementById('tab_type');
+                tabTypeInput.value = tab;
 
-        function switchIdpTab(tab) {
-            // 1. Update Buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('tab-active');
-                btn.classList.add('tab-inactive');
-            });
-            document.getElementById('tab-btn-' + tab).classList.remove('tab-inactive');
-            document.getElementById('tab-btn-' + tab).classList.add('tab-active');
-
-            // 2. Hide all field groups
-            document.getElementById('fields-exp-men').classList.add('hidden');
-            document.getElementById('fields-learning').classList.add('hidden');
-            document.getElementById('fields-mentoring').classList.add('hidden');
-            document.getElementById('fields-exposure').classList.add('hidden');
-
-            // 3. Show relevant field groups & update required attributes
-            const form = document.getElementById('idp-form');
-            const tabTypeInput = document.getElementById('tab_type');
-            tabTypeInput.value = tab;
-
-            // Reset all required
-            form.querySelectorAll('[required]').forEach(el => {
-                if (!['theme', 'activity_date'].includes(el.name)) {
-                    el.removeAttribute('required');
-                }
-            });
-
-            if (tab === 'learning') {
-                document.getElementById('fields-learning').classList.remove('hidden');
-                form.querySelector('[name="activity_learning"]').setAttribute('required', '');
-                form.querySelector('[name="platform"]').setAttribute('required', '');
-            } else {
-                document.getElementById('fields-exp-men').classList.remove('hidden');
-                form.querySelector('[name="mentor_name"]').setAttribute('required', '');
-                form.querySelector('[name="location"]').setAttribute('required', '');
-
-                if (tab === 'mentoring') {
-                    document.getElementById('fields-mentoring').classList.remove('hidden');
-                    form.querySelector('[name="description_mentoring"]').setAttribute('required', '');
-                    form.querySelector('[name="action_plan"]').setAttribute('required', '');
-                } else if (tab === 'exposure') {
-                    document.getElementById('fields-exposure').classList.remove('hidden');
-                    form.querySelector('[name="activity_exposure"]').setAttribute('required', '');
-                    form.querySelector('[name="description_exposure"]').setAttribute('required', '');
-                }
-            }
-
-            // 4. Update Form Action (for store)
-            @if(!isset($editMode))
-                let baseUrl = "{{ route('talent.idp_monitoring.store', ['tab' => 'TAB_PLACEHOLDER']) }}";
-                form.action = baseUrl.replace('TAB_PLACEHOLDER', tab);
-            @endif
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const initialTab = document.getElementById('tab_type').value;
-            switchIdpTab(initialTab);
-        });
-
-        (function() {
-            const navbar = document.querySelector('.navbar-outer');
-            let lastScrollY = window.scrollY;
-            let ticking = false;
-
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        const currentScrollY = window.scrollY;
-                        if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                            navbar.classList.add('nav-hidden');
-                        } else {
-                            navbar.classList.remove('nav-hidden');
-                        }
-                        lastScrollY = currentScrollY;
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-
-            // File Upload Preview Logic
-            const documentInput      = document.getElementById('documentInput');
-            const filePreviewContainer = document.getElementById('filePreviewContainer');
-            const fileListWrapper    = document.getElementById('fileListWrapper');
-            const uploadLabelText    = document.getElementById('uploadLabelText');
-
-            // Semua file yang dipilih
-            let allFiles = [];
-
-            function formatSize(bytes) {
-                const kb = Math.round(bytes / 1024);
-                return kb > 1024 ? (kb / 1024).toFixed(2) + ' MB' : kb + ' KB';
-            }
-
-            function getFileIconSvg() {
-                return `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                </svg>`;
-            }
-
-            function renderFileCards() {
-                fileListWrapper.innerHTML = '';
-
-                if (allFiles.length === 0) {
-                    filePreviewContainer.classList.add('hidden');
-                    uploadLabelText.textContent = 'Upload File';
-                    return;
-                }
-
-                filePreviewContainer.classList.remove('hidden');
-                uploadLabelText.textContent = 'Upload';
-
-                allFiles.forEach((file, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'flex items-center gap-3 p-3 bg-teal-50 border border-teal-100 rounded-[10px] shadow-sm';
-
-                    // Thumbnail / icon
-                    const thumbWrapper = document.createElement('div');
-                    thumbWrapper.className = 'w-12 h-12 shrink-0 rounded overflow-hidden border flex items-center justify-center';
-
-                    if (file.type.startsWith('image/')) {
-                        thumbWrapper.className += ' bg-gray-200 border-gray-300';
-                        const img = document.createElement('img');
-                        img.alt = file.name;
-                        img.className = 'w-full h-full object-cover';
-                        const reader = new FileReader();
-                        reader.onload = e => { img.src = e.target.result; };
-                        reader.readAsDataURL(file);
-                        thumbWrapper.appendChild(img);
-                    } else {
-                        thumbWrapper.className += ' bg-teal-100 border-teal-200 text-teal-600';
-                        thumbWrapper.innerHTML = getFileIconSvg();
+                // Reset all required
+                form.querySelectorAll('[required]').forEach(el => {
+                    if (!['theme', 'activity_date'].includes(el.name)) {
+                        el.removeAttribute('required');
                     }
-
-                    // Info teks
-                    const info = document.createElement('div');
-                    info.className = 'flex-1 min-w-0';
-                    info.innerHTML = `
-                        <p class="text-sm font-bold text-gray-800 truncate" title="${file.name}">${file.name}</p>
-                        <p class="text-xs text-gray-500">${formatSize(file.size)}</p>
-                    `;
-
-                    // Tombol hapus per file
-                    const removeBtn = document.createElement('button');
-                    removeBtn.type = 'button';
-                    removeBtn.title = 'Hapus File';
-                    removeBtn.className = 'shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition';
-                    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>`;
-                    removeBtn.addEventListener('click', () => {
-                        allFiles.splice(index, 1);
-                        syncInput();
-                        renderFileCards();
-                    });
-
-                    card.appendChild(thumbWrapper);
-                    card.appendChild(info);
-                    card.appendChild(removeBtn);
-                    fileListWrapper.appendChild(card);
                 });
 
-                syncInput();
-            }
+                if (tab === 'learning') {
+                    document.getElementById('fields-learning').classList.remove('hidden');
+                    form.querySelector('[name="activity_learning"]').setAttribute('required', '');
+                    form.querySelector('[name="platform"]').setAttribute('required', '');
+                } else {
+                    document.getElementById('fields-exp-men').classList.remove('hidden');
+                    form.querySelector('[name="mentor_name"]').setAttribute('required', '');
+                    form.querySelector('[name="location"]').setAttribute('required', '');
 
-            function syncInput() {
-                const dt = new DataTransfer();
-                allFiles.forEach(f => dt.items.add(f));
-                documentInput.files = dt.files;
-            }
-
-            function showWarning(msg) {
-                const box  = document.getElementById('uploadWarning');
-                const text = document.getElementById('uploadWarningText');
-                text.textContent = msg;
-                box.classList.remove('hidden');
-                // Auto-hide setelah 5 detik
-                clearTimeout(box._timer);
-                box._timer = setTimeout(() => box.classList.add('hidden'), 5000);
-            }
-
-            function hideWarning() {
-                document.getElementById('uploadWarning').classList.add('hidden');
-            }
-
-            const MAX_FILES   = 5;
-            const MAX_SIZE_MB = 5;
-            const MAX_BYTES   = MAX_SIZE_MB * 1024 * 1024;
-
-            function addFiles(newFiles) {
-                const warnings = [];
-
-                newFiles.forEach(f => {
-                    // Cek ukuran file
-                    if (f.size > MAX_BYTES) {
-                        warnings.push(`"${f.name}" melebihi batas ${MAX_SIZE_MB} MB (ukuran: ${formatSize(f.size)}).`);
-                        return; // lewati file ini
+                    if (tab === 'mentoring') {
+                        document.getElementById('fields-mentoring').classList.remove('hidden');
+                        form.querySelector('[name="description_mentoring"]').setAttribute('required', '');
+                        form.querySelector('[name="action_plan"]').setAttribute('required', '');
+                    } else if (tab === 'exposure') {
+                        document.getElementById('fields-exposure').classList.remove('hidden');
+                        form.querySelector('[name="activity_exposure"]').setAttribute('required', '');
+                        form.querySelector('[name="description_exposure"]').setAttribute('required', '');
                     }
+                }
 
-                    // Cek duplikat
-                    if (allFiles.some(e => e.name === f.name && e.size === f.size)) {
-                        return; // lewati duplikat
-                    }
+                // 4. Update Form Action (for store)
+                @if(!isset($editMode))
+                    let baseUrl = "{{ route('talent.idp_monitoring.store', ['tab' => 'TAB_PLACEHOLDER']) }}";
+                    form.action = baseUrl.replace('TAB_PLACEHOLDER', tab);
+                @endif
+            }
 
-                    // Cek batas jumlah file
-                    if (allFiles.length >= MAX_FILES) {
-                        warnings.push(`Maksimal ${MAX_FILES} file. "${f.name}" tidak ditambahkan.`);
+            document.addEventListener('DOMContentLoaded', function() {
+                const initialTab = document.getElementById('tab_type').value;
+                switchIdpTab(initialTab);
+            });
+
+            (function() {
+                // File Upload Preview Logic
+                const documentInput      = document.getElementById('documentInput');
+                const filePreviewContainer = document.getElementById('filePreviewContainer');
+                const fileListWrapper    = document.getElementById('fileListWrapper');
+                const uploadLabelText    = document.getElementById('uploadLabelText');
+
+                // Semua file yang dipilih
+                let allFiles = [];
+
+                function formatSize(bytes) {
+                    const kb = Math.round(bytes / 1024);
+                    return kb > 1024 ? (kb / 1024).toFixed(2) + ' MB' : kb + ' KB';
+                }
+
+                function getFileIconSvg() {
+                    return `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>`;
+                }
+
+                function renderFileCards() {
+                    fileListWrapper.innerHTML = '';
+
+                    if (allFiles.length === 0) {
+                        filePreviewContainer.classList.add('hidden');
+                        uploadLabelText.textContent = 'Upload File';
                         return;
                     }
 
-                    allFiles.push(f);
-                });
+                    filePreviewContainer.classList.remove('hidden');
+                    uploadLabelText.textContent = 'Upload';
 
-                if (warnings.length > 0) {
-                    showWarning(warnings.join(' '));
-                } else {
-                    hideWarning();
+                    allFiles.forEach((file, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'flex items-center gap-3 p-3 bg-teal-50 border border-teal-100 rounded-[10px] shadow-sm';
+
+                        // Thumbnail / icon
+                        const thumbWrapper = document.createElement('div');
+                        thumbWrapper.className = 'w-12 h-12 shrink-0 rounded overflow-hidden border flex items-center justify-center';
+
+                        if (file.type.startsWith('image/')) {
+                            thumbWrapper.className += ' bg-gray-200 border-gray-300';
+                            const img = document.createElement('img');
+                            img.alt = file.name;
+                            img.className = 'w-full h-full object-cover';
+                            const reader = new FileReader();
+                            reader.onload = e => { img.src = e.target.result; };
+                            reader.readAsDataURL(file);
+                            thumbWrapper.appendChild(img);
+                        } else {
+                            thumbWrapper.className += ' bg-teal-100 border-teal-200 text-teal-600';
+                            thumbWrapper.innerHTML = getFileIconSvg();
+                        }
+
+                        // Info teks
+                        const info = document.createElement('div');
+                        info.className = 'flex-1 min-w-0';
+                        info.innerHTML = `
+                            <p class="text-sm font-bold text-gray-800 truncate" title="${file.name}">${file.name}</p>
+                            <p class="text-xs text-gray-500">${formatSize(file.size)}</p>
+                        `;
+
+                        // Tombol hapus per file
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.title = 'Hapus File';
+                        removeBtn.className = 'shrink-0 p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition';
+                        removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>`;
+                        removeBtn.addEventListener('click', () => {
+                            allFiles.splice(index, 1);
+                            syncInput();
+                            renderFileCards();
+                        });
+
+                        card.appendChild(thumbWrapper);
+                        card.appendChild(info);
+                        card.appendChild(removeBtn);
+                        fileListWrapper.appendChild(card);
+                    });
+
+                    syncInput();
                 }
 
-                renderFileCards();
-            }
+                function syncInput() {
+                    const dt = new DataTransfer();
+                    allFiles.forEach(f => dt.items.add(f));
+                    documentInput.files = dt.files;
+                }
 
-            if (documentInput) {
-                // Pilih file
-                documentInput.addEventListener('change', function() {
-                    // Jangan reset array agar file baru bertambah (append) bukan menggantikan pilihan sebelumnya di UI
-                    addFiles(Array.from(this.files));
-                });
-            }
-        })();
-    </script>
-</body>
+                function showWarning(msg) {
+                    const box  = document.getElementById('uploadWarning');
+                    const text = document.getElementById('uploadWarningText');
+                    text.textContent = msg;
+                    box.classList.remove('hidden');
+                    // Auto-hide setelah 5 detik
+                    clearTimeout(box._timer);
+                    box._timer = setTimeout(() => box.classList.add('hidden'), 5000);
+                }
 
-</html>
+                function hideWarning() {
+                    document.getElementById('uploadWarning').classList.add('hidden');
+                }
+
+                const MAX_FILES   = 5;
+                const MAX_SIZE_MB = 5;
+                const MAX_BYTES   = MAX_SIZE_MB * 1024 * 1024;
+
+                function addFiles(newFiles) {
+                    const warnings = [];
+
+                    newFiles.forEach(f => {
+                        // Cek ukuran file
+                        if (f.size > MAX_BYTES) {
+                            warnings.push(`"${f.name}" melebihi batas ${MAX_SIZE_MB} MB (ukuran: ${formatSize(f.size)}).`);
+                            return; // lewati file ini
+                        }
+
+                        // Cek duplikat
+                        if (allFiles.some(e => e.name === f.name && e.size === f.size)) {
+                            return; // lewati duplikat
+                        }
+
+                        // Cek batas jumlah file
+                        if (allFiles.length >= MAX_FILES) {
+                            warnings.push(`Maksimal ${MAX_FILES} file. "${f.name}" tidak ditambahkan.`);
+                            return;
+                        }
+
+                        allFiles.push(f);
+                    });
+
+                    if (warnings.length > 0) {
+                        showWarning(warnings.join(' '));
+                    } else {
+                        hideWarning();
+                    }
+
+                    renderFileCards();
+                }
+
+                if (documentInput) {
+                    // Pilih file
+                    documentInput.addEventListener('change', function() {
+                        // Jangan reset array agar file baru bertambah (append) bukan menggantikan pilihan sebelumnya di UI
+                        addFiles(Array.from(this.files));
+                    });
+                }
+            })();
+        </script>
+    </x-slot>
+</x-talent.layout>

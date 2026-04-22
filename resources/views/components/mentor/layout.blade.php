@@ -195,11 +195,52 @@
                 padding: 16px !important;
             }
         }
-    </style>
+            /* ── Background Decoration ── */
+            .bg-decoration {
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                overflow: hidden;
+                pointer-events: none;
+                background-color: #f0f4f8;
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 100px, transparent 50%);
+            }
+            .bg-decoration::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
+                background-size: 32px 32px;
+                opacity: 0.3;
+            }
+            .bg-blob {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(120px);
+                opacity: 0.35;
+                animation: blob-float 35s infinite alternate ease-in-out;
+            }
+            @keyframes blob-float {
+                0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+                33% { transform: translate(60px, -80px) scale(1.2) rotate(120deg); }
+                66% { transform: translate(-40px, 40px) scale(0.8) rotate(240deg); }
+                100% { transform: translate(0, 0) scale(1) rotate(360deg); }
+            }
+        </style>
     {{ $styles ?? '' }}
 </head>
 
-<body class="bg-[#f8fafc] min-h-screen pt-[80px] flex flex-col">
+<body class="bg-[#f8fafc] min-h-screen pt-[80px] flex flex-col relative">
+
+    {{-- DECORATIVE BACKGROUND --}}
+    <div class="bg-decoration">
+        <div class="bg-blob w-[800px] h-[800px] bg-blue-200/30 -top-64 -left-64"></div>
+        <div class="bg-blob w-[600px] h-[600px] bg-indigo-200/30 top-1/2 -right-32" style="animation-delay: -5s;"></div>
+        <div class="bg-blob w-[900px] h-[900px] bg-sky-200/20 -bottom-48 left-1/4" style="animation-delay: -10s;"></div>
+        <div class="bg-blob w-[500px] h-[500px] bg-blue-100/40 top-1/4 left-1/2" style="animation-delay: -15s;"></div>
+    </div>
 
     <div class="navbar-outer">
         {{-- Logo + Title --}}
@@ -573,7 +614,7 @@
 
     {{-- MAIN CONTENT --}}
     <main id="main-content"
-        class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white mt-4 mx-4 lg:mx-6 lg:mt-6 rounded-xl shadow-sm border border-gray-100">
+        class="p-4 lg:p-8 min-h-[calc(100vh-80px)] bg-white/90 backdrop-blur-md mt-4 mx-4 lg:mx-6 lg:mt-6 rounded-2xl shadow-sm border border-white/20">
         {{ $slot }}
     </main>
 
@@ -622,9 +663,9 @@
     {{ $scripts ?? '' }}
 
     {{-- FOOTER --}}
-    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
-        <span class="text-white text-sm font-medium tracking-wide">
-            &copy; 2026 PT. Tiga Serangkai Inti Corpora
+    <footer class="mt-auto bg-gradient-to-br from-[#2e3746] to-[#1e293b] py-6 text-center w-full border-t border-white/5">
+        <span class="text-white/80 text-sm font-medium tracking-wide">
+            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
         </span>
     </footer>
 </body>

@@ -176,7 +176,7 @@
                                 {{ $m->nama }}
                             </a>
                         @empty
-                            <div class="block py-3.5 px-4 text-gray-400 italic">Belum ada mentee</div>
+                            <div class="block py-3.5 px-4 text-gray-400 italic">Belum ada Talent</div>
                         @endforelse
                     </div>
                 </div>
@@ -320,7 +320,11 @@
                             </div>
                         </td>
                     </tr>
-                        @endforelse
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-8 text-center text-gray-400 text-sm italic">Belum ada aktivitas Mentoring.</td>
+                    </tr>
+                    @endforelse
                     </tbody>
                 </table>
                 </div>
@@ -380,7 +384,11 @@
                             </div>
                         </td>
                     </tr>
-                        @endforelse
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-8 text-center text-gray-400 text-sm italic">Belum ada aktivitas Learning.</td>
+                    </tr>
+                    @endforelse
                     </tbody>
                 </table>
                 </div>

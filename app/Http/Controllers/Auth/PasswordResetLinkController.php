@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\ResetPasswordLinkNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
@@ -42,11 +45,28 @@ class PasswordResetLinkController extends Controller
                 ->withErrors(['login' => 'Username atau email tidak ditemukan.']);
         }
 
-        $status = Password::sendResetLink(['email' => $user->email]);
+        $plainToken = Str::random(64);
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('login'))
-                        ->withErrors(['login' => __($status)]);
+        DB::table('password_resets')
+            ->where('user_id', $user->id)
+            ->delete();
+
+        DB::table('password_resets')->insert([
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'token' => hash('sha256', $plainToken),
+            'expires_at' => now()->addMinutes(60),
+            'is_used' => false,
+            'created_at' => now(),
+        ]);
+
+        $resetUrl = URL::route('password.reset', [
+            'token' => $plainToken,
+            'email' => $user->email,
+        ]);
+
+        $user->notify(new ResetPasswordLinkNotification($resetUrl));
+
+        return back()->with('status', 'Link reset password telah dikirim ke email Anda.');
     }
 }

@@ -51,9 +51,9 @@ class MentorDashboardController extends Controller
                     }
 
                     // Hitung status IDP logbook HANYA UNTUK mentor ini, tetapi ikut sertakan Learning
-                    $idpActivities = IdpActivity::with('type')
-                        ->where('user_id_talent', $talent->id)
-                        ->where(function ($q) use ($user) {
+            $idpActivities = IdpActivity::with('type')
+                ->where('user_id_talent', $talent->id)
+                ->where(function ($q) use ($user) {
                     $q->where('verify_by', $user->id)
                         ->orWhereHas('type', function ($qType) {
                         $qType->where('type_name', 'Learning');
@@ -62,9 +62,12 @@ class MentorDashboardController extends Controller
                 }
             )
                 ->get();
-            $pending = $idpActivities->where('status', 'Pending')->count();
+            $pending = $idpActivities->filter(function ($activity) {
+                return $activity->status === 'Pending' || $activity->status === null || $activity->status === '';
+            })->count();
             $approved = $idpActivities->whereIn('status', ['Approve', 'Approved'])->count();
             $rejected = $idpActivities->whereIn('status', ['Reject', 'Rejected'])->count();
+            $hasHistory = ($approved + $rejected) > 0;
 
             // Hitung persentase untuk Exposure, Mentoring, Learning (asumsi target 6 untuk mockup)
             $countExposure = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
@@ -86,6 +89,8 @@ class MentorDashboardController extends Controller
             'approved' => $approved,
             'rejected' => $rejected,
             ],
+            'has_pending' => $pending > 0,
+            'has_history' => $hasHistory,
             'progress' => [
             'exposure' => ['count' => $countExposure, 'target' => $target, 'pct' => min(100, round(($countExposure / $target) * 100))],
             'mentoring' => ['count' => $countMentoring, 'target' => $target, 'pct' => min(100, round(($countMentoring / $target) * 100))],
@@ -100,7 +105,21 @@ class MentorDashboardController extends Controller
     public function logbook(Request $request)
     {
         $user = Auth::user();
-        $mentees = $user->mentees;
+        $mentees = $user->mentees->filter(function ($mentee) use ($user) {
+            return IdpActivity::where('user_id_talent', $mentee->id)
+                ->where(function ($q) use ($user) {
+                    $q->where('verify_by', $user->id)
+                        ->orWhereHas('type', function ($qType) {
+                            $qType->where('type_name', 'Learning');
+                        });
+                })
+                ->where(function ($q) {
+                    $q->where('status', 'Pending')
+                        ->orWhereNull('status')
+                        ->orWhere('status', '');
+                })
+                ->exists();
+        })->values();
 
         $talentId = $request->get('talent_id');
         $selectedTalent = null;
@@ -131,6 +150,11 @@ class MentorDashboardController extends Controller
                     }
                     );
                 })
+                    ->where(function ($q) {
+                        $q->where('status', 'Pending')
+                            ->orWhereNull('status')
+                            ->orWhere('status', '');
+                    })
                     ->orderBy('created_at', 'desc')
                     ->get();
 
@@ -206,7 +230,17 @@ class MentorDashboardController extends Controller
     public function riwayat(Request $request)
     {
         $user = Auth::user();
-        $mentees = $user->mentees;
+        $mentees = $user->mentees->filter(function ($mentee) use ($user) {
+            return IdpActivity::where('user_id_talent', $mentee->id)
+                ->where(function ($q) use ($user) {
+                    $q->where('verify_by', $user->id)
+                        ->orWhereHas('type', function ($qType) {
+                            $qType->where('type_name', 'Learning');
+                        });
+                })
+                ->whereIn('status', ['Approve', 'Approved', 'Reject', 'Rejected'])
+                ->exists();
+        })->values();
 
         $talentId = $request->get('talent_id');
         $selectedTalent = null;
@@ -234,7 +268,7 @@ class MentorDashboardController extends Controller
                                 $qType->where('type_name', 'Learning');
                             });
                     })
-                    ->whereIn('status', ['Approve', 'Approved'])
+                    ->whereIn('status', ['Approve', 'Approved', 'Reject', 'Rejected'])
                     ->orderBy('created_at', 'desc')
                     ->get();
 
@@ -333,7 +367,9 @@ class MentorDashboardController extends Controller
             $request->status == 'Approved' ? 'success' : 'warning'
         );
 
-        return back()->with('success', 'Status aktivitas berhasil diperbarui menjadi ' . $request->status . '.');
+        return redirect()
+            ->route('mentor.riwayat', ['talent_id' => $activity->user_id_talent])
+            ->with('success', 'Status aktivitas berhasil diperbarui menjadi ' . $request->status . ' dan dipindahkan ke riwayat.');
     }
 
     public function logbookItemDetail($id)

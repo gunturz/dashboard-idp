@@ -124,13 +124,20 @@ class AtasanDashboardController extends Controller
     public function assessmentPage($talentId)
     {
         $user = Auth::user();
-        $talent = User::where('atasan_id', $user->id)->findOrFail($talentId);
+        $talent = User::where('atasan_id', $user->id)
+            ->with(['promotion_plan.targetPosition', 'position'])
+            ->findOrFail($talentId);
 
         $competencies = Competence::with(['questions' => function ($q) {
             $q->orderBy('level');
         }])->get();
 
-        return view('atasan.competency_atasan', compact('user', 'talent', 'competencies'));
+        $positionId = optional($talent->promotion_plan)->target_position_id ?? $talent->position_id;
+        $targetLevels = $positionId
+            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            : collect();
+
+        return view('atasan.competency_atasan', compact('user', 'talent', 'competencies', 'targetLevels'));
     }
 
     public function storeAssessment(Request $request, $talentId)
@@ -231,7 +238,7 @@ class AtasanDashboardController extends Controller
             ->map(fn($t) => $t->promotion_plan->start_date->format('Y') . '/' . $t->promotion_plan->target_date->format('Y'))
             ->unique()->values();
 
-        $perusahaanOptions = $talents->map(fn($t) => $t->company?->nama_perusahaan ?? null)->filter()->unique()->values();
+        $perusahaanOptions = $talents->map(fn($t) => $t->company?->nama_company ?? null)->filter()->unique()->values();
         $departemenOptions = $talents->map(fn($t) => $t->department?->nama_department ?? null)->filter()->unique()->values();
 
         // Apply filters in PHP

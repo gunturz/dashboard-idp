@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use Illuminate\Auth\Events\Registered;
+use Laravel\Socialite\Facades\Socialite;
+use Throwable;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,6 +32,54 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        return $this->sendLoginResponse();
+    }
+
+    public function redirectToGoogle(): RedirectResponse
+    {
+        return $this->googleDriver()->redirect();
+    }
+
+    public function handleGoogleCallback(Request $request): RedirectResponse
+    {
+        try {
+            $googleUser = $this->googleDriver()->user();
+        } catch (Throwable $exception) {
+            Log::error('Google login callback failed.', [
+                'message' => $exception->getMessage(),
+                'type' => $exception::class,
+                'url' => $request->fullUrl(),
+            ]);
+
+            return redirect()->route('login')
+                ->withErrors(['google' => 'Login dengan Google gagal. Silakan coba lagi.']);
+        }
+
+        $email = strtolower((string) $googleUser->getEmail());
+
+        if ($email === '') {
+            return redirect()->route('login')
+                ->withErrors(['google' => 'Akun Google tidak memiliki email yang dapat digunakan untuk login.']);
+        }
+
+        $user = User::query()
+            ->whereRaw('LOWER(email) = ?', [$email])
+            ->first();
+
+        if (! $user) {
+            return redirect()->route('login')
+                ->withErrors(['google' => 'Email Google Anda belum terdaftar di sistem IDP.']);
+        }
+
+        Auth::login($user, true);
+        $request->session()->regenerate();
+
+        return $this->sendLoginResponse();
+    }
+
+    protected function sendLoginResponse(): RedirectResponse
+    {
 
 
         // Verifikasi intent kandidat (dari session storeKompetensi)
@@ -71,6 +123,11 @@ class AuthenticatedSessionController extends Controller
         }
 
         return redirect()->intended(route('dashboard'));
+    }
+
+    protected function googleDriver()
+    {
+        return Socialite::driver('google')->stateless();
     }
 
     /**

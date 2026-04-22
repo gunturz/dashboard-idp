@@ -157,6 +157,7 @@
         </style>
     </x-slot>
 
+
     <div class="w-full px-4 lg:px-10 py-8 flex-grow animate-reveal">
         {{-- Header Section (Dashboard Style) --}}
         <div class="page-header">

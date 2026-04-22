@@ -307,6 +307,64 @@
         }
 
         /* ── SELECT DROPDOWN ── */
+        .social-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin: 1rem 0 0.85rem;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .social-divider::before,
+        .social-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .btn-social-google {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.9rem;
+            padding: 0.95rem 1.25rem;
+            border-radius: 14px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.96);
+            color: #111827;
+            font-size: 1rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 12px 22px -10px rgba(15, 23, 42, 0.45);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+
+        .btn-social-google:hover {
+            transform: translateY(-2px);
+            background: #ffffff;
+            box-shadow: 0 16px 28px -12px rgba(15, 23, 42, 0.55);
+        }
+
+        .btn-social-google:active {
+            transform: translateY(0);
+        }
+
+        .btn-social-google svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .google-error-message {
+            margin-top: 0.75rem;
+        }
+
         .form-select {
             width: 100%;
             padding: 0.8rem 2.4rem 0.8rem 1rem;

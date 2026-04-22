@@ -134,19 +134,19 @@
         }
 
         .prem-stat-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: 12px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
 
         .prem-stat-icon svg {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
         }
 
         .si-teal {
@@ -180,11 +180,11 @@
         }
 
         .prem-stat-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 800;
             color: #1e293b;
-            line-height: 1.1;
-            margin-bottom: 4px;
+            line-height: 1;
+            margin-bottom: 2px;
         }
 
         .prem-stat-label {

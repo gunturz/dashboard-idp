@@ -54,13 +54,13 @@
     <div class="prem-stat-grid" style="grid-template-columns: repeat(5, 1fr);">
         @foreach ($summaryCards as $card)
             <div onclick="filterRole('{{ $card['name'] }}')" data-role="{{ $card['name'] }}"
-                class="prem-stat clickable prem-stat-{{ $card['color'] }} role-card transition-all" style="border-width: 2px;">
+                class="prem-stat clickable prem-stat-{{ $card['color'] }} role-card transition-all">
                 <div class="prem-stat-icon si-{{ $card['color'] }}">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         {!! $card['icon'] !!}
                     </svg>
                 </div>
-                <div class="prem-stat-value" style="font-size: 1.8rem;">{{ $card['count'] }}</div>
+                <div class="prem-stat-value animate-counter" data-target="{{ $card['count'] }}">0</div>
                 <div class="prem-stat-label">{{ $card['name'] }}</div>
             </div>
         @endforeach
@@ -533,6 +533,21 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // ── Animated Counter ──
+            const counters = document.querySelectorAll('.animate-counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target') || '0', 10);
+                const duration = 1000;
+                const start = performance.now();
+                const step = (now) => {
+                    const p = Math.min((now - start) / duration, 1);
+                    const ease = 1 - Math.pow(1 - p, 3);
+                    counter.innerText = Math.round(ease * target);
+                    if (p < 1) requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            });
+
             filterUsers();
         });
     </script>

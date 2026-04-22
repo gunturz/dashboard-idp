@@ -51,22 +51,42 @@
     @endphp
 
     {{-- Summary Stats Bar --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="summary-card card-teal">
-            <div class="summary-value">{{ $totalMentee }}</div>
-            <div class="summary-label">Total Talent</div>
+    <div class="prem-stat-grid grid-cols-2 lg:grid-cols-4 mb-8">
+        <div class="prem-stat prem-stat-teal">
+            <div class="prem-stat-icon si-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                </svg>
+            </div>
+            <div class="prem-stat-value">{{ $totalMentee }}</div>
+            <div class="prem-stat-label">Total Talent</div>
         </div>
-        <div class="summary-card card-yellow">
-            <div class="summary-value">{{ $totalPending }}</div>
-            <div class="summary-label">Pending Review</div>
+        <div class="prem-stat prem-stat-amber">
+            <div class="prem-stat-icon si-amber">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value">{{ $totalPending }}</div>
+            <div class="prem-stat-label">Pending Review</div>
         </div>
-        <div class="summary-card card-green">
-            <div class="summary-value">{{ $totalApproved }}</div>
-            <div class="summary-label">Approved</div>
+        <div class="prem-stat prem-stat-green">
+            <div class="prem-stat-icon si-green">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value">{{ $totalApproved }}</div>
+            <div class="prem-stat-label">Approved</div>
         </div>
-        <div class="summary-card card-red">
-            <div class="summary-value">{{ $totalRejected }}</div>
-            <div class="summary-label">Rejected</div>
+        <div class="prem-stat prem-stat-red">
+            <div class="prem-stat-icon si-red">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value">{{ $totalRejected }}</div>
+            <div class="prem-stat-label">Rejected</div>
         </div>
     </div>
 

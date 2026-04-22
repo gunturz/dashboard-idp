@@ -14,46 +14,107 @@
                 letter-spacing: 0.01em;
             }
 
-            .val-table-wrap {
-                border: 1px solid #e2e8f0;
+            .custom-scrollbar::-webkit-scrollbar { 
+                height: 8px; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-track { 
+                background: #f8fafc; 
+                border-radius: 10px; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb { 
+                background: #0d9488; 
                 border-radius: 10px;
+                border: 2px solid #f8fafc;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+                background: #0f766e; 
+            }
+
+            .prem-card {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
                 overflow: hidden;
-                margin-bottom: 2rem;
+                margin-bottom: 24px;
             }
 
-            .val-table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 0.875rem;
-            }
-
-            .val-table th {
-                background: #f8fafc;
-                color: #475569;
+            .btn-prem {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                font-size: 0.8rem;
                 font-weight: 700;
-                font-size: 0.78rem;
-                text-align: center;
-                padding: 14px 16px;
-                border-bottom: 1px solid #e2e8f0;
+                padding: 8px 16px;
+                border-radius: 10px;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                text-decoration: none;
                 white-space: nowrap;
             }
 
-            .val-table th:first-child,
-            .val-table td:first-child {
-                text-align: left;
-                padding-left: 20px;
+            .btn-prem:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             }
 
-            .val-table td {
+            .btn-dark {
+                background: #475569;
+                color: #fff;
+            }
+
+            .btn-dark:hover {
+                background: #334155;
+                color: #fff;
+            }
+
+            .btn-ghost {
+                background: #f1f5f9;
+                color: #334155;
+                border: 1px solid #e2e8f0;
+            }
+
+            .btn-ghost:hover {
+                background: #e2e8f0;
+                color: #1e293b;
+            }
+
+            .highlight-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.85rem;
+            }
+
+            .highlight-table th {
+                background: #f8fafc;
+                color: #475569;
+                font-weight: 700;
+                text-align: center;
+                padding: 14px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+                white-space: nowrap;
+                font-size: 0.78rem;
+            }
+
+            .highlight-table td {
                 padding: 14px 16px;
                 color: #475569;
-                border-top: 1px solid #f1f5f9;
+                border-top: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
                 text-align: center;
                 vertical-align: middle;
             }
 
-            .val-table tr:hover td {
-                background: #fafbfc;
+            .highlight-table th:last-child,
+            .highlight-table td:last-child {
+                border-right: none;
+            }
+
+            .highlight-table tbody tr:hover td {
+                background: #f0fdfa;
             }
 
             .status-dot {
@@ -141,18 +202,6 @@
     </x-slot>
 
     <div class="w-full">
-        {{-- ── Page Header ── --}}
-        <div class="page-header animate-title">
-            <div class="page-header-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div>
-            <div>
-                <h1 class="page-header-title">LogBook Talent</h1>
-                <p class="page-header-sub">Validasi seluruh aktivitas pengembangan yang telah dilaksanakan oleh talent</p>
-            </div>
-        </div>
         {{-- Talent Selector --}}
         <div class="mb-6 flex items-center gap-6 talent-selector-row" style="position: relative; z-index: 50;">
             <label class="text-[15px] font-bold text-gray-700 whitespace-nowrap">Talent</label>
@@ -200,10 +249,10 @@
         </div>
 
         {{-- Tab Navigation --}}
-        <div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
-            <button id="tab-exposure" onclick="switchTab('exposure')" class="btn-prem btn-dark tab-btn active">Exposure</button>
-            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="btn-prem btn-ghost tab-btn">Mentoring</button>
-            <button id="tab-learning" onclick="switchTab('learning')" class="btn-prem btn-ghost tab-btn">Learning</button>
+        <div class="inline-flex items-center gap-1.5 mb-8 bg-slate-100/80 p-1.5 rounded-full border border-slate-200/60 overflow-x-auto custom-scrollbar w-fit">
+            <button id="tab-exposure" onclick="switchTab('exposure')" class="btn-prem btn-dark tab-btn active px-6 rounded-full">Exposure</button>
+            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="btn-prem btn-ghost tab-btn px-6 rounded-full border-transparent bg-transparent hover:bg-slate-200/80">Mentoring</button>
+            <button id="tab-learning" onclick="switchTab('learning')" class="btn-prem btn-ghost tab-btn px-6 rounded-full border-transparent bg-transparent hover:bg-slate-200/80">Learning</button>
         </div>
 
         {{-- ═══ EXPOSURE ═══ --}}
@@ -265,6 +314,7 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
         </div>
         </div>
 
@@ -330,7 +380,6 @@
                 </div>
             </div>
         </div>
-        </div>
 
         {{-- ═══ LEARNING ═══ --}}
         <div id="panel-learning" class="hidden">
@@ -393,7 +442,6 @@
                 </table>
                 </div>
             </div>
-        </div>
         </div>
 
         @else
@@ -515,14 +563,14 @@
                     if (panel) panel.classList.add('hidden');
                     if (btn) {
                         btn.classList.remove('btn-dark', 'active');
-                        btn.classList.add('btn-ghost');
+                        btn.classList.add('btn-ghost', 'border-transparent', 'bg-transparent', 'hover:bg-slate-200/80');
                     }
                 });
                 const activePanel = document.getElementById('panel-' + tab);
                 const activeBtn = document.getElementById('tab-' + tab);
                 if (activePanel) activePanel.classList.remove('hidden');
                 if (activeBtn) {
-                    activeBtn.classList.remove('btn-ghost');
+                    activeBtn.classList.remove('btn-ghost', 'border-transparent', 'bg-transparent', 'hover:bg-slate-200/80');
                     activeBtn.classList.add('btn-dark', 'active');
                 }
                 // Update URL hash without jumping

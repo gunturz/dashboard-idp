@@ -12,12 +12,13 @@
                 justify-content: center;
                 min-height: 130px;
                 border: 2px solid transparent;
+            }
             .summary-value { font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
             .summary-label { font-size: 0.8rem; color: #64748b; font-weight: 500; }
             .card-teal { border-color: #0d9488; }
             .card-teal .summary-value { color: #0d9488; }
-            .card-yellow { border-color: #eab308; }
-            .card-yellow .summary-value { color: #eab308; }
+            .card-yellow { border-color: #facc15; }
+            .card-yellow .summary-value { color: #facc15; }
             .card-green { border-color: #22c55e; }
             .card-green .summary-value { color: #22c55e; }
             .card-red { border-color: #ef4444; }
@@ -53,19 +54,19 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div class="summary-card card-teal">
             <div class="summary-value">{{ $totalMentee }}</div>
-            <div class="summary-label">Total Mentee</div>
+            <div class="summary-label">Total Talent</div>
         </div>
         <div class="summary-card card-yellow">
             <div class="summary-value">{{ $totalPending }}</div>
-            <div class="summary-label">Feedback Pending</div>
+            <div class="summary-label">Pending Review</div>
         </div>
         <div class="summary-card card-green">
             <div class="summary-value">{{ $totalApproved }}</div>
-            <div class="summary-label">Total Approved</div>
+            <div class="summary-label">Approved</div>
         </div>
         <div class="summary-card card-red">
             <div class="summary-value">{{ $totalRejected }}</div>
-            <div class="summary-label">Total Rejected</div>
+            <div class="summary-label">Rejected</div>
         </div>
     </div>
 
@@ -189,27 +190,13 @@
                             </td>
                             {{-- Aksi --}}
                             <td class="px-5 py-4 text-center">
-                                @if($mentee['has_pending'])
-                                    <a href="{{ route('mentor.logbook', ['talent_id' => $mentee['id']]) }}"
-                                        class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        Validasi
-                                    </a>
-                                @elseif($mentee['has_history'])
-                                    <a href="{{ route('mentor.riwayat', ['talent_id' => $mentee['id']]) }}"
-                                        class="inline-flex items-center gap-1.5 bg-[#0f766e] hover:bg-[#115e59] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        Lihat Riwayat
-                                    </a>
-                                @else
-                                    <span class="inline-flex items-center gap-1.5 bg-gray-100 text-gray-400 text-xs font-semibold px-4 py-2 rounded-lg cursor-not-allowed">
-                                        Belum Ada Data
-                                    </span>
-                                @endif
+                                <a href="{{ route('mentor.logbook', ['talent_id' => $mentee['id']]) }}"
+                                    class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Validasi
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -217,7 +204,7 @@
                 </table>
             </div>
             @else
-            <div class="py-10 text-center text-gray-400 text-sm font-medium">Belum ada mentee yang terdaftar.</div>
+            <div class="py-10 text-center text-gray-400 text-sm font-medium">Belum ada talent yang terdaftar.</div>
             @endif
         </div>
     </div>

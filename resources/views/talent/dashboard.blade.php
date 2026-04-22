@@ -1,34 +1,91 @@
-<x-talent.layout title="Dashboard Talent – Individual Development Plan" :user="$user" :notifications="$notifications" :mobileCollapsible="true">
+<x-talent.layout title="Dashboard Talent – Individual Development Plan" :user="$user" :notifications="$notifications"
+    :mobileCollapsible="true">
     <x-slot name="styles">
         <style>
             /* ── Donut Chart ── */
-            .donut-ring { transform: rotate(-90deg); transform-origin: 50% 50%; }
+            .donut-ring {
+                transform: rotate(-90deg);
+                transform-origin: 50% 50%;
+            }
+
             /* ── Competency bar ── */
-            @keyframes barReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0% 0 0); } }
-            .bar-fill { animation: barReveal 0.9s cubic-bezier(0.4, 0, 0.2, 1) both; animation-delay: 0.35s; }
+            @keyframes barReveal {
+                from {
+                    clip-path: inset(0 100% 0 0);
+                }
+
+                to {
+                    clip-path: inset(0 0% 0 0);
+                }
+            }
+
+            .bar-fill {
+                animation: barReveal 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+                animation-delay: 0.35s;
+            }
+
             /* ── Dropdown custom ── */
-            .score-select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%234a5a6a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; background-size: 14px; padding: 0.4rem 2rem 0.4rem 0.75rem; min-width: 64px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.875rem; font-weight: 600; color: #2e3746; background-color: #f8fafc; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
-            .score-select:focus { outline: none; border-color: #2e3746; box-shadow: 0 0 0 3px rgba(46, 55, 70, 0.12); }
-            .score-select:hover { border-color: #94a3b8; background-color: #fff; }
-            /* ── Upload area ── */
-            .upload-area { border: 2px dashed #cbd5e1; transition: border-color 0.2s, background 0.2s; }
-            .upload-area:hover, .upload-area.drag-over { border-color: #22c55e; background: #f0fdf4; }
+            .score-select {
+                -webkit-appearance: none;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%234a5a6a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 8px center;
+                background-size: 14px;
+                padding: 0.4rem 2rem 0.4rem 0.75rem;
+                min-width: 64px;
+                border: 1.5px solid #cbd5e1;
+                border-radius: 10px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: #2e3746;
+                background-color: #f8fafc;
+                cursor: pointer;
+                transition: border-color 0.2s, box-shadow 0.2s;
+            }
+
+            .score-select:focus {
+                outline: none;
+                border-color: #2e3746;
+                box-shadow: 0 0 0 3px rgba(46, 55, 70, 0.12);
+            }
+
+            .score-select:hover {
+                border-color: #94a3b8;
+                background-color: #fff;
+            }
+
+            .upload-area {
+                border: 2px dashed #cbd5e1;
+                transition: border-color 0.2s, background 0.2s;
+            }
+
+            .upload-area:hover,
+            .upload-area.drag-over {
+                border-color: #22c55e;
+                background: #f0fdf4;
+            }
         </style>
     </x-slot>
 
-    <div class="w-full px-4 lg:px-6 pt-5 pb-6 space-y-6 flex-grow">
+    <div class="w-full px-4 lg:px-6 pt-5 pb-6 space-y-8 flex-grow">
 
+        {{-- Main Dashboard - Titles updated below --}}
 
         {{-- ══════════════════════════════ CHART ROW ══════════════════════════════ --}}
-        <div class="space-y-1" id="Kompetensi">
-            <div class="flex items-center gap-2.5 px-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd" />
-                </svg>
-                <h2 class="text-xl font-bold text-[#2e3746] animate-title">Kompetensi</h2>
+        <div class="space-y-4" id="Kompetensi">
+            <div class="page-header animate-title mb-2 mt-2">
+                <div class="page-header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="page-header-title">Kompetensi</div>
+                    <div class="page-header-sub">Hasil penilaian kompetensi (GAP Score)</div>
+                </div>
             </div>
 
             {{-- ── Kompetensi Bar Chart (full width) ── --}}
@@ -53,50 +110,66 @@
                     </div>
                 @elseif(!$latestAssessment)
                     <div class="flex flex-col items-center justify-center py-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         <p class="text-sm font-semibold text-gray-500">Anda belum mengisi assessment kompetensi.</p>
-                        <a href="{{ route('talent.competency') }}" class="mt-3 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Isi Kompetensi</a>
+                        <a href="{{ route('talent.competency') }}"
+                            class="mt-3 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Isi
+                            Kompetensi</a>
                     </div>
                 @elseif(!$atasanHasScored)
                     <div class="flex flex-col items-center justify-center py-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-orange-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-orange-400 mb-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                         <p class="text-base font-bold text-gray-700">Atasan Belum Memberikan Nilai</p>
-                        <p class="text-sm text-gray-500 mt-1 text-center max-w-sm">Grafik kompetensi akan muncul setelah atasan Anda memberikan penilaian dan approval.</p>
+                        <p class="text-sm text-gray-500 mt-1 text-center max-w-sm">Grafik kompetensi akan muncul setelah
+                            atasan Anda memberikan penilaian dan approval.</p>
                     </div>
                 @else
                     @php $maxScore = 5; @endphp
                     <div class="space-y-5">
                         <!-- Header for GAP score column so user knows what the number means -->
                         <div class="flex justify-end hidden md:flex" style="margin-bottom: -15px;">
-                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-[8px]">GAP</span>
+                            <span
+                                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-[8px]">GAP</span>
                         </div>
                         @foreach ($kompetensiData as $label => $data)
                             @php
                                 $scoreVal = is_array($data) ? $data['score'] : $data;
-                                $gapVal   = is_array($data) ? $data['gap'] : 0;
+                                $gapVal = is_array($data) ? $data['gap'] : 0;
                                 $targetScore = $scoreVal - $gapVal;
                                 $pct = ($scoreVal / $maxScore) * 100;
                                 $targetPct = ($targetScore / $maxScore) * 100;
 
                                 // Warna indikator GAP (opsional agar menarik)
                                 $textColor = '#64748b'; // default 0
-                                if ($gapVal < -1.5) $textColor = '#ef4444';
-                                elseif ($gapVal < 0) $textColor = '#f97316';
+                                if ($gapVal < -1.5) {
+                                    $textColor = '#ef4444';
+                                } elseif ($gapVal < 0) {
+                                    $textColor = '#f97316';
+                                }
                             @endphp
                             <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2 md:mb-0">
-                                <span class="text-sm text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate" title="{{ $label }}">{{ $label }}</span>
+                                <span
+                                    class="text-sm text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate"
+                                    title="{{ $label }}">{{ $label }}</span>
                                 <div class="flex items-center gap-3 flex-1 w-full">
                                     <div class="flex-1 bg-gray-100 rounded-full h-5 relative overflow-hidden">
                                         <!-- Target score background -->
-                                        <div class="absolute top-0 left-0 h-full rounded-full bg-gray-300" style="width:{{ $targetPct }}%; z-index: 0;"></div>
+                                        <div class="absolute top-0 left-0 h-full rounded-full bg-gray-300"
+                                            style="width:{{ $targetPct }}%; z-index: 0;"></div>
                                         <!-- Actual score bar -->
-                                        <div class="absolute top-0 left-0 bar-fill h-full rounded-full" style="width:{{ $pct }}%; background:#0d9488; z-index: 10;"></div>
+                                        <div class="absolute top-0 left-0 bar-fill h-full rounded-full"
+                                            style="width:{{ $pct }}%; background:#0d9488; z-index: 10;"></div>
                                     </div>
-                                    <span class="text-sm font-black w-10 text-right flex-shrink-0" style="color:{{ $textColor }};">
+                                    <span class="text-sm font-black w-10 text-right flex-shrink-0"
+                                        style="color:{{ $textColor }};">
                                         {{ number_format($gapVal, 1) }}
                                     </span>
                                 </div>
@@ -122,20 +195,24 @@
         </div>
 
         {{-- ══════════════════════════════ IDP MONITORING CARDS ══════════════════════════════ --}}
-        <div class="space-y-1" id="IDP Monitoring">
-            <div class="flex items-center gap-2.5 px-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 24 24"
-                    fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                        clip-rule="evenodd" />
-                    <path
-                        d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                </svg>
-                <h2 class="text-xl font-bold text-[#2e3746] animate-title">IDP Monitoring</h2>
+        <div class="space-y-4" id="IDP Monitoring">
+            <div class="page-header animate-title mb-2 mt-6">
+                <div class="page-header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                            clip-rule="evenodd" />
+                        <path
+                            d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="page-header-title">IDP Monitoring</div>
+                    <div class="page-header-sub">Perkembangan program Individual Development Plan (IDP)</div>
+                </div>
             </div>
 
-            <div class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
+            <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
                 {{-- Smooth Progress Circle Charts --}}
                 @php
@@ -146,6 +223,8 @@
                             'from' => '#334155',
                             'to' => '#334155',
                             'id' => 'grad-exposure',
+                            'btn_color' =>
+                                'bg-slate-700 hover:bg-slate-800 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-[0_6px_16px_-2px_rgba(51,65,85,0.5)]',
                         ],
                         'Mentoring' => [
                             'done' => min($mentoringCount ?? 0, 6),
@@ -153,6 +232,8 @@
                             'from' => '#f59e0b',
                             'to' => '#f59e0b',
                             'id' => 'grad-mentoring',
+                            'btn_color' =>
+                                'bg-amber-500 hover:bg-amber-600 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_16px_-2px_rgba(245,158,11,0.5)]',
                         ],
                         'Learning' => [
                             'done' => min($learningCount ?? 0, 6),
@@ -160,8 +241,9 @@
                             'from' => '#0d9488',
                             'to' => '#0d9488',
                             'id' => 'grad-learning',
+                            'btn_color' =>
+                                'bg-teal-600 hover:bg-teal-700 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-[0_6px_16px_-2px_rgba(13,148,136,0.5)]',
                         ],
-                        
                     ];
                     $r = 38;
                     $circ = 2 * M_PI * $r; // ≈ 238.76
@@ -199,9 +281,16 @@
                                         style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <div class="bg-white border border-gray-200 px-5 py-1.5 rounded-[10px] shadow-sm">
-                                <span class="text-sm font-bold text-gray-800">{{ $label }}</span>
-                            </div>
+                            <a href="{{ route('talent.logbook.detail') }}#{{ strtolower($label) }}"
+                                class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5">
+                                <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -301,40 +390,35 @@
                     </div>
 
                 </div>
-
-                {{-- Lihat Logbook Button --}}
-                <div class="mt-5 pt-5 border-t border-gray-200">
-                    <a href="{{ route('talent.logbook.detail') }}"
-                        class="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-semibold py-3 px-6 rounded-[10px] text-base transition-all active:scale-95 shadow-[0_8px_20px_-4px_rgba(13,148,136,0.4)] hover:shadow-[0_12px_25px_-4px_rgba(13,148,136,0.5)]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                        Lihat Logbook
-                    </a>
-                </div>
             </div>
         </div> {{-- /wrapper IDP Monitoring cards --}}
 
         {{-- ══════════════════════════════ PROJECT IMPROVEMENT ══════════════════════════════ --}}
-        <div class="space-y-1">
-            <div class="flex items-center gap-2.5 px-2" id="Project Improvement">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                </svg>
-                <h2 class="text-xl font-bold text-[#2e3746] animate-title">Project Improvement</h2>
+        <div class="space-y-4" id="Project Improvement">
+            <div class="page-header animate-title mb-2 mt-6">
+                <div class="page-header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="page-header-title">Project Improvement</div>
+                    <div class="page-header-sub">Daftar & submission project improvement Anda</div>
+                </div>
             </div>
 
-            <div class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up fade-up-4">
+            <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
-                @if(session('success_project'))
-                    <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm" role="alert">
+                @if (session('success_project'))
+                    <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm"
+                        role="alert">
                         <strong class="font-bold">Berhasil!</strong>
                         <span class="block sm:inline">{{ session('success_project') }}</span>
                     </div>
                 @endif
-                @if($errors->any())
-                    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-[10px] relative text-sm" role="alert">
+                @if ($errors->any())
+                    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-[10px] relative text-sm"
+                        role="alert">
                         <strong class="font-bold">Oops! Terjadi kesalahan:</strong>
                         <ul class="list-disc list-inside mt-1">
                             @foreach ($errors->all() as $error)
@@ -344,7 +428,8 @@
                     </div>
                 @endif
 
-                <form action="{{ route('talent.project.store') }}" method="POST" enctype="multipart/form-data" id="upload-form">
+                <form action="{{ route('talent.project.store') }}" method="POST" enctype="multipart/form-data"
+                    id="upload-form">
                     @csrf
 
                     {{-- Judul Project Input --}}
@@ -406,41 +491,55 @@
                             </thead>
                             <tbody>
                                 @forelse($projects as $project)
-                                <tr class="bg-white border-b border-gray-100">
-                                    <td class="px-4 py-3 text-gray-700 border-r border-gray-200 font-medium">
-                                        {{ $project->title }}
-                                        <div class="text-xs text-gray-400 font-normal mt-0.5">{{ $project->created_at->format('d M Y') }}</div>
-                                    </td>
-                                    <td class="text-center px-4 py-3">
-                                        @if($project->status === 'Pending')
-                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span> Pending
-                                            </span>
-                                        @elseif($project->status === 'Verified')
-                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span> Verified
-                                            </span>
-                                        @elseif($project->status === 'On Progress')
-                                            <span class="inline-flex items-center gap-1.5 text-blue-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span> On Progress
-                                            </span>
-                                        @elseif($project->status === 'Rejected')
-                                            <span class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span> Rejected
-                                            </span>
-                                        @else
-                                            <span class="inline-flex items-center gap-1.5 text-gray-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-gray-400 inline-block"></span> {{ $project->status }}
-                                            </span>
-                                        @endif
-                                    </td>
-                                </tr>
+                                    <tr class="bg-white border-b border-gray-100">
+                                        <td class="px-4 py-3 text-gray-700 border-r border-gray-200 font-medium">
+                                            {{ $project->title }}
+                                            <div class="text-xs text-gray-400 font-normal mt-0.5">
+                                                {{ $project->created_at->format('d M Y') }}</div>
+                                        </td>
+                                        <td class="text-center px-4 py-3">
+                                            @if ($project->status === 'Pending')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
+                                                    <span
+                                                        class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
+                                                    Pending
+                                                </span>
+                                            @elseif($project->status === 'Verified')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
+                                                    <span
+                                                        class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+                                                    Verified
+                                                </span>
+                                            @elseif($project->status === 'On Progress')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-blue-500 text-xs font-semibold">
+                                                    <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>
+                                                    On Progress
+                                                </span>
+                                            @elseif($project->status === 'Rejected')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
+                                                    <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>
+                                                    Rejected
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-gray-500 text-xs font-semibold">
+                                                    <span class="w-2 h-2 rounded-full bg-gray-400 inline-block"></span>
+                                                    {{ $project->status }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
                                 @empty
-                                <tr class="bg-white">
-                                    <td class="px-4 py-5 text-gray-400 border-r border-gray-200 text-center text-xs" colspan="2">
-                                        Belum ada project yang disubmit.
-                                    </td>
-                                </tr>
+                                    <tr class="bg-white">
+                                        <td class="px-4 py-5 text-gray-400 border-r border-gray-200 text-center text-xs"
+                                            colspan="2">
+                                            Belum ada project yang disubmit.
+                                        </td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -450,28 +549,28 @@
         </div> {{-- /wrapper Project Improvement --}}
 
         {{-- ══════════════════════════════ RIWAYAT ══════════════════════════════ --}}
-        <div class="space-y-1">
-            <div class="flex items-center gap-2.5 px-2" id="Riwayat">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path
-                        d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-                </svg>
-                <h2 class="text-xl font-bold text-[#2e3746] animate-title">Riwayat</h2>
+        <div class="space-y-4" id="Riwayat">
+            <div class="page-header animate-title mb-2 mt-6">
+                <div class="page-header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                        <path fill-rule="evenodd"
+                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="page-header-title">Riwayat Program IDP</div>
+                    <div class="page-header-sub">Lihat ringkasan perjalanan dan pencapaian Anda</div>
+                </div>
             </div>
 
             <div
-                class="bg-gray-50 rounded-[10px] shadow-sm p-6 border border-gray-200 fade-up flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                class="prem-card p-6 md:p-8 fade-up flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div class="md:pr-6 pr-0 w-full">
                     <div class="flex items-center gap-2 mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2e3746]" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <h3 class="text-base font-bold text-[#2e3746] animate-title">Riwayat Program IDP</h3>
                     </div>
-                    <p class="text-sm text-gray-500 font-medium">Lihat ringkasan perjalanan program IDP Anda — mulai dari kompetensi, aktivitas logbook, hingga pencapaian yang telah dikompletasi.</p>
+                    <p class="text-sm text-gray-500 font-medium">Lihat ringkasan perjalanan program IDP Anda mulai dari
+                        kompetensi, aktivitas logbook, hingga pencapaian yang telah dikompletasi.</p>
                 </div>
                 <a href="{{ route('talent.riwayat') }}"
                     class="w-full md:w-auto text-center bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
@@ -480,7 +579,7 @@
             </div>
         </div>
     </div> {{-- /wrapper Riwayat --}}
-    
+
     </div> <!-- Tutup w-full px-6 flex-grow wrapper -->
 
     <x-slot name="scripts">

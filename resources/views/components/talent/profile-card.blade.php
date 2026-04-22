@@ -25,31 +25,34 @@
 
             <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Perusahaan</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Perusahaan</span>
                     <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Departemen</span>
                     <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Sekarang</span>
-                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Posisi yang Dituju</span>
+                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
 
             <div class="px-10 w-1/3 flex flex-col pt-3 space-y-3 text-sm">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Mentor</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Mentor</span>
                     <span class="text-white">{{ collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-') }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Atasan</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Atasan</span>
                     <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Dituju</span>
-                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Periode</span>
+                    <span class="text-white">
+                        {{ optional($user->promotion_plan)->start_date ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-' }} - 
+                        {{ optional($user->promotion_plan)->target_date ? \Carbon\Carbon::parse($user->promotion_plan->target_date)->format('d/m/Y') : '-' }}
+                    </span>
                 </div>
             </div>
 
@@ -84,16 +87,16 @@
             {{-- Group 1: Info Perusahaan --}}
             <div class="px-4 pb-3 pt-2 space-y-2.5 text-sm border-t border-white/10">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Perusahaan</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Perusahaan</span>
                     <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Departemen</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Departemen</span>
                     <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Posisi Sekarang</span>
-                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Jabatan yang Dituju</span>
+                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
             {{-- Group 2: Mentor & Atasan --}}
@@ -107,8 +110,11 @@
                     <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Posisi Dituju</span>
-                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Periode</span>
+                    <span class="text-white">
+                        {{ optional($user->promotion_plan)->start_date ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-' }} - 
+                        {{ optional($user->promotion_plan)->target_date ? \Carbon\Carbon::parse($user->promotion_plan->target_date)->format('d/m/Y') : '-' }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -139,31 +145,34 @@
 
             <div class="px-6 md:px-10 w-full md:w-1/3 flex flex-col py-4 md:pt-3 space-y-3 text-sm">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Perusahaan</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Perusahaan</span>
                     <span class="text-white">{{ optional($user->company)->nama_company ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Departemen</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Departemen</span>
                     <span class="text-white">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Sekarang</span>
-                    <span class="text-white">{{ optional($user->position)->position_name ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-36 flex-shrink-0">Jabatan yang Dituju</span>
+                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
 
             <div class="px-6 md:px-10 w-full md:w-1/3 flex flex-col py-4 md:pt-3 space-y-3 text-sm">
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Mentor</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Mentor</span>
                     <span class="text-white">{{ collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-') }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Atasan</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Atasan</span>
                     <span class="text-white">{{ optional($user->atasan)->nama ?? '-' }}</span>
                 </div>
                 <div class="flex gap-2">
-                    <span class="font-semibold text-white/70 w-32 flex-shrink-0">Posisi Dituju</span>
-                    <span class="text-white">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                    <span class="font-semibold text-white/70 w-28 flex-shrink-0">Periode</span>
+                    <span class="text-white">
+                        {{ optional($user->promotion_plan)->start_date ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-' }} - 
+                        {{ optional($user->promotion_plan)->target_date ? \Carbon\Carbon::parse($user->promotion_plan->target_date)->format('d/m/Y') : '-' }}
+                    </span>
                 </div>
             </div>
 

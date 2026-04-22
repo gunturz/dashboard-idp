@@ -134,81 +134,79 @@
         </style>
     </x-slot>
 
-    <div class="riwayat-wrapper">
-
-        {{-- ── Page Title ─────────────────────────────── --}}
-        <div class="page-title">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+    {{-- ── Page Header ── --}}
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h1>Riwayat Penilaian</h1>
         </div>
+        <div>
+            <h1 class="page-header-title">Riwayat Penilaian</h1>
+            <p class="page-header-sub">Arsip seluruh penilaian talent yang telah Anda selesaikan</p>
+        </div>
+    </div>
 
-        {{-- ── Filter Bar ──────────────────────────────── --}}
-        <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
-
-            {{-- Cari Nama --}}
-            <div class="relative w-full sm:w-[35%]">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    <div class="prem-card">
+        <div class="prem-card-header">
+            <div class="prem-card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836c-.149.598.019 1.225.44 1.645a4.5 4.5 0 1 1-6.136-6.136 1.125 1.125 0 1 1 1.591 1.591 2.25 2.25 0 1 0 2.688 2.688l.708-2.836c.149-.598-.019-1.225-.44-1.645a4.5 4.5 0 1 1 6.136 6.136 1.125 1.125 0 1 1-1.591-1.591 2.25 2.25 0 1 0-2.688-2.688l-.709 2.836Z" clip-rule="evenodd" />
                 </svg>
-                <input
-                    type="text"
-                    placeholder="Cari Nama"
-                    autocomplete="off"
-                    id="live-search-input"
-                    class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                    oninput="filterRiwayat()"
-                >
+                Filter Riwayat
             </div>
-
-            {{-- Semua Periode --}}
-            <div class="relative w-full sm:w-[21%]">
-                <select id="filter-periode" class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" onchange="filterRiwayat()">
-                    <option value="">Semua Periode</option>
-                    @foreach($periodeOptions as $opt)
-                        <option value="{{ $opt }}">{{ $opt }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            {{-- Semua Perusahaan --}}
-            <div class="relative w-full sm:w-[21%]">
-                <select id="filter-perusahaan" class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" onchange="filterRiwayat()">
-                    <option value="">Semua Perusahaan</option>
-                    @foreach($perusahaanOptions as $opt)
-                        <option value="{{ $opt }}">{{ $opt }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            {{-- Semua Departemen --}}
-            <div class="relative w-full sm:w-[21%]">
-                <select id="filter-departemen" class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" onchange="filterRiwayat()">
-                    <option value="">Semua Departemen</option>
-                    @foreach($departemenOptions as $opt)
-                        <option value="{{ $opt }}">{{ $opt }}</option>
-                    @endforeach
-                </select>
-            </div>
-
         </div>
 
-        {{-- ── Table ───────────────────────────────────── --}}
-        <div class="table-wrapper">
-            <table class="riwayat-table">
-                <thead>
-                    <tr>
-                        <th>Talent</th>
-                        <th>Perusahaan</th>
-                        <th>Departemen</th>
-                        <th>Start Date</th>
-                        <th>Due Date</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+        <div class="p-6">
+            <div class="flex flex-col md:flex-row gap-4 mb-8">
+                {{-- Cari Nama --}}
+                <div class="relative flex-grow group">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+                        class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#14b8a6] transition-colors pointer-events-none">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                        class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all shadow-sm"
+                        oninput="filterRiwayat()">
+                </div>
+
+                {{-- Filters --}}
+                <div class="flex flex-wrap gap-4">
+                    <select id="filter-periode" class="min-w-[160px] border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white transition-all shadow-sm" onchange="filterRiwayat()">
+                        <option value="">Semua Periode</option>
+                        @foreach($periodeOptions as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+
+                    <select id="filter-perusahaan" class="min-w-[180px] border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white transition-all shadow-sm" onchange="filterRiwayat()">
+                        <option value="">Semua Perusahaan</option>
+                        @foreach($perusahaanOptions as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+
+                    <select id="filter-departemen" class="min-w-[180px] border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white transition-all shadow-sm" onchange="filterRiwayat()">
+                        <option value="">Semua Departemen</option>
+                        @foreach($departemenOptions as $opt)
+                            <option value="{{ $opt }}">{{ $opt }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="highlight-table">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 200px;">Talent</th>
+                            <th>Perusahaan</th>
+                            <th>Departemen</th>
+                            <th>Start Date</th>
+                            <th>Due Date</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
                 <tbody id="riwayat-tbody">
                     @forelse($talents as $talent)
                         @php
@@ -253,8 +251,8 @@
                             </td>
 
                             {{-- Aksi --}}
-                            <td>
-                                <a href="{{ route('atasan.monitoring.detail', $talent->id) }}" class="btn-detail">
+                            <td class="text-center">
+                                <a href="{{ route('atasan.monitoring.detail', $talent->id) }}" class="btn-prem btn-teal px-4 py-1.5 rounded-lg shadow-sm">
                                     Lihat Detail
                                 </a>
                             </td>
@@ -262,11 +260,11 @@
                     @empty
                         <tr id="empty-row">
                             <td colspan="6">
-                                <div class="empty-state">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div class="py-12 flex flex-col items-center justify-center text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
-                                    <p>Tidak ada data talent yang ditemukan.</p>
+                                    <p class="font-medium">Tidak ada data talent yang ditemukan.</p>
                                 </div>
                             </td>
                         </tr>
@@ -275,19 +273,19 @@
                     {{-- Hidden empty row for JS filtering --}}
                     <tr id="js-empty-row" class="hidden">
                         <td colspan="6">
-                            <div class="empty-state">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="py-12 flex flex-col items-center justify-center text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                <p>Tidak ada data yang sesuai dengan filter.</p>
+                                <p class="font-medium">Tidak ada data yang sesuai dengan filter.</p>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
     </div>
+</div>
 
     <x-slot name="scripts">
         <script>

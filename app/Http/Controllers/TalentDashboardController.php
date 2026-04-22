@@ -396,71 +396,71 @@ class TalentDashboardController extends Controller
         }
     }
 
-    public function riwayat()
-    {
-        $user = Auth::user();
+    // public function riwayat()
+    // {
+    //     $user = Auth::user();
 
-        $talent = User::with([
-            'company',
-            'department',
-            'position',
-            'mentor',
-            'atasan',
-            'promotion_plan.targetPosition',
-            'assessmentSession.details.competence',
-            'idpActivities.type',
-            'improvementProjects.verifier',
-            'panelisAssessments.panelis.company',
-        ])->findOrFail($user->id);
+    //     $talent = User::with([
+    //         'company',
+    //         'department',
+    //         'position',
+    //         'mentor',
+    //         'atasan',
+    //         'promotion_plan.targetPosition',
+    //         'assessmentSession.details.competence',
+    //         'idpActivities.type',
+    //         'improvementProjects.verifier',
+    //         'panelisAssessments.panelis.company',
+    //     ])->findOrFail($user->id);
 
-        $competencies = \App\Models\Competence::all();
+    //     $competencies = \App\Models\Competence::all();
 
-        $positionId = optional($talent->promotion_plan)->target_position_id;
-        $standards = $positionId
-            ?\App\Models\PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
-            : collect();
+    //     $positionId = optional($talent->promotion_plan)->target_position_id;
+    //     $standards = $positionId
+    //         ?\App\Models\PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+    //         : collect();
 
-        // Build top 3 GAP list
-        $sess = $talent->assessmentSession;
-        $gaps = collect();
-        if ($sess && $sess->details->count()) {
-            $overrides = $sess->details->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
-                ->sortBy(fn($d) => (int)explode('|', str_replace('priority_', '', $d->notes))[0]);
-            $gaps = $overrides->count() > 0
-                ? $overrides->values()
-                : $sess->details->sortBy('gap_score')->take(3)->values();
-        }
+    //     // Build top 3 GAP list
+    //     $sess = $talent->assessmentSession;
+    //     $gaps = collect();
+    //     if ($sess && $sess->details->count()) {
+    //         $overrides = $sess->details->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
+    //             ->sortBy(fn($d) => (int)explode('|', str_replace('priority_', '', $d->notes))[0]);
+    //         $gaps = $overrides->count() > 0
+    //             ? $overrides->values()
+    //             : $sess->details->sortBy('gap_score')->take(3)->values();
+    //     }
 
-        // IDP activity counts
-        $exposureCount = 0;
-        $mentoringCount = 0;
-        $learningCount = 0;
-        if ($talent->idpActivities) {
-            foreach ($talent->idpActivities as $act) {
-                $typeName = strtolower(optional($act->type)->type_name ?? '');
-                if (str_contains($typeName, 'exposure'))
-                    $exposureCount++;
-                elseif (str_contains($typeName, 'mentor'))
-                    $mentoringCount++;
-                elseif (str_contains($typeName, 'learn'))
-                    $learningCount++;
-            }
-        }
+    //     // IDP activity counts
+    //     $exposureCount = 0;
+    //     $mentoringCount = 0;
+    //     $learningCount = 0;
+    //     if ($talent->idpActivities) {
+    //         foreach ($talent->idpActivities as $act) {
+    //             $typeName = strtolower(optional($act->type)->type_name ?? '');
+    //             if (str_contains($typeName, 'exposure'))
+    //                 $exposureCount++;
+    //             elseif (str_contains($typeName, 'mentor'))
+    //                 $mentoringCount++;
+    //             elseif (str_contains($typeName, 'learn'))
+    //                 $learningCount++;
+    //         }
+    //     }
 
-        $notifications = $this->getNotifications();
+    //     $notifications = $this->getNotifications();
 
-        return view('talent.riwayat', compact(
-            'user',
-            'talent',
-            'competencies',
-            'standards',
-            'gaps',
-            'exposureCount',
-            'mentoringCount',
-            'learningCount',
-            'notifications'
-        ));
-    }
+    //     return view('talent.riwayat', compact(
+    //         'user',
+    //         'talent',
+    //         'competencies',
+    //         'standards',
+    //         'gaps',
+    //         'exposureCount',
+    //         'mentoringCount',
+    //         'learningCount',
+    //         'notifications'
+    //     ));
+    // }
 
     public function notifikasi()
     {
@@ -771,6 +771,94 @@ class TalentDashboardController extends Controller
         catch (\Exception $e) {
             Log::error('talentDashboard destroyIdpMonitoring error: ' . $e->getMessage());
             return back()->with('error', 'Gagal menghapus data logbook.');
+        }
+    }
+
+    public function riwayat()
+    {
+        try {
+            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
+            if ($user->role->role_name !== 'talent') {
+                abort(403);
+            }
+
+            $notifications = $this->getNotifications();
+
+            // Ambil semua sesi assessment (IDP cycles) milik talent ini
+            $sessions = DB::table('assessment_session')
+                ->where('user_id_talent', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('talent.riwayat', compact('user', 'notifications', 'sessions'));
+        } catch (\Exception $e) {
+            Log::error('talent riwayat error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    public function riwayatDetail($id)
+    {
+        try {
+            $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan', 'promotion_plan.targetPosition']);
+            if ($user->role->role_name !== 'talent') {
+                abort(403);
+            }
+
+            $notifications = $this->getNotifications();
+
+            // Sesi Assessment yang dipilih
+            $session = DB::table('assessment_session')
+                ->where('id', $id)
+                ->where('user_id_talent', $user->id)
+                ->first();
+
+            if (!$session) {
+                abort(404, 'Data riwayat tidak ditemukan.');
+            }
+
+            // Data Kompetensi dari sesi ini
+            $details = DB::table('detail_assessment')
+                ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
+                ->where('assessment_id', $session->id)
+                ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan', 'detail_assessment.gap_score')
+                ->get();
+
+            $kompetensiData = [];
+            foreach ($details as $d) {
+                $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
+                $kompetensiData[$d->name] = [
+                    'score' => $avg,
+                    'gap'   => $d->gap_score ?? 0
+                ];
+            }
+
+            // IDP Monitoring (Aktivitas)
+            $idpActivities = IdpActivity::with('type')
+                ->where('user_id_talent', $user->id)
+                ->get();
+
+            $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
+            $learningCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Learning')->count();
+            $mentoringCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Mentoring')->count();
+
+            // Project Improvement
+            $projects = ImprovementProject::where('user_id_talent', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('talent.riwayat-detail', compact(
+                'user',
+                'notifications',
+                'session',
+                'kompetensiData',
+                'exposureCount',
+                'learningCount',
+                'mentoringCount',
+                'projects'
+            ));
+        } catch (\Exception $e) {
+            Log::error('talent riwayatDetail error: ' . $e->getMessage());
+            throw $e;
         }
     }
 }

@@ -334,13 +334,20 @@
             box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
         }
 
+        .form-select:invalid {
+            color: #cbd5e1;
+            font-style: italic;
+        }
+
         .form-select option {
             background-color: #1e293b; /* Background gelap saat list dropdown terbuka */
             color: #ffffff;
+            font-style: normal;
         }
 
         .form-select option[value=''][disabled] {
             color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
         }
 
         .session-status {

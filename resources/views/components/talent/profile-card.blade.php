@@ -2,8 +2,12 @@
 
 @if($mobileCollapsible)
     {{-- ===== DESKTOP VIEW (dashboard): 3-column layout ===== --}}
-    <div class="hidden md:block bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
-        <div class="flex flex-row items-stretch divide-x divide-white/20">
+    <div class="hidden md:block relative overflow-hidden bg-gradient-to-r from-[#1e293b] via-[#2e3746] to-[#1e293b] shadow-xl py-6 fade-up fade-up-1">
+        {{-- Decorative Glows --}}
+        <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[60px] -ml-24 -mb-24"></div>
+        
+        <div class="relative z-10 flex flex-row items-stretch divide-x divide-white/10">
 
             <div class="flex items-center gap-5 px-10 flex-shrink-0 w-1/3 justify-center py-2">
                 <div class="flex-shrink-0">
@@ -60,7 +64,8 @@
     </div>
 
     {{-- ===== MOBILE VIEW (dashboard only): compact + collapsible ===== --}}
-    <div class="md:hidden bg-[#2e3746] shadow-md fade-up fade-up-1">
+    <div class="md:hidden relative overflow-hidden bg-gradient-to-br from-[#2e3746] to-[#1e293b] shadow-lg fade-up fade-up-1">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-teal-500/10 rounded-full blur-[40px]"></div>
         <div class="flex items-center gap-3 px-4 py-3 cursor-pointer" id="mobile-profile-toggle" onclick="toggleMobileProfile()">
             <div class="flex-shrink-0">
                 @if ($user->foto ?? false)
@@ -122,8 +127,12 @@
 
 @else
     {{-- ===== ORIGINAL VIEW (logbook, dll): responsive stacked layout ===== --}}
-    <div class="bg-[#2e3746] shadow-md py-6 fade-up fade-up-1">
-        <div class="flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-white/20">
+    <div class="relative overflow-hidden bg-gradient-to-r from-[#1e293b] via-[#2e3746] to-[#1e293b] shadow-xl py-6 fade-up fade-up-1">
+        {{-- Decorative Glows --}}
+        <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[60px] -ml-24 -mb-24"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-white/10">
 
             <div class="flex items-center gap-5 px-6 md:px-10 flex-shrink-0 w-full md:w-1/3 justify-center py-4 md:py-2">
                 <div class="flex-shrink-0">

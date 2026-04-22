@@ -1,6 +1,6 @@
 @props([
     'title' => 'Individual Development Plan',
-    'bodyClass' => 'bg-white min-h-screen flex flex-col pt-[80px]',
+    'bodyClass' => 'bg-[#f8fafc] min-h-screen flex flex-col pt-[80px] relative',
     'showProfileCard' => true,
     'mobileCollapsible' => false,
     'user' => null,
@@ -107,8 +107,10 @@
             display: flex;
             align-items: center;
             background: #2e3746;
+            background: linear-gradient(135deg, #2e3746 0%, #1e293b 100%);
             padding: 1rem 1.75rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -212,21 +214,29 @@
             .page-header-icon {
                 width: 52px;
                 height: 52px;
-                border-radius: 16px;
-                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+                border-radius: 18px;
+                background: linear-gradient(135deg, #2e3746 0%, #1e293b 100%);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25);
+                box-shadow: 0 8px 16px -4px rgba(30, 41, 59, 0.3);
                 flex-shrink: 0;
                 color: white;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             }
-            .page-header-icon svg { width: 26px; height: 26px; }
+            .page-header-icon:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 24px -6px rgba(30, 41, 59, 0.35);
+                background: linear-gradient(135deg, #3d4f65 0%, #2e3746 100%);
+            }
+            .page-header-icon svg { width: 26px; height: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
             .page-header-title {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
                 font-weight: 800;
-                color: #1e293b;
+                color: #0f172a;
                 line-height: 1.15;
+                letter-spacing: -0.025em;
             }
             .page-header-sub {
                 font-size: 0.8rem;
@@ -249,19 +259,71 @@
             .section-title::before {
                 content: '';
                 display: inline-block;
-                width: 4px;
-                height: 18px;
-                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                width: 5px;
+                height: 20px;
+                background: linear-gradient(180deg, #10b981, #059669);
                 border-radius: 9999px;
+                box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
             }
 
             /* ── Premium Card Style ── */
             .prem-card {
-                background: #fff;
-                border: 1px solid #e2e8f0;
-                border-radius: 20px;
-                box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(226, 232, 240, 0.8);
+                border-radius: 24px;
+                box-shadow: 
+                    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+                    0 10px 15px -3px rgba(0, 0, 0, 0.01);
                 overflow: hidden;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .prem-card:hover {
+                background: #ffffff;
+                box-shadow: 
+                    0 20px 25px -5px rgba(0, 0, 0, 0.04),
+                    0 10px 10px -5px rgba(0, 0, 0, 0.01);
+                border-color: rgba(16, 185, 129, 0.3);
+                transform: translateY(-2px);
+            }
+
+            /* ── Background Decoration ── */
+            .bg-decoration {
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                overflow: hidden;
+                pointer-events: none;
+                background-color: #f0f4f8;
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.08) 100px, transparent 50%);
+            }
+
+            .bg-decoration::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
+                background-size: 32px 32px;
+                opacity: 0.3;
+            }
+
+            .bg-blob {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(120px);
+                opacity: 0.35;
+                animation: blob-float 35s infinite alternate ease-in-out;
+            }
+
+            @keyframes blob-float {
+                0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+                33% { transform: translate(60px, -80px) scale(1.2) rotate(120deg); }
+                66% { transform: translate(-40px, 40px) scale(0.8) rotate(240deg); }
+                100% { transform: translate(0, 0) scale(1) rotate(360deg); }
             }
         </style>
     
@@ -269,6 +331,14 @@
 </head>
 
 <body class="{{ $bodyClass }}">
+
+    {{-- DECORATIVE BACKGROUND --}}
+    <div class="bg-decoration">
+        <div class="bg-blob w-[800px] h-[800px] bg-blue-200/30 -top-64 -left-64"></div>
+        <div class="bg-blob w-[600px] h-[600px] bg-indigo-200/30 top-1/2 -right-32" style="animation-delay: -5s;"></div>
+        <div class="bg-blob w-[900px] h-[900px] bg-sky-200/20 -bottom-48 left-1/4" style="animation-delay: -10s;"></div>
+        <div class="bg-blob w-[500px] h-[500px] bg-blue-100/40 top-1/4 left-1/2" style="animation-delay: -15s;"></div>
+    </div>
 
     {{-- NAVBAR --}}
     @include('components.talent.navbar', ['user' => $user ?? auth()->user(), 'notifications' => $notifications ?? collect([])])
@@ -282,10 +352,30 @@
     {{ $slot }}
 
     {{-- FOOTER --}}
-    <footer class="mt-auto bg-[#2e3746] py-5 text-center w-full">
-        <span class="text-white text-sm font-medium tracking-wide">
-            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
-        </span>
+    <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
+        <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
+            {{-- Bagian Kiri: Logo & Deskripsi --}}
+            <div class="flex items-center gap-[12px]">
+                <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl">
+                <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
+                    <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
+                    Platform Individual Development Plan
+                </div>
+            </div>
+            
+            {{-- Bagian Tengah: Links --}}
+            <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
+                <a href="{{ route('talent.dashboard') }}#Kompetensi" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Kompetensi</a>
+                <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">IDP</a>
+                <a href="{{ route('talent.dashboard') }}#Project Improvement" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Project Improvement</a>
+                <a href="{{ route('talent.riwayat') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Riwayat</a>
+            </div>
+
+            {{-- Bagian Kanan: Copyright --}}
+            <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
+                &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -374,7 +464,7 @@
                     });
                     return;
                 }
-                if (path.includes('/talent/idp-monitoring')) {
+                if (path.includes('/talent/idp-monitoring') || path.includes('/talent/logbook')) {
                     links.forEach(l => {
                         if (l.getAttribute('data-section') === 'IDP Monitoring') l.classList.add('active');
                         else l.classList.remove('active');
@@ -421,7 +511,7 @@
                     if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
                     else l.classList.remove('active');
                 });
-            } else if (path.includes('/talent/idp-monitoring')) {
+            } else if (path.includes('/talent/idp-monitoring') || path.includes('/talent/logbook')) {
                 links.forEach(l => {
                     if (l.getAttribute('data-section') === 'IDP Monitoring') l.classList.add('active');
                     else l.classList.remove('active');

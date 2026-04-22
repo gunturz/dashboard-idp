@@ -91,16 +91,23 @@
             {{-- ── Kompetensi Bar Chart (full width) ── --}}
             <div class="prem-card p-6 md:p-8 fade-up fade-up-2">
                 @if (!$latestAssessment)
-                    <div class="flex flex-col items-center justify-center py-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-3" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <p class="text-sm font-semibold text-gray-500">Anda belum mengisi assessment kompetensi.</p>
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-4 border border-slate-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <p class="text-[1.05rem] font-bold text-slate-700 mb-5 text-center">Anda belum mengisi assessment kompetensi</p>
                         <a href="{{ route('talent.competency') }}"
-                            class="mt-3 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Isi
-                            Kompetensi</a>
+                            class="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
+                            style="background: linear-gradient(135deg, #0d9488, #10b981);">
+                            Isi Kompetensi
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
                     </div>
                 @elseif(!$atasanHasScored)
                     <div class="flex flex-col items-center justify-center py-6">

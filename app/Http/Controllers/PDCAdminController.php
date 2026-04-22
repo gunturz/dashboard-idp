@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\ValidationException;
 
 class PDCAdminController extends Controller
 {
@@ -242,6 +243,121 @@ class PDCAdminController extends Controller
      */
     public function storeDevelopmentPlan(Request $request)
     {
+        $this->persistDevelopmentPlan($request);
+
+        return redirect()->route('pdc_admin.progress_talent')
+            ->with('success', 'Development Plan berhasil disimpan!');
+    }
+
+    public function developmentPlan()
+    {
+        $user = auth()->user();
+        $companies = Company::orderBy('nama_company')->get();
+        $departments = Department::orderBy('nama_department')->get();
+
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
+        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+
+        $editMode = false;
+        $editingTalent = null;
+        $prefillData = null;
+
+        return view('pdc_admin.development-plan', compact(
+            'user',
+            'companies',
+            'departments',
+            'positions',
+            'mentors',
+            'atasans',
+            'editMode',
+            'editingTalent',
+            'prefillData'
+        ));
+    }
+
+    public function editDevelopmentPlan($company_id, $position_id)
+    {
+        $user = auth()->user();
+        $companies = Company::orderBy('nama_company')->get();
+        $departments = Department::orderBy('nama_department')->get();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
+        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+
+        $editingTalents = $this->getGroupedTalentsForPlan((int) $company_id, (int) $position_id);
+        abort_if($editingTalents->isEmpty(), 404, 'Development Plan tidak ditemukan.');
+
+        $editingTalent = $editingTalents->first();
+        $plan = $editingTalent->promotion_plan;
+
+        $editMode = true;
+        $prefillData = [
+            'company_id' => $editingTalent->company_id,
+            'department_id' => $editingTalent->department_id,
+            'target_position_id' => $plan->target_position_id,
+            'atasan_id' => $editingTalent->atasan_id,
+            'start_date' => optional($plan->start_date)->format('Y-m-d'),
+            'target_date' => optional($plan->target_date)->format('Y-m-d'),
+            'talents' => $editingTalents->map(function ($talent) {
+                return [
+                    'talent_id' => $talent->id,
+                    'mentors' => collect(optional($talent->promotion_plan)->mentor_ids ?: [])
+                        ->filter()
+                        ->values()
+                        ->all(),
+                ];
+            })->values()->all(),
+            'group_company_id' => (int) $company_id,
+            'group_position_id' => (int) $position_id,
+        ];
+
+        return view('pdc_admin.development-plan', compact(
+            'user',
+            'companies',
+            'departments',
+            'positions',
+            'mentors',
+            'atasans',
+            'editMode',
+            'editingTalent',
+            'prefillData'
+        ));
+    }
+
+    public function updateDevelopmentPlan(Request $request, $company_id, $position_id)
+    {
+        $editingTalents = $this->getGroupedTalentsForPlan((int) $company_id, (int) $position_id);
+        abort_if($editingTalents->isEmpty(), 404, 'Development Plan tidak ditemukan.');
+
+        $this->persistDevelopmentPlan($request, $editingTalents);
+
+        return redirect()->route('pdc_admin.progress_talent')
+            ->with('success', 'Development Plan berhasil diperbarui!');
+    }
+
+    public function destroyDevelopmentPlan($company_id, $position_id)
+    {
+        $talents = $this->getGroupedTalentsForPlan((int) $company_id, (int) $position_id);
+        abort_if($talents->isEmpty(), 404, 'Development Plan tidak ditemukan.');
+
+        DB::transaction(function () use ($talents) {
+            foreach ($talents as $talent) {
+                $talent->update([
+                    'mentor_id' => null,
+                    'atasan_id' => null,
+                ]);
+
+                $talent->promotion_plan()->delete();
+            }
+        });
+
+        return redirect()->route('pdc_admin.progress_talent')
+            ->with('success', 'Progress talent grup berhasil dihapus.');
+    }
+
+    protected function persistDevelopmentPlan(Request $request, $editingTalents = null): void
+    {
         $request->validate([
             'company_id' => 'required|exists:company,id',
             'department_id' => 'nullable|exists:department,id',
@@ -257,15 +373,24 @@ class PDCAdminController extends Controller
 
         $sourcePositionId = $this->resolvePreviousPositionId((int) $request->target_position_id);
         if (!$sourcePositionId) {
-            return back()->withErrors([
+            throw ValidationException::withMessages([
                 'target_position_id' => 'Posisi yang dituju tidak memiliki urutan posisi sebelumnya yang valid.',
-            ])->withInput();
+            ]);
         }
 
         $selectedTalentIds = collect($request->talents)
             ->pluck('talent_id')
             ->filter()
             ->values();
+
+        $editingTalentIds = collect($editingTalents)->pluck('id')->map(fn($id) => (string) $id)->values();
+        $isEditMode = $editingTalentIds->isNotEmpty();
+
+        if ($isEditMode && $selectedTalentIds->isEmpty()) {
+            throw ValidationException::withMessages([
+                'talents' => 'Minimal harus ada satu talent dalam grup.',
+            ]);
+        }
 
         $validTalentIds = User::query()
             ->whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
@@ -276,9 +401,9 @@ class PDCAdminController extends Controller
             ->pluck('id');
 
         if ($validTalentIds->count() !== $selectedTalentIds->count()) {
-            return back()->withErrors([
+            throw ValidationException::withMessages([
                 'talents' => 'Talent yang dipilih harus sesuai perusahaan, departemen, dan urutan posisi sebelum posisi target.',
-            ])->withInput();
+            ]);
         }
 
         $validAtasan = User::query()
@@ -289,9 +414,9 @@ class PDCAdminController extends Controller
             ->exists();
 
         if (!$validAtasan) {
-            return back()->withErrors([
+            throw ValidationException::withMessages([
                 'atasan_id' => 'Atasan harus sesuai perusahaan dan departemen yang dipilih.',
-            ])->withInput();
+            ]);
         }
 
         $selectedMentorIds = collect($request->talents)
@@ -309,53 +434,62 @@ class PDCAdminController extends Controller
             ->pluck('id');
 
         if ($validMentorIds->count() !== $selectedMentorIds->count()) {
-            return back()->withErrors([
+            throw ValidationException::withMessages([
                 'talents' => 'Mentor yang dipilih harus sesuai perusahaan dan departemen yang dipilih.',
-            ])->withInput();
+            ]);
         }
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $editingTalentIds, $selectedTalentIds, $isEditMode) {
+            if ($isEditMode) {
+                $removedTalentIds = $editingTalentIds
+                    ->diff($selectedTalentIds->map(fn($id) => (string) $id));
+
+                if ($removedTalentIds->isNotEmpty()) {
+                    User::whereIn('id', $removedTalentIds->all())->update([
+                        'mentor_id' => null,
+                        'atasan_id' => null,
+                    ]);
+
+                    PromotionPlan::whereIn('user_id_talent', $removedTalentIds->all())->delete();
+                }
+            }
+
             foreach ($request->talents as $talentData) {
                 $talentId = $talentData['talent_id'];
-                $mentorIds = $talentData['mentors'];
+                $mentorIds = collect($talentData['mentors'])
+                    ->filter()
+                    ->values()
+                    ->all();
                 $primaryMentorId = $mentorIds[0] ?? null;
 
-                // Update mentor & atasan on user (primary mentor only)
                 User::where('id', $talentId)->update([
                     'mentor_id' => $primaryMentorId,
                     'atasan_id' => $request->atasan_id,
                 ]);
 
-                // Create or update promotion_plan with ALL mentor IDs
                 PromotionPlan::updateOrCreate(
-                ['user_id_talent' => $talentId],
-                [
-                    'target_position_id' => $request->target_position_id,
-                    'mentor_ids' => $mentorIds, // all selected mentors
-                    'status_promotion' => 'In Progress',
-                    'start_date' => $request->start_date,
-                    'target_date' => $request->target_date,
-                ]
+                    ['user_id_talent' => $talentId],
+                    [
+                        'target_position_id' => $request->target_position_id,
+                        'mentor_ids' => $mentorIds,
+                        'status_promotion' => 'In Progress',
+                        'start_date' => $request->start_date,
+                        'target_date' => $request->target_date,
+                    ]
                 );
             }
         });
-
-        return redirect()->route('pdc_admin.development_plan')
-            ->with('success', 'Development Plan berhasil disimpan!');
     }
 
-    public function developmentPlan()
+    protected function getGroupedTalentsForPlan(int $companyId, int $positionId)
     {
-        $user = auth()->user();
-        $companies = Company::orderBy('nama_company')->get();
-        $departments = Department::orderBy('nama_department')->get();
-
-        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
-
-
-        return view('pdc_admin.development-plan', compact('user', 'companies', 'departments', 'positions', 'mentors', 'atasans'));
+        return User::where('company_id', $companyId)
+            ->whereHas('promotion_plan', function ($q) use ($positionId) {
+                $q->where('target_position_id', $positionId);
+            })
+            ->with(['promotion_plan', 'department'])
+            ->orderBy('nama')
+            ->get();
     }
 
     public function detail($company_id, $position_id)

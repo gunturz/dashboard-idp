@@ -135,6 +135,12 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.development_plan.store');
     Route::get('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'developmentPlan'])
         ->name('pdc_admin.development_plan');
+    Route::get('/pdc-admin/development-plan/{company_id}/{position_id}/edit', [\App\Http\Controllers\PDCAdminController::class , 'editDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.edit');
+    Route::put('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.update');
+    Route::delete('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.destroy');
     Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
         ->name('pdc_admin.detail.talent');
     Route::get('/pdc-admin/logbook-detail/{id}', [\App\Http\Controllers\PDCAdminController::class , 'logbookDetail'])

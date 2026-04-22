@@ -61,19 +61,22 @@
 
             /* ── Competency Card ── */
             .comp-card {
-                border: 1.5px solid #e2e8f0;
-                border-radius: 14px;
+                border: 1px solid #dbe4ee;
+                border-radius: 20px;
                 overflow: hidden;
-                margin-bottom: 20px;
+                margin-bottom: 24px;
+                background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+                box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
             }
 
             .comp-card-title {
                 text-align: center;
-                font-size: 1rem;
-                font-weight: 700;
-                color: #2e3746;
-                padding: 18px;
-                background: white;
+                font-size: 1.55rem;
+                font-weight: 800;
+                color: #22324a;
+                letter-spacing: -0.02em;
+                padding: 22px 24px;
+                background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
                 border-bottom: 1px solid #e2e8f0;
             }
 
@@ -83,58 +86,100 @@
             }
 
             .comp-table thead tr {
-                background: #f8fafc;
+                background: linear-gradient(180deg, #f8fbff 0%, #f1f5f9 100%);
             }
 
             .comp-table th {
-                padding: 12px 20px;
-                font-size: 0.8rem;
-                font-weight: 700;
-                color: #475569;
+                padding: 16px 22px;
+                font-size: 0.92rem;
+                font-weight: 800;
+                color: #334155;
+                letter-spacing: 0.01em;
                 text-align: center;
                 border-right: 1px solid #f1f5f9;
             }
 
-            .comp-table th:first-child { width: 80px; }
+            .comp-table th:first-child { width: 96px; }
             .comp-table th:last-child { border-right: none; }
 
             .comp-table td {
-                padding: 14px 20px;
-                font-size: 0.82rem;
+                padding: 18px 24px;
+                font-size: 0.95rem;
                 color: #64748b;
                 vertical-align: top;
                 border-top: 1px solid #f1f5f9;
                 border-right: 1px solid #f1f5f9;
-                line-height: 1.6;
+                line-height: 1.72;
+                background: rgba(255, 255, 255, 0.82);
             }
 
-            .comp-table td:first-child { text-align: center; font-weight: 700; color: #2e3746; vertical-align: middle; border-right: 1px solid #f1f5f9; }
+            .comp-table td:first-child {
+                text-align: center;
+                font-weight: 800;
+                font-size: 1.1rem;
+                color: #23324b;
+                vertical-align: middle;
+                border-right: 1px solid #f1f5f9;
+                background: #f8fbff;
+            }
             .comp-table td:last-child { border-right: none; }
 
-            .comp-table tbody tr:hover { background: #fafafa; }
+            .comp-table tbody tr:hover td { background: #f8fbff; }
+
+            .question-text {
+                font-size: 1.12rem;
+                line-height: 1.8;
+                color: #48627f;
+                font-weight: 500;
+            }
+
+            .question-empty {
+                font-size: 1rem;
+                color: #94a3b8;
+                font-style: italic;
+            }
+
+            .question-editor {
+                width: 100%;
+                min-height: 132px;
+                padding: 18px 22px;
+                border: none;
+                outline: none;
+                resize: vertical;
+                font-family: inherit;
+                font-size: 1.05rem;
+                line-height: 1.75;
+                color: #334155;
+                background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+            }
+
+            .question-editor::placeholder {
+                color: #94a3b8;
+            }
 
             /* Edit button */
             .btn-edit-comp {
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                padding: 7px 18px;
+                padding: 9px 20px;
                 background: #2e3746;
                 color: white;
                 border: none;
-                border-radius: 8px;
-                font-size: 0.78rem;
-                font-weight: 600;
+                border-radius: 10px;
+                font-size: 0.82rem;
+                font-weight: 700;
                 cursor: pointer;
                 transition: all .2s;
+                box-shadow: 0 8px 18px rgba(46, 55, 70, 0.16);
             }
             .btn-edit-comp:hover { background: #1e2737; }
 
             .comp-card-footer {
-                padding: 12px 20px;
+                padding: 16px 22px;
                 display: flex;
                 justify-content: flex-end;
-                background: white;
+                background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
                 border-top: 1px solid #f1f5f9;
             }
 

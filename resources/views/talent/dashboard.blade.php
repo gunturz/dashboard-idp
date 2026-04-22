@@ -89,7 +89,7 @@
             </div>
 
             {{-- ── Kompetensi Bar Chart (full width) ── --}}
-            <div class="bg-gray-50 border border-gray-100 rounded-[10px] shadow-sm p-6 fade-up fade-up-2">
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 fade-up fade-up-2">
                 @if(!$hasDevPlan)
                     {{-- Belum ada development plan dari PDC Admin --}}
                     <div class="flex flex-col items-center justify-center py-8 text-center">
@@ -304,7 +304,7 @@
 
                     {{-- Exposure --}}
                     <div
-                        class="bg-white shadow-sm border border-gray-100 rounded-[10px] p-5 flex flex-col justify-between">
+                        class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
                         <div class="flex flex-col h-full">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-gray-500">
@@ -335,7 +335,7 @@
 
                     {{-- Mentoring --}}
                     <div
-                        class="bg-white shadow-sm border border-gray-100 rounded-[10px] p-5 flex flex-col justify-between">
+                        class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
                         <div class="flex flex-col h-full">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-gray-500">
@@ -365,7 +365,7 @@
 
                     {{-- Learning --}}
                     <div
-                        class="bg-white shadow-sm border border-gray-100 rounded-[10px] p-5 flex flex-col justify-between">
+                        class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
                         <div class="flex flex-col h-full">
                             <div class="flex items-center gap-2 mb-2">
                                 <span class="text-gray-500">
@@ -461,7 +461,7 @@
 
                     {{-- Upload Area --}}
                     <label for="file-upload"
-                        class="upload-area rounded-[10px] cursor-pointer flex flex-col items-center justify-center py-10 mb-5 bg-white border-2 border-dashed border-gray-300 hover:border-teal-500 transition-colors"
+                        class="upload-area rounded-2xl cursor-pointer flex flex-col items-center justify-center py-10 mb-5 bg-gray-50 border-2 border-dashed border-gray-200 hover:border-teal-500 transition-colors"
                         id="drop-zone">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -482,8 +482,8 @@
                     </div>
 
                     {{-- Project Table --}}
-                    <div class="overflow-x-auto rounded-[10px] border border-gray-200">
-                        <table class="w-full text-sm bg-white min-w-[600px]">
+                    <div class="overflow-x-auto rounded-2xl border border-gray-200">
+                        <table class="w-full text-sm bg-gray-50 min-w-[600px]">
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th

@@ -54,7 +54,7 @@
 
             /* ── Talent Card ── */
             .talent-card {
-                background: white;
+                background: #f9fafb;
                 border: 1px solid #e2e8f0;
                 border-radius: 16px;
                 overflow: hidden;

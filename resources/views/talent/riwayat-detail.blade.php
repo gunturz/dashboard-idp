@@ -23,18 +23,11 @@
                 background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
                 border: 1px solid #e2e8f0;
                 color: #475569;
-                box-shadow: 
-                    0 4px 6px -1px rgba(0, 0, 0, 0.05),
-                    inset 0 0 10px rgba(255, 255, 255, 0.5);
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            .btn-back-prem:hover {
-                background: #ffffff;
-                transform: translateY(-2px) scale(1.02);
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-                border-color: #cbd5e1;
-                color: #1e293b;
+            .btn-back-prem:active {
+                transform: scale(0.98);
             }
         </style>
     </x-slot>
@@ -180,7 +173,7 @@
 
             <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
                 <div class="overflow-x-auto rounded-[10px] border border-gray-200">
-                    <table class="w-full text-sm bg-white min-w-[600px]">
+                    <table class="w-full text-sm bg-gray-50 min-w-[600px]">
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200">Judul Project Improvement</th>

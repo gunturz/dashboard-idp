@@ -182,18 +182,18 @@
                 align-items: center;
                 gap: 5px;
                 background: white;
-                color: #2e3746;
+                color: #0f172a;
                 font-size: 0.75rem;
                 font-weight: 700;
                 padding: 7px 14px;
                 border-radius: 8px;
-                border: 1.5px solid #2e3746;
+                border: 1.5px solid #0f172a;
                 white-space: nowrap;
                 text-decoration: none;
                 transition: all 0.2s;
             }
             .btn-lihat-penilaian:hover {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
             }
 

@@ -184,7 +184,7 @@
         input:-webkit-autofill:hover,
         input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 50px #2e3746 inset !important;
+            -webkit-box-shadow: 0 0 0 50px #0f172a inset !important;
             /* Gunakan warna gelap yg konsisten */
             -webkit-text-fill-color: #ffffff !important;
             caret-color: #ffffff;

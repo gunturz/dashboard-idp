@@ -11,7 +11,7 @@
             .page-title h2 {
                 font-size: 1.4rem;
                 font-weight: 800;
-                color: #2e3746;
+                color: #0f172a;
             }
 
             /* ── Company Section ── */
@@ -154,7 +154,7 @@
                 justify-content: center;
                 width: 100%;
                 padding: 12px 18px;
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 border: none;
                 font-size: 0.82rem;
@@ -167,7 +167,7 @@
             .btn-penilaian-separated:hover {
                 background: #1e293b;
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(46, 55, 70, 0.3);
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
                 color: white;
             }
             .btn-penilaian-separated:active {
@@ -210,7 +210,7 @@
     {{-- Page Title --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div class="page-title !mb-0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
             </svg>
             <h2>Dashboard</h2>

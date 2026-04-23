@@ -4,7 +4,7 @@
             .section-pill {
                 display: inline-flex;
                 align-items: center;
-                background: #2e3746;
+                background: #0f172a;
                 color: #fff;
                 font-size: 0.85rem;
                 font-weight: 700;
@@ -154,7 +154,7 @@
                 padding: 0;
                 text-decoration: none;
             }
-            .btn-detail:hover { color: #2e3746; }
+            .btn-detail:hover { color: #0f172a; }
 
             .btn-pilih-aksi {
                 background: #eab308;

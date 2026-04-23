@@ -20,7 +20,7 @@
 
             /* ── Info Card (dark) ── */
             .info-card {
-                background: #2e3746;
+                background: #0f172a;
                 border-radius: 14px;
                 padding: 20px 28px;
                 margin-bottom: 32px;

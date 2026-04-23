@@ -20,11 +20,11 @@
             .avatar-placeholder {
                 width: 120px; height: 120px;
                 border-radius: 24px;
-                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+                background: #0f172a;
                 display: flex; align-items: center; justify-content: center;
                 font-size: 2.6rem; font-weight: 800;
                 color: white;
-                box-shadow: 0 4px 20px rgba(46,55,70,0.3);
+                box-shadow: 0 4px 20px rgba(15, 23, 42,0.3);
                 letter-spacing: -1px;
             }
             .avatar-upload-btn {
@@ -44,7 +44,7 @@
 
             /* Hero Banner */
             .prof-hero {
-                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 60%, #2a4060 100%);
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
                 border-radius: 20px;
                 padding: 32px 36px;
                 display: flex;
@@ -260,12 +260,14 @@
     <div class="prof-page animate-title">
 
         {{-- Back Button --}}
-        <div class="mb-5">
-            <a href="{{ route('pdc_admin.dashboard') }}" class="btn-prem btn-ghost text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <div class="mb-6">
+            <a href="{{ route('pdc_admin.dashboard') }}" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-full shadow-sm hover:bg-gray-50 hover:text-slate-700 hover:border-gray-100 transition-all duration-300 group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" 
+                     class="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
                 </svg>
-                Kembali ke Dashboard
+                Kembali
             </a>
         </div>
 

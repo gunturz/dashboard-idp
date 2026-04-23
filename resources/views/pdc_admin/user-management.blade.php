@@ -31,12 +31,11 @@
             }
 
             .um-email-text {
-                display: inline-block;
+                display: block;
                 max-width: 100%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                vertical-align: middle;
             }
         </style>
     </x-slot>
@@ -100,7 +99,7 @@
                 @endforeach
             </select>
         </div>
-        <div id="departmentFilterWrapper" class="md:col-span-1 relative hidden">
+        <div class="md:col-span-1 relative">
             <select id="departmentFilter" onchange="filterUsers()"
                 class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
@@ -116,11 +115,11 @@
     {{-- Data Section --}}
     @php
         $userGroups = [
-            ['title' => 'Talent', 'users' => $talents, 'showPosisi' => true, 'showMultiRole' => true, 'showDepartment' => true],
-            ['title' => 'Mentor', 'users' => $mentors, 'showPosisi' => true, 'showMultiRole' => true, 'showDepartment' => true],
-            ['title' => 'Atasan', 'users' => $atasans, 'showPosisi' => true, 'showMultiRole' => true, 'showDepartment' => true],
-            ['title' => 'Finance', 'users' => $finances, 'showPosisi' => false, 'showMultiRole' => false, 'showDepartment' => false],
-            ['title' => 'Panelis', 'users' => $panelisUsers, 'showPosisi' => false, 'showMultiRole' => false, 'showDepartment' => false],
+            ['title' => 'Talent', 'users' => $talents, 'showPosisi' => true, 'showMultiRole' => true],
+            ['title' => 'Mentor', 'users' => $mentors, 'showPosisi' => true, 'showMultiRole' => true],
+            ['title' => 'Atasan', 'users' => $atasans, 'showPosisi' => true, 'showMultiRole' => true],
+            ['title' => 'Finance', 'users' => $finances, 'showPosisi' => false, 'showMultiRole' => false],
+            ['title' => 'Panelis', 'users' => $panelisUsers, 'showPosisi' => false, 'showMultiRole' => false],
         ];
     @endphp
 
@@ -143,9 +142,7 @@
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:16%">Email</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Nama Lengkap</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:17%">Perusahaan</th>
-                                    @if ($group['showDepartment'])
-                                        <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Departemen</th>
-                                    @endif
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Departemen</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:12%">Posisi saat ini</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:8%">Multi Role</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:12%">Aksi</th>
@@ -154,9 +151,7 @@
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Email</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:24%">Nama Lengkap</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Perusahaan</th>
-                                    @if ($group['showDepartment'])
-                                        <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Departemen</th>
-                                    @endif
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Departemen</th>
                                     <th class="text-sm font-bold text-[#2e3746] p-3" style="width:12%">Aksi</th>
                                 @endif
                             </tr>
@@ -166,16 +161,12 @@
                                 <tr class="bg-white hover:bg-gray-50 transition-colors user-row"
                                     data-company-id="{{ $u->company_id ?? '' }}"
                                     data-department="{{ strtolower($u->department->nama_department ?? '') }}">
-                                    <td class="um-email-cell text-sm font-medium text-[#475569]">
-                                        <span class="um-email-text" title="{{ $u->email }}">{{ $u->email }}</span>
-                                    </td>
+                                    <td class="text-sm font-medium text-[#475569] whitespace-nowrap">{{ $u->email }}</td>
                                     <td class="col-name text-sm font-bold text-[#2e3746] whitespace-nowrap">{{ $u->nama }}</td>
                                     <td class="col-company text-sm font-medium text-[#475569]">
                                         {{ $u->company->nama_company ?? '—' }}</td>
-                                    @if ($group['showDepartment'])
-                                        <td class="text-sm font-medium text-[#475569]">
-                                            {{ $u->department->nama_department ?? '-' }}</td>
-                                    @endif
+                                    <td class="text-sm font-medium text-[#475569]">
+                                        {{ $u->department->nama_department ?? '-' }}</td>
                                     @if ($group['showPosisi'])
                                         <td class="text-sm font-medium text-[#475569]">
                                             {{ $u->position->position_name ?? '—' }}</td>
@@ -224,10 +215,7 @@
                             @empty
                                 <tr>
                                     @php
-                                        $cols = 4;
-                                        if ($group['showDepartment']) {
-                                            $cols++;
-                                        }
+                                        $cols = 5;
                                         if ($group['showPosisi']) {
                                             $cols++;
                                         }
@@ -503,18 +491,8 @@
         function syncDepartmentFilterOptions() {
             const companySelect = document.getElementById('companyFilter');
             const departmentSelect = document.getElementById('departmentFilter');
-            const departmentWrapper = document.getElementById('departmentFilterWrapper');
             const selectedCompanyId = companySelect.value;
             const selectedDepartment = departmentSelect.value;
-
-            if (!selectedCompanyId) {
-                departmentSelect.innerHTML = '<option value="">Semua Departemen</option>';
-                departmentSelect.value = '';
-                departmentWrapper.classList.add('hidden');
-                return;
-            }
-
-            departmentWrapper.classList.remove('hidden');
             const availableDepartments = selectedCompanyId
                 ? (departmentsByCompany[selectedCompanyId] || [])
                 : allDepartments;

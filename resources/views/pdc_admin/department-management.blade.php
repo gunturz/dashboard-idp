@@ -17,7 +17,7 @@
             .dept-name {
                 font-size: 0.95rem;
                 font-weight: 600;
-                color: #2e3746;
+                color: #0f172a;
             }
             .btn-back {
                 padding: 8px 16px;
@@ -71,7 +71,7 @@
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
         </div>
         <button onclick="openAddDeptModal()"
-            class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#2e3746] hover:bg-[#1f2937] rounded-xl transition-colors shadow-sm">
+            class="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#0f172a] hover:bg-[#1f2937] rounded-xl transition-colors shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
@@ -81,7 +81,7 @@
 
     {{-- Main Card --}}
     <div class="prem-card p-8 w-full mb-10">
-        <h3 class="text-lg font-bold text-[#2e3746] mb-6">Daftar Departemen</h3>
+        <h3 class="text-lg font-bold text-[#0f172a] mb-6">Daftar Departemen</h3>
 
         {{-- Dept List --}}
         <div class="space-y-3" id="deptList">
@@ -115,13 +115,13 @@
     {{-- Add Modal --}}
     <div id="addDeptModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-8">
-            <h3 class="text-xl font-black text-[#2e3746] mb-1">Tambah Departemen</h3>
+            <h3 class="text-xl font-black text-[#0f172a] mb-1">Tambah Departemen</h3>
             <p class="text-sm text-gray-400 mb-6">Masukkan nama departemen baru</p>
             <form method="POST" action="{{ route('pdc_admin.department.store') }}">
                 @csrf
                 <input type="hidden" name="company_id" value="{{ $company->id }}">
                 <input type="text" name="nama_department" placeholder="Nama departemen"
-                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
+                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#0f172a] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('addDeptModal')"
                         class="flex-1 py-3 text-sm font-semibold text-gray-500 bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">
@@ -139,13 +139,13 @@
     {{-- Edit Modal --}}
     <div id="editDeptModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-8">
-            <h3 class="text-xl font-black text-[#2e3746] mb-1">Edit Departemen</h3>
+            <h3 class="text-xl font-black text-[#0f172a] mb-1">Edit Departemen</h3>
             <p class="text-sm text-gray-400 mb-6">Ganti nama departemen</p>
             <form method="POST" id="editDeptForm" action="">
                 @csrf
                 @method('PUT')
                 <input type="text" name="nama_department" id="editDeptInput" placeholder="Nama departemen"
-                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
+                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#0f172a] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('editDeptModal')"
                         class="flex-1 py-3 text-sm font-semibold text-gray-500 bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">

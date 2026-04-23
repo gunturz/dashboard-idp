@@ -164,9 +164,9 @@
         }
         .dash-header-icon {
             width: 48px; height: 48px; border-radius: 14px;
-            background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+            background: #0f172a;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25); flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); flex-shrink: 0;
         }
         .dash-header-icon svg { color: white; width: 24px; height: 24px; }
         .dash-header-title { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
@@ -178,9 +178,9 @@
         .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
         .page-header-icon {
             width: 48px; height: 48px; border-radius: 14px;
-            background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+            background: #0f172a;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 14px rgba(46, 55, 70, 0.25); flex-shrink: 0; color: white;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); flex-shrink: 0; color: white;
         }
         .page-header-icon svg { width: 24px; height: 24px; flex-shrink: 0; }
         .page-header-title { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
@@ -346,7 +346,7 @@
                 <div id="bell-dropdown"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     <div
-                        class="px-5 py-3.5 bg-gradient-to-r from-[#2e3746] to-[#38475a] flex items-center justify-between">
+                        class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
                                 fill="currentColor">
@@ -431,7 +431,7 @@
 
                 <div id="profile-dropdown"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-4 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
+                    <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                         <div class="flex items-center gap-3">
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
                                 style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
@@ -451,7 +451,7 @@
                             <a href="{{ route('profile.edit') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div
-                                    class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                    class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors"
                                         viewBox="0 0 20 20" fill="currentColor">
@@ -518,7 +518,7 @@
                 <div id="mobile-menu-dropdown"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
                     {{-- Dropdown Header --}}
-                    <div class="px-5 py-5 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
+                    <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                         <div class="flex items-center gap-3.5">
                             <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
                                 style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
@@ -540,7 +540,7 @@
                             <a href="{{ route('finance.notifikasi') }}"
                                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div
-                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
+                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0 relative">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
                                         viewBox="0 0 20 20" fill="currentColor">
@@ -609,7 +609,7 @@
                             <a href="{{ route('profile.edit') }}"
                                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div
-                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
                                         viewBox="0 0 20 20" fill="currentColor">

@@ -115,7 +115,7 @@
             $mentorNames = optional($talent->mentor)->nama ?? '-';
         }
     @endphp
-    <div class="bg-[#2e3746] shadow-md py-6 mb-7 w-full -mt-4 md:-mt-8 -mx-4 lg:-mx-8 px-4 lg:px-8 max-w-[100vw] sm:max-w-none md:-mx-8" style="width: calc(100% + 4rem);">
+    <div class="bg-[#0f172a] shadow-md py-6 mb-7 w-full -mt-4 md:-mt-8 -mx-4 lg:-mx-8 px-4 lg:px-8 max-w-[100vw] sm:max-w-none md:-mx-8" style="width: calc(100% + 4rem);">
         <div class="flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-white/20">
 
             <div class="flex items-center gap-5 px-6 md:px-10 flex-shrink-0 w-full md:w-1/3 py-4 md:py-2">

@@ -133,7 +133,7 @@
             }
             .gap-select-item input[type="checkbox"] {
                 width: 20px; height: 20px; border-radius: 4px; border: 2px solid #cbd5e1;
-                cursor: pointer; accent-color: #2e3746;
+                cursor: pointer; accent-color: #0f172a;
             }
             .gap-name-modal { flex: 1; font-weight: 700; color: #334155; font-size: 0.875rem; }
             .gap-score-modal { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
@@ -188,7 +188,7 @@
             .finance-field-label {
                 font-size: 0.7rem;
                 font-weight: 800;
-                color: #2e3746;
+                color: #0f172a;
                 text-transform: uppercase;
                 margin-bottom: 4px;
                 display: block;
@@ -401,7 +401,7 @@
             .btn-approve:hover { background: #22c55e; color: white; }
 
             .btn-audit {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 padding: 8px 16px;
                 border-radius: 8px;
@@ -513,9 +513,9 @@
             }
             .pill:hover { background: #cbd5e1; color: #1e293b; }
             .pill.active {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
-                box-shadow: 0 2px 12px rgba(46,55,70,0.22);
+                box-shadow: 0 2px 12px rgba(15, 23, 42,0.22);
             }
 
             /* --- HEATMAP & COMPETENCY --- */
@@ -561,7 +561,7 @@
             }
             .btn-pilih-gap {
                 padding: 6px 12px;
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 font-size: 0.75rem;
                 font-weight: 600;
@@ -723,26 +723,26 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div class="nav-tabs md:flex hidden">
             <div class="tab-item active" onclick="switchSection('kompetensi', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
                 Kompetensi
             </div>
             <div class="tab-item" onclick="switchSection('idp', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
                     <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
                 </svg>
                 IDP
             </div>
             <div class="tab-item" onclick="switchSection('project', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                 </svg>
                 Project Improvement
             </div>
             <div class="tab-item" onclick="switchSection('logbook', this)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 24 24" fill="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
                 Logbook
@@ -750,7 +750,7 @@
         </div>
 
         <div class="mobile-nav-select md:hidden w-full relative">
-            <select onchange="handleNavSelect(this)" id="mobile-nav-dropdown" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-[15px] rounded-xl py-3.5 pl-4 pr-10 font-bold shadow-[0_2px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-[#2e3746] focus:bg-white appearance-none cursor-pointer transition-all">
+            <select onchange="handleNavSelect(this)" id="mobile-nav-dropdown" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-[15px] rounded-xl py-3.5 pl-4 pr-10 font-bold shadow-[0_2px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-[#0f172a] focus:bg-white appearance-none cursor-pointer transition-all">
                 <option value="kompetensi">Kompetensi</option>
                 <option value="idp">IDP</option>
                 <option value="project">Project Improvement</option>
@@ -1015,7 +1015,7 @@
     {{-- ================================= SECTION: PROJECT IMPROVEMENT ================================= --}}
     <div id="section-project" class="hidden">
         <div class="section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
             </svg>
             Project Improvement
@@ -1068,7 +1068,7 @@
     {{-- ================================= SECTION: LOGBOOK ================================= --}}
     <div id="section-logbook" class="hidden">
         <div class="section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 24 24" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0f172a]" viewBox="0 0 24 24" fill="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
             LogBook
@@ -1648,11 +1648,11 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex flex-col h-full">
-                            <label class="text-[#2e3746] font-extrabold text-sm md:text-base mb-3 tracking-wide uppercase">Catatan</label>
+                            <label class="text-[#0f172a] font-extrabold text-sm md:text-base mb-3 tracking-wide uppercase">Catatan</label>
                             <textarea name="notes" required class="w-full rounded-xl border border-gray-300 px-4 py-3 text-[13px] text-gray-500 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none flex-grow min-h-[130px]" placeholder="cth: Pada slide ke 17 apakah sudah memenuhi standar kriteria untuk melakukan bisnis. . ."></textarea>
                         </div>
                         <div class="flex flex-col">
-                            <label class="text-[#2e3746] font-extrabold text-sm md:text-base mb-3 tracking-wide uppercase">Kirim Kepada</label>
+                            <label class="text-[#0f172a] font-extrabold text-sm md:text-base mb-3 tracking-wide uppercase">Kirim Kepada</label>
                             <div class="relative">
                                 <select name="assigned_finance_id" required class="w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-[13px] text-gray-500 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 pr-10">
                                     <option value="" disabled selected>Pilih email finance yang terdaftar</option>

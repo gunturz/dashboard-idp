@@ -120,7 +120,7 @@
         }
 
         .nav-logo-text span:first-child {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: var(--emerald);
             letter-spacing: 2px;
@@ -128,7 +128,7 @@
         }
 
         .nav-logo-text span:last-child {
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 800;
             color: var(--white);
             letter-spacing: -0.3px;
@@ -144,9 +144,9 @@
             padding: 8px 22px;
             border: 1.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 99px;
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: rgba(255, 255, 255, 1);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: all 0.25s;
         }
@@ -164,7 +164,7 @@
             padding: 9px 24px;
             background: linear-gradient(135deg, var(--teal), var(--green));
             border-radius: 99px;
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--white);
             text-decoration: none;
@@ -227,7 +227,7 @@
         .hero-desc {
             font-size: 1.05rem;
             font-weight: 400;
-            color: rgba(255, 255, 255, 1);
+            color: rgba(255, 255, 255, 0.8);
             line-height: 1.75;
             max-width: 580px;
             margin: 0 auto 40px;
@@ -287,7 +287,7 @@
             border-radius: 99px;
             font-size: 0.9rem;
             font-weight: 600;
-            color: rgba(255, 255, 255, 1);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.05);
@@ -368,7 +368,7 @@
 
         .section-sub {
             font-size: 0.95rem;
-            color: rgba(255, 255, 255, 1);
+            color: rgba(255, 255, 255, 0.8);
             line-height: 1.7;
             max-width: 520px;
             margin: 0 auto;
@@ -498,14 +498,14 @@
         }
 
         .tl-title {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--white);
             margin-bottom: 8px;
         }
 
         .tl-desc {
-            font-size: 0.83rem;
+            font-size: 0.9rem;
             color: var(--muted);
             line-height: 1.7;
         }
@@ -646,14 +646,14 @@
         }
 
         .feature-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: var(--white);
             margin-bottom: 10px;
         }
 
         .feature-desc {
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             color: var(--muted);
             line-height: 1.7;
         }
@@ -663,7 +663,7 @@
             margin-top: 16px;
             background: rgba(13, 148, 136, 0.15);
             color: var(--emerald);
-            font-size: 0.65rem;
+            font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -729,7 +729,7 @@
         }
 
         .role-desc {
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             color: var(--muted);
             line-height: 1.7;
         }
@@ -774,7 +774,7 @@
         }
 
         .cta-desc {
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.55);
             line-height: 1.7;
             margin-bottom: 36px;
@@ -887,8 +887,11 @@
 
         /* ─── MOBILE ─── */
         @media (max-width: 640px) {
+            .nav-logo-text span:first-child {
+                font-size: 0.75rem;
+            }
             .nav-logo-text span:last-child {
-                font-size: 0.85rem;
+                font-size: 1.05rem;
             }
 
             .btn-nav-ghost {
@@ -975,7 +978,7 @@
             <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo">
             <div class="nav-logo-text">
                 <span>Portal</span>
-                <span>IDP Dashboard</span>
+                <span>Individual Development Plan</span>
             </div>
         </a>
         <div class="nav-cta">
@@ -1015,11 +1018,13 @@
                         </svg>
                         Masuk ke Dashboard
                     </a>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
                         <a href="{{ route('register') }}" class="btn-hero-secondary">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" style="width:16px;height:16px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                             </svg>
                             Daftar Sekarang
                         </a>
@@ -1167,7 +1172,7 @@
                     <div class="feature-icon f-teal">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path fill-rule="evenodd"
-                                d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                                d="M3 6a3 3 0 0 1 3-3h2.25a3 3 0 0 1 3 3v2.25a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm9.75 0a3 3 0 0 1 3-3H18a3 3 0 0 1 3 3v2.25a3 3 0 0 1-3 3h-2.25a3 3 0 0 1-3-3V6ZM3 15.75a3 3 0 0 1 3-3h2.25a3 3 0 0 1 3 3V18a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-2.25Zm9.75 0a3 3 0 0 1 3-3H18a3 3 0 0 1 3 3V18a3 3 0 0 1-3 3h-2.25a3 3 0 0 1-3-3v-2.25Z"
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
@@ -1191,9 +1196,8 @@
                 <div class="feature-card reveal">
                     <div class="feature-icon f-purple">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0112 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 01-.372-.568 6.787 6.787 0 011.019-4.38z"
-                                clip-rule="evenodd" />
+                            <path
+                                d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
                         </svg>
                     </div>
                     <div class="feature-title">Multi-role System</div>
@@ -1204,9 +1208,8 @@
                 <div class="feature-card reveal">
                     <div class="feature-icon f-orange">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5zm6.61 10.936a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-                                clip-rule="evenodd" />
+                            <path
+                                d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />
                         </svg>
                     </div>
                     <div class="feature-title">Logbook Digital</div>
@@ -1216,7 +1219,7 @@
 
                 <div class="feature-card reveal">
                     <div class="feature-icon f-rose">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                         </svg>
                     </div>

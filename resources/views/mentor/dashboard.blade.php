@@ -206,22 +206,23 @@
         </div>
 
         @if ($totalPending > 0)
-            <!-- Banner Approval Validation - Image 1 View -->
-            <div
-                class="mb-4 bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-3 px-5 flex items-center justify-between">
-                <div class="text-[#475569] font-medium text-[14px]">
-                    Ada <span class="font-bold text-[#2e3746]">{{ $totalPending }} Permintaan</span> yang menunggu
-                    validasi anda
+            {{-- Banner Approval Validation (Finance style) --}}
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between shadow-sm mb-6">
+                <div class="flex items-center gap-4 mb-3 sm:mb-0">
+                    <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <p class="text-amber-900 font-medium text-sm">
+                        Ada <span class="font-bold text-amber-600">{{ $totalPending }} Permintaan</span> yang menunggu validasi anda
+                    </p>
                 </div>
-                <a href="{{ route('mentor.logbook') }}"
-                    class="bg-[#facc15] hover:bg-[#eab308] text-[#1e293b] font-bold text-[13px] px-5 py-2.5 rounded-lg transition-colors inline-block shadow-sm">
+                <a href="{{ route('mentor.validasi') }}"
+                    class="inline-flex items-center gap-2 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-sm font-bold px-8 py-2.5 rounded-[10px] transition-all shadow-sm hover:-translate-y-0.5 whitespace-nowrap">
                     Review Sekarang
                 </a>
             </div>
-            <a href="{{ route('mentor.validasi') }}" class="bg-[#facc15] hover:bg-[#eab308] text-[#1e293b] font-bold text-[13px] px-5 py-2.5 rounded-lg transition-colors inline-block shadow-sm">
-                Review Sekarang
-            </a>
-        </div>
         @endif
 
         <div class="bg-gray-50 border border-gray-200 rounded-xl shadow-sm overflow-hidden">

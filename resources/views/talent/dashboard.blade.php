@@ -28,7 +28,7 @@
             .score-select {
                 -webkit-appearance: none;
                 appearance: none;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%234a5a6a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='%230f172a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
                 background-repeat: no-repeat;
                 background-position: right 8px center;
                 background-size: 14px;
@@ -38,7 +38,7 @@
                 border-radius: 10px;
                 font-size: 0.875rem;
                 font-weight: 600;
-                color: #2e3746;
+                color: #0f172a;
                 background-color: #f8fafc;
                 cursor: pointer;
                 transition: border-color 0.2s, box-shadow 0.2s;
@@ -46,8 +46,8 @@
 
             .score-select:focus {
                 outline: none;
-                border-color: #2e3746;
-                box-shadow: 0 0 0 3px rgba(46, 55, 70, 0.12);
+                border-color: #0f172a;
+                box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.12);
             }
 
             .score-select:hover {
@@ -519,8 +519,8 @@
                                                 </span>
                                             @elseif($project->status === 'On Progress')
                                                 <span
-                                                    class="inline-flex items-center gap-1.5 text-blue-500 text-xs font-semibold">
-                                                    <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>
+                                                    class="inline-flex items-center gap-1.5 text-teal-600 text-xs font-semibold">
+                                                    <span class="w-2 h-2 rounded-full bg-teal-500 inline-block"></span>
                                                     On Progress
                                                 </span>
                                             @elseif($project->status === 'Rejected')

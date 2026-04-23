@@ -141,7 +141,7 @@
                 padding: 0;
                 text-decoration: none;
             }
-            .btn-detail:hover { color: #2e3746; }
+            .btn-detail:hover { color: #0f172a; }
 
             .btn-pending {
                 display: inline-flex;

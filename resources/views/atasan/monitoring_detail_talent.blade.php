@@ -32,7 +32,7 @@
             .section-header svg {
                 width: 24px;
                 height: 24px;
-                color: #2e3746;
+                color: #0f172a;
             }
 
             .section-header h3 {
@@ -455,7 +455,7 @@
                     $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
 
                     $charts = [
-                        ['label' => 'Exposure',  'done' => min($exposureCount, 6),  'total' => 6, 'color' => '#2e3746'],
+                        ['label' => 'Exposure',  'done' => min($exposureCount, 6),  'total' => 6, 'color' => '#0f172a'],
                         ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
                         ['label' => 'Learning',  'done' => min($learningCount, 6),  'total' => 6, 'color' => '#0d9488']
                     ];

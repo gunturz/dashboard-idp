@@ -47,7 +47,7 @@
                 white-space: nowrap;
             }
             .tab-btn.active {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             }

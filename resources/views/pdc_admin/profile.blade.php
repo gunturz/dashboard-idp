@@ -20,11 +20,11 @@
             .avatar-placeholder {
                 width: 120px; height: 120px;
                 border-radius: 24px;
-                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 100%);
+                background: #0f172a;
                 display: flex; align-items: center; justify-content: center;
                 font-size: 2.6rem; font-weight: 800;
                 color: white;
-                box-shadow: 0 4px 20px rgba(46,55,70,0.3);
+                box-shadow: 0 4px 20px rgba(15, 23, 42,0.3);
                 letter-spacing: -1px;
             }
             .avatar-upload-btn {
@@ -44,7 +44,7 @@
 
             /* Hero Banner */
             .prof-hero {
-                background: linear-gradient(135deg, #2e3746 0%, #3d4f65 60%, #2a4060 100%);
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
                 border-radius: 20px;
                 padding: 32px 36px;
                 display: flex;

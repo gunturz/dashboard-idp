@@ -3,7 +3,7 @@
         <style>
             .section-header {
                 display: inline-block;
-                background: #2e3746; color: white;
+                background: #0f172a; color: white;
                 font-weight: 600; font-size: 0.875rem;
                 padding: 0.35rem 1.25rem;
                 border-radius: 6px 6px 0 0;
@@ -16,7 +16,7 @@
                 transition: border-color 0.2s, box-shadow 0.2s;
                 color: #1e293b;
             }
-            .prof-input:focus { outline: none; border-color: #2e3746; box-shadow: 0 0 0 3px rgba(46,55,70,0.1); }
+            .prof-input:focus { outline: none; border-color: #0f172a; box-shadow: 0 0 0 3px rgba(15, 23, 42,0.1); }
             .prof-input:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
             .modal-backdrop {
                 position: fixed; inset: 0; z-index: 100;
@@ -223,7 +223,7 @@
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
                                     <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#2e3746] w-32 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="text-sm font-semibold text-[#0f172a] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
                                         
                                         @if (($field['type'] ?? '') === 'text')
@@ -346,7 +346,7 @@
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @foreach ($profilFields as $i => $field)
                                     <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#2e3746] w-28 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span class="text-sm font-semibold text-[#0f172a] w-28 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
                                         @if (($field['type'] ?? '') === 'text')
                                             <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}" class="edit-field prof-input hidden">
@@ -418,7 +418,7 @@
                     Batalkan
                 </button>
                 <button type="button" onclick="submitForm()"
-                        class="flex-1 bg-[#2e3746] hover:bg-[#1e2a36] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
+                        class="flex-1 bg-[#0f172a] hover:bg-[#1e2a36] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
                     Ya, Yakin
                 </button>
             </div>

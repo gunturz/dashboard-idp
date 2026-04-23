@@ -117,7 +117,7 @@
                 class="role-table-container border border-[#e2e8f0] rounded-xl overflow-hidden shadow-sm bg-white">
                 {{-- Table Title --}}
                 <div class="bg-[#f8fafc] border-b border-[#e2e8f0] py-3 text-center">
-                    <h3 class="font-bold text-[#2e3746] leading-none">{{ $group['title'] }}</h3>
+                    <h3 class="font-bold text-[#0f172a] leading-none">{{ $group['title'] }}</h3>
                 </div>
 
                 {{-- Table Data --}}
@@ -127,18 +127,18 @@
                             <tr class="bg-white">
                                 @if ($group['showMultiRole'])
                                     {{-- 6 columns: Email, Nama, Perusahaan, Posisi, MultiRole, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Posisi saat ini</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:10%">Multi Role</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:20%">Email</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:20%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:20%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:15%">Posisi saat ini</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:10%">Multi Role</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:15%">Aksi</th>
                                 @else
                                     {{-- 4 columns for Finance/Panelis: Email, Nama, Perusahaan, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:25%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:30%">Email</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:30%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:25%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#0f172a] p-3" style="width:15%">Aksi</th>
                                 @endif
                             </tr>
                         </thead>
@@ -146,7 +146,7 @@
                             @forelse($group['users'] as $u)
                                 <tr class="bg-white hover:bg-gray-50 transition-colors user-row" data-department="{{ strtolower($u->department->nama_department ?? '') }}">
                                     <td class="text-sm font-medium text-[#475569]">{{ $u->email }}</td>
-                                    <td class="col-name text-sm font-bold text-[#2e3746]">{{ $u->nama }}</td>
+                                    <td class="col-name text-sm font-bold text-[#0f172a]">{{ $u->nama }}</td>
                                     <td class="col-company text-sm font-medium text-[#475569]">
                                         {{ $u->company->nama_company ?? '—' }}</td>
                                     @if ($group['showPosisi'])
@@ -225,7 +225,7 @@
     <div id="roleModal" class="fixed inset-0 bg-black/50 z-[100] items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform transition-all">
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/80">
-                <h3 class="text-lg font-bold text-[#2e3746]">Assign Role</h3>
+                <h3 class="text-lg font-bold text-[#0f172a]">Assign Role</h3>
                 <button type="button" onclick="closeRoleModal()"
                     class="text-gray-400 hover:text-gray-600 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"

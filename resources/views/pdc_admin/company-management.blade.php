@@ -19,7 +19,7 @@
             .company-name {
                 font-size: 1rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
             }
 
             @media (max-width: 640px) {
@@ -72,7 +72,7 @@
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
         </div>
         <button onclick="openAddModal()"
-            class="flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#2e3746] hover:bg-[#1f2937] rounded-xl transition-colors shadow-sm">
+            class="flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#0f172a] hover:bg-[#1f2937] rounded-xl transition-colors shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
                 stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -83,7 +83,7 @@
 
     {{-- Main Card --}}
     <div class="prem-card p-4 sm:p-8 w-full mb-10">
-        <h3 class="text-lg font-bold text-[#2e3746] mb-6">Daftar Perusahaan</h3>
+        <h3 class="text-lg font-bold text-[#0f172a] mb-6">Daftar Perusahaan</h3>
 
         {{-- Company List --}}
         <div class="space-y-4" id="companyList">
@@ -134,12 +134,12 @@
     {{-- Add Modal --}}
     <div id="addModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-8">
-            <h3 class="text-xl font-black text-[#2e3746] mb-1">Tambah Perusahaan</h3>
+            <h3 class="text-xl font-black text-[#0f172a] mb-1">Tambah Perusahaan</h3>
             <p class="text-sm text-gray-400 mb-6">Masukkan nama perusahaan baru</p>
             <form method="POST" action="{{ route('pdc_admin.company.store') }}">
                 @csrf
                 <input type="text" name="nama_company" placeholder="Nama perusahaan"
-                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
+                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#0f172a] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('addModal')"
                         class="flex-1 py-3 text-sm font-semibold text-gray-500 bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">
@@ -157,13 +157,13 @@
     {{-- Edit Modal --}}
     <div id="editModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl p-8">
-            <h3 class="text-xl font-black text-[#2e3746] mb-1">Edit Perusahaan</h3>
+            <h3 class="text-xl font-black text-[#0f172a] mb-1">Edit Perusahaan</h3>
             <p class="text-sm text-gray-400 mb-6">Ganti nama perusahaan</p>
             <form method="POST" id="editForm" action="">
                 @csrf
                 @method('PUT')
                 <input type="text" name="nama_company" id="editInput" placeholder="Nama perusahaan"
-                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#2e3746] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
+                    class="w-full border border-gray-200 rounded-xl py-3 px-4 text-sm text-[#0f172a] placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#14b8a6] mb-6">
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('editModal')"
                         class="flex-1 py-3 text-sm font-semibold text-gray-500 bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">

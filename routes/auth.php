@@ -237,6 +237,8 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.riwayat.detail');
     Route::get('/mentor/riwayat', [\App\Http\Controllers\MentorDashboardController::class , 'riwayat'])
         ->name('mentor.riwayat');
+    Route::get('/mentor/riwayat/talent/{talentId}/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'riwayatLogbook'])
+        ->name('mentor.riwayat.logbook');
 
     // Finance Routes
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])

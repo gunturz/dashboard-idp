@@ -213,7 +213,7 @@
         @endif
 
         {{-- Talent Selector --}}
-        <div class="mb-6 flex items-center gap-6 talent-selector-row" style="position: relative; z-index: 50;">
+        <div class="mb-6 flex items-center gap-6 talent-selector-row" style="position: relative; z-index: 40;">
             <label class="text-[15px] font-bold text-gray-700 whitespace-nowrap">Talent</label>
             
             <div class="relative w-full max-w-lg" id="custom-select-container">
@@ -305,15 +305,6 @@
                                     </svg>
                                     Detail
                                 </a>
-                                @if($data['status'] === 'Pending')
-                                    <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="btn-pilih-aksi">
-                                        Pilih Aksi
-                                    </button>
-                                @elseif(in_array($data['status'], ['Approve','Approved']))
-                                    <span class="btn-approved">Approved</span>
-                                @else
-                                    <span class="btn-rejected">Rejected</span>
-                                @endif
                             </div>
                         </td>
                     </tr>
@@ -368,15 +359,6 @@
                                     </svg>
                                     Detail
                                 </a>
-                                @if($data['status'] === 'Pending')
-                                    <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="btn-pilih-aksi">
-                                        Pilih Aksi
-                                    </button>
-                                @elseif(in_array($data['status'], ['Approve','Approved']))
-                                    <span class="btn-approved">Approved</span>
-                                @else
-                                    <span class="btn-rejected">Rejected</span>
-                                @endif
                             </div>
                         </td>
                     </tr>
@@ -431,15 +413,6 @@
                                     </svg>
                                     Detail
                                 </a>
-                                @if($data['status'] === 'Pending')
-                                    <button onclick="openStatusModal({{ $data['id'] }}, '{{ addslashes($selectedTalent->nama) }}')" class="btn-pilih-aksi">
-                                        Pilih Aksi
-                                    </button>
-                                @elseif(in_array($data['status'], ['Approve','Approved']))
-                                    <span class="btn-approved">Approved</span>
-                                @else
-                                    <span class="btn-rejected">Rejected</span>
-                                @endif
                             </div>
                         </td>
                     </tr>
@@ -462,61 +435,9 @@
         @endif
     </div>
 
-    {{-- Modal Confirm Aksi --}}
-    <div id="statusModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
-        <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[360px] p-7 text-center transform scale-95 transition-transform duration-300" id="statusModalContent">
-            <div class="mx-auto flex h-[68px] w-[68px] items-center justify-center rounded-full bg-[#eab308] mb-5 shadow-[0_4px_12px_rgba(234,179,8,0.3)]">
-                <span class="text-white font-black text-4xl leading-none -mt-1">!</span>
-            </div>
-            <h3 class="text-xl font-bold text-[#1e293b] mb-2 tracking-tight">Update Status Tugas?</h3>
-            <p class="text-[13px] text-gray-500 leading-relaxed mb-6 font-medium px-2">
-                Pilih status untuk tugas <span id="modalTalentName" class="font-bold text-gray-700">Talent</span>. Tindakan ini akan langsung memperbarui logbook sistem.
-            </p>
-            <form id="statusModalForm" method="POST" action="">
-                @csrf
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <button type="submit" name="status" value="Rejected" class="w-full bg-[#ef4444] text-white font-bold py-2.5 rounded-lg hover:bg-red-600 transition-colors shadow-[0_2px_8px_rgba(239,68,68,0.3)]">
-                        Reject
-                    </button>
-                    <button type="submit" name="status" value="Approved" class="w-full bg-[#10b981] text-white font-bold py-2.5 rounded-lg hover:bg-emerald-600 transition-colors shadow-[0_2px_8px_rgba(16,185,129,0.3)]">
-                        Approve
-                    </button>
-                </div>
-            </form>
-            <button onclick="closeStatusModal()" type="button" class="w-full bg-[#f1f5f9] text-[#64748b] font-bold py-2.5 rounded-lg hover:bg-gray-200 transition-colors">
-                Batal
-            </button>
-        </div>
-    </div>
 
     <x-slot name="scripts">
         <script>
-            // Logbook Status Modal Logic
-            const baseStatusUrl = "{{ url('/mentor/validasi') }}";
-
-            function openStatusModal(id, talentName) {
-                const modal = document.getElementById('statusModal');
-                const modalContent = document.getElementById('statusModalContent');
-                const form = document.getElementById('statusModalForm');
-                const nameSpan = document.getElementById('modalTalentName');
-
-                form.action = `${baseStatusUrl}/${id}/status`;
-                nameSpan.textContent = talentName;
-
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
-                }, 10);
-            }
-
-            function closeStatusModal() {
-                const modal = document.getElementById('statusModal');
-                const modalContent = document.getElementById('statusModalContent');
-                modal.classList.add('opacity-0');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => { modal.classList.add('hidden'); }, 300);
-            }
 
             // Custom Dropdown Talent Logic
             function toggleTalentDropdown() {

@@ -62,13 +62,28 @@ class MentorDashboardController extends Controller
             }
             )
                 ->get();
-            $pending = $idpActivities->filter(function ($activity) {
+            $pendingActivities = $idpActivities->filter(function ($activity) {
                     return $activity->status === 'Pending' || $activity->status === null || $activity->status === '';
                 }
-                )->count();
+                );
+                $pending = $pendingActivities->count();
                 $approved = $idpActivities->whereIn('status', ['Approve', 'Approved'])->count();
                 $rejected = $idpActivities->whereIn('status', ['Reject', 'Rejected'])->count();
                 $hasHistory = ($approved + $rejected) > 0;
+
+                // Determine which tab needs validation
+                $pendingTab = '';
+                if ($pending > 0) {
+                    if ($pendingActivities->contains(fn($act) => $act->type && $act->type->type_name === 'Exposure')) {
+                        $pendingTab = '#exposure';
+                    }
+                    elseif ($pendingActivities->contains(fn($act) => $act->type && $act->type->type_name === 'Mentoring')) {
+                        $pendingTab = '#mentoring';
+                    }
+                    elseif ($pendingActivities->contains(fn($act) => $act->type && $act->type->type_name === 'Learning')) {
+                        $pendingTab = '#learning';
+                    }
+                }
 
                 // Hitung persentase untuk Exposure, Mentoring, Learning (asumsi target 6 untuk mockup)
                 $countExposure = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
@@ -90,6 +105,7 @@ class MentorDashboardController extends Controller
                 'approved' => $approved,
                 'rejected' => $rejected,
                 ],
+                'pending_tab' => $pendingTab,
                 'has_pending' => $pending > 0,
                 'has_history' => $hasHistory,
                 'progress' => [
@@ -225,117 +241,92 @@ class MentorDashboardController extends Controller
     public function riwayat(Request $request)
     {
         $user = Auth::user();
-        $mentees = $user->mentees->filter(function ($mentee) use ($user) {
-            return IdpActivity::where('user_id_talent', $mentee->id)
-            ->where(function ($q) use ($user) {
-                    $q->where('verify_by', $user->id)
-                        ->orWhereHas('type', function ($qType) {
-                    $qType->where('type_name', 'Learning');
-                }
-                );
-            }
-            )
-            ->whereIn('status', ['Approve', 'Approved', 'Reject', 'Rejected'])
-            ->exists();
+
+        // Ambil semua mentee dari mentor ini
+        $allMentees = $user->mentees;
+
+        // Filter: hanya tampilkan yang sudah selesai penilaian panelis (status_promotion = 'Approved Panelis')
+        $completedTalents = $allMentees->filter(function ($mentee) {
+            return optional($mentee->promotion_plan)->status_promotion === 'Approved Panelis';
         })->values();
 
-        $talentId = $request->get('talent_id');
-        $selectedTalent = null;
+        // Load relasi yang diperlukan untuk tabel riwayat
+        $completedTalents->load([
+            'company',
+            'department',
+            'position',
+            'promotion_plan.targetPosition',
+        ]);
+
+        return view('mentor.riwayat', compact('user', 'completedTalents'));
+    }
+
+    public function riwayatLogbook(Request $request, $talentId)
+    {
+        $user = Auth::user();
+        $talent = \App\Models\User::with(['position', 'department', 'company', 'promotion_plan'])->findOrFail($talentId);
+
+        // Ambil semua aktivitas logbook talent ini
+        $activities = \App\Models\IdpActivity::with(['type', 'verifier'])
+            ->where('user_id_talent', $talentId)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $exposureData = [];
         $mentoringData = [];
         $learningData = [];
 
-        if ($mentees->isNotEmpty()) {
-            if ($talentId) {
-                // Cari talent berdasarkan id
-                $selectedTalent = $mentees->firstWhere('id', $talentId);
-            }
-            if (!$selectedTalent) {
-                // Default ke mentee pertama
-                $selectedTalent = $mentees->first();
-            }
+        foreach ($activities as $act) {
+            $typeName = $act->type ? $act->type->type_name : '';
 
-            if ($selectedTalent) {
-                $activities = IdpActivity::with(['type', 'verifier'])
-                    ->where('user_id_talent', $selectedTalent->id)
-                    ->where(function ($q) use ($user) {
-                    $q->where('verify_by', $user->id)
-                        ->orWhereHas('type', function ($qType) {
-                        $qType->where('type_name', 'Learning');
-                    }
-                    );
-                })
-                    ->whereIn('status', ['Approve', 'Approved', 'Reject', 'Rejected'])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-
-                foreach ($activities as $act) {
-                    $typeName = $act->type ? $act->type->type_name : '';
-
-                    // Decode list file path
-                    $docPaths = [];
-                    $docNames = [];
-                    if ($act->document_path) {
-                        if (str_starts_with($act->document_path, '["')) {
-                            $docPaths = json_decode($act->document_path, true) ?? [];
-                            $docNames = $act->file_name ? explode(', ', $act->file_name) : [];
-                        }
-                        else {
-                            $docPaths = [$act->document_path];
-                            $docNames = [$act->file_name ?? ''];
-                        }
-                    }
-
-                    if ($typeName === 'Exposure') {
-                        $exposureData[] = [
-                            'id' => $act->id,
-                            'mentor' => $act->verifier ? $act->verifier->nama : '-',
-                            'tema' => $act->theme,
-                            'tanggal_update' => $act->updated_at,
-                            'tanggal' => $act->activity_date,
-                            'lokasi' => $act->location,
-                            'aktivitas' => $act->activity,
-                            'deskripsi' => $act->description,
-                            'file_paths' => $docPaths,
-                            'file_names' => $docNames,
-                            'status' => $act->status,
-                        ];
-                    }
-                    elseif ($typeName === 'Mentoring') {
-                        $mentoringData[] = [
-                            'id' => $act->id,
-                            'mentor' => $act->verifier ? $act->verifier->nama : '-',
-                            'tema' => $act->theme,
-                            'tanggal_update' => $act->updated_at,
-                            'tanggal' => $act->activity_date,
-                            'lokasi' => $act->location,
-                            'deskripsi' => $act->description,
-                            'action_plan' => $act->action_plan,
-                            'file_paths' => $docPaths,
-                            'file_names' => $docNames,
-                            'status' => $act->status,
-                        ];
-                    }
-                    elseif ($typeName === 'Learning') {
-                        $learningData[] = [
-                            'id' => $act->id,
-                            'sumber' => $act->activity,
-                            'tema' => $act->theme,
-                            'tanggal_update' => $act->updated_at,
-                            'tanggal' => $act->activity_date,
-                            'platform' => $act->platform,
-                            'file_paths' => $docPaths,
-                            'file_names' => $docNames,
-                            'status' => $act->status,
-                        ];
-                    }
+            $docPaths = [];
+            $docNames = [];
+            if ($act->document_path) {
+                if (str_starts_with($act->document_path, '["')) {
+                    $docPaths = json_decode($act->document_path, true) ?? [];
+                    $docNames = $act->file_name ? explode(', ', $act->file_name) : [];
                 }
+                else {
+                    $docPaths = [$act->document_path];
+                    $docNames = [$act->file_name ?? ''];
+                }
+            }
+
+            $base = [
+                'id' => $act->id,
+                'mentor' => $act->verifier ? $act->verifier->nama : '-',
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
+                'file_paths' => $docPaths,
+                'file_names' => $docNames,
+            ];
+
+            if ($typeName === 'Exposure') {
+                $exposureData[] = array_merge($base, [
+                    'lokasi' => $act->location,
+                    'aktivitas' => $act->activity,
+                    'deskripsi' => $act->description,
+                ]);
+            }
+            elseif ($typeName === 'Mentoring') {
+                $mentoringData[] = array_merge($base, [
+                    'lokasi' => $act->location,
+                    'deskripsi' => $act->description,
+                    'action_plan' => $act->action_plan,
+                ]);
+            }
+            elseif ($typeName === 'Learning') {
+                $learningData[] = array_merge($base, [
+                    'sumber' => $act->activity,
+                    'platform' => $act->platform,
+                ]);
             }
         }
 
-        return view('mentor.riwayat', compact(
-            'user', 'mentees', 'selectedTalent', 'exposureData', 'mentoringData', 'learningData'
+        return view('mentor.riwayat-logbook', compact(
+            'user', 'talent', 'exposureData', 'mentoringData', 'learningData'
         ));
     }
 

@@ -141,7 +141,9 @@
                                         {{ $mentee['status']['pending'] }}
                                     </span>
                                 @else
-                                    <span class="text-gray-400 text-sm">-</span>
+                                    <span class="inline-flex items-center justify-center bg-gray-50 border border-yellow-500 text-yellow-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        0
+                                    </span>
                                 @endif
                             </td>
                             {{-- Approved --}}
@@ -191,7 +193,7 @@
                             {{-- Aksi --}}
                             <td class="px-5 py-4 text-center">
                                 @if($mentee['status']['pending'] > 0)
-                                    <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}"
+                                    <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}{{ $mentee['pending_tab'] ?? '' }}"
                                         class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

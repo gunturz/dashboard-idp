@@ -218,134 +218,124 @@
                     Review Sekarang
                 </a>
             </div>
+            <a href="{{ route('mentor.validasi') }}" class="bg-[#facc15] hover:bg-[#eab308] text-[#1e293b] font-bold text-[13px] px-5 py-2.5 rounded-lg transition-colors inline-block shadow-sm">
+                Review Sekarang
+            </a>
+        </div>
         @endif
 
         <div class="bg-gray-50 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-            @if ($totalMentee > 0)
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="bg-[#f8fafc] border-b border-gray-200">
-                                <th
-                                    class="px-5 py-4 text-left text-xs font-bold text-[#475569] uppercase tracking-wider">
-                                    Talent</th>
-                                <th
-                                    class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">
-                                    Pending</th>
-                                <th
-                                    class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">
-                                    Approved</th>
-                                <th
-                                    class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">
-                                    Rejected</th>
-                                <th
-                                    class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">
-                                    Progress Logbook</th>
-                                <th
-                                    class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">
-                                    Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100" id="mentee-tbody">
-                            @foreach ($menteesList as $mentee)
-                                <tr class="mentee-row-item hover:bg-gray-50/60 transition-colors"
-                                    data-name="{{ strtolower($mentee['name']) }}">
-                                    {{-- Foto + Nama + Jabatan --}}
-                                    <td class="px-5 py-4">
-                                        <div class="flex items-center gap-3">
-                                            <img src="{{ $mentee['foto'] ? asset('storage/' . $mentee['foto']) : 'https://ui-avatars.com/api/?name=' . urlencode($mentee['name']) . '&background=random' }}"
-                                                class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-gray-100 shadow-sm">
-                                            <div>
-                                                <p class="font-bold text-[14px] text-slate-800 leading-tight">
-                                                    {{ $mentee['name'] }}</p>
-                                                <p class="text-[11px] text-gray-500 font-medium mt-0.5">
-                                                    {{ $mentee['position'] }} <span class="text-gray-400">·</span> <span
-                                                        class="italic">{{ $mentee['department'] }}</span>
-                                                </p>
+            @if($totalMentee > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-[#f8fafc] border-b border-gray-200">
+                            <th class="px-5 py-4 text-left text-xs font-bold text-[#475569] uppercase tracking-wider">Talent</th>
+                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Pending</th>
+                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Approved</th>
+                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Rejected</th>
+                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Progress Logbook</th>
+                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100" id="mentee-tbody">
+                        @foreach($menteesList as $mentee)
+                        <tr class="mentee-row-item hover:bg-gray-50/60 transition-colors" data-name="{{ strtolower($mentee['name']) }}">
+                            {{-- Foto + Nama + Jabatan --}}
+                            <td class="px-5 py-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ $mentee['foto'] ? asset('storage/' . $mentee['foto']) : 'https://ui-avatars.com/api/?name=' . urlencode($mentee['name']) . '&background=random' }}"
+                                        class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-gray-100 shadow-sm">
+                                    <div>
+                                        <p class="font-bold text-[14px] text-slate-800 leading-tight">{{ $mentee['name'] }}</p>
+                                        <p class="text-[11px] text-gray-500 font-medium mt-0.5">
+                                            {{ $mentee['position'] }} <span class="text-gray-400">·</span> <span class="italic">{{ $mentee['department'] }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            {{-- Pending --}}
+                            <td class="px-5 py-4 text-center">
+                                @if($mentee['status']['pending'] > 0)
+                                    <span class="inline-flex items-center justify-center bg-yellow-50 border border-yellow-300 text-yellow-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        {{ $mentee['status']['pending'] }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center justify-center bg-gray-50 border border-yellow-500 text-yellow-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        0
+                                    </span>
+                                @endif
+                            </td>
+                            {{-- Approved --}}
+                            <td class="px-5 py-4 text-center">
+                                <span class="inline-flex items-center justify-center bg-green-50 border border-green-200 text-green-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                    {{ $mentee['status']['approved'] }}
+                                </span>
+                            </td>
+                            {{-- Rejected --}}
+                            <td class="px-5 py-4 text-center">
+                                <span class="inline-flex items-center justify-center bg-red-50 border border-red-200 text-red-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                    {{ $mentee['status']['rejected'] }}
+                                </span>
+                            </td>
+                            {{-- Progress Donuts --}}
+                            <td class="px-5 py-4">
+                                <div class="flex items-end justify-center gap-5">
+                                    @foreach([
+                                        ['key' => 'exposure',  'stroke' => '#64748b', 'track' => 'rgba(100,116,139,0.15)', 'label' => 'Exposure'],
+                                        ['key' => 'mentoring', 'stroke' => '#eab308', 'track' => 'rgba(234,179,8,0.15)',   'label' => 'Mentoring'],
+                                        ['key' => 'learning',  'stroke' => '#22c55e', 'track' => 'rgba(34,197,94,0.15)',   'label' => 'Learning'],
+                                    ] as $prog)
+                                    @php
+                                        $pct = $mentee['progress'][$prog['key']]['pct'] ?? 0;
+                                        $cnt = $mentee['progress'][$prog['key']]['count'] ?? 0;
+                                        $tgt = $mentee['progress'][$prog['key']]['target'] ?? 0;
+                                    @endphp
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div class="relative w-[80px] h-[80px] flex items-center justify-center">
+                                            <svg viewBox="0 0 36 36" class="absolute w-full h-full -rotate-90">
+                                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none" stroke="{{ $prog['track'] }}" stroke-width="4"/>
+                                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none" stroke="{{ $prog['stroke'] }}" stroke-width="4"
+                                                    stroke-dasharray="{{ $pct }}, 100"/>
+                                            </svg>
+                                            <div class="flex flex-col items-center font-bold text-[#2e3746] leading-tight">
+                                                <span class="text-[13px] tracking-tight">{{ $cnt }}/{{ $tgt }}</span>
+                                                <span class="text-[10px] text-[#475569] italic">{{ $pct }}%</span>
                                             </div>
                                         </div>
-                                    </td>
-                                    {{-- Pending --}}
-                                    <td class="px-5 py-4 text-center">
-                                        @if ($mentee['status']['pending'] > 0)
-                                            <span
-                                                class="inline-flex items-center justify-center bg-yellow-50 border border-yellow-300 text-yellow-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
-                                                {{ $mentee['status']['pending'] }}
-                                            </span>
-                                        @else
-                                            <span class="text-gray-400 text-sm">-</span>
-                                        @endif
-                                    </td>
-                                    {{-- Approved --}}
-                                    <td class="px-5 py-4 text-center">
-                                        <span
-                                            class="inline-flex items-center justify-center bg-green-50 border border-green-200 text-green-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
-                                            {{ $mentee['status']['approved'] }}
-                                        </span>
-                                    </td>
-                                    {{-- Rejected --}}
-                                    <td class="px-5 py-4 text-center">
-                                        <span
-                                            class="inline-flex items-center justify-center bg-red-50 border border-red-200 text-red-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
-                                            {{ $mentee['status']['rejected'] }}
-                                        </span>
-                                    </td>
-                                    {{-- Progress Donuts --}}
-                                    <td class="px-5 py-4">
-                                        <div class="flex items-end justify-center gap-5">
-                                            @foreach ([['key' => 'exposure', 'stroke' => '#64748b', 'track' => 'rgba(100,116,139,0.15)', 'label' => 'Exposure'], ['key' => 'mentoring', 'stroke' => '#eab308', 'track' => 'rgba(234,179,8,0.15)', 'label' => 'Mentoring'], ['key' => 'learning', 'stroke' => '#22c55e', 'track' => 'rgba(34,197,94,0.15)', 'label' => 'Learning']] as $prog)
-                                                @php
-                                                    $pct = $mentee['progress'][$prog['key']]['pct'] ?? 0;
-                                                    $cnt = $mentee['progress'][$prog['key']]['count'] ?? 0;
-                                                    $tgt = $mentee['progress'][$prog['key']]['target'] ?? 0;
-                                                @endphp
-                                                <div class="flex flex-col items-center gap-2">
-                                                    <div
-                                                        class="relative w-[80px] h-[80px] flex items-center justify-center">
-                                                        <svg viewBox="0 0 36 36"
-                                                            class="absolute w-full h-full -rotate-90">
-                                                            <path
-                                                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                                fill="none" stroke="{{ $prog['track'] }}"
-                                                                stroke-width="4" />
-                                                            <path
-                                                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                                fill="none" stroke="{{ $prog['stroke'] }}"
-                                                                stroke-width="4"
-                                                                stroke-dasharray="{{ $pct }}, 100" />
-                                                        </svg>
-                                                        <div
-                                                            class="flex flex-col items-center font-bold text-[#2e3746] leading-tight">
-                                                            <span
-                                                                class="text-[13px] tracking-tight">{{ $cnt }}/{{ $tgt }}</span>
-                                                            <span
-                                                                class="text-[10px] text-[#475569] italic">{{ $pct }}%</span>
-                                                        </div>
-                                                    </div>
-                                                    <span
-                                                        class="border border-[#cbd5e1] text-[#475569] bg-white text-[11px] font-medium px-3 py-1 rounded-full shadow-sm">{{ $prog['label'] }}</span>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </td>
-                                    {{-- Aksi --}}
-                                    <td class="px-5 py-4 text-center">
-                                        <a href="{{ route('mentor.logbook', ['talent_id' => $mentee['id']]) }}"
-                                            class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                            Validasi
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                        <span class="border border-[#cbd5e1] text-[#475569] bg-white text-[11px] font-medium px-3 py-1 rounded-full shadow-sm">{{ $prog['label'] }}</span>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </td>
+                            {{-- Aksi --}}
+                            <td class="px-5 py-4 text-center">
+                                @if($mentee['status']['pending'] > 0)
+                                    <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}{{ $mentee['pending_tab'] ?? '' }}"
+                                        class="inline-flex items-center gap-1.5 bg-[#2e3746] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Validasi
+                                    </a>
+                                @else
+                                    <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}"
+                                        class="inline-flex items-center gap-1.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Lihat Validasi
+                                    </a>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             @else
                 <div class="py-10 text-center text-gray-400 text-sm font-medium">Belum ada talent yang terdaftar.</div>
             @endif

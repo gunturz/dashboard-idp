@@ -135,6 +135,12 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.development_plan.store');
     Route::get('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'developmentPlan'])
         ->name('pdc_admin.development_plan');
+    Route::get('/pdc-admin/development-plan/{company_id}/{position_id}/edit', [\App\Http\Controllers\PDCAdminController::class , 'editDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.edit');
+    Route::put('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.update');
+    Route::delete('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyDevelopmentPlan'])
+        ->name('pdc_admin.development_plan.destroy');
     Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
         ->name('pdc_admin.detail.talent');
     Route::get('/pdc-admin/logbook-detail/{id}', [\App\Http\Controllers\PDCAdminController::class , 'logbookDetail'])
@@ -223,14 +229,16 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.notifikasi');
     Route::post('/mentor/notifikasi/mark-all-read', [\App\Http\Controllers\MentorDashboardController::class , 'markAllNotificationsRead'])
         ->name('mentor.notifikasi.markAllRead');
-    Route::get('/mentor/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
-        ->name('mentor.logbook');
-    Route::post('/mentor/logbook/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
-        ->name('mentor.logbook.update_status');
-    Route::get('/mentor/logbook-item/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
-        ->name('mentor.logbook.detail');
+    Route::get('/mentor/validasi', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
+        ->name('mentor.validasi');
+    Route::post('/mentor/validasi/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
+        ->name('mentor.validasi.update_status');
+    Route::get('/mentor/riwayat-detail/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
+        ->name('mentor.riwayat.detail');
     Route::get('/mentor/riwayat', [\App\Http\Controllers\MentorDashboardController::class , 'riwayat'])
         ->name('mentor.riwayat');
+    Route::get('/mentor/riwayat/talent/{talentId}/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'riwayatLogbook'])
+        ->name('mentor.riwayat.logbook');
 
     // Finance Routes
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])

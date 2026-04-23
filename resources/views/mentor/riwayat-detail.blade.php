@@ -85,7 +85,7 @@
                 @if($activity->type_idp == 1)
                 <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Aktivitas</span>
-                    <div class="text-[15px] text-gray-800 font-bold break-words">{{ $activity->activity ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->activity ?? '-' }}</div>
                 </div>
                 @endif
 
@@ -103,6 +103,72 @@
                 </div>
                 @endif
             </div>
+
+            @if($user->id === $activity->verify_by && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
+                <div class="mt-10 flex justify-end gap-3 pt-6 border-t border-gray-100">
+                    <button type="button" onclick="openConfirmModal('Rejected')" class="px-6 py-2.5 bg-[#ef4444] text-white font-bold rounded-lg hover:bg-red-600 transition-colors shadow-sm">
+                        Reject
+                    </button>
+                    <button type="button" onclick="openConfirmModal('Approved')" class="px-6 py-2.5 bg-[#10b981] text-white font-bold rounded-lg hover:bg-emerald-600 transition-colors shadow-sm">
+                        Approve
+                    </button>
+                </div>
+            @endif
         </div>
     </div>
+
+    @if($user->id === $activity->verify_by && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
+    {{-- Modal Confirm Action --}}
+    <div id="confirmModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0" style="transition: opacity 0.3s ease;">
+        <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[360px] p-7 text-center transform scale-95 transition-transform duration-300" id="confirmModalContent">
+            <div class="mx-auto flex h-[68px] w-[68px] items-center justify-center rounded-full bg-[#1e293b] mb-5 shadow-sm">
+                <span class="text-white font-black text-4xl leading-none -mt-1">?</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#1e293b] mb-2 tracking-tight">Konfirmasi</h3>
+            <p class="text-[13px] text-gray-500 leading-relaxed mb-6 font-medium px-2">
+                Apakah Anda yakin ingin <span id="modalActionText" class="font-bold text-gray-700">...</span> tugas ini? Tindakan ini akan langsung memperbarui logbook sistem.
+            </p>
+            <form id="confirmActionForm" method="POST" action="{{ url('/mentor/validasi/' . $activity->id . '/status') }}">
+                @csrf
+                <input type="hidden" name="status" id="actionStatusInput" value="">
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button type="button" onclick="closeConfirmModal()" class="w-full bg-[#f1f5f9] text-[#64748b] font-bold py-2.5 rounded-lg hover:bg-gray-200 transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="w-full bg-[#14b8a6] text-white font-bold py-2.5 rounded-lg hover:bg-teal-600 transition-colors">
+                        Ya
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <x-slot name="scripts">
+        <script>
+            function openConfirmModal(status) {
+                const modal = document.getElementById('confirmModal');
+                const modalContent = document.getElementById('confirmModalContent');
+                const actionText = document.getElementById('modalActionText');
+                const inputStatus = document.getElementById('actionStatusInput');
+
+                inputStatus.value = status;
+                actionText.textContent = status === 'Approved' ? 'meng-Approve' : 'me-Reject';
+
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            }
+
+            function closeConfirmModal() {
+                const modal = document.getElementById('confirmModal');
+                const modalContent = document.getElementById('confirmModalContent');
+                modal.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            }
+        </script>
+    </x-slot>
+    @endif
 </x-mentor.layout>

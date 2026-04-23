@@ -4,7 +4,7 @@
         <div class="flex items-center gap-3 flex-shrink-0">
 
             {{-- Mobile hamburger --}}
-            @if(!($hideSidebar ?? false))
+            @if (!($hideSidebar ?? false))
                 <button
                     class="flex-shrink-0 lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
                     onclick="toggleMobileSidebar()" aria-label="Menu">
@@ -44,12 +44,14 @@
             {{-- Notification Bell --}}
             <div class="hidden lg:relative lg:block" id="bell-wrapper">
                 @php
-                    $rawNotif = \App\Models\AppNotification::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+                    $rawNotif = \App\Models\AppNotification::where('user_id', auth()->id())
+                        ->orderBy('created_at', 'desc')
+                        ->get();
                     $unreadNotifications = $rawNotif->where('is_read', false)->map(function ($n) {
                         return [
                             'title' => $n->title,
-                            'desc'  => $n->desc,
-                            'time'  => $n->created_at->diffForHumans(),
+                            'desc' => $n->desc,
+                            'time' => $n->created_at->diffForHumans(),
                         ];
                     });
                     $hasUnreadNotif = $unreadNotifications->count() > 0;
@@ -63,7 +65,7 @@
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                     {{-- Pulse Badge --}}
-                    @if($hasUnreadNotif)
+                    @if ($hasUnreadNotif)
                         <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
                             <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
                         </span>
@@ -86,24 +88,29 @@
                         </div>
                         <form action="{{ route('pdc_admin.notifikasi.markAllRead') }}" method="POST" class="m-0">
                             @csrf
-                            <button type="submit" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
+                            <button type="submit"
+                                class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
                                 Tandai semua
                             </button>
                         </form>
                     </div>
 
-                    @if($hasUnreadNotif)
+                    @if ($hasUnreadNotif)
                         <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
-                            @foreach($unreadNotifications->take(3) as $notif)
+                            @foreach ($unreadNotifications->take(3) as $notif)
                                 <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
                                     onclick="window.location='{{ route('pdc_admin.notifikasi') }}'">
-                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <div
+                                        class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}</p>
+                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}
+                                        </p>
                                         <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? $notif['time'] !!}</p>
                                     </div>
                                 </li>
@@ -124,7 +131,8 @@
                     @endif
 
                     <div class="px-5 py-3 border-t border-gray-100 text-center">
-                        <a href="{{ route('pdc_admin.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
+                        <a href="{{ route('pdc_admin.notifikasi') }}"
+                            class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
                             Lihat semua notifikasi →
                         </a>
                     </div>
@@ -177,7 +185,8 @@
                                 {{ $initials }}
                             </div>
                             <div class="overflow-hidden">
-                                <p class="text-sm font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}
+                                <p class="text-sm font-bold text-white truncate">
+                                    {{ $user->nama ?? ($user->name ?? '-') }}
                                 </p>
                                 <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
                                 <span
@@ -209,18 +218,24 @@
                         <li class="lg:hidden">
                             <a href="{{ route('pdc_admin.notifikasi') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-                                <div class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path
+                                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
-                                    @if($hasUnreadNotif)
-                                        <span class="absolute top-0.5 right-0.5 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
+                                    @if ($hasUnreadNotif)
+                                        <span
+                                            class="absolute top-0.5 right-0.5 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
                                     @endif
                                 </div>
                                 <span>Notifikasi</span>
-                                @if($hasUnreadNotif)
-                                    <span class="ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $unreadNotifications->count() }}</span>
+                                @if ($hasUnreadNotif)
+                                    <span
+                                        class="ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $unreadNotifications->count() }}</span>
                                 @endif
                             </a>
                         </li>
@@ -249,4 +264,4 @@
             </div>
         </div>
     </div>
-</div>
+    </div>

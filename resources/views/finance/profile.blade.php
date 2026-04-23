@@ -45,36 +45,42 @@
     </x-slot>
 
 {{-- MAIN CONTENT --}}
-    <div class="w-full max-w-3xl mx-auto px-6 pb-8 pt-0 flex-grow fade-up">
+    <div class="w-full max-w-4xl mx-auto px-4 pb-12">
 
-        {{-- Row Back --}}
+        {{-- Back Button --}}
         <div class="mb-6">
-            <a href="{{ route('finance.dashboard') }}" class="btn-back">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+            <a href="{{ route('finance.dashboard') }}" class="btn-prem btn-ghost group">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 transition-transform group-hover:-translate-x-1">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
-                <span>Kembali</span>
+                <span>Kembali ke Dashboard</span>
             </a>
         </div>
 
-        <div class="flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-            </svg>
-            <h1 class="text-2xl font-bold text-[#2e3746]">Profile Finance</h1>
+        {{-- Page Header --}}
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="page-header-title">Profil Finance</h2>
+                <p class="page-header-sub">Kelola informasi akun dan data profil Anda</p>
+            </div>
         </div>
 
         {{-- Error Display --}}
         @if ($errors->any())
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl shadow-sm">
-                <div class="flex">
+            <div class="bg-red-50 border border-red-200 p-4 mb-6 rounded-2xl shadow-sm">
+                <div class="flex gap-3">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">Terjadi kesalahan pada data yang Anda masukkan:</p>
+                    <div>
+                        <p class="text-sm font-bold text-red-700">Terjadi kesalahan:</p>
                         <ul class="mt-1 list-disc list-inside text-xs text-red-600">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -88,15 +94,16 @@
         {{-- Success banner --}}
         @if (session('status') === 'profile-updated')
             <div id="success-banner"
-                 class="flex items-center justify-between gap-3 bg-white border border-green-400 text-green-700 rounded-xl px-5 py-3 mb-6 shadow-sm">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="text-sm font-semibold">Pengubahan Profile Finance berhasil</span>
+                 class="flex items-center justify-between gap-3 bg-green-50 border border-green-200 text-green-700 rounded-2xl px-5 py-4 mb-6 shadow-sm animate-title">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-bold">Profil berhasil diperbarui</span>
                 </div>
-                <button onclick="document.getElementById('success-banner').remove()"
-                        class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
+                <button onclick="document.getElementById('success-banner').remove()" class="text-green-400 hover:text-green-600 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                     </svg>
@@ -108,7 +115,7 @@
             @csrf
             @method('PATCH')
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="prem-card">
                 {{-- ===== DESKTOP LAYOUT (laptop): foto kiri, data kanan ===== --}}
                 <div class="hidden md:flex gap-8 p-8">
 

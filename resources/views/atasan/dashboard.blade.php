@@ -236,11 +236,13 @@
                         <div class="talent-name-block">
                             <span class="name">{{ $talent->nama }}</span>
                             <span class="role">
-                                <span class="text-gray-500">{{ optional($talent->position)->position_name ?? '-' }}</span>
+                                <span
+                                    class="text-gray-500">{{ optional($talent->position)->position_name ?? '-' }}</span>
                                 @if (optional($talent->promotion_plan)->targetPosition)
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-300 mx-1" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-300 mx-1"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                     <span
                                         class="text-gray-500">{{ $talent->promotion_plan->targetPosition->position_name }}</span>
@@ -296,8 +298,8 @@
                     @if ($details->isNotEmpty())
                         @if ($hasAtasanScored)
                             <div class="btn-assessment btn-assessment-done gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-emerald-500" viewBox="0 0 20 20"
-                                    fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-emerald-500"
+                                    viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd"
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                         clip-rule="evenodd" />
@@ -365,8 +367,6 @@
                     }
                 }, 16);
             });
-
-
         </script>
     </x-slot>
 </x-atasan.layout>

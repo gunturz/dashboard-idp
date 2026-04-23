@@ -115,9 +115,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <p class="text-sm font-semibold text-gray-500">Anda belum mengisi assessment kompetensi.</p>
+                        <p class="text-base font-bold text-gray-700">Belum Ada Data Assessment</p>
+                        <p class="text-sm text-gray-500 mt-1 mb-2 text-center max-w-sm">Anda belum mengisi assessment kompetensi. Silakan isi terlebih dahulu untuk melihat data kompetensi Anda.</p>
                         <a href="{{ route('talent.competency') }}"
-                            class="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
+                            class="mt-5 inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
                             style="background: linear-gradient(135deg, #0d9488, #10b981);">
                             Isi Kompetensi
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">

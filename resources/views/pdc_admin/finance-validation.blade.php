@@ -265,16 +265,10 @@
                 <option value="">Semua Status</option>
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
-                <option value="verified">Verified</option>
                 <option value="rejected">Rejected</option>
             </select>
         </div>
 
-        {{-- Reset Button --}}
-        <button type="button" onclick="resetFinanceFilters()" class="btn-prem btn-ghost w-full sm:w-auto mt-2 sm:mt-0" id="reset-filter-btn" style="display:none;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            Reset
-        </button>
     </div>
 
     {{-- Table --}}
@@ -570,9 +564,6 @@
             const search = document.getElementById('live-search-input').value.toLowerCase();
             const status = document.getElementById('live-status-filter').value.toLowerCase();
             const rows = document.querySelectorAll('.finance-row');
-            const resetBtn = document.getElementById('reset-filter-btn');
-
-            resetBtn.style.display = (search || status) ? 'inline-flex' : 'none';
 
             rows.forEach(row => {
                 const rowText = row.dataset.search;
@@ -583,12 +574,6 @@
 
                 row.style.display = (matchSearch && matchStatus) ? '' : 'none';
             });
-        }
-
-        function resetFinanceFilters() {
-            document.getElementById('live-search-input').value = '';
-            document.getElementById('live-status-filter').value = '';
-            filterFinanceList();
         }
 
         function openActionModal(projectId, talentName, actionUrl) {

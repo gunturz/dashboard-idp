@@ -428,7 +428,7 @@
                             {{ optional(optional($talent)->position)->position_name ?? '-' }} - Manager
                             <em>{{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}</em>
                         </span>
-                        <span class="talent-date">Dikirim: {{ $project->updated_at ? $project->updated_at->format('d F Y') : '-' }}</span>
+                        <span class="talent-date">Dikirim: {{ $project->created_at ? $project->created_at->format('d F Y') : '-' }}</span>
                     </div>
                 </div>
                 <div class="header-right">

@@ -55,7 +55,7 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            padding: 3.5rem 2.5rem;
+            padding: 1.5rem 2.5rem;
             width: 100%;
             max-width: 440px;
             max-height: 90vh;
@@ -100,14 +100,14 @@
             text-align: center;
             line-height: 1.3;
             letter-spacing: -0.5px;
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.25rem;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .login-logo-wrapper {
             display: flex;
             justify-content: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .login-logo-wrapper img {
@@ -127,7 +127,7 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 2rem;
+            margin-bottom: 1.25rem;
         }
 
         .form-label {
@@ -253,7 +253,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
             letter-spacing: 0.5px;
-            margin-top: 2rem;
+            margin-top: 1.25rem;
         }
 
         .btn-login:hover {
@@ -277,7 +277,7 @@
             text-align: center;
             font-size: 0.82rem;
             color: #94a3b8;
-            margin-top: 1.2rem;
+            margin-top: 0.75rem;
         }
 
         .register-link-text a {
@@ -312,7 +312,7 @@
             display: flex;
             align-items: center;
             gap: 0.9rem;
-            margin: 1rem 0 0.85rem;
+            margin: 0.75rem 0;
             color: rgba(255, 255, 255, 0.72);
             font-size: 0.78rem;
             font-weight: 600;

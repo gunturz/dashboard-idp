@@ -12,22 +12,42 @@
         </div>
 
         {{-- 4 Summary Cards --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-gray-50 rounded-xl border-2 border-teal-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
-                <span class="text-4xl font-extrabold text-teal-500 mb-2">{{ $total }}</span>
-                <span class="text-xs text-gray-500 font-medium">Total Request</span>
+        <div class="prem-stat-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">
+            <div class="prem-stat prem-stat-teal">
+                <div class="prem-stat-icon si-teal">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7z" />
+                    </svg>
+                </div>
+                <div class="prem-stat-value">{{ $total }}</div>
+                <div class="prem-stat-label">Total Request</div>
             </div>
-            <div class="bg-gray-50 rounded-xl border-2 border-yellow-400 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
-                <span class="text-4xl font-extrabold text-yellow-400 mb-2">{{ $pending }}</span>
-                <span class="text-xs text-gray-500 font-medium">Pending Review</span>
+            <div class="prem-stat prem-stat-amber">
+                <div class="prem-stat-icon si-amber">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="prem-stat-value">{{ $pending }}</div>
+                <div class="prem-stat-label">Pending Review</div>
             </div>
-            <div class="bg-gray-50 rounded-xl border-2 border-green-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
-                <span class="text-4xl font-extrabold text-green-500 mb-2">{{ $approved }}</span>
-                <span class="text-xs text-gray-500 font-medium">Approved</span>
+            <div class="prem-stat prem-stat-green">
+                <div class="prem-stat-icon si-green">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="prem-stat-value">{{ $approved }}</div>
+                <div class="prem-stat-label">Approved</div>
             </div>
-            <div class="bg-gray-50 rounded-xl border-2 border-red-500 p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow">
-                <span class="text-4xl font-extrabold text-red-500 mb-2">{{ $rejected }}</span>
-                <span class="text-xs text-gray-500 font-medium">Rejected</span>
+            <div class="prem-stat prem-stat-red">
+                <div class="prem-stat-icon si-red">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="prem-stat-value">{{ $rejected }}</div>
+                <div class="prem-stat-label">Rejected</div>
             </div>
         </div>
 

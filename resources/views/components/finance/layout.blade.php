@@ -178,7 +178,81 @@
             .nav-icon-btn {
                 width: 38px;
         }
-                /* ── Background Decoration ── */
+        /* ══ Premium Stats Cards ══ */
+        .prem-stat-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .prem-stat {
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px 20px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .prem-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3.5px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .prem-stat-teal::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+        .prem-stat-blue::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .prem-stat-amber::before { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+        .prem-stat-green::before { background: linear-gradient(90deg, #10b981, #34d399); }
+        .prem-stat-red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+        .prem-stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+        }
+
+        .prem-stat-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .si-teal { background: rgba(20, 184, 166, 0.12); color: #14b8a6; }
+        .si-blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+        .si-amber { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+        .si-green { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+        .si-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+        .prem-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .prem-stat-label {
+            font-size: 0.82rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* ── Background Decoration ── */
             .bg-decoration {
                 position: fixed;
                 inset: 0;

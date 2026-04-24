@@ -63,20 +63,7 @@
         </style>
     </x-slot>
 
-    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up">
-
-        {{-- Back Link --}}
-        <div class="mb-5">
-            <a href="{{ route('talent.dashboard') }}"
-                class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd"
-                        d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"
-                        clip-rule="evenodd" />
-                </svg>
-                <span class="text-[#0f172a]">Kembali</span>
-            </a>
-        </div>
+    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up"> 
 
         <div class="page-header animate-title">
             <div class="page-header-icon">
@@ -92,13 +79,13 @@
         </div>
 
         {{-- Tab Navigation --}}
-        <div class="flex gap-2 p-1.5 bg-gray-100 rounded-full w-fit mb-8 shadow-inner overflow-x-auto">
+        <div class="flex gap-1.5 p-1.5 bg-[#f9fafb] border border-[#e2e8f0] rounded-full w-fit mb-8 shadow-inner overflow-x-auto">
             <button id="tab-exposure" onclick="switchTab('exposure')"
                 class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 bg-[#0f172a] text-white shadow-sm whitespace-nowrap">Exposure</button>
             <button id="tab-mentoring" onclick="switchTab('mentoring')"
-                class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Mentoring</button>
+                class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-[#64748b] hover:bg-[#cbd5e1] hover:text-[#0f172a] whitespace-nowrap">Mentoring</button>
             <button id="tab-learning" onclick="switchTab('learning')"
-                class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 whitespace-nowrap">Learning</button>
+                class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 text-[#64748b] hover:bg-[#cbd5e1] hover:text-[#0f172a] whitespace-nowrap">Learning</button>
         </div>
 
         {{-- Exposure Section --}}
@@ -403,11 +390,11 @@
                     document.getElementById('panel-' + t).classList.add('hidden');
                     const btn = document.getElementById('tab-' + t);
                     btn.classList.remove('bg-[#0f172a]', 'text-white', 'shadow-sm');
-                    btn.classList.add('text-gray-500', 'hover:text-gray-900');
+                    btn.classList.add('text-[#64748b]', 'hover:bg-[#cbd5e1]', 'hover:text-[#0f172a]');
                 });
                 document.getElementById('panel-' + tab).classList.remove('hidden');
                 const activeBtn = document.getElementById('tab-' + tab);
-                activeBtn.classList.remove('text-gray-500', 'hover:text-gray-900');
+                activeBtn.classList.remove('text-[#64748b]', 'hover:bg-[#cbd5e1]', 'hover:text-[#0f172a]');
                 activeBtn.classList.add('bg-[#0f172a]', 'text-white', 'shadow-sm');
                 history.replaceState(null, null, '#' + tab);
             }

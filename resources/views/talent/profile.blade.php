@@ -3,7 +3,7 @@
     <x-slot name="styles">
         <style>
             /* ══ Profile Page ══ */
-            .prof-page { max-width: 960px; margin: 0 auto; }
+            .prof-page { max-width: 960px }
 
             /* Avatar */
             .avatar-wrap {
@@ -292,19 +292,8 @@
         </style>
     </x-slot>
 
-    <div class="prof-page animate-title pb-8 px-6 pt-12">
+    <div class="prof-page mx-auto w-full animate-title pb-8 px-6 pt-12">
 
-        {{-- Back Button --}}
-        <div class="mb-6">
-            <a href="{{ route('talent.dashboard') }}" 
-               class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-full shadow-sm hover:bg-gray-50 hover:text-slate-700 hover:border-gray-100 transition-all duration-300 group">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" 
-                     class="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
-                </svg>
-                Kembali
-            </a>
-        </div>
 
         {{-- Alerts --}}
         @if ($errors->any())
@@ -318,13 +307,13 @@
         @if (session('status') === 'profile-updated')
             <div id="success-banner" class="prof-alert-success">
                 <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
                     <span class="text-sm font-semibold text-teal-800">Profile berhasil diperbarui!</span>
                 </div>
                 <button onclick="document.getElementById('success-banner').remove()" class="text-teal-500 hover:text-teal-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                     </svg>
                 </button>
@@ -345,7 +334,7 @@
 
                 {{-- Upload button (visible in edit mode) --}}
                 <label for="foto-input" id="foto-upload-btn" class="avatar-upload-btn hidden" title="Ganti Foto">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
                     </svg>
@@ -370,42 +359,6 @@
             </div>
         </div>
 
-        {{-- Stat Strip --}}
-        <div class="prof-stat-strip">
-            <div class="prof-stat-item">
-                <div class="prof-stat-icon-wrap" style="background:rgba(20,184,166,0.1)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#14b8a6">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="prof-stat-val">{{ $user->nama ?? '—' }}</div>
-                    <div class="prof-stat-lbl">Nama Lengkap</div>
-                </div>
-            </div>
-            <div class="prof-stat-item">
-                <div class="prof-stat-icon-wrap" style="background:rgba(59,130,246,0.1)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#3b82f6">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="prof-stat-val" style="font-size:.92rem">{{ $user->company->nama_company ?? '—' }}</div>
-                    <div class="prof-stat-lbl">Perusahaan</div>
-                </div>
-            </div>
-            <div class="prof-stat-item">
-                <div class="prof-stat-icon-wrap" style="background:rgba(139,92,246,0.1)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#8b5cf6">
-                        <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="prof-stat-val" style="font-size:.92rem">{{ $user->department->nama_department ?? '—' }}</div>
-                    <div class="prof-stat-lbl">Departemen</div>
-                </div>
-            </div>
-        </div>
 
         {{-- FORM --}}
         <form id="profile-form" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
@@ -416,7 +369,7 @@
             <div class="prof-section">
                 <div class="prof-section-header">
                     <div class="prof-section-icon" style="background:rgba(20,184,166,0.1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#14b8a6">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#14b8a6" width="16" height="16">
                             <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
                         </svg>
                     </div>
@@ -440,7 +393,7 @@
             <div class="prof-section">
                 <div class="prof-section-header">
                     <div class="prof-section-icon" style="background:rgba(59,130,246,0.1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#3b82f6">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#3b82f6" width="16" height="16">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                         </svg>
                     </div>
@@ -499,7 +452,7 @@
             <div class="prof-section">
                 <div class="prof-section-header">
                     <div class="prof-section-icon" style="background:rgba(245,158,11,0.1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#f59e0b">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#f59e0b" width="16" height="16">
                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
                         </svg>
                     </div>
@@ -526,14 +479,14 @@
             {{-- Footer Actions --}}
             <div class="prof-footer">
                 <button type="button" id="btn-edit" onclick="enterEditMode()" class="btn-prem btn-teal">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="18" height="18">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"/>
                     </svg>
                     Edit Profil
                 </button>
                 <button type="button" id="btn-hapus-foto" onclick="hapusFoto()"
                         class="btn-prem btn-ghost hidden" style="color:#ef4444;border-color:#fecaca">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="18" height="18">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                     Hapus Foto
@@ -542,7 +495,7 @@
                     Batal
                 </button>
                 <button type="button" id="btn-simpan" onclick="openConfirmModal()" class="btn-prem btn-teal hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="18" height="18">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
                     </svg>
                     Simpan Perubahan
@@ -556,7 +509,7 @@
     <div id="confirm-modal" class="modal-backdrop hidden">
         <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm flex flex-col items-center text-center gap-5">
             <div class="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="36" height="36">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </div>

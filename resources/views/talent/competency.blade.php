@@ -12,6 +12,31 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0d9488;
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f766e;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #0d9488 transparent;
+        }
+
         /* Base backgrounds */
         .bg-dark-slate {
             background-color: #334155;
@@ -366,12 +391,12 @@
                     <div class="mb-5">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="w-3 h-3 rounded-full inline-block" style="background:#0f766e"></span>
-                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Core Competencies</h3>
+                            <h3 class="text-sm font-bold text-gray-500">Core Competencies</h3>
                         </div>
                         <div class="overflow-hidden rounded-xl border border-gray-100">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="text-xs text-gray-400 uppercase tracking-wider" style="background:#f8fafc">
+                                    <tr class="text-sm text-gray-500 font-bold" style="background:#f8fafc">
                                         <th class="px-5 py-3 text-left font-semibold">Kompetensi</th>
                                         <th class="py-3 text-center font-semibold" style="width:120px">Level</th>
                                         <th class="px-5 py-3 text-right font-semibold" style="width:90px">Aksi</th>
@@ -386,12 +411,12 @@
                     <div class="mb-4">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="w-3 h-3 rounded-full inline-block" style="background:#6366f1"></span>
-                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Managerial Competencies</h3>
+                            <h3 class="text-sm font-bold text-gray-500">Managerial Competencies</h3>
                         </div>
                         <div class="overflow-hidden rounded-xl border border-gray-100">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="text-xs text-gray-400 uppercase tracking-wider" style="background:#f8fafc">
+                                    <tr class="text-sm text-gray-500 font-bold" style="background:#f8fafc">
                                         <th class="px-5 py-3 text-left font-semibold">Kompetensi</th>
                                         <th class="py-3 text-center font-semibold" style="width:120px">Level</th>
                                         <th class="px-5 py-3 text-right font-semibold" style="width:90px">Aksi</th>

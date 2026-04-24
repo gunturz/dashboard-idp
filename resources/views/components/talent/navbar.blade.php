@@ -2,7 +2,7 @@
     <a href="{{ route('talent.dashboard') }}"
         class="flex items-center gap-3 hover:opacity-90 transition-opacity flex-shrink-0">
         <div class="hidden sm:flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 bg-white rounded-xl shadow-md flex-shrink-0 ring-2 ring-white/20">
-            <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-8 h-8 lg:w-9 lg:h-9 object-contain">
+            <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-8 h-8 lg:w-9 lg:h-9 object-contain" style="max-width: 36px; max-height: 36px; width: 100%; height: auto;">
         </div>
         <div class="hidden sm:block">
             <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
@@ -10,7 +10,7 @@
         </div>
         <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
             <div class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain" style="max-width: 32px; max-height: 32px; width: 100%; height: auto;">
             </div>
             IDP Talent
         </h1>

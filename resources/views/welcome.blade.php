@@ -52,16 +52,27 @@
 
         /* ─── SCROLLBAR ─── */
         ::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--dark);
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--teal);
+            background: #0d9488;
             border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f766e;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #0d9488 transparent;
         }
 
         /* ─── NOISE OVERLAY ─── */

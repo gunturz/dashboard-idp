@@ -7,7 +7,6 @@
                 align-items: center;
                 gap: 16px;
                 margin-bottom: 32px;
-                margin-top: 20px;
             }
 
             .page-header-icon {
@@ -67,11 +66,9 @@
             .highlight-table th {
                 padding: 18px 24px;
                 text-align: center;
-                font-size: 0.75rem;
+                font-size: 0.9rem;
                 font-weight: 800;
-                color: #64748b;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
+                color: #475569;
                 border-bottom: 1px solid #f1f5f9;
                 border-right: 1px solid #f1f5f9;
             }
@@ -121,15 +118,35 @@
                 border: none;
             }
 
-            .btn-emerald {
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            .btn-action-teal {
+                padding: 0.75rem 1.5rem;
+                background: linear-gradient(135deg, #0d9488, #10b981);
                 color: white;
-                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+                border: none;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
+                letter-spacing: 0.5px;
+                white-space: nowrap;
             }
 
-            /* Button hover effect simplified */
-            .btn-emerald:active {
-                transform: scale(0.98);
+            .btn-action-teal:hover {
+                background: linear-gradient(135deg, #0f766e, #059669);
+                box-shadow: 0 15px 25px -5px rgba(13, 148, 136, 0.5);
+                transform: translateY(-2px);
+            }
+
+            .btn-action-teal:active {
+                transform: translateY(0);
+                background: linear-gradient(135deg, #115e59, #065f46);
+                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
             }
 
             .btn-back-prem {
@@ -157,9 +174,9 @@
     </x-slot>
 
 
-    <div class="w-full px-4 lg:px-10 py-8 flex-grow animate-reveal">
+    <div class="w-full px-4 lg:px-6 pt-5 pb-6 flex-grow animate-reveal">
         {{-- Header Section (Dashboard Style) --}}
-        <div class="page-header">
+        <div class="page-header mt-2">
             <div class="page-header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
@@ -206,7 +223,7 @@
                                 {{ $dueDate->translatedFormat('d F Y') }}
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('talent.riwayat.detail', $session->id) }}" class="btn-prem btn-emerald">
+                                <a href="{{ route('talent.riwayat.detail', $session->id) }}" class="btn-action-teal">
                                     Lihat Detail
                                 </a>
                             </td>
@@ -225,16 +242,6 @@
                     @endforelse
                 </tbody>
             </table>
-        </div>
-
-        {{-- Back Button Section --}}
-        <div class="flex justify-end order-1">
-            <a href="{{ route('talent.dashboard') }}" class="btn-prem btn-back-prem">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
-                </svg>
-                <span>Kembali</span>
-            </a>
         </div>
     </div>
 </x-talent.layout>

@@ -65,6 +65,44 @@
                 border-color: #22c55e;
                 background: #f0fdf4;
             }
+
+            /* ── Action Buttons (Matching Login) ── */
+            .btn-action-teal {
+                padding: 0.75rem 1.5rem;
+                background: linear-gradient(135deg, #0d9488, #10b981);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
+                letter-spacing: 0.5px;
+            }
+
+            .btn-action-teal:hover:not(:disabled) {
+                background: linear-gradient(135deg, #0f766e, #059669);
+                box-shadow: 0 15px 25px -5px rgba(13, 148, 136, 0.5);
+                transform: translateY(-2px);
+            }
+
+            .btn-action-teal:active:not(:disabled) {
+                transform: translateY(0);
+                background: linear-gradient(135deg, #115e59, #065f46);
+                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
+            }
+
+            .btn-action-teal:disabled {
+                background: #cbd5e1;
+                box-shadow: none;
+                cursor: not-allowed;
+                color: #64748b;
+            }
         </style>
     </x-slot>
 
@@ -475,7 +513,7 @@
                     {{-- Submit Project --}}
                     <div class="flex justify-end mb-6">
                         <button type="submit"
-                            class="text-white font-semibold px-8 py-2.5 rounded-[10px] transition-all {{ optional($user->promotion_plan)->is_locked ? 'bg-gray-400 opacity-50 cursor-not-allowed' : 'bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]' }}"
+                            class="btn-action-teal px-8"
                             {{ optional($user->promotion_plan)->is_locked ? 'disabled title="Progress telah dikunci"' : '' }}>
                             Submit
                         </button>
@@ -578,7 +616,7 @@
                         kompetensi, aktivitas logbook, hingga pencapaian yang telah dikompletasi.</p>
                 </div>
                 <a href="{{ route('talent.riwayat') }}"
-                    class="w-full md:w-auto text-center bg-gradient-to-br from-[#10b981] to-[#059669] hover:from-[#16a34a] hover:to-[#15803d] text-white font-semibold flex-shrink-0 px-6 py-2.5 rounded-[10px] text-sm transition-all active:scale-95 shadow-[0_10px_15px_-3px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.5)] active:shadow-[0_3px_10px_rgba(34,197,94,0.3)]">
+                    class="w-full md:w-auto btn-action-teal px-8 whitespace-nowrap">
                     Lihat Riwayat
                 </a>
             </div>

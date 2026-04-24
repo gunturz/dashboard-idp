@@ -154,12 +154,12 @@
         .talent-prof-hero {
             flex-direction: column; align-items: stretch;
             gap: 0; padding: 20px 20px;
-            margin: 12px 12px 0 12px;
+            margin: 18px 12px 0 12px;
         }
         .talent-hero-section, .talent-hero-section-1 { flex: none; }
-        .talent-hero-section-1 { padding: 0 0 16px 0; flex-direction: row; align-items: center; }
-        .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 0; }
-        .talent-hero-section { padding: 16px 0 0 0; }
+        .talent-hero-section-1 { padding: 0; flex-direction: row; align-items: center; }
+        .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 16px 0; }
+        .talent-hero-section { padding: 0; }
     }
 </style>
 
@@ -175,11 +175,11 @@
 @endphp
 
 @if($mobileCollapsible)
-    {{-- ===== DESKTOP VIEW: 3-section hero ===== --}}
-    <div class="hidden md:flex talent-prof-hero fade-up fade-up-1" style="box-shadow:0 8px 32px rgba(15,23,42,0.35);">
+    {{-- ===== RESPONSIVE VIEW: 3-section hero ===== --}}
+    <div class="flex talent-prof-hero fade-up fade-up-1" style="box-shadow:0 8px 32px rgba(15,23,42,0.35);">
 
         {{-- Section 1: Avatar + Identity --}}
-        <div class="talent-hero-section-1">
+        <div class="talent-hero-section-1 cursor-pointer md:cursor-default" onclick="toggleMobileProfile()">
             <div class="talent-hero-avatar-wrap">
                 @if ($user->foto ?? false)
                     <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
@@ -187,82 +187,58 @@
                     <div class="talent-hero-avatar-placeholder">{{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
                 @endif
             </div>
-            <div class="talent-hero-info">
-                <div class="talent-hero-name">{{ $user->nama ?? $user->name }}</div>
+            <div class="talent-hero-info flex-1 min-w-0">
+                <div class="talent-hero-name truncate">{{ $user->nama ?? $user->name }}</div>
                 <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
             </div>
-        </div>
-
-        <div class="talent-hero-divider"></div>
-
-        {{-- Section 2: Perusahaan, Departemen, Posisi --}}
-        <div class="talent-hero-section flex-1">
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Perusahaan</span>
-                <span class="talent-hero-meta-value">{{ optional($user->company)->nama_company ?? '-' }}</span>
-            </div>
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Departemen</span>
-                <span class="talent-hero-meta-value">{{ optional($user->department)->nama_department ?? '-' }}</span>
-            </div>
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                <span class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
-            </div>
-        </div>
-
-        <div class="talent-hero-divider"></div>
-
-        {{-- Section 3: Mentor, Atasan, Periode --}}
-        <div class="talent-hero-section flex-1">
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Mentor</span>
-                <span class="talent-hero-meta-value">{{ $mentorNames }}</span>
-            </div>
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Atasan</span>
-                <span class="talent-hero-meta-value">{{ optional($user->atasan)->nama ?? '-' }}</span>
-            </div>
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Periode</span>
-                <span class="talent-hero-meta-value">{{ $periode }}</span>
-            </div>
-        </div>
-
-    </div>
-
-    {{-- ===== MOBILE VIEW: compact + collapsible ===== --}}
-    <div class="md:hidden relative overflow-hidden fade-up fade-up-1" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 70%,#2a4060 100%);border-radius:16px;margin:12px 12px 0 12px;box-shadow:0 8px 24px rgba(15,23,42,0.35);">
-        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full" style="background:rgba(20,184,166,0.08);filter:blur(40px);pointer-events:none"></div>
-        <div class="talent-hero-mobile-header" onclick="toggleMobileProfile()">
-            @if ($user->foto ?? false)
-                <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto" class="talent-hero-mobile-avatar">
-            @else
-                <div class="talent-hero-mobile-avatar-placeholder">{{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
-            @endif
-            <div class="flex-1 min-w-0">
-                <p class="text-white font-bold text-base leading-tight truncate">{{ $user->nama ?? $user->name }}</p>
-                <p class="text-white/50 text-sm mt-0.5">{{ ucfirst($user->role->role_name ?? 'Talent') }}</p>
-            </div>
-            <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white/40 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            {{-- Chevron only shows on mobile and if collapsible is enabled --}}
+            <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg" 
+                 class="h-6 w-6 text-white/40 md:hidden transition-transform duration-300" 
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
         </div>
+
         <div id="mobile-profile-detail" class="mobile-profile-detail-panel">
-            {{-- Group 1 --}}
-            <div class="px-4 pb-4 pt-2 space-y-3 border-t border-white/10">
-                <div><p class="text-white/50 text-xs font-semibold">Perusahaan</p><p class="text-white text-sm font-bold mt-0.5">{{ optional($user->company)->nama_company ?? '-' }}</p></div>
-                <div><p class="text-white/50 text-xs font-semibold">Departemen</p><p class="text-white text-sm font-bold mt-0.5">{{ optional($user->department)->nama_department ?? '-' }}</p></div>
-                <div><p class="text-white/50 text-xs font-semibold">Posisi yang Dituju</p><p class="text-white text-sm font-bold mt-0.5">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</p></div>
+            <div class="talent-hero-divider"></div>
+
+            {{-- Section 2: Perusahaan, Departemen, Posisi --}}
+            <div class="talent-hero-section flex-1">
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Perusahaan</span>
+                    <span class="talent-hero-meta-value">{{ optional($user->company)->nama_company ?? '-' }}</span>
+                </div>
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Departemen</span>
+                    <span class="talent-hero-meta-value">{{ optional($user->department)->nama_department ?? '-' }}</span>
+                </div>
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Posisi yang Dituju</span>
+                    <span class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                </div>
             </div>
-            {{-- Group 2 --}}
-            <div class="px-4 pb-4 pt-2 space-y-3 border-t border-white/10">
-                <div><p class="text-white/50 text-xs font-semibold">Mentor</p><p class="text-white text-sm font-bold mt-0.5">{{ $mentorNames }}</p></div>
-                <div><p class="text-white/50 text-xs font-semibold">Atasan</p><p class="text-white text-sm font-bold mt-0.5">{{ optional($user->atasan)->nama ?? '-' }}</p></div>
-                <div><p class="text-white/50 text-xs font-semibold">Periode</p><p class="text-white text-sm font-bold mt-0.5">{{ $periode }}</p></div>
+
+            <div class="talent-hero-divider"></div>
+
+            {{-- Section 3: Mentor, Atasan, Periode --}}
+            <div class="talent-hero-section flex-1">
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Mentor</span>
+                    <span class="talent-hero-meta-value">{{ $mentorNames }}</span>
+                </div>
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Atasan</span>
+                    <span class="talent-hero-meta-value">{{ optional($user->atasan)->nama ?? '-' }}</span>
+                </div>
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Periode</span>
+                    <span class="talent-hero-meta-value">{{ $periode }}</span>
+                </div>
             </div>
         </div>
+
     </div>
+
 
 @else
     {{-- ===== OTHER PAGES: 3-section hero, fully responsive ===== --}}

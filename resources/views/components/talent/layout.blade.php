@@ -35,15 +35,26 @@
         /* ── Scrollbar ── */
         ::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #0d9488;
             border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f766e;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #0d9488 transparent;
         }
 
         /* ── Title Animation ── */
@@ -175,6 +186,25 @@
         }
         .mobile-profile-detail-panel.open {
             max-height: 400px !important;
+        }
+        @media (min-width: 768px) {
+            /* Make the main hero card a 5-column grid:
+               [section1] [divider] [section2] [divider] [section3] */
+            .talent-prof-hero {
+                display: grid;
+                grid-template-columns: 1fr auto 1fr auto 1fr;
+                align-items: stretch;
+            }
+            /* Panel becomes "invisible" — its children join the grid directly */
+            .mobile-profile-detail-panel {
+                max-height: none !important;
+                overflow: visible;
+                display: contents;
+            }
+            .talent-hero-section-1 {
+                display: flex;
+                align-items: center;
+            }
         }
 
         /* ── Responsive ── */
@@ -321,11 +351,12 @@
     {{ $slot }}
 
     {{-- FOOTER --}}
+    @if(request()->routeIs('talent.dashboard'))
     <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
         <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
             {{-- Bagian Kiri: Logo & Deskripsi --}}
             <div class="flex items-center gap-[12px]">
-                <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl">
+                <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
                 <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
                     <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
                     Platform Individual Development Plan
@@ -346,6 +377,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
     <script>
         // Hide navbar on scroll down, show on scroll up

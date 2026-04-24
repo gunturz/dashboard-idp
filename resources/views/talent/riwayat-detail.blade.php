@@ -165,9 +165,12 @@
                                     <span class="text-4xl font-bold" style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <div class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] text-sm font-bold tracking-wide">
-                                {{ $label }}
-                            </div>
+                            <a href="{{ route('talent.logbook.detail') }}#{{ strtolower($label) }}" class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer">
+                                <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 relative transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -230,16 +233,5 @@
                 </div>
             </div>
         </div>
-
-        {{-- ══════════════════════════════ ACTIONS ══════════════════════════════ --}}
-        <div class="flex justify-end pt-4">
-            <a href="{{ route('talent.riwayat') }}" class="btn-back-prem flex items-center gap-2 px-8 py-2.5 rounded-[12px] font-bold text-sm tracking-wide active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
-                </svg>
-                Kembali
-            </a>
-        </div>
-
     </div>
 </x-talent.layout>

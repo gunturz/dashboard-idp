@@ -23,31 +23,34 @@
             /* ── Tab bar ── */
             .tab-bar {
                 display: flex;
-                background: #e2e8f0;
+                background: #f9fafb;
+                border: 1px solid #e2e8f0;
                 border-radius: 9999px;
-                padding: 5px;
-                gap: 4px;
+                padding: 6px;
+                gap: 6px;
                 width: fit-content;
-                margin-bottom: 1.5rem;
+                margin-bottom: 2rem;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
             }
 
             .tab-btn {
-                padding: 0.55rem 1.75rem;
-                font-weight: 600;
-                font-size: 0.9rem;
+                padding: 0.625rem 1.5rem;
+                font-weight: 700;
+                font-size: 0.875rem;
                 border-radius: 9999px;
                 cursor: pointer;
-                transition: all 0.2s;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                 text-decoration: none;
                 color: #64748b;
                 background: transparent;
                 white-space: nowrap;
+                border: none;
             }
 
             .tab-active {
                 background-color: #0f172a;
                 color: #ffffff;
-                box-shadow: 0 2px 12px rgba(15, 23, 42,0.22);
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
             }
 
             .tab-inactive {
@@ -81,36 +84,48 @@
                 border-color: #22c55e;
             }
 
-            .submit-btn {
-                background: linear-gradient(135deg, #10b981, #059669);
+            .btn-action-teal {
+                padding: 0.75rem 1.5rem;
+                background: linear-gradient(135deg, #0d9488, #10b981);
                 color: white;
-                font-weight: 600;
-                padding: 0.5rem 2.5rem;
-                border-radius: 10px;
+                border: none;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                font-size: 0.875rem;
-                box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+                box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
+                letter-spacing: 0.5px;
             }
 
-            .submit-btn:hover {
-                background: linear-gradient(135deg, #16a34a, #15803d);
-                box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
-                transform: translateY(-1px);
+            .btn-action-teal:hover:not(:disabled) {
+                background: linear-gradient(135deg, #0f766e, #059669);
+                box-shadow: 0 15px 25px -5px rgba(13, 148, 136, 0.5);
+                transform: translateY(-2px);
             }
 
-            .submit-btn:active {
+            .btn-action-teal:active:not(:disabled) {
                 transform: translateY(0);
-                box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+                background: linear-gradient(135deg, #115e59, #065f46);
+                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
             }
 
-            /* Main Gray Container matches the image */
-            .wrapper-bg {
-                background-color: #f3f4f6;
+            .btn-action-teal:disabled {
+                background: #cbd5e1;
+                box-shadow: none;
+                cursor: not-allowed;
+                color: #64748b;
             }
+
 
             .form-bg {
-                background-color: #ffffff;
-                border-radius: 10px;
+                background-color: #f9fafb;
+                border: 1px solid #e2e8f0;
+                border-radius: 24px;
             }
 
             /* ── Responsive Tab Bar ── */
@@ -132,18 +147,7 @@
     </x-slot>
 
     {{-- ══════════════════════════════ FORM AREA ══════════════════════════════ --}}
-    <div class="w-full max-w-5xl mx-auto px-4 md:px-6 pt-6 md:pt-10 pb-12 flex-grow fade-up fade-up-2">
-
-        {{-- Back Link --}}
-        <div class="px-2 mb-4">
-            <a href="{{ route('talent.dashboard') }}"
-                class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                </svg>
-                <span class="text-[#0f172a]">Kembali</span>
-            </a>
-        </div>
+    <div class="w-full px-4 lg:px-6 pt-5 pb-6 flex-grow fade-up fade-up-2">
 
         {{-- Custom Title --}}
         <div class="page-header animate-title">
@@ -188,7 +192,6 @@
             </script>
         @endif
 
-        <div class="wrapper-bg rounded-[16px] shadow-sm p-4 md:p-6 border border-gray-200">
 
             {{-- Tabs --}}
             <div class="tab-bar">
@@ -352,14 +355,12 @@
                     </div>
 
                     <div class="flex justify-end pt-5">
-                        <button type="submit" class="submit-btn text-white font-semibold">
+                        <button type="submit" class="btn-action-teal px-8">
                             Submit
                         </button>
                     </div>
                 </form>
             </div>
-
-        </div>
     </div>
 
     <x-slot name="scripts">

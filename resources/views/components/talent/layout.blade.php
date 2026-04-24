@@ -426,6 +426,10 @@
             function updateActiveOnScroll() {
                 // If on separate pages, keep those highlighted
                 const path = window.location.pathname;
+                if (path.includes('/profile') || path.includes('/profil')) {
+                    links.forEach(l => l.classList.remove('active'));
+                    return;
+                }
                 if (path.includes('/talent/riwayat')) {
                     links.forEach(l => {
                         if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
@@ -475,7 +479,9 @@
             const hash = decodeURIComponent(window.location.hash.replace('#', ''));
             const path = window.location.pathname;
 
-            if (path.includes('/talent/riwayat')) {
+            if (path.includes('/profile') || path.includes('/profil')) {
+                links.forEach(l => l.classList.remove('active'));
+            } else if (path.includes('/talent/riwayat')) {
                 links.forEach(l => {
                     if (l.getAttribute('data-section') === 'Riwayat') l.classList.add('active');
                     else l.classList.remove('active');

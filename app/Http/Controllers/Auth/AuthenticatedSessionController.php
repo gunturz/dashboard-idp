@@ -45,10 +45,11 @@ class AuthenticatedSessionController extends Controller
     {
         try {
             $googleUser = $this->googleDriver()->user();
-        } catch (Throwable $exception) {
+        }
+        catch (Throwable $exception) {
             Log::error('Google login callback failed.', [
                 'message' => $exception->getMessage(),
-                'type' => $exception::class,
+                'type' => $exception::class ,
                 'url' => $request->fullUrl(),
             ]);
 
@@ -56,7 +57,7 @@ class AuthenticatedSessionController extends Controller
                 ->withErrors(['google' => 'Login dengan Google gagal. Silakan coba lagi.']);
         }
 
-        $email = strtolower((string) $googleUser->getEmail());
+        $email = strtolower((string)$googleUser->getEmail());
 
         if ($email === '') {
             return redirect()->route('login')
@@ -67,7 +68,7 @@ class AuthenticatedSessionController extends Controller
             ->whereRaw('LOWER(email) = ?', [$email])
             ->first();
 
-        if (! $user) {
+        if (!$user) {
             return redirect()->route('login')
                 ->withErrors(['google' => 'Email Google Anda belum terdaftar di sistem IDP.']);
         }
@@ -113,13 +114,20 @@ class AuthenticatedSessionController extends Controller
         if ($roles && $roles->count() > 1) {
             return redirect()->route('role.select');
         }
-        
+
         if ($roles && $roles->count() === 1) {
             $role = strtolower($roles->first()->role_name);
             session(['active_role' => $role]);
-        } else {
+        }
+        else {
             $role = strtolower(Auth::user()->role->role_name ?? '');
             session(['active_role' => $role]);
+        }
+
+        // Set flag for PDC Admin so the layout can show the registration toast on first load
+        // Use put instead of flash to survive the double redirect from /dashboard -> /pdc_admin/dashboard
+        if (in_array($role, ['admin', 'pdc_admin'])) {
+            session()->put('pdc_admin_just_logged_in', true);
         }
 
         return redirect()->intended(route('dashboard'));

@@ -222,6 +222,7 @@ class PanelisController extends Controller
 
         // Tampilkan hanya penilaian yang dibuat oleh panelis ini
         $assessments = PanelisAssessment::where('panelis_id', $user->id)
+            ->whereNotNull('panelis_score')
             ->with([
             'talent.position',
             'talent.department',

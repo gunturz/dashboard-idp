@@ -1113,6 +1113,8 @@
         // Custom scripts block has been removed for SweetAlert
     </script>
     {{ $scripts ?? '' }}
+
+    {{-- Registration Toast removed. It's now handled by the bell dropdown auto-opening in navbar.blade.php --}}
 </body>
 
 </html>

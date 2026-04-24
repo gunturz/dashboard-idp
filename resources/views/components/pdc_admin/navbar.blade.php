@@ -101,7 +101,7 @@
                     </div>
 
                     @if ($hasUnreadNotif)
-                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
+                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto" id="pdc-bell-list">
                             @foreach ($unreadNotifications->take(2) as $notif)
                                 <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
                                     onclick="window.location='{{ route('pdc_admin.notifikasi') }}'">
@@ -122,7 +122,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <div class="flex flex-col items-center py-10 text-center px-4">
+                        <div class="flex flex-col items-center py-10 text-center px-4" id="pdc-bell-empty-state">
                             <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -188,6 +188,10 @@
                     .listen('.notification.new', function (data) {
                         // 1. Update badge counter
                         pdcUpdateBadge();
+
+                        document.dispatchEvent(new CustomEvent('pdc:notification-received', {
+                            detail: data
+                        }));
 
                         // 2. Tampilkan toast realtime
                         pdcShowToast(data.title, data.desc);
@@ -287,6 +291,108 @@
                         toast.style.transform = 'translateX(40px) scale(.96)';
                         setTimeout(() => toast.remove(), 400);
                     }, 5000);
+                }
+            });
+            </script>
+            @endauth
+
+            @auth
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let pdcBellPopupTimeout = null;
+                let pdcBellCleanupTimeout = null;
+
+                document.addEventListener('pdc:notification-received', function (event) {
+                    const data = event.detail || {};
+                    pdcInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
+                    pdcShowBellPopup();
+                });
+
+                function pdcInsertRealtimeNotification(title, desc) {
+                    const dropdown = document.getElementById('bell-dropdown');
+                    if (!dropdown) return;
+
+                    const emptyState = document.getElementById('pdc-bell-empty-state');
+                    if (emptyState) {
+                        emptyState.remove();
+                    }
+
+                    let list = document.getElementById('pdc-bell-list');
+                    if (!list) {
+                        list = document.createElement('ul');
+                        list.id = 'pdc-bell-list';
+                        list.className = 'divide-y divide-gray-50 max-h-60 overflow-y-auto';
+
+                        const footer = dropdown.querySelector('.px-5.py-3.border-t');
+                        if (footer) {
+                            dropdown.insertBefore(list, footer);
+                        } else {
+                            dropdown.appendChild(list);
+                        }
+                    }
+
+                    const item = document.createElement('li');
+                    item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                    item.onclick = function () {
+                        window.location = '{{ route('pdc_admin.notifikasi') }}';
+                    };
+                    item.innerHTML = `
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-800 truncate"></p>
+                            <p class="text-xs text-gray-500 truncate"></p>
+                        </div>
+                    `;
+
+                    const titleEl = item.querySelector('p.text-sm');
+                    const descEl = item.querySelector('p.text-xs');
+
+                    if (titleEl) titleEl.textContent = title;
+                    if (descEl) descEl.textContent = desc;
+
+                    list.prepend(item);
+
+                    while (list.children.length > 2) {
+                        list.removeChild(list.lastElementChild);
+                    }
+                }
+
+                function pdcShowBellPopup() {
+                    const bellDropdown = document.getElementById('bell-dropdown');
+                    if (!bellDropdown) return;
+
+                    clearTimeout(pdcBellPopupTimeout);
+                    clearTimeout(pdcBellCleanupTimeout);
+
+                    bellDropdown.classList.remove('hidden');
+                    bellDropdown.style.transformOrigin = 'top right';
+                    bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+                    bellDropdown.style.opacity = '0';
+                    bellDropdown.style.transform = 'scale(0.82) translateY(-10px)';
+
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            bellDropdown.style.opacity = '1';
+                            bellDropdown.style.transform = 'scale(1) translateY(0)';
+                        });
+                    });
+
+                    pdcBellPopupTimeout = setTimeout(function () {
+                        bellDropdown.style.opacity = '0';
+                        bellDropdown.style.transform = 'scale(0.86) translateY(-8px)';
+
+                        pdcBellCleanupTimeout = setTimeout(function () {
+                            bellDropdown.classList.add('hidden');
+                            bellDropdown.style.transition = '';
+                            bellDropdown.style.transformOrigin = '';
+                            bellDropdown.style.opacity = '';
+                            bellDropdown.style.transform = '';
+                        }, 350);
+                    }, 4500);
                 }
             });
             </script>

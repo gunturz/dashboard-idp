@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\NewUserRegistered;
 use App\Http\Controllers\Controller;
+use App\Models\AppNotification;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -63,9 +65,9 @@ class RegisteredUserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
             'password' => [
-                'required', 
-                'confirmed', 
-                'min:8', 
+                'required',
+                'confirmed',
+                'min:8',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
             ],
             'nama' => ['required', 'string', 'max:255'],
@@ -138,6 +140,28 @@ class RegisteredUserController extends Controller
             DB::commit();
 
             event(new Registered($user));
+
+            // ── Notify all PDC Admins about new registration ──────────────────
+            $roleName = DB::table('role')->where('id', $request->role_id)->value('role_name') ?? 'User';
+            $pdcAdminIds = User::whereHas('roles', fn($q) => $q->where('role_name', 'admin'))->pluck('id');
+            foreach ($pdcAdminIds as $adminId) {
+                $notif = \App\Models\AppNotification::create([
+                    'user_id' => $adminId,
+                    'title' => 'User Baru Registrasi',
+                    'desc' => '<span class="font-semibold">' . e($request->nama) . '</span> telah mendaftar sebagai <span class="font-semibold">' . e(ucfirst($roleName)) . '</span>.',
+                    'type' => 'info',
+                    'is_read' => false,
+                ]);
+
+                // 🔴 Broadcast real-time ke channel private PDC Admin ini
+                broadcast(new NewUserRegistered(
+                    $adminId,
+                    'User Baru Registrasi',
+                    e($request->nama) . ' telah mendaftar sebagai ' . ucfirst($roleName) . '.',
+                    $notif->id
+                    ));
+            }
+            // ─────────────────────────────────────────────────────────────────
 
             // Redirect ke halaman login dengan pesan sukses
             return redirect()->route('login')->with('status', 'Pendaftaran akun berhasil! Silakan masuk.');

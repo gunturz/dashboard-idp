@@ -182,18 +182,18 @@
                 align-items: center;
                 gap: 5px;
                 background: white;
-                color: #2e3746;
+                color: #0f172a;
                 font-size: 0.75rem;
                 font-weight: 700;
                 padding: 7px 14px;
                 border-radius: 8px;
-                border: 1.5px solid #2e3746;
+                border: 1.5px solid #0f172a;
                 white-space: nowrap;
                 text-decoration: none;
                 transition: all 0.2s;
             }
             .btn-lihat-penilaian:hover {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
             }
 
@@ -340,7 +340,7 @@
         <div class="relative w-full sm:w-[20%]">
             <select id="live-company-filter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all" 
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" 
-                onchange="filterPanelisList()">
+                onchange="syncDepartmentOptions(); filterPanelisList()">
                 <option value="">Semua Perusahaan</option>
                 @foreach ($companies as $company)
                     <option value="{{ $company->id }}">{{ $company->nama_company }}</option>
@@ -361,7 +361,7 @@
         </div>
 
         {{-- Departemen --}}
-        <div class="relative w-full sm:w-[20%]">
+        <div id="live-department-filter-wrapper" class="relative w-full sm:w-[20%] hidden">
             <select id="live-department-filter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all" 
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" 
                 onchange="filterPanelisList()">
@@ -372,13 +372,6 @@
             </select>
         </div>
 
-        {{-- Reset Button --}}
-        <button type="button" onclick="resetPanelisFilters()" class="btn-prem btn-ghost w-full sm:w-auto mt-2 sm:mt-0" id="reset-filter-btn" style="white-space:nowrap; display:none;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-1 inline-block">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-            Reset
-        </button>
     </div>
 
     {{-- ── Data Table grouped by Company ── --}}
@@ -607,17 +600,53 @@
 
     <x-slot name="scripts">
         <script>
+            const allDepartments = @json($allDepartments);
+            const departmentsByCompany = @json($departmentsByCompany);
+
+            function syncDepartmentOptions() {
+                const companyId = document.getElementById('live-company-filter').value;
+                const departmentSelect = document.getElementById('live-department-filter');
+                const departmentWrapper = document.getElementById('live-department-filter-wrapper');
+                const currentDepartmentId = departmentSelect.value;
+
+                if (!companyId) {
+                    departmentSelect.innerHTML = '<option value="">Semua Departemen</option>';
+                    departmentSelect.value = '';
+                    departmentWrapper.classList.add('hidden');
+                    return;
+                }
+
+                departmentWrapper.classList.remove('hidden');
+                const sourceDepartments = companyId
+                    ? (departmentsByCompany[companyId] || [])
+                    : allDepartments;
+
+                const sortedDepartments = [...sourceDepartments]
+                    .sort((a, b) => a.nama_department.localeCompare(b.nama_department, 'id', { sensitivity: 'base' }));
+
+                departmentSelect.innerHTML = '<option value="">Semua Departemen</option>';
+
+                sortedDepartments.forEach((dept) => {
+                    const option = document.createElement('option');
+                    option.value = dept.id;
+                    option.textContent = dept.nama_department;
+                    departmentSelect.appendChild(option);
+                });
+
+                if (currentDepartmentId && sortedDepartments.some(dept => String(dept.id) === String(currentDepartmentId))) {
+                    departmentSelect.value = currentDepartmentId;
+                } else {
+                    departmentSelect.value = '';
+                }
+            }
+
             function filterPanelisList() {
                 const search = document.getElementById('live-search-input').value.toLowerCase();
                 const companyId = document.getElementById('live-company-filter').value;
                 const positionId = document.getElementById('live-position-filter').value;
                 const departmentId = document.getElementById('live-department-filter').value;
-                
+
                 const rows = document.querySelectorAll('.talent-row');
-                const resetBtn = document.getElementById('reset-filter-btn');
-                
-                // Show/hide reset button
-                resetBtn.style.display = (search || companyId || positionId || departmentId) ? 'inline-flex' : 'none';
 
                 // Track results per position group to handle rowspan
                 const groupVisibility = {};
@@ -677,14 +706,6 @@
                 });
             }
 
-            function resetPanelisFilters() {
-                document.getElementById('live-search-input').value = '';
-                document.getElementById('live-company-filter').value = '';
-                document.getElementById('live-position-filter').value = '';
-                document.getElementById('live-department-filter').value = '';
-                filterPanelisList();
-            }
-
             function initGroupHover() {
                 const rows = document.querySelectorAll('.talent-row');
                 rows.forEach(row => {
@@ -705,7 +726,11 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', initGroupHover);
+            document.addEventListener('DOMContentLoaded', () => {
+                initGroupHover();
+                syncDepartmentOptions();
+                filterPanelisList();
+            });
 
             // ... Modal logic below ...
             const panelisUsers = @json($panelisUsers);

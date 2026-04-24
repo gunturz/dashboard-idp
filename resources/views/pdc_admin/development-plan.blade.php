@@ -11,7 +11,7 @@
             .field-label {
                 font-size: 0.875rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
                 flex-shrink: 0;
                 width: 160px;
             }
@@ -31,7 +31,7 @@
             .mentor-label {
                 font-size: 0.875rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
                 text-align: right;
             }
 
@@ -95,7 +95,7 @@
 
             .btn-batal {
                 background: #F4F1EA;
-                color: #2e3746;
+                color: #0f172a;
                 font-weight: 700;
                 font-size: 0.875rem;
                 border: none;
@@ -121,7 +121,7 @@
             .talent-label {
                 font-size: 0.875rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
             }
 
             .dp-select {
@@ -314,7 +314,7 @@
                     <span class="field-label">Start Date</span>
                     <div class="flex-1 flex gap-8 items-center" style="display: flex;">
                         <input type="date" name="start_date" class="dp-select dp-date" value="{{ $formStartDate }}" required style="width: 100%">
-                        <span class="font-bold text-[#2e3746] text-[0.875rem] whitespace-nowrap">Due Date</span>
+                        <span class="font-bold text-[#0f172a] text-[0.875rem] whitespace-nowrap">Due Date</span>
                         <input type="date" name="target_date" class="dp-select dp-date" value="{{ $formTargetDate }}" required style="width: 100%">
                     </div>
                 </div>

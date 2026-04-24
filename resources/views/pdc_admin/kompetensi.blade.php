@@ -25,7 +25,7 @@
             }
 
             .top-tab-btn.active {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 box-shadow: 0 2px 8px rgba(0,0,0,.18);
             }
@@ -54,7 +54,7 @@
             }
 
             .sub-tab-btn.active {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 box-shadow: 0 2px 8px rgba(0,0,0,.18);
             }
@@ -163,7 +163,7 @@
                 align-items: center;
                 gap: 6px;
                 padding: 9px 20px;
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 border: none;
                 border-radius: 10px;
@@ -171,7 +171,7 @@
                 font-weight: 700;
                 cursor: pointer;
                 transition: all .2s;
-                box-shadow: 0 8px 18px rgba(46, 55, 70, 0.16);
+                box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
             }
             .btn-edit-comp:hover { background: #1e2737; }
 
@@ -198,7 +198,7 @@
                 padding: 14px 10px;
                 font-size: 0.85rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
                 text-align: center;
                 background: #f8fafc;
                 border-bottom: 2px solid #e2e8f0;
@@ -230,7 +230,7 @@
                 height: 100%;
                 min-height: 56px;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
                 cursor: pointer;
                 transition: background 0.2s, color 0.2s;
             }
@@ -256,7 +256,7 @@
 
             .btn-batal-ts {
                 background: #F4F1EA;
-                color: #2e3746;
+                color: #0f172a;
                 font-weight: 700;
                 font-size: 0.8rem;
                 border: none;
@@ -269,7 +269,7 @@
             .btn-batal-ts:hover { background: #eadecc; }
 
             .btn-edit-ts {
-                background: #2e3746;
+                background: #0f172a;
                 color: white;
                 font-weight: 700;
                 font-size: 0.8rem;

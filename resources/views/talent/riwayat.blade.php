@@ -14,11 +14,11 @@
                 width: 56px;
                 height: 56px;
                 border-radius: 18px;
-                background: linear-gradient(135deg, #2e3746 0%, #38475a 100%);
+                background: linear-gradient(135deg, #0f172a 0%, #38475a 100%);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 0 10px 20px rgba(46, 55, 70, 0.15);
+                box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
                 flex-shrink: 0;
                 color: white;
             }

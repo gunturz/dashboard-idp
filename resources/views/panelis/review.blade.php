@@ -386,7 +386,7 @@
 
     {{-- Page Title --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <h2 class="text-2xl font-extrabold text-[#2e3746] animate-title">Permintaan Penilaian</h2>
+        <h2 class="text-2xl font-extrabold text-[#0f172a] animate-title">Permintaan Penilaian</h2>
         
         {{-- Live Search --}}
         <div class="relative w-full sm:w-80">
@@ -428,7 +428,7 @@
                             {{ optional(optional($talent)->position)->position_name ?? '-' }} - Manager
                             <em>{{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}</em>
                         </span>
-                        <span class="talent-date">Dikirim: {{ $project->updated_at ? $project->updated_at->format('d F Y') : '-' }}</span>
+                        <span class="talent-date">Dikirim: {{ $project->created_at ? $project->created_at->format('d F Y') : '-' }}</span>
                     </div>
                 </div>
                 <div class="header-right">

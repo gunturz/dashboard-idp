@@ -88,7 +88,7 @@
             }
             .pill:hover { background: #cbd5e1; color: #1e293b; }
             .pill.active {
-                background: #2e3746; color: white; box-shadow: 0 2px 12px rgba(46,55,70,0.22);
+                background: #0f172a; color: white; box-shadow: 0 2px 12px rgba(15, 23, 42,0.22);
             }
 
             /* Heatmap */
@@ -499,7 +499,7 @@
     {{-- ================================= SECTION: PROJECT IMPROVEMENT ================================= --}}
     <div id="section-project" class="hidden w-full">
         <div class="section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
             </svg>
             Project Improvement
@@ -553,7 +553,7 @@
     {{-- ================================= SECTION: LOGBOOK ================================= --}}
     <div id="section-logbook" class="hidden w-full">
         <div class="section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 24 24" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0f172a]" viewBox="0 0 24 24" fill="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
             LogBook

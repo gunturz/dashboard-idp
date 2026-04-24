@@ -21,7 +21,7 @@
                 font-weight: 800;
                 line-height: 1.2;
                 margin-bottom: 8px;
-                color: #2e3746;
+                color: #0f172a;
             }
 
             .stat-card .stat-label {
@@ -73,7 +73,7 @@
                 padding: 18px 24px;
                 font-size: 1rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
                 white-space: nowrap;
             }
 
@@ -91,7 +91,7 @@
                 padding: 14px 20px;
                 font-size: 0.85rem;
                 font-weight: 700;
-                color: #2e3746;
+                color: #0f172a;
                 text-align: center;
                 border-right: 1px solid #f1f5f9;
             }
@@ -265,16 +265,10 @@
                 <option value="">Semua Status</option>
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
-                <option value="verified">Verified</option>
                 <option value="rejected">Rejected</option>
             </select>
         </div>
 
-        {{-- Reset Button --}}
-        <button type="button" onclick="resetFinanceFilters()" class="btn-prem btn-ghost w-full sm:w-auto mt-2 sm:mt-0" id="reset-filter-btn" style="display:none;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            Reset
-        </button>
     </div>
 
     {{-- Table --}}
@@ -369,7 +363,7 @@
                                     <button type="button"
                                         onclick="openFinanceModal('{{ addslashes($project->talent->nama ?? '-') }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', {{ $project->id }}, '{{ addslashes($project->title) }}', '{{ $project->document_path ? asset('storage/' . $project->document_path) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
                                         title="Kirim project ini ke Finance untuk direview"
-                                        class="w-full px-3 py-2 text-[11px] font-semibold text-white bg-[#2E3746] hover:bg-[#1e242e] rounded-lg transition-colors shadow-sm">
+                                        class="w-full px-3 py-2 text-[11px] font-semibold text-white bg-[#0f172a] hover:bg-[#1e242e] rounded-lg transition-colors shadow-sm">
                                         Kirim Finance
                                     </button>
                                 @endif
@@ -500,30 +494,30 @@
 
                     <div class="grid grid-cols-2 gap-3 mb-3 text-left">
                         <div>
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1">Talent</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Talent</label>
                             <div id="fin-talent-name" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[12px] font-bold text-slate-800"></div>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1">Perusahaan</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Perusahaan</label>
                             <div id="fin-company-name" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[12px] font-bold text-slate-800"></div>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1">Departemen</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Departemen</label>
                             <div id="fin-dept-name" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[12px] font-bold text-slate-800"></div>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1">Posisi Tujuan</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Posisi Tujuan</label>
                             <div id="fin-pos-name" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[12px] font-bold text-slate-800"></div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3 mb-5 text-left">
                         <div>
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1">Judul Project</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Judul Project</label>
                             <input type="text" id="finance-proj-title" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[12px] text-slate-500 font-semibold cursor-not-allowed" readonly>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1">Lampiran</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Lampiran</label>
                             <div class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 flex items-center h-[34px]">
                                 <a id="finance-proj-file" href="#" target="_blank" class="text-blue-600 hover:underline font-semibold text-[12px] flex items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
@@ -537,11 +531,11 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                         <div class="flex flex-col h-full">
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1.5">Catatan</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1.5">Catatan</label>
                             <textarea name="notes" required class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[12px] text-gray-700 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none flex-grow min-h-[90px]" placeholder="cth: Pada slide ke 17. . .">{{ old('notes') }}</textarea>
                         </div>
                         <div class="flex flex-col">
-                            <label class="block text-[11px] font-extrabold text-[#2e3746] uppercase mb-1.5">Kirim Kepada</label>
+                            <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1.5">Kirim Kepada</label>
                             <div class="relative">
                                 <select id="finance-assigned-select" name="assigned_finance_id" required class="w-full appearance-none rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-[12px] text-gray-700 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 pr-9">
                                     <option value="" disabled selected>Pilih email finance</option>
@@ -570,9 +564,6 @@
             const search = document.getElementById('live-search-input').value.toLowerCase();
             const status = document.getElementById('live-status-filter').value.toLowerCase();
             const rows = document.querySelectorAll('.finance-row');
-            const resetBtn = document.getElementById('reset-filter-btn');
-
-            resetBtn.style.display = (search || status) ? 'inline-flex' : 'none';
 
             rows.forEach(row => {
                 const rowText = row.dataset.search;
@@ -583,12 +574,6 @@
 
                 row.style.display = (matchSearch && matchStatus) ? '' : 'none';
             });
-        }
-
-        function resetFinanceFilters() {
-            document.getElementById('live-search-input').value = '';
-            document.getElementById('live-status-filter').value = '';
-            filterFinanceList();
         }
 
         function openActionModal(projectId, talentName, actionUrl) {

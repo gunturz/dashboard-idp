@@ -3,15 +3,15 @@
     {{-- Page Header --}}
     <div class="flex justify-between items-center mb-8">
         <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
             </svg>
             <div>
-                <h2 class="text-2xl font-bold text-[#2e3746]">Atasan</h2>
+                <h2 class="text-2xl font-bold text-[#0f172a]">Atasan</h2>
                 <p class="text-sm text-gray-500">Daftar atasan program IDP.</p>
             </div>
         </div>
-        <button class="bg-[#2e3746] text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm hover:bg-[#1e2737] transition-colors" onclick="openManageModal()">
+        <button class="bg-[#0f172a] text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-semibold text-sm hover:bg-[#1e2737] transition-colors" onclick="openManageModal()">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
@@ -37,7 +37,7 @@
                                 </div>
                             @endif
                             <div>
-                                <h3 class="font-bold text-[#2e3746] text-lg leading-tight">{{ $atasan->nama }}</h3>
+                                <h3 class="font-bold text-[#0f172a] text-lg leading-tight">{{ $atasan->nama }}</h3>
                                 <p class="text-xs text-gray-500 mt-1 font-medium">{{ $atasan->position->position_name ?? '—' }} - {{ $atasan->department->nama_department ?? '—' }}</p>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                         <div class="flex flex-col gap-2">
                             @foreach($atasan->subordinates as $talent)
                                 <div class="bg-white border border-[#e2e8f0] rounded-xl px-4 py-3 flex justify-between items-center whitespace-nowrap overflow-hidden text-ellipsis shadow-sm">
-                                    <span class="font-bold text-[#2e3746] text-sm overflow-hidden text-ellipsis">{{ $talent->nama }}</span>
+                                    <span class="font-bold text-[#0f172a] text-sm overflow-hidden text-ellipsis">{{ $talent->nama }}</span>
                                     <span class="text-xs font-medium text-[#475569] overflow-hidden text-ellipsis pl-4">
                                         {{ $talent->position->position_name ?? '—' }}
                                         @if($talent->promotion_plan && $talent->promotion_plan->targetPosition)
@@ -84,19 +84,19 @@
     <div id="modal-manage-atasan" style="display:none; position:fixed; inset:0; background:rgba(30,41,59,0.5); backdrop-filter:blur(2px); z-index:100; align-items:center; justify-content:center;">
         <div style="background:white; width:100%; max-width:650px; border-radius:12px; padding:32px; max-height:90vh; overflow-y:auto; box-shadow:0 10px 40px rgba(0,0,0,0.1);">
             <div class="flex items-center gap-3 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2e3746]" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                 </svg>
-                <h3 class="text-xl font-bold text-[#2e3746]">Kelola Atasan</h3>
+                <h3 class="text-xl font-bold text-[#0f172a]">Kelola Atasan</h3>
             </div>
 
-            <p class="text-sm font-bold text-[#2e3746] mb-3">Daftar Atasan</p>
+            <p class="text-sm font-bold text-[#0f172a] mb-3">Daftar Atasan</p>
             <div class="flex flex-col gap-3 mb-4 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar" style="scrollbar-width: thin;">
                 @foreach($atasans as $a)
                     <div class="w-full bg-white border border-[#d1d5db] rounded-lg p-4 flex justify-between items-center transition-colors text-left atasan-card-item"
                          onclick="handleCardClick({{ $a->id }}, '{{ addslashes($a->nama) }}', '{{ $a->position_id }}', '{{ $a->department_id }}', '{{ addslashes($a->email) }}', '{{ addslashes($a->username) }}', '{{ addslashes($a->remember_token ?? '') }}', this)">
                         <div>
-                            <p class="font-bold text-[#2e3746]">{{ $a->nama }}</p>
+                            <p class="font-bold text-[#0f172a]">{{ $a->nama }}</p>
                             <p class="text-sm text-gray-500">{{ $a->position->position_name ?? '—' }} - {{ $a->department->nama_department ?? '—' }}</p>
                         </div>
                         <span class="text-sm font-medium text-[#475569]">{{ $a->subordinates->count() }} Talent</span>
@@ -122,15 +122,15 @@
                 @csrf
                 <input type="hidden" name="id" id="atasan-id" value="">
 
-                <p class="text-sm font-bold text-[#2e3746] mb-4" id="form-title">Tambah Atasan</p>
+                <p class="text-sm font-bold text-[#0f172a] mb-4" id="form-title">Tambah Atasan</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">NAMA</label>
+                        <label class="block text-xs font-bold text-[#0f172a] mb-1.5 uppercase">NAMA</label>
                         <input type="text" name="nama" id="input-nama" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan nama" required>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">JABATAN</label>
+                        <label class="block text-xs font-bold text-[#0f172a] mb-1.5 uppercase">JABATAN</label>
                         <select name="position_id" id="input-jabatan" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf] bg-white appearance-none" style="padding-right:30px; background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" required>
                             <option value="" disabled selected>Masukkan Jabatan</option>
                             @foreach($positions as $pos)
@@ -139,7 +139,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">DEPARTEMEN</label>
+                        <label class="block text-xs font-bold text-[#0f172a] mb-1.5 uppercase">DEPARTEMEN</label>
                         <select name="department_id" id="input-departemen" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf] bg-white appearance-none" style="padding-right:30px; background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;" required>
                             <option value="" disabled selected>Masukkan Departemen</option>
                             @foreach($departments as $dept)
@@ -148,15 +148,15 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">EMAIL</label>
+                        <label class="block text-xs font-bold text-[#0f172a] mb-1.5 uppercase">EMAIL</label>
                         <input type="email" name="email" id="input-email" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan Email" required>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase">USERNAME</label>
+                        <label class="block text-xs font-bold text-[#0f172a] mb-1.5 uppercase">USERNAME</label>
                         <input type="text" name="username" id="input-username" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] outline-none focus:border-[#2dd4bf]" placeholder="Masukkan Username" required>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-[#2e3746] mb-1.5 uppercase flex items-end justify-between">
+                        <label class="block text-xs font-bold text-[#0f172a] mb-1.5 uppercase flex items-end justify-between">
                             <span>PASSWORD</span>
                             <span id="password-hint" class="hidden font-normal text-gray-400 normal-case" style="font-size:10px;">(Kosongkan jika tidak diubah)</span>
                         </label>
@@ -173,7 +173,7 @@
                 </div>
 
                 <div class="flex justify-end gap-3">
-                    <button type="button" class="bg-[#F4F1EA] text-[#2e3746] font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#eadecc] transition-colors" id="btn-cancel" onclick="closeManageModal()">Tutup</button>
+                    <button type="button" class="bg-[#F4F1EA] text-[#0f172a] font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#eadecc] transition-colors" id="btn-cancel" onclick="closeManageModal()">Tutup</button>
                     <button type="submit" class="bg-[#14b8a6] text-white font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-[#0d9488] transition-colors" id="btn-submit">Tambah</button>
                 </div>
             </form>

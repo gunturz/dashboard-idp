@@ -45,9 +45,9 @@
             }
 
             .tab-active {
-                background-color: #2e3746;
+                background-color: #0f172a;
                 color: #ffffff;
-                box-shadow: 0 2px 12px rgba(46,55,70,0.22);
+                box-shadow: 0 2px 12px rgba(15, 23, 42,0.22);
             }
 
             .tab-inactive {
@@ -57,7 +57,7 @@
 
             .tab-inactive:hover {
                 background-color: #cbd5e1;
-                color: #2e3746;
+                color: #0f172a;
             }
 
             .upload-btn {
@@ -68,7 +68,7 @@
                 align-items: center;
                 gap: 0.4rem;
                 font-size: 0.875rem;
-                color: #2e3746;
+                color: #0f172a;
                 cursor: pointer;
                 transition: all 0.2s;
                 font-weight: 500;
@@ -141,7 +141,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
-                <span class="text-[#2e3746]">Kembali</span>
+                <span class="text-[#0f172a]">Kembali</span>
             </a>
         </div>
 

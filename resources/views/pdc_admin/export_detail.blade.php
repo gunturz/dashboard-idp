@@ -26,11 +26,11 @@
 
             /* Profile header card */
             .profile-card {
-                background: #2e3746; border: none; border-radius: 0;
+                background: #0f172a; border: none; border-radius: 0;
                 padding: 24px; margin-bottom: 24px; margin-top: -32px;
                 margin-left: -16px; margin-right: -16px; width: calc(100% + 32px);
                 display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-                box-shadow: 0 4px 12px rgba(46, 55, 70, 0.15);
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
                 color: white;
             }
             @media(min-width: 1024px) {
@@ -69,7 +69,7 @@
                 flex: 1; text-align: center; padding: 10px 0; font-size: 0.85rem; font-weight: 700;
                 color: #475569; cursor: pointer; border-radius: 99px; transition: all 0.2s;
             }
-            .tab-item.active { background: #2e3746; color: white; }
+            .tab-item.active { background: #0f172a; color: white; }
 
             /* Section title */
             .section-title {
@@ -85,7 +85,7 @@
 
             /* Logbook Specific */
             .logbook-pill {
-                background: #2e3746; color: white; padding: 6px 16px; border-radius: 99px;
+                background: #0f172a; color: white; padding: 6px 16px; border-radius: 99px;
                 font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 16px; margin-top: 24px;
             }
             .logbook-table {

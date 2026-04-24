@@ -2,7 +2,7 @@
 
 @if($mobileCollapsible)
     {{-- ===== DESKTOP VIEW (dashboard): 3-column layout ===== --}}
-    <div class="hidden md:block relative overflow-hidden bg-gradient-to-r from-[#1e293b] via-[#2e3746] to-[#1e293b] shadow-xl py-6 fade-up fade-up-1">
+    <div class="hidden md:block relative overflow-hidden bg-[#0f172a] shadow-xl py-6 fade-up fade-up-1">
         {{-- Decorative Glows --}}
         <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[60px] -ml-24 -mb-24"></div>
@@ -64,7 +64,7 @@
     </div>
 
     {{-- ===== MOBILE VIEW (dashboard only): compact + collapsible ===== --}}
-    <div class="md:hidden relative overflow-hidden bg-gradient-to-br from-[#2e3746] to-[#1e293b] shadow-lg fade-up fade-up-1">
+    <div class="md:hidden relative overflow-hidden bg-[#0f172a] shadow-lg fade-up fade-up-1">
         <div class="absolute -top-10 -right-10 w-32 h-32 bg-teal-500/10 rounded-full blur-[40px]"></div>
         <div class="flex items-center gap-3 px-4 py-3 cursor-pointer" id="mobile-profile-toggle" onclick="toggleMobileProfile()">
             <div class="flex-shrink-0">
@@ -127,7 +127,7 @@
 
 @else
     {{-- ===== ORIGINAL VIEW (logbook, dll): responsive stacked layout ===== --}}
-    <div class="relative overflow-hidden bg-gradient-to-r from-[#1e293b] via-[#2e3746] to-[#1e293b] shadow-xl py-6 fade-up fade-up-1">
+    <div class="relative overflow-hidden bg-[#0f172a] shadow-xl py-6 fade-up fade-up-1">
         {{-- Decorative Glows --}}
         <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[60px] -ml-24 -mb-24"></div>

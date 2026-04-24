@@ -5,16 +5,20 @@
 ])
 
 @php
-    $unreadNotifications = isset($notifications) && $notifications
-        ? (is_array($notifications) ? collect($notifications)->where('is_read', false) : $notifications->where('is_read', false))
-        : collect();
+    $unreadNotifications =
+        isset($notifications) && $notifications
+            ? (is_array($notifications)
+                ? collect($notifications)->where('is_read', false)
+                : $notifications->where('is_read', false))
+            : collect();
     $hasUnreadNotif = $unreadNotifications->count() > 0;
 
     $nama = $user->nama ?? ($user->name ?? 'Finance');
     $nameParts = explode(' ', $nama);
-    $initials = count($nameParts) >= 2 
-        ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1)) 
-        : strtoupper(substr($nameParts[0], 0, 2));
+    $initials =
+        count($nameParts) >= 2
+            ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1))
+            : strtoupper(substr($nameParts[0], 0, 2));
 @endphp
 
 <!DOCTYPE html>
@@ -139,137 +143,141 @@
 
         /* ── Responsive ── */
         @media (max-width: 1024px) {
-            .mobile-menu {
-                top: 60px;
-                padding: 1rem;
-            }
-
-            .navbar-outer {
-                height: 60px;
-                padding: 0 16px;
-            }
-
-            .navbar-outer h1 {
-                font-size: 1.1rem;
-                white-space: normal;
-                line-height: 1.3;
-            }
-
-            .nav-icon-btn {
-                width: 38px;
-                height: 38px;
-            }
-
-            .desktop-logo-text {
-                display: none;
-            }
-
-            .navbar-outer {
-                height: 60px;
-                padding: 0 16px;
-            }
-
-            .navbar-outer h1 {
-                font-size: 1.1rem;
-                white-space: normal;
-                line-height: 1.3;
-            }
-
-            .nav-icon-btn {
-                width: 38px;
-        }
-        /* ══ Premium Stats Cards ══ */
-        .prem-stat-grid {
-            display: grid;
-            gap: 20px;
-            margin-bottom: 24px;
+            .mobile-menu { top: 60px; padding: 1rem; }
+            .navbar-outer { height: 60px; padding: 0 16px; }
+            .navbar-outer h1 { font-size: 1.1rem; white-space: normal; line-height: 1.3; }
+            .nav-icon-btn { width: 38px; height: 38px; }
+            .desktop-logo-text { display: none; }
         }
 
-        .prem-stat {
-            background: #f9fafb;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 20px 20px 18px;
+        @media (max-width: 640px) {
+            .prem-stat-grid { grid-template-columns: 1fr !important; }
+            .dash-header-date { display: none; }
+        }
+
+        /* ══ Dash Header (matches Admin standard) ══ */
+        .dash-header {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
         }
+        .dash-header-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            background: #0f172a;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); flex-shrink: 0;
+        }
+        .dash-header-icon svg { color: white; width: 24px; height: 24px; }
+        .dash-header-title { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
+        .dash-header-sub { font-size: 0.8rem; color: #64748b; margin-top: 2px; font-weight: 400; }
+        .dash-header-date { margin-left: auto; font-size: 0.78rem; color: #94a3b8; font-weight: 500; text-align: right; }
+        .dash-header-date span { display: block; font-size: 1rem; font-weight: 700; color: #475569; }
 
+        /* ══ Page Header (legacy alias) ══ */
+        .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+        .page-header-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            background: #0f172a;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); flex-shrink: 0; color: white;
+        }
+        .page-header-icon svg { width: 24px; height: 24px; flex-shrink: 0; }
+        .page-header-title { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
+        .page-header-sub { font-size: 0.8rem; color: #64748b; margin-top: 2px; font-weight: 400; }
+
+        /* ══ Premium Stats Cards ══ */
+        .prem-stat-grid { display: grid; gap: 20px; margin-bottom: 24px; }
+        .prem-stat {
+            background: #f9fafb; border: 1px solid #e2e8f0; border-radius: 16px;
+            padding: 20px 20px 18px; display: flex; flex-direction: column;
+            align-items: flex-start; gap: 0; position: relative; overflow: hidden;
+            text-decoration: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .prem-stat::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3.5px;
-            border-radius: 16px 16px 0 0;
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 3.5px; border-radius: 16px 16px 0 0;
         }
-
         .prem-stat-teal::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
         .prem-stat-blue::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
         .prem-stat-amber::before { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
         .prem-stat-green::before { background: linear-gradient(90deg, #10b981, #34d399); }
         .prem-stat-red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
-
         .prem-stat-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-bottom: 10px;
+            width: 38px; height: 38px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-bottom: 10px;
         }
-
-        .prem-stat-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
+        .prem-stat-icon svg { width: 18px; height: 18px; }
         .si-teal { background: rgba(20, 184, 166, 0.12); color: #14b8a6; }
         .si-blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
         .si-amber { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
         .si-green { background: rgba(16, 185, 129, 0.12); color: #10b981; }
         .si-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+        .prem-stat-value { font-size: 2.5rem; font-weight: 800; color: #1e293b; line-height: 1; margin-bottom: 2px; }
+        .prem-stat-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
 
-        .prem-stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #1e293b;
-            line-height: 1;
-            margin-bottom: 2px;
+        /* ══ Premium Card ══ */
+        .prem-card {
+            background: #f9fafb; border: 1px solid #e2e8f0; border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .04); overflow: hidden; margin-bottom: 24px;
         }
+        .prem-card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border-bottom: 1px solid #e2e8f0; gap: 12px; flex-wrap: wrap;
+        }
+        .prem-card-title { display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; color: #1e293b; }
+        .prem-card-title svg { width: 18px; height: 18px; color: #14b8a6; flex-shrink: 0; }
 
-        .prem-stat-label {
-            font-size: 0.82rem;
-            color: #64748b;
-            font-weight: 500;
+        /* ══ Premium Buttons ══ */
+        .btn-prem {
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            font-size: 0.8rem; font-weight: 700; padding: 8px 16px; border-radius: 10px;
+            border: none; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none; white-space: nowrap;
         }
+        .btn-prem:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
+        .btn-prem svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .btn-teal { background: #14b8a6; color: #fff; box-shadow: 0 2px 6px rgba(20, 184, 166, 0.25); }
+        .btn-teal:hover { background: #0d9488; color: #fff; }
+        .btn-ghost { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+        .btn-ghost:hover { background: #e2e8f0; color: #1e293b; }
+        .btn-red { background: #ef4444; color: #fff; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25); }
+        .btn-red:hover { background: #dc2626; color: #fff; }
+        .btn-dark { background: #475569; color: #fff; }
+        .btn-dark:hover { background: #334155; color: #fff; }
+
+        /* ══ Badges ══ */
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 700; letter-spacing: .02em; }
+        .badge-teal { background: rgba(20, 184, 166, 0.12); color: #0d9488; border: 1px solid rgba(20, 184, 166, 0.25); }
+        .badge-amber { background: rgba(245, 158, 11, 0.12); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.25); }
+        .badge-green { background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25); }
+        .badge-red { background: rgba(239, 68, 68, 0.12); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .badge-blue { background: rgba(59, 130, 246, 0.12); color: #2563eb; border: 1px solid rgba(59, 130, 246, 0.25); }
+        .badge-gray { background: rgba(100, 116, 139, 0.1); color: #475569; border: 1px solid rgba(100, 116, 139, 0.2); }
+
+        /* ══ Premium Table ══ */
+        .prem-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .prem-table th { background: #f8fafc; color: #475569; font-weight: 700; text-align: center; padding: 11px 14px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .05em; }
+        .prem-table td { padding: 13px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; color: #334155; text-align: center; }
+        .prem-table tbody tr:last-child td { border-bottom: none; }
+        .prem-table tbody tr:hover td { background: #f0fdfa; }
+
+        /* ══ Filter Bar ══ */
+        .filter-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 16px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0, 0, 0, .03); }
+        .filter-input { border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 14px; font-size: 0.83rem; color: #334155; outline: none; background: #f8fafc; transition: border-color .2s, box-shadow .2s; }
+        .filter-input:focus { border-color: #14b8a6; box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12); background: #fff; }
+
+        /* ══ Empty State ══ */
+        .empty-prem { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center; }
+        .empty-prem svg { width: 48px; height: 48px; margin-bottom: 12px; color: #cbd5e1; }
+        .empty-prem h3 { font-size: 1rem; font-weight: 700; color: #475569; margin-bottom: 4px; }
+        .empty-prem p { font-size: 0.82rem; color: #94a3b8; }
 
         /* ── Background Decoration ── */
-            .bg-decoration {
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                overflow: hidden;
-                pointer-events: none;
-                background-color: #ffffff;
-            }
-            .bg-decoration::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
-                background-size: 32px 32px;
-                opacity: 0.3;
-            }
-        </style>
+        .bg-decoration { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background-color: #ffffff; }
+        .bg-decoration::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px); background-size: 32px 32px; opacity: 0.3; }
+    </style>
     {{ $styles ?? '' }}
 </head>
 
@@ -291,8 +299,10 @@
                 class="text-white text-base lg:text-xl font-bold tracking-wide whitespace-nowrap desktop-logo-text sm:block hidden">
                 Individual Development Plan
             </h1>
-            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
-                <div class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
+            <h1
+                class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
+                <div
+                    class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
                     <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
                 </div>
                 IDP Finance
@@ -336,10 +346,10 @@
                 <div id="bell-dropdown"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     <div
-                        class="px-5 py-3.5 bg-gradient-to-r from-[#2e3746] to-[#38475a] flex items-center justify-between">
+                        class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]"
-                                viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
+                                fill="currentColor">
                                 <path
                                     d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                                 <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
@@ -401,8 +411,7 @@
 
             {{-- ═══ Desktop: Profile ═══ --}}
             <div class="relative hidden lg:block" id="profile-wrapper">
-                <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')"
-                    aria-label="Profil"
+                <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
                     class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
                         style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
@@ -422,7 +431,7 @@
 
                 <div id="profile-dropdown"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-4 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
+                    <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                         <div class="flex items-center gap-3">
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
                                 style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
@@ -442,7 +451,7 @@
                             <a href="{{ route('profile.edit') }}"
                                 class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div
-                                    class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
+                                    class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors"
                                         viewBox="0 0 20 20" fill="currentColor">
@@ -497,43 +506,56 @@
 
             <!-- Mobile Hamburger Button -->
             <div class="relative block xl:hidden ml-2" id="mobile-menu-wrapper">
-                <button class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95" aria-label="Menu" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button
+                    class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95"
+                    aria-label="Menu" id="mobile-menu-btn"
+                    onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
+                <div id="mobile-menu-dropdown"
+                    class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
                     {{-- Dropdown Header --}}
-                    <div class="px-5 py-5 bg-gradient-to-br from-[#2e3746] to-[#38475a]">
+                    <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                         <div class="flex items-center gap-3.5">
                             <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
                                 style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
                                 {{ $initials }}
                             </div>
                             <div class="overflow-hidden">
-                                <p class="text-[14px] font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}</p>
+                                <p class="text-[14px] font-bold text-white truncate">
+                                    {{ $user->nama ?? ($user->name ?? '-') }}</p>
                                 <p class="text-[11px] text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
-                                <span class="inline-block mt-1.5 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Finance</span>
+                                <span
+                                    class="inline-block mt-1.5 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Finance</span>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="py-2.5">
                         {{-- Quick Action: Notifikasi --}}
                         <div class="px-3 mb-1">
-                            <a href="{{ route('finance.notifikasi') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
-                                <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0 relative">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                            <a href="{{ route('finance.notifikasi') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path
+                                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
-                                    @if($hasUnreadNotif)
+                                    @if ($hasUnreadNotif)
                                         <span class="absolute top-1 right-1 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
                                     @endif
                                 </div>
                                 <span class="font-medium">Notifikasi</span>
-                                @if($hasUnreadNotif)
-                                    <span class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
+                                @if ($hasUnreadNotif)
+                                    <span
+                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
                                 @endif
                             </a>
                         </div>
@@ -542,26 +564,38 @@
 
                         {{-- Section: Dashboard Menu --}}
                         <div class="px-3 space-y-0.5">
-                            <a href="{{ route('finance.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('finance.dashboard') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
-                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            <a href="{{ route('finance.dashboard') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('finance.dashboard') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
                                 </div>
                                 <span class="font-medium">Dashboard</span>
                             </a>
-                            <a href="{{ route('finance.permintaan_validasi') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('finance.permintaan_validasi') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
-                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <a href="{{ route('finance.permintaan_validasi') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('finance.permintaan_validasi') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
                                 <span class="font-medium">Validasi</span>
                             </a>
-                            <a href="{{ route('finance.riwayat') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('finance.riwayat') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
-                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <a href="{{ route('finance.riwayat') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('finance.riwayat') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
                                 <span class="font-medium">Riwayat</span>
@@ -572,19 +606,30 @@
 
                         {{-- Section: Account --}}
                         <div class="px-3">
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
-                                <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#2e3746] flex items-center justify-center transition-colors flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            <a href="{{ route('profile.edit') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                            clip-rule="evenodd" />
                                     </svg>
                                 </div>
                                 <span class="font-medium">Lihat Profil</span>
                             </a>
-                            @if(Auth::user()->roles->count() > 1)
-                                <a href="{{ route('role.select') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
-                                    <div class="w-8 h-8 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            @if (Auth::user()->roles->count() > 1)
+                                <a href="{{ route('role.select') }}"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                                         </svg>
                                     </div>
                                     <span class="font-medium">Ganti Role</span>
@@ -592,10 +637,16 @@
                             @endif
                             <form method="POST" action="{{ route('logout') }}" class="m-0">
                                 @csrf
-                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors group">
-                                    <div class="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                <button type="submit"
+                                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors group">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="h-4 w-4 text-red-500 group-hover:text-white transition-colors"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                            stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                         </svg>
                                     </div>
                                     <span class="font-medium">Keluar</span>
@@ -612,8 +663,7 @@
 
     {{-- MAIN CONTENT --}}
     <div class="flex-1">
-        <main id="main-content"
-            class="p-4 lg:p-8 min-h-[calc(100vh-80px)] mt-4 mx-4 lg:mx-6 lg:mt-6">
+        <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] mt-4 mx-4 lg:mx-6 lg:mt-6">
             {{ $slot }}
         </main>
     </div>

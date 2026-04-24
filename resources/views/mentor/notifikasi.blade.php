@@ -38,18 +38,18 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                     <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                 </svg>
-                <span class="text-[#2e3746]">Kembali</span>
+                <span class="text-[#0f172a]">Kembali</span>
             </a>
         </div>
 
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-2.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#2e3746]" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#0f172a]" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <h2 class="text-2xl font-bold text-[#2e3746] animate-title">Notifikasi</h2>
+                <h2 class="text-2xl font-bold text-[#0f172a] animate-title">Notifikasi</h2>
             </div>
             <form action="{{ route('mentor.notifikasi.markAllRead') }}" method="POST">
                 @csrf

@@ -25,6 +25,18 @@
             .um-table tbody tr:last-child td {
                 border-bottom: none;
             }
+
+            .um-email-cell {
+                max-width: 220px;
+            }
+
+            .um-email-text {
+                display: block;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         </style>
     </x-slot>
 
@@ -78,12 +90,12 @@
                 placeholder="Cari Nama">
         </div>
         <div class="md:col-span-1 relative">
-            <select id="companyFilter" onchange="filterUsers()"
+            <select id="companyFilter" onchange="syncDepartmentFilterOptions(); filterUsers()"
                 class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
                 <option value="">Semua Perusahaan</option>
                 @foreach ($companies as $company)
-                    <option value="{{ strtolower($company->nama_company) }}">{{ $company->nama_company }}</option>
+                    <option value="{{ $company->id }}">{{ $company->nama_company }}</option>
                 @endforeach
             </select>
         </div>
@@ -122,33 +134,39 @@
 
                 {{-- Table Data --}}
                 <div class="overflow-x-auto">
-                    <table class="um-table" style="table-layout: fixed; width: 100%;">
+                    <table class="um-table" style="width: 100%;">
                         <thead>
                             <tr class="bg-white">
                                 @if ($group['showMultiRole'])
-                                    {{-- 6 columns: Email, Nama, Perusahaan, Posisi, MultiRole, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Posisi saat ini</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:10%">Multi Role</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
+                                    {{-- 7 columns: Email, Nama, Perusahaan, Departemen, Posisi, MultiRole, Aksi --}}
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:16%">Email</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:17%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Departemen</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:12%">Posisi saat ini</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:8%">Multi Role</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:12%">Aksi</th>
                                 @else
-                                    {{-- 4 columns for Finance/Panelis: Email, Nama, Perusahaan, Aksi --}}
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Email</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:30%">Nama Lengkap</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:25%">Perusahaan</th>
-                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:15%">Aksi</th>
+                                    {{-- 5 columns for Finance/Panelis: Email, Nama, Perusahaan, Departemen, Aksi --}}
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Email</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:24%">Nama Lengkap</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:20%">Perusahaan</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:18%">Departemen</th>
+                                    <th class="text-sm font-bold text-[#2e3746] p-3" style="width:12%">Aksi</th>
                                 @endif
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($group['users'] as $u)
-                                <tr class="bg-white hover:bg-gray-50 transition-colors user-row" data-department="{{ strtolower($u->department->nama_department ?? '') }}">
-                                    <td class="text-sm font-medium text-[#475569]">{{ $u->email }}</td>
-                                    <td class="col-name text-sm font-bold text-[#2e3746]">{{ $u->nama }}</td>
+                                <tr class="bg-white hover:bg-gray-50 transition-colors user-row"
+                                    data-company-id="{{ $u->company_id ?? '' }}"
+                                    data-department="{{ strtolower($u->department->nama_department ?? '') }}">
+                                    <td class="text-sm font-medium text-[#475569] whitespace-nowrap">{{ $u->email }}</td>
+                                    <td class="col-name text-sm font-bold text-[#2e3746] whitespace-nowrap">{{ $u->nama }}</td>
                                     <td class="col-company text-sm font-medium text-[#475569]">
                                         {{ $u->company->nama_company ?? '—' }}</td>
+                                    <td class="text-sm font-medium text-[#475569]">
+                                        {{ $u->department->nama_department ?? '-' }}</td>
                                     @if ($group['showPosisi'])
                                         <td class="text-sm font-medium text-[#475569]">
                                             {{ $u->position->position_name ?? '—' }}</td>
@@ -197,7 +215,7 @@
                             @empty
                                 <tr>
                                     @php
-                                        $cols = 4;
+                                        $cols = 5;
                                         if ($group['showPosisi']) {
                                             $cols++;
                                         }
@@ -311,7 +329,23 @@
         </form>
     </div>
 
+    @php
+        $allDepartmentsForJs = ($departments ?? collect())
+            ->map(function ($department) {
+                return [
+                    'id' => $department->id,
+                    'nama_department' => $department->nama_department,
+                    'company_id' => $department->company_id,
+                ];
+            })
+            ->values()
+            ->all();
+    @endphp
+
     <script>
+        const departmentsByCompany = @json($departmentsByCompany ?? []);
+        const allDepartments = @json($allDepartmentsForJs);
+
         function openRoleModal(userId, currentRoleIds) {
             const form = document.getElementById('roleForm');
             form.action = `/pdc-admin/assign-role/${userId}`;
@@ -402,7 +436,7 @@
 
         function filterUsers() {
             let searchValue = document.getElementById('searchInput').value.toLowerCase();
-            let companyValue = document.getElementById('companyFilter').value.toLowerCase();
+            let companyValue = document.getElementById('companyFilter').value;
             let departmentValue = document.getElementById('departmentFilter').value.toLowerCase();
 
             let isAnyFilterActive = searchValue !== "" || companyValue !== "" || departmentValue !== "";
@@ -421,12 +455,11 @@
 
                 rows.forEach(row => {
                     let name = row.querySelector('.col-name')?.innerText.toLowerCase() || "";
-                    let company = row.querySelector('.col-company')?.innerText.toLowerCase() || "";
+                    let companyId = row.dataset.companyId || "";
                     let department = row.dataset.department || "";
 
                     let matchSearch = name.includes(searchValue);
-                    let matchCompany = companyValue === "" || company.includes(companyValue) || company ===
-                        companyValue;
+                    let matchCompany = companyValue === "" || companyId === companyValue;
                     let matchDepartment = departmentValue === "" || department.includes(departmentValue) ||
                         department === departmentValue;
 
@@ -453,6 +486,30 @@
                     container.classList.remove('hidden');
                 }
             });
+        }
+
+        function syncDepartmentFilterOptions() {
+            const companySelect = document.getElementById('companyFilter');
+            const departmentSelect = document.getElementById('departmentFilter');
+            const selectedCompanyId = companySelect.value;
+            const selectedDepartment = departmentSelect.value;
+            const availableDepartments = selectedCompanyId
+                ? (departmentsByCompany[selectedCompanyId] || [])
+                : allDepartments;
+
+            departmentSelect.innerHTML = '<option value="">Semua Departemen</option>';
+
+            availableDepartments.forEach((department) => {
+                const option = document.createElement('option');
+                option.value = String(department.nama_department || '').toLowerCase();
+                option.textContent = department.nama_department || '-';
+                departmentSelect.appendChild(option);
+            });
+
+            const hasSelectedDepartment = Array.from(departmentSelect.options)
+                .some(option => option.value === selectedDepartment);
+
+            departmentSelect.value = hasSelectedDepartment ? selectedDepartment : '';
         }
 
         const ITEMS_PER_PAGE = 7;
@@ -548,6 +605,7 @@
                 requestAnimationFrame(step);
             });
 
+            syncDepartmentFilterOptions();
             filterUsers();
         });
     </script>

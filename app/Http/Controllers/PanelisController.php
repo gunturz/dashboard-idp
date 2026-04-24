@@ -82,7 +82,8 @@ class PanelisController extends Controller
             'talent.assessmentSession.details.competence',
         ])
             ->whereNotNull('feedback')
-            ->orderBy('updated_at', 'desc')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         return view('panelis.review', compact('user', 'projects'))

@@ -130,7 +130,7 @@
                                 data-company="{{ $compName }}"
                                 data-period="{{ $periodLabel }}">
                                 <td>
-                                    <p class="font-bold text-[#2e3746]">{{ $talent->nama }}</p>
+                                    <p class="font-bold text-[#0f172a]">{{ $talent->nama }}</p>
                                     <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr; {{ $targetPos }}
                                     </p>
                                 </td>

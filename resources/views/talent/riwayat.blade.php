@@ -51,6 +51,10 @@
                 overflow: hidden;
             }
 
+            .prem-card:hover {
+                transform: none !important;
+            }
+
             .highlight-table {
                 width: 100%;
                 border-collapse: collapse;

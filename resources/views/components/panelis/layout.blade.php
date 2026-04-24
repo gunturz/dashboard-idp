@@ -553,7 +553,7 @@
 
     {{-- MAIN CONTENT --}}
     <main id="main-content"
-        class="p-4 lg:p-8 min-h-[calc(100vh-80px)] mt-4 mx-4 lg:mx-6 lg:mt-6">
+        class="px-4 py-8 lg:px-6 min-h-[calc(100vh-80px)]">
         {{ $slot }}
     </main>
 

@@ -679,7 +679,7 @@
         }
 
         .roles-inner {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -690,15 +690,33 @@
 
         .roles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .roles-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .roles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .roles-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .role-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 18px;
-            padding: 32px 24px;
+            padding: 24px 16px;
             text-align: center;
             transition: all 0.3s;
             cursor: default;
@@ -887,15 +905,50 @@
 
         /* ─── MOBILE ─── */
         @media (max-width: 640px) {
-            .nav-logo-text span:first-child {
-                font-size: 0.75rem;
+            .navbar {
+                padding: 0 1.25rem;
+                height: 64px;
             }
+
+            .nav-logo {
+                gap: 10px;
+            }
+
+            .nav-logo img {
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                padding: 5px;
+            }
+
+            .nav-logo-text {
+                max-width: 140px;
+            }
+
+            .nav-logo-text span:first-child {
+                font-size: 0.6rem;
+                letter-spacing: 1px;
+            }
+            
             .nav-logo-text span:last-child {
-                font-size: 1.05rem;
+                font-size: 0.8rem;
+                white-space: normal;
+                line-height: 1.2;
             }
 
             .btn-nav-ghost {
                 display: none;
+            }
+
+            .btn-nav-primary {
+                padding: 7px 16px;
+                font-size: 0.85rem;
+                gap: 4px;
+            }
+            
+            .btn-nav-primary svg {
+                width: 16px !important;
+                height: 16px !important;
             }
 
             .hero-stats {

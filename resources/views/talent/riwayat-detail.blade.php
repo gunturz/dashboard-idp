@@ -1,4 +1,4 @@
-<x-talent.layout title="Detail Riwayat Program – Individual Development Plan" :user="$user" :notifications="$notifications" :mobileCollapsible="true">
+<x-talent.layout title="Detail Riwayat Program – Individual Development Plan" :user="$user" :notifications="$notifications" :mobileCollapsible="true" :showProfileCard="true">
     <x-slot name="styles">
         <style>
             /* ── Donut Chart ── */
@@ -28,6 +28,23 @@
 
             .btn-back-prem:active {
                 transform: scale(0.98);
+            }
+
+            /* ── Disable card and table row hover animations ── */
+            .prem-card:hover {
+                transform: none !important;
+            }
+
+            table tbody tr,
+            table tbody tr td {
+                transition: none !important;
+            }
+
+            table tbody tr:hover,
+            table tbody tr:hover td {
+                background: inherit !important;
+                box-shadow: none !important;
+                transform: none !important;
             }
         </style>
     </x-slot>

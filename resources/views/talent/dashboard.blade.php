@@ -1,5 +1,5 @@
 <x-talent.layout title="Dashboard Talent – Individual Development Plan" :user="$user" :notifications="$notifications"
-    :mobileCollapsible="true">
+    :mobileCollapsible="true" :showProfileCard="true">
     <x-slot name="styles">
         <style>
             /* ── Donut Chart ── */
@@ -103,18 +103,16 @@
                             PDC Admin belum menetapkan posisi yang dituju, mentor, dan atasan untuk Anda.<br>
                             Data kompetensi akan tampil setelah development plan dibuat.
                         </p>
-                        <div class="mt-4 flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
-                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span>
-                            <span class="text-xs font-semibold text-amber-600">Sedang menunggu PDC Admin membuat Development Plan</span>
-                        </div>
                     </div>
                 @elseif(!$latestAssessment)
                     <div class="flex flex-col items-center justify-center py-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-3" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
                         <p class="text-base font-bold text-gray-700">Belum Ada Data Assessment</p>
                         <p class="text-sm text-gray-500 mt-1 mb-2 text-center max-w-sm">Anda belum mengisi assessment kompetensi. Silakan isi terlebih dahulu untuk melihat data kompetensi Anda.</p>
                         <a href="{{ route('talent.competency') }}"
@@ -128,11 +126,13 @@
                     </div>
                 @elseif(!$atasanHasScored)
                     <div class="flex flex-col items-center justify-center py-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-orange-400 mb-3" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
+                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#ffedd5,#fed7aa)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
                         <p class="text-base font-bold text-gray-700">Atasan Belum Memberikan Nilai</p>
                         <p class="text-sm text-gray-500 mt-1 text-center max-w-sm">Grafik kompetensi akan muncul setelah
                             atasan Anda memberikan penilaian dan approval.</p>
@@ -143,7 +143,7 @@
                         <!-- Header for GAP score column so user knows what the number means -->
                         <div class="flex justify-end hidden md:flex" style="margin-bottom: -15px;">
                             <span
-                                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-[8px]">GAP</span>
+                                class="text-xs font-bold text-gray-400 uppercase tracking-widest mr-[10px]">GAP</span>
                         </div>
                         @foreach ($kompetensiData as $label => $data)
                             @php
@@ -161,9 +161,8 @@
                                     $textColor = '#f97316';
                                 }
                             @endphp
-                            <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2 md:mb-0">
                                 <span
-                                    class="text-sm text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate"
+                                    class="text-base text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate"
                                     title="{{ $label }}">{{ $label }}</span>
                                 <div class="flex items-center gap-3 flex-1 w-full">
                                     <div class="flex-1 bg-gray-100 rounded-full h-5 relative overflow-hidden">
@@ -174,7 +173,7 @@
                                         <div class="absolute top-0 left-0 bar-fill h-full rounded-full"
                                             style="width:{{ $pct }}%; background:#0d9488; z-index: 10;"></div>
                                     </div>
-                                    <span class="text-sm font-black w-10 text-right flex-shrink-0"
+                                    <span class="text-base font-black w-12 text-right flex-shrink-0"
                                         style="color:{{ $textColor }};">
                                         {{ number_format($gapVal, 1) }}
                                     </span>
@@ -184,7 +183,7 @@
                         {{-- Skala keterangan -- sejajar dengan bar --}}
                         <div class="items-center gap-3 pt-1 hidden md:flex">
                             <span class="w-56 flex-shrink-0"></span>
-                            <div class="flex-1 flex justify-between text-xs text-gray-400">
+                            <div class="flex-1 flex justify-between text-sm text-gray-400">
                                 <span>0</span>
                                 <span>1</span>
                                 <span>2</span>
@@ -192,7 +191,7 @@
                                 <span>4</span>
                                 <span>5</span>
                             </div>
-                            <span class="w-10 flex-shrink-0"></span>
+                            <span class="w-12 flex-shrink-0"></span>
                         </div>
                     </div>
                 @endif

@@ -1,7 +1,7 @@
 @props([
     'title' => 'Individual Development Plan',
     'bodyClass' => 'bg-[#ffffff] min-h-screen flex flex-col pt-[80px] relative',
-    'showProfileCard' => true,
+    'showProfileCard' => false,
     'mobileCollapsible' => false,
     'user' => null,
     'notifications' => null

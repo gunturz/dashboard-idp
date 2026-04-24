@@ -1,29 +1,52 @@
-<x-talent.layout title="Profile" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false" :user="$user" :notifications="$notifications">
+<x-talent.layout title="Profile" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false"
+    :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             .section-header {
                 display: inline-block;
-                background: #0f172a; color: white;
-                font-weight: 600; font-size: 0.875rem;
+                background: #0f172a;
+                color: white;
+                font-weight: 600;
+                font-size: 0.875rem;
                 padding: 0.35rem 1.25rem;
                 border-radius: 6px 6px 0 0;
                 margin-bottom: -1px;
             }
+
             .prof-input {
-                border: 1.5px solid #cbd5e1; border-radius: 8px;
-                padding: 0.45rem 0.75rem; font-size: 0.875rem;
-                width: 100%; background: #fff;
+                border: 1.5px solid #cbd5e1;
+                border-radius: 8px;
+                padding: 0.45rem 0.75rem;
+                font-size: 0.875rem;
+                width: 100%;
+                background: #fff;
                 transition: border-color 0.2s, box-shadow 0.2s;
                 color: #1e293b;
             }
-            .prof-input:focus { outline: none; border-color: #0f172a; box-shadow: 0 0 0 3px rgba(15, 23, 42,0.1); }
-            .prof-input:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
-            .modal-backdrop {
-                position: fixed; inset: 0; z-index: 100;
-                background: rgba(0,0,0,0.45);
-                display: flex; align-items: center; justify-content: center;
+
+            .prof-input:focus {
+                outline: none;
+                border-color: #0f172a;
+                box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
             }
-                    .btn-back {
+
+            .prof-input:disabled {
+                background: #f8fafc;
+                color: #94a3b8;
+                cursor: not-allowed;
+            }
+
+            .modal-backdrop {
+                position: fixed;
+                inset: 0;
+                z-index: 100;
+                background: rgba(0, 0, 0, 0.45);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-back {
                 padding: 8px 16px;
                 border: 1px solid #e2e8f0;
                 border-radius: 8px;
@@ -37,6 +60,7 @@
                 transition: all 0.2s;
                 width: fit-content;
             }
+
             .btn-back:hover {
                 background: #f8fafc;
                 border-color: #cbd5e1;
@@ -44,14 +68,16 @@
         </style>
     </x-slot>
 
-{{-- MAIN CONTENT --}}
+    {{-- MAIN CONTENT --}}
     <div class="w-full max-w-3xl mx-auto px-6 pb-8 pt-0 flex-grow fade-up">
 
         {{-- Back Link --}}
         <div class="mb-4">
             <a href="{{ route('talent.dashboard') }}" class="btn-back">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd"
+                        d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"
+                        clip-rule="evenodd" />
                 </svg>
                 <span class="text-[#0f172a]">Kembali</span>
             </a>
@@ -60,7 +86,8 @@
         <div class="page-header animate-title">
             <div class="page-header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clip-rule="evenodd" />
                 </svg>
             </div>
             <div>
@@ -74,8 +101,11 @@
             <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl shadow-sm">
                 <div class="flex">
                     <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                clip-rule="evenodd" />
                         </svg>
                     </div>
                     <div class="ml-3">
@@ -93,17 +123,22 @@
         {{-- Success banner --}}
         @if (session('status') === 'profile-updated')
             <div id="success-banner"
-                 class="flex items-center justify-between gap-3 bg-white border border-green-400 text-green-700 rounded-xl px-5 py-3 mb-6 shadow-sm">
+                class="flex items-center justify-between gap-3 bg-white border border-green-400 text-green-700 rounded-xl px-5 py-3 mb-6 shadow-sm">
                 <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0"
+                        viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
                     </svg>
                     <span class="text-sm font-semibold">Pengubahan Profile Talent berhasil</span>
                 </div>
                 <button onclick="document.getElementById('success-banner').remove()"
-                        class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
+                    class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
                     </svg>
                 </button>
             </div>
@@ -121,44 +156,52 @@
                     <div class="flex flex-col items-center gap-4 flex-shrink-0 w-44">
                         <div class="relative w-44 h-44">
                             @if ($user->foto ?? false)
-                                <img id="foto-preview"
-                                     src="{{ asset('storage/' . $user->foto) }}"
-                                     alt="Foto Profil"
-                                     class="w-44 h-44 rounded-2xl object-cover border-2 border-gray-200 shadow">
-                                <div id="foto-placeholder" class="hidden w-44 h-44 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                <img id="foto-preview" src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
+                                    class="w-44 h-44 rounded-2xl object-cover border-2 border-gray-200 shadow">
+                                <div id="foto-placeholder"
+                                    class="hidden w-44 h-44 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                     </svg>
                                 </div>
                             @else
-                                <div id="foto-placeholder" class="w-44 h-44 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                <div id="foto-placeholder"
+                                    class="w-44 h-44 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                     </svg>
                                 </div>
                                 <img id="foto-preview" src="" alt="Foto Profil"
-                                     class="hidden w-44 h-44 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0">
+                                    class="hidden w-44 h-44 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0">
                             @endif
                         </div>
 
                         {{-- Tombol foto – edit mode only --}}
                         <div id="foto-buttons" class="flex gap-2 hidden w-44">
                             <label for="foto-input"
-                                   class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 Ganti Foto
                             </label>
-                            <input id="foto-input" name="foto" type="file" accept="image/*" class="sr-only" onchange="previewFoto(this)">
-                            
+                            <input id="foto-input" name="foto" type="file" accept="image/*" class="sr-only"
+                                onchange="previewFoto(this)">
+
                             {{-- Input tersembunyi untuk penanda hapus foto --}}
                             <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
-                            
+
                             <button type="button" onclick="hapusFoto()"
-                                    class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                                 Hapus Foto
                             </button>
@@ -175,31 +218,46 @@
                                 @php
                                     $akunFields = [
                                         ['label' => 'Username', 'key' => 'username', 'type' => 'text'],
-                                        ['label' => 'Email',    'key' => 'email',    'type' => 'email'],
-                                        ['label' => 'Password', 'key' => 'password', 'type' => 'password', 'placeholder' => 'Abaikan jika tidak diubah']
+                                        ['label' => 'Email', 'key' => 'email', 'type' => 'email'],
+                                        [
+                                            'label' => 'Password',
+                                            'key' => 'password',
+                                            'type' => 'password',
+                                            'placeholder' => 'Abaikan jika tidak diubah',
+                                        ],
                                     ];
                                 @endphp
                                 @foreach ($akunFields as $i => $field)
-                                    <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#3d4f62] w-32 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
-                                                                                @if ($field['type'] === 'password')
+                                    <div
+                                        class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+                                        <span
+                                            class="text-sm font-semibold text-[#3d4f62] w-32 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span
+                                            class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : $user->{$field['key']} ?? '-' }}</span>
+                                        @if ($field['type'] === 'password')
                                             <div class="edit-field hidden relative w-full">
-                                                <input type="password" name="{{ $field['key'] }}" value="" placeholder="{{ $field['placeholder'] ?? '' }}" class="prof-input w-full pr-10">
-                                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                                                <input type="password" name="{{ $field['key'] }}" value=""
+                                                    placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                    class="prof-input w-full pr-10">
+                                                <button type="button"
+                                                    class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                                    onclick="togglePasswordVisibility(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-5 w-5 text-gray-400 hover:text-gray-600 toggle-icon"
+                                                        viewBox="0 0 20 20" fill="currentColor">
                                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd"
+                                                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                            clip-rule="evenodd" />
                                                     </svg>
                                                 </button>
                                             </div>
                                         @else
-                                            <input type="{{ $field['type'] }}"
-                                                   name="{{ $field['key'] }}"
-                                                   value="{{ $user->{$field['key']} ?? '' }}"
-                                                   placeholder="{{ $field['placeholder'] ?? '' }}"
-                                                   {{ $field['disabled'] ?? false ? 'disabled' : '' }}
-                                                   class="edit-field prof-input hidden">
+                                            <input type="{{ $field['type'] }}" name="{{ $field['key'] }}"
+                                                value="{{ $user->{$field['key']} ?? '' }}"
+                                                placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                {{ $field['disabled'] ?? false ? 'disabled' : '' }}
+                                                class="edit-field prof-input hidden">
                                         @endif
                                     </div>
                                 @endforeach
@@ -212,28 +270,81 @@
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @php
                                     $profilFields = [
-                                        ['label' => 'Nama',               'key' => 'nama',               'type' => 'text',   'val' => $user->nama ?? '-'],
-                                        ['label' => 'Perusahaan',         'key' => 'company_id',         'type' => 'select', 'options' => $companies ?? [],   'val' => $user->company->nama_company ?? '-'],
-                                        ['label' => 'Departemen',         'key' => 'department_id',      'type' => 'select', 'options' => $departments ?? [], 'val' => $user->department->nama_department ?? '-'],
-                                        ['label' => 'Role',               'key' => 'role_id',            'type' => 'readonly', 'val' => ucwords(str_replace('_', ' ', $activeRoleName ?? $user->role->role_name ?? '-'))],
-                                        ['label' => 'Posisi Sekarang',    'key' => 'position_id',        'type' => 'readonly', 'val' => $user->position->position_name ?? '-'],
-                                        ['label' => 'Mentor',             'type' => 'readonly', 'val' => collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-')],
-                                        ['label' => 'Atasan',             'type' => 'readonly', 'val' => optional($user->atasan)->nama ?? '-'],
-                                        ['label' => 'Posisi Yang Dituju', 'type' => 'readonly', 'val' => optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-'],
+                                        [
+                                            'label' => 'Nama',
+                                            'key' => 'nama',
+                                            'type' => 'text',
+                                            'val' => $user->nama ?? '-',
+                                        ],
+                                        [
+                                            'label' => 'Perusahaan',
+                                            'key' => 'company_id',
+                                            'type' => 'select',
+                                            'options' => $companies ?? [],
+                                            'val' => $user->company->nama_company ?? '-',
+                                        ],
+                                        [
+                                            'label' => 'Departemen',
+                                            'key' => 'department_id',
+                                            'type' => 'select',
+                                            'options' => $departments ?? [],
+                                            'val' => $user->department->nama_department ?? '-',
+                                        ],
+                                        [
+                                            'label' => 'Role',
+                                            'key' => 'role_id',
+                                            'type' => 'readonly',
+                                            'val' => ucwords(
+                                                str_replace(
+                                                    '_',
+                                                    ' ',
+                                                    $activeRoleName ?? ($user->role->role_name ?? '-'),
+                                                ),
+                                            ),
+                                        ],
+                                        [
+                                            'label' => 'Posisi Sekarang',
+                                            'key' => 'position_id',
+                                            'type' => 'readonly',
+                                            'val' => $user->position->position_name ?? '-',
+                                        ],
+                                        [
+                                            'label' => 'Mentor',
+                                            'type' => 'readonly',
+                                            'val' =>
+                                                collect(optional($user->promotion_plan)->mentor_models)
+                                                    ->pluck('nama')
+                                                    ->join(', ') ?:
+                                                optional($user->mentor)->nama ?? '-',
+                                        ],
+                                        [
+                                            'label' => 'Atasan',
+                                            'type' => 'readonly',
+                                            'val' => optional($user->atasan)->nama ?? '-',
+                                        ],
+                                        [
+                                            'label' => 'Posisi Yang Dituju',
+                                            'type' => 'readonly',
+                                            'val' =>
+                                                optional(optional($user->promotion_plan)->targetPosition)
+                                                    ->position_name ?? '-',
+                                        ],
                                     ];
                                 @endphp
                                 @foreach ($profilFields as $i => $field)
-                                    <div class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#0f172a] w-32 flex-shrink-0">{{ $field['label'] }}</span>
+                                    <div
+                                        class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+                                        <span
+                                            class="text-sm font-semibold text-[#0f172a] w-32 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
-                                        
+
                                         @if (($field['type'] ?? '') === 'text')
-                                            <input type="text"
-                                                   name="{{ $field['key'] }}"
-                                                   value="{{ $user->{$field['key']} ?? '' }}"
-                                                   class="edit-field prof-input hidden">
+                                            <input type="text" name="{{ $field['key'] }}"
+                                                value="{{ $user->{$field['key']} ?? '' }}"
+                                                class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden"
+                                                {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
@@ -243,22 +354,32 @@
                                                             $optName = $opt->nama_company;
                                                         } elseif ($field['key'] === 'department_id') {
                                                             $optName = $opt->nama_department;
-                                                        } elseif (in_array($field['key'], ['position_id', 'target_position_id'])) {
+                                                        } elseif (
+                                                            in_array($field['key'], [
+                                                                'position_id',
+                                                                'target_position_id',
+                                                            ])
+                                                        ) {
                                                             $optName = $opt->position_name;
                                                         } else {
-                                                            $optName = $opt->name ?? $opt->position_name ?? $opt->nama ?? '';
+                                                            $optName =
+                                                                $opt->name ??
+                                                                ($opt->position_name ?? ($opt->nama ?? ''));
                                                         }
-                                                        $selectedId = $field['key'] === 'target_position_id'
-                                                            ? ($user->promotion_plan->target_position_id ?? null)
-                                                            : ($user->{$field['key']} ?? null);
+                                                        $selectedId =
+                                                            $field['key'] === 'target_position_id'
+                                                                ? $user->promotion_plan->target_position_id ?? null
+                                                                : $user->{$field['key']} ?? null;
                                                     @endphp
-                                                    <option value="{{ $opt->id }}" {{ $selectedId == $opt->id ? 'selected' : '' }}>
+                                                    <option value="{{ $opt->id }}"
+                                                        {{ $selectedId == $opt->id ? 'selected' : '' }}>
                                                         {{ $optName }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         @else
-                                            <span class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
+                                            <span
+                                                class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
                                         @endif
                                     </div>
                                 @endforeach
@@ -274,34 +395,43 @@
                         <div class="relative w-36 h-36">
                             @if ($user->foto ?? false)
                                 <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                                     class="w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow foto-preview-mobile">
-                                <div class="hidden w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    class="w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow foto-preview-mobile">
+                                <div
+                                    class="hidden w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                     </svg>
                                 </div>
                             @else
-                                <div class="w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                <div
+                                    class="w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                     </svg>
                                 </div>
                                 <img src="" alt="Foto Profil"
-                                     class="hidden w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0 foto-preview-mobile">
+                                    class="hidden w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0 foto-preview-mobile">
                             @endif
                         </div>
                         <div class="flex gap-2 hidden w-36 foto-buttons-mobile">
                             <label for="foto-input"
-                                   class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 Ganti
                             </label>
                             <button type="button" onclick="hapusFoto()"
-                                    class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                                 Hapus
                             </button>
@@ -315,26 +445,36 @@
                             <span class="section-header">Info Akun</span>
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @foreach ($akunFields as $i => $field)
-                                    <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : ($user->{$field['key']} ?? '-') }}</span>
-                                                                                @if ($field['type'] === 'password')
+                                    <div
+                                        class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+                                        <span
+                                            class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
+                                        <span
+                                            class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : $user->{$field['key']} ?? '-' }}</span>
+                                        @if ($field['type'] === 'password')
                                             <div class="edit-field hidden relative w-full">
-                                                <input type="password" name="{{ $field['key'] }}" value="" placeholder="{{ $field['placeholder'] ?? '' }}" class="prof-input w-full pr-10">
-                                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                                                <input type="password" name="{{ $field['key'] }}" value=""
+                                                    placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                    class="prof-input w-full pr-10">
+                                                <button type="button"
+                                                    class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                                    onclick="togglePasswordVisibility(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-5 w-5 text-gray-400 hover:text-gray-600 toggle-icon"
+                                                        viewBox="0 0 20 20" fill="currentColor">
                                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd"
+                                                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                            clip-rule="evenodd" />
                                                     </svg>
                                                 </button>
                                             </div>
                                         @else
-                                            <input type="{{ $field['type'] }}"
-                                                   name="{{ $field['key'] }}"
-                                                   value="{{ $user->{$field['key']} ?? '' }}"
-                                                   placeholder="{{ $field['placeholder'] ?? '' }}"
-                                                   {{ $field['disabled'] ?? false ? 'disabled' : '' }}
-                                                   class="edit-field prof-input hidden">
+                                            <input type="{{ $field['type'] }}" name="{{ $field['key'] }}"
+                                                value="{{ $user->{$field['key']} ?? '' }}"
+                                                placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                {{ $field['disabled'] ?? false ? 'disabled' : '' }}
+                                                class="edit-field prof-input hidden">
                                         @endif
                                     </div>
                                 @endforeach
@@ -346,30 +486,52 @@
                             <span class="section-header">Profil</span>
                             <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
                                 @foreach ($profilFields as $i => $field)
-                                    <div class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span class="text-sm font-semibold text-[#0f172a] w-28 flex-shrink-0">{{ $field['label'] }}</span>
+                                    <div
+                                        class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
+                                        <span
+                                            class="text-sm font-semibold text-[#0f172a] w-28 flex-shrink-0">{{ $field['label'] }}</span>
                                         <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
                                         @if (($field['type'] ?? '') === 'text')
-                                            <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}" class="edit-field prof-input hidden">
+                                            <input type="text" name="{{ $field['key'] }}"
+                                                value="{{ $user->{$field['key']} ?? '' }}"
+                                                class="edit-field prof-input hidden">
                                         @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden" {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
+                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden"
+                                                {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                                                 <option value="" disabled>Pilih {{ $field['label'] }}</option>
                                                 @foreach ($field['options'] as $opt)
                                                     @php
-                                                        if ($field['key'] === 'role_id') $optName = ucwords(str_replace('_', ' ', $opt->role_name));
-                                                        elseif ($field['key'] === 'company_id') $optName = $opt->nama_company;
-                                                        elseif ($field['key'] === 'department_id') $optName = $opt->nama_department;
-                                                        elseif (in_array($field['key'], ['position_id', 'target_position_id'])) $optName = $opt->position_name;
-                                                        else $optName = $opt->name ?? $opt->position_name ?? $opt->nama ?? '';
-                                                        $selectedId = $field['key'] === 'target_position_id'
-                                                            ? ($user->promotion_plan->target_position_id ?? null)
-                                                            : ($user->{$field['key']} ?? null);
+                                                        if ($field['key'] === 'role_id') {
+                                                            $optName = ucwords(str_replace('_', ' ', $opt->role_name));
+                                                        } elseif ($field['key'] === 'company_id') {
+                                                            $optName = $opt->nama_company;
+                                                        } elseif ($field['key'] === 'department_id') {
+                                                            $optName = $opt->nama_department;
+                                                        } elseif (
+                                                            in_array($field['key'], [
+                                                                'position_id',
+                                                                'target_position_id',
+                                                            ])
+                                                        ) {
+                                                            $optName = $opt->position_name;
+                                                        } else {
+                                                            $optName =
+                                                                $opt->name ??
+                                                                ($opt->position_name ?? ($opt->nama ?? ''));
+                                                        }
+                                                        $selectedId =
+                                                            $field['key'] === 'target_position_id'
+                                                                ? $user->promotion_plan->target_position_id ?? null
+                                                                : $user->{$field['key']} ?? null;
                                                     @endphp
-                                                    <option value="{{ $opt->id }}" {{ $selectedId == $opt->id ? 'selected' : '' }}>{{ $optName }}</option>
+                                                    <option value="{{ $opt->id }}"
+                                                        {{ $selectedId == $opt->id ? 'selected' : '' }}>
+                                                        {{ $optName }}</option>
                                                 @endforeach
                                             </select>
                                         @else
-                                            <span class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
+                                            <span
+                                                class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
                                         @endif
                                     </div>
                                 @endforeach
@@ -380,19 +542,16 @@
 
                 {{-- Footer aksi --}}
                 <div class="border-t border-gray-100 px-8 py-5 flex justify-end gap-3">
-                    <button type="button" id="btn-edit"
-                            onclick="enterEditMode()"
-                            class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                    <button type="button" id="btn-edit" onclick="enterEditMode()"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Edit
                     </button>
-                    <button type="button" id="btn-batal"
-                            onclick="exitEditMode()"
-                            class="hidden border border-gray-300 text-gray-600 bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
+                    <button type="button" id="btn-batal" onclick="exitEditMode()"
+                        class="hidden border border-gray-300 text-gray-600 bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-2.5 rounded-xl transition-all active:scale-95">
                         Batal
                     </button>
-                    <button type="button" id="btn-simpan"
-                            onclick="openConfirmModal()"
-                            class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
+                    <button type="button" id="btn-simpan" onclick="openConfirmModal()"
+                        class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
                         Simpan
                     </button>
                 </div>
@@ -400,13 +559,15 @@
         </form>
     </div>
 
-    
-{{-- MODAL KONFIRMASI --}}
-<div id="confirm-modal" class="modal-backdrop hidden">
+
+    {{-- MODAL KONFIRMASI --}}
+    <div id="confirm-modal" class="modal-backdrop hidden">
         <div class="bg-white rounded-2xl shadow-2xl p-8 w-80 flex flex-col items-center text-center gap-4">
             <div class="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-amber-500" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                 </svg>
             </div>
             <div>
@@ -415,19 +576,19 @@
             </div>
             <div class="flex gap-3 w-full mt-1">
                 <button type="button" onclick="closeConfirmModal()"
-                        class="flex-1 border border-gray-300 text-gray-600 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition active:scale-95">
+                    class="flex-1 border border-gray-300 text-gray-600 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition active:scale-95">
                     Batalkan
                 </button>
                 <button type="button" onclick="submitForm()"
-                        class="flex-1 bg-[#0f172a] hover:bg-[#1e2a36] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
+                    class="flex-1 bg-[#0f172a] hover:bg-[#1e2a36] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
                     Ya, Yakin
                 </button>
             </div>
         </div>
     </div>
 
-<script>
-// Dropdown
+    <script>
+        // Dropdown
         function toggleDropdown(id) {
             const el = document.getElementById(id);
             const isHidden = el.classList.contains('hidden');
@@ -435,7 +596,7 @@
             if (isHidden) el.classList.remove('hidden');
         }
         document.addEventListener('click', function(e) {
-            const inside = ['bell-wrapper','profile-wrapper','mobile-menu-wrapper'].some(id => {
+            const inside = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'].some(id => {
                 const el = document.getElementById(id);
                 return el && el.contains(e.target);
             });
@@ -448,14 +609,16 @@
             const icon = container.querySelector('.toggle-icon');
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
+                icon.innerHTML =
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
             } else {
                 input.type = 'password';
-                icon.innerHTML = '<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />';
+                icon.innerHTML =
+                    '<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />';
             }
         }
 
-        
+
         // AJAX Load Department for Edit Profile
         function loadDepartmentsByCompanyProfile(selectElement) {
             const companyId = selectElement.value;
@@ -464,17 +627,17 @@
                 s.innerHTML = '<option value="" disabled selected>Memuat...</option>';
             });
 
-            if(!companyId) return;
+            if (!companyId) return;
 
             fetch(`/register/departments?company_id=${companyId}`)
-            .then(r => r.json())
-            .then(data => {
-                let html = '<option value="" disabled selected>Pilih Departemen</option>';
-                if(data.length === 0) html = '<option value="" disabled selected>Tidak ada</option>';
-                else data.forEach(d => html += `<option value="${d.id}">${d.nama_department}</option>`);
-                deptSelects.forEach(s => s.innerHTML = html);
-            })
-            .catch(() => deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Error</option>'));
+                .then(r => r.json())
+                .then(data => {
+                    let html = '<option value="" disabled selected>Pilih Departemen</option>';
+                    if (data.length === 0) html = '<option value="" disabled selected>Tidak ada</option>';
+                    else data.forEach(d => html += `<option value="${d.id}">${d.nama_department}</option>`);
+                    deptSelects.forEach(s => s.innerHTML = html);
+                })
+                .catch(() => deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Error</option>'));
         }
 
         // Edit mode
@@ -519,7 +682,10 @@
         function hapusFoto() {
             const preview = document.getElementById('foto-preview');
             const placeholder = document.getElementById('foto-placeholder');
-            if (preview) { preview.src = ''; preview.classList.add('hidden'); }
+            if (preview) {
+                preview.src = '';
+                preview.classList.add('hidden');
+            }
             if (placeholder) placeholder.classList.remove('hidden');
             document.getElementById('foto-input').value = '';
             document.getElementById('should_delete_foto').value = '1';
@@ -529,9 +695,11 @@
         function openConfirmModal() {
             document.getElementById('confirm-modal').classList.remove('hidden');
         }
+
         function closeConfirmModal() {
             document.getElementById('confirm-modal').classList.add('hidden');
         }
+
         function submitForm() {
             closeConfirmModal();
             document.getElementById('profile-form').submit();

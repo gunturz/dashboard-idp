@@ -1,6 +1,39 @@
 <x-panelis.layout title="Detail Talent Panelis – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
+            /* ── Page Header ── */
+            .page-header {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+            .page-header-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 18px;
+                background: #0f172a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 8px 16px -4px rgba(30, 41, 59, 0.3);
+                flex-shrink: 0;
+                color: white;
+            }
+            .page-header-icon svg { width: 26px; height: 26px; }
+            .page-header-title {
+                font-size: 1.75rem;
+                font-weight: 800;
+                color: #0f172a;
+                line-height: 1.15;
+                letter-spacing: -0.025em;
+            }
+            .page-header-sub {
+                font-size: 0.8rem;
+                color: #64748b;
+                margin-top: 3px;
+                font-weight: 400;
+            }
             /* ── Scrollbar ── */
             ::-webkit-scrollbar { width: 5px; height: 5px; }
             ::-webkit-scrollbar-track { background: transparent; }
@@ -8,39 +41,76 @@
 
             /* ── Back button ── */
             .btn-back {
-                display: inline-flex; align-items: center; gap: 8px;
-                padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 10px;
-                background: white; color: #475569; font-weight: 600; font-size: 0.85rem;
-                text-decoration: none; transition: all 0.2s; margin-bottom: 28px;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 9px 20px;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 12px;
+                background: white;
+                color: #475569;
+                font-weight: 600;
+                font-size: 0.85rem;
+                text-decoration: none;
+                transition: all 0.2s;
+                white-space: nowrap;
             }
-            .btn-back:hover { background: #f8fafc; border-color: #cbd5e1; color: #1e293b; }
+            .btn-back:hover {
+                background: #f8fafc;
+                border-color: #94a3b8;
+                color: #1e293b;
+                transform: translateX(-2px);
+            }
 
             /* ── Profile header card ── */
             .profile-card {
-                background: #0f172a; border: none; border-radius: 16px;
-                padding: 24px; margin-bottom: 28px;
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
+                border-radius: 20px;
+                padding: 32px 36px;
                 display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+                margin-bottom: 28px;
+                position: relative;
+                overflow: hidden;
                 box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
                 color: white;
             }
+            .profile-card::before {
+                content: '';
+                position: absolute;
+                top: -40px; right: -40px;
+                width: 200px; height: 200px;
+                border-radius: 50%;
+                background: rgba(20,184,166,0.08);
+            }
+            .profile-card::after {
+                content: '';
+                position: absolute;
+                bottom: -60px; left: 30%;
+                width: 250px; height: 250px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.04);
+            }
             .profile-col-1 {
                 display: flex; align-items: center; gap: 16px;
-                border-right: 1px dashed rgba(255, 255, 255, 0.2); padding-right: 16px;
+                border-right: 1px solid rgba(255, 255, 255, 0.2); padding-right: 16px;
+                position: relative; z-index: 1;
             }
             .profile-col-general {
                 display: flex; flex-direction: column; justify-content: center; gap: 12px;
+                position: relative; z-index: 1;
             }
             .profile-col-general:nth-child(2) {
-                border-right: 1px dashed rgba(255, 255, 255, 0.2); padding-right: 16px;
+                border-right: 1px solid rgba(255, 255, 255, 0.2); padding-right: 16px;
             }
             .profile-avatar {
-                width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
-                border: 2px solid rgba(255, 255, 255, 0.3); flex-shrink: 0;
+                width: 80px; height: 80px; border-radius: 20px; object-fit: cover;
+                border: 2px solid rgba(255, 255, 255, 0.4); flex-shrink: 0;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             }
-            .profile-info h3 { font-size: 1.1rem; font-weight: 800; color: white; margin-bottom: 2px; }
-            .profile-info p { font-size: 0.78rem; color: #cbd5e1; font-style: italic; }
-            .meta-item { font-size: 0.78rem; color: #cbd5e1; }
-            .meta-item strong { color: white; font-weight: 700; }
+            .profile-info h3 { font-size: 1.15rem; font-weight: 800; color: white; margin-bottom: 4px; }
+            .profile-info p { font-size: 0.8rem; color: #cbd5e1; font-style: italic; }
+            .meta-item { font-size: 0.82rem; color: #cbd5e1; }
+            .meta-item strong { color: white; font-weight: 700; font-size: 0.85rem; }
 
             /* ── Section title ── */
             .section-title {
@@ -103,21 +173,26 @@
             /* ── LogBook summary ── */
             /* Using inline tailwind classes */
 
-            @media(max-width:768px) {
-                .profile-card { grid-template-columns: 1fr; gap: 16px; }
-                .profile-col-1, .profile-col-general:nth-child(2) { border-right: none; padding-right: 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.2); padding-bottom: 16px; }
+            @media (max-width: 768px) {
+                .profile-card { grid-template-columns: 1fr; gap: 16px; padding: 24px; }
+                .profile-col-1, .profile-col-general:nth-child(2) { border-right: none; padding-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 16px; }
                 .donut-container { flex-direction: column; }
             }
         </style>
     </x-slot>
 
-    {{-- Back Button --}}
-    <a href="{{ route('panelis.dashboard') }}" class="btn-back">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-        </svg>
-        Kembali
-    </a>
+    {{-- Page Header --}}
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Detail Talent</div>
+            <div class="page-header-sub">Informasi lengkap dan rekap perkembangan talent</div>
+        </div>
+    </div>
 
     {{-- Profile Card --}}
     <div class="profile-card">

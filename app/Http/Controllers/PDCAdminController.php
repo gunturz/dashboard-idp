@@ -117,30 +117,46 @@ class PDCAdminController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-            $q->whereNotNull('target_position_id')
-                ->where('status_promotion', '!=', 'Approved Panelis');
-        })
+                $q->whereNotNull('target_position_id')
+                    ->where('status_promotion', '!=', 'Approved Panelis');
+            })
+            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
+            ->select('users.*')
+            ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
         // Grouping: Company ID -> Target Position ID -> Talents
-        $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
+        $groupedData = $talents->groupBy('company_id')
+            ->map(function ($companyTalents) {
+                $sortedCompanyTalents = $companyTalents->sortByDesc(function ($talent) {
+                    return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
+                })->values();
+
             return [
-            'company' => $companyTalents->first()->company,
-            'positions' => $companyTalents->groupBy(
-                function ($item) {
-                return $item->promotion_plan->target_position_id ?? 0;
-            }
-            )->map(
-                function ($positionTalents) {
-                return [
-                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                'talents' => $positionTalents,
-                ];
-            }
-            ),
+                'company' => $sortedCompanyTalents->first()->company,
+                'latest_plan_at' => $sortedCompanyTalents->max(function ($talent) {
+                    return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
+                }),
+                'positions' => $sortedCompanyTalents->groupBy(
+                    function ($item) {
+                        return $item->promotion_plan->target_position_id ?? 0;
+                    }
+                )->map(
+                    function ($positionTalents) {
+                        $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                            return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
+                        })->values();
+
+                        return [
+                            'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                            'talents' => $sortedPositionTalents,
+                        ];
+                    }
+                ),
             ];
-        });
+            })
+            ->sortByDesc('latest_plan_at');
 
         return view('pdc_admin.progress-talent', compact('user', 'groupedData'));
     }
@@ -281,6 +297,14 @@ class PDCAdminController extends Controller
         $user = auth()->user();
         $companies = Company::orderBy('nama_company')->get();
         $departments = Department::orderBy('nama_department')->get();
+        $departmentsByCompany = $departments
+            ->groupBy('company_id')
+            ->map(fn($items) => $items->map(fn($dept) => [
+                'id' => $dept->id,
+                'nama_department' => $dept->nama_department,
+                'company_id' => $dept->company_id,
+            ])->values())
+            ->toArray();
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
@@ -561,6 +585,7 @@ class PDCAdminController extends Controller
             'talent.promotion_plan.targetPosition',
         ])
             ->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $total = $projects->count();
@@ -675,30 +700,38 @@ class PDCAdminController extends Controller
         $user = auth()->user();
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
-        })->with(['position', 'department', 'company'])->get();
+        })->with(['position', 'department', 'company'])->latest()->get();
 
         $mentors = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'mentor');
-        })->with(['position', 'department', 'company'])->get();
+        })->with(['position', 'department', 'company'])->latest()->get();
 
         $finances = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'finance');
-        })->with(['position', 'department', 'company'])->get();
+        })->with(['position', 'department', 'company'])->latest()->get();
 
         $panelisUsers = User::whereHas('roles', function ($q) {
             $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']);
-        })->with(['position', 'department', 'company'])->get();
+        })->with(['position', 'department', 'company'])->latest()->get();
 
         $atasans = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'atasan');
-        })->with(['position', 'department', 'company'])->get();
+        })->with(['position', 'department', 'company'])->latest()->get();
 
-        $departments = Department::all();
+        $departments = Department::orderBy('nama_department')->get();
+        $departmentsByCompany = $departments
+            ->groupBy('company_id')
+            ->map(fn($items) => $items->map(fn($dept) => [
+                'id' => $dept->id,
+                'nama_department' => $dept->nama_department,
+                'company_id' => $dept->company_id,
+            ])->values())
+            ->toArray();
         $positions = Position::all();
         $rolesData = Role::all(); // Provide all roles for the assign modal
-        $companies = Company::all();
+        $companies = Company::orderBy('nama_company')->get();
 
-        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'positions', 'rolesData', 'companies'));
+        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'departmentsByCompany', 'positions', 'rolesData', 'companies'));
     }
 
     public function destroyUser($id)
@@ -838,7 +871,13 @@ class PDCAdminController extends Controller
             $query->where('department_id', $request->department_id);
         }
 
-        $talents = $query->get();
+        $talents = $query->get()
+            ->sortByDesc(function ($talent) {
+                return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                    ?? optional($talent->promotion_plan)->created_at
+                    ?? $talent->created_at;
+            })
+            ->values();
 
         // Stats
         $totalProjectImprovement = ImprovementProject::count();
@@ -863,27 +902,62 @@ class PDCAdminController extends Controller
         }
 
         // Group by company -> target position -> talents
-        $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
+        $groupedData = $talents->groupBy('company_id')
+            ->map(function ($companyTalents) {
+                $sortedCompanyTalents = $companyTalents->sortByDesc(function ($talent) {
+                    return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                        ?? optional($talent->promotion_plan)->created_at
+                        ?? $talent->created_at;
+                })->values();
+
             return [
-            'company' => $companyTalents->first()->company,
-            'positions' => $companyTalents->groupBy(
-                function ($item) {
-                return $item->promotion_plan->target_position_id ?? 0;
-            }
-            )->map(
-                function ($positionTalents) {
-                return [
-                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                'talents' => $positionTalents,
-                ];
-            }
-            ),
+                'company' => $sortedCompanyTalents->first()->company,
+                'latest_project_at' => $sortedCompanyTalents->max(function ($talent) {
+                    return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                        ?? optional($talent->promotion_plan)->created_at
+                        ?? $talent->created_at;
+                }),
+                'positions' => $sortedCompanyTalents->groupBy(
+                    function ($item) {
+                        return $item->promotion_plan->target_position_id ?? 0;
+                    }
+                )->map(
+                    function ($positionTalents) {
+                        $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                            return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                                ?? optional($talent->promotion_plan)->created_at
+                                ?? $talent->created_at;
+                        })->values();
+
+                        return [
+                            'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                            'talents' => $sortedPositionTalents,
+                        ];
+                    }
+                ),
             ];
-        });
+            })
+            ->sortByDesc('latest_project_at');
 
         $companies = Company::orderBy('nama_company')->get();
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $departments = Department::orderBy('nama_department')->get();
+        $allDepartments = $departments
+            ->map(fn($dept) => [
+                'id' => $dept->id,
+                'nama_department' => $dept->nama_department,
+                'company_id' => $dept->company_id,
+            ])
+            ->values()
+            ->toArray();
+        $departmentsByCompany = $departments
+            ->groupBy('company_id')
+            ->map(fn($items) => $items->map(fn($dept) => [
+                'id' => $dept->id,
+                'nama_department' => $dept->nama_department,
+                'company_id' => $dept->company_id,
+            ])->values())
+            ->toArray();
 
         $panelisUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director']))
             ->with(['company', 'position'])
@@ -897,6 +971,8 @@ class PDCAdminController extends Controller
             'companies',
             'positions',
             'departments',
+            'allDepartments',
+            'departmentsByCompany',
             'totalProjectImprovement',
             'belumDinilai',
             'sudahDinilai',

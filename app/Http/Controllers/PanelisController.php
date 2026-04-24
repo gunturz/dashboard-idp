@@ -82,7 +82,8 @@ class PanelisController extends Controller
             'talent.assessmentSession.details.competence',
         ])
             ->whereNotNull('feedback')
-            ->orderBy('updated_at', 'desc')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         return view('panelis.review', compact('user', 'projects'))
@@ -221,6 +222,7 @@ class PanelisController extends Controller
 
         // Tampilkan hanya penilaian yang dibuat oleh panelis ini
         $assessments = PanelisAssessment::where('panelis_id', $user->id)
+            ->whereNotNull('panelis_score')
             ->with([
             'talent.position',
             'talent.department',

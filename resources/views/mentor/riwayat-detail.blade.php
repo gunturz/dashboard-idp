@@ -1,4 +1,4 @@
-<x-mentor.layout title="Detail Logbook" :user="$user">
+<x-mentor.layout title="Detail Logbook" :user="$user" :notifications="$notifications">
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <div class="bg-white rounded-[20px] shadow-sm border border-gray-100 p-8">
             <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-6">
@@ -6,7 +6,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                 </a>
                 <div>
-                    <h2 class="text-2xl font-bold text-[#1e293b]">Detail Logbook - {{ $activity->type->nama_type ?? 'Aktivitas' }}</h2>
+                    <h2 class="text-2xl font-bold text-[#1e293b]">Detail Logbook - {{ $activity->type->type_name ?? 'Aktivitas' }}</h2>
                     <p class="text-gray-500 text-sm mt-1">Lihat detail aktivitas logbook yang disubmit oleh talent.</p>
                 </div>
             </div>
@@ -104,7 +104,12 @@
                 @endif
             </div>
 
-            @if($user->id === $activity->verify_by && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
+            @php
+                // Check if current user is authorized to validate
+                $isAuthorizedValidator = ($activity->type_idp == 3) ? true : ($user->id === $activity->verify_by);
+            @endphp
+
+            @if($isAuthorizedValidator && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
                 <div class="mt-10 flex justify-end gap-3 pt-6 border-t border-gray-100">
                     <button type="button" onclick="openConfirmModal('Rejected')" class="px-6 py-2.5 bg-[#ef4444] text-white font-bold rounded-lg hover:bg-red-600 transition-colors shadow-sm">
                         Reject
@@ -117,7 +122,7 @@
         </div>
     </div>
 
-    @if($user->id === $activity->verify_by && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
+    @if($isAuthorizedValidator && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
     {{-- Modal Confirm Action --}}
     <div id="confirmModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0" style="transition: opacity 0.3s ease;">
         <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[360px] p-7 text-center transform scale-95 transition-transform duration-300" id="confirmModalContent">

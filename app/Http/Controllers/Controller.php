@@ -45,6 +45,16 @@ abstract class Controller
     }
 
     /**
+     * Create the same notification for multiple users.
+     */
+    protected function addNotificationToUsers(iterable $userIds, $title, $desc, $type = 'success'): void
+    {
+        foreach (collect($userIds)->filter()->unique() as $userId) {
+            $this->addNotificationToUser($userId, $title, $desc, $type);
+        }
+    }
+
+    /**
      * Mark all notifications as read for the authenticated user.
      */
     public function markAllNotificationsRead(\Illuminate\Http\Request $request)

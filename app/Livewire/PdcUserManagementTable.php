@@ -37,7 +37,8 @@ class PdcUserManagementTable extends Component
     {
         if ($this->selectedRole === $role) {
             $this->selectedRole = '';
-        } else {
+        }
+        else {
             $this->selectedRole = $role;
         }
         $this->resetAllPages();
@@ -55,14 +56,13 @@ class PdcUserManagementTable extends Component
     {
         return User::with(['company', 'department', 'position', 'roles'])
             ->whereHas('roles', fn($q) => $q->where('role_name', $roleName))
-            ->when($this->search, fn($q) => $q->where(fn($q2) =>
-        $q2->where('nama', 'like', "%{$this->search}%")
-        ->orWhere('email', 'like', "%{$this->search}%")
-        ))
+            ->when($this->search, fn($q) => $q->where('nama', 'like', "%{$this->search}%"))
             ->when($this->company, fn($q) => $q->where('company_id', $this->company))
             ->when($this->department, fn($q) => $q->whereHas('department',
         fn($q2) => $q2->where('nama_department', 'like', "%{$this->department}%")
         ))
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->paginate(7, ['*'], "page_{$roleName}");
     }
 
@@ -80,7 +80,8 @@ class PdcUserManagementTable extends Component
         $usersByRole = [];
         if ($this->selectedRole) {
             $usersByRole[$this->selectedRole] = $this->usersForRole($this->selectedRole);
-        } else {
+        }
+        else {
             foreach ($roleList as $r) {
                 $usersByRole[$r] = $this->usersForRole($r);
             }

@@ -1,6 +1,7 @@
 @props([
     'title' => 'Mentor – Individual Development Plan',
     'user' => null,
+    'notifications' => null,
 ])
 
 @php
@@ -269,6 +270,211 @@
         font-weight: 500;
     }
 
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .page-header-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        background: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+        flex-shrink: 0;
+        color: white;
+    }
+
+    .page-header-icon svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .page-header-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1e293b;
+        line-height: 1.15;
+    }
+
+    .page-header-sub {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 3px;
+        font-weight: 400;
+    }
+
+    .page-header-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .prem-card {
+        background: #f9fafb;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    .prem-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e2e8f0;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .prem-card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: .9rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .prem-card-title svg {
+        width: 18px;
+        height: 18px;
+        color: #14b8a6;
+        flex-shrink: 0;
+    }
+
+    .btn-prem {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .btn-prem:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn-prem svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    .btn-teal {
+        background: #14b8a6;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(20, 184, 166, 0.25);
+    }
+
+    .btn-teal:hover {
+        background: #0d9488;
+        color: #fff;
+    }
+
+    .btn-ghost {
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-ghost:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+    }
+
+    .btn-blue {
+        background: #3b82f6;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-blue:hover {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .btn-red {
+        background: #ef4444;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+    }
+
+    .btn-red:hover {
+        background: #dc2626;
+        color: #fff;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 99px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: .02em;
+    }
+
+    .badge-teal {
+        background: rgba(20, 184, 166, 0.12);
+        color: #0d9488;
+        border: 1px solid rgba(20, 184, 166, 0.25);
+    }
+
+    .badge-gray {
+        background: rgba(100, 116, 139, 0.1);
+        color: #475569;
+        border: 1px solid rgba(100, 116, 139, 0.2);
+    }
+
+    .empty-prem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 24px;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .empty-prem svg {
+        width: 56px;
+        height: 56px;
+        color: #cbd5e1;
+    }
+
+    .empty-prem h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #475569;
+        margin: 0;
+    }
+
+    .empty-prem p {
+        font-size: 0.82rem;
+        color: #94a3b8;
+        margin: 0;
+    }
+
     /* ── Background Decoration ── */
             .bg-decoration {
                 position: fixed;
@@ -388,7 +594,7 @@
                                 <span class="font-medium">Notifikasi</span>
                                 @if ($hasUnreadNotif)
                                     <span
-                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
+                                        class="ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $unreadNotifications->count() > 99 ? '99+' : $unreadNotifications->count() }}</span>
                                 @endif
                             </a>
                         </div>
@@ -498,9 +704,14 @@
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                     @if ($hasUnreadNotif)
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                        @php
+                            $unreadCount = $unreadNotifications->count();
+                            $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
+                        @endphp
+                        <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
+                            {{ $displayCount }}
                         </span>
+                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                     @endif
                 </button>
 
@@ -711,6 +922,46 @@
             });
             if (!clickedInside) {
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const shouldShowMentorNotifPopup = @json(session()->pull('mentor_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
+
+            if (shouldShowMentorNotifPopup) {
+                setTimeout(function () {
+                    const bellDropdown = document.getElementById('bell-dropdown');
+                    if (!bellDropdown) return;
+
+                    bellDropdown.classList.remove('hidden');
+                    bellDropdown.style.transformOrigin = 'top right';
+                    bellDropdown.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    bellDropdown.style.transform = 'scale(1)';
+                    bellDropdown.style.opacity = '1';
+
+                    setTimeout(function () {
+                        if (!bellDropdown.classList.contains('hidden')) {
+                            bellDropdown.style.transform = 'scale(0)';
+                            bellDropdown.style.opacity = '0';
+
+                            setTimeout(function () {
+                                bellDropdown.classList.add('hidden');
+                                bellDropdown.style = '';
+                            }, 500);
+                        }
+                    }, 5000);
+                }, 250);
+            }
+        });
+
+        window.addEventListener('notifikasi-marked-read', function () {
+            const badge = document.getElementById('bell-red-badge');
+            if (badge) badge.remove();
+
+            const bellBtn = document.getElementById('bell-btn');
+            if (bellBtn) {
+                const ping = bellBtn.querySelector('.animate-ping');
+                if (ping) ping.remove();
             }
         });
     </script>

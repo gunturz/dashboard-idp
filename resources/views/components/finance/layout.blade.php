@@ -5,12 +5,19 @@
 ])
 
 @php
-    $unreadNotifications =
-        isset($notifications) && $notifications
-            ? (is_array($notifications)
-                ? collect($notifications)->where('is_read', false)
-                : $notifications->where('is_read', false))
-            : collect();
+    $rawUnreadNotifs = \App\Models\AppNotification::where('user_id', auth()->id())
+        ->where('is_read', false)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
+    $unreadNotifications = $rawUnreadNotifs->map(function($n) {
+        return [
+            'id' => $n->id,
+            'title' => $n->title,
+            'desc' => $n->desc,
+            'time' => $n->created_at->diffForHumans()
+        ];
+    });
     $hasUnreadNotif = $unreadNotifications->count() > 0;
 
     $nama = $user->nama ?? ($user->name ?? 'Finance');
@@ -329,6 +336,10 @@
             class="flex items-center space-x-2 sm:space-x-3 pl-0 xl:pl-6 border-l-0 xl:border-l border-white/20 xl:ml-0 ml-auto">
             {{-- ═══ Notification Bell ═══ --}}
             <div class="relative hidden lg:block" id="bell-wrapper">
+                @php
+                    $financeUnreadCount = \App\Models\AppNotification::where('user_id', auth()->id())->where('is_read', false)->count();
+                    $displayCount = $financeUnreadCount > 99 ? '99+' : $financeUnreadCount;
+                @endphp
                 <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
                     class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20"
@@ -337,10 +348,11 @@
                             d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
-                    @if ($hasUnreadNotif)
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                    @if ($financeUnreadCount > 0)
+                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#343E4E] animate-bounce" style="animation-duration: 2s;" id="bell-red-badge">
+                            {{ $displayCount }}
                         </span>
+                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                     @endif
                 </button>
 
@@ -368,7 +380,7 @@
 
                     @if ($hasUnreadNotif)
                         <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
-                            @foreach ($unreadNotifications->take(3) as $notif)
+                            @foreach ($unreadNotifications->take(2) as $notif)
                                 <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
                                     onclick="window.location='{{ route('finance.notifikasi') }}'">
                                     <div
@@ -692,6 +704,55 @@
             });
             if (!clickedInside) {
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
+        // Clear red badge when Livewire marks all as read
+        window.addEventListener('notifikasi-marked-read', function () {
+            const badge = document.getElementById('bell-red-badge');
+            if (badge) badge.remove();
+            const bellBtn = document.getElementById('bell-btn');
+            if (bellBtn) {
+                const ping = bellBtn.querySelector('.animate-ping');
+                if (ping) ping.remove();
+            }
+        });
+
+        // Auto-expand notification bell on load if there are unread notifications (Only show once using sessionStorage)
+        document.addEventListener('DOMContentLoaded', function () {
+            let hasUnread = {{ ($financeUnreadCount ?? 0) > 0 ? 'true' : 'false' }};
+            let bellDropdown = document.getElementById('bell-dropdown');
+            let hasShownPopup = sessionStorage.getItem('finance_notif_shown');
+
+            if (hasUnread && bellDropdown && {{ request()->routeIs('finance.dashboard') ? 'true' : 'false' }} && !hasShownPopup) {
+                // Set flag to ensure it doesn't expand on next reload/visit during this session
+                sessionStorage.setItem('finance_notif_shown', 'true');
+                
+                bellDropdown.classList.remove('hidden');
+                bellDropdown.style.transformOrigin = 'top right';
+                bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+                bellDropdown.style.opacity = '0';
+                bellDropdown.style.transform = 'scale(0.82) translateY(-10px)';
+
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        bellDropdown.style.opacity = '1';
+                        bellDropdown.style.transform = 'scale(1) translateY(0)';
+                    });
+                });
+
+                setTimeout(function () {
+                    bellDropdown.style.opacity = '0';
+                    bellDropdown.style.transform = 'scale(0.86) translateY(-8px)';
+
+                    setTimeout(function () {
+                        bellDropdown.classList.add('hidden');
+                        bellDropdown.style.transition = '';
+                        bellDropdown.style.transformOrigin = '';
+                        bellDropdown.style.opacity = '';
+                        bellDropdown.style.transform = '';
+                    }, 350);
+                }, 4500);
             }
         });
     </script>

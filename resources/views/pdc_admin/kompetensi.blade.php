@@ -239,6 +239,10 @@
                 background: #14b8a6;
                 color: white;
             }
+            .ts-radio-label.is-checked {
+                background: #14b8a6;
+                color: white;
+            }
 
             .btn-simpan-ts {
                 background: #14b8a6;
@@ -318,7 +322,5 @@
     </div>
 
     <livewire:pdc-admin-kompetensi-manager />
-
-    </x-slot>
 
 </x-pdc_admin.layout>

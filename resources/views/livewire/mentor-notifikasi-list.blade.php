@@ -1,11 +1,4 @@
-{{--
-    Livewire Component: pdc-admin-notifikasi-list
-    Wire:poll setiap 10 detik sebagai fallback Reverb.
-    Desain identik dengan template notifikasi PDC Admin yang sudah ada.
---}}
 <div wire:poll.10s="loadNotifications">
-
-    {{-- ── Page Header Actions ── --}}
     <div class="page-header animate-title">
         <div class="page-header-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -39,7 +32,6 @@
         </div>
     </div>
 
-    {{-- ── Notifications Card ── --}}
     <div class="prem-card w-full mb-6">
         <div class="prem-card-header flex justify-between items-center">
             <span class="prem-card-title">
@@ -57,11 +49,10 @@
             @forelse ($notifications as $notif)
                 <label class="notif-item {{ !$notif['is_read'] ? 'unread' : '' }} type-{{ $notif['type'] ?? 'info' }}"
                     style="padding-left: 24px; border-left: 4px solid {{ $notif['accent'] ?? '#3b82f6' }}; border-top: 3px solid {{ $notif['accent'] ?? '#3b82f6' }}; border-radius: 20px; display: flex; align-items: center; gap: 12px; cursor: {{ $isEditMode ? 'pointer' : 'default' }}; margin-bottom: 0;">
-                    
                     @if($isEditMode)
                         <div style="flex-shrink: 0; display: flex; align-items: center;">
-                            <input type="checkbox" wire:model.live="selectedNotifications" value="{{ $notif['id'] }}" 
-                                class="w-5 h-5 text-[#14b8a6] bg-gray-100 border-gray-300 rounded focus:ring-[#14b8a6]" 
+                            <input type="checkbox" wire:model.live="selectedNotifications" value="{{ $notif['id'] }}"
+                                class="w-5 h-5 text-[#14b8a6] bg-gray-100 border-gray-300 rounded focus:ring-[#14b8a6]"
                                 style="cursor: pointer;">
                         </div>
                     @endif
@@ -107,9 +98,8 @@
         </div>
     </div>
 
-    {{-- ── Back Button ── --}}
     <div class="w-full flex justify-start mb-8">
-        <a href="{{ route('pdc_admin.dashboard') }}" class="btn-prem btn-ghost" style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #475569; padding: 10px 16px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; transition: all 0.2s;">
+        <a href="{{ route('mentor.dashboard') }}" class="btn-prem btn-ghost" style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #475569; padding: 10px 16px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; transition: all 0.2s;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
@@ -127,5 +117,4 @@
             </button>
         </div>
     @endif
-
 </div>

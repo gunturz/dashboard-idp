@@ -37,7 +37,16 @@ class RoleController extends Controller
 
         // Verify the user actually possesses this role
         if ($user->hasRole($request->role_name)) {
-            session(['active_role' => strtolower($request->role_name)]);
+            $roleName = strtolower($request->role_name);
+            session(['active_role' => $roleName]);
+
+            if (in_array($roleName, ['admin', 'pdc_admin'])) {
+                session()->put('pdc_admin_just_logged_in', true);
+            }
+            if ($roleName === 'mentor') {
+                session()->put('mentor_just_logged_in', true);
+            }
+
             return redirect()->route('dashboard');
         }
 

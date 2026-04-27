@@ -22,6 +22,7 @@ class MentorDashboardController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
+        $notifications = $this->getNotifications();
 
         // Asumsi mentor memiliki talents bimbingan via relasi getMenteesAttribute yang ada di model User
         $talents = $user->mentees;
@@ -93,6 +94,8 @@ class MentorDashboardController extends Controller
                 // Atur default target = 6 (hanya contoh untuk pie chart)
                 $target = 6;
 
+                $latestSubmissionAt = $idpActivities->max('created_at');
+
                 return [
                 'id' => $talent->id,
                 'name' => $talent->nama,
@@ -112,16 +115,22 @@ class MentorDashboardController extends Controller
                 'exposure' => ['count' => $countExposure, 'target' => $target, 'pct' => min(100, round(($countExposure / $target) * 100))],
                 'mentoring' => ['count' => $countMentoring, 'target' => $target, 'pct' => min(100, round(($countMentoring / $target) * 100))],
                 'learning' => ['count' => $countLearning, 'target' => $target, 'pct' => min(100, round(($countLearning / $target) * 100))],
-                ]
+                ],
+                'latest_submission_at' => $latestSubmissionAt?->timestamp ?? 0,
                 ];
             });
 
-        return view('mentor.dashboard', compact('user', 'menteesList'));
+        $menteesList = $menteesList
+            ->sortByDesc('latest_submission_at')
+            ->values();
+
+        return view('mentor.dashboard', compact('user', 'menteesList', 'notifications'));
     }
 
     public function logbook(Request $request)
     {
         $user = Auth::user();
+        $notifications = $this->getNotifications();
         // Tampilkan semua mentee yang memiliki aktivitas terkait mentor (tidak hanya yang pending)
         // agar setelah validasi talent tetap muncul di dropdown
         $mentees = $user->mentees->filter(function ($mentee) use ($user) {
@@ -234,13 +243,14 @@ class MentorDashboardController extends Controller
         }
 
         return view('mentor.validasi', compact(
-            'user', 'mentees', 'selectedTalent', 'exposureData', 'mentoringData', 'learningData'
+            'user', 'mentees', 'selectedTalent', 'exposureData', 'mentoringData', 'learningData', 'notifications'
         ));
     }
 
     public function riwayat(Request $request)
     {
         $user = Auth::user();
+        $notifications = $this->getNotifications();
 
         // Ambil semua mentee dari mentor ini
         $allMentees = $user->mentees;
@@ -258,12 +268,13 @@ class MentorDashboardController extends Controller
             'promotion_plan.targetPosition',
         ]);
 
-        return view('mentor.riwayat', compact('user', 'completedTalents'));
+        return view('mentor.riwayat', compact('user', 'completedTalents', 'notifications'));
     }
 
     public function riwayatLogbook(Request $request, $talentId)
     {
         $user = Auth::user();
+        $notifications = $this->getNotifications();
         $talent = \App\Models\User::with(['position', 'department', 'company', 'promotion_plan'])->findOrFail($talentId);
 
         // Ambil semua aktivitas logbook talent ini
@@ -326,7 +337,7 @@ class MentorDashboardController extends Controller
         }
 
         return view('mentor.riwayat-logbook', compact(
-            'user', 'talent', 'exposureData', 'mentoringData', 'learningData'
+            'user', 'talent', 'exposureData', 'mentoringData', 'learningData', 'notifications'
         ));
     }
 
@@ -367,7 +378,8 @@ class MentorDashboardController extends Controller
     public function logbookItemDetail($id)
     {
         $user = Auth::user();
+        $notifications = $this->getNotifications();
         $activity = IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
-        return view('mentor.riwayat-detail', compact('user', 'activity'));
+        return view('mentor.riwayat-detail', compact('user', 'activity', 'notifications'));
     }
 }

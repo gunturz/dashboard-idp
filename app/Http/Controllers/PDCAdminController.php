@@ -450,6 +450,12 @@ class PDCAdminController extends Controller
             ->unique()
             ->values();
 
+        $talentNames = User::query()
+            ->whereIn('id', $selectedTalentIds)
+            ->pluck('nama', 'id');
+
+        $mentorNotifications = [];
+
         $validMentorIds = User::query()
             ->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))
             ->where('company_id', $request->company_id)
@@ -463,7 +469,7 @@ class PDCAdminController extends Controller
             ]);
         }
 
-        DB::transaction(function () use ($request, $editingTalentIds, $selectedTalentIds, $isEditMode) {
+        DB::transaction(function () use ($request, $editingTalentIds, $selectedTalentIds, $isEditMode, $talentNames, &$mentorNotifications) {
             if ($isEditMode) {
                 $removedTalentIds = $editingTalentIds
                     ->diff($selectedTalentIds->map(fn($id) => (string) $id));
@@ -480,8 +486,22 @@ class PDCAdminController extends Controller
 
             foreach ($request->talents as $talentData) {
                 $talentId = $talentData['talent_id'];
+                $existingPlan = PromotionPlan::where('user_id_talent', $talentId)->first();
+                $existingMentorIds = collect($existingPlan?->mentor_ids ?? [])
+                    ->map(fn($id) => (string) $id)
+                    ->filter()
+                    ->values();
                 $mentorIds = collect($talentData['mentors'])
                     ->filter()
+                    ->values()
+                    ->all();
+                $newMentorIds = collect($mentorIds)
+                    ->map(fn($id) => (string) $id)
+                    ->filter()
+                    ->values();
+                $newlyAssignedMentorIds = $newMentorIds
+                    ->diff($existingMentorIds)
+                    ->map(fn($id) => (int) $id)
                     ->values()
                     ->all();
                 $primaryMentorId = $mentorIds[0] ?? null;
@@ -501,8 +521,30 @@ class PDCAdminController extends Controller
                         'target_date' => $request->target_date,
                     ]
                 );
+
+                if (!empty($newlyAssignedMentorIds)) {
+                    $talentName = $talentNames[$talentId] ?? 'Talent';
+
+                    foreach ($newlyAssignedMentorIds as $mentorId) {
+                        $mentorNotifications[] = [
+                            'user_id' => $mentorId,
+                            'title' => 'Talent Baru pada Development Plan',
+                            'desc' => 'PDC Admin telah memilih <span class="font-semibold">' . e($talentName) . '</span> sebagai talent untuk Anda pada development plan.',
+                            'type' => 'info',
+                        ];
+                    }
+                }
             }
         });
+
+        foreach ($mentorNotifications as $notification) {
+            $this->addNotificationToUser(
+                $notification['user_id'],
+                $notification['title'],
+                $notification['desc'],
+                $notification['type']
+            );
+        }
     }
 
     protected function getGroupedTalentsForPlan(int $companyId, int $positionId)

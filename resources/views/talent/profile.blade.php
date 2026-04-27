@@ -460,18 +460,21 @@
                 </div>
                 <div class="prof-field-row">
                     <span class="prof-field-label">Password</span>
-                    <span class="view-field prof-field-value text-slate-400 italic text-sm">••••••••</span>
-                    <div class="edit-field hidden flex-1 relative">
-                        <input type="password" name="password" placeholder="Password baru (kosongkan jika tidak diubah)"
-                               class="prof-input w-full" autocomplete="new-password">
+                    
+                    {{-- View Mode --}}
+                    <div class="view-field flex-1 relative">
+                        <input type="password" value="password1234" readonly class="prof-input w-full pr-10 text-slate-600 bg-[#eff6ff] border-none shadow-sm cursor-default" style="pointer-events: none;">
                     </div>
-                </div>
-                <div class="prof-field-row">
-                    <span class="prof-field-label">Konfirmasi</span>
-                    <span class="view-field prof-field-value text-slate-400 italic text-sm">——</span>
+
+                    {{-- Edit Mode --}}
                     <div class="edit-field hidden flex-1 relative">
-                        <input type="password" name="password_confirmation" placeholder="Ulangi password baru"
-                               class="prof-input w-full" autocomplete="new-password">
+                        <input type="password" name="password" value="" placeholder="Abaikan jika tidak diubah" class="prof-input w-full pr-10 text-slate-600 outline-none">
+                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 hover:text-slate-700 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -609,7 +612,22 @@
         }
         function openConfirmModal()  { document.getElementById('confirm-modal').classList.remove('hidden'); }
         function closeConfirmModal() { document.getElementById('confirm-modal').classList.add('hidden'); }
-        function submitForm() { closeConfirmModal(); document.getElementById('profile-form').submit(); }
+        function submitForm() { 
+            closeConfirmModal(); 
+            document.getElementById('profile-form').submit(); 
+        }
+        
+        function togglePasswordVisibility(button) {
+            const input = button.previousElementSibling;
+            const icon = button.querySelector('.toggle-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />';
+            }
+        }
         document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === document.getElementById('confirm-modal')) closeConfirmModal(); });
     </script>
 </x-talent.layout>

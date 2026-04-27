@@ -255,17 +255,23 @@ class MentorDashboardController extends Controller
         // Ambil semua mentee dari mentor ini
         $allMentees = $user->mentees;
 
-        // Filter: hanya tampilkan yang sudah selesai penilaian panelis (status_promotion = 'Approved Panelis')
+        // Filter: hanya tampilkan yang sudah selesai penilaian panelis atau sudah diputuskan (Approved Panelis, Promoted, Not Promoted)
         $completedTalents = $allMentees->filter(function ($mentee) {
-            return optional($mentee->promotion_plan)->status_promotion === 'Approved Panelis';
+            $plan = $mentee->all_promotion_plans->first();
+            return in_array(optional($plan)->status_promotion, ['Approved Panelis', 'Promoted', 'Not Promoted']);
         })->values();
+
+        // Map archived plans to original property for view compatibility
+        foreach ($completedTalents as $mentee) {
+            $mentee->promotion_plan = $mentee->all_promotion_plans->first();
+        }
 
         // Load relasi yang diperlukan untuk tabel riwayat
         $completedTalents->load([
             'company',
             'department',
             'position',
-            'promotion_plan.targetPosition',
+            'all_promotion_plans.targetPosition',
         ]);
 
         return view('mentor.riwayat', compact('user', 'completedTalents', 'notifications'));
@@ -276,6 +282,7 @@ class MentorDashboardController extends Controller
         $user = Auth::user();
         $notifications = $this->getNotifications();
         $talent = \App\Models\User::with(['position', 'department', 'company', 'promotion_plan'])->findOrFail($talentId);
+
 
         // Ambil semua aktivitas logbook talent ini
         $activities = \App\Models\IdpActivity::with(['type', 'verifier'])

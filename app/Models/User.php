@@ -72,7 +72,12 @@ class User extends Authenticatable
 
     public function promotion_plan()
     {
-        return $this->hasOne(PromotionPlan::class , 'user_id_talent');
+        return $this->hasOne(PromotionPlan::class , 'user_id_talent')->where('is_active', true);
+    }
+
+    public function all_promotion_plans()
+    {
+        return $this->hasMany(PromotionPlan::class , 'user_id_talent')->orderBy('created_at', 'desc');
     }
 
     public function mentor()
@@ -87,22 +92,42 @@ class User extends Authenticatable
 
     public function assessmentSession()
     {
-        return $this->hasOne(AssessmentSession::class , 'user_id_talent');
+        return $this->hasOne(AssessmentSession::class , 'user_id_talent')->where('is_active', true);
+    }
+
+    public function all_assessmentSessions()
+    {
+        return $this->hasMany(AssessmentSession::class , 'user_id_talent')->orderBy('created_at', 'desc');
     }
 
     public function idpActivities()
     {
-        return $this->hasMany(IdpActivity::class , 'user_id_talent');
+        return $this->hasMany(IdpActivity::class , 'user_id_talent')->where('is_active', true);
+    }
+
+    public function all_idpActivities()
+    {
+        return $this->hasMany(IdpActivity::class , 'user_id_talent')->orderBy('created_at', 'desc');
     }
 
     public function improvementProjects()
     {
-        return $this->hasMany(ImprovementProject::class , 'user_id_talent');
+        return $this->hasMany(ImprovementProject::class , 'user_id_talent')->where('is_active', true);
+    }
+
+    public function all_improvementProjects()
+    {
+        return $this->hasMany(ImprovementProject::class , 'user_id_talent')->orderBy('created_at', 'desc');
     }
 
     public function panelisAssessments()
     {
-        return $this->hasMany(PanelisAssessment::class , 'user_id_talent');
+        return $this->hasMany(PanelisAssessment::class , 'user_id_talent')->where('is_active', true);
+    }
+
+    public function all_panelisAssessments()
+    {
+        return $this->hasMany(PanelisAssessment::class , 'user_id_talent')->orderBy('created_at', 'desc');
     }
 
     public function getMenteesAttribute()

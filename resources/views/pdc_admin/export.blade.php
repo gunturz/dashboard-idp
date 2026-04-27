@@ -80,6 +80,18 @@
                     @endforeach
                 </select>
             </div>
+
+            {{-- Status Filter --}}
+            <div class="relative w-full sm:w-[30%]">
+                <select id="statusFilter"
+                    class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
+                    style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
+                    onchange="filterTalents()">
+                    <option value="">Semua Status</option>
+                    <option value="Promoted">Promoted</option>
+                    <option value="Not Promoted">Not Promoted</option>
+                </select>
+            </div>
         </div>
 
         {{-- Table --}}
@@ -97,10 +109,11 @@
             <table class="prem-table" id="archiveTable" style="width: 100%; table-layout: auto;">
                 <thead>
                     <tr>
-                        <th style="width: 22%">Talent</th>
-                        <th style="width: 22%">Perusahaan</th>
-                        <th style="width: 16%">Start Date</th>
-                        <th style="width: 16%">Due Date</th>
+                        <th style="width: 20%">Talent</th>
+                        <th style="width: 20%">Perusahaan</th>
+                        <th style="width: 12%">Start Date</th>
+                        <th style="width: 12%">Due Date</th>
+                        <th style="width: 12%">Status Promosi</th>
                         <th style="width: 24%">Aksi</th>
                     </tr>
                 </thead>
@@ -128,7 +141,8 @@
                             <tr class="archive-row border-b border-slate-300 hover:bg-slate-50 transition-colors"
                                 data-name="{{ strtolower($talent->nama) }}"
                                 data-company="{{ $compName }}"
-                                data-period="{{ $periodLabel }}">
+                                data-period="{{ $periodLabel }}"
+                                data-status="{{ optional($talent->promotion_plan)->status_promotion }}">
                                 <td>
                                     <p class="font-bold text-[#0f172a]">{{ $talent->nama }}</p>
                                     <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr; {{ $targetPos }}
@@ -137,6 +151,24 @@
                                 <td>{{ $compName }}</td>
                                 <td>{{ $startDate }}</td>
                                 <td>{{ $dueDate }}</td>
+                                <td>
+                                    @php $promoStatus = optional($talent->promotion_plan)->status_promotion; @endphp
+                                    @if ($promoStatus === 'Promoted')
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
+                                            Promoted
+                                        </span>
+                                    @elseif ($promoStatus === 'Not Promoted')
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                                            Not Promoted
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                            {{ $promoStatus ?? '-' }}
+                                        </span>
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('pdc_admin.export.detail', $talent->id) }}"
@@ -176,6 +208,7 @@
                 const searchTxt = document.getElementById('searchInput').value.toLowerCase().trim();
                 const compVal   = document.getElementById('companyFilter').value;
                 const periodVal = document.getElementById('periodFilter').value;
+                const statusVal = document.getElementById('statusFilter').value;
 
                 let visibleCount = 0;
 
@@ -183,12 +216,14 @@
                     const name    = row.getAttribute('data-name')    || '';
                     const comp    = row.getAttribute('data-company')  || '';
                     const period  = row.getAttribute('data-period')   || '';
+                    const status  = row.getAttribute('data-status')   || '';
 
                     const matchName   = name.includes(searchTxt);
                     const matchComp   = compVal   === '' || comp   === compVal;
                     const matchPeriod = periodVal === '' || period === periodVal;
+                    const matchStatus = statusVal === '' || status === statusVal;
 
-                    if (matchName && matchComp && matchPeriod) {
+                    if (matchName && matchComp && matchPeriod && matchStatus) {
                         row.style.display = '';
                         visibleCount++;
                     } else {

@@ -1,26 +1,6 @@
 <div>
-    {{-- Live Search + Reset --}}
-    <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
-        <div class="relative w-full sm:w-[40%]">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <input type="text"
-                wire:model.live.debounce.300ms="search"
-                placeholder="Cari Nama Talent..."
-                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
-        </div>
-        @if($search)
-            <button type="button" wire:click="$set('search', '')" class="btn-prem btn-ghost w-full sm:w-auto mt-2 sm:mt-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                Reset
-            </button>
-        @endif
-    </div>
-
     {{-- Stat Grid --}}
-    <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="prem-stat-grid mb-8" style="grid-template-columns: repeat(3, 1fr);">
         <div class="prem-stat prem-stat-teal">
             <div class="prem-stat-icon si-teal">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" /></svg>
@@ -41,6 +21,34 @@
             </div>
             <div class="prem-stat-value">{{ $totalPositions }}</div>
             <div class="prem-stat-label">Target Posisi</div>
+        </div>
+    </div>
+
+    {{-- Actions Row: Search + Button --}}
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+        <div class="relative w-full sm:w-[40%]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text"
+                wire:model.live.debounce.300ms="search"
+                placeholder="Cari Nama Talent..."
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+            @if($search)
+                <button type="button" wire:click="$set('search', '')" class="btn-prem btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    Reset
+                </button>
+            @endif
+
+            <a href="{{ route('pdc_admin.development_plan') }}" class="flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#0f172a] hover:bg-[#1f2937] rounded-xl transition-all whitespace-nowrap shadow-lg shadow-slate-200 transform hover:scale-[1.02] active:scale-[0.98]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                Development Plan
+            </a>
         </div>
     </div>
 

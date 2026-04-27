@@ -319,6 +319,4 @@
 
     <livewire:pdc-admin-kompetensi-manager />
 
-    </x-slot>
-
 </x-pdc_admin.layout>

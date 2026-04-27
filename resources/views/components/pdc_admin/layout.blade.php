@@ -3,6 +3,7 @@
     'user' => null,
     'hideSidebar' => false,
     'hideNavbar' => false,
+    
 ])
 
 <!DOCTYPE html>

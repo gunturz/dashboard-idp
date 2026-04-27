@@ -3,7 +3,8 @@
     'user' => null,
     'hideSidebar' => false,
     'hideNavbar' => false,
-    
+    'styles' => '',
+    'scripts' => '',
 ])
 
 <!DOCTYPE html>

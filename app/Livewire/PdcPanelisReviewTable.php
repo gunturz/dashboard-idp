@@ -40,7 +40,7 @@ class PdcPanelisReviewTable extends Component
         $query = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->whereHas('promotion_plan', fn($q) => $q
         ->whereNotNull('target_position_id')
-        ->where('status_promotion', '!=', 'Approved Panelis')
+        ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
         )
             ->with([
             'company',
@@ -125,7 +125,7 @@ class PdcPanelisReviewTable extends Component
             );
             $isReviewedByPanelis = PanelisAssessment::where('user_id_talent', $talent->id)->exists();
 
-            if (optional($talent->promotion_plan)->status_promotion === 'Approved Panelis') {
+            if (in_array(optional($talent->promotion_plan)->status_promotion, ['Approved Panelis', 'Promoted', 'Not Promoted'])) {
                 $sudahDinilai++;
             }
             if ($alreadySent && !$isReviewedByPanelis) {

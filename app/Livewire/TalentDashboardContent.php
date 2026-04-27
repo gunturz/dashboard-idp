@@ -67,6 +67,7 @@ class TalentDashboardContent extends Component
 
         $latestAssessment = DB::table('assessment_session')
             ->where('user_id_talent', $user->id)
+            ->where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -97,6 +98,7 @@ class TalentDashboardContent extends Component
         // 2. IDP Charts
         $idpActivities = IdpActivity::with('type')
             ->where('user_id_talent', $user->id)
+            ->where('is_active', true)
             ->get();
 
         $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
@@ -105,6 +107,7 @@ class TalentDashboardContent extends Component
 
         // 3. Projects
         $projects = ImprovementProject::where('user_id_talent', $user->id)
+            ->where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->get();
 

@@ -421,6 +421,7 @@ class TalentDashboardController extends Controller
 
         $activities = \App\Models\IdpActivity::with(['type', 'verifier'])
             ->where('user_id_talent', $user->id)
+            ->where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->get();
 

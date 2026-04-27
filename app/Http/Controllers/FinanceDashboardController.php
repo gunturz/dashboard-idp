@@ -58,6 +58,9 @@ class FinanceDashboardController extends Controller
 
         // Tampilkan semua project yang dikirim ke finance ini (feedback = ada), belum ada keputusan dari Finance
         $projects = ImprovementProject::with(['talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
+            ->whereHas('talent.promotion_plan', function ($q) {
+                $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
+            })
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
             ->where(function ($q) {

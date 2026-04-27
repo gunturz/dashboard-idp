@@ -28,7 +28,7 @@ class PdcProgressTalentTable extends Component
         })
             ->whereHas('promotion_plan', function ($q) {
             $q->whereNotNull('target_position_id')
-                ->where('status_promotion', '!=', 'Approved Panelis');
+                ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
         })
             ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
             ->select('users.*')

@@ -158,6 +158,7 @@
         }
     </style>
     {{ $styles ?? '' }}
+    @livewireStyles
 </head>
 
 <body class="bg-[#ffffff] min-h-screen flex flex-col pt-[60px] lg:pt-[80px] relative">
@@ -606,6 +607,7 @@
             }
         });
     </script>
+    @livewireScripts
     {{ $scripts ?? '' }}
 </body>
 

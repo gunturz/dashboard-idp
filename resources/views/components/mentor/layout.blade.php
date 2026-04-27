@@ -288,6 +288,7 @@
             }
         </style>
     {{ $styles ?? '' }}
+    @livewireStyles
 </head>
 
 <body class="bg-[#ffffff] min-h-screen pt-[80px] flex flex-col relative">
@@ -713,6 +714,7 @@
             }
         });
     </script>
+    @livewireScripts
     {{ $scripts ?? '' }}
 
     {{-- FOOTER --}}

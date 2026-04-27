@@ -61,41 +61,33 @@
     </x-slot>
 
     <div class="px-3 md:px-0">
-        {{-- Kembali Button --}}
-        <div class="mb-6">
-            <a href="{{ route('atasan.monitoring.detail', $talent->id) }}" class="btn-prem btn-ghost w-fit">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                </svg>
-                Kembali
-            </a>
-        </div>
+
 
         {{-- ── Page Header ── --}}
-        <div class="page-header animate-title">
-            <div class="page-header-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white">
+                    <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c1.68 0 3.282.466 4.75 1.286a.75.75 0 001-.707V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
                 </svg>
             </div>
             <div>
-                <h1 class="page-header-title">LogBook Talent : {{ $talent->nama }}</h1>
-                <p class="page-header-sub">Rekap detail seluruh aktivitas pengembangan yang telah dilaksanakan oleh talent</p>
+                <h1 class="text-2xl font-extrabold text-[#1f2937]">LogBook</h1>
+                <p class="text-[13px] font-medium text-gray-500 mt-1">Rekam jejak aktivitas pengembangan talent {{ strtolower($talent->nama) }}</p>
             </div>
         </div>
 
         {{-- Tab Navigation --}}
-        <div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
-            <button id="tab-exposure" onclick="switchTab('exposure')" class="btn-prem btn-dark tab-btn active">Exposure</button>
-            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="btn-prem btn-ghost tab-btn">Mentoring</button>
-            <button id="tab-learning" onclick="switchTab('learning')" class="btn-prem btn-ghost tab-btn">Learning</button>
+        <div class="flex bg-white border border-gray-100 rounded-full w-fit p-1 mb-10 shadow-sm ring-1 ring-inset ring-gray-100/50">
+            <button id="tab-exposure" onclick="switchTab('exposure')" class="tab-btn px-6 py-2.5 font-bold text-sm rounded-full transition-all tracking-wide {{ ($activeTab ?? 'exposure') === 'exposure' ? 'bg-slate-900 text-white shadow-md active' : 'text-slate-500 hover:text-slate-800' }}">Exposure</button>
+            <button id="tab-mentoring" onclick="switchTab('mentoring')" class="tab-btn px-6 py-2.5 font-bold text-sm rounded-full transition-all tracking-wide {{ ($activeTab ?? 'exposure') === 'mentoring' ? 'bg-slate-900 text-white shadow-md active' : 'text-slate-500 hover:text-slate-800' }}">Mentoring</button>
+            <button id="tab-learning" onclick="switchTab('learning')" class="tab-btn px-6 py-2.5 font-bold text-sm rounded-full transition-all tracking-wide {{ ($activeTab ?? 'exposure') === 'learning' ? 'bg-slate-900 text-white shadow-md active' : 'text-slate-500 hover:text-slate-800' }}">Learning</button>
         </div>
 
         {{-- Exposure Panel --}}
-        <div id="panel-exposure" class="tab-panel">
+        <div id="panel-exposure" class="tab-panel {{ ($activeTab ?? 'exposure') === 'exposure' ? '' : 'hidden' }}">
             <div class="prem-card">
                 <div class="p-0 overflow-x-auto custom-scrollbar">
-                    <table class="highlight-table mb-0">
+                    <table class="pdc-log-table">
                     <thead>
                         <tr>
                             <th>Mentor</th>
@@ -137,18 +129,19 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td></tr>
+                        <tr><td colspan="6" class="py-12 px-6 text-center"><div class="flex flex-col items-center justify-center p-6"><svg class="w-12 h-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg><p class="text-gray-500 font-semibold">Belum ada data dari talent</p></div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
+        </div>
 
         {{-- Mentoring Panel --}}
-        <div id="panel-mentoring" class="tab-panel hidden">
+        <div id="panel-mentoring" class="tab-panel {{ ($activeTab ?? 'exposure') === 'mentoring' ? '' : 'hidden' }}">
             <div class="prem-card">
                 <div class="p-0 overflow-x-auto custom-scrollbar">
-                    <table class="highlight-table mb-0">
+                    <table class="pdc-log-table">
                     <thead>
                         <tr>
                             <th>Mentor</th>
@@ -190,18 +183,19 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td></tr>
+                        <tr><td colspan="6" class="py-12 px-6 text-center"><div class="flex flex-col items-center justify-center p-6"><svg class="w-12 h-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg><p class="text-gray-500 font-semibold">Belum ada data dari talent</p></div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
+        </div>
 
         {{-- Learning Panel --}}
-        <div id="panel-learning" class="tab-panel hidden">
+        <div id="panel-learning" class="tab-panel {{ ($activeTab ?? 'exposure') === 'learning' ? '' : 'hidden' }}">
             <div class="prem-card">
                 <div class="p-0 overflow-x-auto custom-scrollbar">
-                    <table class="highlight-table mb-0">
+                    <table class="pdc-log-table">
                     <thead>
                         <tr>
                             <th>Sumber</th>
@@ -234,11 +228,21 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Learning yang dicatat.</td></tr>
+                        <tr><td colspan="6" class="py-12 px-6 text-center"><div class="flex flex-col items-center justify-center p-6"><svg class="w-12 h-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg><p class="text-gray-500 font-semibold">Belum ada data dari talent</p></div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+        </div>
+        </div>
+        {{-- Kembali Button Bottom --}}
+        <div class="mt-8 mb-6 w-full flex justify-start">
+            <a href="{{ route('atasan.monitoring', ['activeSection' => 'idp']) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 text-gray-600 rounded-full hover:bg-gray-50 transition-all font-bold text-sm shadow-sm ring-1 ring-inset ring-gray-200 w-fit">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Kembali
+            </a>
         </div>
     </div>
 
@@ -247,10 +251,11 @@
             function switchTab(tab) {
                 // Hide all panels
                 document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-                // Reset all buttons to ghost
+                
+                // Reset all buttons 
                 document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('btn-dark', 'active');
-                    b.classList.add('btn-ghost');
+                    b.classList.remove('active', 'bg-slate-900', 'text-white', 'shadow-md');
+                    b.classList.add('text-slate-500', 'hover:text-slate-800');
                 });
                 
                 // Show selected panel
@@ -260,24 +265,27 @@
                 // Activate selected button
                 const activeBtn = document.getElementById('tab-' + tab);
                 if (activeBtn) {
-                    activeBtn.classList.add('btn-dark', 'active');
-                    activeBtn.classList.remove('btn-ghost');
+                    activeBtn.classList.remove('text-slate-500', 'hover:text-slate-800');
+                    activeBtn.classList.add('active', 'bg-slate-900', 'text-white', 'shadow-md');
                 }
 
-                // Update URL hash without jumping
-                if (history.pushState) {
-                    history.pushState(null, null, '#' + tab);
-                } else {
-                    window.location.hash = '#' + tab;
-                }
+                // Update URL query without reloading
+                const url = new URL(window.location.href);
+                url.searchParams.set('tab', tab);
+                url.hash = tab;
+                window.history.replaceState({}, '', url.toString());
             }
 
-            // Handle initial hash
+            // Handle initial tab from query/hash
             document.addEventListener('DOMContentLoaded', () => {
+                const params = new URLSearchParams(window.location.search);
+                const queryTab = params.get('tab');
                 const hash = window.location.hash.replace('#', '');
-                if (hash && ['exposure', 'mentoring', 'learning'].includes(hash)) {
-                    switchTab(hash);
-                }
+                const initialTab = ['exposure', 'mentoring', 'learning'].includes(queryTab)
+                    ? queryTab
+                    : (['exposure', 'mentoring', 'learning'].includes(hash) ? hash : @json($activeTab ?? 'exposure'));
+
+                switchTab(initialTab);
             });
         </script>
     </x-slot>

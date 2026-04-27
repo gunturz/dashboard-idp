@@ -1,0 +1,99 @@
+<x-talent.layout title="LogBook Detail – Individual Development Plan" :user="$user" :notifications="$notifications">
+    <x-slot name="styles">
+        <style>
+            .custom-scrollbar::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f8fafc;
+                border-radius: 10px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #0d9488;
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #0f766e;
+            }
+
+            @media (max-width: 767px) {
+                .custom-scrollbar {
+                    max-width: calc(100vw - 1.5rem);
+                }
+            }
+
+            .log-table-container {
+                background: white;
+                border-radius: 16px;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+
+            .pdc-log-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .pdc-log-table th {
+                padding: 24px 32px;
+                background: #f8fafc;
+                font-weight: 800;
+                color: #475569;
+                font-size: 0.95rem;
+                text-align: center;
+                white-space: nowrap;
+            }
+
+            .pdc-log-table td {
+                padding: 32px;
+                color: #64748b;
+                font-size: 0.9rem;
+                border-top: 1px solid #f1f5f9;
+            }
+
+            .pdc-log-table tr:hover {
+                background: #fafafa;
+            }
+        </style>
+    </x-slot>
+
+    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up"> 
+
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <div>
+                <div class="page-header-title">LogBook</div>
+                <div class="page-header-sub">Rekam jejak seluruh aktivitas pengembangan Anda</div>
+            </div>
+        </div>
+
+        {{-- Livewire Tab & Table Content --}}
+        <livewire:talent-logbook-table />
+
+        <div class="mt-8 flex justify-start">
+            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
+                class="inline-flex items-center gap-2 text-gray-500 hover:text-slate-800 bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-full transition-colors text-sm font-bold shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali
+            </a>
+        </div>
+
+    </div>
+
+    <x-slot name="scripts"></x-slot>
+</x-talent.layout>

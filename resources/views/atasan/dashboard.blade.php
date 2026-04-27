@@ -298,13 +298,13 @@
                     @if ($details->isNotEmpty())
                         @if ($hasAtasanScored)
                             <div class="btn-assessment btn-assessment-done gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-emerald-500"
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500 flex-shrink-0"
                                     viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd"
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                <span>Assessment Selesai</span>
+                                <span class="truncate">Assessment Selesai</span>
                             </div>
                         @else
                             <a href="{{ route('atasan.competency_atasan.page', $talent->id) }}"
@@ -314,12 +314,12 @@
                         @endif
                     @else
                         <div class="btn-assessment btn-assessment-done gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-amber-500" fill="none"
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 flex-shrink-0" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>Talent belum submit assessment</span>
+                            <span class="truncate">Talent belum submit assessment</span>
                         </div>
                     @endif
                 </div>

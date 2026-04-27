@@ -1,4 +1,4 @@
-<x-app.layout title="Detail Logbook" :user="$user">
+<x-panelis.layout title="Detail Logbook" :user="$user">
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <div class="bg-white rounded-[20px] shadow-sm border border-gray-100 p-8">
             <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-6">

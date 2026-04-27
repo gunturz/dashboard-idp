@@ -566,7 +566,7 @@
         /* ── Sidebar ── */
         .sidebar {
             width: 260px;
-            background: linear-gradient(180deg, #232d3a 0%, #2a3444 60%, #243040 100%);
+            background: #0f172a;
             position: fixed;
             top: 80px;
             bottom: 0;
@@ -886,6 +886,7 @@
         }
     </style>
     {{ $styles ?? '' }}
+    @livewireStyles
 </head>
 
 <body class="bg-[#ffffff] min-h-screen relative {{ $hideNavbar ? '' : 'pt-[60px] lg:pt-[80px]' }}">
@@ -952,7 +953,7 @@
 
             {{-- Progress Talent --}}
             <a href="{{ route('pdc_admin.progress_talent') }}"
-                class="sidebar-item {{ request()->routeIs('pdc_admin.progress_talent') ? 'active' : '' }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.progress_talent', 'pdc_admin.detail') ? 'active' : '' }}"
                 title="Progress Talent">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke-width="2" stroke="currentColor">
@@ -1112,7 +1113,9 @@
     <script>
         // Custom scripts block has been removed for SweetAlert
     </script>
+    @livewireScripts
     {{ $scripts ?? '' }}
+    @stack('scripts')
 
     {{-- Registration Toast removed. It's now handled by the bell dropdown auto-opening in navbar.blade.php --}}
 </body>

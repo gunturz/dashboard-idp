@@ -121,6 +121,36 @@
                 color: #64748b;
             }
 
+            .btn-action-red {
+                padding: 0.75rem 1.5rem;
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.4);
+                letter-spacing: 0.5px;
+            }
+
+            .btn-action-red:hover:not(:disabled) {
+                background: linear-gradient(135deg, #dc2626, #b91c1c);
+                box-shadow: 0 15px 25px -5px rgba(239, 68, 68, 0.5);
+                transform: translateY(-2px);
+            }
+
+            .btn-action-red:active:not(:disabled) {
+                transform: translateY(0);
+                background: linear-gradient(135deg, #b91c1c, #991b1b);
+                box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+            }
+
 
             .form-bg {
                 background-color: #f9fafb;
@@ -354,7 +384,11 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end pt-5">
+                    <div class="flex justify-end gap-3 pt-5">
+                        <a href="{{ route('talent.dashboard') }}#IDP Monitoring" 
+                            class="btn-action-red px-8">
+                            Batal
+                        </a>
                         <button type="submit" class="btn-action-teal px-8">
                             Submit
                         </button>

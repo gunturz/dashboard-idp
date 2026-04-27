@@ -289,7 +289,7 @@ class AtasanDashboardController extends Controller
         return view('atasan.monitoring_detail_talent', compact('user', 'talent', 'competencies', 'standards'));
     }
 
-    public function talentLogbookDetail($talentId)
+    public function talentLogbookDetail(Request $request, $talentId)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
         $talent = User::where('atasan_id', $user->id)
@@ -336,6 +336,11 @@ class AtasanDashboardController extends Controller
             ];
         });
 
-        return view('atasan.logbook_detail_talent', compact('user', 'talent', 'exposureData', 'mentoringData', 'learningData'));
+        $activeTab = strtolower((string) $request->query('tab', 'exposure'));
+        if (!in_array($activeTab, ['exposure', 'mentoring', 'learning'], true)) {
+            $activeTab = 'exposure';
+        }
+
+        return view('atasan.logbook_detail_talent', compact('user', 'talent', 'exposureData', 'mentoringData', 'learningData', 'activeTab'));
     }
 }

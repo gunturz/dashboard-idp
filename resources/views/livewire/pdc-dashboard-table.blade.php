@@ -20,12 +20,6 @@
                 class="search-input"
                 id="tableSearchInput"
             />
-            <div wire:loading wire:target="search" style="display:flex;align-items:center;">
-                <svg style="width:13px;height:13px;animation:spin 1s linear infinite;color:#14b8a6;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle style="opacity:.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path style="opacity:.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-            </div>
         </div>
     </div>
 

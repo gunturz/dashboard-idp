@@ -526,7 +526,7 @@ class PDCAdminController extends Controller
             ->whereHas('promotion_plan', function ($q) use ($position_id) {
             $q->where('target_position_id', $position_id);
         })
-            ->with(['department', 'position', 'mentor', 'atasan', 'assessmentSession.details.competence', 'idpActivities.type', 'improvementProjects.verifier'])
+            ->with(['department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
         $competencies = Competence::all();
@@ -550,9 +550,6 @@ class PDCAdminController extends Controller
             'mentor',
             'atasan',
             'promotion_plan.targetPosition',
-            'assessmentSession.details.competence',
-            'idpActivities.type',
-            'improvementProjects.verifier',
         ])->findOrFail($talent_id);
 
         // Build a single-item collection so the existing detail.blade.php loop still works
@@ -573,6 +570,69 @@ class PDCAdminController extends Controller
             ->get();
 
         return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
+    }
+
+    public function talentLogbook($talent_id)
+    {
+        $user = auth()->user();
+        $talent = User::with([
+            'company',
+            'department',
+            'position',
+            'mentor',
+            'atasan',
+            'promotion_plan.targetPosition',
+        ])->findOrFail($talent_id);
+
+        $activities = \App\Models\IDPActivity::with(['type', 'verifier'])
+            ->where('user_id_talent', $talent->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $exposureData = [];
+        $mentoringData = [];
+        $learningData = [];
+
+        foreach ($activities as $act) {
+            $typeName = $act->type?->type_name ?? '';
+
+            if ($typeName === 'Exposure') {
+                $exposureData[] = [
+                    'id' => $act->id,
+                    'mentor' => $act->verifier?->nama ?? '-',
+                    'tema' => $act->theme,
+                    'tanggal_update' => $act->updated_at,
+                    'tanggal' => $act->activity_date,
+                    'status' => $act->status,
+                ];
+            } elseif ($typeName === 'Mentoring') {
+                $mentoringData[] = [
+                    'id' => $act->id,
+                    'mentor' => $act->verifier?->nama ?? '-',
+                    'tema' => $act->theme,
+                    'tanggal_update' => $act->updated_at,
+                    'tanggal' => $act->activity_date,
+                    'status' => $act->status,
+                ];
+            } elseif ($typeName === 'Learning') {
+                $learningData[] = [
+                    'id' => $act->id,
+                    'sumber' => $act->activity,
+                    'tema' => $act->theme,
+                    'tanggal_update' => $act->updated_at,
+                    'tanggal' => $act->activity_date,
+                    'status' => $act->status,
+                ];
+            }
+        }
+
+        return view('pdc_admin.logbook', compact(
+            'user',
+            'talent',
+            'exposureData',
+            'mentoringData',
+            'learningData'
+        ));
     }
 
     public function financeValidation()

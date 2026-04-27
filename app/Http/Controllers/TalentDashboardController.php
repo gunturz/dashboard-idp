@@ -21,68 +21,11 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent/talent yang bisa mengakses dashboard ini.');
             }
 
-            $kompetensi = null;
             $notifications = $this->getNotifications();
-            $competenciesList = DB::table('competencies')->pluck('name', 'id')->toArray();
-
-            // Project Improvement: ambil data milik user ini
-            $projects = ImprovementProject::where('user_id_talent', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-            $idpActivities = IdpActivity::with('type')
-                ->where('user_id_talent', $user->id)
-                ->get();
-
-            $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
-            $learningCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Learning')->count();
-            $mentoringCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Mentoring')->count();
-
-            // Cek apakah PDC Admin sudah membuat Development Plan (promotion_plan) untuk talent ini
-            $hasDevPlan = !is_null(optional($user->promotion_plan)->target_position_id);
-
-            // Kinerja (Kompetensi) Logic
-            $latestAssessment = DB::table('assessment_session')
-                ->where('user_id_talent', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->first();
-
-            $kompetensiData = [];
-            $atasanHasScored = false;
-
-            if ($latestAssessment) {
-                $details = DB::table('detail_assessment')
-                    ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
-                    ->where('assessment_id', $latestAssessment->id)
-                    ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan', 'detail_assessment.gap_score')
-                    ->get();
-
-                $totalAtasanScore = $details->sum('score_atasan');
-                if ($totalAtasanScore > 0) {
-                    $atasanHasScored = true;
-                }
-
-                foreach ($details as $d) {
-                    // Capping at 5 just in case
-                    $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
-                    $kompetensiData[$d->name] = [
-                        'score' => $avg,
-                        'gap' => $d->gap_score ?? 0
-                    ];
-                }
-            }
 
             return view('talent.dashboard', compact(
                 'user',
-                'notifications',
-                'projects',
-                'exposureCount',
-                'learningCount',
-                'mentoringCount',
-                'kompetensiData',
-                'atasanHasScored',
-                'latestAssessment',
-                'hasDevPlan'
+                'notifications'
             ));
         }
         catch (\Exception $e) {
@@ -547,7 +490,7 @@ class TalentDashboardController extends Controller
             }
         }
 
-        return view('talent.logbook-detail', compact(
+        return view('talent.logbook', compact(
             'user',
             'notifications',
             'exposureData',
@@ -569,7 +512,7 @@ class TalentDashboardController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return view('talent.logbook-item', compact('user', 'activity', 'notifications'));
+        return view('talent.logbook-detail', compact('user', 'activity', 'notifications'));
     }
 
     public function editIdpMonitoring($id)
@@ -791,7 +734,8 @@ class TalentDashboardController extends Controller
                 ->get();
 
             return view('talent.riwayat', compact('user', 'notifications', 'sessions'));
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             Log::error('talent riwayat error: ' . $e->getMessage());
             throw $e;
         }
@@ -828,7 +772,7 @@ class TalentDashboardController extends Controller
                 $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
                 $kompetensiData[$d->name] = [
                     'score' => $avg,
-                    'gap'   => $d->gap_score ?? 0
+                    'gap' => $d->gap_score ?? 0
                 ];
             }
 
@@ -856,7 +800,8 @@ class TalentDashboardController extends Controller
                 'mentoringCount',
                 'projects'
             ));
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             Log::error('talent riwayatDetail error: ' . $e->getMessage());
             throw $e;
         }

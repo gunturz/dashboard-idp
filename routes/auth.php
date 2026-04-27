@@ -108,9 +108,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/talent/notifikasi/mark-all-read', [\App\Http\Controllers\TalentDashboardController::class , 'markAllNotificationsRead'])
         ->name('talent.notifikasi.markAllRead');
     Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class , 'logbookDetail'])
+        ->name('talent.logbook');
+    Route::get('/talent/logbook-detail/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'logbookItemDetail'])
         ->name('talent.logbook.detail');
-    Route::get('/talent/logbook-item/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'logbookItemDetail'])
-        ->name('talent.logbook.item');
     Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class , 'storeProject'])
         ->name('talent.project.store');
     Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class , 'riwayat'])
@@ -125,8 +125,10 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.notifikasi');
     Route::post('/pdc-admin/notifikasi/mark-all-read', [\App\Http\Controllers\PDCAdminController::class , 'markAllNotificationsRead'])
         ->name('pdc_admin.notifikasi.markAllRead');
-    Route::get('/pdc-admin/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'detail'])
+    Route::get('/pdc-admin/progress-talent/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'detail'])
         ->name('pdc_admin.detail');
+    Route::get('/pdc-admin/talent/{talent_id}/logbook', [\App\Http\Controllers\PDCAdminController::class , 'talentLogbook'])
+        ->name('pdc_admin.talent.logbook');
     Route::get('/pdc-admin/talents-by-company', [\App\Http\Controllers\PDCAdminController::class , 'getTalentsByCompany'])
         ->name('pdc_admin.talents_by_company');
     Route::post('/pdc-admin/top-gaps/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateTopGaps'])

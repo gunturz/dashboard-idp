@@ -332,6 +332,7 @@
         </style>
     
     {{ $styles ?? '' }}
+    @livewireStyles
 </head>
 
 <body class="{{ $bodyClass }}">
@@ -538,6 +539,7 @@
         })();
     </script>
     
+    @livewireScripts
     {{ $scripts ?? '' }}
 </body>
 </html>

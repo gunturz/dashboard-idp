@@ -279,6 +279,7 @@
         .bg-decoration::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px); background-size: 32px 32px; opacity: 0.3; }
     </style>
     {{ $styles ?? '' }}
+    @livewireStyles
 </head>
 
 <body class="bg-[#ffffff] min-h-screen flex flex-col pt-[60px] lg:pt-[80px] relative">
@@ -694,6 +695,7 @@
             }
         });
     </script>
+    @livewireScripts
     {{ $scripts ?? '' }}
 </body>
 

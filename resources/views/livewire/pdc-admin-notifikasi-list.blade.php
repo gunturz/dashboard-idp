@@ -1,0 +1,92 @@
+{{--
+    Livewire Component: pdc-admin-notifikasi-list
+    Wire:poll setiap 10 detik sebagai fallback Reverb.
+    Desain identik dengan template notifikasi PDC Admin yang sudah ada.
+--}}
+<div wire:poll.10s="loadNotifications">
+
+    {{-- ── Page Header Actions ── --}}
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Notifikasi</div>
+            <div class="page-header-sub">Semua pemberitahuan aktivitas sistem</div>
+        </div>
+        <div class="page-header-actions" style="margin-top: 30px;">
+            @if($unreadCount > 0)
+                <button wire:click="markAllRead" class="btn-prem btn-teal" style="padding: 8px 16px; font-size: 0.85rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>
+                    Tandai Semua Dibaca
+                </button>
+            @endif
+        </div>
+    </div>
+
+    {{-- ── Notifications Card ── --}}
+    <div class="prem-card w-full mb-6">
+        <div class="prem-card-header flex justify-between items-center">
+            <span class="prem-card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/></svg>
+                Semua Notifikasi
+            </span>
+            @if($unreadCount > 0)
+                <span class="badge badge-teal">{{ $unreadCount }} belum dibaca</span>
+            @else
+                <span class="badge badge-gray">Semua sudah dibaca</span>
+            @endif
+        </div>
+
+        <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+            @forelse ($notifications as $notif)
+                <div class="notif-item {{ !$notif['is_read'] ? 'unread' : '' }} type-{{ $notif['type'] ?? 'info' }}" style="padding-left: 24px;">
+                    <div class="notif-icon ni-{{ $notif['type'] ?? 'info' }}">
+                        @if (($notif['type'] ?? '') === 'success')
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        @elseif (($notif['type'] ?? '') === 'warning')
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        @endif
+                    </div>
+                    <div style="flex:1; min-width:0;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:4px;">
+                            <h3 style="font-weight:700; color:#1e293b; font-size:.9rem; margin:0; flex:1;">{!! $notif['title'] !!}</h3>
+                            @if ($notif['badge'] ?? false)
+                                <span class="badge badge-teal" style="flex-shrink:0;">{{ $notif['badge'] }}</span>
+                            @endif
+                            @if (!$notif['is_read'])
+                                <div class="notif-unread-dot"></div>
+                            @endif
+                        </div>
+                        <p style="font-size:.83rem; color:#475569; margin:0 0 6px; line-height:1.6;">{!! $notif['desc'] !!}</p>
+                        <div class="notif-time">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            {{ $notif['time'] }}
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="empty-prem" style="border:none; padding:48px 20px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                    <h3>Tidak Ada Notifikasi</h3>
+                    <p>Anda sudah up to date! Tidak ada pemberitahuan baru.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    {{-- ── Back Button ── --}}
+    <div class="w-full flex justify-start mb-8">
+        <a href="{{ route('pdc_admin.dashboard') }}" class="btn-prem btn-ghost" style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #475569; padding: 10px 16px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; transition: all 0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Kembali
+        </a>
+    </div>
+
+</div>

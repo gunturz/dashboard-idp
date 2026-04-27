@@ -387,32 +387,26 @@
     {{-- Page Title --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <h2 class="text-2xl font-extrabold text-[#0f172a] animate-title">Permintaan Penilaian</h2>
-        
-        {{-- Live Search --}}
-        <div class="relative w-full sm:w-80">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <input type="text" id="live-search-input" placeholder="Cari Nama Talent atau Judul Project…" 
-                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                oninput="filterReviews()">
-        </div>
     </div>
 
-    {{-- Review Cards --}}
-    @forelse($projects as $idx => $project)
-        @php
-            $talent = $project->talent;
-            $assessment = optional($talent)->assessmentSession;
-            $details = $assessment ? $assessment->details : collect();
-            $isFirstExpanded = ($idx === 0);
-        @endphp
+    {{-- Livewire Component (search + cards + pagination) --}}
+    <livewire:panelis-review-table />
 
-        <div class="review-card review-card-item" id="review-card-{{ $idx }}" 
-             data-name="{{ strtolower(optional($talent)->nama ?? '') }}"
-             data-project="{{ strtolower($project->title ?? '') }}">
-            {{-- Card Header --}}
+    <x-slot name="scripts">
+        <script>
+            function toggleReviewCard(id) {
+                const body  = document.getElementById('body-'  + id);
+                const arrow = document.getElementById('arrow-' + id);
+                if (!body || !arrow) return;
+                body.classList.toggle('open');
+                arrow.classList.toggle('rotated');
+            }
+        </script>
+    </x-slot>
+
+</x-panelis.layout>
+
+
             <div class="review-card-header" onclick="toggleReviewCard({{ $idx }})">
                 <div class="talent-header-info">
                     @if(optional($talent)->foto)

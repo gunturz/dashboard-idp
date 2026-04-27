@@ -390,96 +390,41 @@
     {{-- ── Main Dashboard Content ── --}}
     <div id="pdc-dashboard-wrapper">
         <!-- Stats Grid -->
-        <div class="prem-stat-grid" style="grid-template-columns: repeat(4, 1fr);">
-            @php
-                $tableRows = [];
-                if (isset($groupedData)) {
-                    foreach ($groupedData as $companyId => $companyData) {
-                        foreach ($companyData['positions'] as $positionId => $posData) {
-                            foreach ($posData['talents'] as $index => $talent) {
-                                $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                                if (!empty($mentorIds)) {
-                                    $mentorNames = \App\Models\User::whereIn('id', $mentorIds)
-                                        ->pluck('nama')
-                                        ->toArray();
-                                    $mentorStr = implode(', ', $mentorNames) ?: '-';
-                                } else {
-                                    $mentorStr = optional($talent->mentor)->nama ?? '-';
-                                }
-                                $tableRows[] = [
-                                    'position' => optional($posData['targetPosition'])->position_name ?? '-',
-                                    'dept' => optional($talent->department)->nama_department ?? '-',
-                                    'talent' => $talent->nama,
-                                    'role' => optional($talent->position)->position_name ?? 'Officer',
-                                    'mentor' => $mentorStr,
-                                    'atasan' => optional($talent->atasan)->nama ?? '-',
-                                ];
-                            }
-                        }
-                    }
-                }
-
-                $statCards = [
-                    [
-                        'label' => 'Total User',
-                        'value' => (int) ($totalUsers ?? 0),
-                        'href' => route('pdc_admin.user_management'),
-                        'colorClass' => 'prem-stat-teal',
-                        'iconBg' => 'si-teal',
-                        'icon' =>
-                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>',
-                    ],
-                    [
-                        'label' => 'On Progress',
-                        'value' => (int) ($onProgressTalent ?? 0),
-                        'href' => route('pdc_admin.progress_talent'),
-                        'colorClass' => 'prem-stat-blue',
-                        'iconBg' => 'si-blue',
-                        'icon' =>
-                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>',
-                    ],
-                    [
-                        'label' => 'Pending Finance',
-                        'value' => (int) ($pendingFinance ?? 0),
-                        'href' => route('pdc_admin.finance_validation'),
-                        'colorClass' => 'prem-stat-green',
-                        'iconBg' => 'si-green',
-                        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 01-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004zM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 01-.921.42z"/>
-                                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v.816a3.836 3.836 0 00-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 01-.921-.421l-.879-.66a.75.75 0 00-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 001.5 0v-.81a4.124 4.124 0 001.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 00-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 00.933-1.175l-.415-.33a3.836 3.836 0 00-1.719-.755V6z" clip-rule="evenodd"/>
-                                    </svg>',
-                    ],
-                    [
-                        'label' => 'Pending Panelis',
-                        'value' => (int) ($pendingPanelis ?? 0),
-                        'href' => route('pdc_admin.panelis_review'),
-                        'colorClass' => 'prem-stat-amber',
-                        'iconBg' => 'si-amber',
-                        'icon' =>
-                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>',
-                    ],
+        @php
+            $palette = ['#14b8a6', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'];
+            $roleLabels = ['Talent', 'Mentor', 'Atasan', 'Finance', 'Panelis'];
+            $roleChartData = [];
+            foreach ($roleLabels as $idx => $r) {
+                $roleChartData[] = [
+                    'label' => $r,
+                    'value' => $roleCounts[$r] ?? 0,
+                    'color' => $palette[$idx],
                 ];
+            }
+            $roleChartDataJson = json_encode($roleChartData);
+        @endphp
 
-                $palette = ['#14b8a6', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'];
-                $roleLabels = ['Talent', 'Mentor', 'Atasan', 'Finance', 'Panelis'];
-                $roleChartData = [];
-                foreach ($roleLabels as $idx => $r) {
-                    $roleChartData[] = [
-                        'label' => $r,
-                        'value' => $roleCounts[$r] ?? 0,
-                        'color' => $palette[$idx],
-                    ];
-                }
-                $roleChartDataJson = json_encode($roleChartData);
-            @endphp
-
-            @foreach ($statCards as $card)
-                <a href="{{ $card['href'] }}" class="prem-stat clickable {{ $card['colorClass'] }}">
-                    <div class="prem-stat-icon {{ $card['iconBg'] }}">{!! $card['icon'] !!}</div>
-                    <div class="prem-stat-value animate-counter" data-target="{{ $card['value'] }}">0</div>
-                    <div class="prem-stat-label">{{ $card['label'] }}</div>
-                </a>
-            @endforeach
+        <div class="prem-stat-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <a href="{{ route('pdc_admin.user_management') }}" class="prem-stat clickable prem-stat-teal">
+                <div class="prem-stat-icon si-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg></div>
+                <div class="prem-stat-value animate-counter" data-target="{{ (int) ($totalUsers ?? 0) }}">0</div>
+                <div class="prem-stat-label">Total User</div>
+            </a>
+            <a href="{{ route('pdc_admin.progress_talent') }}" class="prem-stat clickable prem-stat-blue">
+                <div class="prem-stat-icon si-blue"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg></div>
+                <div class="prem-stat-value animate-counter" data-target="{{ (int) ($onProgressTalent ?? 0) }}">0</div>
+                <div class="prem-stat-label">On Progress</div>
+            </a>
+            <a href="{{ route('pdc_admin.finance_validation') }}" class="prem-stat clickable prem-stat-green">
+                <div class="prem-stat-icon si-green"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 01-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004zM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 01-.921.42z"/><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v.816a3.836 3.836 0 00-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 01-.921-.421l-.879-.66a.75.75 0 00-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 001.5 0v-.81a4.124 4.124 0 001.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 00-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 00.933-1.175l-.415-.33a3.836 3.836 0 00-1.719-.755V6z" clip-rule="evenodd"/></svg></div>
+                <div class="prem-stat-value animate-counter" data-target="{{ (int) ($pendingFinance ?? 0) }}">0</div>
+                <div class="prem-stat-label">Pending Finance</div>
+            </a>
+            <a href="{{ route('pdc_admin.panelis_review') }}" class="prem-stat clickable prem-stat-amber">
+                <div class="prem-stat-icon si-amber"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg></div>
+                <div class="prem-stat-value animate-counter" data-target="{{ (int) ($pendingPanelis ?? 0) }}">0</div>
+                <div class="prem-stat-label">Pending Panelis</div>
+            </a>
         </div>
 
         <!-- Main Grid -->
@@ -516,79 +461,9 @@
                 </div>
             </div>
 
-            <!-- Right: Progress Table -->
+            <!-- Right: Progress Table (Livewire) -->
             <div class="glass-card" style="display:flex;flex-direction:column">
-                <div class="card-header">
-                    <span class="card-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M5.566 4.657A4.505 4.505 0 016.75 4.5h10.5c.41 0 .806.055 1.183.157A3 3 0 0015.75 3h-7.5a3 3 0 00-2.684 1.657zM2.25 12a3 3 0 013-3h13.5a3 3 0 013 3v6a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-6zM5.25 7.5c-.41 0-.806.055-1.184.157A3 3 0 016.75 6h10.5a3 3 0 012.683 1.657A4.505 4.505 0 0018.75 7.5H5.25z" />
-                        </svg>
-                        Recent Highlight Progress
-                    </span>
-                    <div class="search-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <input type="text" id="tableSearchInput" placeholder="Cari talent..." class="search-input" />
-                    </div>
-                </div>
-
-                @if (count($tableRows) === 0)
-                    <div class="empty-state">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                        </svg>
-                        <p>Belum ada data progress talent</p>
-                    </div>
-                @else
-                    <div class="table-scroll">
-                        <table class="highlight-table">
-                            <thead>
-                                <tr>
-                                    <th>Posisi Dituju</th>
-                                    <th>Talent</th>
-                                    <th>Departemen</th>
-                                    <th>Mentor</th>
-                                    <th>Atasan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="highlightTbody">
-                                @foreach ($tableRows as $idx => $row)
-                                    <tr class="table-row {{ $idx % 2 === 0 ? 'row-even' : '' }}"
-                                        data-talent="{{ strtolower($row['talent'] ?? '') }}"
-                                        data-position="{{ strtolower($row['position'] ?? '') }}"
-                                        data-mentor="{{ strtolower($row['mentor'] ?? '') }}">
-                                        <td>
-                                            <div class="td-position">{{ $row['position'] }}</div>
-                                            <div class="td-sub">{{ $row['dept'] }}</div>
-                                        </td>
-                                        <td>
-                                            <div class="td-name">{{ $row['talent'] }}</div>
-                                            <div class="td-sub">{{ $row['role'] }}</div>
-                                        </td>
-                                        <td class="td-muted">{{ $row['dept'] }}</td>
-                                        <td class="td-muted">{{ $row['mentor'] }}</td>
-                                        <td class="td-muted">{{ $row['atasan'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Add empty state for search filtering -->
-                    <div id="searchEmptyState" class="empty-state" style="display: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <p>Tidak ada baris yang cocok dengan pencarian.</p>
-                    </div>
-                @endif
+                <livewire:pdc-dashboard-table />
             </div>
         </div>
     </div>
@@ -617,10 +492,8 @@
                     const ctx = canvas.getContext('2d');
                     const roleChartData = {!! $roleChartDataJson ?? '[]' !!};
 
-                    const W = canvas.width,
-                        H = canvas.height;
-                    const cx = W / 2,
-                        cy = H / 2;
+                    const W = canvas.width, H = canvas.height;
+                    const cx = W / 2, cy = H / 2;
                     const R = Math.min(W, H) / 2 - 14;
                     const r = R * 0.60;
 
@@ -652,40 +525,6 @@
                     ctx.fillStyle = '#ffffff';
                     ctx.shadowBlur = 0;
                     ctx.fill();
-                }
-
-                // ── Table Search ───────────────────────────────────────────────────
-                const searchInput = document.getElementById('tableSearchInput');
-                if (searchInput) {
-                    searchInput.addEventListener('input', function(e) {
-                        const q = e.target.value.toLowerCase();
-                        const rows = document.querySelectorAll('#highlightTbody tr');
-                        let found = 0;
-                        rows.forEach(row => {
-                            const talent = row.getAttribute('data-talent') || '';
-                            const position = row.getAttribute('data-position') || '';
-                            const mentor = row.getAttribute('data-mentor') || '';
-
-                            if (talent.includes(q) || position.includes(q) || mentor.includes(q)) {
-                                row.style.display = '';
-                                found++;
-                            } else {
-                                row.style.display = 'none';
-                            }
-                        });
-
-                        const searchEmptyState = document.getElementById('searchEmptyState');
-                        const highlightTbody = document.getElementById('highlightTbody');
-                        if (searchEmptyState && highlightTbody) {
-                            if (found === 0) {
-                                highlightTbody.parentElement.style.display = 'none';
-                                searchEmptyState.style.display = 'flex';
-                            } else {
-                                highlightTbody.parentElement.style.display = '';
-                                searchEmptyState.style.display = 'none';
-                            }
-                        }
-                    });
                 }
             });
         </script>

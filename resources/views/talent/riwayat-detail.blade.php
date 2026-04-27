@@ -165,7 +165,7 @@
                                     <span class="text-4xl font-bold" style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <a href="{{ route('talent.logbook.detail') }}#{{ strtolower($label) }}" class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer">
+                            <a href="{{ route('talent.logbook') }}#{{ strtolower($label) }}" class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer">
                                 <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 relative transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />

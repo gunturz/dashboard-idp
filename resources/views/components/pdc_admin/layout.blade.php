@@ -566,7 +566,7 @@
         /* ── Sidebar ── */
         .sidebar {
             width: 260px;
-            background: linear-gradient(180deg, #232d3a 0%, #2a3444 60%, #243040 100%);
+            background: #0f172a;
             position: fixed;
             top: 80px;
             bottom: 0;

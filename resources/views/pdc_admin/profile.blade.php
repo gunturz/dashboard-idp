@@ -321,52 +321,8 @@
 
             <div class="prof-hero-info">
                 <div class="prof-hero-name">{{ $user->nama ?? 'Nama Admin' }}</div>
-                <div class="prof-hero-email">{{ $user->email }}</div>
                 @php $roleName = ucwords(str_replace('_', ' ', $activeRoleName ?? $user->role->role_name ?? 'PDC Admin')); @endphp
                 <div class="prof-hero-badge">{{ $roleName }}</div>
-            </div>
-
-            <div class="prof-hero-meta hidden md:flex">
-                <div class="prof-hero-meta-item">Perusahaan <br><span>{{ $user->company->nama_company ?? '—' }}</span></div>
-                <div class="prof-hero-meta-item">Departemen <br><span>{{ $user->department->nama_department ?? '—' }}</span></div>
-                <div class="prof-hero-meta-item">Bergabung <br><span>{{ $user->created_at?->translatedFormat('M Y') ?? '—' }}</span></div>
-            </div>
-        </div>
-
-        {{-- Stat Strip --}}
-        <div class="prof-stat-strip">
-            <div class="prof-stat-item">
-                <div class="prof-stat-icon-wrap" style="background:rgba(20,184,166,0.1)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#14b8a6">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="prof-stat-val">{{ $user->nama ?? '—' }}</div>
-                    <div class="prof-stat-lbl">Nama Lengkap</div>
-                </div>
-            </div>
-            <div class="prof-stat-item">
-                <div class="prof-stat-icon-wrap" style="background:rgba(59,130,246,0.1)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#3b82f6">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="prof-stat-val" style="font-size:.92rem">{{ $user->company->nama_company ?? '—' }}</div>
-                    <div class="prof-stat-lbl">Perusahaan</div>
-                </div>
-            </div>
-            <div class="prof-stat-item">
-                <div class="prof-stat-icon-wrap" style="background:rgba(139,92,246,0.1)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#8b5cf6">
-                        <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="prof-stat-val" style="font-size:.92rem">{{ $user->department->nama_department ?? '—' }}</div>
-                    <div class="prof-stat-lbl">Departemen</div>
-                </div>
             </div>
         </div>
 
@@ -463,15 +419,22 @@
                 </div>
                 <div class="prof-field-row">
                     <span class="prof-field-label">Password</span>
-                    <span class="view-field prof-field-value text-slate-400 italic text-sm">••••••••</span>
-                    <input type="password" name="password" placeholder="Password baru (kosongkan jika tidak diubah)"
-                           class="edit-field prof-input hidden" autocomplete="new-password">
-                </div>
-                <div class="prof-field-row">
-                    <span class="prof-field-label">Konfirmasi</span>
-                    <span class="view-field prof-field-value text-slate-400 italic text-sm">——</span>
-                    <input type="password" name="password_confirmation" placeholder="Ulangi password baru"
-                           class="edit-field prof-input hidden" autocomplete="new-password">
+                    
+                    {{-- View Mode --}}
+                    <div class="view-field flex-1 relative">
+                        <input type="password" value="password1234" readonly class="prof-input w-full pr-10 text-slate-600 bg-[#eff6ff] border-none shadow-sm cursor-default" style="pointer-events: none;">
+                    </div>
+
+                    {{-- Edit Mode --}}
+                    <div class="edit-field hidden flex-1 relative">
+                        <input type="password" name="password" value="" placeholder="Abaikan jika tidak diubah" class="prof-input w-full pr-10 text-slate-600 outline-none">
+                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 hover:text-slate-700 toggle-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -573,7 +536,22 @@
         }
         function openConfirmModal()  { document.getElementById('confirm-modal').classList.remove('hidden'); }
         function closeConfirmModal() { document.getElementById('confirm-modal').classList.add('hidden'); }
-        function submitForm() { closeConfirmModal(); document.getElementById('profile-form').submit(); }
+        function submitForm() { 
+            closeConfirmModal(); 
+            document.getElementById('profile-form').submit(); 
+        }
+        
+        function togglePasswordVisibility(button) {
+            const input = button.previousElementSibling;
+            const icon = button.querySelector('.toggle-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />';
+            } else {
+                input.type = 'password';
+                icon.innerHTML = '<path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />';
+            }
+        }
         document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === document.getElementById('confirm-modal')) closeConfirmModal(); });
     </script>
     </x-slot>

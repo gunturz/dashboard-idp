@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -34,6 +36,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function applyActiveFilter(Relation $relation, string $table): Relation
+    {
+        if (Schema::hasColumn($table, 'is_active')) {
+            $relation->where($table . '.is_active', true);
+        }
+
+        return $relation;
     }
 
     public function company()
@@ -72,7 +83,10 @@ class User extends Authenticatable
 
     public function promotion_plan()
     {
-        return $this->hasOne(PromotionPlan::class , 'user_id_talent')->where('is_active', true);
+        return $this->applyActiveFilter(
+            $this->hasOne(PromotionPlan::class , 'user_id_talent'),
+            'promotion_plan'
+        );
     }
 
     public function all_promotion_plans()
@@ -92,7 +106,10 @@ class User extends Authenticatable
 
     public function assessmentSession()
     {
-        return $this->hasOne(AssessmentSession::class , 'user_id_talent')->where('is_active', true);
+        return $this->applyActiveFilter(
+            $this->hasOne(AssessmentSession::class , 'user_id_talent'),
+            'assessment_session'
+        );
     }
 
     public function all_assessmentSessions()
@@ -102,7 +119,10 @@ class User extends Authenticatable
 
     public function idpActivities()
     {
-        return $this->hasMany(IdpActivity::class , 'user_id_talent')->where('is_active', true);
+        return $this->applyActiveFilter(
+            $this->hasMany(IdpActivity::class , 'user_id_talent'),
+            'idp_activity'
+        );
     }
 
     public function all_idpActivities()
@@ -112,7 +132,10 @@ class User extends Authenticatable
 
     public function improvementProjects()
     {
-        return $this->hasMany(ImprovementProject::class , 'user_id_talent')->where('is_active', true);
+        return $this->applyActiveFilter(
+            $this->hasMany(ImprovementProject::class , 'user_id_talent'),
+            'improvement_project'
+        );
     }
 
     public function all_improvementProjects()
@@ -122,7 +145,10 @@ class User extends Authenticatable
 
     public function panelisAssessments()
     {
-        return $this->hasMany(PanelisAssessment::class , 'user_id_talent')->where('is_active', true);
+        return $this->applyActiveFilter(
+            $this->hasMany(PanelisAssessment::class , 'user_id_talent'),
+            'panelis_assessments'
+        );
     }
 
     public function all_panelisAssessments()

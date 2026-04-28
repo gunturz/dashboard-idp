@@ -81,18 +81,6 @@
         {{-- Livewire Tab & Table Content --}}
         <livewire:talent-logbook-table />
 
-        <div class="mt-8 flex justify-start">
-            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
-                class="inline-flex items-center gap-2 text-gray-500 hover:text-slate-800 bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-full transition-colors text-sm font-bold shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Kembali
-            </a>
-        </div>
-
     </div>
 
     <x-slot name="scripts"></x-slot>

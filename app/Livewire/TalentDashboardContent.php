@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
 
@@ -16,6 +17,11 @@ class TalentDashboardContent extends Component
 
     public $judul_project;
     public $project_file;
+
+    protected function hasIsActiveColumn(string $table): bool
+    {
+        return Schema::hasColumn($table, 'is_active');
+    }
 
     public function submitProject()
     {
@@ -67,7 +73,10 @@ class TalentDashboardContent extends Component
 
         $latestAssessment = DB::table('assessment_session')
             ->where('user_id_talent', $user->id)
-            ->where('is_active', true)
+            ->when(
+                $this->hasIsActiveColumn('assessment_session'),
+                fn($query) => $query->where('is_active', true)
+            )
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -98,7 +107,10 @@ class TalentDashboardContent extends Component
         // 2. IDP Charts
         $idpActivities = IdpActivity::with('type')
             ->where('user_id_talent', $user->id)
-            ->where('is_active', true)
+            ->when(
+                $this->hasIsActiveColumn('idp_activity'),
+                fn($query) => $query->where('is_active', true)
+            )
             ->get();
 
         $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
@@ -107,7 +119,10 @@ class TalentDashboardContent extends Component
 
         // 3. Projects
         $projects = ImprovementProject::where('user_id_talent', $user->id)
-            ->where('is_active', true)
+            ->when(
+                $this->hasIsActiveColumn('improvement_project'),
+                fn($query) => $query->where('is_active', true)
+            )
             ->orderBy('created_at', 'desc')
             ->get();
 

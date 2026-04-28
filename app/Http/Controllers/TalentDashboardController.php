@@ -6,12 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
 use App\Models\User;
 
 class TalentDashboardController extends Controller
 {
+    protected function hasIsActiveColumn(string $table): bool
+    {
+        return Schema::hasColumn($table, 'is_active');
+    }
+
     protected function resolveMentorNotificationRecipients(User $user, ?int $verifyById = null): array
     {
         $mentorIds = collect(optional($user->promotion_plan)->mentor_ids ?? [])
@@ -434,7 +440,10 @@ class TalentDashboardController extends Controller
 
         $activities = \App\Models\IdpActivity::with(['type', 'verifier'])
             ->where('user_id_talent', $user->id)
-            ->where('is_active', true)
+            ->when(
+                $this->hasIsActiveColumn('idp_activity'),
+                fn($query) => $query->where('is_active', true)
+            )
             ->orderBy('created_at', 'desc')
             ->get();
 

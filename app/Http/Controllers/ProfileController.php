@@ -88,8 +88,23 @@ class ProfileController extends Controller
             unset($data['password']); // Jangan update password jika kosong
         }
 
-        // Handle upload foto
-        if ($request->hasFile('foto')) {
+        // Handle upload foto (base64 from cropper)
+        if (!empty($data['foto_base64'])) {
+            if ($user->foto) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
+            }
+            $image_parts = explode(";base64,", $data['foto_base64']);
+            if (count($image_parts) == 2) {
+                $image_type_aux = explode("image/", $image_parts[0]);
+                $image_type = $image_type_aux[1];
+                $image_base64 = base64_decode($image_parts[1]);
+                $fileName = 'foto-profil/' . uniqid() . '.' . $image_type;
+                \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image_base64);
+                $data['foto'] = $fileName;
+            }
+        }
+        // Handle upload foto (regular file, fallback)
+        elseif ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($user->foto) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
@@ -102,6 +117,10 @@ class ProfileController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
             }
             $data['foto'] = null;
+        }
+
+        if (array_key_exists('foto_base64', $data)) {
+            unset($data['foto_base64']);
         }
 
         // Hapus password jika kosong, agar tidak ikut ke-update menjadi null hash

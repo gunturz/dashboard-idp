@@ -491,6 +491,8 @@
         </div>
     </div>
 
+    @include('profile.partials.cropper-modal')
+
     <x-slot name="scripts">
     <script>
         function enterEditMode() {

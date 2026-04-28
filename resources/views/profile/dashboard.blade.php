@@ -887,6 +887,8 @@
         </div>
     </div>
 
+    @include('profile.partials.cropper-modal')
+
     <script>
         // Dropdown
         function toggleDropdown(id) {

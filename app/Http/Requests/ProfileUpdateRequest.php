@@ -31,6 +31,7 @@ class ProfileUpdateRequest extends FormRequest
             'target_position_id' => ['nullable', 'integer', 'exists:position,id'],
             'role_id' => ['nullable', 'integer', 'exists:role,id'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'foto_base64' => ['nullable', 'string'],
             'password' => ['nullable', 'string', 'min:8'],
             'should_delete_foto' => ['nullable', 'boolean'],
         ];

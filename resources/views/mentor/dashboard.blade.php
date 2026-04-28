@@ -1,62 +1,141 @@
 <x-mentor.layout title="Dashboard Mentor" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
-            .summary-card {
-                background: #f9fafb;
-                border-radius: 12px;
-                padding: 24px;
-                text-align: center;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            /* ══ Page Header (Admin Style) ══ */
+            .dash-header {
                 display: flex;
-                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+                margin-bottom: 28px;
+            }
+
+            .dash-header-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 14px;
+                background: #0f172a;
+                display: flex;
+                align-items: center;
                 justify-content: center;
-                min-height: 130px;
-                border: 2px solid transparent;
+                box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+                flex-shrink: 0;
             }
 
-            .summary-value {
-                font-size: 2.5rem;
+            .dash-header-icon svg {
+                color: white;
+                width: 24px;
+                height: 24px;
+            }
+
+            .dash-header-title {
+                font-size: 1.6rem;
                 font-weight: 800;
-                line-height: 1.2;
-                margin-bottom: 6px;
+                color: #1e293b;
+                line-height: 1.1;
             }
 
-            .summary-label {
+            .dash-header-sub {
                 font-size: 0.8rem;
                 color: #64748b;
+                margin-top: 2px;
+                font-weight: 400;
+            }
+
+            .dash-header-date {
+                margin-left: auto;
+                font-size: 0.78rem;
+                color: #94a3b8;
                 font-weight: 500;
+                text-align: right;
             }
 
-            .card-teal {
-                border-color: #0d9488;
+            .dash-header-date span {
+                display: block;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #475569;
             }
 
-            .card-teal .summary-value {
-                color: #0d9488;
+            .animate-title {
+                animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
             }
 
-            .card-yellow {
-                border-color: #facc15;
+            @keyframes titleReveal {
+                from { opacity: 0; transform: translateX(-20px) }
+                to { opacity: 1; transform: translateX(0) }
             }
 
-            .card-yellow .summary-value {
-                color: #facc15;
+            /* ══ Glass Card (Admin style) ══ */
+            .glass-card {
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, .03);
+                overflow: hidden;
             }
 
-            .card-green {
-                border-color: #22c55e;
+            .card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 18px 24px;
+                border-bottom: 1px solid #e2e8f0;
+                gap: 12px;
             }
 
-            .card-green .summary-value {
-                color: #22c55e;
+            .card-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: .95rem;
+                font-weight: 700;
+                color: #1e293b;
             }
 
-            .card-red {
-                border-color: #ef4444;
+            .card-title svg {
+                width: 20px;
+                height: 20px;
+                color: #0f172a;
+                flex-shrink: 0;
             }
 
-            .card-red .summary-value {
-                color: #ef4444;
+            /* ══ Table Card (Admin Style) ══ */
+            .highlight-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: .82rem;
+            }
+
+            .highlight-table th {
+                background: #f8fafc;
+                color: #475569;
+                font-weight: 700;
+                text-align: left;
+                padding: 12px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                white-space: nowrap;
+                font-size: .75rem;
+                text-transform: uppercase;
+                letter-spacing: .05em;
+            }
+
+            .highlight-table td {
+                padding: 12px 16px;
+                border-bottom: 1px solid #f1f5f9;
+                vertical-align: middle;
+                color: #334155;
+            }
+
+            .table-row {
+                transition: background .15s;
+            }
+
+            .table-row:hover td {
+                background: #f0fdfa !important;
+            }
+
+            .row-even td {
+                background: #fafbfc;
             }
 
             /* ══ MOBILE ONLY — does NOT affect desktop ══ */
@@ -64,61 +143,10 @@
                 main {
                     padding: 16px !important;
                 }
-
-                .accordion-header {
-                    padding: 16px !important;
-                    gap: 12px !important;
-                }
-
-                .accordion-header img {
-                    width: 44px !important;
-                    height: 44px !important;
-                }
-
-                .accordion-header h3 {
-                    font-size: 15px !important;
-                }
-
-                .accordion-header p {
-                    font-size: 11px !important;
-                }
-
-                .accordion-content {
-                    padding: 16px !important;
-                }
-
-                .donut-container {
-                    justify-content: center !important;
-                    gap: 20px !important;
-                }
-
-                .donut-wrapper {
-                    width: 90px !important;
-                    height: 90px !important;
-                }
-
-                .donut-wrapper span:first-child {
-                    font-size: 14px !important;
-                }
-
-                .gap-title {
-                    font-size: 13px !important;
-                    margin-bottom: 12px !important;
-                }
-
-                .gap-item {
-                    padding: 8px 12px !important;
-                }
-
-                .gap-item span {
-                    font-size: 12px !important;
-                }
-
                 .summary-card {
                     min-height: 100px;
                     padding: 16px;
                 }
-
                 .summary-value {
                     font-size: 1.875rem !important;
                 }
@@ -133,6 +161,24 @@
         $firstPendingMentee = collect($menteesList)->firstWhere('has_pending', true);
     @endphp
 
+    {{-- ── Page Header (Admin Style) ── --}}
+    <div class="dash-header animate-title">
+        <div class="dash-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
+                <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z" />
+            </svg>
+        </div>
+        <div>
+            <div class="dash-header-title">Dashboard</div>
+            <div class="dash-header-sub">Individual Development Plan – Monitoring Talent</div>
+        </div>
+        <div class="dash-header-date hidden md:block">
+            Hari ini
+            <span>{{ now()->translatedFormat('d F Y') }}</span>
+        </div>
+    </div>
+
     {{-- Summary Stats Bar --}}
     <div class="prem-stat-grid grid-cols-2 lg:grid-cols-4 mb-8">
         <div class="prem-stat prem-stat-teal">
@@ -142,7 +188,7 @@
                         d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
                 </svg>
             </div>
-            <div class="prem-stat-value">{{ $totalMentee }}</div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $totalMentee }}">0</div>
             <div class="prem-stat-label">Total Talent</div>
         </div>
         <div class="prem-stat prem-stat-amber">
@@ -153,7 +199,7 @@
                         clip-rule="evenodd" />
                 </svg>
             </div>
-            <div class="prem-stat-value">{{ $totalPending }}</div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $totalPending }}">0</div>
             <div class="prem-stat-label">Pending Review</div>
         </div>
         <div class="prem-stat prem-stat-green">
@@ -164,7 +210,7 @@
                         clip-rule="evenodd" />
                 </svg>
             </div>
-            <div class="prem-stat-value">{{ $totalApproved }}</div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $totalApproved }}">0</div>
             <div class="prem-stat-label">Approved</div>
         </div>
         <div class="prem-stat prem-stat-red">
@@ -175,40 +221,38 @@
                         clip-rule="evenodd" />
                 </svg>
             </div>
-            <div class="prem-stat-value">{{ $totalRejected }}</div>
+            <div class="prem-stat-value animate-counter" data-target="{{ $totalRejected }}">0</div>
             <div class="prem-stat-label">Rejected</div>
         </div>
     </div>
 
-    {{-- Daftar Talent Table --}}
-    <div class="mb-8">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-            <div class="flex items-center gap-2.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#0f172a]" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path
-                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+    {{-- Daftar Talent Card --}}
+    <div class="glass-card mb-10">
+        <div class="card-header">
+            <div class="card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.896 1.82 11.608 11.608 0 0 0 3.398-1.966.75.75 0 0 0 .225-.634 5.25 5.25 0 0 0-10.5 0c0 .04.001.077.002.115a.75.75 0 0 1-.36.63 11.962 11.962 0 0 1-2.02.946l.044.056a3.75 3.75 0 0 0 10.108-1.111Z" />
                 </svg>
-                <h2 class="text-xl font-bold text-[#0f172a]">Daftar Talent</h2>
+                Daftar Talent Anda
             </div>
 
             {{-- Live Search --}}
-            <div class="relative w-full sm:w-80">
+            <div class="relative w-full sm:w-72">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor"
-                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;pointer-events:none;">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input type="text" id="live-search-input" placeholder="Cari Nama Talent…"
-                    class="w-full border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                    class="w-full border border-gray-200 rounded-xl py-2 pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
                     oninput="filterMentees()">
             </div>
         </div>
 
         @if ($totalPending > 0)
             {{-- Banner Approval Validation (Finance style) --}}
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between shadow-sm mb-6">
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between shadow-sm m-6">
                 <div class="flex items-center gap-4 mb-3 sm:mb-0">
                     <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -228,12 +272,10 @@
             </div>
         @endif
 
-        <div class="bg-gray-50 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-            @if($totalMentee > 0)
+        @if($totalMentee > 0)
             <div class="overflow-x-auto">
-                <table class="w-full border-collapse">
+                <table class="highlight-table">
                     <thead>
-                        <tr class="bg-[#f8fafc] border-b border-gray-200">
                             <th class="px-5 py-4 text-left text-xs font-bold text-[#475569] uppercase tracking-wider">Talent</th>
                             <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Pending</th>
                             <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Approved</th>

@@ -190,57 +190,192 @@
         } else {
             $mentorNames = optional($talent->mentor)->nama ?? '-';
         }
+
+        $startDate  = optional($talent->promotion_plan)->start_date;
+        $targetDate = optional($talent->promotion_plan)->target_date;
+        $periodeStr = ($startDate ? \Carbon\Carbon::parse($startDate)->format('d/m/Y') : '-')
+                    . ' – '
+                    . ($targetDate ? \Carbon\Carbon::parse($targetDate)->format('d/m/Y') : '-');
     @endphp
-    <div class="bg-[#0f172a] shadow-md py-6 mb-7 w-full -mt-4 md:-mt-8 -mx-4 lg:-mx-8 px-4 lg:px-8 max-w-[100vw] sm:max-w-none md:-mx-8"
-        style="width: calc(100% + 4rem);">
-        <div class="flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-white/20">
 
-            <div class="flex items-center gap-5 px-6 md:px-10 flex-shrink-0 w-full md:w-1/3 py-4 md:py-2">
-                <div class="flex-shrink-0">
-                    @if ($talent->foto ?? false)
-                        <img src="{{ asset('storage/' . $talent->foto) }}" alt="Foto Profil"
-                            class="w-24 h-24 rounded-[10px] object-cover border-2 border-white/30">
-                    @else
-                        <div
-                            class="w-24 h-24 rounded-[10px] bg-white/20 flex items-center justify-center border-2 border-white/30">
-                            <span class="text-white text-3xl font-bold">{{ $initials }}</span>
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    <p class="text-white font-bold text-base leading-tight">{{ $namaTalent }}</p>
-                    <p class="text-white/80 text-xs mt-1">Talent</p>
-                </div>
+    {{-- CSS identik dengan Talent profile-card --}}
+    <style>
+        .talent-prof-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
+            padding: 28px 32px;
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 28px;
+        }
+        .talent-prof-hero::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 220px; height: 220px;
+            border-radius: 50%;
+            background: rgba(20, 184, 166, 0.08);
+            pointer-events: none;
+        }
+        .talent-prof-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: 30%;
+            width: 280px; height: 280px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            pointer-events: none;
+        }
+        .talent-hero-avatar-wrap { position: relative; flex-shrink: 0; }
+        .talent-hero-avatar-img {
+            width: 96px; height: 96px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .talent-hero-avatar-placeholder {
+            width: 96px; height: 96px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.12);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.4rem; font-weight: 800;
+            color: white;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            letter-spacing: -1px;
+        }
+        .talent-hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 28px;
+            position: relative;
+            z-index: 1;
+        }
+        .talent-hero-section-1 {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 28px 0 0;
+            position: relative; z-index: 1;
+        }
+        .talent-hero-divider {
+            width: 1px;
+            align-self: stretch;
+            background: rgba(255,255,255,0.15);
+            flex-shrink: 0;
+            margin: 4px 0;
+        }
+        .talent-hero-info { min-width: 0; }
+        .talent-hero-name {
+            font-size: 1.35rem; font-weight: 800;
+            color: #ffffff; line-height: 1.2;
+        }
+        .talent-hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(20,184,166,0.18);
+            border: 1px solid rgba(20,184,166,0.3);
+            color: #5eead4;
+            font-size: 0.75rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 99px;
+            margin-top: 10px; letter-spacing: .04em;
+        }
+        .talent-hero-badge::before {
+            content: ''; width: 7px; height: 7px; border-radius: 50%;
+            background: #14b8a6;
+            animation: pulse-dot-hero 2s ease infinite;
+        }
+        @keyframes pulse-dot-hero { 0%,100%{opacity:1} 50%{opacity:.4} }
+        .talent-hero-meta-label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        .talent-hero-meta-value {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.92);
+            font-weight: 700;
+            margin-top: 1px;
+            line-height: 1.3;
+        }
+        .talent-hero-meta-row { display: flex; flex-direction: column; }
+        @media (max-width: 1024px) {
+            .talent-hero-section { padding: 0 16px; }
+            .talent-hero-section-1 { padding: 0 16px 0 0; }
+        }
+        @media (max-width: 768px) {
+            .talent-prof-hero {
+                flex-direction: column; align-items: stretch;
+                gap: 0; padding: 20px 20px;
+            }
+            .talent-hero-section, .talent-hero-section-1 { flex: none; }
+            .talent-hero-section-1 { padding: 0; flex-direction: row; align-items: center; }
+            .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 16px 0; }
+            .talent-hero-section { padding: 0; }
+        }
+    </style>
+
+    <div class="talent-prof-hero" style="box-shadow:0 8px 32px rgba(15,23,42,0.35);">
+
+        {{-- Section 1: Avatar + Identity --}}
+        <div class="talent-hero-section-1">
+            <div class="talent-hero-avatar-wrap">
+                @if ($talent->foto ?? false)
+                    <img src="{{ asset('storage/' . $talent->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
+                @else
+                    <div class="talent-hero-avatar-placeholder">{{ $initials }}</div>
+                @endif
             </div>
-
-            <div class="px-6 md:px-10 w-full md:w-1/3 flex flex-col justify-center py-4 md:py-2 space-y-3 text-sm">
-                <div class="flex gap-2 items-center">
-                    <span class="font-bold text-white w-36 flex-shrink-0">Perusahaan</span>
-                    <span class="text-white/80">{{ optional($talent->company)->nama_company ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2 items-center">
-                    <span class="font-bold text-white w-36 flex-shrink-0">Departemen</span>
-                    <span class="text-white/80">{{ optional($talent->department)->nama_department ?? '-' }}</span>
-                </div>
-                <div class="flex gap-2 items-center">
-                    <span class="font-bold text-white w-36 flex-shrink-0">Jabatan yang Dituju</span>
-                    <span
-                        class="text-white/80">{{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
-                </div>
+            <div class="talent-hero-info">
+                <div class="talent-hero-name">{{ $namaTalent }}</div>
+                <div class="talent-hero-badge">Talent</div>
             </div>
-
-            <div class="px-6 md:px-10 w-full md:w-1/3 flex flex-col justify-center py-4 md:py-2 space-y-3 text-sm">
-                <div class="flex gap-2 items-center">
-                    <span class="font-bold text-white w-24 flex-shrink-0">Mentor</span>
-                    <span class="text-white/80">{{ $mentorNames }}</span>
-                </div>
-                <div class="flex gap-2 items-center">
-                    <span class="font-bold text-white w-24 flex-shrink-0">Atasan</span>
-                    <span class="text-white/80">{{ optional($talent->atasan)->nama ?? '-' }}</span>
-                </div>
-            </div>
-
         </div>
+
+        <div class="talent-hero-divider"></div>
+
+        {{-- Section 2: Perusahaan, Departemen, Posisi --}}
+        <div class="talent-hero-section flex-1">
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Perusahaan</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->company)->nama_company ?? '-' }}</span>
+            </div>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Departemen</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+            </div>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Posisi yang Dituju</span>
+                <span class="talent-hero-meta-value">{{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+            </div>
+        </div>
+
+        <div class="talent-hero-divider"></div>
+
+        {{-- Section 3: Mentor, Atasan, Periode --}}
+        <div class="talent-hero-section flex-1">
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Mentor</span>
+                <span class="talent-hero-meta-value">{{ $mentorNames }}</span>
+            </div>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Atasan</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->atasan)->nama ?? '-' }}</span>
+            </div>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Periode</span>
+                <span class="talent-hero-meta-value">{{ $periodeStr }}</span>
+            </div>
+        </div>
+
     </div>
 
 

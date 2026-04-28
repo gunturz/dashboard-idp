@@ -273,6 +273,11 @@
             </div>
         @endif
 
+        {{-- FORM --}}
+        <form id="profile-form" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            @csrf @method('PATCH')
+            <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
+
         {{-- Hero Banner --}}
         <div class="prof-hero">
             {{-- Avatar --}}
@@ -301,11 +306,6 @@
                 <div class="prof-hero-badge">{{ $roleName }}</div>
             </div>
         </div>
-
-        {{-- FORM --}}
-        <form id="profile-form" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
-            @csrf @method('PATCH')
-            <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
 
             {{-- Info Akun --}}
             <div class="prof-section">
@@ -467,6 +467,8 @@
             </div>
         </div>
     </div>
+
+    @include('profile.partials.cropper-modal')
 
     <x-slot name="scripts">
     <script>

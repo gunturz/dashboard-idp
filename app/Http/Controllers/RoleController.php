@@ -43,6 +43,15 @@ class RoleController extends Controller
             if (in_array($roleName, ['admin', 'pdc_admin'])) {
                 session()->put('pdc_admin_just_logged_in', true);
             }
+            if (in_array($roleName, ['panelis', 'bo_director', 'board_of_directors', 'board_of_director'])) {
+                session()->put('panelis_just_logged_in', true);
+            }
+            if ($roleName === 'atasan') {
+                session()->put('atasan_just_logged_in', true);
+            }
+            if ($roleName === 'talent') {
+                session()->put('talent_just_logged_in', true);
+            }
             if ($roleName === 'mentor') {
                 session()->put('mentor_just_logged_in', true);
             }

@@ -137,6 +137,21 @@ class TalentDashboardController extends Controller
 
             DB::commit();
 
+            if ($user->atasan_id) {
+                $this->addNotificationToUser(
+                    $user->atasan_id,
+                    'Assessment Kompetensi Baru dari Talent',
+                    '<span class="font-semibold">' . e($user->nama) . '</span> telah mengisi assessment kompetensi dan menunggu penilaian Anda.',
+                    'info'
+                );
+            }
+
+            $this->notifyPdcAdmins(
+                'Kompetensi Talent Selesai Diisi',
+                'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah menyelesaikan assessment kompetensi.',
+                'info'
+            );
+
             return redirect()->route('talent.dashboard')
                 ->with('success', 'Berhasil! Penilaian kompetensi Anda telah tersimpan.');
         }
@@ -283,19 +298,17 @@ class TalentDashboardController extends Controller
                 'platform' => $request->platform ?? '',
             ]);
 
-            // Tambahkan notifikasi ke Talent
-            $this->addNotificationToUser(
-                $user->id,
-                'Submit IDP Berhasil',
-                'Formulir <span class="font-semibold">' . ucfirst($tab) . '</span> dengan tema <span class="font-semibold">' . $validated['theme'] . '</span> telah berhasil dikirim dan sedang menunggu tinjauan dari mentor/atasan.',
-                'success'
-            );
-
             $mentorRecipientIds = $this->resolveMentorNotificationRecipients($user, $verifyById);
             $this->addNotificationToUsers(
                 $mentorRecipientIds,
                 'IDP Activity Baru',
                 $user->nama . ' telah mengunggah IDP Monitoring baru (<span class="font-semibold">' . ucfirst($tab) . '</span>) dengan tema <span class="font-semibold">' . e($validated['theme']) . '</span>.',
+                'info'
+            );
+
+            $this->notifyPdcAdmins(
+                'IDP Monitoring Baru dari Talent',
+                'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah mengunggah IDP Monitoring <span class="font-semibold">' . e(ucfirst($tab)) . '</span> dengan tema <span class="font-semibold">' . e($validated['theme']) . '</span>.',
                 'info'
             );
 
@@ -338,12 +351,10 @@ class TalentDashboardController extends Controller
                 'status' => 'Pending',
             ]);
 
-            // Tambahkan notifikasi ke akun Talent sendri
-            $this->addNotificationToUser(
-                Auth::id(),
-                'Submit Project Improvement Berhasil',
-                'Project Improvement berjudul <span class="font-semibold">' . e($request->judul_project) . '</span> telah berhasil disubmit dan sedang menunggu tinjauan.',
-                'success'
+            $this->notifyPdcAdmins(
+                'Project Improvement Baru',
+                'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah mengunggah Project Improvement berjudul <span class="font-semibold">' . e($request->judul_project) . '</span>.',
+                'info'
             );
 
             return redirect(route('talent.dashboard') . '#Project Improvement')

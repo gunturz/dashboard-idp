@@ -218,9 +218,14 @@
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                     @if ($hasUnreadNotif)
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                        @php
+                            $unreadCount = $unreadNotifications->count();
+                            $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
+                        @endphp
+                        <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
+                            {{ $displayCount }}
                         </span>
+                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                     @endif
                 </button>
 
@@ -604,6 +609,46 @@
             });
             if (!clickedInside) {
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const shouldShowPanelisNotifPopup = @json(session()->pull('panelis_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
+
+            if (shouldShowPanelisNotifPopup) {
+                setTimeout(function () {
+                    const bellDropdown = document.getElementById('bell-dropdown');
+                    if (!bellDropdown) return;
+
+                    bellDropdown.classList.remove('hidden');
+                    bellDropdown.style.transformOrigin = 'top right';
+                    bellDropdown.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    bellDropdown.style.transform = 'scale(1)';
+                    bellDropdown.style.opacity = '1';
+
+                    setTimeout(function () {
+                        if (!bellDropdown.classList.contains('hidden')) {
+                            bellDropdown.style.transform = 'scale(0)';
+                            bellDropdown.style.opacity = '0';
+
+                            setTimeout(function () {
+                                bellDropdown.classList.add('hidden');
+                                bellDropdown.style = '';
+                            }, 500);
+                        }
+                    }, 5000);
+                }, 250);
+            }
+        });
+
+        window.addEventListener('notifikasi-marked-read', function () {
+            const badge = document.getElementById('bell-red-badge');
+            if (badge) badge.remove();
+
+            const bellBtn = document.getElementById('bell-btn');
+            if (bellBtn) {
+                const ping = bellBtn.querySelector('.animate-ping');
+                if (ping) ping.remove();
             }
         });
     </script>

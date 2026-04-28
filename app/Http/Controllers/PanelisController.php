@@ -209,6 +209,14 @@ class PanelisController extends Controller
         ]
         );
 
+        $talent = User::find($talent_id);
+
+        $this->notifyPdcAdmins(
+            'Review Panelis Selesai',
+            'Panelis <span class="font-semibold">' . e($user->nama) . '</span> telah memberikan review untuk talent <span class="font-semibold">' . e(optional($talent)->nama ?? 'Talent') . '</span> dengan total skor <span class="font-semibold">' . e((string) $totalScore) . '</span>.',
+            'info'
+        );
+
         return redirect()->route('panelis.history')
             ->with('success', 'Penilaian berhasil disimpan! Total skor: ' . $totalScore);
     }

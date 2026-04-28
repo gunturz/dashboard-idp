@@ -15,10 +15,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 
 class PDCAdminController extends Controller
 {
+    protected function formatPlanPeriod(?string $startDate, ?string $targetDate): string
+    {
+        if (!$startDate || !$targetDate) {
+            return '-';
+        }
+
+        return Carbon::parse($startDate)->translatedFormat('d F Y') . ' - ' . Carbon::parse($targetDate)->translatedFormat('d F Y');
+    }
+
     public function notifikasi()
     {
         return view('pdc_admin.notifikasi', [
@@ -50,7 +60,7 @@ class PDCAdminController extends Controller
             'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
         ];
 
-        // Fetch the 5 most recent 'In Progress' talents with their relationships
+        // Fetch the 8 most recent talents whose development plan is still active
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
@@ -62,7 +72,7 @@ class PDCAdminController extends Controller
             ->select('users.*')
             ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
-            ->take(5)
+            ->take(8)
             ->get();
 
         // Grouping: Company ID -> Target Position ID -> Talents
@@ -309,7 +319,14 @@ class PDCAdminController extends Controller
         $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
         $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
-        $editingTalents = $this->getGroupedTalentsForPlan((int) $company_id, (int) $position_id);
+        $departmentId = request()->query('department_id');
+        $planCreatedAt = request()->query('plan_created_at');
+        $editingTalents = $this->getGroupedTalentsForPlan(
+            (int) $company_id,
+            (int) $position_id,
+            $departmentId ? (int) $departmentId : null,
+            $planCreatedAt
+        );
         abort_if($editingTalents->isEmpty(), 404, 'Development Plan tidak ditemukan.');
 
         $editingTalent = $editingTalents->first();
@@ -334,6 +351,8 @@ class PDCAdminController extends Controller
             })->values()->all(),
             'group_company_id' => (int) $company_id,
             'group_position_id' => (int) $position_id,
+            'group_department_id' => $editingTalent->department_id,
+            'group_plan_created_at' => optional($plan->created_at)?->format('Y-m-d H:i:s'),
         ];
 
         return view('pdc_admin.development-plan', compact(
@@ -351,7 +370,14 @@ class PDCAdminController extends Controller
 
     public function updateDevelopmentPlan(Request $request, $company_id, $position_id)
     {
-        $editingTalents = $this->getGroupedTalentsForPlan((int) $company_id, (int) $position_id);
+        $departmentId = $request->query('department_id');
+        $planCreatedAt = $request->query('plan_created_at');
+        $editingTalents = $this->getGroupedTalentsForPlan(
+            (int) $company_id,
+            (int) $position_id,
+            $departmentId ? (int) $departmentId : null,
+            $planCreatedAt
+        );
         abort_if($editingTalents->isEmpty(), 404, 'Development Plan tidak ditemukan.');
 
         $this->persistDevelopmentPlan($request, $editingTalents);
@@ -362,7 +388,14 @@ class PDCAdminController extends Controller
 
     public function destroyDevelopmentPlan($company_id, $position_id)
     {
-        $talents = $this->getGroupedTalentsForPlan((int) $company_id, (int) $position_id);
+        $departmentId = request()->query('department_id');
+        $planCreatedAt = request()->query('plan_created_at');
+        $talents = $this->getGroupedTalentsForPlan(
+            (int) $company_id,
+            (int) $position_id,
+            $departmentId ? (int) $departmentId : null,
+            $planCreatedAt
+        );
         abort_if($talents->isEmpty(), 404, 'Development Plan tidak ditemukan.');
 
         DB::transaction(function () use ($talents) {
@@ -455,6 +488,14 @@ class PDCAdminController extends Controller
             ->pluck('nama', 'id');
 
         $mentorNotifications = [];
+        $talentNotifications = [];
+        $atasanNotifications = [];
+        $targetPositionName = Position::find($request->target_position_id)?->position_name ?? 'posisi yang dituju';
+        $atasanName = User::find($request->atasan_id)?->nama ?? 'Atasan';
+        $mentorNamesById = User::query()
+            ->whereIn('id', $selectedMentorIds)
+            ->pluck('nama', 'id');
+        $periodLabel = $this->formatPlanPeriod($request->start_date, $request->target_date);
 
         $validMentorIds = User::query()
             ->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))
@@ -469,7 +510,7 @@ class PDCAdminController extends Controller
             ]);
         }
 
-        DB::transaction(function () use ($request, $editingTalentIds, $selectedTalentIds, $isEditMode, $talentNames, &$mentorNotifications) {
+        DB::transaction(function () use ($request, $editingTalentIds, $selectedTalentIds, $isEditMode, $talentNames, $targetPositionName, $atasanName, $mentorNamesById, $periodLabel, &$mentorNotifications, &$talentNotifications, &$atasanNotifications) {
             if ($isEditMode) {
                 $removedTalentIds = $editingTalentIds
                     ->diff($selectedTalentIds->map(fn($id) => (string) $id));
@@ -487,6 +528,7 @@ class PDCAdminController extends Controller
             foreach ($request->talents as $talentData) {
                 $talentId = $talentData['talent_id'];
                 $existingPlan = PromotionPlan::where('user_id_talent', $talentId)->first();
+                $planAlreadyExists = (bool) $existingPlan;
                 $existingMentorIds = collect($existingPlan?->mentor_ids ?? [])
                     ->map(fn($id) => (string) $id)
                     ->filter()
@@ -522,6 +564,25 @@ class PDCAdminController extends Controller
                     ]
                 );
 
+                $mentorList = collect($mentorIds)
+                    ->map(fn($mentorId) => $mentorNamesById[$mentorId] ?? null)
+                    ->filter()
+                    ->join(', ');
+
+                $talentNotifications[] = [
+                    'user_id' => $talentId,
+                    'title' => $planAlreadyExists ? 'Development Plan Diperbarui' : 'Development Plan Baru',
+                    'desc' => 'PDC Admin telah ' . ($planAlreadyExists ? 'memperbarui' : 'membuat') . ' development plan Anda: posisi yang dituju <span class="font-semibold">' . e($targetPositionName) . '</span>, mentor <span class="font-semibold">' . e($mentorList ?: '-') . '</span>, atasan <span class="font-semibold">' . e($atasanName) . '</span>, periode <span class="font-semibold">' . e($periodLabel) . '</span>.',
+                    'type' => 'info',
+                ];
+
+                $atasanNotifications[] = [
+                    'user_id' => (int) $request->atasan_id,
+                    'title' => $planAlreadyExists ? 'Development Plan Talent Diperbarui' : 'Talent Baru pada Development Plan',
+                    'desc' => 'PDC Admin telah memilih <span class="font-semibold">' . e($talentNames[$talentId] ?? 'Talent') . '</span> ke development plan Anda untuk posisi tujuan <span class="font-semibold">' . e($targetPositionName) . '</span> pada periode <span class="font-semibold">' . e($periodLabel) . '</span>.',
+                    'type' => 'info',
+                ];
+
                 if (!empty($newlyAssignedMentorIds)) {
                     $talentName = $talentNames[$talentId] ?? 'Talent';
 
@@ -545,28 +606,56 @@ class PDCAdminController extends Controller
                 $notification['type']
             );
         }
+
+        foreach ($talentNotifications as $notification) {
+            $this->addNotificationToUser(
+                $notification['user_id'],
+                $notification['title'],
+                $notification['desc'],
+                $notification['type']
+            );
+        }
+
+        foreach (collect($atasanNotifications)->unique(fn($notification) => implode('|', [$notification['user_id'], $notification['title'], strip_tags($notification['desc'])])) as $notification) {
+            $this->addNotificationToUser(
+                $notification['user_id'],
+                $notification['title'],
+                $notification['desc'],
+                $notification['type']
+            );
+        }
     }
 
-    protected function getGroupedTalentsForPlan(int $companyId, int $positionId)
+    protected function getGroupedTalentsForPlan(int $companyId, int $positionId, ?int $departmentId = null, ?string $planCreatedAt = null)
     {
         return User::where('company_id', $companyId)
-            ->whereHas('promotion_plan', function ($q) use ($positionId) {
+            ->when($departmentId, fn($q) => $q->where('department_id', $departmentId))
+            ->whereHas('promotion_plan', function ($q) use ($positionId, $planCreatedAt) {
                 $q->where('target_position_id', $positionId);
+                if ($planCreatedAt) {
+                    $q->where('created_at', $planCreatedAt);
+                }
             })
             ->with(['promotion_plan', 'department'])
             ->orderBy('nama')
             ->get();
     }
 
-    public function detail($company_id, $position_id)
+    public function detail(Request $request, $company_id, $position_id)
     {
         $user = auth()->user();
         $company = Company::findOrFail($company_id);
         $targetPosition = Position::findOrFail($position_id);
+        $departmentId = $request->query('department_id');
+        $planCreatedAt = $request->query('plan_created_at');
 
         $talents = User::where('company_id', $company_id)
-            ->whereHas('promotion_plan', function ($q) use ($position_id) {
+            ->when($departmentId, fn($q) => $q->where('department_id', $departmentId))
+            ->whereHas('promotion_plan', function ($q) use ($position_id, $planCreatedAt) {
             $q->where('target_position_id', $position_id);
+            if ($planCreatedAt) {
+                $q->where('created_at', $planCreatedAt);
+            }
         })
             ->with(['department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
@@ -729,8 +818,8 @@ class PDCAdminController extends Controller
 
         $this->addNotificationToUser(
             $project->user_id_talent,
-            'Project ' . $request->status,
-            'Project Improvement Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh PDC Admin.' . $feedbackNote,
+            'Keputusan Project Improvement dari PDC Admin',
+            'PDC Admin telah menindaklanjuti hasil finance validation dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $request->status . '</span>.' . $feedbackNote,
             $request->status == 'Verified' ? 'success' : 'warning'
         );
 
@@ -1172,6 +1261,7 @@ class PDCAdminController extends Controller
     public function sendPanelisReview(Request $request, $talent_id)
     {
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
+        $talent = User::findOrFail($talent_id);
         if (!$plan->is_locked) {
             return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke Panelis.');
         }
@@ -1186,6 +1276,13 @@ class PDCAdminController extends Controller
                 'user_id_talent' => $talent_id,
                 'panelis_id' => $panelis_id,
             ]);
+
+            $this->addNotificationToUser(
+                $panelis_id,
+                'Permintaan Penilaian Baru dari PDC Admin',
+                'PDC Admin telah mengirimkan talent <span class="font-semibold">' . e($talent->nama) . '</span> untuk Anda berikan penilaian panelis.',
+                'info'
+            );
         }
 
         $plan->update(['status_promotion' => 'Pending Panelis']);

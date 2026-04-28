@@ -370,11 +370,20 @@ class MentorDashboardController extends Controller
             'status' => $request->status,
         ]);
 
+        $typeName = $activity->type?->type_name ?? 'IDP Monitoring';
+        $mentorName = $mentor->nama ?? 'Mentor';
+
         $this->addNotificationToUser(
             $activity->user_id_talent,
-            'Logbook ' . $request->status,
-            'Aktivitas logbook Anda telah diperbarui menjadi <span class="font-semibold">' . $request->status . '</span> oleh mentor Anda.',
+            $typeName . ' ' . $request->status,
+            '<span class="font-semibold">' . e($mentorName) . '</span> telah memvalidasi IDP Monitoring <span class="font-semibold">' . e($typeName) . '</span> Anda dengan status <span class="font-semibold">' . $request->status . '</span>.',
             $request->status == 'Approved' ? 'success' : 'warning'
+        );
+
+        $this->notifyPdcAdmins(
+            'Validasi Mentor Selesai',
+            'Mentor <span class="font-semibold">' . e($mentorName) . '</span> telah memberikan validasi <span class="font-semibold">' . e($request->status) . '</span> untuk IDP Monitoring <span class="font-semibold">' . e($typeName) . '</span> milik talent <span class="font-semibold">' . e(optional($activity->talent)->nama ?? 'Talent') . '</span>.',
+            $request->status === 'Approved' ? 'success' : 'warning'
         );
 
         return redirect()

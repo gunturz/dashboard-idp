@@ -30,16 +30,13 @@ class PdcProgressTalentTable extends Component
             $q->whereNotNull('target_position_id')
                 ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
         })
-            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
-            ->select('users.*')
-            ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->when($this->search, function ($q) {
             $q->where('users.nama', 'like', '%' . $this->search . '%');
         })
             ->get();
 
-        // Grouping: Company ID -> Target Position ID -> Talents
+        // Grouping: Company ID -> Plan Session + Department + Target Position -> Talents
         $groupedData = $talents->groupBy('company_id')
             ->map(function ($companyTalents) {
             $sorted = $companyTalents->sortByDesc(function ($talent) {
@@ -50,11 +47,28 @@ class PdcProgressTalentTable extends Component
                 return [
                 'company' => $sorted->first()->company,
                 'latest_plan_at' => $sorted->max(fn($t) => optional($t->promotion_plan)->created_at ?? $t->created_at),
-                'positions' => $sorted->groupBy(fn($item) => $item->promotion_plan->target_position_id ?? 0)
-                ->map(function ($positionTalents) {
-                    $sortedPos = $positionTalents->sortByDesc(fn($t) => optional($t->promotion_plan)->created_at ?? $t->created_at)->values();
+                'plan_groups' => $sorted->groupBy(function ($item) {
+                    $plan = $item->promotion_plan;
+                    $planCreatedAt = optional($plan?->created_at)->format('Y-m-d H:i:s') ?? 'no-plan';
+
+                    return implode('|', [
+                        $plan?->target_position_id ?? 0,
+                        $item->department_id ?? 0,
+                        $planCreatedAt,
+                    ]);
+                })->map(function ($groupTalents) {
+                    $sortedPos = $groupTalents->sortByDesc(fn($t) => optional($t->promotion_plan)->created_at ?? $t->created_at)->values();
+                    $firstTalent = $sortedPos->first();
+                    $plan = optional($firstTalent)->promotion_plan;
+
                     return [
-                    'targetPosition' => optional($sortedPos->first()->promotion_plan)->targetPosition ?? null,
+                    'targetPosition' => optional($plan)->targetPosition,
+                    'target_position_id' => $plan?->target_position_id,
+                    'department_id' => $firstTalent?->department_id,
+                    'department_name' => optional($firstTalent?->department)->nama_department ?? '-',
+                    'plan_created_at' => optional($plan?->created_at)?->format('Y-m-d H:i:s'),
+                    'start_date' => optional($plan?->start_date)?->format('Y-m-d'),
+                    'target_date' => optional($plan?->target_date)?->format('Y-m-d'),
                     'talents' => $sortedPos,
                     ];
                 }
@@ -65,7 +79,7 @@ class PdcProgressTalentTable extends Component
 
         $totalTalent = $talents->count();
         $totalCompany = $groupedData->count();
-        $totalPositions = $groupedData->sum(fn($c) => $c['positions']->count());
+        $totalPositions = $groupedData->sum(fn($c) => $c['plan_groups']->count());
 
         return view('livewire.pdc-progress-talent-table', compact(
             'groupedData',

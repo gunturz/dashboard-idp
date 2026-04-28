@@ -237,7 +237,7 @@
         </div>
         {{-- Kembali Button Bottom --}}
         <div class="mt-8 mb-6 w-full flex justify-start">
-            <a href="{{ route('atasan.monitoring', ['activeSection' => 'idp']) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 text-gray-600 rounded-full hover:bg-gray-50 transition-all font-bold text-sm shadow-sm ring-1 ring-inset ring-gray-200 w-fit">
+            <a href="{{ route('atasan.monitoring.detail', $talent->id) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 text-gray-600 rounded-full hover:bg-gray-50 transition-all font-bold text-sm shadow-sm ring-1 ring-inset ring-gray-200 w-fit">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>

@@ -239,6 +239,10 @@
                 background: #14b8a6;
                 color: white;
             }
+            .ts-radio-label.is-checked {
+                background: #14b8a6;
+                color: white;
+            }
 
             .btn-simpan-ts {
                 background: #14b8a6;

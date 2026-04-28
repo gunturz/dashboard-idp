@@ -7,13 +7,7 @@ use App\Models\ImprovementProject;
 
 class FinanceDashboardController extends Controller
 {
-    /**
-     * Build Finance notifications (mockup, can be replaced with real data)
-     */
-    protected function getNotifications()
-    {
-        return collect([]);
-    }
+
 
     public function dashboard()
     {
@@ -58,6 +52,9 @@ class FinanceDashboardController extends Controller
 
         // Tampilkan semua project yang dikirim ke finance ini (feedback = ada), belum ada keputusan dari Finance
         $projects = ImprovementProject::with(['talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
+            ->whereHas('talent.promotion_plan', function ($q) {
+                $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
+            })
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
             ->where(function ($q) {
@@ -114,6 +111,8 @@ class FinanceDashboardController extends Controller
 
     public function updateFinanceValidation(Request $request, $id)
     {
+        $user = auth()->user();
+
         $request->validate([
             'finance_decision' => 'required|in:Approved,Rejected',
             'finance_feedback' => 'nullable|string'
@@ -132,12 +131,14 @@ class FinanceDashboardController extends Controller
             // TIDAK mengubah 'status' — keputusan final ada di tangan PDC Admin
         ]);
 
-        // Notifikasi ke PDC Admin (verify_by) bahwa Finance sudah memberi keputusan
-        if ($project->verify_by) {
+        // Notifikasi ke seluruh PDC Admin bahwa Finance sudah memberi keputusan
+        $pdcAdminIds = \App\Models\User::whereHas('roles', fn($q) => $q->where('role_name', 'admin'))->pluck('id');
+
+        foreach ($pdcAdminIds as $adminId) {
             $this->addNotificationToUser(
-                $project->verify_by,
-                'Finance telah memberikan keputusan',
-                'Finance telah memilih <span class="font-semibold">' . $decision . '</span> untuk Project Improvement milik <strong>' . ($project->talent->nama ?? '-') . '</strong>.',
+                $adminId,
+                'Validasi Finance Diterima',
+                'Finance (<strong>' . ($user->nama ?? $user->name) . '</strong>) telah memberikan keputusan <span class="font-semibold">' . $decision . '</span> untuk Project Improvement milik <strong>' . ($project->talent->nama ?? '-') . '</strong>. Silakan tinjau dan berikan keputusan akhir.',
                 $decision === 'Approved' ? 'success' : 'warning'
             );
         }

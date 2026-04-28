@@ -1,4 +1,4 @@
-<x-mentor.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user">
+<x-mentor.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             .riwayat-table {

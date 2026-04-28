@@ -14,6 +14,8 @@ class PdcAdminKompetensiManager extends Component
     public $topTab = 'questions'; // 'questions', 'target'
     public $subTabQuestion = 'core'; // 'core', 'managerial'
     public $activePositionId = null;
+    public $scrollToCompetenceId = null;
+    public $scrollToTargetSection = null;
 
     // Untuk edit mode (Questions)
     public $editingCompetenceId = null;
@@ -61,6 +63,7 @@ class PdcAdminKompetensiManager extends Component
     public function editQuestions($compId)
     {
         $this->editingCompetenceId = $compId;
+        $this->scrollToCompetenceId = $compId;
         // Load existing questions
         $comp = Competence::with('questions')->find($compId);
         $this->editingQuestions = [];
@@ -68,6 +71,8 @@ class PdcAdminKompetensiManager extends Component
             $q = $comp->questions->firstWhere('level', $i);
             $this->editingQuestions[$i] = $q ? $q->question_text : '';
         }
+
+        $this->dispatch('scroll-to-competence', competenceId: $compId);
     }
 
     public function saveQuestions()
@@ -97,14 +102,23 @@ class PdcAdminKompetensiManager extends Component
     }
 
     // --- LOGIC TARGET SCORE ---
-    public function editTargetScore()
+    public function editTargetScore($section = 'core')
     {
         $this->editingTargetScoreMode = true;
-        $targets = PositionTargetCompetence::where('position_id', $this->activePositionId)->get();
+        $this->scrollToTargetSection = $section;
+
+        $competencies = Competence::pluck('id');
+        $targets = PositionTargetCompetence::where('position_id', $this->activePositionId)
+            ->pluck('target_level', 'competence_id');
+
         $this->editingTargetScores = [];
-        foreach ($targets as $ts) {
-            $this->editingTargetScores[$ts->competence_id] = $ts->target_level;
+        foreach ($competencies as $competenceId) {
+            $this->editingTargetScores[$competenceId] = isset($targets[$competenceId])
+                ? (int) $targets[$competenceId]
+                : null;
         }
+
+        $this->dispatch('scroll-to-target-section', section: $section);
     }
 
     public function saveTargetScores()

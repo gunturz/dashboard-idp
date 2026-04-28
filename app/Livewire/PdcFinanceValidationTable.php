@@ -17,7 +17,9 @@ class PdcFinanceValidationTable extends Component
             'talent.position',
             'talent.department',
             'talent.promotion_plan.targetPosition',
-        ]);
+        ])->whereHas('talent.promotion_plan', function ($q) {
+            $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
+        });
 
         // Filter: Status (Pending, Approved, Rejected) - Finance mapping
         // We match logic from the Blade where: 
@@ -54,7 +56,9 @@ class PdcFinanceValidationTable extends Component
 
         // Count base values (independent from filters to keep stat card static as original logic,
         // Wait, original logic shows stats of ALL projects. Let's compute overall stats separately)
-        $allProjects = ImprovementProject::get();
+        $allProjects = ImprovementProject::whereHas('talent.promotion_plan', function ($q) {
+            $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
+        })->get();
         // Here the dashboard wants overall values or filtered values? 
         // Original behavior: The counts are taken from DB before JS filter.
         $total = $allProjects->count();

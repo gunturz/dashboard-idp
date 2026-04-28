@@ -129,6 +129,9 @@ class AuthenticatedSessionController extends Controller
         if (in_array($role, ['admin', 'pdc_admin'])) {
             session()->put('pdc_admin_just_logged_in', true);
         }
+        if ($role === 'mentor') {
+            session()->put('mentor_just_logged_in', true);
+        }
 
         return redirect()->intended(route('dashboard'));
     }

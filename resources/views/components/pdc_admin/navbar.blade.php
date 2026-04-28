@@ -394,6 +394,20 @@
                         }, 350);
                     }, 4500);
                 }
+
+                window.addEventListener('notifikasi-marked-read', function () {
+                    let badge = document.getElementById('bell-red-badge');
+                    if (badge) badge.remove();
+                    
+                    let bellBtn = document.getElementById('bell-btn');
+                    if (bellBtn) {
+                        let ping = bellBtn.querySelector('.animate-ping');
+                        if (ping) ping.remove();
+                    }
+
+                    // Mobile badges
+                    document.querySelectorAll('.bg-\\[\\#14b8a6\\].w-2.h-2, .bg-\\[\\#f97316\\]').forEach(el => el.remove());
+                });
             });
             </script>
             @endauth

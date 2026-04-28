@@ -12,6 +12,21 @@ use App\Models\User;
 
 class TalentDashboardController extends Controller
 {
+    protected function resolveMentorNotificationRecipients(User $user, ?int $verifyById = null): array
+    {
+        $mentorIds = collect(optional($user->promotion_plan)->mentor_ids ?? [])
+            ->merge([$user->mentor_id, $verifyById])
+            ->filter()
+            ->unique()
+            ->values();
+
+        return User::query()
+            ->whereIn('id', $mentorIds)
+            ->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))
+            ->pluck('id')
+            ->all();
+    }
+
     public function index()
     {
         try {
@@ -270,15 +285,13 @@ class TalentDashboardController extends Controller
                 'success'
             );
 
-            // Tambahkan notifikasi ke Verifikator (Mentor)
-            if ($verifyById) {
-                $this->addNotificationToUser(
-                    $verifyById,
-                    'IDP Activity Baru',
-                    $user->nama . ' telah mengirimkan aktivitas IDP baru (<span class="font-semibold">' . ucfirst($tab) . '</span>) untuk diverifikasi.',
-                    'info'
-                );
-            }
+            $mentorRecipientIds = $this->resolveMentorNotificationRecipients($user, $verifyById);
+            $this->addNotificationToUsers(
+                $mentorRecipientIds,
+                'IDP Activity Baru',
+                $user->nama . ' telah mengunggah IDP Monitoring baru (<span class="font-semibold">' . ucfirst($tab) . '</span>) dengan tema <span class="font-semibold">' . e($validated['theme']) . '</span>.',
+                'info'
+            );
 
             return redirect()->route('talent.idp_monitoring', $tab)->with('success', 'IDP Activity berhasil disubmit.');
         }
@@ -421,6 +434,7 @@ class TalentDashboardController extends Controller
 
         $activities = \App\Models\IdpActivity::with(['type', 'verifier'])
             ->where('user_id_talent', $user->id)
+            ->where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -670,6 +684,14 @@ class TalentDashboardController extends Controller
                 'platform' => $request->platform ?? $activity->platform,
                 'status' => 'Pending', // Kembalikan ke Pending bila diedit
             ]);
+
+            $mentorRecipientIds = $this->resolveMentorNotificationRecipients($user, $verifyById);
+            $this->addNotificationToUsers(
+                $mentorRecipientIds,
+                'IDP Activity Diperbarui',
+                $user->nama . ' telah memperbarui IDP Monitoring (<span class="font-semibold">' . ucfirst($tab) . '</span>) dengan tema <span class="font-semibold">' . e($validated['theme']) . '</span>.',
+                'info'
+            );
 
             return redirect()->route('talent.logbook.detail')->with('success', 'IDP Activity berhasil diperbarui.');
         }

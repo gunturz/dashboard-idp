@@ -6,7 +6,7 @@ use App\Models\AppNotification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class PdcAdminNotifikasiList extends Component
+class MentorNotifikasiList extends Component
 {
     public array $notifications = [];
     public int $unreadCount = 0;
@@ -62,23 +62,16 @@ class PdcAdminNotifikasiList extends Component
         ];
 
         $theme = $themes[$notification->type ?? ''] ?? $defaultTheme;
-        $theme['uses_people_icon'] = str_starts_with((string)$notification->type, 'registration-');
+        $theme['uses_people_icon'] = str_starts_with((string) $notification->type, 'registration-');
 
         return $theme;
     }
 
-    /**
-     * Load notifikasi dari database saat komponen dimount.
-     */
     public function mount(): void
     {
         $this->loadNotifications();
     }
 
-    /**
-     * Memuat ulang data notifikasi dari database.
-     * Dipanggil oleh wire:poll dan juga bisa dipanggil dari event.
-     */
     public function loadNotifications(): void
     {
         $items = AppNotification::where('user_id', Auth::id())
@@ -89,19 +82,19 @@ class PdcAdminNotifikasiList extends Component
             $theme = $this->resolveNotificationTheme($n);
 
             return [
-            'id' => $n->id,
-            'title' => $n->title,
-            'desc' => $n->desc,
-            'type' => $n->type ?? 'info',
-            'badge' => null,
-            'is_read' => (bool)$n->is_read,
-            'time' => $n->created_at->diffForHumans(),
-            'accent' => $theme['accent'],
-            'icon_bg' => $theme['icon_bg'],
-            'icon_color' => $theme['icon_color'],
-            'badge_bg' => $theme['badge_bg'],
-            'badge_color' => $theme['badge_color'],
-            'uses_people_icon' => $theme['uses_people_icon'],
+                'id' => $n->id,
+                'title' => $n->title,
+                'desc' => $n->desc,
+                'type' => $n->type ?? 'info',
+                'badge' => null,
+                'is_read' => (bool) $n->is_read,
+                'time' => $n->created_at->diffForHumans(),
+                'accent' => $theme['accent'],
+                'icon_bg' => $theme['icon_bg'],
+                'icon_color' => $theme['icon_color'],
+                'badge_bg' => $theme['badge_bg'],
+                'badge_color' => $theme['badge_color'],
+                'uses_people_icon' => $theme['uses_people_icon'],
             ];
         })->toArray();
 
@@ -110,9 +103,6 @@ class PdcAdminNotifikasiList extends Component
             ->count();
     }
 
-    /**
-     * Tandai semua notifikasi sebagai sudah dibaca.
-     */
     public function markAllRead(): void
     {
         AppNotification::where('user_id', Auth::id())
@@ -125,7 +115,7 @@ class PdcAdminNotifikasiList extends Component
 
     public function toggleEditMode(): void
     {
-        $this->isEditMode = !$this->isEditMode;
+        $this->isEditMode = ! $this->isEditMode;
         $this->selectedNotifications = [];
     }
 
@@ -149,6 +139,6 @@ class PdcAdminNotifikasiList extends Component
 
     public function render()
     {
-        return view('livewire.pdc-admin-notifikasi-list');
+        return view('livewire.mentor-notifikasi-list');
     }
 }

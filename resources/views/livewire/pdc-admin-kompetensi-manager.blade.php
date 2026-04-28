@@ -43,7 +43,7 @@
                 @foreach($comps as $comp)
                     @if($editingCompetenceId === $comp->id)
                         {{-- Edit Mode --}}
-                        <div class="comp-card" id="edit-comp-{{ $comp->id }}">
+                        <div class="comp-card competence-card" id="comp-{{ $comp->id }}" data-competence-id="{{ $comp->id }}">
                             <form wire:submit.prevent="saveQuestions">
                                 <div class="comp-card-title">{{ $comp->name }}</div>
                                 <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
@@ -74,7 +74,7 @@
                         </div>
                     @else
                         {{-- View Mode --}}
-                        <div class="comp-card" id="view-comp-{{ $comp->id }}">
+                        <div class="comp-card competence-card" id="comp-{{ $comp->id }}" data-competence-id="{{ $comp->id }}">
                             <div class="comp-card-title">{{ $comp->name }}</div>
                             <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                                 <table class="comp-table min-w-[900px] md:min-w-full">
@@ -113,11 +113,10 @@
         @if($topTab === 'target')
             <div id="panel-target" class="tab-panel active">
                 {{-- Position Sub Tabs --}}
-                <div class="sub-tabs overflow-x-auto whitespace-nowrap hide-scrollbar flex-wrap">
+                <div class="sub-tabs">
                     @foreach($positions as $index => $pos)
                         <button class="sub-tab-btn {{ $activePositionId === $pos->id ? 'active' : '' }}" 
-                                wire:click="setActivePosition({{ $pos->id }})" 
-                                style="flex: 0 0 auto;">
+                                wire:click="setActivePosition({{ $pos->id }})">
                             {{ $pos->position_name }}
                         </button>
                     @endforeach
@@ -130,7 +129,7 @@
                         <form wire:submit.prevent="saveTargetScores">
                             
                             {{-- ─ CORE COMPETENCIES ─ --}}
-                            <div class="comp-card">
+                            <div class="comp-card" id="target-core-section">
                                 <div class="comp-card-title">Core Competencies</div>
                                 <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                                     <table class="ts-table {{ $editingTargetScoreMode ? '' : 'view-mode' }} min-w-[900px] md:min-w-full">
@@ -149,11 +148,12 @@
                                                         <td style="width:12%;">
                                                             @if($editingTargetScoreMode)
                                                                 <input type="radio" wire:model="editingTargetScores.{{$comp->id}}" value="{{ $lvl }}" id="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="hidden">
+                                                                @php $checked = isset($editingTargetScores[$comp->id]) && (int) $editingTargetScores[$comp->id] === $lvl; @endphp
                                                             @else 
-                                                                @php $checked = isset($targetScoresLookup[$comp->id]) && $targetScoresLookup[$comp->id] === $lvl; @endphp
+                                                                @php $checked = isset($targetScoresLookup[$comp->id]) && (int) $targetScoresLookup[$comp->id] === $lvl; @endphp
                                                                 <input type="radio" disabled {{ $checked ? 'checked' : '' }} id="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="hidden">
                                                             @endif
-                                                            <label for="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label">{{ $lvl }}</label>
+                                                            <label for="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label {{ $checked ? 'is-checked' : '' }}">{{ $lvl }}</label>
                                                         </td>
                                                     @endfor
                                                     
@@ -166,7 +166,7 @@
                                                                 </div>
                                                             @else
                                                                 <div class="flex flex-col gap-3 px-2 sm:px-4">
-                                                                    <button type="button" class="btn-edit-ts" wire:click="editTargetScore">Edit</button>
+                                                                    <button type="button" class="btn-edit-ts" wire:click="editTargetScore('core')">Edit</button>
                                                                 </div>
                                                             @endif
                                                         </td>
@@ -179,7 +179,7 @@
                             </div>
 
                             {{-- ─ MANAGERIAL COMPETENCIES ─ --}}
-                            <div class="comp-card mt-6">
+                            <div class="comp-card mt-6" id="target-managerial-section">
                                 <div class="comp-card-title">Managerial Competencies</div>
                                 <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                                     <table class="ts-table {{ $editingTargetScoreMode ? '' : 'view-mode' }} min-w-[900px] md:min-w-full">
@@ -198,11 +198,12 @@
                                                         <td style="width:12%;">
                                                             @if($editingTargetScoreMode)
                                                                 <input type="radio" wire:model="editingTargetScores.{{$comp->id}}" value="{{ $lvl }}" id="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="hidden">
+                                                                @php $checked = isset($editingTargetScores[$comp->id]) && (int) $editingTargetScores[$comp->id] === $lvl; @endphp
                                                             @else 
-                                                                @php $checked = isset($targetScoresLookup[$comp->id]) && $targetScoresLookup[$comp->id] === $lvl; @endphp
+                                                                @php $checked = isset($targetScoresLookup[$comp->id]) && (int) $targetScoresLookup[$comp->id] === $lvl; @endphp
                                                                 <input type="radio" disabled {{ $checked ? 'checked' : '' }} id="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="hidden">
                                                             @endif
-                                                            <label for="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label">{{ $lvl }}</label>
+                                                            <label for="ts_{{$activePositionId}}_{{$comp->id}}_{{$lvl}}" class="ts-radio-label {{ $checked ? 'is-checked' : '' }}">{{ $lvl }}</label>
                                                         </td>
                                                     @endfor
                                                     
@@ -215,7 +216,7 @@
                                                                 </div>
                                                             @else
                                                                 <div class="flex flex-col gap-3 px-2 sm:px-4">
-                                                                    <button type="button" class="btn-edit-ts" wire:click="editTargetScore">Edit</button>
+                                                                    <button type="button" class="btn-edit-ts" wire:click="editTargetScore('managerial')">Edit</button>
                                                                 </div>
                                                             @endif
                                                         </td>
@@ -232,4 +233,52 @@
             </div>
         @endif
     </div>
+
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            const scrollToCompetence = (competenceId) => {
+                if (!competenceId) return;
+
+                const target = document.getElementById(`comp-${competenceId}`);
+                if (!target) return;
+
+                requestAnimationFrame(() => {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    window.location.hash = `comp-${competenceId}`;
+                });
+            };
+
+            Livewire.on('scroll-to-competence', ({ competenceId }) => {
+                scrollToCompetence(competenceId);
+            });
+
+            Livewire.on('scroll-to-target-section', ({ section }) => {
+                const targetId = section === 'managerial'
+                    ? 'target-managerial-section'
+                    : 'target-core-section';
+
+                const target = document.getElementById(targetId);
+                if (!target) return;
+
+                requestAnimationFrame(() => {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    window.location.hash = targetId;
+                });
+            });
+
+            const hash = window.location.hash.replace('#', '');
+            if (hash.startsWith('comp-')) {
+                const competenceId = hash.replace('comp-', '');
+                scrollToCompetence(competenceId);
+            }
+            if (hash === 'target-core-section' || hash === 'target-managerial-section') {
+                const target = document.getElementById(hash);
+                if (target) {
+                    requestAnimationFrame(() => {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                }
+            }
+        });
+    </script>
 </div>

@@ -1,4 +1,4 @@
-<x-mentor.layout title="Validasi – Individual Development Plan" :user="$user">
+<x-mentor.layout title="Validasi – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
             .section-pill {

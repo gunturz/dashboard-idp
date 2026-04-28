@@ -12,11 +12,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    private function buildRegistrationNotificationMeta(string $roleName): array
+    {
+        $normalizedRole = strtolower(trim($roleName));
+
+        $roleLabels = [
+            'talent' => 'Talent',
+            'mentor' => 'Mentor',
+            'atasan' => 'Atasan',
+            'finance' => 'Finance',
+            'panelis' => 'Panelis',
+        ];
+
+        $label = $roleLabels[$normalizedRole] ?? ucfirst($normalizedRole ?: 'User');
+
+        return [
+            'title' => $label . ' Baru Registrasi',
+            'role_label' => $label,
+            'type' => 'registration-' . $normalizedRole,
+        ];
+    }
+
     /**
      * Display the registration view.
      */
@@ -143,23 +165,32 @@ class RegisteredUserController extends Controller
 
             // ── Notify all PDC Admins about new registration ──────────────────
             $roleName = DB::table('role')->where('id', $request->role_id)->value('role_name') ?? 'User';
+            $notificationMeta = $this->buildRegistrationNotificationMeta($roleName);
             $pdcAdminIds = User::whereHas('roles', fn($q) => $q->where('role_name', 'admin'))->pluck('id');
             foreach ($pdcAdminIds as $adminId) {
                 $notif = \App\Models\AppNotification::create([
                     'user_id' => $adminId,
-                    'title' => 'User Baru Registrasi',
-                    'desc' => '<span class="font-semibold">' . e($request->nama) . '</span> telah mendaftar sebagai <span class="font-semibold">' . e(ucfirst($roleName)) . '</span>.',
-                    'type' => 'info',
+                    'title' => $notificationMeta['title'],
+                    'desc' => '<span class="font-semibold">' . e($request->nama) . '</span> telah mendaftar sebagai <span class="font-semibold">' . e($notificationMeta['role_label']) . '</span>.',
+                    'type' => $notificationMeta['type'],
                     'is_read' => false,
                 ]);
 
                 // 🔴 Broadcast real-time ke channel private PDC Admin ini
-                broadcast(new NewUserRegistered(
-                    $adminId,
-                    'User Baru Registrasi',
-                    e($request->nama) . ' telah mendaftar sebagai ' . ucfirst($roleName) . '.',
-                    $notif->id
+                try {
+                    broadcast(new NewUserRegistered(
+                        $adminId,
+                        $notificationMeta['title'],
+                        e($request->nama) . ' telah mendaftar sebagai ' . $notificationMeta['role_label'] . '.',
+                        $notif->id
                     ));
+                } catch (\Throwable $broadcastException) {
+                    Log::warning('Broadcast notifikasi registrasi gagal dikirim.', [
+                        'admin_id' => $adminId,
+                        'notification_id' => $notif->id,
+                        'error' => $broadcastException->getMessage(),
+                    ]);
+                }
             }
             // ─────────────────────────────────────────────────────────────────
 

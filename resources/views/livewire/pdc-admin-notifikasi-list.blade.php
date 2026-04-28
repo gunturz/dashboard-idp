@@ -8,8 +8,9 @@
     {{-- ── Page Header Actions ── --}}
     <div class="page-header animate-title">
         <div class="page-header-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
             </svg>
         </div>
         <div>
@@ -43,6 +44,10 @@
     <div class="prem-card w-full mb-6">
         <div class="prem-card-header flex justify-between items-center">
             <span class="prem-card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 18px; height: 18px; color: #14b8a6; flex-shrink: 0;">
+                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
                 Semua Notifikasi
             </span>
             @if($unreadCount > 0)
@@ -98,7 +103,10 @@
                 </label>
             @empty
                 <div class="empty-prem" style="border:none; padding:48px 20px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 56px; height: 56px; color: #cbd5e1;">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                    </svg>
                     <h3>Tidak Ada Notifikasi</h3>
                     <p>Anda sudah up to date! Tidak ada pemberitahuan baru.</p>
                 </div>

@@ -1,8 +1,9 @@
 <div wire:poll.10s="loadNotifications">
     <div class="page-header animate-title">
         <div class="page-header-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
             </svg>
         </div>
         <div>
@@ -35,7 +36,10 @@
     <div class="prem-card w-full mb-6">
         <div class="prem-card-header flex justify-between items-center">
             <span class="prem-card-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
                 Semua Notifikasi
             </span>
             @if($unreadCount > 0)
@@ -90,7 +94,10 @@
                 </label>
             @empty
                 <div class="empty-prem" style="border:none; padding:48px 20px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 56px; height: 56px; color: #cbd5e1;">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                    </svg>
                     <h3>Tidak Ada Notifikasi</h3>
                     <p>Anda sudah up to date! Tidak ada pemberitahuan baru.</p>
                 </div>
@@ -98,14 +105,7 @@
         </div>
     </div>
 
-    <div class="w-full flex justify-start mb-8">
-        <a href="{{ route('panelis.dashboard') }}" class="btn-prem btn-ghost" style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #475569; padding: 10px 16px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; transition: all 0.2s;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 18px; height: 18px;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-            </svg>
-            Kembali
-        </a>
-    </div>
+
 
     @if($isEditMode)
         <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-lg border border-gray-100 animate-title">

@@ -45,7 +45,11 @@
         </style>
     </x-slot>
 
-    <livewire:finance-notifikasi-list />
+    <div class="px-6 py-8">
+        <div class="mx-auto w-full animate-title" style="max-width: 960px;">
+            <livewire:finance-notifikasi-list />
+        </div>
+    </div>
 
 </x-finance.layout>
 

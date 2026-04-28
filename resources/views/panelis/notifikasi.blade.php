@@ -247,5 +247,9 @@
         </style>
     </x-slot>
 
-    <livewire:panelis-notifikasi-list />
+    <div class="px-6 py-8">
+        <div class="mx-auto w-full animate-title" style="max-width: 960px;">
+            <livewire:panelis-notifikasi-list />
+        </div>
+    </div>
 </x-panelis.layout>

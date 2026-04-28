@@ -7,6 +7,16 @@
     'notifications' => null
 ])
 
+@php
+    $unreadNotifications =
+        isset($notifications) && $notifications
+            ? (is_array($notifications)
+                ? collect($notifications)->where('is_read', false)
+                : $notifications->where('is_read', false))
+            : collect();
+    $hasUnreadNotif = $unreadNotifications->count() > 0;
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -409,13 +419,19 @@
         // ── Dropdown toggle (bell & profile) ──
         function toggleDropdown(dropdownId, btnId) {
             const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+
             const isHidden = dropdown.classList.contains('hidden');
 
             // Tutup semua dropdown lain dulu
-            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.dropdown-panel').forEach(el => {
+                el.classList.add('hidden');
+                el.style.display = 'none';
+            });
 
             if (isHidden) {
                 dropdown.classList.remove('hidden');
+                dropdown.style.display = '';
             }
         }
 
@@ -427,7 +443,49 @@
                 return el && el.contains(e.target);
             });
             if (!clickedInside) {
-                document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.dropdown-panel').forEach(el => {
+                    el.classList.add('hidden');
+                    el.style.display = 'none';
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.dropdown-panel').forEach(el => {
+                el.classList.add('hidden');
+                el.style.display = 'none';
+            });
+
+            const shouldShowTalentNotifPopup = @json(session()->pull('talent_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
+
+            if (shouldShowTalentNotifPopup) {
+                setTimeout(function () {
+                    const bellDropdown = document.getElementById('bell-dropdown');
+                    if (!bellDropdown) return;
+
+                    bellDropdown.classList.remove('hidden');
+                    bellDropdown.style.display = '';
+                    bellDropdown.style.transformOrigin = 'top right';
+                    bellDropdown.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    bellDropdown.style.transform = 'scale(1)';
+                    bellDropdown.style.opacity = '1';
+
+                    setTimeout(function () {
+                        if (!bellDropdown.classList.contains('hidden')) {
+                            bellDropdown.style.transform = 'scale(0)';
+                            bellDropdown.style.opacity = '0';
+
+                            setTimeout(function () {
+                                bellDropdown.classList.add('hidden');
+                                bellDropdown.style.display = 'none';
+                                bellDropdown.style.transform = '';
+                                bellDropdown.style.opacity = '';
+                                bellDropdown.style.transition = '';
+                                bellDropdown.style.transformOrigin = '';
+                            }, 500);
+                        }
+                    }, 5000);
+                }, 250);
             }
         });
 
@@ -537,6 +595,17 @@
                 links[0].classList.add('active');
             }
         })();
+
+        window.addEventListener('notifikasi-marked-read', function () {
+            const badge = document.getElementById('bell-red-badge');
+            if (badge) badge.remove();
+
+            const bellBtn = document.getElementById('bell-btn');
+            if (bellBtn) {
+                const ping = bellBtn.querySelector('.animate-ping');
+                if (ping) ping.remove();
+            }
+        });
     </script>
     
     @livewireScripts

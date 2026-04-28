@@ -1,110 +1,251 @@
-<x-atasan.layout title="Notifikasi – Individual Development Plan" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false" :user="$user" :notifications="$notifications">
+<x-atasan.layout title="Notifikasi - Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
-            /* Notification Card Styles */
-            .notif-card { background-color: #ffffff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1.25rem; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); margin-bottom: 1rem; cursor: pointer; }
-            .notif-card:hover { border-color: #cbd5e1; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); transform: translateY(-2px); }
-            .notif-unread { background-color: #f0fdf4; border-color: #86efac; }
-            .notif-icon-wrap { flex-shrink: 0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
-            .icon-success { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #16a34a; }
-            .icon-info { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: #2563eb; }
-            .icon-warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706; }
-                    .btn-back {
-                padding: 8px 16px;
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                background: white;
-                color: #475569;
-                font-weight: 500;
-                font-size: 0.875rem;
+            .page-header {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 28px;
+            }
+
+            .page-header-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 16px;
+                background: #0f172a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+                flex-shrink: 0;
+                color: white;
+            }
+
+            .page-header-icon svg {
+                width: 26px;
+                height: 26px;
+            }
+
+            .page-header-title {
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: #1e293b;
+                line-height: 1.15;
+            }
+
+            .page-header-sub {
+                font-size: 0.8rem;
+                color: #64748b;
+                margin-top: 3px;
+                font-weight: 400;
+            }
+
+            .page-header-actions {
+                margin-left: auto;
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                transition: all 0.2s;
-                width: fit-content;
+                flex-shrink: 0;
             }
-            .btn-back:hover {
-                background: #f8fafc;
-                border-color: #cbd5e1;
+
+            .prem-card {
+                background: #f9fafb;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+                overflow: hidden;
+                margin-bottom: 24px;
             }
+
+            .prem-card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 20px;
+                border-bottom: 1px solid #e2e8f0;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .prem-card-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: .9rem;
+                font-weight: 700;
+                color: #1e293b;
+            }
+
+            .prem-card-title svg {
+                width: 18px;
+                height: 18px;
+                color: #14b8a6;
+                flex-shrink: 0;
+            }
+
+            .btn-prem {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                font-size: 0.8rem;
+                font-weight: 700;
+                padding: 8px 16px;
+                border-radius: 10px;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                text-decoration: none;
+                white-space: nowrap;
+            }
+
+            .btn-prem:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            }
+
+            .btn-prem svg {
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+            }
+
+            .btn-teal {
+                background: #14b8a6;
+                color: #fff;
+                box-shadow: 0 2px 6px rgba(20, 184, 166, 0.25);
+            }
+
+            .btn-teal:hover {
+                background: #0d9488;
+                color: #fff;
+            }
+
+            .btn-ghost {
+                background: #f1f5f9;
+                color: #334155;
+                border: 1px solid #e2e8f0;
+            }
+
+            .btn-ghost:hover {
+                background: #e2e8f0;
+                color: #1e293b;
+            }
+
+            .btn-blue {
+                background: #3b82f6;
+                color: #fff;
+                box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+            }
+
+            .btn-blue:hover {
+                background: #2563eb;
+                color: #fff;
+            }
+
+            .btn-red {
+                background: #ef4444;
+                color: #fff;
+                box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+            }
+
+            .btn-red:hover {
+                background: #dc2626;
+                color: #fff;
+            }
+
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                padding: 3px 10px;
+                border-radius: 99px;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: .02em;
+            }
+
+            .badge-teal {
+                background: rgba(20, 184, 166, 0.12);
+                color: #0d9488;
+                border: 1px solid rgba(20, 184, 166, 0.25);
+            }
+
+            .badge-gray {
+                background: rgba(100, 116, 139, 0.1);
+                color: #475569;
+                border: 1px solid rgba(100, 116, 139, 0.2);
+            }
+
+            .empty-prem {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 60px 24px;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .empty-prem svg {
+                width: 56px;
+                height: 56px;
+                color: #cbd5e1;
+            }
+
+            .empty-prem h3 {
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: #475569;
+                margin: 0;
+            }
+
+            .empty-prem p {
+                font-size: 0.82rem;
+                color: #94a3b8;
+                margin: 0;
+            }
+
+            .notif-item {
+                display: flex; align-items: flex-start; gap: 14px;
+                background: #fff; border: 1px solid #e2e8f0;
+                border-radius: 16px; padding: 16px 20px;
+                transition: transform .2s, box-shadow .2s, border-color .2s;
+                position: relative; overflow: hidden;
+            }
+            .notif-item::before {
+                content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+                width: 4px; border-radius: 4px 0 0 4px;
+            }
+            .notif-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+            .notif-item.unread { border-color: #86efac; background: #f0fdf4; }
+            .notif-item.unread::before { background: linear-gradient(180deg,#22c55e,#16a34a); }
+            .notif-item.type-success::before { background: linear-gradient(180deg,#22c55e,#16a34a); }
+            .notif-item.type-info::before { background: linear-gradient(180deg,#3b82f6,#1d4ed8); }
+            .notif-item.type-warning::before { background: linear-gradient(180deg,#f59e0b,#d97706); }
+
+            .notif-icon {
+                width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+                display: flex; align-items: center; justify-content: center;
+            }
+            .notif-icon svg { width: 22px; height: 22px; }
+            .ni-success { background: linear-gradient(135deg,#dcfce7,#bbf7d0); color: #16a34a; }
+            .ni-info    { background: linear-gradient(135deg,#dbeafe,#bfdbfe); color: #2563eb; }
+            .ni-warning { background: linear-gradient(135deg,#fef3c7,#fde68a); color: #d97706; }
+
+            .notif-unread-dot {
+                width: 9px; height: 9px; border-radius: 50%;
+                background: #14b8a6; flex-shrink: 0; margin-top: 6px;
+                box-shadow: 0 0 0 3px rgba(20,184,166,.2);
+            }
+
+            .notif-time {
+                font-size: .72rem; color: #94a3b8; font-weight: 500; margin-top: 4px;
+                display: flex; align-items: center; gap: 4px;
+            }
+            .notif-time svg { width: 12px; height: 12px; }
         </style>
     </x-slot>
 
-    <div class="w-full max-w-4xl mx-auto px-6 pt-8 pb-12 flex-grow fade-up fade-up-1">
-
-        {{-- Back Link --}}
-        <div class="mb-6">
-            <a href="{{ route('atasan.dashboard') }}" class="btn-back">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                </svg>
-                <span class="text-[#0f172a]">Kembali</span>
-            </a>
-        </div>
-
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-2.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#0f172a]" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <h2 class="text-2xl font-bold text-[#0f172a] animate-title">Notifikasi</h2>
-            </div>
-            <form action="{{ route('atasan.notifikasi.markAllRead') }}" method="POST">
-                @csrf
-                <button type="submit" class="text-sm font-semibold text-teal-600 hover:text-teal-700 transition">Tandai semua
-                    dibaca</button>
-            </form>
-        </div>
-
-        {{-- Notifications List --}}
-        <div class="space-y-3">
-            @forelse ($notifications as $notif)
-                <div class="notif-card {{ !$notif['is_read'] ? 'notif-unread' : '' }}">
-                    <div class="notif-icon-wrap icon-{{ $notif['type'] }}">
-                        @if ($notif['type'] == 'success')
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        @elseif($notif['type'] == 'info')
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        @elseif($notif['type'] == 'warning')
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        @endif
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-bold text-gray-800 text-base">{!! $notif['title'] !!}</h3>
-                            @if ($notif['badge'])
-                                <span
-                                    class="text-xs text-teal-600 font-semibold bg-teal-50 px-2 py-1 rounded-md">{{ $notif['badge'] }}</span>
-                            @endif
-                        </div>
-                        <p class="text-sm text-gray-600 mb-2 leading-relaxed">{!! $notif['desc'] !!}</p>
-                        <span class="text-xs text-gray-400 font-medium">{{ $notif['time'] }}</span>
-                    </div>
-                </div>
-            @empty
-                <div class="text-center py-12">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
-                    <p class="text-gray-400 text-sm font-medium">Belum ada notifikasi</p>
-                </div>
-            @endforelse
-        </div>
-
-    </div>
-
-    </x-atasan.layout>
+    <livewire:atasan-notifikasi-list />
+</x-atasan.layout>

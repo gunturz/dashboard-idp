@@ -55,6 +55,35 @@ abstract class Controller
     }
 
     /**
+     * Get all users that should receive PDC Admin notifications.
+     */
+    protected function getPdcAdminRecipientIds(): array
+    {
+        return \App\Models\User::query()
+            ->where(function ($query) {
+                $query->whereHas('roles', fn($q) => $q->whereIn('role_name', ['admin', 'pdc admin', 'pdc_admin']))
+                    ->orWhereHas('role', fn($q) => $q->whereIn('role_name', ['admin', 'pdc admin', 'pdc_admin']));
+            })
+            ->pluck('id')
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Send the same notification to all PDC Admin recipients.
+     */
+    protected function notifyPdcAdmins($title, $desc, $type = 'info'): void
+    {
+        $this->addNotificationToUsers(
+            $this->getPdcAdminRecipientIds(),
+            $title,
+            $desc,
+            $type
+        );
+    }
+
+    /**
      * Mark all notifications as read for the authenticated user.
      */
     public function markAllNotificationsRead(\Illuminate\Http\Request $request)

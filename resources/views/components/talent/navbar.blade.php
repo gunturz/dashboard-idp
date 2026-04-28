@@ -44,7 +44,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
-            <div id="mobile-menu-dropdown" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
+            <div id="mobile-menu-dropdown" style="display:none;" class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
                 {{-- Dropdown Header --}}
                 <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                     <div class="flex items-center gap-3.5">
@@ -155,13 +155,18 @@
                     <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
                 @if($hasUnreadNotif)
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                        <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                    @php
+                        $unreadCount = $unreadNotifications->count();
+                        $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
+                    @endphp
+                    <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
+                        {{ $displayCount }}
                     </span>
+                    <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                 @endif
             </button>
 
-            <div id="bell-dropdown"
+            <div id="bell-dropdown" style="display:none;"
                 class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                 <div class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -235,7 +240,7 @@
                 </svg>
             </button>
 
-            <div id="profile-dropdown"
+            <div id="profile-dropdown" style="display:none;"
                 class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                 <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                     <div class="flex items-center gap-3">

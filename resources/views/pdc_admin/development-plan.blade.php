@@ -246,7 +246,7 @@
         @endif
 
         <div class="prem-card p-8">
-            <form method="POST" action="{{ $editMode ? route('pdc_admin.development_plan.update', ['company_id' => $prefillData['group_company_id'], 'position_id' => $prefillData['group_position_id']]) : route('pdc_admin.development_plan.store') }}" id="dev-plan-form">
+            <form method="POST" action="{{ $editMode ? route('pdc_admin.development_plan.update', ['company_id' => $prefillData['group_company_id'], 'position_id' => $prefillData['group_position_id'], 'department_id' => $prefillData['group_department_id'] ?? null, 'plan_created_at' => $prefillData['group_plan_created_at'] ?? null]) : route('pdc_admin.development_plan.store') }}" id="dev-plan-form">
                 @csrf
                 @if($editMode)
                     @method('PUT')

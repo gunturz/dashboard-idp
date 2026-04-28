@@ -2,7 +2,7 @@
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <div class="bg-white rounded-[20px] shadow-sm border border-gray-100 p-8">
             <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-6">
-                <a href="javascript:history.back()" class="text-gray-400 hover:text-gray-700 bg-gray-50 hover:bg-gray-200 p-2.5 rounded-full transition-colors">
+                <a href="{{ route('atasan.monitoring.logbook', ['talentId' => $activity->user_id_talent, 'tab' => strtolower($activity->type->type_name ?? 'exposure')]) }}" class="text-gray-400 hover:text-gray-700 bg-gray-50 hover:bg-gray-200 p-2.5 rounded-full transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                 </a>
                 <div>

@@ -22,7 +22,7 @@ class PdcDashboardTable extends Component
             ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->when($this->search, fn($q) => $q->where('users.nama', 'like', '%' . $this->search . '%'))
-            ->take(20)
+            ->take(8)
             ->get();
 
         $rows = [];

@@ -129,6 +129,15 @@ class AuthenticatedSessionController extends Controller
         if (in_array($role, ['admin', 'pdc_admin'])) {
             session()->put('pdc_admin_just_logged_in', true);
         }
+        if (in_array($role, ['panelis', 'bo_director', 'board_of_directors', 'board_of_director'])) {
+            session()->put('panelis_just_logged_in', true);
+        }
+        if ($role === 'atasan') {
+            session()->put('atasan_just_logged_in', true);
+        }
+        if ($role === 'talent') {
+            session()->put('talent_just_logged_in', true);
+        }
         if ($role === 'mentor') {
             session()->put('mentor_just_logged_in', true);
         }

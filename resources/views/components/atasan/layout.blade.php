@@ -788,9 +788,14 @@
                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
                     @if ($hasUnreadNotif)
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#14b8a6] rounded-full">
-                            <span class="absolute inset-0 rounded-full bg-[#14b8a6] animate-ping opacity-75"></span>
+                        @php
+                            $unreadCount = $unreadNotifications->count();
+                            $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
+                        @endphp
+                        <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
+                            {{ $displayCount }}
                         </span>
+                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                     @endif
                 </button>
 
@@ -1008,14 +1013,74 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const shouldShowAtasanNotifPopup = @json(session()->pull('atasan_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
+
+            if (shouldShowAtasanNotifPopup) {
+                setTimeout(function () {
+                    const bellDropdown = document.getElementById('bell-dropdown');
+                    if (!bellDropdown) return;
+
+                    bellDropdown.classList.remove('hidden');
+                    bellDropdown.style.transformOrigin = 'top right';
+                    bellDropdown.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    bellDropdown.style.transform = 'scale(1)';
+                    bellDropdown.style.opacity = '1';
+
+                    setTimeout(function () {
+                        if (!bellDropdown.classList.contains('hidden')) {
+                            bellDropdown.style.transform = 'scale(0)';
+                            bellDropdown.style.opacity = '0';
+
+                            setTimeout(function () {
+                                bellDropdown.classList.add('hidden');
+                                bellDropdown.style = '';
+                            }, 500);
+                        }
+                    }, 5000);
+                }, 250);
+            }
+        });
+
+        window.addEventListener('notifikasi-marked-read', function () {
+            const badge = document.getElementById('bell-red-badge');
+            if (badge) badge.remove();
+
+            const bellBtn = document.getElementById('bell-btn');
+            if (bellBtn) {
+                const ping = bellBtn.querySelector('.animate-ping');
+                if (ping) ping.remove();
+            }
+        });
     </script>
     {{-- FOOTER --}}
-    <footer
-        class="mt-auto bg-gradient-to-br from-[#0f172a] to-[#1e293b] py-6 text-center w-full border-t border-white/5">
-        <span class="text-white/80 text-sm font-medium tracking-wide">
-            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
-        </span>
+    @if(request()->routeIs('atasan.dashboard'))
+    <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
+        <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
+            {{-- Bagian Kiri: Logo & Deskripsi --}}
+            <div class="flex items-center gap-[12px]">
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
+                <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
+                    <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
+                    Platform Individual Development Plan
+                </div>
+            </div>
+
+            {{-- Bagian Tengah: Links --}}
+            <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
+                <a href="{{ route('atasan.dashboard') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Dashboard</a>
+                <a href="{{ route('atasan.monitoring') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Monitoring</a>
+                <a href="{{ route('atasan.riwayat') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Riwayat</a>
+            </div>
+
+            {{-- Bagian Kanan: Copyright --}}
+            <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
+                &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
+            </div>
+        </div>
     </footer>
+    @endif
 
     @livewireScripts
     {{ $scripts ?? '' }}

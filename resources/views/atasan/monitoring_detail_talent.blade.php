@@ -246,6 +246,81 @@
                 border-radius: 50%;
             }
 
+            .project-section-title {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .project-section-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 16px;
+                background: #0f172a;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+                flex-shrink: 0;
+            }
+
+            .project-section-icon svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .project-improvement-table {
+                width: 100%;
+                table-layout: fixed;
+                border-collapse: collapse;
+            }
+
+            .project-improvement-table th,
+            .project-improvement-table td {
+                vertical-align: middle;
+            }
+
+            .project-improvement-table th:nth-child(1),
+            .project-improvement-table td:nth-child(1) {
+                width: 50%;
+                text-align: left;
+            }
+
+            .project-improvement-table th:nth-child(2),
+            .project-improvement-table td:nth-child(2),
+            .project-improvement-table th:nth-child(3),
+            .project-improvement-table td:nth-child(3) {
+                width: 25%;
+                text-align: center;
+            }
+
+            .project-improvement-table td:nth-child(2),
+            .project-improvement-table td:nth-child(3) {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .project-title-cell {
+                font-weight: 800;
+                color: #1e293b;
+                text-align: left;
+                word-break: break-word;
+            }
+
+            .project-action-cell,
+            .project-status-cell {
+                text-align: center;
+            }
+
+            .project-file-link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                min-width: 128px;
+            }
+
             /* --- LogBook Section --- */
             .logbook-section {
                 background: #f8fafc;
@@ -490,20 +565,21 @@
         {{-- Project Improvement --}}
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.4s;">
             <div class="prem-card-header">
-                <div class="prem-card-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM6.262 6.072a8.25 8.25 0 1 1 10.56 12.015A8.25 8.25 0 0 1 6.262 6.072Z" clip-rule="evenodd" />
-                        <path d="M15.982 12.912a.75.75 0 0 1 0 1.06l-2.912 2.912a.75.75 0 1 1-1.06-1.06l1.632-1.632H7.5a.75.75 0 0 1 0-1.5h6.142l-1.632-1.632a.75.75 0 0 1 1.06-1.06l2.912 2.912Z" />
-                    </svg>
-                    Project Improvement
+                <div class="project-section-title">
+                    <span class="project-section-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.5 6h-6.879a1.5 1.5 0 0 1-1.06-.44l-.622-.62A1.5 1.5 0 0 0 9.88 4.5H6A2.25 2.25 0 0 0 3.75 6.75v10.5A2.25 2.25 0 0 0 6 19.5h13.5a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 19.5 6Z" />
+                        </svg>
+                    </span>
+                    <span>Project Improvement</span>
                 </div>
             </div>
             <div class="p-0">
                 <div class="overflow-x-auto custom-scrollbar">
-                    <table class="highlight-table mb-0">
+                    <table class="highlight-table project-improvement-table mb-0">
                         <thead>
                             <tr>
-                                <th style="min-width: 300px;">Judul Project Improvement</th>
+                                <th>Judul Project Improvement</th>
                                 <th class="text-center">File</th>
                                 <th class="text-center">Status</th>
                             </tr>
@@ -511,16 +587,16 @@
                         <tbody>
                             @forelse($talent->improvementProjects as $proj)
                                 <tr>
-                                    <td class="font-bold text-[#1e293b]">{{ $proj->title }}</td>
-                                    <td class="text-center">
-                                        <a href="{{ asset('storage/' . $proj->document_path) }}" class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" target="_blank">
+                                    <td class="project-title-cell">{{ $proj->title }}</td>
+                                    <td class="project-action-cell">
+                                        <a href="{{ asset('storage/' . $proj->document_path) }}" class="project-file-link font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100" target="_blank">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                             </svg>
                                             Lihat File
                                         </a>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="project-status-cell">
                                         @if($proj->status === 'Verified')
                                             <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Verified

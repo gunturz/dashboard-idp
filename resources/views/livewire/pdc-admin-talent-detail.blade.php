@@ -189,7 +189,7 @@
                             @php $standard = $standards[$comp->id] ?? 0; @endphp
                             <tr>
                                 <td class="td-left">{{ $comp->name }}</td>
-                                <td>{{ $standard }}</td>
+                                <td>{{ number_format((float)$standard, 1) }}</td>
                                 @foreach ($talents as $talent)
                                     @php
                                         $detail = $talent->assessmentSession ? $talent->assessmentSession->details->firstWhere('competence_id', $comp->id) : null;

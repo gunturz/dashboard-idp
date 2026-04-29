@@ -72,7 +72,7 @@
                     <p class="text-sm text-gray-500 mb-4">Pilih role yang akan ditetapkan untuk user ini (bisa lebih dari satu).</p>
                     <div class="space-y-3">
                         @foreach ($rolesData as $roleData)
-                            @if (!in_array(strtolower($roleData->role_name), ['admin', 'pdc admin', 'pdc_admin']))
+                            @if (!in_array(strtolower($roleData->role_name), ['admin', 'pdc admin', 'pdc_admin', 'finance', 'panelis']))
                                 <label class="flex items-center p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors m-0">
                                     <input type="checkbox" name="roles[]" value="{{ $roleData->id }}"
                                         class="role-checkbox w-5 h-5 text-[#14b8a6] border-gray-300 rounded focus:ring-[#14b8a6]">

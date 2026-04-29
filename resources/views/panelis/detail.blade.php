@@ -270,7 +270,7 @@
                     @endphp
                     <tr>
                         <td class="td-left">{{ $comp->name }}</td>
-                        <td>{{ $standard }}</td>
+                        <td>{{ number_format((float)$standard, 1) }}</td>
                         <td>{{ $sT ?: '-' }}</td>
                         <td>{{ $sA ?: '-' }}</td>
                         <td>{{ $final ?: '-' }}</td>

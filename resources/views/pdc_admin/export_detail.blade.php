@@ -277,7 +277,7 @@
                                 @endphp
                                 <tr>
                                     <td class="td-left">{{ $comp->name }}</td>
-                                    <td>{{ $standard }}</td>
+                                    <td>{{ number_format((float)$standard, 1) }}</td>
                                     <td><span class="font-bold">{{ $sT ?: '-' }}</span></td>
                                     <td><span class="font-bold">{{ $sA ?: '-' }}</span></td>
                                     <td><span class="font-bold">{{ $final ?: '-' }}</span></td>

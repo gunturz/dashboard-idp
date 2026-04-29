@@ -287,7 +287,7 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $comp->name }}</td>
-                                    <td class="font-bold text-gray-800">{{ $standard }}</td>
+                                    <td class="font-bold text-gray-800">{{ number_format((float)$standard, 1) }}</td>
                                     <td>
                                         @if ($scoreTalent)
                                             <span class="font-bold text-[#0d9488]">{{ $scoreTalent }}</span>

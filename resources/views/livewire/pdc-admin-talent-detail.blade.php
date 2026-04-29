@@ -1007,9 +1007,9 @@
                                 <div class="relative">
                                     <select name="assigned_finance_id" required
                                         class="w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-[13px] text-gray-500 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 pr-10">
-                                        <option value="" disabled selected>Pilih email finance yang terdaftar</option>
+                                        <option value="" disabled selected>Pilih nama finance yang terdaftar</option>
                                         @foreach($financeUsers as $finUser)
-                                            <option value="{{ $finUser->id }}" class="text-gray-700">{{ $finUser->email }}
+                                            <option value="{{ $finUser->id }}" class="text-gray-700">{{ $finUser->nama }}
                                             </option>
                                         @endforeach
                                     </select>

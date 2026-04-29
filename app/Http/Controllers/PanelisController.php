@@ -40,8 +40,8 @@ class PanelisController extends Controller
             ->whereNotIn('id', $alreadyAssessedTalentIds)
             // Hanya talent khusus untuk panelis ini (assignment)
             ->whereHas('panelisAssessments', function ($q) use ($user) {
-                $q->where('panelis_id', $user->id);
-            })
+            $q->where('panelis_id', $user->id);
+        })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
@@ -213,7 +213,7 @@ class PanelisController extends Controller
 
         $this->notifyPdcAdmins(
             'Review Panelis Selesai',
-            'Panelis <span class="font-semibold">' . e($user->nama) . '</span> telah memberikan review untuk talent <span class="font-semibold">' . e(optional($talent)->nama ?? 'Talent') . '</span> dengan total skor <span class="font-semibold">' . e((string) $totalScore) . '</span>.',
+            'Panelis <span class="font-semibold">' . e($user->nama) . '</span> telah memberikan review untuk talent <span class="font-semibold">' . e(optional($talent)->nama ?? 'Talent') . '</span> dengan total skor <span class="font-semibold">' . e((string)$totalScore) . '</span>.',
             'info'
         );
 
@@ -270,8 +270,8 @@ class PanelisController extends Controller
     {
         $user = auth()->user();
         $activity = \App\Models\IdpActivity::with(['talent', 'verifier', 'type'])->findOrFail($id);
-        return view('bod.logbook-item', compact('user', 'activity'))
-               ->with('notifications', $this->getNotifications());
+        return view('panelis.logbook-item', compact('user', 'activity'))
+            ->with('notifications', $this->getNotifications());
     }
 
 

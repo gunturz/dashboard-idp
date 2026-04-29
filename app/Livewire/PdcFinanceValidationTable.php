@@ -67,7 +67,9 @@ class PdcFinanceValidationTable extends Component
         $rejected = $allProjects->where('status', 'Rejected')->count();
 
         // Get Finance Users
-        $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->get();
+        $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
+            ->orderBy('nama')
+            ->get();
 
         return view('livewire.pdc-finance-validation-table', [
             'projects' => $projects,

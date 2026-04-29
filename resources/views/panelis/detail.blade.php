@@ -230,8 +230,50 @@
         </div>
     </div>
 
-    {{-- ====== HEATMAP KOMPETENSI ====== --}}
+    {{-- ====== TOP 3 GAP ====== --}}
     <div class="section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-[#0f172a]">
+            <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5Z" clip-rule="evenodd" />
+        </svg>
+        TOP 3 GAP Kompetensi
+    </div>
+
+    @if($talent->assessmentSession && $talent->assessmentSession->details->count())
+        @php
+            $firstDetail = $talent->assessmentSession->details->first();
+            $noteText = collect($talent->assessmentSession->details)
+                ->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
+                ->map(fn($d) => explode('|', $d->notes)[1] ?? '')
+                ->filter()->first() ?? null;
+        @endphp
+        @if($noteText)
+            <div class="catatan-admin-box">
+                <span>Catatan dari Admin:</span> {{ $noteText }}
+            </div>
+        @endif
+    @endif
+
+    @forelse($gaps as $index => $gap)
+        <div class="gap-item prio-{{ $index + 1 }}">
+            <div class="flex items-center">
+                <span class="gap-number">{{ $index + 1 }}</span>
+                {{ optional($gap->competence)->name ?? '-' }}
+            </div>
+            <span>{{ number_format($gap->gap_score, 1) }}</span>
+        </div>
+    @empty
+        @for($i = 1; $i <= 3; $i++)
+            <div class="gap-item" style="border:1px solid #e2e8f0;background:#f8fafc;color:#94a3b8;">
+                <div class="flex items-center">
+                    <span class="gap-number" style="background:#cbd5e1;">{{ $i }}</span> -
+                </div>
+                <span>0</span>
+            </div>
+        @endfor
+    @endforelse
+
+    {{-- ====== HEATMAP KOMPETENSI ====== --}}
+    <div class="section-title mt-8">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-[#0f172a]">
             <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z" clip-rule="evenodd" />
         </svg>
@@ -297,48 +339,6 @@
         </table>
     </div>
 
-    {{-- ====== TOP 3 GAP ====== --}}
-    <div class="section-title mt-8">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-[#0f172a]">
-            <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5Z" clip-rule="evenodd" />
-        </svg>
-        TOP 3 GAP Kompetensi
-    </div>
-
-    @if($talent->assessmentSession && $talent->assessmentSession->details->count())
-        @php
-            $firstDetail = $talent->assessmentSession->details->first();
-            $noteText = collect($talent->assessmentSession->details)
-                ->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
-                ->map(fn($d) => explode('|', $d->notes)[1] ?? '')
-                ->filter()->first() ?? null;
-        @endphp
-        @if($noteText)
-            <div class="catatan-admin-box">
-                <span>Catatan dari Admin:</span> {{ $noteText }}
-            </div>
-        @endif
-    @endif
-
-    @forelse($gaps as $index => $gap)
-        <div class="gap-item prio-{{ $index + 1 }}">
-            <div class="flex items-center">
-                <span class="gap-number">{{ $index + 1 }}</span>
-                {{ optional($gap->competence)->name ?? '-' }}
-            </div>
-            <span>{{ number_format($gap->gap_score, 1) }}</span>
-        </div>
-    @empty
-        @for($i = 1; $i <= 3; $i++)
-            <div class="gap-item" style="border:1px solid #e2e8f0;background:#f8fafc;color:#94a3b8;">
-                <div class="flex items-center">
-                    <span class="gap-number" style="background:#cbd5e1;">{{ $i }}</span> -
-                </div>
-                <span>0</span>
-            </div>
-        @endfor
-    @endforelse
-
     {{-- ====== IDP MONITORING ====== --}}
     <div class="section-title">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-[#0f172a]">
@@ -371,9 +371,14 @@
                         <span class="text-xs font-bold text-gray-400">{{ round($pct * 100) }}%</span>
                     </div>
                 </div>
-                <div class="border border-gray-200 px-4 py-1 rounded-full">
-                    <span class="text-sm font-semibold text-gray-700">{{ $chart['label'] }}</span>
-                </div>
+                <a href="{{ route('panelis.logbook', $talent->id) }}#{{ strtolower($chart['label']) }}" 
+                   class="flex items-center justify-center transition-colors hover:brightness-90 text-white px-5 py-2.5 rounded-xl shadow-md font-bold text-sm min-w-[130px]"
+                   style="background-color: {{ $chart['color'] }};">
+                    {{ $chart['label'] }} 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 max-w-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </a>
             </div>
         @endforeach
     </div>

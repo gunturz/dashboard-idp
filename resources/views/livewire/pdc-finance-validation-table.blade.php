@@ -328,9 +328,9 @@
                             <label class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1.5">Kirim Kepada</label>
                             <div class="relative">
                                 <select id="finance-assigned-select" name="assigned_finance_id" required class="w-full appearance-none rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-[12px] text-gray-700 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 pr-9">
-                                    <option value="" disabled selected>Pilih email finance</option>
+                                    <option value="" disabled selected>Pilih nama finance</option>
                                     @foreach($financeUsers as $finUser)
-                                        <option value="{{ $finUser->id }}" data-company-id="{{ $finUser->company_id }}" @selected(old('assigned_finance_id') == $finUser->id) class="text-gray-700">{{ $finUser->email }}</option>
+                                        <option value="{{ $finUser->id }}" data-company-id="{{ $finUser->company_id }}" @selected(old('assigned_finance_id') == $finUser->id) class="text-gray-700">{{ $finUser->nama }}</option>
                                     @endforeach
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-teal-600">

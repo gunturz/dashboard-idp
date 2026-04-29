@@ -88,7 +88,12 @@ class PdcPanelisReviewTable extends Component
             ?? optional($t->promotion_plan)->created_at
             ?? $t->created_at
             ),
-                'positions' => $sorted->groupBy(fn($item) => $item->promotion_plan->target_position_id ?? 0)
+                'positions' => $sorted->groupBy(function ($item) {
+                $pos = $item->promotion_plan->target_position_id ?? 0;
+                $dept = $item->department_id ?? 0;
+                return $pos . '_' . $dept;
+            }
+            )
                 ->map(function ($positionTalents) {
                 $sortedPos = $positionTalents->sortByDesc(fn($t) =>
                 optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at

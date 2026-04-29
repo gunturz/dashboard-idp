@@ -112,6 +112,14 @@
                         </thead>
                         <tbody>
                             @foreach ($companyData['positions'] as $positionId => $posData)
+                                @php
+                                    $firstTalent = $posData['talents']->first();
+                                    $plan = optional($firstTalent)->promotion_plan;
+                                    $periodLabel = '-';
+                                    if (!empty($plan->start_date) && !empty($plan->target_date)) {
+                                        $periodLabel = \Carbon\Carbon::parse($plan->start_date)->translatedFormat('d M Y') . ' - ' . \Carbon\Carbon::parse($plan->target_date)->translatedFormat('d M Y');
+                                    }
+                                @endphp
                                 @foreach ($posData['talents'] as $index => $talent)
                                     <tr class="talent-row"
                                         data-name="{{ strtolower($talent->nama) }}"
@@ -121,13 +129,13 @@
                                         data-pos-group="{{ $companyId }}-{{ $positionId }}">
                                         {{-- Posisi (rowspan) --}}
                                         @if ($index === 0)
-                                            <td rowspan="{{ count($posData['talents']) }}" class="text-left pl-6">
-                                                <span class="font-bold text-[#1e293b] block text-sm">
-                                                    {{ optional($posData['targetPosition'])->position_name ?? '-' }}
-                                                </span>
-                                                <span class="text-xs text-[#64748b] italic block mt-0.5">
-                                                    {{ optional($posData['targetPosition'])->department->nama_department ?? optional($talent->department)->nama_department ?? '-' }}
-                                                </span>
+                                            <td rowspan="{{ count($posData['talents']) }}" class="border-r border-[#f1f5f9] text-center align-middle">
+                                                <div class="flex flex-col items-center justify-center gap-2 px-4 py-2">
+                                                    <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-200/60 bg-teal-50/50">
+                                                        <span class="font-bold text-teal-900 text-sm leading-none">{{ optional($posData['targetPosition'])->position_name ?? '-' }}</span>
+                                                    </div>
+                                                    <span class="text-[11px] text-slate-500 font-medium">{{ $periodLabel }}</span>
+                                                </div>
                                             </td>
                                         @endif
 

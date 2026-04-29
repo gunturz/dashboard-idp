@@ -414,45 +414,34 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    // Build rows: Panelis users (or at least 5 placeholder rows)
-                    $totalRows = max(5, $panelisUsers->count());
-                @endphp
-                @for ($i = 0; $i < $totalRows; $i++)
+                @forelse ($panelisUsers as $i => $panelis)
                     @php
-                        $panelis = $panelisUsers->get($i);
-                        $assessment = $panelis
-                            ? \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)
+                        $assessment = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)
                                 ->where('panelis_id', $panelis->id)
-                                ->first()
-                            : null;
+                                ->first();
                         $isAssessor = $assessment !== null;
                     @endphp
                     <tr>
                         {{-- Penilai Panelis --}}
                         <td class="text-left-cell">
-                            @if ($panelis)
-                                <span class="font-semibold text-[#1e293b]">{{ $panelis->nama }}</span>
-                                @if ($panelis->position)
-                                    <span
-                                        class="block text-xs text-[#64748b] italic">{{ $panelis->position->position_name }}</span>
-                                @endif
+                            <span class="font-semibold text-[#1e293b]">{{ $panelis->nama }}</span>
+                            @if ($panelis->position)
+                                <span
+                                    class="block text-xs text-[#64748b] italic">{{ $panelis->position->position_name }}</span>
                             @endif
                         </td>
 
                         {{-- Perusahaan --}}
                         <td>
-                            @if ($panelis && optional($panelis->company)->nama_company)
+                            @if (optional($panelis->company)->nama_company)
                                 {{ $panelis->company->nama_company }}
-                            @elseif ($i === 0 && optional($latestProject)->talent)
-                                {{ optional($talent->company)->nama_company ?? '' }}
                             @endif
                         </td>
 
                         {{-- Skor --}}
                         <td>
-                            @if ($isAssessor)
-                                <span class="font-bold text-[#1e293b]">{{ $assessment->panelis_score ?? 0 }} /
+                            @if ($isAssessor && $assessment->panelis_score)
+                                <span class="font-bold text-[#1e293b]">{{ $assessment->panelis_score }} /
                                     50</span>
                             @endif
                         </td>
@@ -487,7 +476,11 @@
                             @endif
                         </td>
                     </tr>
-                @endfor
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-gray-400 py-8">Belum ada panelis yang ditugaskan untuk talent ini.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

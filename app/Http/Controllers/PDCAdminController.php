@@ -986,8 +986,21 @@ class PDCAdminController extends Controller
             'assigned_finance_id' => 'required|exists:users,id',
         ]);
 
-        $project = ImprovementProject::find($request->project_id);
+        $project = ImprovementProject::with('talent')->find($request->project_id);
         if ($project) {
+            $assignedFinance = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))
+                ->find($request->assigned_finance_id);
+
+            if (
+                !$assignedFinance ||
+                !$project->talent ||
+                (string) $assignedFinance->company_id !== (string) $project->talent->company_id
+            ) {
+                throw ValidationException::withMessages([
+                    'assigned_finance_id' => 'Finance yang dipilih harus sesuai dengan perusahaan talent.',
+                ]);
+            }
+
             $project->update([
                 'status' => 'Pending',
                 'feedback' => $request->notes,
@@ -1189,9 +1202,12 @@ class PDCAdminController extends Controller
             'improvementProjects',
         ])->findOrFail($talent_id);
 
-        // All Panelis users for building the evaluation table rows
-        $panelisUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['panelis', 'bo_director', 'board_of_directors', 'board_of_director', 'panelis']))
-            ->with('company')
+        // Only panelis assigned to this specific talent
+        $assignedPanelisIds = \App\Models\PanelisAssessment::where('user_id_talent', $talent_id)
+            ->pluck('panelis_id');
+
+        $panelisUsers = User::whereIn('id', $assignedPanelisIds)
+            ->with(['company', 'position'])
             ->orderBy('nama')
             ->get();
 

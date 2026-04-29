@@ -271,6 +271,8 @@ Route::middleware('auth')->group(function () {
         ->name('panelis.penilaian.simpan');
     Route::get('/panelis/talent/{talent_id}/logbook', [\App\Http\Controllers\PanelisController::class , 'logbook'])
         ->name('panelis.logbook');
+    Route::get('/panelis/logbook-detail/{id}', [\App\Http\Controllers\PanelisController::class , 'logbookItemDetail'])
+        ->name('panelis.logbook.detail');
     Route::get('/panelis/notifikasi', [\App\Http\Controllers\PanelisController::class , 'notifikasi'])
         ->name('panelis.notifikasi');
     Route::post('/panelis/notifikasi/mark-all-read', [\App\Http\Controllers\PanelisController::class , 'markAllNotificationsRead'])

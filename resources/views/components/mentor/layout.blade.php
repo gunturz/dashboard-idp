@@ -1047,8 +1047,8 @@
 
                 const titleEl = item.querySelector('p.text-sm');
                 const descEl = item.querySelector('p.text-xs');
-                if (titleEl) titleEl.textContent = title;
-                if (descEl) descEl.textContent = desc;
+                if (titleEl) titleEl.innerHTML = title;
+                if (descEl) descEl.innerHTML = desc;
 
                 list.prepend(item);
 

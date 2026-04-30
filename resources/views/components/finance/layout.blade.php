@@ -393,9 +393,9 @@
                                         </svg>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] ?? ($notif->title ?? '-') !!}
+                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}
                                         </p>
-                                        <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? ($notif['time'] ?? '') !!}</p>
+                                        <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? $notif['time'] !!}</p>
                                     </div>
                                 </li>
                             @endforeach
@@ -833,8 +833,8 @@
 
                 const titleEl = item.querySelector('p.text-sm');
                 const descEl = item.querySelector('p.text-xs');
-                if (titleEl) titleEl.textContent = title;
-                if (descEl) descEl.textContent = desc;
+                if (titleEl) titleEl.innerHTML = title;
+                if (descEl) descEl.innerHTML = desc;
 
                 list.prepend(item);
 

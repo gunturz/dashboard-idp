@@ -313,7 +313,7 @@
     </x-slot>
 
     <div class="px-6 py-8">
-        <div class="mx-auto w-full animate-title" style="max-width: 960px;">
+        <div class="mx-auto w-full" style="max-width: 960px;">
             <livewire:atasan-notifikasi-list />
         </div>
     </div>

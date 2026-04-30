@@ -1,4 +1,4 @@
-<div wire:poll.10s="loadNotifications">
+<div wire:poll.10s="loadNotifications" x-data x-init="window.addEventListener('app-notification-received', () => $wire.loadNotifications())">
     <div class="page-header animate-title">
         <div class="page-header-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

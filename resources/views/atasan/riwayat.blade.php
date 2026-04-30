@@ -193,53 +193,8 @@
         </div>
     </div>
 
-    <div class="prem-card">
+     <div class="prem-card">
         <div class="p-6">
-            <div class="flex flex-col md:flex-row gap-4 mb-8">
-                {{-- Cari Nama --}}
-                <div class="relative flex-grow group">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                        stroke="currentColor"
-                        class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#14b8a6] transition-colors pointer-events-none">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input type="text" id="live-search-input" placeholder="Cari Nama Talent…"
-                        class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all shadow-sm"
-                        oninput="filterRiwayat()">
-                </div>
-
-                {{-- Filters --}}
-                <div class="flex flex-wrap gap-4">
-                    <select id="filter-periode"
-                        class="min-w-[160px] border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white transition-all shadow-sm"
-                        onchange="filterRiwayat()">
-                        <option value="">Semua Periode</option>
-                        @foreach($periodeOptions as $opt)
-                            <option value="{{ $opt }}">{{ $opt }}</option>
-                        @endforeach
-                    </select>
-
-                    <select id="filter-perusahaan"
-                        class="min-w-[180px] border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white transition-all shadow-sm"
-                        onchange="filterRiwayat()">
-                        <option value="">Semua Perusahaan</option>
-                        @foreach($perusahaanOptions as $opt)
-                            <option value="{{ $opt }}">{{ $opt }}</option>
-                        @endforeach
-                    </select>
-
-                    <select id="filter-departemen"
-                        class="min-w-[180px] border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white transition-all shadow-sm"
-                        onchange="filterRiwayat()">
-                        <option value="">Semua Departemen</option>
-                        @foreach($departemenOptions as $opt)
-                            <option value="{{ $opt }}">{{ $opt }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
             <div class="overflow-x-auto custom-scrollbar">
                 <table class="highlight-table">
                     <thead>

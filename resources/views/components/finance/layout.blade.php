@@ -286,6 +286,7 @@
         .bg-decoration::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px); background-size: 32px 32px; opacity: 0.3; }
     </style>
     {{ $styles ?? '' }}
+    @vite(['resources/js/app.js'])
     @livewireStyles
 </head>
 
@@ -379,7 +380,7 @@
                     </div>
 
                     @if ($hasUnreadNotif)
-                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto">
+                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto" id="finance-bell-list">
                             @foreach ($unreadNotifications->take(2) as $notif)
                                 <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
                                     onclick="window.location='{{ route('finance.notifikasi') }}'">
@@ -400,7 +401,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <div class="flex flex-col items-center py-10 text-center px-4">
+                        <div class="flex flex-col items-center py-10 text-center px-4" id="finance-bell-empty-state">
                             <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -741,6 +742,132 @@
                     bellDropdown.style.transform = 'scale(0.86) translateY(-8px)';
 
                     setTimeout(function () {
+                        bellDropdown.classList.add('hidden');
+                        bellDropdown.style.transition = '';
+                        bellDropdown.style.transformOrigin = '';
+                        bellDropdown.style.opacity = '';
+                        bellDropdown.style.transform = '';
+                    }, 350);
+                }, 4500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof window.Echo === 'undefined') return;
+
+            let financeBellPopupTimeout = null;
+            let financeBellCleanupTimeout = null;
+
+            window.Echo.private('user-notifications.{{ auth()->id() }}')
+                .listen('.notification.created', function (data) {
+                    window.dispatchEvent(new CustomEvent('app-notification-received', {
+                        detail: data
+                    }));
+                    financeUpdateBadge();
+                    financeInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
+                    financeShowBellPopup();
+                });
+
+            function financeUpdateBadge() {
+                let badge = document.getElementById('bell-red-badge');
+
+                if (badge) {
+                    const current = parseInt((badge.textContent || '').trim(), 10) || 0;
+                    const next = current + 1;
+                    badge.textContent = next > 99 ? '99+' : next;
+                    return;
+                }
+
+                const bellBtn = document.getElementById('bell-btn');
+                if (!bellBtn) return;
+
+                badge = document.createElement('span');
+                badge.id = 'bell-red-badge';
+                badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#343E4E] animate-bounce';
+                badge.style.animationDuration = '2s';
+                badge.textContent = '1';
+                bellBtn.appendChild(badge);
+
+                const ping = document.createElement('span');
+                ping.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
+                bellBtn.appendChild(ping);
+            }
+
+            function financeInsertRealtimeNotification(title, desc) {
+                const dropdown = document.getElementById('bell-dropdown');
+                if (!dropdown) return;
+
+                const emptyState = document.getElementById('finance-bell-empty-state');
+                if (emptyState) emptyState.remove();
+
+                let list = document.getElementById('finance-bell-list');
+                if (!list) {
+                    list = document.createElement('ul');
+                    list.id = 'finance-bell-list';
+                    list.className = 'divide-y divide-gray-50 max-h-60 overflow-y-auto';
+
+                    const footer = dropdown.querySelector('.px-5.py-3.border-t');
+                    if (footer) {
+                        dropdown.insertBefore(list, footer);
+                    } else {
+                        dropdown.appendChild(list);
+                    }
+                }
+
+                const item = document.createElement('li');
+                item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                item.onclick = function () {
+                    window.location = '{{ route('finance.notifikasi') }}';
+                };
+                item.innerHTML = `
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-gray-800 truncate"></p>
+                        <p class="text-xs text-gray-500 truncate"></p>
+                    </div>
+                `;
+
+                const titleEl = item.querySelector('p.text-sm');
+                const descEl = item.querySelector('p.text-xs');
+                if (titleEl) titleEl.textContent = title;
+                if (descEl) descEl.textContent = desc;
+
+                list.prepend(item);
+
+                while (list.children.length > 2) {
+                    list.removeChild(list.lastElementChild);
+                }
+            }
+
+            function financeShowBellPopup() {
+                const bellDropdown = document.getElementById('bell-dropdown');
+                if (!bellDropdown) return;
+
+                clearTimeout(financeBellPopupTimeout);
+                clearTimeout(financeBellCleanupTimeout);
+
+                bellDropdown.classList.remove('hidden');
+                bellDropdown.style.transformOrigin = 'top right';
+                bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+                bellDropdown.style.opacity = '0';
+                bellDropdown.style.transform = 'scale(0.82) translateY(-10px)';
+
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        bellDropdown.style.opacity = '1';
+                        bellDropdown.style.transform = 'scale(1) translateY(0)';
+                    });
+                });
+
+                financeBellPopupTimeout = setTimeout(function () {
+                    bellDropdown.style.opacity = '0';
+                    bellDropdown.style.transform = 'scale(0.86) translateY(-8px)';
+
+                    financeBellCleanupTimeout = setTimeout(function () {
                         bellDropdown.classList.add('hidden');
                         bellDropdown.style.transition = '';
                         bellDropdown.style.transformOrigin = '';

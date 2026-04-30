@@ -3,7 +3,7 @@
     Wire:poll setiap 10 detik sebagai fallback Reverb.
     Desain identik dengan template notifikasi PDC Admin yang sudah ada.
 --}}
-<div wire:poll.10s="loadNotifications">
+<div wire:poll.10s="loadNotifications" x-data x-init="window.addEventListener('app-notification-received', () => $wire.loadNotifications())">
 
     {{-- ── Page Header Actions ── --}}
     <div class="page-header animate-title">

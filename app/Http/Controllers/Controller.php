@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserNotificationCreated;
+use App\Models\AppNotification;
+
 abstract class Controller
 {
     /**
@@ -35,13 +38,21 @@ abstract class Controller
      */
     protected function addNotificationToUser($userId, $title, $desc, $type = 'success')
     {
-        \App\Models\AppNotification::create([
+        $notification = AppNotification::create([
             'user_id' => $userId,
             'title'   => $title,
             'desc'    => $desc,
             'type'    => $type,
             'is_read' => false,
         ]);
+
+        broadcast(new UserNotificationCreated(
+            (int) $userId,
+            (int) $notification->id,
+            (string) $title,
+            (string) $desc,
+            (string) $type,
+        ));
     }
 
     /**

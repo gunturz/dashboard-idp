@@ -183,9 +183,10 @@
             document.addEventListener('DOMContentLoaded', function () {
                 if (typeof window.Echo === 'undefined') return;
 
-                // Subscribe ke private channel milik admin ini
-                window.Echo.private('pdc-admin.{{ auth()->id() }}')
-                    .listen('.notification.new', function (data) {
+                const handleIncomingNotification = function (data) {
+                        window.dispatchEvent(new CustomEvent('app-notification-received', {
+                            detail: data
+                        }));
                         // 1. Update badge counter
                         pdcUpdateBadge();
 
@@ -195,7 +196,15 @@
 
                         // 2. Tampilkan toast realtime
                         pdcShowToast(data.title, data.desc);
-                    });
+                    };
+
+                // Channel lama khusus registrasi
+                window.Echo.private('pdc-admin.{{ auth()->id() }}')
+                    .listen('.notification.new', handleIncomingNotification);
+
+                // Channel generik untuk semua notifikasi user
+                window.Echo.private('user-notifications.{{ auth()->id() }}')
+                    .listen('.notification.created', handleIncomingNotification);
 
                 // ── Badge updater ──────────────────────────────────────────────
                 function pdcUpdateBadge() {

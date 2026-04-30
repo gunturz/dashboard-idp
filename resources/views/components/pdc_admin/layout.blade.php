@@ -888,6 +888,7 @@
         }
     </style>
     {{ $styles ?? '' }}
+    @vite(['resources/js/app.js'])
     @livewireStyles
 </head>
 

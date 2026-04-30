@@ -46,7 +46,7 @@
             }
 
             .talent-name-block .role {
-                font-size: 0.75rem;
+                font-size: 0.85rem;
                 color: #64748b;
                 display: flex;
                 align-items: center;
@@ -68,26 +68,32 @@
                 margin-bottom: 20px;
                 border-radius: 12px;
                 overflow: hidden;
-                border: 1px solid #f1f5f9;
+                border: 1px solid #e2e8f0;
             }
 
             .competency-table th {
-                background: #f8fafc;
+                background: #f1f5f9;
                 padding: 12px 14px;
-                font-size: 0.72rem;
+                font-size: 0.8rem;
                 font-weight: 800;
-                color: #475569;
+                color: #334155;
                 text-transform: uppercase;
                 letter-spacing: 0.025em;
-                border-bottom: 1px solid #f1f5f9;
+                border-bottom: 1px solid #e2e8f0;
             }
 
             .competency-table td {
                 padding: 12px 14px;
-                font-size: 0.82rem;
-                color: #334155;
-                border-bottom: 1px solid #f1f5f9;
+                font-size: 0.9rem;
+                color: #1e293b;
+                border-bottom: 1px solid #e2e8f0;
                 text-align: center;
+                background: #ffffff;
+                transition: background-color 0.2s ease;
+            }
+
+            .competency-table tr:hover td {
+                background: #f8fafc;
             }
 
             .competency-table tr:last-child td {
@@ -97,7 +103,7 @@
             .competency-table td:first-child {
                 text-align: left;
                 font-weight: 600;
-                color: #1e293b;
+                color: #0f172a;
             }
 
             .btn-assessment {
@@ -107,7 +113,7 @@
                 width: 100%;
                 padding: 12px;
                 border-radius: 12px;
-                font-size: 0.85rem;
+                font-size: 0.95rem;
                 font-weight: 700;
                 transition: all 0.2s;
                 border: none;
@@ -213,7 +219,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 mt-10">
         <div>
             <h3 class="text-xl font-bold text-[#1e293b]">Daftar Talent</h3>
-            <p class="text-xs text-gray-500 mt-0.5 font-medium">Kelola dan lihat perkembangan kompetensi setiap talent
+            <p class="text-sm text-gray-500 mt-0.5 font-medium">Kelola dan lihat perkembangan kompetensi setiap talent
             </p>
         </div>
     </div>
@@ -250,14 +256,14 @@
                             </span>
                             <div class="mt-1.5">
                                 <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                                    class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">{{ optional($talent->department)->nama_department ?? '-' }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="hidden sm:block">
                         @if ($hasAtasanScored)
                             <span
-                                class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-widest">Done</span>
+                                class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-widest">Done</span>
                         @endif
                     </div>
                 </div>
@@ -269,7 +275,7 @@
                             <tr>
                                 <th>Item Kompetensi</th>
                                 <th style="width: 80px;">Target</th>
-                                <th style="width: 100px;">Talent</th>
+                                <th style="width: 100px;">Skor Talent</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -286,7 +292,7 @@
                                         @if ($scoreTalent)
                                             <span class="font-bold text-[#0d9488]">{{ $scoreTalent }}</span>
                                         @else
-                                            <span class="text-gray-300">-</span>
+                                            <span class="text-slate-400 font-medium">-</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -335,11 +341,11 @@
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Beres!</h3>
-                <p class="text-slate-500 text-sm max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh
-                    talent di tim Anda. Kerja bagus!</p>
+                <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Selesai!</h3>
+                <p class="text-slate-500 text-base max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh
+                    talent di tim Anda</p>
                 <a href="{{ route('atasan.riwayat') }}"
-                    class="mt-6 px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-50 transition-all shadow-sm">Buka
+                    class="mt-6 px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold text-base rounded-xl hover:bg-slate-50 transition-all shadow-sm">Buka
                     Halaman Riwayat</a>
             </div>
         @endforelse

@@ -28,31 +28,33 @@
 
             /* ── Table ──────────────────────────────────────────── */
             .table-wrapper {
-                border: 1px solid #d1d5db;
+                border: 1px solid #e2e8f0;
                 border-radius: 12px;
                 overflow: hidden;
-                background: #f9fafb;
+                background: #ffffff;
             }
 
-            .riwayat-table {
+            .highlight-table {
                 width: 100%;
                 border-collapse: collapse;
             }
 
-            .riwayat-table thead tr {
-                background: #f1f5f9;
+            .highlight-table thead tr {
+                background: #f8fafc;
             }
 
-            .riwayat-table th {
-                padding: 14px 16px;
-                text-align: center;
-                font-size: 0.875rem;
+            .highlight-table th {
+                padding: 12px 16px;
+                text-align: left;
+                font-size: 0.85rem;
                 font-weight: 700;
-                color: #1e293b;
-                border-bottom: 1px solid #d1d5db;
-                border-right: 1px solid #d1d5db;
+                color: #475569;
+                border-bottom: 1px solid #e2e8f0;
                 white-space: nowrap;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
             }
+
 
             .riwayat-table th:last-child {
                 border-right: none;
@@ -69,14 +71,14 @@
 
             .riwayat-table tbody tr:hover {
                 background: #f8fafc;
+
             }
 
-            .riwayat-table td {
+            .highlight-table td {
                 padding: 16px;
-                font-size: 0.875rem;
-                color: #475569;
-                text-align: center;
-                border-right: 1px solid #e2e8f0;
+                font-size: 0.95rem;
+                color: #334155;
+                text-align: left;
                 vertical-align: middle;
             }
 
@@ -84,24 +86,22 @@
                 border-right: none;
             }
 
+
             /* Talent name cell */
             .talent-name {
-                font-weight: 700;
+                font-weight: 600;
                 color: #1e293b;
                 display: block;
                 text-align: left;
             }
 
             .talent-position {
-                font-size: 0.775rem;
+                font-size: 0.85rem;
                 color: #64748b;
                 font-style: italic;
                 display: block;
                 text-align: left;
-            }
-
-            .riwayat-table td:first-child {
-                text-align: left;
+                margin-top: 2px;
             }
 
             /* Lihat Detail button */
@@ -111,7 +111,7 @@
                 background: #f1f5f9;
                 border: 1px solid #d1d5db;
                 border-radius: 7px;
-                font-size: 0.8rem;
+                font-size: 0.9rem;
                 font-weight: 600;
                 color: #475569;
                 text-decoration: none;
@@ -153,6 +153,43 @@
         <div>
             <h1 class="page-header-title">Riwayat Penilaian</h1>
             <p class="page-header-sub">Arsip seluruh penilaian talent yang telah Anda selesaikan</p>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+        {{-- Cari Nama --}}
+        <div class="relative flex-grow group">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                oninput="filterRiwayat()">
+        </div>
+
+        {{-- Filters --}}
+        <div class="flex flex-wrap gap-4">
+            <select id="filter-periode" class="min-w-[160px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" onchange="filterRiwayat()">
+                <option value="">Semua Periode</option>
+                @foreach($periodeOptions as $opt)
+                    <option value="{{ $opt }}">{{ $opt }}</option>
+                @endforeach
+            </select>
+
+            <select id="filter-perusahaan" class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" onchange="filterRiwayat()">
+                <option value="">Semua Perusahaan</option>
+                @foreach($perusahaanOptions as $opt)
+                    <option value="{{ $opt }}">{{ $opt }}</option>
+                @endforeach
+            </select>
+
+            <select id="filter-departemen" class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" onchange="filterRiwayat()">
+                <option value="">Semua Departemen</option>
+                @foreach($departemenOptions as $opt)
+                    <option value="{{ $opt }}">{{ $opt }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 

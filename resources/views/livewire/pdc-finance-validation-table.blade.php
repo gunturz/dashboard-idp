@@ -1,6 +1,6 @@
 <div>
     {{-- Summary Cards --}}
-    <div class="prem-stat-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="prem-stat-grid overflow-x-auto pb-2" style="grid-template-columns:repeat(4, minmax(140px, 1fr))">
         <div class="prem-stat prem-stat-teal">
             <div class="prem-stat-icon si-teal">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
@@ -77,12 +77,12 @@
         <table class="fv-table">
             <thead>
                 <tr>
-                    <th style="width: 16%;">Talent</th>
-                    <th style="width: 22%;">Judul Project Improvement</th>
-                    <th style="width: 7%;">File</th>
-                    <th style="width: 3%;">Validasi Finance</th>
-                    <th style="width: 25%;">Feedback dari Finance</th>
-                    <th style="width: 30%;">Aksi</th>
+                    <th style="width: 16%; min-width: 150px;">Talent</th>
+                    <th style="width: 22%; min-width: 200px;">Judul Project Improvement</th>
+                    <th style="width: 7%; min-width: 80px;">File</th>
+                    <th style="width: 10%; min-width: 130px;">Validasi Finance</th>
+                    <th style="width: 20%; min-width: 200px;">Feedback dari Finance</th>
+                    <th style="width: 25%; min-width: 240px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>

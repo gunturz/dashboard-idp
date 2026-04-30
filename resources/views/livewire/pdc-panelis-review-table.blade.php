@@ -1,7 +1,7 @@
 {{-- Livewire: pdc-panelis-review-table --}}
 <div>
     {{-- ── Summary Cards ── --}}
-    <div class="prem-stat-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="prem-stat-grid overflow-x-auto pb-2" style="grid-template-columns:repeat(3, minmax(150px, 1fr))">
         <div class="prem-stat prem-stat-teal">
             <div class="prem-stat-icon si-teal">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 5.25a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3v.205c.933.085 1.857.197 2.774.334 1.454.218 2.476 1.483 2.476 2.917v3.033c0 1.211-.734 2.352-1.936 2.752A24.726 24.726 0 0 1 12 15.75c-2.73 0-5.36-.442-7.814-1.259-1.202-.4-1.936-1.541-1.936-2.752V8.706c0-1.434 1.022-2.7 2.476-2.917A48.814 48.814 0 0 1 7.5 5.455V5.25Zm3 0v.25c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-.25a1.5 1.5 0 0 0-1.5-1.5h-1.5a1.5 1.5 0 0 0-1.5 1.5Z" clip-rule="evenodd" /><path d="M3 16.02v2.73a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-2.73a26.12 26.12 0 0 1-9 1.73 26.12 26.12 0 0 1-9-1.73Z" /></svg>

@@ -52,15 +52,11 @@
             <div class="page-header-sub">Manajemen struktur departemen di perusahaan ini.</div>
         </div>
         <div class="page-header-actions">
-            <a href="{{ route('pdc_admin.company_management') }}" class="btn-prem btn-dark px-4">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
-                Kembali
-            </a>
         </div>
     </div>
 
     {{-- Toolbar --}}
-    <div class="flex items-center justify-between gap-4 mb-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div class="relative w-full sm:w-80">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -109,6 +105,14 @@
                 <p class="text-center text-gray-400 py-12 italic">Belum ada departemen untuk perusahaan ini.</p>
             @endforelse
         </div>
+    </div>
+
+    {{-- Bottom Actions --}}
+    <div class="flex justify-start mb-10">
+        <a href="{{ route('pdc_admin.company_management') }}" class="btn-prem btn-dark px-4 inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+            Kembali
+        </a>
     </div>
 
     {{-- Modals --}}

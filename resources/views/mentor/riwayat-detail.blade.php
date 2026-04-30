@@ -1,61 +1,68 @@
 <x-mentor.layout title="Detail Logbook" :user="$user" :notifications="$notifications">
-    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-        <div class="bg-white rounded-[20px] shadow-sm border border-gray-100 p-8">
-            <div class="flex items-center gap-4 mb-8 border-b border-gray-100 pb-6">
-                <a href="javascript:history.back()" class="text-gray-400 hover:text-gray-700 bg-gray-50 hover:bg-gray-200 p-2.5 rounded-full transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                </a>
+    <div class="w-full">
+        {{-- ── Page Header ── --}}
+        <div class="page-header animate-title mb-8 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="page-header-icon shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd" />
+                        <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963 5.23 5.23 0 00-3.434-1.279h-1.875a.375.375 0 01-.375-.375V5.25z" />
+                    </svg>
+                </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-[#1e293b]">Detail Logbook - {{ $activity->type->type_name ?? 'Aktivitas' }}</h2>
-                    <p class="text-gray-500 text-sm mt-1">Lihat detail aktivitas logbook yang disubmit oleh talent.</p>
+                    <h1 class="page-header-title">Detail Logbook - {{ $activity->type->type_name ?? 'Aktivitas' }}</h1>
+                    <p class="page-header-sub">Lihat detail aktivitas logbook yang disubmit oleh talent.</p>
                 </div>
             </div>
+        </div>
+
+        <div class="prem-card p-8">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @if($activity->type_idp == 1 || $activity->type_idp == 2)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Mentor</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ $activity->verifier->nama ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ $activity->verifier->nama ?? '-' }}</div>
                 </div>
                 @endif
 
                 @if($activity->type_idp == 3)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Sumber</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ $activity->activity ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ $activity->activity ?? '-' }}</div>
                 </div>
                 @endif
 
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tema</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ $activity->theme ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ $activity->theme ?? '-' }}</div>
                 </div>
 
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tgl. Pengiriman/Update</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->format('d F Y') : '-' }}</div>
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tanggal Pengiriman/Update</span>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->format('d F Y') : '-' }}</div>
                 </div>
 
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
-                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tgl. Pelaksanaan</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ \Carbon\Carbon::parse($activity->activity_date)->format('d F Y') }}</div>
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Tanggal Pelaksanaan</span>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ \Carbon\Carbon::parse($activity->activity_date)->format('d F Y') }}</div>
                 </div>
 
                 @if($activity->type_idp == 1 || $activity->type_idp == 2)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Lokasi</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ $activity->location ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ $activity->location ?? '-' }}</div>
                 </div>
                 @endif
 
                 @if($activity->type_idp == 3)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Platform</span>
-                    <div class="text-[15px] text-gray-800 font-medium">{{ $activity->platform ?? '-' }}</div>
+                    <div class="text-[15px] text-gray-800 font-medium whitespace-pre-wrap">{{ $activity->platform ?? '-' }}</div>
                 </div>
                 @endif
 
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-2">Dokumentasi</span>
                     @php
                         $dPaths = []; $dNames = [];
@@ -83,21 +90,21 @@
                 </div>
 
                 @if($activity->type_idp == 1)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Aktivitas</span>
                     <div class="text-[15px] text-gray-800 font-medium break-words">{{ $activity->activity ?? '-' }}</div>
                 </div>
                 @endif
 
                 @if($activity->type_idp != 3)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Deskripsi</span>
                     <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->description ?? '-' }}</div>
                 </div>
                 @endif
 
                 @if($activity->type_idp == 2)
-                <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-100 md:col-span-2">
+                <div class="p-5 bg-white rounded-xl border border-slate-200 shadow-sm md:col-span-2">
                     <span class="block text-[11px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">Action Plan</span>
                     <div class="text-[15px] text-gray-800 leading-relaxed font-medium break-words">{{ $activity->action_plan ?? '-' }}</div>
                 </div>
@@ -110,11 +117,19 @@
             @endphp
 
             @if($isAuthorizedValidator && ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
-                <div class="mt-10 flex justify-end gap-3 pt-6 border-t border-gray-100">
-                    <button type="button" onclick="openConfirmModal('Rejected')" class="px-6 py-2.5 bg-[#ef4444] text-white font-bold rounded-lg hover:bg-red-600 transition-colors shadow-sm">
+                <div class="mt-10 flex justify-end gap-3 pt-6 border-t border-slate-100">
+                    <button type="button" onclick="openConfirmModal('Rejected')"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-red-400 text-red-500 bg-white font-bold text-sm rounded-lg hover:bg-red-500 hover:text-white transition-all duration-200 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                         Reject
                     </button>
-                    <button type="button" onclick="openConfirmModal('Approved')" class="px-6 py-2.5 bg-[#10b981] text-white font-bold rounded-lg hover:bg-emerald-600 transition-colors shadow-sm">
+                    <button type="button" onclick="openConfirmModal('Approved')"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-emerald-400 text-emerald-600 bg-white font-bold text-sm rounded-lg hover:bg-emerald-500 hover:text-white transition-all duration-200 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
                         Approve
                     </button>
                 </div>

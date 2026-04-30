@@ -81,116 +81,42 @@
                 color: #1e293b;
             }
 
-            .highlight-table {
+
+
+            .log-table-container {
+                background: white;
+                border-radius: 16px;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+
+            .pdc-log-table {
                 width: 100%;
                 border-collapse: collapse;
-                font-size: 0.85rem;
             }
 
-            .highlight-table th {
+            .pdc-log-table th {
+                padding: 16px 24px;
                 background: #f8fafc;
+                font-weight: 800;
                 color: #475569;
-                font-weight: 700;
+                font-size: 0.875rem;
                 text-align: center;
-                padding: 14px 16px;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
                 white-space: nowrap;
-                font-size: 0.78rem;
+                border-bottom: 1px solid #e2e8f0;
             }
 
-            .highlight-table td {
-                padding: 14px 16px;
-                color: #475569;
-                border-top: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
-                text-align: center;
-                vertical-align: middle;
+            .pdc-log-table td {
+                padding: 14px 24px;
+                color: #64748b;
+                font-size: 0.875rem;
+                border-top: 1px solid #f1f5f9;
             }
 
-            .highlight-table th:last-child,
-            .highlight-table td:last-child {
-                border-right: none;
-            }
-
-            .highlight-table tbody tr:hover td {
-                background: #f0fdfa;
-            }
-
-            .status-dot {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                font-size: 0.82rem;
-                font-weight: 600;
-            }
-
-            .status-dot::before {
-                content: '';
-                display: inline-block;
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                flex-shrink: 0;
-            }
-
-            .status-pending::before  { background: #f59e0b; }
-            .status-approved::before { background: #22c55e; }
-            .status-rejected::before { background: #ef4444; }
-            .status-pending  { color: #92400e; }
-            .status-approved { color: #15803d; }
-            .status-rejected { color: #b91c1c; }
-
-            .btn-detail {
-                display: inline-flex;
-                align-items: center;
-                gap: 5px;
-                font-size: 0.78rem;
-                font-weight: 600;
-                color: #475569;
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                padding: 0;
-                text-decoration: none;
-            }
-            .btn-detail:hover { color: #0f172a; }
-
-            .btn-pilih-aksi {
-                background: #eab308;
-                color: white;
-                font-size: 0.75rem;
-                font-weight: 700;
-                padding: 5px 14px;
-                border-radius: 6px;
-                border: none;
-                cursor: pointer;
-                transition: background 0.15s;
-            }
-            .btn-pilih-aksi:hover { background: #ca8a04; }
-
-            .btn-approved {
-                display: inline-flex;
-                align-items: center;
-                font-size: 0.75rem;
-                font-weight: 700;
-                color: #15803d;
-                background: #dcfce7;
-                border: 1px solid #bbf7d0;
-                padding: 4px 12px;
-                border-radius: 6px;
-            }
-
-            .btn-rejected {
-                display: inline-flex;
-                align-items: center;
-                font-size: 0.75rem;
-                font-weight: 700;
-                color: #b91c1c;
-                background: #fee2e2;
-                border: 1px solid #fecaca;
-                padding: 4px 12px;
-                border-radius: 6px;
+            .pdc-log-table tr:hover td {
+                background: #fafafa;
             }
 
             @media (max-width: 767px) {
@@ -201,8 +127,21 @@
         </style>
     </x-slot>
 
-        {{-- Livewire Component --}}
-        <livewire:mentor-validasi-table />
+    {{-- ── Page Header ── --}}
+    <div class="page-header animate-title">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+        <div>
+            <h1 class="page-header-title">Validasi Logbook</h1>
+            <p class="page-header-sub">Tinjau dan validasi aktivitas logbook talent Anda</p>
+        </div>
+    </div>
+
+    {{-- Livewire Component --}}
+    <livewire:mentor-validasi-table />
 
 
     <x-slot name="scripts">

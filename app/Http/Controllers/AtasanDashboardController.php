@@ -38,11 +38,11 @@ class AtasanDashboardController extends Controller
         // Fetch ALL subordinates for summary stats
         $allTalents = $this->applyActiveTalentScope(User::query(), $user->id)
             ->with([
-            'position',
-            'department',
-            'promotion_plan.targetPosition',
-            'assessmentSession.details.competence',
-        ])
+                'position',
+                'department',
+                'promotion_plan.targetPosition',
+                'assessmentSession.details.competence',
+            ])
             ->get();
 
         // Summary stats
@@ -61,8 +61,7 @@ class AtasanDashboardController extends Controller
             $totalAtasanScore = $session->details->sum('score_atasan');
             if ($totalAtasanScore == 0) {
                 $assessmentPending++;
-            }
-            else {
+            } else {
                 $onTrack++;
             }
         }
@@ -91,8 +90,13 @@ class AtasanDashboardController extends Controller
         }
 
         return view('atasan.dashboard', compact(
-            'user', 'talents', 'totalTalents', 'assessmentPending', 'onTrack',
-            'competencies', 'allStandards'
+            'user',
+            'talents',
+            'totalTalents',
+            'assessmentPending',
+            'onTrack',
+            'competencies',
+            'allStandards'
         ));
     }
 
@@ -102,17 +106,17 @@ class AtasanDashboardController extends Controller
 
         $talents = $this->applyActiveTalentScope(User::query(), $user->id)
             ->with([
-            'department',
-            'position',
-            'mentor',
-            'atasan',
-            'company',
-            'promotion_plan.targetPosition',
-            'assessmentSession.details.competence',
-            'idpActivities.type',
-            'idpActivities.verifier',
-            'improvementProjects.verifier',
-        ])
+                'department',
+                'position',
+                'mentor',
+                'atasan',
+                'company',
+                'promotion_plan.targetPosition',
+                'assessmentSession.details.competence',
+                'idpActivities.type',
+                'idpActivities.verifier',
+                'improvementProjects.verifier',
+            ])
             ->get();
 
         $competencies = Competence::all();
@@ -137,9 +141,11 @@ class AtasanDashboardController extends Controller
             ->with(['promotion_plan.targetPosition', 'position'])
             ->findOrFail($talentId);
 
-        $competencies = Competence::with(['questions' => function ($q) {
-            $q->orderBy('level');
-        }])->get();
+        $competencies = Competence::with([
+            'questions' => function ($q) {
+                $q->orderBy('level');
+            }
+        ])->get();
 
         $positionId = optional($talent->promotion_plan)->target_position_id ?? $talent->position_id;
         $targetLevels = $positionId
@@ -191,10 +197,10 @@ class AtasanDashboardController extends Controller
                 DB::table('detail_assessment')
                     ->where('id', $detail->id)
                     ->update([
-                    'score_atasan' => $scoreAtasan,
-                    'gap_score' => $gapScore,
-                    'updated_at' => now(),
-                ]);
+                        'score_atasan' => $scoreAtasan,
+                        'gap_score' => $gapScore,
+                        'updated_at' => now(),
+                    ]);
             }
         }
 
@@ -224,8 +230,8 @@ class AtasanDashboardController extends Controller
     public function riwayat(Request $request)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
-        $search      = $request->input('search');
-        $filterPeriode    = $request->input('periode');
+        $search = $request->input('search');
+        $filterPeriode = $request->input('periode');
         $filterPerusahaan = $request->input('perusahaan');
         $filterDepartemen = $request->input('departemen');
 
@@ -235,18 +241,18 @@ class AtasanDashboardController extends Controller
                     ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
             })
             ->with([
-            'position',
-            'department',
-            'company',
-            'all_promotion_plans' => function ($q) {
-                $q->where('is_active', false)
-                    ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
-                    ->with('targetPosition')
-                    ->orderByDesc('created_at');
-            },
-            'all_assessmentSessions.details.competence',
-            'all_improvementProjects'
-        ]);
+                'position',
+                'department',
+                'company',
+                'all_promotion_plans' => function ($q) {
+                    $q->where('is_active', false)
+                        ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
+                        ->with('targetPosition')
+                        ->orderByDesc('created_at');
+                },
+                'all_assessmentSessions.details.competence',
+                'all_improvementProjects'
+            ]);
 
         if ($search) {
             $talentsQuery->where('nama', 'like', '%' . $search . '%');
@@ -274,7 +280,8 @@ class AtasanDashboardController extends Controller
         // Apply filters in PHP
         if ($filterPeriode) {
             $talents = $talents->filter(function ($t) use ($filterPeriode) {
-                if (!$t->promotion_plan || !$t->promotion_plan->start_date || !$t->promotion_plan->target_date) return false;
+                if (!$t->promotion_plan || !$t->promotion_plan->start_date || !$t->promotion_plan->target_date)
+                    return false;
                 $key = $t->promotion_plan->start_date->format('Y') . '/' . $t->promotion_plan->target_date->format('Y');
                 return $key === $filterPeriode;
             })->values();
@@ -287,9 +294,16 @@ class AtasanDashboardController extends Controller
         }
 
         return view('atasan.riwayat', compact(
-            'user', 'talents', 'competencies', 'search',
-            'filterPeriode', 'filterPerusahaan', 'filterDepartemen',
-            'periodeOptions', 'perusahaanOptions', 'departemenOptions'
+            'user',
+            'talents',
+            'competencies',
+            'search',
+            'filterPeriode',
+            'filterPerusahaan',
+            'filterDepartemen',
+            'periodeOptions',
+            'perusahaanOptions',
+            'departemenOptions'
         ));
     }
 
@@ -298,20 +312,20 @@ class AtasanDashboardController extends Controller
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
         $talent = User::where('atasan_id', $user->id)
             ->with([
-            'position',
-            'department',
-            'company',
-            'mentor',
-            'atasan',
-            'promotion_plan.targetPosition',
-            'assessmentSession.details.competence',
-            'idpActivities.type',
-            'improvementProjects',
-            'all_promotion_plans.targetPosition',
-            'all_assessmentSessions.details.competence',
-            'all_idpActivities.type',
-            'all_improvementProjects'
-        ])
+                'position',
+                'department',
+                'company',
+                'mentor',
+                'atasan',
+                'promotion_plan.targetPosition',
+                'assessmentSession.details.competence',
+                'idpActivities.type',
+                'improvementProjects',
+                'all_promotion_plans.targetPosition',
+                'all_assessmentSessions.details.competence',
+                'all_idpActivities.type',
+                'all_improvementProjects'
+            ])
             ->findOrFail($talentId);
 
         if (!$talent->promotion_plan && $talent->all_promotion_plans->isNotEmpty()) {
@@ -339,16 +353,62 @@ class AtasanDashboardController extends Controller
         return view('atasan.monitoring_detail_talent', compact('user', 'talent', 'competencies', 'standards'));
     }
 
+    public function riwayatDetail($talentId)
+    {
+        $user = Auth::user()->load(['company', 'department', 'position', 'role']);
+        $talent = User::where('atasan_id', $user->id)
+            ->with([
+                'position',
+                'department',
+                'company',
+                'mentor',
+                'atasan',
+                'promotion_plan.targetPosition',
+                'assessmentSession.details.competence',
+                'idpActivities.type',
+                'improvementProjects',
+                'all_promotion_plans.targetPosition',
+                'all_assessmentSessions.details.competence',
+                'all_idpActivities.type',
+                'all_improvementProjects'
+            ])
+            ->findOrFail($talentId);
+
+        if (!$talent->promotion_plan && $talent->all_promotion_plans->isNotEmpty()) {
+            $talent->promotion_plan = $talent->all_promotion_plans->firstWhere('is_active', false) ?? $talent->all_promotion_plans->first();
+        }
+
+        if (!$talent->assessmentSession && $talent->all_assessmentSessions->isNotEmpty()) {
+            $talent->assessmentSession = $talent->all_assessmentSessions->firstWhere('is_active', false) ?? $talent->all_assessmentSessions->first();
+        }
+
+        if ($talent->idpActivities->isEmpty() && $talent->all_idpActivities->isNotEmpty()) {
+            $talent->idpActivities = $talent->all_idpActivities;
+        }
+
+        if ($talent->improvementProjects->isEmpty() && $talent->all_improvementProjects->isNotEmpty()) {
+            $talent->improvementProjects = $talent->all_improvementProjects;
+        }
+
+        $competencies = Competence::orderBy('id')->get();
+
+        $positionId = optional($talent->promotion_plan)->target_position_id ?? $talent->position_id;
+        $standards = PositionTargetCompetence::where('position_id', $positionId)
+            ->pluck('target_level', 'competence_id');
+
+        return view('atasan.riwayat_detail_talent', compact('user', 'talent', 'competencies', 'standards'));
+    }
+
     public function talentLogbookDetail(Request $request, $talentId)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
         $talent = User::where('atasan_id', $user->id)
             ->with([
-            'idpActivities.type',
-            'idpActivities.verifier',
-            'all_idpActivities.type',
-            'all_idpActivities.verifier',
-        ])
+                'idpActivities.type',
+                'idpActivities.verifier',
+                'all_idpActivities.type',
+                'all_idpActivities.verifier',
+            ])
             ->findOrFail($talentId);
 
         $activities = $talent->idpActivities->isNotEmpty()
@@ -359,34 +419,34 @@ class AtasanDashboardController extends Controller
         // Process data for tabs (similar to talent dashboard)
         $exposureData = $activities->where('type_idp', 1)->map(function ($act) {
             return [
-            'id' => $act->id,
-            'mentor' => $act->verifier->nama ?? '-',
-            'tema' => $act->theme,
-            'tanggal_update' => $act->updated_at,
-            'tanggal' => $act->activity_date,
-            'status' => $act->status,
+                'id' => $act->id,
+                'mentor' => $act->verifier->nama ?? '-',
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
             ];
         });
 
         $mentoringData = $activities->where('type_idp', 2)->map(function ($act) {
             return [
-            'id' => $act->id,
-            'mentor' => $act->verifier->nama ?? '-',
-            'tema' => $act->theme,
-            'tanggal_update' => $act->updated_at,
-            'tanggal' => $act->activity_date,
-            'status' => $act->status,
+                'id' => $act->id,
+                'mentor' => $act->verifier->nama ?? '-',
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
             ];
         });
 
         $learningData = $activities->where('type_idp', 3)->map(function ($act) {
             return [
-            'id' => $act->id,
-            'sumber' => $act->activity,
-            'tema' => $act->theme,
-            'tanggal_update' => $act->updated_at,
-            'tanggal' => $act->activity_date,
-            'status' => $act->status,
+                'id' => $act->id,
+                'sumber' => $act->activity,
+                'tema' => $act->theme,
+                'tanggal_update' => $act->updated_at,
+                'tanggal' => $act->activity_date,
+                'status' => $act->status,
             ];
         });
 

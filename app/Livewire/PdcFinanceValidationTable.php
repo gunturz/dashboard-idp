@@ -29,16 +29,14 @@ class PdcFinanceValidationTable extends Component
         if ($this->statusFilter) {
             if ($this->statusFilter === 'approved') {
                 $query->where('finance_feedback', 'like', '[Approved]%');
-            }
-            elseif ($this->statusFilter === 'rejected') {
+            } elseif ($this->statusFilter === 'rejected') {
                 $query->where('finance_feedback', 'like', '[Rejected]%');
-            }
-            elseif ($this->statusFilter === 'pending') {
+            } elseif ($this->statusFilter === 'pending') {
                 $query->whereNull('finance_feedback')
                     ->orWhere(function ($q) {
-                    $q->where('finance_feedback', 'not like', '[Approved]%')
-                        ->where('finance_feedback', 'not like', '[Rejected]%');
-                });
+                        $q->where('finance_feedback', 'not like', '[Approved]%')
+                            ->where('finance_feedback', 'not like', '[Rejected]%');
+                    });
             }
         }
 
@@ -50,7 +48,7 @@ class PdcFinanceValidationTable extends Component
         }
 
         // Apply sorting manually as original code
-        $projects = $query->orderByRaw("FIELD(status, 'Pending', 'On Progress', 'Verified', 'Rejected')")
+        $projects = $query->orderByRaw("FIELD(status, 'Pending', 'Approved', 'Rejected')")
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -62,8 +60,8 @@ class PdcFinanceValidationTable extends Component
         // Here the dashboard wants overall values or filtered values? 
         // Original behavior: The counts are taken from DB before JS filter.
         $total = $allProjects->count();
-        $pending = $allProjects->whereIn('status', ['Pending', 'On Progress'])->count();
-        $approved = $allProjects->where('status', 'Verified')->count();
+        $pending = $allProjects->where('status', 'Pending')->count();
+        $approved = $allProjects->where('status', 'Approved')->count();
         $rejected = $allProjects->where('status', 'Rejected')->count();
 
         // Get Finance Users

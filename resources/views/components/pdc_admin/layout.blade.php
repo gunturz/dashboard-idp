@@ -1026,8 +1026,8 @@
             </a>
 
             {{-- Progress Archive --}}
-            <a href="{{ route('pdc_admin.export') }}"
-                class="sidebar-item {{ request()->routeIs('pdc_admin.export') ? 'active' : '' }}"
+            <a href="{{ route('pdc_admin.progress_archive') }}"
+                class="sidebar-item {{ request()->routeIs('pdc_admin.progress_archive*') ? 'active' : '' }}"
                 title="Progress Archive">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none"
                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

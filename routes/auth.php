@@ -13,46 +13,46 @@ use App\Http\Controllers\KandidatDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class , 'create'])
+    Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class , 'store']);
+    Route::post('register', [RegisteredUserController::class, 'store']);
 
     // Step 2 registrasi kandidat: halaman kompetensi
-    Route::get('register/kompetensi', [RegisteredUserController::class , 'stepKompetensi'])
+    Route::get('register/kompetensi', [RegisteredUserController::class, 'stepKompetensi'])
         ->name('register.kompetensi');
 
-    Route::post('register/kompetensi', [RegisteredUserController::class , 'storeKompetensi'])
+    Route::post('register/kompetensi', [RegisteredUserController::class, 'storeKompetensi'])
         ->name('register.kompetensi.store');
 
-    Route::get('login', [AuthenticatedSessionController::class , 'create'])
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class , 'store']);
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    Route::get('auth/google', [AuthenticatedSessionController::class , 'redirectToGoogle'])
+    Route::get('auth/google', [AuthenticatedSessionController::class, 'redirectToGoogle'])
         ->name('auth.google.redirect');
 
-    Route::get('auth/google/callback', [AuthenticatedSessionController::class , 'handleGoogleCallback'])
+    Route::get('auth/google/callback', [AuthenticatedSessionController::class, 'handleGoogleCallback'])
         ->name('auth.google.callback');
 
 
 
-    Route::get('forgot-password', [PasswordResetLinkController::class , 'create'])
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class , 'store'])
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
         ->name('password.email');
 
-    Route::get('reset-password/{token}', [NewPasswordController::class , 'create'])
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
         ->name('password.reset');
 
-    Route::post('reset-password', [NewPasswordController::class , 'store'])
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
 });
 
 // API: fetch departments filtered by company — accessible to both guest and logged-in users
-Route::get('register/departments', [\App\Http\Controllers\Auth\RegisteredUserController::class , 'getDepartmentsByCompany'])
+Route::get('register/departments', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'getDepartmentsByCompany'])
     ->name('register.departments_by_company');
 
 Route::middleware('auth')->group(function () {
@@ -64,18 +64,18 @@ Route::middleware('auth')->group(function () {
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class , 'store'])
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
 
-    Route::get('confirm-password', [ConfirmablePasswordController::class , 'show'])
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
         ->name('password.confirm');
 
-    Route::post('confirm-password', [ConfirmablePasswordController::class , 'store']);
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
-    Route::put('password', [PasswordController::class , 'update'])->name('password.update');
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class , 'destroy'])
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
 
@@ -83,200 +83,208 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class , 'index'])
+    Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class, 'index'])
         ->name('talent.dashboard');
-    Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class , 'riwayat'])
+    Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class, 'riwayat'])
         ->name('talent.riwayat');
-    Route::get('/talent/riwayat/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'riwayatDetail'])
+    Route::get('/talent/riwayat/{id}', [\App\Http\Controllers\TalentDashboardController::class, 'riwayatDetail'])
         ->name('talent.riwayat.detail');
-    Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'competency'])
+    Route::get('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class, 'competency'])
         ->name('talent.competency');
-    Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class , 'storeCompetency'])
+    Route::post('/talent/competency', [\App\Http\Controllers\TalentDashboardController::class, 'storeCompetency'])
         ->name('talent.competency.store');
-    Route::get('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class , 'idpMonitoring'])
+    Route::get('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class, 'idpMonitoring'])
         ->name('talent.idp_monitoring');
-    Route::post('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class , 'storeIdpMonitoring'])
+    Route::post('/talent/idp-monitoring/{tab?}', [\App\Http\Controllers\TalentDashboardController::class, 'storeIdpMonitoring'])
         ->name('talent.idp_monitoring.store');
-    Route::get('/talent/idp-monitoring/edit/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'editIdpMonitoring'])
+    Route::get('/talent/idp-monitoring/edit/{id}', [\App\Http\Controllers\TalentDashboardController::class, 'editIdpMonitoring'])
         ->name('talent.idp_monitoring.edit');
-    Route::put('/talent/idp-monitoring/update/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'updateIdpMonitoring'])
+    Route::put('/talent/idp-monitoring/update/{id}', [\App\Http\Controllers\TalentDashboardController::class, 'updateIdpMonitoring'])
         ->name('talent.idp_monitoring.update');
-    Route::delete('/talent/idp-monitoring/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'destroyIdpMonitoring'])
+    Route::delete('/talent/idp-monitoring/{id}', [\App\Http\Controllers\TalentDashboardController::class, 'destroyIdpMonitoring'])
         ->name('talent.idp_monitoring.destroy');
-    Route::get('/talent/notifikasi', [\App\Http\Controllers\TalentDashboardController::class , 'notifikasi'])
+    Route::get('/talent/notifikasi', [\App\Http\Controllers\TalentDashboardController::class, 'notifikasi'])
         ->name('talent.notifikasi');
-    Route::post('/talent/notifikasi/mark-all-read', [\App\Http\Controllers\TalentDashboardController::class , 'markAllNotificationsRead'])
+    Route::post('/talent/notifikasi/mark-all-read', [\App\Http\Controllers\TalentDashboardController::class, 'markAllNotificationsRead'])
         ->name('talent.notifikasi.markAllRead');
-    Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class , 'logbookDetail'])
+    Route::get('/talent/logbook', [\App\Http\Controllers\TalentDashboardController::class, 'logbookDetail'])
         ->name('talent.logbook');
-    Route::get('/talent/logbook-detail/{id}', [\App\Http\Controllers\TalentDashboardController::class , 'logbookItemDetail'])
+    Route::get('/talent/logbook-detail/{id}', [\App\Http\Controllers\TalentDashboardController::class, 'logbookItemDetail'])
         ->name('talent.logbook.detail');
-    Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class , 'storeProject'])
+    Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class, 'storeProject'])
         ->name('talent.project.store');
-    Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class , 'riwayat'])
+    Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class, 'riwayat'])
         ->name('talent.riwayat');
 
     // PDC Admin Routes
-    Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class , 'dashboard'])
+    Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class, 'dashboard'])
         ->name('pdc_admin.dashboard');
-    Route::get('/pdc-admin/progress-talent', [\App\Http\Controllers\PDCAdminController::class , 'progressTalent'])
+    Route::get('/pdc-admin/progress-talent', [\App\Http\Controllers\PDCAdminController::class, 'progressTalent'])
         ->name('pdc_admin.progress_talent');
-    Route::get('/pdc-admin/notifikasi', [\App\Http\Controllers\PDCAdminController::class , 'notifikasi'])
+    Route::get('/pdc-admin/notifikasi', [\App\Http\Controllers\PDCAdminController::class, 'notifikasi'])
         ->name('pdc_admin.notifikasi');
-    Route::post('/pdc-admin/notifikasi/mark-all-read', [\App\Http\Controllers\PDCAdminController::class , 'markAllNotificationsRead'])
+    Route::post('/pdc-admin/notifikasi/mark-all-read', [\App\Http\Controllers\PDCAdminController::class, 'markAllNotificationsRead'])
         ->name('pdc_admin.notifikasi.markAllRead');
-    Route::get('/pdc-admin/progress-talent/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'detail'])
+    Route::get('/pdc-admin/progress-talent/detail/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class, 'detail'])
         ->name('pdc_admin.detail');
-    Route::get('/pdc-admin/talent/{talent_id}/logbook', [\App\Http\Controllers\PDCAdminController::class , 'talentLogbook'])
+    Route::get('/pdc-admin/talent/{talent_id}/logbook', [\App\Http\Controllers\PDCAdminController::class, 'talentLogbook'])
         ->name('pdc_admin.talent.logbook');
-    Route::get('/pdc-admin/talents-by-company', [\App\Http\Controllers\PDCAdminController::class , 'getTalentsByCompany'])
+    Route::get('/pdc-admin/talents-by-company', [\App\Http\Controllers\PDCAdminController::class, 'getTalentsByCompany'])
         ->name('pdc_admin.talents_by_company');
-    Route::post('/pdc-admin/top-gaps/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateTopGaps'])
+    Route::post('/pdc-admin/top-gaps/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'updateTopGaps'])
         ->name('pdc_admin.top_gaps.update');
-    Route::post('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'storeDevelopmentPlan'])
+    Route::post('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class, 'storeDevelopmentPlan'])
         ->name('pdc_admin.development_plan.store');
-    Route::get('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class , 'developmentPlan'])
+    Route::get('/pdc-admin/development-plan', [\App\Http\Controllers\PDCAdminController::class, 'developmentPlan'])
         ->name('pdc_admin.development_plan');
-    Route::get('/pdc-admin/development-plan/{company_id}/{position_id}/edit', [\App\Http\Controllers\PDCAdminController::class , 'editDevelopmentPlan'])
+    Route::get('/pdc-admin/development-plan/{company_id}/{position_id}/edit', [\App\Http\Controllers\PDCAdminController::class, 'editDevelopmentPlan'])
         ->name('pdc_admin.development_plan.edit');
-    Route::put('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateDevelopmentPlan'])
+    Route::put('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class, 'updateDevelopmentPlan'])
         ->name('pdc_admin.development_plan.update');
-    Route::delete('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyDevelopmentPlan'])
+    Route::delete('/pdc-admin/development-plan/{company_id}/{position_id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyDevelopmentPlan'])
         ->name('pdc_admin.development_plan.destroy');
-    Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'detailTalent'])
+    Route::get('/pdc-admin/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'detailTalent'])
         ->name('pdc_admin.detail.talent');
-    Route::get('/pdc-admin/logbook-detail/{id}', [\App\Http\Controllers\PDCAdminController::class , 'logbookDetail'])
+    Route::get('/pdc-admin/logbook-detail/{id}', [\App\Http\Controllers\PDCAdminController::class, 'logbookDetail'])
         ->name('pdc_admin.logbook.detail');
-    Route::get('/pdc-admin/finance-validation', [\App\Http\Controllers\PDCAdminController::class , 'financeValidation'])
+    Route::get('/pdc-admin/finance-validation', [\App\Http\Controllers\PDCAdminController::class, 'financeValidation'])
         ->name('pdc_admin.finance_validation');
-    Route::patch('/pdc-admin/finance-validation/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateFinanceValidation'])
+    Route::patch('/pdc-admin/finance-validation/{id}', [\App\Http\Controllers\PDCAdminController::class, 'updateFinanceValidation'])
         ->name('pdc_admin.finance_validation.update');
-    Route::get('/pdc-admin/kompetensi', [\App\Http\Controllers\PDCAdminController::class , 'kompetensi'])
+    Route::get('/pdc-admin/kompetensi', [\App\Http\Controllers\PDCAdminController::class, 'kompetensi'])
         ->name('pdc_admin.kompetensi');
-    Route::post('/pdc-admin/kompetensi/questions', [\App\Http\Controllers\PDCAdminController::class , 'updateQuestions'])
+    Route::post('/pdc-admin/kompetensi/questions', [\App\Http\Controllers\PDCAdminController::class, 'updateQuestions'])
         ->name('pdc_admin.competency.update_questions');
-    Route::post('/pdc-admin/kompetensi/target-scores/{position_id}', [\App\Http\Controllers\PDCAdminController::class , 'updateTargetScores'])
+    Route::post('/pdc-admin/kompetensi/target-scores/{position_id}', [\App\Http\Controllers\PDCAdminController::class, 'updateTargetScores'])
         ->name('pdc_admin.target_score.update');
-    Route::get('/pdc-admin/user-management', [\App\Http\Controllers\PDCAdminController::class , 'user_management'])
+    Route::get('/pdc-admin/user-management', [\App\Http\Controllers\PDCAdminController::class, 'user_management'])
         ->name('pdc_admin.user_management');
-    Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class , 'assignRole'])
+    Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class, 'assignRole'])
         ->name('pdc_admin.assign_role');
-    Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class , 'resetPassword'])
+    Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class, 'resetPassword'])
         ->name('pdc_admin.reset_password');
-    Route::delete('/pdc-admin/user/{id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyUser'])
+    Route::delete('/pdc-admin/user/{id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyUser'])
         ->name('pdc_admin.user.destroy');
     // Company Management
-    Route::get('/pdc-admin/company-management', [\App\Http\Controllers\PDCAdminController::class , 'companyManagement'])
+    Route::get('/pdc-admin/company-management', [\App\Http\Controllers\PDCAdminController::class, 'companyManagement'])
         ->name('pdc_admin.company_management');
-    Route::post('/pdc-admin/company', [\App\Http\Controllers\PDCAdminController::class , 'storeCompany'])
+    Route::post('/pdc-admin/company', [\App\Http\Controllers\PDCAdminController::class, 'storeCompany'])
         ->name('pdc_admin.company.store');
-    Route::put('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateCompany'])
+    Route::put('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class, 'updateCompany'])
         ->name('pdc_admin.company.update');
-    Route::delete('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyCompany'])
+    Route::delete('/pdc-admin/company/{id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyCompany'])
         ->name('pdc_admin.company.destroy');
-    Route::get('/pdc-admin/company/{id}/departments', [\App\Http\Controllers\PDCAdminController::class , 'departmentManagement'])
+    Route::get('/pdc-admin/company/{id}/departments', [\App\Http\Controllers\PDCAdminController::class, 'departmentManagement'])
         ->name('pdc_admin.company.departments');
-    Route::post('/pdc-admin/department', [\App\Http\Controllers\PDCAdminController::class , 'storeDepartment'])
+    Route::post('/pdc-admin/department', [\App\Http\Controllers\PDCAdminController::class, 'storeDepartment'])
         ->name('pdc_admin.department.store');
-    Route::put('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class , 'updateDepartment'])
+    Route::put('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class, 'updateDepartment'])
         ->name('pdc_admin.department.update');
-    Route::delete('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class , 'destroyDepartment'])
+    Route::delete('/pdc-admin/department/{id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyDepartment'])
         ->name('pdc_admin.department.destroy');
-    Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class , 'requestFinanceValidation'])
+    Route::post('/pdc-admin/finance-validation/request', [\App\Http\Controllers\PDCAdminController::class, 'requestFinanceValidation'])
         ->name('pdc_admin.finance.request');
-    Route::get('/pdc-admin/export', [\App\Http\Controllers\PDCAdminController::class , 'export'])
-        ->name('pdc_admin.export');
-    Route::get('/pdc-admin/export/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'exportDetail'])
-        ->name('pdc_admin.export.detail');
+    Route::get('/pdc-admin/progress-archive', [\App\Http\Controllers\PDCAdminController::class, 'export'])
+        ->name('pdc_admin.progress_archive');
+    Route::get('/pdc-admin/progress-archive/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'exportDetail'])
+        ->name('pdc_admin.progress_archive.detail');
 
-    Route::get('/pdc-admin/panelis-review', [\App\Http\Controllers\PDCAdminController::class , 'panelisReview'])
+    Route::get('/pdc-admin/panelis-review', [\App\Http\Controllers\PDCAdminController::class, 'panelisReview'])
         ->name('pdc_admin.panelis_review');
-    Route::post('/pdc-admin/panelis-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'sendPanelisReview'])
+    Route::post('/pdc-admin/panelis-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'sendPanelisReview'])
         ->name('pdc_admin.panelis_review.send');
-    Route::get('/pdc-admin/panelis-review/{talent_id}', [\App\Http\Controllers\PDCAdminController::class , 'panelisReviewDetail'])
+    Route::get('/pdc-admin/panelis-review/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'panelisReviewDetail'])
         ->name('pdc_admin.panelis_review.detail');
-    Route::post('/pdc-admin/panelis-review/{talent_id}/complete', [\App\Http\Controllers\PDCAdminController::class , 'panelisReviewComplete'])
+    Route::post('/pdc-admin/panelis-review/{talent_id}/complete', [\App\Http\Controllers\PDCAdminController::class, 'panelisReviewComplete'])
         ->name('pdc_admin.panelis_review.complete');
-    Route::post('/pdc-admin/panelis-review/{talent_id}/toggle-lock', [\App\Http\Controllers\PDCAdminController::class , 'toggleLock'])
+    Route::post('/pdc-admin/panelis-review/{talent_id}/toggle-lock', [\App\Http\Controllers\PDCAdminController::class, 'toggleLock'])
         ->name('pdc_admin.panelis_review.toggle_lock');
-    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class , 'exportPdf'])
+    Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
         ->name('pdc_admin.export_pdf');
 
+
+
+
+
     // Atasan Routes
-    Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class , 'dashboard'])
+    Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class, 'dashboard'])
         ->name('atasan.dashboard');
-    Route::get('/atasan/notifikasi', [\App\Http\Controllers\AtasanDashboardController::class , 'notifikasi'])
+    Route::get('/atasan/notifikasi', [\App\Http\Controllers\AtasanDashboardController::class, 'notifikasi'])
         ->name('atasan.notifikasi');
-    Route::post('/atasan/notifikasi/mark-all-read', [\App\Http\Controllers\AtasanDashboardController::class , 'markAllNotificationsRead'])
+    Route::post('/atasan/notifikasi/mark-all-read', [\App\Http\Controllers\AtasanDashboardController::class, 'markAllNotificationsRead'])
         ->name('atasan.notifikasi.markAllRead');
-    Route::get('/atasan/monitoring', [\App\Http\Controllers\AtasanDashboardController::class , 'monitoring'])
+    Route::get('/atasan/monitoring', [\App\Http\Controllers\AtasanDashboardController::class, 'monitoring'])
         ->name('atasan.monitoring');
-    Route::get('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'assessmentPage'])
+    Route::get('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class, 'assessmentPage'])
         ->name('atasan.competency_atasan.page');
-    Route::post('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'storeAssessment'])
+    Route::post('/atasan/competency_atasan/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class, 'storeAssessment'])
         ->name('atasan.competency_atasan.store');
-    Route::get('/atasan/logbook-item/{id}', [\App\Http\Controllers\AtasanDashboardController::class , 'logbookItemDetail'])
+    Route::get('/atasan/logbook-item/{id}', [\App\Http\Controllers\AtasanDashboardController::class, 'logbookItemDetail'])
         ->name('atasan.logbook.detail');
-    Route::get('/atasan/riwayat', [\App\Http\Controllers\AtasanDashboardController::class , 'riwayat'])
+    Route::get('/atasan/riwayat', [\App\Http\Controllers\AtasanDashboardController::class, 'riwayat'])
         ->name('atasan.riwayat');
-    Route::get('/atasan/monitoring/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class , 'monitoringDetail'])
+    Route::get('/atasan/riwayat/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class, 'riwayatDetail'])
+        ->name('atasan.riwayat.detail');
+    Route::get('/atasan/riwayat/{talentId}/logbook', [\App\Http\Controllers\AtasanDashboardController::class, 'talentLogbookDetail'])
+        ->name('atasan.riwayat.logbook');
+    Route::get('/atasan/monitoring/{talentId}', [\App\Http\Controllers\AtasanDashboardController::class, 'monitoringDetail'])
         ->name('atasan.monitoring.detail');
-    Route::get('/atasan/monitoring/{talentId}/logbook', [\App\Http\Controllers\AtasanDashboardController::class , 'talentLogbookDetail'])
+    Route::get('/atasan/monitoring/{talentId}/logbook', [\App\Http\Controllers\AtasanDashboardController::class, 'talentLogbookDetail'])
         ->name('atasan.monitoring.logbook');
 
     // Mentor Routes
-    Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class , 'dashboard'])
+    Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class, 'dashboard'])
         ->name('mentor.dashboard');
-    Route::get('/mentor/notifikasi', [\App\Http\Controllers\MentorDashboardController::class , 'notifikasi'])
+    Route::get('/mentor/notifikasi', [\App\Http\Controllers\MentorDashboardController::class, 'notifikasi'])
         ->name('mentor.notifikasi');
-    Route::post('/mentor/notifikasi/mark-all-read', [\App\Http\Controllers\MentorDashboardController::class , 'markAllNotificationsRead'])
+    Route::post('/mentor/notifikasi/mark-all-read', [\App\Http\Controllers\MentorDashboardController::class, 'markAllNotificationsRead'])
         ->name('mentor.notifikasi.markAllRead');
-    Route::get('/mentor/validasi', [\App\Http\Controllers\MentorDashboardController::class , 'logbook'])
+    Route::get('/mentor/validasi', [\App\Http\Controllers\MentorDashboardController::class, 'logbook'])
         ->name('mentor.validasi');
-    Route::post('/mentor/validasi/{id}/status', [\App\Http\Controllers\MentorDashboardController::class , 'updateLogbookStatus'])
+    Route::post('/mentor/validasi/{id}/status', [\App\Http\Controllers\MentorDashboardController::class, 'updateLogbookStatus'])
         ->name('mentor.validasi.update_status');
-    Route::get('/mentor/riwayat-detail/{id}', [\App\Http\Controllers\MentorDashboardController::class , 'logbookItemDetail'])
+    Route::get('/mentor/riwayat-detail/{id}', [\App\Http\Controllers\MentorDashboardController::class, 'logbookItemDetail'])
         ->name('mentor.riwayat.detail');
-    Route::get('/mentor/riwayat', [\App\Http\Controllers\MentorDashboardController::class , 'riwayat'])
+    Route::get('/mentor/riwayat', [\App\Http\Controllers\MentorDashboardController::class, 'riwayat'])
         ->name('mentor.riwayat');
-    Route::get('/mentor/riwayat/talent/{talentId}/logbook', [\App\Http\Controllers\MentorDashboardController::class , 'riwayatLogbook'])
+    Route::get('/mentor/riwayat/talent/{talentId}/logbook', [\App\Http\Controllers\MentorDashboardController::class, 'riwayatLogbook'])
         ->name('mentor.riwayat.logbook');
 
     // Finance Routes
-    Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class , 'dashboard'])
+    Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class, 'dashboard'])
         ->name('finance.dashboard');
-    Route::get('/finance/riwayat', [\App\Http\Controllers\FinanceDashboardController::class , 'riwayat'])
+    Route::get('/finance/riwayat', [\App\Http\Controllers\FinanceDashboardController::class, 'riwayat'])
         ->name('finance.riwayat');
-    Route::get('/finance/permintaan-validasi', [\App\Http\Controllers\FinanceDashboardController::class , 'permintaanValidasi'])
+    Route::get('/finance/permintaan-validasi', [\App\Http\Controllers\FinanceDashboardController::class, 'permintaanValidasi'])
         ->name('finance.permintaan_validasi');
-    Route::patch('/finance/permintaan-validasi/{id}', [\App\Http\Controllers\FinanceDashboardController::class , 'updateFinanceValidation'])
+    Route::patch('/finance/permintaan-validasi/{id}', [\App\Http\Controllers\FinanceDashboardController::class, 'updateFinanceValidation'])
         ->name('finance.permintaan_validasi.update');
-    Route::get('/finance/notifikasi', [\App\Http\Controllers\FinanceDashboardController::class , 'notifikasi'])
+    Route::get('/finance/notifikasi', [\App\Http\Controllers\FinanceDashboardController::class, 'notifikasi'])
         ->name('finance.notifikasi');
-    Route::post('/finance/notifikasi/mark-all-read', [\App\Http\Controllers\FinanceDashboardController::class , 'markAllNotificationsRead'])
+    Route::post('/finance/notifikasi/mark-all-read', [\App\Http\Controllers\FinanceDashboardController::class, 'markAllNotificationsRead'])
         ->name('finance.notifikasi.markAllRead');
 
     // Panelis Routes
-    Route::get('/panelis/dashboard', [\App\Http\Controllers\PanelisController::class , 'dashboard'])
+    Route::get('/panelis/dashboard', [\App\Http\Controllers\PanelisController::class, 'dashboard'])
         ->name('panelis.dashboard');
-    Route::get('/panelis/review', [\App\Http\Controllers\PanelisController::class , 'review'])
+    Route::get('/panelis/review', [\App\Http\Controllers\PanelisController::class, 'review'])
         ->name('panelis.review');
-    Route::get('/panelis/history', [\App\Http\Controllers\PanelisController::class , 'history'])
+    Route::get('/panelis/history', [\App\Http\Controllers\PanelisController::class, 'history'])
         ->name('panelis.history');
-    Route::get('/panelis/talent/{talent_id}', [\App\Http\Controllers\PanelisController::class , 'detailTalent'])
+    Route::get('/panelis/talent/{talent_id}', [\App\Http\Controllers\PanelisController::class, 'detailTalent'])
         ->name('panelis.detail_talent');
-    Route::get('/panelis/talent/{talent_id}/penilaian', [\App\Http\Controllers\PanelisController::class , 'penilaian'])
+    Route::get('/panelis/talent/{talent_id}/penilaian', [\App\Http\Controllers\PanelisController::class, 'penilaian'])
         ->name('panelis.penilaian');
-    Route::post('/panelis/talent/{talent_id}/penilaian', [\App\Http\Controllers\PanelisController::class , 'simpanPenilaian'])
+    Route::post('/panelis/talent/{talent_id}/penilaian', [\App\Http\Controllers\PanelisController::class, 'simpanPenilaian'])
         ->name('panelis.penilaian.simpan');
-    Route::get('/panelis/talent/{talent_id}/logbook', [\App\Http\Controllers\PanelisController::class , 'logbook'])
+    Route::get('/panelis/talent/{talent_id}/logbook', [\App\Http\Controllers\PanelisController::class, 'logbook'])
         ->name('panelis.logbook');
-    Route::get('/panelis/logbook-detail/{id}', [\App\Http\Controllers\PanelisController::class , 'logbookItemDetail'])
+    Route::get('/panelis/logbook-detail/{id}', [\App\Http\Controllers\PanelisController::class, 'logbookItemDetail'])
         ->name('panelis.logbook.detail');
-    Route::get('/panelis/notifikasi', [\App\Http\Controllers\PanelisController::class , 'notifikasi'])
+    Route::get('/panelis/notifikasi', [\App\Http\Controllers\PanelisController::class, 'notifikasi'])
         ->name('panelis.notifikasi');
-    Route::post('/panelis/notifikasi/mark-all-read', [\App\Http\Controllers\PanelisController::class , 'markAllNotificationsRead'])
+    Route::post('/panelis/notifikasi/mark-all-read', [\App\Http\Controllers\PanelisController::class, 'markAllNotificationsRead'])
         ->name('panelis.notifikasi.markAllRead');
-    Route::get('/panelis/profile', [\App\Http\Controllers\ProfileController::class , 'edit'])
+    Route::get('/panelis/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])
         ->name('panelis.profile');
 });

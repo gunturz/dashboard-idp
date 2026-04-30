@@ -447,37 +447,20 @@
                                         @endif
                                     </td>
                                     <td class="text-center px-4 py-3">
-                                        @if ($project->status === 'Pending')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
-                                                <span
-                                                    class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
-                                                Pending
-                                            </span>
-                                        @elseif($project->status === 'Verified')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
-                                                <span
-                                                    class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
-                                                Verified
-                                            </span>
-                                        @elseif($project->status === 'On Progress')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 text-teal-600 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-teal-500 inline-block"></span>
-                                                On Progress
+                                        @if($project->status === 'Approved')
+                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+                                                Approved
                                             </span>
                                         @elseif($project->status === 'Rejected')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
+                                            <span class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
                                                 <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>
                                                 Rejected
                                             </span>
                                         @else
-                                            <span
-                                                class="inline-flex items-center gap-1.5 text-gray-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-gray-400 inline-block"></span>
-                                                {{ $project->status }}
+                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
+                                                <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
+                                                Pending
                                             </span>
                                         @endif
                                     </td>

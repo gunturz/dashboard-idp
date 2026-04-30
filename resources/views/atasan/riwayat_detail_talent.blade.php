@@ -1,4 +1,4 @@
-<x-atasan.layout title="Monitoring Detail – Individual Development Plan" :user="$user">
+<x-atasan.layout title="Riwayat Detail – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* ── Animations (aligned with talent dashboard) ── */
@@ -471,10 +471,7 @@
         </div>
         <div>
             <div class="flex items-center gap-3">
-                <h1 class="page-header-title">Detail Progres Talent</h1>
-                <span
-                    class="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-600 text-[10px] font-bold uppercase tracking-wider border border-teal-100">Monitoring
-                    Mode</span>
+                <h1 class="page-header-title">Riwayat Progres Talent</h1>
             </div>
             <p class="page-header-sub">Pantau detail capaian kompetensi dan progres IDP individu secara real-time</p>
         </div>
@@ -720,20 +717,21 @@
                                                 </a>
                                             </td>
                                             <td class="project-status-cell">
-                                                @if($proj->status === 'Verified')
-                                                    <span
-                                                        class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Verified
+                                                @if(in_array($proj->status, ['Approved', 'Approve']))
+                                                    <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                                    </span>
+                                                @elseif(in_array($proj->status, ['Rejected', 'Reject']))
+                                                    <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                                     </span>
                                                 @else
-                                                    <span
-                                                        class="inline-flex items-center gap-1 text-orange-600 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                                                        {{ $proj->status ?: 'Pending' }}
+                                                    <span class="inline-flex items-center gap-1 text-orange-600 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Pending
                                                     </span>
                                                 @endif
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                     @empty
                                         <tr>
                                             <td colspan="3" class="py-12 text-center text-gray-400 font-medium italic">Belum
@@ -766,7 +764,7 @@
                                         terintegrasi.</p>
                                 </div>
                             </div>
-                            <a href="{{ route('atasan.monitoring.logbook', $talent->id) }}"
+                            <a href="{{ route('atasan.riwayat.logbook', $talent->id) }}"
                                 class="btn-prem btn-teal px-8 py-3 rounded-xl shadow-md whitespace-nowrap">
                                 Lihat Detail Selengkapnya
                             </a>

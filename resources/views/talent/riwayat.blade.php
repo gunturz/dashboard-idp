@@ -205,8 +205,9 @@
                         @php
                             $startDate = \Carbon\Carbon::parse($session->created_at);
                             $dueDate = \Carbon\Carbon::parse($session->created_at)->addMonths(6);
-                            $posName = optional($user->position)->position_name ?? 'Staff';
-                            $targetPos = optional($user->promotion_plan)->targetPosition?->position_name ?? 'Manager';
+                            // Gunakan posisi yang di-snapshot saat sesi dibuat
+                            $posName   = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
+                            $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';
                         @endphp
                         <tr>
                             <td style="text-align: left;">

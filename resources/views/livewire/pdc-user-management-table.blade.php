@@ -17,7 +17,7 @@
         ];
     @endphp
 
-    <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="prem-stat-grid mb-6 overflow-x-auto pb-2" style="grid-template-columns: repeat(5, minmax(140px, 1fr));">
         @foreach($roleConfig as $key => $cfg)
             <div wire:key="stat-{{ $key }}"
                  wire:click="toggleRole('{{ $key }}')"

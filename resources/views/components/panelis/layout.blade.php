@@ -156,6 +156,45 @@
             background-size: 32px 32px;
             opacity: 0.3;
         }
+        /* Generic Page Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .page-header-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .page-header-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .page-header-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.15;
+        }
+
+        .page-header-sub {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 3px;
+            font-weight: 400;
+        }
     </style>
     {{ $styles ?? '' }}
     @livewireStyles

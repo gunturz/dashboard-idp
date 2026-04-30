@@ -42,8 +42,8 @@
         </style>
     </x-slot>
 
-    <div class="px-6 py-8">
-        <div class="mx-auto w-full" style="max-width: 960px;">
+    <div class="px-6 pb-8">
+        <div class="mx-auto w-full animate-title" style="max-width: 960px;">
             <livewire:mentor-notifikasi-list />
         </div>
     </div>

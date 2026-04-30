@@ -35,7 +35,7 @@
             }
 
             .dash-header-sub {
-                font-size: 0.8rem;
+                font-size: 0.875rem;
                 color: #64748b;
                 margin-top: 2px;
                 font-weight: 400;
@@ -87,7 +87,7 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                font-size: .95rem;
+                font-size: 1rem;
                 font-weight: 700;
                 color: #1e293b;
             }
@@ -103,7 +103,7 @@
             .highlight-table {
                 width: 100%;
                 border-collapse: collapse;
-                font-size: .9rem;
+                font-size: .95rem;
             }
 
             .highlight-table th {
@@ -113,7 +113,7 @@
                 padding: 12px 16px;
                 border-bottom: 1px solid #e2e8f0;
                 white-space: nowrap;
-                font-size: .8rem;
+                font-size: .85rem;
                 text-transform: uppercase;
                 letter-spacing: .05em;
             }
@@ -310,26 +310,38 @@
                             {{-- Pending --}}
                             <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
                                 @if($mentee['status']['pending'] > 0)
-                                    <span class="inline-flex items-center justify-center bg-yellow-50 border border-yellow-300 text-yellow-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                    <span class="inline-flex items-center justify-center bg-amber-50 border border-amber-200 text-amber-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
                                         {{ $mentee['status']['pending'] }}
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center justify-center bg-gray-50 border border-yellow-500 text-yellow-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                    <span class="inline-flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-400 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
                                         0
                                     </span>
                                 @endif
                             </td>
                             {{-- Approved --}}
                             <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
-                                <span class="inline-flex items-center justify-center bg-green-50 border border-green-200 text-green-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
-                                    {{ $mentee['status']['approved'] }}
-                                </span>
+                                @if($mentee['status']['approved'] > 0)
+                                    <span class="inline-flex items-center justify-center bg-green-50 border border-green-200 text-green-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        {{ $mentee['status']['approved'] }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-400 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        0
+                                    </span>
+                                @endif
                             </td>
                             {{-- Rejected --}}
                             <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
-                                <span class="inline-flex items-center justify-center bg-red-50 border border-red-200 text-red-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
-                                    {{ $mentee['status']['rejected'] }}
-                                </span>
+                                @if($mentee['status']['rejected'] > 0)
+                                    <span class="inline-flex items-center justify-center bg-red-50 border border-red-200 text-red-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        {{ $mentee['status']['rejected'] }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-400 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
+                                        0
+                                    </span>
+                                @endif
                             </td>
                             {{-- Progress Donuts --}}
                             <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">

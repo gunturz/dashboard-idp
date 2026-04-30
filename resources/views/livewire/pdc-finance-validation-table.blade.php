@@ -1,6 +1,6 @@
 <div>
     {{-- Summary Cards --}}
-    <div class="prem-stat-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="prem-stat-grid overflow-x-auto pb-2" style="grid-template-columns:repeat(4, minmax(140px, 1fr))">
         <div class="prem-stat prem-stat-teal">
             <div class="prem-stat-icon si-teal">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -97,19 +97,51 @@
             </span>
         </div>
         <div class="overflow-x-auto">
-            <table class="fv-table">
-                <thead>
-                    <tr>
-                        <th style="width: 16%;">Talent</th>
-                        <th style="width: 22%;">Judul Project Improvement</th>
-                        <th style="width: 7%;">File</th>
-                        <th style="width: 3%;">Validasi Finance</th>
-                        <th style="width: 25%;">Feedback dari Finance</th>
-                        <th style="width: 30%;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($projects as $project)
+        <table class="fv-table">
+            <thead>
+                <tr>
+                    <th style="width: 16%; min-width: 150px;">Talent</th>
+                    <th style="width: 22%; min-width: 200px;">Judul Project Improvement</th>
+                    <th style="width: 7%; min-width: 80px;">File</th>
+                    <th style="width: 10%; min-width: 130px;">Validasi Finance</th>
+                    <th style="width: 20%; min-width: 200px;">Feedback dari Finance</th>
+                    <th style="width: 25%; min-width: 240px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($projects as $project)
+                    @php
+                        $finDec = 'Pending';
+                        if ($project->finance_feedback) {
+                            if (str_starts_with($project->finance_feedback, '[Approved]')) $finDec = 'Approved';
+                            elseif (str_starts_with($project->finance_feedback, '[Rejected]')) $finDec = 'Rejected';
+                        }
+                    @endphp
+                    <tr class="finance-row">
+                        <td>
+                            <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
+                            <p class="text-xs text-gray-500 italic mt-1">
+                                {{ $project->talent->position->position_name ?? '-' }}
+                                &rarr;
+                                {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                            </p>
+                        </td>
+                        <td class="text-left">{{ $project->title }}</td>
+                        <td>
+                            @if ($project->document_path)
+                                <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank"
+                                    class="file-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                    </svg>
+                                    Lihat
+                                </a>
+                            @else
+                                <span class="text-gray-400 text-xs">—</span>
+                            @endif
+                        </td>
                         @php
                             $finDec = 'Pending';
                             if ($project->finance_feedback) {

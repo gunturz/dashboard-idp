@@ -10,7 +10,7 @@
             background: #f8fafc;
             font-weight: 800;
             color: #475569;
-            font-size: 0.875rem;
+            font-size: 0.925rem;
             text-align: center;
             white-space: nowrap;
             border-bottom: 1px solid #e2e8f0;
@@ -19,7 +19,7 @@
         .pdc-log-table td {
             padding: 16px 24px;
             color: #64748b;
-            font-size: 0.875rem;
+            font-size: 0.925rem;
             border-top: 1px solid #f1f5f9;
             text-align: center;
             vertical-align: middle;
@@ -41,7 +41,21 @@
     @endif
 
     {{-- Header & Talent Selector Row --}}
-    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-8" style="position: relative; z-index: 40;">
+    <div class="flex flex-col {{ $showAllTalents ? 'gap-3 mb-5' : 'gap-6 mb-8' }}">
+        {{-- Dropdown (Now Above) --}}
+        <div class="relative w-full">
+            <select wire:model.live="selectedTalentId" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] font-medium outline-none focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf] bg-white appearance-none cursor-pointer">
+                <option value="0">Tampilkan Semua Talent</option>
+                @foreach($mentees as $m)
+                    <option value="{{ $m->id }}">{{ $m->nama }}</option>
+                @endforeach
+            </select>
+            <svg class="w-4 h-4 text-[#94a3b8] absolute right-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+
+        {{-- Talent Profile/Title (Now Below) --}}
         <div class="flex-1">
             @if(!$showAllTalents && $selectedTalent)
                 <div class="flex items-center gap-4">
@@ -56,24 +70,7 @@
                         </p>
                     </div>
                 </div>
-            @else
-                <div>
-                    <h3 class="font-bold text-[20px] text-slate-800 leading-tight">Semua Talent</h3>
-                    <p class="text-[13px] text-gray-500 font-medium mt-1">Menampilkan seluruh logbook talent, Talent yang baru divalidasi akan berada di urutan atas.</p>
-                </div>
             @endif
-        </div>
-        
-        <div class="relative w-full sm:w-72 flex-shrink-0">
-            <select wire:model.live="selectedTalentId" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] font-medium outline-none focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf] bg-white appearance-none cursor-pointer">
-                <option value="0">Tampilkan Semua Talent</option>
-                @foreach($mentees as $m)
-                    <option value="{{ $m->id }}">{{ $m->nama }}</option>
-                @endforeach
-            </select>
-            <svg class="w-4 h-4 text-[#94a3b8] absolute right-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
         </div>
     </div>
 
@@ -193,9 +190,9 @@
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('mentor.riwayat.detail', $data['id']) }}"
-                                            class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
+                                            class="inline-flex items-center gap-2 font-black text-[11px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105 uppercase tracking-wider"
                                             title="Detail">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                             </svg>
@@ -281,9 +278,9 @@
                         </td>
                         <td class="text-center">
                             <a href="{{ route('mentor.riwayat.detail', $data['id']) }}"
-                                class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
+                                class="inline-flex items-center gap-2 font-black text-[11px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105 uppercase tracking-wider"
                                 title="Detail">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
@@ -300,11 +297,5 @@
             </table>
         </div>
     @endif
-
-    @else
-    <div class="text-center py-20">
-        <h3 class="text-xl font-bold text-slate-700 mb-2">Belum Ada Logbook</h3>
-        <p class="text-gray-500 text-sm">Belum ada logbook talent yang bisa ditampilkan.</p>
-    </div>
     @endif
 </div>

@@ -265,7 +265,7 @@
     }
 
     .prem-stat-label {
-        font-size: 0.82rem;
+        font-size: 0.875rem;
         color: #64748b;
         font-weight: 500;
     }
@@ -296,14 +296,14 @@
     }
 
     .page-header-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: 800;
         color: #1e293b;
         line-height: 1.15;
     }
 
     .page-header-sub {
-        font-size: 0.8rem;
+        font-size: 0.875rem;
         color: #64748b;
         margin-top: 3px;
         font-weight: 400;

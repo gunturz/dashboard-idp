@@ -102,7 +102,7 @@
                 background: #f8fafc;
                 font-weight: 800;
                 color: #475569;
-                font-size: 0.875rem;
+                font-size: 0.925rem;
                 text-align: center;
                 white-space: nowrap;
                 border-bottom: 1px solid #e2e8f0;
@@ -111,7 +111,7 @@
             .pdc-log-table td {
                 padding: 14px 24px;
                 color: #64748b;
-                font-size: 0.875rem;
+                font-size: 0.925rem;
                 border-top: 1px solid #f1f5f9;
             }
 

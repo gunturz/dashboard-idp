@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Progress Archive – PDC Admin" :user="$user">
+<x-pdc_admin.layout title="Progress Archive â€“ PDC Admin" :user="$user">
 
     <div class="px-2 pb-10">
         {{-- Page Header --}}
@@ -39,11 +39,9 @@
                         $uniquePeriods = collect();
                         foreach ($groupedData as $group) {
                             foreach ($group['talents'] as $t) {
-                                $sd = optional($t->promotion_plan)->start_date;
-                                $td = optional($t->promotion_plan)->target_date;
-                                if ($sd && $td) {
-                                    $label = \Carbon\Carbon::parse($sd)->format('Y') . ' – ' . \Carbon\Carbon::parse($td)->format('Y');
-                                    $uniquePeriods->push($label);
+                                $dueDate = optional($t->promotion_plan)->target_date;
+                                if ($dueDate) {
+                                    $uniquePeriods->push(\Carbon\Carbon::parse($dueDate)->format('Y'));
                                 }
                             }
                         }
@@ -129,13 +127,11 @@
                                 $dueDate = optional($talent->promotion_plan)->target_date
                                     ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y')
                                     : '-';
-                                $currentPos = $talent->position->position_name ?? '-' ;
+                                $currentPos = $talent->position->position_name ?? '-';
                                 $targetPos  = optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
                                 $periodLabel = '';
-                                if (optional($talent->promotion_plan)->start_date && optional($talent->promotion_plan)->target_date) {
-                                    $periodLabel = \Carbon\Carbon::parse($talent->promotion_plan->start_date)->format('Y')
-                                        . ' – '
-                                        . \Carbon\Carbon::parse($talent->promotion_plan->target_date)->format('Y');
+                                if (optional($talent->promotion_plan)->target_date) {
+                                    $periodLabel = \Carbon\Carbon::parse($talent->promotion_plan->target_date)->format('Y');
                                 }
                             @endphp
                             <tr class="archive-row border-b border-slate-300 hover:bg-slate-50 transition-colors"

@@ -149,9 +149,10 @@
                                                 <td rowspan="{{ count($posData['talents']) }}" class="action-cell">
                                                     <div class="flex flex-col gap-1.5 py-1 w-full max-w-[120px] mx-auto">
                                                         <a href="{{ route('pdc_admin.detail', $detailRouteParams) }}"
-                                                            class="btn-prem btn-teal text-xs inline-flex items-center justify-center h-9 w-full" style="margin: 0; padding: 0;">
+                                                            class="btn-prem btn-teal inline-flex items-center justify-center h-9 w-full px-2"
+                                                            style="margin: 0; font-size: 11px; white-space: nowrap;">
                                                             Lihat Detail
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 ml-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/></svg>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 ml-1 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/></svg>
                                                         </a>
                                                         <div class="grid grid-cols-2 gap-1.5 w-full">
                                                             <a href="{{ route('pdc_admin.development_plan.edit', $detailRouteParams) }}"

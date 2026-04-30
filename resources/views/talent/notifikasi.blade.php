@@ -208,8 +208,8 @@
         </style>
     </x-slot>
 
-    <main id="main-content" class="px-6 py-8 min-h-[calc(100vh-80px)]">
-        <div class="mx-auto w-full" style="max-width: 960px;">
+    <main id="main-content" class="px-6 pt-5 pb-8 min-h-[calc(100vh-80px)]">
+        <div class="mx-auto w-full animate-title" style="max-width: 960px;">
             <livewire:talent-notifikasi-list />
         </div>
     </main>

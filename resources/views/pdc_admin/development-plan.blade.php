@@ -310,12 +310,14 @@
                     </div>
                 </div>
 
-                <div class="field-row mb-12">
-                    <span class="field-label">Start Date</span>
-                    <div class="flex-1 flex gap-8 items-center" style="display: flex;">
-                        <input type="date" name="start_date" class="dp-select dp-date" value="{{ $formStartDate }}" required style="width: 100%">
-                        <span class="font-bold text-[#0f172a] text-[0.875rem] whitespace-nowrap">Due Date</span>
-                        <input type="date" name="target_date" class="dp-select dp-date" value="{{ $formTargetDate }}" required style="width: 100%">
+                <div class="grid grid-cols-2 gap-4 mb-12 pt-4">
+                    <div class="w-full">
+                        <span class="field-label block mb-2">Start Date</span>
+                        <input type="date" name="start_date" class="dp-select dp-date w-full" value="{{ $formStartDate }}" required>
+                    </div>
+                    <div class="w-full">
+                        <span class="field-label block mb-2">Due Date</span>
+                        <input type="date" name="target_date" class="dp-select dp-date w-full" value="{{ $formTargetDate }}" required>
                     </div>
                 </div>
 

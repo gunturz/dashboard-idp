@@ -103,18 +103,17 @@
             .highlight-table {
                 width: 100%;
                 border-collapse: collapse;
-                font-size: .82rem;
+                font-size: .9rem;
             }
 
             .highlight-table th {
                 background: #f8fafc;
                 color: #475569;
                 font-weight: 700;
-                text-align: left;
                 padding: 12px 16px;
                 border-bottom: 1px solid #e2e8f0;
                 white-space: nowrap;
-                font-size: .75rem;
+                font-size: .8rem;
                 text-transform: uppercase;
                 letter-spacing: .05em;
             }
@@ -226,30 +225,29 @@
         </div>
     </div>
 
-    {{-- Daftar Talent Card --}}
-    <div class="glass-card mb-10">
-        <div class="card-header">
-            <div class="card-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.896 1.82 11.608 11.608 0 0 0 3.398-1.966.75.75 0 0 0 .225-.634 5.25 5.25 0 0 0-10.5 0c0 .04.001.077.002.115a.75.75 0 0 1-.36.63 11.962 11.962 0 0 1-2.02.946l.044.056a3.75 3.75 0 0 0 10.108-1.111Z" />
-                </svg>
-                Daftar Talent Anda
-            </div>
-
-            {{-- Live Search --}}
-            <div class="relative w-full sm:w-72">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                    stroke="currentColor"
-                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;pointer-events:none;">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input type="text" id="live-search-input" placeholder="Cari Nama Talent…"
-                    class="w-full border border-gray-200 rounded-xl py-2 pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                    oninput="filterMentees()">
-            </div>
+    {{-- Daftar Talent: Header di luar card (sesuai pola Atasan) --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 mt-2">
+        <div>
+            <h3 class="text-xl font-bold text-[#1e293b]">Daftar Talent Anda</h3>
+            <p class="text-sm text-gray-500 mt-0.5 font-medium">Pantau progress logbook dan validasi setiap talent</p>
         </div>
 
+        {{-- Live Search --}}
+        <div class="relative w-full sm:w-72">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor"
+                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#94a3b8;pointer-events:none;">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…"
+                class="w-full border border-gray-200 rounded-xl py-2 pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                oninput="filterMentees()">
+        </div>
+    </div>
+
+    {{-- Daftar Talent Card --}}
+    <div class="glass-card mb-10">
         @if ($totalPending > 0)
             {{-- Banner Approval Validation (Finance style) --}}
             <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between shadow-sm m-6">
@@ -275,33 +273,42 @@
         @if($totalMentee > 0)
             <div class="overflow-x-auto">
                 <table class="highlight-table">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 30%;">
+                        <col style="width: 20%;">
+                    </colgroup>
                     <thead>
-                            <th class="px-5 py-4 text-left text-xs font-bold text-[#475569] uppercase tracking-wider">Talent</th>
-                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Pending</th>
-                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Approved</th>
-                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Rejected</th>
-                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Progress Logbook</th>
-                            <th class="px-5 py-4 text-center text-xs font-bold text-[#475569] uppercase tracking-wider">Aksi</th>
+                        <tr>
+                            <th class="px-5 py-4 font-bold text-[#475569] uppercase tracking-wider" style="text-align:center;">Talent</th>
+                            <th class="px-5 py-4 font-bold text-[#475569] uppercase tracking-wider" style="text-align:center;">Pending</th>
+                            <th class="px-5 py-4 font-bold text-[#475569] uppercase tracking-wider" style="text-align:center;">Approved</th>
+                            <th class="px-5 py-4 font-bold text-[#475569] uppercase tracking-wider" style="text-align:center;">Rejected</th>
+                            <th class="px-5 py-4 font-bold text-[#475569] uppercase tracking-wider" style="text-align:center;">Progress Logbook</th>
+                            <th class="px-5 py-4 font-bold text-[#475569] uppercase tracking-wider" style="text-align:center;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100" id="mentee-tbody">
                         @foreach($menteesList as $mentee)
                         <tr class="mentee-row-item hover:bg-gray-50/60 transition-colors" data-name="{{ strtolower($mentee['name']) }}">
                             {{-- Foto + Nama + Jabatan --}}
-                            <td class="px-5 py-4">
-                                <div class="flex items-center gap-3">
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                <div class="flex items-center justify-center gap-3">
                                     <img src="{{ $mentee['foto'] ? asset('storage/' . $mentee['foto']) : 'https://ui-avatars.com/api/?name=' . urlencode($mentee['name']) . '&background=random' }}"
                                         class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-gray-100 shadow-sm">
-                                    <div>
-                                        <p class="font-bold text-[14px] text-slate-800 leading-tight">{{ $mentee['name'] }}</p>
-                                        <p class="text-[11px] text-gray-500 font-medium mt-0.5">
+                                    <div style="text-align: left;">
+                                        <p class="font-bold text-base text-slate-800 leading-tight">{{ $mentee['name'] }}</p>
+                                        <p class="text-sm text-gray-500 font-medium mt-1">
                                             {{ $mentee['position'] }} <span class="text-gray-400">·</span> <span class="italic">{{ $mentee['department'] }}</span>
                                         </p>
                                     </div>
                                 </div>
                             </td>
                             {{-- Pending --}}
-                            <td class="px-5 py-4 text-center">
+                            <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
                                 @if($mentee['status']['pending'] > 0)
                                     <span class="inline-flex items-center justify-center bg-yellow-50 border border-yellow-300 text-yellow-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
                                         {{ $mentee['status']['pending'] }}
@@ -313,19 +320,19 @@
                                 @endif
                             </td>
                             {{-- Approved --}}
-                            <td class="px-5 py-4 text-center">
+                            <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
                                 <span class="inline-flex items-center justify-center bg-green-50 border border-green-200 text-green-600 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
                                     {{ $mentee['status']['approved'] }}
                                 </span>
                             </td>
                             {{-- Rejected --}}
-                            <td class="px-5 py-4 text-center">
+                            <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
                                 <span class="inline-flex items-center justify-center bg-red-50 border border-red-200 text-red-500 font-bold text-sm px-3 py-1 rounded-full min-w-[36px]">
                                     {{ $mentee['status']['rejected'] }}
                                 </span>
                             </td>
                             {{-- Progress Donuts --}}
-                            <td class="px-5 py-4">
+                            <td class="px-5 py-4" style="text-align:center;vertical-align:middle;">
                                 <div class="flex items-end justify-center gap-5">
                                     @foreach([
                                         ['key' => 'exposure',  'stroke' => '#64748b', 'track' => 'rgba(100,116,139,0.15)', 'label' => 'Exposure'],
@@ -347,29 +354,29 @@
                                                     stroke-dasharray="{{ $pct }}, 100"/>
                                             </svg>
                                             <div class="flex flex-col items-center font-bold text-[#0f172a] leading-tight">
-                                                <span class="text-[13px] tracking-tight">{{ $cnt }}/{{ $tgt }}</span>
-                                                <span class="text-[10px] text-[#475569] italic">{{ $pct }}%</span>
+                                                <span class="text-[15px] tracking-tight">{{ $cnt }}/{{ $tgt }}</span>
+                                                <span class="text-xs text-[#475569] italic">{{ $pct }}%</span>
                                             </div>
                                         </div>
-                                        <span class="border border-[#cbd5e1] text-[#475569] bg-white text-[11px] font-medium px-3 py-1 rounded-full shadow-sm">{{ $prog['label'] }}</span>
+                                        <span class="border border-[#cbd5e1] text-[#475569] bg-white text-xs font-medium px-3 py-1 rounded-full shadow-sm">{{ $prog['label'] }}</span>
                                     </div>
                                     @endforeach
                                 </div>
                             </td>
                             {{-- Aksi --}}
-                            <td class="px-5 py-4 text-center">
+                            <td class="px-5 py-4 align-middle" style="text-align:center;">
                                 @if($mentee['status']['pending'] > 0)
                                     <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id'], 'tab' => ltrim($mentee['pending_tab'] ?: '#exposure', '#')]) }}"
-                                        class="inline-flex items-center gap-1.5 bg-[#0f172a] hover:bg-[#38475a] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        class="inline-flex items-center gap-1.5 bg-[#0f172a] hover:bg-[#38475a] text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
                                         Validasi
                                     </a>
                                 @else
                                     <a href="{{ route('mentor.validasi', ['talent_id' => $mentee['id']]) }}"
-                                        class="inline-flex items-center gap-1.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold px-4 py-2 rounded-lg transition-colors shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        class="inline-flex items-center gap-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-bold px-3 py-2.5 rounded-lg transition-colors shadow-sm whitespace-nowrap">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>

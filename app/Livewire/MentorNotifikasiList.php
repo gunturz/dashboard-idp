@@ -115,7 +115,7 @@ class MentorNotifikasiList extends Component
 
     public function toggleEditMode(): void
     {
-        $this->isEditMode = ! $this->isEditMode;
+        $this->isEditMode = !$this->isEditMode;
         $this->selectedNotifications = [];
     }
 

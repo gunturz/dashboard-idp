@@ -51,16 +51,49 @@ class TalentDashboardContent extends Component
                 'status' => 'Pending',
             ]);
 
-            // Notification omitted here as it requires Controller base methods, 
-            // but we can add directly via Notification model if configured.
-            // For simplicity we just flash success.
+            $this->notifyPdcAdmins(
+                'Project Improvement Baru',
+                'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah mengunggah Project Improvement berjudul <span class="font-semibold">' . e($this->judul_project) . '</span>.',
+                'info'
+            );
+
             $this->reset(['judul_project', 'project_file']);
             session()->flash('success_project', 'Project Improvement berhasil disubmit.');
 
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Livewire submitProject error: ' . $e->getMessage());
             session()->flash('error', 'Terjadi kesalahan saat menyimpan project.');
+        }
+    }
+
+    protected function notifyPdcAdmins($title, $desc, $type = 'info'): void
+    {
+        $adminIds = \App\Models\User::query()
+            ->where(function ($query) {
+                $query->whereHas('roles', fn($q) => $q->whereIn('role_name', ['admin', 'pdc admin', 'pdc_admin']))
+                    ->orWhereHas('role', fn($q) => $q->whereIn('role_name', ['admin', 'pdc admin', 'pdc_admin']));
+            })
+            ->pluck('id')
+            ->unique()
+            ->values()
+            ->all();
+
+        foreach (collect($adminIds)->filter()->unique() as $adminId) {
+            $notification = \App\Models\AppNotification::create([
+                'user_id' => $adminId,
+                'title' => $title,
+                'desc' => $desc,
+                'type' => $type,
+                'is_read' => false,
+            ]);
+
+            broadcast(new \App\Events\UserNotificationCreated(
+                (int) $adminId,
+                (int) $notification->id,
+                (string) $title,
+                (string) $desc,
+                (string) $type
+            ));
         }
     }
 

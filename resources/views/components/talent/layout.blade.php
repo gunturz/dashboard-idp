@@ -622,7 +622,73 @@
                     talentUpdateBadge();
                     talentInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
                     talentShowBellPopup();
+                    talentShowToast(data.title || 'Notifikasi Baru', data.desc || '');
                 });
+
+            function talentShowToast(title, desc) {
+                let container = document.getElementById('talent-rt-toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'talent-rt-toast-container';
+                    container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column-reverse;gap:10px;pointer-events:none;';
+                    document.body.appendChild(container);
+                }
+
+                let toast = document.createElement('div');
+                toast.style.cssText = [
+                    'pointer-events:auto',
+                    'display:flex',
+                    'align-items:flex-start',
+                    'gap:12px',
+                    'background:#fff',
+                    'border:1px solid #e2e8f0',
+                    'border-left:4px solid #10b981',
+                    'border-radius:14px',
+                    'padding:14px 18px',
+                    'box-shadow:0 10px 40px rgba(0,0,0,.13)',
+                    'min-width:300px',
+                    'max-width:360px',
+                    'position:relative',
+                    'overflow:hidden',
+                    'opacity:0',
+                    'transform:translateX(40px) scale(.96)',
+                    'transition:opacity .35s ease,transform .35s ease'
+                ].join(';');
+
+                toast.innerHTML = `
+                    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#d1fae5,#a7f3d0);display:flex;align-items:center;justify-content:center;">
+                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#059669' style='width:20px;height:20px;'>
+                            <path d='M12 2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.06 1.06a.75.75 0 101.06 1.06l1.06-1.06zM5.466 19.084a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06zM19.98 12a.75.75 0 00-.75-.75h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 00.75-.75zM4.77 12a.75.75 0 00-.75-.75h-1.5a.75.75 0 000 1.5h1.5a.75.75 0 00.75-.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.06 1.06l1.06 1.06zM6.166 5.466a.75.75 0 010-1.06l1.06-1.06a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 01-1.06 0zM12 18.75a.75.75 0 00-.75.75v1.5a.75.75 0 001.5 0v-1.5a.75.75 0 00-.75-.75z'/>
+                        </svg>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:.85rem;font-weight:700;color:#1e293b;margin-bottom:3px;">${title}</div>
+                        <div style="font-size:.78rem;color:#64748b;line-height:1.5;">${desc}</div>
+                    </div>
+                    <div style="position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#059669,#34d399);width:100%;transform-origin:left;animation:talentBarShrink 5s linear forwards;border-radius:0 0 0 14px;"></div>
+                `;
+
+                if (!document.getElementById('talent-toast-style')) {
+                    let s = document.createElement('style');
+                    s.id = 'talent-toast-style';
+                    s.textContent = '@keyframes talentBarShrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}';
+                    document.head.appendChild(s);
+                }
+
+                container.appendChild(toast);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        toast.style.opacity = '1';
+                        toast.style.transform = 'translateX(0) scale(1)';
+                    });
+                });
+
+                setTimeout(function () {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(40px) scale(.96)';
+                    setTimeout(() => toast.remove(), 400);
+                }, 5000);
+            }
 
             function talentUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');

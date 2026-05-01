@@ -99,15 +99,15 @@ class AtasanNotifikasiList extends Component
         })->toArray();
 
         $this->unreadCount = collect($this->notifications)
-            ->where('is_read', false)
+            ->where('is_read', 0)
             ->count();
     }
 
     public function markAllRead(): void
     {
         AppNotification::where('user_id', Auth::id())
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
+            ->where('is_read', 0)
+            ->update(['is_read' => 1]);
 
         $this->loadNotifications();
         $this->dispatch('notifikasi-marked-read');

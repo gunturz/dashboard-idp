@@ -1069,7 +1069,73 @@
                     atasanUpdateBadge();
                     atasanInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
                     atasanShowBellPopup();
+                    atasanShowToast(data.title || 'Notifikasi Baru', data.desc || '');
                 });
+
+            function atasanShowToast(title, desc) {
+                let container = document.getElementById('atasan-rt-toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'atasan-rt-toast-container';
+                    container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column-reverse;gap:10px;pointer-events:none;';
+                    document.body.appendChild(container);
+                }
+
+                let toast = document.createElement('div');
+                toast.style.cssText = [
+                    'pointer-events:auto',
+                    'display:flex',
+                    'align-items:flex-start',
+                    'gap:12px',
+                    'background:#fff',
+                    'border:1px solid #e2e8f0',
+                    'border-left:4px solid #f59e0b',
+                    'border-radius:14px',
+                    'padding:14px 18px',
+                    'box-shadow:0 10px 40px rgba(0,0,0,.13)',
+                    'min-width:300px',
+                    'max-width:360px',
+                    'position:relative',
+                    'overflow:hidden',
+                    'opacity:0',
+                    'transform:translateX(40px) scale(.96)',
+                    'transition:opacity .35s ease,transform .35s ease'
+                ].join(';');
+
+                toast.innerHTML = `
+                    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;">
+                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#d97706' style='width:20px;height:20px;'>
+                            <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:.85rem;font-weight:700;color:#1e293b;margin-bottom:3px;">${title}</div>
+                        <div style="font-size:.78rem;color:#64748b;line-height:1.5;">${desc}</div>
+                    </div>
+                    <div style="position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#f59e0b,#fbbf24);width:100%;transform-origin:left;animation:atasanBarShrink 5s linear forwards;border-radius:0 0 0 14px;"></div>
+                `;
+
+                if (!document.getElementById('atasan-toast-style')) {
+                    let s = document.createElement('style');
+                    s.id = 'atasan-toast-style';
+                    s.textContent = '@keyframes atasanBarShrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}';
+                    document.head.appendChild(s);
+                }
+
+                container.appendChild(toast);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        toast.style.opacity = '1';
+                        toast.style.transform = 'translateX(0) scale(1)';
+                    });
+                });
+
+                setTimeout(function () {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(40px) scale(.96)';
+                    setTimeout(() => toast.remove(), 400);
+                }, 5000);
+            }
 
             function atasanUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');

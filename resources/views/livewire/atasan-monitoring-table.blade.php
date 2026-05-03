@@ -16,9 +16,28 @@
 
     {{-- Centered title block --}}
     <div class="text-center mb-8">
-        <h2 class="text-[1.35rem] font-extrabold text-[#1e293b]">
-            {{ optional($user->position)->position_name ?? 'Jabatan Atasan' }} – {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
-        </h2>
+        @php
+            // Kumpulkan kombinasi posisi sekarang → posisi tujuan yang unik
+            $positionRoutes = $talents->map(function($t) {
+                $current = optional($t->position)->position_name ?? '-';
+                $target  = optional(optional($t->promotion_plan)->targetPosition)->position_name ?? '-';
+                return $current . ' → ' . $target;
+            })->unique()->values();
+        @endphp
+
+        {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
+        @foreach($positionRoutes as $route)
+            <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
+                {{ $route }}
+            </h2>
+        @endforeach
+
+        {{-- Baris 2: Perusahaan --}}
+        <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">
+            {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
+        </p>
+
+        {{-- Baris 3: Jumlah talent --}}
         <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mt-1">{{ $talents->count() }} TALENT</p>
     </div>
 
@@ -238,7 +257,7 @@
                                             <tr class="border-b border-gray-100 hover:bg-slate-50/50 transition duration-150">
                                                 <td class="py-4 px-6 font-bold text-sm text-slate-800">{{ $proj->title }}</td>
                                                 <td class="py-4 px-6 text-center">
-                                                    <a href="{{ asset('storage/' . $proj->document_path) }}" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 hover:bg-teal-50 px-3 py-1.5 rounded-lg transition-colors font-bold text-xs" target="_blank">LIHAT</a>
+                                                    <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 hover:bg-teal-50 px-3 py-1.5 rounded-lg transition-colors font-bold text-xs" target="_blank">LIHAT</a>
                                                 </td>
                                                 <td class="py-4 px-6 text-center">
                                                     <div class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
@@ -348,7 +367,7 @@
                                                                 @if(count($dPaths) > 0)
                                                                     <div class="flex flex-col gap-2">
                                                                         @foreach($dPaths as $di => $dp)
-                                                                            <a href="{{ asset('storage/' . $dp) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-700 hover:underline flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 shadow-sm">{{ $dNames[$di] ?? 'Dokumen' }}</a>
+                                                                            <a href="{{ route('files.preview', ['path' => $dp]) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-700 hover:underline flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 shadow-sm">{{ $dNames[$di] ?? 'Dokumen' }}</a>
                                                                         @endforeach
                                                                     </div>
                                                                 @else

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
 
@@ -42,7 +43,10 @@ class TalentDashboardContent extends Component
         ]);
 
         try {
-            $documentPath = $this->project_file->store('improvement_projects', 'public');
+            $extension = $this->project_file->getClientOriginalExtension();
+            $baseName = Str::slug($this->judul_project) ?: 'project-improvement';
+            $storedFileName = $baseName . '-' . now()->format('Ymd-His') . '.' . $extension;
+            $documentPath = $this->project_file->storeAs('improvement_projects', $storedFileName, 'public');
 
             ImprovementProject::create([
                 'user_id_talent' => $user->id,
@@ -87,13 +91,20 @@ class TalentDashboardContent extends Component
                 'is_read' => false,
             ]);
 
-            broadcast(new \App\Events\UserNotificationCreated(
-                (int) $adminId,
-                (int) $notification->id,
-                (string) $title,
-                (string) $desc,
-                (string) $type
-            ));
+            try {
+                broadcast(new \App\Events\UserNotificationCreated(
+                    (int) $adminId,
+                    (int) $notification->id,
+                    (string) $title,
+                    (string) $desc,
+                    (string) $type
+                ));
+            } catch (\Throwable $e) {
+                Log::warning('Broadcast notification failed after project submission: '.$e->getMessage(), [
+                    'admin_id' => $adminId,
+                    'notification_id' => $notification->id,
+                ]);
+            }
         }
     }
 

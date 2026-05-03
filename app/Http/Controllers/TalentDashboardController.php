@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
 use App\Models\User;
@@ -341,8 +342,11 @@ class TalentDashboardController extends Controller
                 'project_file.mimes' => 'Format file tidak didukung.',
             ]);
 
+            $extension = $request->file('project_file')->getClientOriginalExtension();
+            $baseName = Str::slug($request->judul_project) ?: 'project-improvement';
+            $storedFileName = $baseName . '-' . now()->format('Ymd-His') . '.' . $extension;
             $documentPath = $request->file('project_file')
-                ->store('improvement_projects', 'public');
+                ->storeAs('improvement_projects', $storedFileName, 'public');
 
             ImprovementProject::create([
                 'user_id_talent' => Auth::id(),

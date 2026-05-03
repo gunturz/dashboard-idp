@@ -405,7 +405,7 @@
                     <td class="text-left font-semibold">{{ $proj->title }}</td>
                     <td>
                         @if($proj->document_path)
-                            <a href="{{ asset('storage/' . $proj->document_path) }}" target="_blank" class="text-blue-500 underline text-xs font-bold uppercase">Lihat File</a>
+                            <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}" target="_blank" class="text-blue-500 underline text-xs font-bold uppercase">Lihat File</a>
                         @else
                             <span class="text-gray-400 text-xs">-</span>
                         @endif

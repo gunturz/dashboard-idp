@@ -93,7 +93,7 @@
                     @if (count($dPaths) > 0)
                         <div class="flex flex-wrap gap-2">
                             @foreach ($dPaths as $di => $dp)
-                                <a href="{{ asset('storage/' . $dp) }}" target="_blank"
+                                <a href="{{ route('files.preview', ['path' => $dp]) }}" target="_blank"
                                     class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">

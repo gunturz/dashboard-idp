@@ -11,7 +11,9 @@
                 ? collect($notifications)->where('is_read', false)
                 : $notifications->where('is_read', false))
             : collect();
-    $hasUnreadNotif = $unreadNotifications->count() > 0;
+    $unreadCount = $unreadNotifications->count();
+    $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
+    $hasUnreadNotif = $unreadCount > 0;
 
     $nama = $user->nama ?? ($user->name ?? 'Panelis');
     $parts = explode(' ', trim($nama));
@@ -454,16 +456,29 @@
             {{-- Mobile Dropdown Menu --}}
             <div class="relative block lg:hidden ml-2" id="mobile-menu-wrapper">
                 <button
-                    class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95"
-                    aria-label="Menu" id="mobile-menu-btn"
+                    class="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95 max-w-[calc(100vw-7rem)]"
+                    aria-label="Profil dan notifikasi" id="mobile-menu-btn"
                     onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    <div class="relative">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
+                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                            {{ $initials }}
+                        </div>
+                        @if ($hasUnreadNotif)
+                            <span class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
+                        @endif
+                    </div>
+                    <div class="min-w-0 text-left">
+                        <p class="text-white text-[13px] font-semibold leading-tight truncate max-w-[118px]">{{ $nama }}</p>
+                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Panelis</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/70 flex-shrink-0" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
                 <div id="mobile-menu-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
+                    class="dropdown-panel hidden absolute right-0 mt-3 w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] sm:w-[320px] sm:max-w-[calc(100vw-1.5rem)] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
                     {{-- Dropdown Header --}}
 
                     <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
@@ -497,13 +512,13 @@
                                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
                                     @if ($hasUnreadNotif)
-                                        <span class="absolute top-1 right-1 w-2 h-2 bg-[#14b8a6] rounded-full"></span>
+                                        <span data-mobile-unread-badge class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">{{ $displayCount }}</span>
                                     @endif
                                 </div>
                                 <span class="font-medium">Notifikasi</span>
                                 @if ($hasUnreadNotif)
-                                    <span
-                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">Baru</span>
+                                    <span data-mobile-unread-pill
+                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }} Baru</span>
                                 @endif
                             </a>
                         </div>
@@ -595,7 +610,32 @@
         </div>
     </div>
 
-
+    {{-- ── Mobile Notif Dropdown (realtime, dedicated) ── --}}
+    <div id="mobile-notif-dropdown"
+        class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
+        <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
+                <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
+            </div>
+            <a href="{{ route('panelis.notifikasi') }}" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat Semua</a>
+        </div>
+        <ul id="panelis-mobile-notif-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
+        <div id="panelis-mobile-notif-empty" class="flex flex-col items-center py-8 text-center px-4">
+            <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+            </div>
+            <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi baru</p>
+        </div>
+        <div class="px-5 py-3 border-t border-gray-100 text-center">
+            <a href="{{ route('panelis.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua notifikasi &#x2192;</a>
+        </div>
+    </div>
 
     {{-- MAIN CONTENT --}}
     <main id="main-content"
@@ -654,11 +694,37 @@
             });
         })();
 
+        function showDropdownPanel(dropdown, isMobileDropdown = false) {
+            dropdown.classList.remove('hidden');
+            dropdown.style.display = '';
+            dropdown.style.opacity = '0';
+            dropdown.style.transformOrigin = 'top right';
+            dropdown.style.transform = isMobileDropdown ? 'translateY(-8px) scale(.98)' : 'scale(.96) translateY(-6px)';
+            dropdown.style.transition = 'opacity .22s ease, transform .22s ease';
+
+            void dropdown.offsetWidth;
+
+            requestAnimationFrame(() => {
+                dropdown.style.opacity = '1';
+                dropdown.style.transform = 'translateY(0) scale(1)';
+            });
+        }
+
+        function hideDropdownPanel(dropdown) {
+            dropdown.classList.add('hidden');
+            dropdown.style.display = 'none';
+            dropdown.style.opacity = '';
+            dropdown.style.transform = '';
+            dropdown.style.transition = '';
+            dropdown.style.transformOrigin = '';
+        }
+
         function toggleDropdown(dropdownId, btnId) {
             const dropdown = document.getElementById(dropdownId);
             const isHidden = dropdown.classList.contains('hidden');
-            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-            if (isHidden) dropdown.classList.remove('hidden');
+            document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
+            const isMobile = dropdownId === 'mobile-menu-dropdown' || dropdownId === 'mobile-notif-dropdown';
+            if (isHidden) showDropdownPanel(dropdown, isMobile);
         }
 
         document.addEventListener('click', function(e) {
@@ -668,7 +734,7 @@
                 return el && el.contains(e.target);
             });
             if (!clickedInside) {
-                document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
             }
         });
 
@@ -710,31 +776,97 @@
                 const ping = bellBtn.querySelector('.animate-ping');
                 if (ping) ping.remove();
             }
+            document.querySelectorAll('.mobile-trigger-notif-dot, [data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(el => el.remove());
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            if (typeof window.Echo === 'undefined') return;
-
             let panelisBellPopupTimeout = null;
             let panelisBellCleanupTimeout = null;
+            let panelisRealtimeUiBound = false;
 
-            window.Echo.private('user-notifications.{{ auth()->id() }}')
-                .listen('.notification.created', function (data) {
-                    window.dispatchEvent(new CustomEvent('app-notification-received', {
-                        detail: data
-                    }));
-                    panelisUpdateBadge();
-                    panelisInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
-                    panelisShowBellPopup();
-                    panelisShowToast(data.title || 'Notifikasi Baru', data.desc || '');
+            function handlePanelisIncomingNotification(data) {
+                if (!data) return;
+
+                panelisUpdateBadge();
+                panelisInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
+                panelisShowBellPopup();
+                panelisShowToast(data.title || 'Notifikasi Baru', data.desc || '');
+            }
+
+            window.addEventListener('app-notification-received', function (event) {
+                if (!panelisRealtimeUiBound) return;
+                handlePanelisIncomingNotification(event.detail || {});
+            });
+
+            function initPanelisRealtimeNotifications() {
+                if (typeof window.Echo === 'undefined') {
+                    return false;
+                }
+
+                const channelName = 'user-notifications.{{ auth()->id() }}';
+
+                if (window.__panelisNotificationChannelInitialized === channelName) {
+                    panelisRealtimeUiBound = true;
+                    return true;
+                }
+
+                if (window.__panelisNotificationChannelInitialized && window.__panelisNotificationChannelInitialized !== channelName) {
+                    window.Echo.leave(window.__panelisNotificationChannelInitialized);
+                }
+
+                window.Echo.private(channelName)
+                    .subscribed(function () {
+                        console.info('[Panelis Realtime] subscribed to', channelName);
+                    })
+                    .error(function (error) {
+                        console.error('[Panelis Realtime] subscription error', error);
+                    })
+                    .listen('.notification.created', function (data) {
+                        window.dispatchEvent(new CustomEvent('app-notification-received', {
+                            detail: data
+                        }));
+                    });
+
+                window.__panelisNotificationChannelInitialized = channelName;
+                panelisRealtimeUiBound = true;
+
+                return true;
+            }
+
+            if (!initPanelisRealtimeNotifications()) {
+                let retryCount = 0;
+                const retryTimer = setInterval(function () {
+                    retryCount++;
+
+                    if (initPanelisRealtimeNotifications() || retryCount >= 20) {
+                        clearInterval(retryTimer);
+                    }
+                }, 500);
+            }
+
+            window.addEventListener('load', initPanelisRealtimeNotifications);
+            document.addEventListener('livewire:navigated', initPanelisRealtimeNotifications);
+
+            if (typeof window.Echo !== 'undefined'
+                && window.Echo.connector
+                && window.Echo.connector.pusher
+                && window.Echo.connector.pusher.connection) {
+                window.Echo.connector.pusher.connection.bind('connected', function () {
+                    console.info('[Panelis Realtime] websocket connected');
+                    initPanelisRealtimeNotifications();
                 });
+
+                window.Echo.connector.pusher.connection.bind('error', function (error) {
+                    console.error('[Panelis Realtime] websocket error', error);
+                });
+            }
 
             function panelisShowToast(title, desc) {
                 let container = document.getElementById('panelis-rt-toast-container');
                 if (!container) {
                     container = document.createElement('div');
                     container.id = 'panelis-rt-toast-container';
-                    container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column-reverse;gap:10px;pointer-events:none;';
+                    container.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
                     document.body.appendChild(container);
                 }
 
@@ -750,8 +882,9 @@
                     'border-radius:14px',
                     'padding:14px 18px',
                     'box-shadow:0 10px 40px rgba(0,0,0,.13)',
-                    'min-width:300px',
-                    'max-width:360px',
+                    'width:min(100%,360px)',
+                    'min-width:0',
+                    'max-width:100%',
                     'position:relative',
                     'overflow:hidden',
                     'opacity:0',
@@ -796,6 +929,34 @@
 
             function panelisUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');
+                const mobileIndicatorHost = document.querySelector('#mobile-menu-btn .relative');
+                const mobileMenuLinkBadge = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-badge]');
+                const mobileMenuLinkPill = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-pill]');
+
+                function nextBadgeCountFromElement(element) {
+                    const current = parseInt((element?.textContent || '').trim(), 10) || 0;
+                    const next = current + 1;
+                    return next > 99 ? '99+' : String(next);
+                }
+
+                if (mobileIndicatorHost && !mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot')) {
+                    const dot = document.createElement('span');
+                    dot.className = 'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
+                    dot.textContent = '1';
+                    mobileIndicatorHost.appendChild(dot);
+                } else if (mobileIndicatorHost) {
+                    mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent = nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
+                }
+
+                if (mobileMenuLinkBadge) {
+                    mobileMenuLinkBadge.textContent = nextBadgeCountFromElement(mobileMenuLinkBadge);
+                }
+
+                if (mobileMenuLinkPill) {
+                    const current = parseInt((mobileMenuLinkPill.textContent || '').trim(), 10) || 0;
+                    const next = current + 1;
+                    mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
+                }
 
                 if (badge) {
                     const current = parseInt((badge.textContent || '').trim(), 10) || 0;
@@ -817,6 +978,7 @@
                 const ping = document.createElement('span');
                 ping.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
                 bellBtn.appendChild(ping);
+
             }
 
             function panelisInsertRealtimeNotification(title, desc) {
@@ -867,38 +1029,59 @@
                 while (list.children.length > 3) {
                     list.removeChild(list.lastElementChild);
                 }
+
+                // -- Mobile dedicated notif-dropdown --
+                const mobileNotifDropdown = document.getElementById('mobile-notif-dropdown');
+                if (!mobileNotifDropdown) return;
+
+                const mobileEmpty = document.getElementById('panelis-mobile-notif-empty');
+                if (mobileEmpty) mobileEmpty.style.display = 'none';
+
+                const mobileList = document.getElementById('panelis-mobile-notif-list');
+                if (!mobileList) return;
+
+                const mobileItem = document.createElement('li');
+                mobileItem.className = 'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                mobileItem.onclick = function () { window.location = '{{ route('panelis.notifikasi') }}'; };
+                mobileItem.innerHTML = `
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[13px] font-semibold text-gray-800 leading-snug"></p>
+                        <p class="mt-0.5 text-[11px] text-gray-500 leading-relaxed"></p>
+                        <p class="mt-1 text-[10px] text-[#14b8a6] font-medium">Baru saja</p>
+                    </div>
+                `;
+                const mobileTitleEl = mobileItem.querySelectorAll('p')[0];
+                const mobileDescEl  = mobileItem.querySelectorAll('p')[1];
+                if (mobileTitleEl) mobileTitleEl.innerHTML = title;
+                if (mobileDescEl)  mobileDescEl.innerHTML  = desc;
+
+                mobileList.prepend(mobileItem);
+                while (mobileList.children.length > 5) mobileList.removeChild(mobileList.lastElementChild);
             }
 
             function panelisShowBellPopup() {
-                const bellDropdown = document.getElementById('bell-dropdown');
+                const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
+                // Mobile: buka panel notifikasi khusus
+                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
                 if (!bellDropdown) return;
 
                 clearTimeout(panelisBellPopupTimeout);
                 clearTimeout(panelisBellCleanupTimeout);
 
-                bellDropdown.classList.remove('hidden');
-                bellDropdown.style.transformOrigin = 'top right';
-                bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
-                bellDropdown.style.opacity = '0';
-                bellDropdown.style.transform = 'scale(0.82) translateY(-10px)';
-
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(function () {
-                        bellDropdown.style.opacity = '1';
-                        bellDropdown.style.transform = 'scale(1) translateY(0)';
-                    });
-                });
+                document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
+                showDropdownPanel(bellDropdown, isMobileActive);
 
                 panelisBellPopupTimeout = setTimeout(function () {
                     bellDropdown.style.opacity = '0';
-                    bellDropdown.style.transform = 'scale(0.86) translateY(-8px)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
 
                     panelisBellCleanupTimeout = setTimeout(function () {
-                        bellDropdown.classList.add('hidden');
-                        bellDropdown.style.transition = '';
-                        bellDropdown.style.transformOrigin = '';
-                        bellDropdown.style.opacity = '';
-                        bellDropdown.style.transform = '';
+                        hideDropdownPanel(bellDropdown);
                     }, 350);
                 }, 4500);
             }

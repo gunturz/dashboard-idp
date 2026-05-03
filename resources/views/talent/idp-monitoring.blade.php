@@ -340,7 +340,7 @@
                                             </div>
                                             <div class="flex-1 min-w-0 flex items-center justify-between">
                                                 <div>
-                                                    <a href="{{ asset('storage/'.$path) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-800 hover:underline truncate block max-w-[250px]" title="{{ $names[$index] ?? 'Dokumen' }}">{{ $names[$index] ?? 'Dokumen' }}</a>
+                                                    <a href="{{ route('files.preview', ['path' => $path]) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-800 hover:underline truncate block max-w-[250px]" title="{{ $names[$index] ?? 'Dokumen' }}">{{ $names[$index] ?? 'Dokumen' }}</a>
                                                 </div>
                                                 <button type="button" class="shrink-0 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition" title="Hapus File Ini" onclick="this.closest('[data-existing-file]').remove();">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

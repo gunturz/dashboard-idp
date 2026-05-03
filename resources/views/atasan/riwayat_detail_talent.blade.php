@@ -704,7 +704,7 @@
                                         <tr>
                                             <td class="project-title-cell">{{ $proj->title }}</td>
                                             <td class="project-action-cell">
-                                                <a href="{{ asset('storage/' . $proj->document_path) }}"
+                                                <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
                                                     class="project-file-link font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
                                                     target="_blank">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"

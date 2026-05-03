@@ -418,6 +418,31 @@
         })();
 
         // ── Dropdown toggle (bell & profile) ──
+        function showDropdownPanel(dropdown, isMobileDropdown = false) {
+            dropdown.classList.remove('hidden');
+            dropdown.style.display = '';
+            dropdown.style.opacity = '0';
+            dropdown.style.transformOrigin = 'top right';
+            dropdown.style.transform = isMobileDropdown ? 'translateY(-8px) scale(.98)' : 'scale(.96) translateY(-6px)';
+            dropdown.style.transition = 'opacity .22s ease, transform .22s ease';
+
+            void dropdown.offsetWidth;
+
+            requestAnimationFrame(() => {
+                dropdown.style.opacity = '1';
+                dropdown.style.transform = 'translateY(0) scale(1)';
+            });
+        }
+
+        function hideDropdownPanel(dropdown) {
+            dropdown.classList.add('hidden');
+            dropdown.style.display = 'none';
+            dropdown.style.opacity = '';
+            dropdown.style.transform = '';
+            dropdown.style.transition = '';
+            dropdown.style.transformOrigin = '';
+        }
+
         function toggleDropdown(dropdownId, btnId) {
             const dropdown = document.getElementById(dropdownId);
             if (!dropdown) return;
@@ -426,13 +451,12 @@
 
             // Tutup semua dropdown lain dulu
             document.querySelectorAll('.dropdown-panel').forEach(el => {
-                el.classList.add('hidden');
-                el.style.display = 'none';
+                hideDropdownPanel(el);
             });
 
             if (isHidden) {
-                dropdown.classList.remove('hidden');
-                dropdown.style.display = '';
+                const isMobile = dropdownId === 'mobile-menu-dropdown' || dropdownId === 'mobile-notif-dropdown';
+                showDropdownPanel(dropdown, isMobile);
             }
         }
 
@@ -445,10 +469,9 @@
             });
             if (!clickedInside) {
                 document.querySelectorAll('.dropdown-panel').forEach(el => {
-                    el.classList.add('hidden');
-                    el.style.display = 'none';
-                });
-            }
+                hideDropdownPanel(el);
+            });
+        }
         });
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -606,31 +629,100 @@
                 const ping = bellBtn.querySelector('.animate-ping');
                 if (ping) ping.remove();
             }
+            document.querySelectorAll('.mobile-trigger-notif-dot, [data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(el => el.remove());
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            if (typeof window.Echo === 'undefined') return;
-
             let talentBellPopupTimeout = null;
             let talentBellCleanupTimeout = null;
+            let talentRealtimeUiBound = false;
 
-            window.Echo.private('user-notifications.{{ auth()->id() }}')
-                .listen('.notification.created', function (data) {
-                    window.dispatchEvent(new CustomEvent('app-notification-received', {
-                        detail: data
-                    }));
-                    talentUpdateBadge();
-                    talentInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
-                    talentShowBellPopup();
-                    talentShowToast(data.title || 'Notifikasi Baru', data.desc || '');
+            function handleTalentIncomingNotification(data) {
+                window.dispatchEvent(new CustomEvent('app-notification-received', {
+                    detail: data
+                }));
+
+                if (!talentRealtimeUiBound) {
+                    return;
+                }
+
+                talentUpdateBadge();
+                talentInsertRealtimeNotification(data.title || 'Notifikasi Baru', data.desc || '');
+                talentShowBellPopup();
+                talentShowToast(data.title || 'Notifikasi Baru', data.desc || '');
+            }
+
+            function initTalentRealtimeNotifications() {
+                if (typeof window.Echo === 'undefined') {
+                    return false;
+                }
+
+                const channelName = 'user-notifications.{{ auth()->id() }}';
+
+                if (window.__talentNotificationChannelInitialized === channelName) {
+                    talentRealtimeUiBound = true;
+                    return true;
+                }
+
+                if (window.__talentNotificationChannelInitialized && window.__talentNotificationChannelInitialized !== channelName) {
+                    window.Echo.leave(window.__talentNotificationChannelInitialized);
+                }
+
+                const channel = window.Echo.private(channelName);
+
+                channel
+                    .subscribed(function () {
+                        window.__talentNotificationDebug = {
+                            channel: channelName,
+                            subscribedAt: new Date().toISOString(),
+                        };
+                        console.info('[Talent Realtime] subscribed to', channelName);
+                    })
+                    .error(function (error) {
+                        console.error('[Talent Realtime] subscription error', error);
+                    })
+                    .listen('.notification.created', handleTalentIncomingNotification);
+
+                window.__talentNotificationChannelInitialized = channelName;
+                talentRealtimeUiBound = true;
+
+                return true;
+            }
+
+            if (!initTalentRealtimeNotifications()) {
+                let retryCount = 0;
+                const retryTimer = setInterval(function () {
+                    retryCount++;
+
+                    if (initTalentRealtimeNotifications() || retryCount >= 20) {
+                        clearInterval(retryTimer);
+                    }
+                }, 500);
+            }
+
+            window.addEventListener('load', initTalentRealtimeNotifications);
+            document.addEventListener('livewire:navigated', initTalentRealtimeNotifications);
+
+            if (typeof window.Echo !== 'undefined'
+                && window.Echo.connector
+                && window.Echo.connector.pusher
+                && window.Echo.connector.pusher.connection) {
+                window.Echo.connector.pusher.connection.bind('connected', function () {
+                    console.info('[Talent Realtime] websocket connected');
+                    initTalentRealtimeNotifications();
                 });
+
+                window.Echo.connector.pusher.connection.bind('error', function (error) {
+                    console.error('[Talent Realtime] websocket error', error);
+                });
+            }
 
             function talentShowToast(title, desc) {
                 let container = document.getElementById('talent-rt-toast-container');
                 if (!container) {
                     container = document.createElement('div');
                     container.id = 'talent-rt-toast-container';
-                    container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column-reverse;gap:10px;pointer-events:none;';
+                    container.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
                     document.body.appendChild(container);
                 }
 
@@ -646,8 +738,9 @@
                     'border-radius:14px',
                     'padding:14px 18px',
                     'box-shadow:0 10px 40px rgba(0,0,0,.13)',
-                    'min-width:300px',
-                    'max-width:360px',
+                    'width:min(100%,360px)',
+                    'min-width:0',
+                    'max-width:100%',
                     'position:relative',
                     'overflow:hidden',
                     'opacity:0',
@@ -692,6 +785,34 @@
 
             function talentUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');
+                const mobileIndicatorHost = document.querySelector('#mobile-menu-btn .relative');
+                const mobileMenuLinkBadge = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-badge]');
+                const mobileMenuLinkPill = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-pill]');
+
+                function nextBadgeCountFromElement(element) {
+                    const current = parseInt((element?.textContent || '').trim(), 10) || 0;
+                    const next = current + 1;
+                    return next > 99 ? '99+' : String(next);
+                }
+
+                if (mobileIndicatorHost && !mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot')) {
+                    const dot = document.createElement('span');
+                    dot.className = 'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
+                    dot.textContent = '1';
+                    mobileIndicatorHost.appendChild(dot);
+                } else if (mobileIndicatorHost) {
+                    mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent = nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
+                }
+
+                if (mobileMenuLinkBadge) {
+                    mobileMenuLinkBadge.textContent = nextBadgeCountFromElement(mobileMenuLinkBadge);
+                }
+
+                if (mobileMenuLinkPill) {
+                    const current = parseInt((mobileMenuLinkPill.textContent || '').trim(), 10) || 0;
+                    const next = current + 1;
+                    mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
+                }
 
                 if (badge) {
                     const current = parseInt((badge.textContent || '').trim(), 10) || 0;
@@ -713,92 +834,103 @@
                 const ping = document.createElement('span');
                 ping.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
                 bellBtn.appendChild(ping);
+
             }
 
             function talentInsertRealtimeNotification(title, desc) {
+                // ── Desktop bell-dropdown ──
                 const dropdown = document.getElementById('bell-dropdown');
-                if (!dropdown) return;
+                if (dropdown) {
+                    const emptyState = document.getElementById('talent-bell-empty-state');
+                    if (emptyState) emptyState.remove();
 
-                const emptyState = document.getElementById('talent-bell-empty-state');
-                if (emptyState) emptyState.remove();
-
-                let list = document.getElementById('talent-bell-list');
-                if (!list) {
-                    list = document.createElement('ul');
-                    list.id = 'talent-bell-list';
-                    list.className = 'divide-y divide-gray-50 max-h-60 overflow-y-auto';
-
-                    const footer = dropdown.querySelector('.px-5.py-3.border-t');
-                    if (footer) {
-                        dropdown.insertBefore(list, footer);
-                    } else {
-                        dropdown.appendChild(list);
+                    let list = document.getElementById('talent-bell-list');
+                    if (!list) {
+                        list = document.createElement('ul');
+                        list.id = 'talent-bell-list';
+                        list.className = 'divide-y divide-gray-50 max-h-60 overflow-y-auto';
+                        const footer = dropdown.querySelector('.px-5.py-3.border-t');
+                        if (footer) dropdown.insertBefore(list, footer);
+                        else dropdown.appendChild(list);
                     }
+
+                    const item = document.createElement('li');
+                    item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                    item.onclick = function () { window.location = '{{ route('talent.notifikasi') }}'; };
+                    item.innerHTML = `
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-800 truncate"></p>
+                            <p class="text-xs text-gray-500 truncate"></p>
+                        </div>
+                    `;
+                    const titleEl = item.querySelector('p.text-sm');
+                    const descEl = item.querySelector('p.text-xs');
+                    if (titleEl) titleEl.innerHTML = title;
+                    if (descEl) descEl.innerHTML = desc;
+                    list.prepend(item);
+                    while (list.children.length > 3) list.removeChild(list.lastElementChild);
                 }
 
-                const item = document.createElement('li');
-                item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                item.onclick = function () {
-                    window.location = '{{ route('talent.notifikasi') }}';
-                };
-                item.innerHTML = `
-                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                // ── Mobile dedicated notif-dropdown ──
+                const mobileNotifDropdown = document.getElementById('mobile-notif-dropdown');
+                if (!mobileNotifDropdown) return;
+
+                // Sembunyikan empty state
+                const mobileEmpty = document.getElementById('talent-mobile-notif-empty');
+                if (mobileEmpty) mobileEmpty.style.display = 'none';
+
+                const mobileList = document.getElementById('talent-mobile-notif-list');
+                if (!mobileList) return;
+
+                const mobileItem = document.createElement('li');
+                mobileItem.className = 'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                mobileItem.onclick = function () { window.location = '{{ route('talent.notifikasi') }}'; };
+                mobileItem.innerHTML = `
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold text-gray-800 truncate"></p>
-                        <p class="text-xs text-gray-500 truncate"></p>
+                        <p class="text-[13px] font-semibold text-gray-800 leading-snug"></p>
+                        <p class="mt-0.5 text-[11px] text-gray-500 leading-relaxed"></p>
+                        <p class="mt-1 text-[10px] text-[#14b8a6] font-medium">Baru saja</p>
                     </div>
                 `;
+                const mobileTitleEl = mobileItem.querySelectorAll('p')[0];
+                const mobileDescEl  = mobileItem.querySelectorAll('p')[1];
+                if (mobileTitleEl) mobileTitleEl.innerHTML = title;
+                if (mobileDescEl)  mobileDescEl.innerHTML  = desc;
 
-                const titleEl = item.querySelector('p.text-sm');
-                const descEl = item.querySelector('p.text-xs');
-                if (titleEl) titleEl.innerHTML = title;
-                if (descEl) descEl.innerHTML = desc;
-
-                list.prepend(item);
-
-                while (list.children.length > 3) {
-                    list.removeChild(list.lastElementChild);
-                }
+                mobileList.prepend(mobileItem);
+                while (mobileList.children.length > 5) mobileList.removeChild(mobileList.lastElementChild);
             }
 
             function talentShowBellPopup() {
-                const bellDropdown = document.getElementById('bell-dropdown');
+                const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
+                // Mobile: buka panel notifikasi khusus (bukan menu navigasi umum)
+                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
                 if (!bellDropdown) return;
 
                 clearTimeout(talentBellPopupTimeout);
                 clearTimeout(talentBellCleanupTimeout);
 
-                bellDropdown.classList.remove('hidden');
-                bellDropdown.style.display = '';
-                bellDropdown.style.transformOrigin = 'top right';
-                bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
-                bellDropdown.style.opacity = '0';
-                bellDropdown.style.transform = 'scale(0.82) translateY(-10px)';
-
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(function () {
-                        bellDropdown.style.opacity = '1';
-                        bellDropdown.style.transform = 'scale(1) translateY(0)';
-                    });
-                });
+                document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
+                showDropdownPanel(bellDropdown, isMobileActive);
 
                 talentBellPopupTimeout = setTimeout(function () {
                     bellDropdown.style.opacity = '0';
-                    bellDropdown.style.transform = 'scale(0.86) translateY(-8px)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
 
                     talentBellCleanupTimeout = setTimeout(function () {
-                        bellDropdown.classList.add('hidden');
-                        bellDropdown.style.display = 'none';
-                        bellDropdown.style.transition = '';
-                        bellDropdown.style.transformOrigin = '';
-                        bellDropdown.style.opacity = '';
-                        bellDropdown.style.transform = '';
+                        hideDropdownPanel(bellDropdown);
                     }, 350);
-                }, 4500);
+                }, 5000);
             }
         });
     </script>

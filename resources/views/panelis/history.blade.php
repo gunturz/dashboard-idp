@@ -400,7 +400,7 @@
                             {{-- Actions --}}
                             <div class="actions-wrap">
                                 @if($latestProject && $latestProject->document_path)
-                                    <a href="{{ asset('storage/'.$latestProject->document_path) }}" target="_blank" class="btn-preview">Preview File</a>
+                                    <a href="{{ route('files.preview', ['path' => $latestProject->document_path]) }}" target="_blank" class="btn-preview">Preview File</a>
                                 @else
                                     <span class="btn-preview" style="opacity:0.4;cursor:default;">Preview File</span>
                                 @endif

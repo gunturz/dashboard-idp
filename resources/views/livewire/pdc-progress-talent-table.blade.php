@@ -67,15 +67,15 @@
                 <h3 class="company-section-title">{{ $companyData['company']->nama_company ?? 'Unassigned' }}</h3>
                 <div class="prem-card">
                     <div class="overflow-x-auto">
-                        <table class="prem-table">
-                            <thead>
+                        <table class="w-full text-left border-collapse border border-slate-200 bg-white rounded-xl overflow-hidden">
+                            <thead class="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th class="w-[18%] text-left pl-6">Posisi yang Dituju</th>
-                                    <th class="w-[18%]">Talent</th>
-                                    <th class="w-[16%]">Departemen</th>
-                                    <th class="w-[16%]">Mentor</th>
-                                    <th class="w-[14%]">Atasan</th>
-                                    <th class="w-[18%]">Aksi</th>
+                                    <th class="w-[18%] py-4 px-4 text-center font-bold text-slate-700 text-sm border-r border-slate-200">Posisi yang Dituju</th>
+                                    <th class="w-[18%] py-4 px-4 text-center font-bold text-slate-700 text-sm border-r border-slate-200">Talent</th>
+                                    <th class="w-[16%] py-4 px-4 text-center font-bold text-slate-700 text-sm border-r border-slate-200">Departemen</th>
+                                    <th class="w-[16%] py-4 px-4 text-center font-bold text-slate-700 text-sm border-r border-slate-200">Mentor</th>
+                                    <th class="w-[14%] py-4 px-4 text-center font-bold text-slate-700 text-sm border-r border-slate-200">Atasan</th>
+                                    <th class="w-[18%] py-4 px-4 text-center font-bold text-slate-700 text-sm">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,7 +97,7 @@
                                     @foreach ($posData['talents'] as $index => $talent)
                                         <tr class="talent-row">
                                             @if ($index === 0)
-                                                <td rowspan="{{ count($posData['talents']) }}" class="border-r border-[#f1f5f9] text-center align-middle">
+                                                <td rowspan="{{ count($posData['talents']) }}" class="border-r border-b border-slate-200 text-center align-middle">
                                                     <div class="flex flex-col items-center justify-center gap-2 px-4 py-2">
                                                         <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-200/60 bg-teal-50/50">
                                                             <span class="font-bold text-teal-900 text-sm leading-none">{{ $posData['targetPosition']->position_name ?? '-' }}</span>
@@ -106,14 +106,14 @@
                                                     </div>
                                                 </td>
                                             @endif
-                                            <td>
+                                            <td class="border-r border-b border-slate-200 px-4 py-3">
                                                 <span class="font-bold text-[#1e293b] block text-sm">{{ $talent->nama }}</span>
                                                 <span class="text-xs text-[#64748b] italic block mt-0.5">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
                                             </td>
-                                            <td>
+                                            <td class="border-r border-b border-slate-200 px-4 py-3 text-center">
                                                 <span class="text-sm text-[#475569] bg-slate-50 px-3 py-1.5 rounded-md border border-slate-100 whitespace-nowrap">{{ optional($talent->department)->nama_department ?? '-' }}</span>
                                             </td>
-                                            <td>
+                                            <td class="border-r border-b border-slate-200 px-4 py-3">
                                                 <div class="flex flex-col gap-1.5 items-center justify-center">
                                                     @php
                                                         $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
@@ -134,7 +134,7 @@
                                                     @endforelse
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="border-r border-b border-slate-200 px-4 py-3">
                                                 @php $atasanName = optional($talent->atasan)->nama; @endphp
                                                 @if($atasanName)
                                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[0.75rem] font-semibold text-purple-700 bg-purple-50 border border-purple-200 whitespace-nowrap">
@@ -146,7 +146,7 @@
                                                 @endif
                                             </td>
                                             @if ($index === 0)
-                                                <td rowspan="{{ count($posData['talents']) }}" class="action-cell">
+                                                <td rowspan="{{ count($posData['talents']) }}" class="action-cell border-b border-slate-200 px-4 py-3">
                                                     <div class="flex flex-col gap-1.5 py-1 w-full max-w-[120px] mx-auto">
                                                         <a href="{{ route('pdc_admin.detail', $detailRouteParams) }}"
                                                             class="btn-prem btn-teal inline-flex items-center justify-center h-9 w-full px-2"

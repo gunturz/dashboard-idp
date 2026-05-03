@@ -116,6 +116,9 @@
                             if (str_starts_with($project->finance_feedback, '[Approved]')) $finDec = 'Approved';
                             elseif (str_starts_with($project->finance_feedback, '[Rejected]')) $finDec = 'Rejected';
                         }
+                        $cleanFeedback = $project->finance_feedback ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback) : '—';
+                        if (trim($cleanFeedback) === '')
+                            $cleanFeedback = '—';
                     @endphp
                     <tr class="finance-row">
                         <td>
@@ -129,10 +132,10 @@
                         <td class="text-left">{{ $project->title }}</td>
                         <td>
                             @if ($project->document_path)
-                                <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank"
+                                <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
                                     class="file-link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                     </svg>
@@ -142,52 +145,6 @@
                                 <span class="text-gray-400 text-xs">—</span>
                             @endif
                         </td>
-                        @php
-                            $finDec = 'Pending';
-                            if ($project->finance_feedback) {
-                                if (str_starts_with($project->finance_feedback, '[Approved]'))
-                                    $finDec = 'Approved';
-                                elseif (str_starts_with($project->finance_feedback, '[Rejected]'))
-                                    $finDec = 'Rejected';
-                            }
-                        @endphp
-                        <tr class="finance-row">
-                            <td>
-                                <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
-                                <p class="text-xs text-gray-500 italic mt-1">
-                                    {{ $project->talent->position->position_name ?? '-' }}
-                                    &rarr;
-                                    {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}
-                                </p>
-                            </td>
-                            <td class="text-left">{{ $project->title }}</td>
-                            <td>
-                                @if ($project->document_path)
-                                    <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank"
-                                        class="file-link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                        </svg>
-                                        Lihat
-                                    </a>
-                                @else
-                                    <span class="text-gray-400 text-xs">—</span>
-                                @endif
-                            </td>
-                            @php
-                                $finDec = 'Pending';
-                                if ($project->finance_feedback) {
-                                    if (str_starts_with($project->finance_feedback, '[Approved]'))
-                                        $finDec = 'Approved';
-                                    elseif (str_starts_with($project->finance_feedback, '[Rejected]'))
-                                        $finDec = 'Rejected';
-                                }
-                                $cleanFeedback = $project->finance_feedback ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback) : '—';
-                                if (trim($cleanFeedback) === '')
-                                    $cleanFeedback = '—';
-                            @endphp
                             <td>
                                 @if ($finDec === 'Approved')
                                     <span class="status-dot status-approve">Approved</span>
@@ -212,7 +169,7 @@
                                         </button>
                                     @else
                                         <button type="button"
-                                            onclick="openFinanceModal('{{ addslashes($project->talent->nama ?? '-') }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', {{ $project->id }}, '{{ addslashes($project->title) }}', '{{ $project->document_path ? asset('storage/' . $project->document_path) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
+                                            onclick="openFinanceModal('{{ addslashes($project->talent->nama ?? '-') }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', {{ $project->id }}, '{{ addslashes($project->title) }}', '{{ $project->document_path ? route('files.preview', ['path' => $project->document_path]) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
                                             title="Kirim project ini ke Finance untuk direview"
                                             class="w-full px-3 py-2 text-[11px] font-semibold text-white bg-[#0f172a] hover:bg-[#1e242e] rounded-lg transition-colors shadow-sm">
                                             Kirim Finance

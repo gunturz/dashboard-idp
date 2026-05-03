@@ -71,6 +71,7 @@ class PDCAdminController extends Controller
             ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
             ->select('users.*')
             ->orderBy('promotion_plan.created_at', 'desc')
+            ->orderBy('promotion_plan.updated_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->take(8)
             ->get();
@@ -553,7 +554,7 @@ class PDCAdminController extends Controller
                     'atasan_id' => $request->atasan_id,
                 ]);
 
-                PromotionPlan::updateOrCreate(
+                $plan = PromotionPlan::updateOrCreate(
                     ['user_id_talent' => $talentId],
                     [
                         'target_position_id' => $request->target_position_id,
@@ -563,6 +564,13 @@ class PDCAdminController extends Controller
                         'target_date' => $request->target_date,
                     ]
                 );
+
+                if ($plan->wasRecentlyCreated && $request->query('plan_created_at')) {
+                    $plan->timestamps = false;
+                    $plan->created_at = $request->query('plan_created_at');
+                    $plan->save();
+                    $plan->timestamps = true;
+                }
 
                 $mentorList = collect($mentorIds)
                     ->map(fn($mentorId) => $mentorNamesById[$mentorId] ?? null)

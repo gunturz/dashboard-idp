@@ -147,13 +147,4 @@
 
     </div> <!-- Tutup w-full px-6 flex-grow wrapper -->
 
-    <x-slot name="scripts">
-        <script>
-            // File name update for Project Improvement upload
-            document.getElementById('file-upload').addEventListener('change', function(e) {
-                const fileName = e.target.files[0] ? e.target.files[0].name : 'Klik untuk mengunggah';
-                document.getElementById('file-name-display').textContent = fileName;
-            });
-        </script>
-    </x-slot>
 </x-talent.layout>

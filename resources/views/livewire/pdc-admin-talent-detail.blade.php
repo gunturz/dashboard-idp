@@ -396,7 +396,7 @@
                                 <tr>
                                     <td class="font-bold">{{ $proj->title }}</td>
                                     <td>
-                                        <a href="{{ asset('storage/' . $proj->document_path) }}"
+                                        <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
                                             class="text-blue-500 underline uppercase font-bold text-xs" target="_blank">Lihat
                                             File</a>
                                     </td>

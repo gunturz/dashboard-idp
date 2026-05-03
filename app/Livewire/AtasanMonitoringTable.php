@@ -54,7 +54,7 @@ class AtasanMonitoringTable extends Component
                 'department',
                 'position',
                 'mentor',
-                'promotion_plan',
+                'promotion_plan.targetPosition',
             ]);
 
         if ($this->activeSection === 'kompetensi') {

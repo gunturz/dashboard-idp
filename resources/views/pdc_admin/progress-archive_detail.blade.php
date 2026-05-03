@@ -1005,7 +1005,7 @@
 
                     <div class="flex items-center justify-between">
                         @if($project->document_path)
-                            <a href="{{ asset('storage/' . $project->document_path) }}" target="_blank"
+                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
                                 class="px-6 py-2 border border-slate-300 bg-white rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"

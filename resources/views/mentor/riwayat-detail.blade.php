@@ -145,7 +145,7 @@
                     @if (count($dPaths) > 0)
                         <div class="flex flex-wrap gap-2">
                             @foreach ($dPaths as $di => $dp)
-                                <a href="{{ asset('storage/' . $dp) }}" target="_blank"
+                                <a href="{{ route('files.preview', ['path' => $dp]) }}" target="_blank"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[12px] font-black text-teal-600 hover:text-white hover:bg-teal-500 hover:border-teal-500 shadow-sm transition-all duration-300">
                                     {{ $dNames[$di] ?? 'File ' . ($di + 1) }}
                                 </a>

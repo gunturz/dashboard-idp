@@ -3,6 +3,30 @@
         @csrf
 
         {{-- Title khusus halaman register --}}
+
+        {{-- ── NOTIFIKASI INFO (dari Google OAuth redirect) ─────────── --}}
+        @if(session('info'))
+            <div style="
+                background: rgba(59,130,246,0.12);
+                border: 1px solid rgba(59,130,246,0.35);
+                border-radius: 10px;
+                padding: 0.75rem 1rem;
+                margin-bottom: 1.25rem;
+                font-size: 0.82rem;
+                color: #93c5fd;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" style="width:16px;height:16px;flex-shrink:0">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                {{ session('info') }}
+            </div>
+        @endif
+
         <h2 class="login-title" style="margin-bottom: 1.5rem;">Registrasi</h2>
 
         {{-- ── USERNAME ─────────────────────────── --}}
@@ -38,7 +62,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                 </svg>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" class="form-input"
+                <input id="email" type="email" name="email" value="{{ session('google_email', old('email')) }}" {{ session('google_email') ? 'readonly' : '' }}  class="form-input"
                     placeholder="Masukan email" required autocomplete="email" />
             </div>
             @error('email')
@@ -132,7 +156,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
-                <input id="nama" type="text" name="nama" value="{{ old('nama') }}" class="form-input"
+                <input id="nama" type="text" name="nama" value="{{ session('google_name', old('nama')) }}" class="form-input"
                     placeholder="Masukan nama lengkap" required />
             </div>
             @error('nama')

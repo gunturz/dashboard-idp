@@ -69,8 +69,13 @@ class AuthenticatedSessionController extends Controller
             ->first();
 
         if (!$user) {
-            return redirect()->route('login')
-                ->withErrors(['google' => 'Email Google Anda belum terdaftar di sistem IDP.']);
+            // Email belum terdaftar → arahkan ke halaman register
+            // Simpan email Google ke session agar form register bisa pre-fill
+            session()->flash('google_email', $email);
+            session()->flash('google_name', $googleUser->getName());
+
+            return redirect()->route('register')
+                ->with('info', 'Email Google Anda belum terdaftar. Silakan lengkapi data registrasi terlebih dahulu.');
         }
 
         Auth::login($user, true);
@@ -78,6 +83,9 @@ class AuthenticatedSessionController extends Controller
 
         return $this->sendLoginResponse();
     }
+
+
+
 
     protected function sendLoginResponse(): RedirectResponse
     {

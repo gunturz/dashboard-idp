@@ -17,7 +17,8 @@
         ];
     @endphp
 
-    <div class="prem-stat-grid mb-6 overflow-x-auto pb-2" style="grid-template-columns: repeat(5, minmax(140px, 1fr));">
+    <div style="overflow-x: auto; margin: -12px -4px -8px; padding: 12px 4px 8px;">
+    <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(5, minmax(140px, 1fr)); min-width: 700px;">
         @foreach($roleConfig as $key => $cfg)
             <div wire:key="stat-{{ $key }}"
                  wire:click="toggleRole('{{ $key }}')"
@@ -33,7 +34,8 @@
                 <div class="prem-stat-label">{{ $cfg['label'] }}</div>
             </div>
         @endforeach
-    </div>
+    </div>{{-- /prem-stat-grid --}}
+    </div>{{-- /overflow-x wrapper --}}
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div class="md:col-span-2 relative">
@@ -101,21 +103,21 @@
                             <h3 class="text-sm font-bold tracking-wide" style="color: {{ $cfg['hex'] }}">{{ $cfg['label'] }}</h3>
                         </div>
 
-                        <div class="overflow-x-auto">
-                            <table class="um-table w-full">
+                        <div class="overflow-x-auto user-management-wrapper">
+                            <table class="prem-table">
                                 <thead>
-                                    <tr class="bg-[#f8fafc]">
-                                        <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Email</th>
-                                        <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Nama Lengkap</th>
-                                        <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Perusahaan</th>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Perusahaan</th>
                                         @if($showDepartmentAndPosition)
-                                            <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Departemen</th>
-                                            <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Posisi saat ini</th>
+                                            <th>Departemen</th>
+                                            <th>Posisi Saat Ini</th>
                                         @endif
                                         @if($showMultiRole)
-                                            <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Multi Role</th>
+                                            <th>Multi Role</th>
                                         @endif
-                                        <th class="text-xs font-bold text-[#64748b] p-3 uppercase tracking-wide">Aksi</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -195,3 +197,29 @@
         @endforeach
     </div>
 </div>
+
+<style>
+    /* ── User Management Table: Perjelas garis & judul kolom Capitalize ── */
+    .user-management-wrapper .prem-table th {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 0.8rem;
+        color: #1e293b;
+        border-bottom: 2px solid #cbd5e1;
+        border-right: 1px solid #d1d5db;
+        background: #f1f5f9;
+    }
+    .user-management-wrapper .prem-table th:last-child {
+        border-right: none;
+    }
+    .user-management-wrapper .prem-table td {
+        border-bottom: 1px solid #d1d5db;
+        border-right: 1px solid #e5e7eb;
+    }
+    .user-management-wrapper .prem-table td:last-child {
+        border-right: none;
+    }
+    .user-management-wrapper .prem-table tbody tr:last-child td {
+        border-bottom: 1px solid #d1d5db;
+    }
+</style>

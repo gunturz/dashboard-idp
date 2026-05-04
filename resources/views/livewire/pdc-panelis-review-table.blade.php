@@ -80,18 +80,10 @@
                 </select>
             </div>
         @endif
-
-        {{-- Loading indicator --}}
-        <div wire:loading class="flex items-center gap-1.5 text-xs text-[#14b8a6] font-medium">
-            <svg style="width:14px;height:14px;animation:lvwire-spin 1s linear infinite;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle style="opacity:.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path style="opacity:.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-            </svg>
-            Memfilter...
-        </div>
     </div>
 
     {{-- ── Data Table grouped by Company ── --}}
+    <div class="panelis-review-wrapper">
     @forelse ($groupedData as $companyId => $companyData)
         <div class="mb-8 company-section" data-company-id="{{ $companyId }}">
             <h3 class="company-section-title">
@@ -102,7 +94,7 @@
                     <table class="prem-table">
                         <thead>
                             <tr>
-                                <th class="w-[20%] text-left pl-6">Posisi yang Dituju</th>
+                                <th class="w-[20%] text-left pl-6">Posisi Yang Dituju</th>
                                 <th class="w-[18%]">Talent</th>
                                 <th class="w-[16%]">Departemen</th>
                                 <th class="w-[15%]">Validasi PDC</th>
@@ -240,6 +232,7 @@
             <p>{{ $search || $companyFilter || $positionFilter || $departmentFilter ? 'Tidak ada data yang cocok dengan filter yang dipilih.' : 'Data akan muncul setelah talent memiliki development plan aktif.' }}</p>
         </div>
     @endforelse
+    </div>{{-- /panelis-review-wrapper --}}
 
     {{-- ── Kirim Panelis Wizard Modal (tetap di sini agar JS modal tetap bekerja) ── --}}
     <div id="panelisWizardModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -306,6 +299,35 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* ── Panelis Review Table: Perjelas garis & judul kolom Capitalize ── */
+    .panelis-review-wrapper .prem-table th {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 0.8rem;
+        color: #1e293b;
+        border-bottom: 2px solid #cbd5e1;
+        border-right: 1px solid #d1d5db;
+        background: #f1f5f9;
+    }
+    .panelis-review-wrapper .prem-table th:last-child {
+        border-right: none;
+    }
+    .panelis-review-wrapper .prem-table td {
+        border-bottom: 1px solid #d1d5db;
+        border-right: 1px solid #e5e7eb;
+    }
+    .panelis-review-wrapper .prem-table td:last-child {
+        border-right: none;
+    }
+    .panelis-review-wrapper .prem-table tbody tr:last-child td {
+        border-bottom: 1px solid #d1d5db;
+    }
+    .panelis-review-wrapper .prem-card {
+        border: 1.5px solid #cbd5e1;
+    }
+</style>
 
 @push('scripts')
 <script>

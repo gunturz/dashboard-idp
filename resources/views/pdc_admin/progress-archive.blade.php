@@ -103,6 +103,7 @@
             $totalRows = 0;
         @endphp
 
+        <div class="progress-archive-wrapper">
         <div class="prem-card overflow-x-auto">
             <table class="prem-table" id="archiveTable" style="width: 100%; table-layout: auto;">
                 <thead>
@@ -183,19 +184,15 @@
 
                     {{-- Empty state row --}}
                     <tr id="emptyRow" class="hidden">
-                        <td colspan="5" class="py-12 text-center text-slate-500 italic">
+                        <td colspan="6" class="py-12 text-center text-slate-500 italic">
                             Tidak ada talent yang sesuai dengan pencarian Anda.
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        </div>{{-- /progress-archive-wrapper --}}
 
-        @if($totalRows === 0)
-            <div class="text-center text-slate-500 py-10 bg-white rounded-xl shadow-sm border border-slate-200 mt-6">
-                Belum ada data progress archive.
-            </div>
-        @endif
     </div>
 
     <x-slot name="scripts">
@@ -233,10 +230,48 @@
                 }
             }
 
-            document.addEventListener('DOMContentLoaded', filterTalents);
+            document.addEventListener('DOMContentLoaded', () => {
+                filterTalents();
+
+                // Warna placeholder select (abu-abu saat opsi default, gelap saat dipilih)
+                function syncSelectColor(sel) {
+                    sel.style.color = sel.value === '' ? '#94a3b8' : '#334155';
+                }
+                document.querySelectorAll('.archive-select').forEach(sel => {
+                    syncSelectColor(sel);
+                    sel.addEventListener('change', () => syncSelectColor(sel));
+                });
+            });
         </script>
         <style>
             .archive-row td { vertical-align: middle; }
+
+            /* ── Progress Archive Table: Perjelas garis & judul kolom Capitalize ── */
+            .progress-archive-wrapper .prem-table th {
+                text-transform: none;
+                letter-spacing: 0;
+                font-size: 0.8rem;
+                color: #1e293b;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+                background: #f1f5f9;
+            }
+            .progress-archive-wrapper .prem-table th:last-child {
+                border-right: none;
+            }
+            .progress-archive-wrapper .prem-table td {
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
+            }
+            .progress-archive-wrapper .prem-table td:last-child {
+                border-right: none;
+            }
+            .progress-archive-wrapper .prem-table tbody tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
+            }
+            .progress-archive-wrapper .prem-card {
+                border: 1.5px solid #cbd5e1;
+            }
         </style>
     </x-slot>
 

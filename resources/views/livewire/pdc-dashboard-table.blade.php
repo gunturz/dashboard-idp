@@ -32,11 +32,11 @@
             <p>{{ $search ? 'Tidak ada talent yang cocok dengan pencarian.' : 'Belum ada data progress talent' }}</p>
         </div>
     @else
-        <div class="table-scroll">
+        <div class="table-scroll dashboard-table-wrapper">
             <table class="highlight-table">
                 <thead>
                     <tr>
-                        <th>Posisi Dituju</th>
+                        <th>Posisi Yang Dituju</th>
                         <th>Talent</th>
                         <th>Departemen</th>
                         <th>Mentor</th>

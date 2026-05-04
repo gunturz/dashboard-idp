@@ -195,6 +195,37 @@
             font-weight: 500;
         }
 
+        /* ══ Mobile Responsive – Stat Cards ══ */
+        @media (max-width: 767px) {
+            .prem-stat-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important;
+            }
+
+            .prem-stat {
+                aspect-ratio: 1 / 1 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 16px !important;
+            }
+
+            .prem-stat-icon {
+                position: absolute !important;
+                top: 14px !important;
+                left: 14px !important;
+                margin-bottom: 0 !important;
+            }
+
+            .prem-stat-value {
+                font-size: 2rem !important;
+            }
+
+            .prem-stat-label {
+                font-size: 0.75rem !important;
+            }
+        }
+
         /* ══ Page Header ══ */
         .page-header {
             display: flex;

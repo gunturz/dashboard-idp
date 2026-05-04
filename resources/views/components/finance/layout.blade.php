@@ -320,7 +320,7 @@
             </h1>
         </a>
 
-        <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
+        <div class="hidden lg:flex items-center gap-8 flex-1 justify-end pr-8">
             <a href="{{ route('finance.dashboard') }}"
                 class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150 {{ request()->routeIs('finance.dashboard') ? 'active' : '' }}">
                 Dashboard
@@ -336,7 +336,7 @@
         </div>
 
         <div
-            class="flex items-center space-x-2 sm:space-x-3 pl-0 xl:pl-6 border-l-0 xl:border-l border-white/20 xl:ml-0 ml-auto">
+            class="flex items-center space-x-2 sm:space-x-3 pl-0 xl:pl-6 border-l-0 xl:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0">
             {{-- ═══ Notification Bell ═══ --}}
             <div class="relative hidden lg:block" id="bell-wrapper">
                 @php

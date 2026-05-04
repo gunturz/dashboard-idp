@@ -601,9 +601,7 @@
                                 Admin</span>
                         </div>
                     </div>
-
-</div>
-            </div>
+                </div>
 
                 {{-- Menu Items --}}
                 <ul class="py-1.5">

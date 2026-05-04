@@ -16,7 +16,7 @@
         </h1>
     </a>
 
-    <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
+    <div class="hidden lg:flex items-center gap-8 flex-1 justify-end pr-8">
         <a href="{{ route('talent.dashboard') }}#Kompetensi" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="Kompetensi">Kompetensi</a>
         <a href="{{ route('talent.dashboard') }}#IDP Monitoring" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="IDP Monitoring">IDP</a>
         <a href="{{ route('talent.dashboard') }}#Project Improvement" class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150" data-section="Project Improvement">Project Improvement</a>
@@ -38,7 +38,7 @@
         $hasUnreadNotif = $unreadCount > 0;
     @endphp
 
-    <div class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto">
+    <div class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0">
         <!-- Mobile Dropdown Menu -->
         <div class="relative block lg:hidden" id="mobile-menu-wrapper">
             <button class="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95 max-w-[calc(100vw-7rem)]" aria-label="Profil dan notifikasi" id="mobile-menu-btn" onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">

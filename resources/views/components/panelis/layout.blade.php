@@ -231,7 +231,7 @@
         </a>
 
         {{-- Desktop Nav Links --}}
-        <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
+        <div class="hidden lg:flex items-center gap-8 flex-1 justify-end pr-8">
             <a href="{{ route('panelis.dashboard') }}"
                 class="text-sm font-semibold transition-colors pb-0.5
                 {{ request()->routeIs('panelis.dashboard') ? 'text-white border-b-2 border-[#14b8a6]' : 'text-white/60 hover:text-white' }}">
@@ -246,7 +246,7 @@
 
         {{-- ── Right: Actions ── --}}
         <div
-            class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0">
+            class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0 flex-nowrap">
 
             <div class="hidden"></div>
 

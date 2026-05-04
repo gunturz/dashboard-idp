@@ -528,7 +528,7 @@
         </a>
 
         {{-- Desktop Nav Links --}}
-        <div class="hidden xl:flex items-center gap-8 ml-auto pr-8">
+        <div class="hidden lg:flex items-center gap-8 flex-1 justify-end pr-8">
             <a href="{{ route('mentor.dashboard') }}"
                 class="nav-menu-link text-white/60 font-semibold text-sm pb-0.5 hover:text-white transition-colors duration-150 {{ request()->routeIs('mentor.dashboard') ? 'active' : '' }}">
                 Dashboard
@@ -544,7 +544,7 @@
         </div>
 
         <div
-            class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto h-10">
+            class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-4 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0 h-10">
 
             {{-- ═══ Mobile Hamburger Menu (visible only on mobile <1024px) ═══ --}}
             <div class="relative block lg:hidden" id="mobile-menu-wrapper">

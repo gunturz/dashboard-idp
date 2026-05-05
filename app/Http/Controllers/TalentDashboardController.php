@@ -205,8 +205,8 @@ class TalentDashboardController extends Controller
             $rules = [
                 'theme' => 'required|string|max:255',
                 'activity_date' => 'required|date',
-                'documents' => 'nullable|array|max:5', // maks 5 file
-                'documents.*' => 'file|max:5120|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx',
+                'documents' => 'required|array|min:1|max:5', // maks 5 file
+                'documents.*' => 'required|file|max:5120|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx',
             ];
 
             if ($tab === 'learning') {
@@ -243,6 +243,8 @@ class TalentDashboardController extends Controller
             }
 
             $validated = $request->validate($rules, [
+                'documents.required' => 'Dokumentasi wajib dilampirkan.',
+                'documents.min' => 'Dokumentasi wajib dilampirkan minimal 1 file.',
                 'documents.max' => 'Maksimal 5 file yang bisa diupload.',
                 'documents.*.max' => 'Ukuran setiap file tidak boleh melebihi 5 MB.',
                 'documents.*.mimes' => 'Format file harus: PNG, JPG, PDF, DOC, DOCX, XLS, XLSX.',
@@ -313,7 +315,8 @@ class TalentDashboardController extends Controller
                 'info'
             );
 
-            return redirect()->route('talent.idp_monitoring', $tab)->with('success', 'IDP Activity berhasil disubmit.');
+            return redirect(route('talent.dashboard') . '#IDP Monitoring')
+                ->with('success', 'IDP Activity berhasil disubmit.');
         }
         catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
@@ -651,6 +654,10 @@ class TalentDashboardController extends Controller
             $keptPaths = $request->input('existing_documents_paths', []);
             $keptNames = $request->input('existing_documents_names', []);
 
+            if (empty($keptPaths) && !$request->hasFile('documents')) {
+                return back()->with('error', 'Dokumentasi wajib dilampirkan minimal 1 file.')->withInput();
+            }
+
             // Evaluasi file lama mana yang dihapus user dari UI
             if ($activity->document_path) {
                 $oldPaths = [];
@@ -717,7 +724,8 @@ class TalentDashboardController extends Controller
                 'info'
             );
 
-            return redirect()->route('talent.logbook.detail')->with('success', 'IDP Activity berhasil diperbarui.');
+            return redirect(route('talent.dashboard') . '#IDP Monitoring')
+                ->with('success', 'IDP Activity berhasil diperbarui.');
         }
         catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();

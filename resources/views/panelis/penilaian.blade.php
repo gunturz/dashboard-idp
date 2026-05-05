@@ -80,57 +80,66 @@
                 }
             }
 
-            /* ── Info Card (dark) ── */
-            .info-card {
-                background: #0f172a;
-                border-radius: 14px;
-                padding: 20px 28px;
-                margin-bottom: 32px;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px 40px;
+            /* ── Info Card (dark) -> Replaced with Profile Card style ── */
+            .talent-prof-hero {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
+                padding: 28px 32px; display: flex; align-items: stretch; gap: 0;
+                position: relative; overflow: hidden; border-radius: 20px;
+                margin-bottom: 32px; box-shadow: 0 8px 32px rgba(15,23,42,0.35);
+            }
+            .talent-prof-hero::before {
+                content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px;
+                border-radius: 50%; background: rgba(20, 184, 166, 0.08); pointer-events: none;
+            }
+            .talent-prof-hero::after {
+                content: ''; position: absolute; bottom: -60px; left: 30%; width: 280px; height: 280px;
+                border-radius: 50%; background: rgba(255, 255, 255, 0.04); pointer-events: none;
             }
 
-            @media (max-width: 640px) {
-                .info-card {
-                    grid-template-columns: 1fr;
-                }
+            .talent-hero-avatar-wrap { position: relative; flex-shrink: 0; }
+            .talent-hero-avatar-img {
+                width: 96px; height: 96px; border-radius: 20px; object-fit: cover;
+                border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            }
+            .talent-hero-avatar-placeholder {
+                width: 96px; height: 96px; border-radius: 20px; background: rgba(255,255,255,0.12);
+                display: flex; align-items: center; justify-content: center; font-size: 2.4rem; font-weight: 800;
+                color: white; border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.2); letter-spacing: -1px;
             }
 
-            .info-row {
-                display: flex;
-                align-items: baseline;
-                gap: 10px;
-            }
+            .talent-hero-section { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 28px; position: relative; z-index: 1; }
+            .talent-hero-section-1 { flex: 1; min-width: 0; display: flex; align-items: center; gap: 20px; padding: 0 28px 0 0; position: relative; z-index: 1; }
+            .talent-hero-divider { width: 1px; align-self: stretch; background: rgba(255,255,255,0.15); flex-shrink: 0; margin: 4px 0; }
 
-            .info-row label {
-                font-size: 0.75rem;
-                font-weight: 700;
-                color: #94a3b8;
-                white-space: nowrap;
-                min-width: 120px;
+            .talent-hero-info { min-width: 0; }
+            .talent-hero-name { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.2; }
+            .talent-hero-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 3px; }
+            .talent-hero-badge {
+                display: inline-flex; align-items: center; gap: 6px; background: rgba(20,184,166,0.18);
+                border: 1px solid rgba(20,184,166,0.3); color: #5eead4; font-size: 0.75rem; font-weight: 700;
+                padding: 4px 12px; border-radius: 99px; margin-top: 10px; letter-spacing: .04em;
             }
+            .talent-hero-meta-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-weight: 500; line-height: 1.2; }
+            .talent-hero-meta-value { font-size: 0.9rem; color: rgba(255,255,255,0.92); font-weight: 700; margin-top: 1px; line-height: 1.3; }
+            .talent-hero-meta-row { display: flex; flex-direction: column; }
 
-            .info-row span {
-                font-size: 0.85rem;
-                font-weight: 600;
-                color: #f1f5f9;
+            .date-input-custom {
+                background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px;
+                color: #f1f5f9; font-size: 0.82rem; padding: 4px 10px; font-family: 'Poppins', sans-serif;
+                outline: none; color-scheme: dark; margin-top: 2px; display: inline-block; width: max-content;
             }
+            .date-input-custom:focus { border-color: #14b8a6; }
 
-            .info-row input[type="date"] {
-                background: transparent;
-                border: 1px solid #475569;
-                border-radius: 6px;
-                color: #f1f5f9;
-                font-size: 0.82rem;
-                padding: 4px 10px;
-                font-family: 'Poppins', sans-serif;
-                outline: none;
-                color-scheme: dark;
+            @media (max-width: 1024px) {
+                .talent-hero-section { padding: 0 16px; }
+                .talent-hero-section-1 { padding: 0 16px 0 0; }
             }
-
-            .info-row input[type="date"]:focus {
-                border-color: #14b8a6;
+            @media (max-width: 768px) {
+                .talent-prof-hero { flex-direction: column; align-items: stretch; gap: 0; padding: 24px; }
+                .talent-hero-section, .talent-hero-section-1 { flex: none; }
+                .talent-hero-section-1 { padding: 0; flex-direction: row; align-items: center; }
+                .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 16px 0; }
+                .talent-hero-section { padding: 0; }
             }
 
             /* ── Section heading ── */
@@ -513,33 +522,50 @@
     </div>
 
     {{-- Info Card (dark) --}}
-    <div class="info-card">
-        <div>
-            <div class="info-row">
-                <label>Nama Talent</label>
-                <span>{{ $talent->nama }}</span>
+    <div class="talent-prof-hero fade-up fade-up-1">
+        {{-- Section 1: Avatar + Identity --}}
+        <div class="talent-hero-section-1">
+            <div class="talent-hero-avatar-wrap">
+                @if ($talent->foto ?? false)
+                    <img src="{{ asset('storage/' . $talent->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
+                @else
+                    <div class="talent-hero-avatar-placeholder">{{ strtoupper(substr($talent->nama ?? 'T', 0, 1)) }}</div>
+                @endif
             </div>
-            <div class="info-row mt-2">
-                <label>Posisi saat ini</label>
-                <span>{{ optional($talent->position)->position_name ?? '-' }}</span>
-            </div>
-            <div class="info-row mt-2">
-                <label>Departemen</label>
-                <span>{{ optional($talent->department)->nama_department ?? '-' }}</span>
-            </div>
-            <div class="info-row mt-2">
-                <label>Judul Presentasi</label>
-                <span>{{ $project->title ?? 'Pengembangan bla bla bla' }}</span>
+            <div class="talent-hero-info">
+                <div class="talent-hero-name">{{ $talent->nama }}</div>
+                <div class="talent-hero-sub">
+                    {{ optional($talent->position)->position_name ?? '-' }} &rarr; {{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                </div>
+                <div class="talent-hero-badge">{{ ucfirst($talent->role->role_name ?? 'Talent') }}</div>
             </div>
         </div>
-        <div>
-            <div class="info-row">
-                <label>Nama Penilai</label>
-                <span>{{ $user->nama ?? ($user->name ?? '-') }}</span>
+
+        <div class="talent-hero-divider"></div>
+
+        {{-- Section 2: Departemen, Judul Presentasi --}}
+        <div class="talent-hero-section flex-1">
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Departemen</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->department)->nama_department ?? '-' }}</span>
             </div>
-            <div class="info-row mt-2">
-                <label>Tanggal Penilaian</label>
-                <input type="date" id="tanggal-penilaian"
+            <div class="talent-hero-meta-row mt-2">
+                <span class="talent-hero-meta-label">Judul Presentasi</span>
+                <span class="talent-hero-meta-value" style="word-wrap: break-word; white-space: normal; line-height: 1.4;">{{ $project->title ?? 'Pengembangan bla bla bla' }}</span>
+            </div>
+        </div>
+
+        <div class="talent-hero-divider"></div>
+
+        {{-- Section 3: Nama Penilai, Tanggal Penilaian --}}
+        <div class="talent-hero-section flex-1">
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Nama Penilai</span>
+                <span class="talent-hero-meta-value">{{ $user->nama ?? ($user->name ?? '-') }}</span>
+            </div>
+            <div class="talent-hero-meta-row mt-2">
+                <span class="talent-hero-meta-label">Tanggal Penilaian</span>
+                <input type="date" id="tanggal-penilaian" class="date-input-custom"
                     value="{{ $existingAssessment && $existingAssessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($existingAssessment->panelis_tanggal_penilaian)->format('Y-m-d') : now()->format('Y-m-d') }}">
             </div>
         </div>
@@ -633,7 +659,7 @@
                             'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',
                         ],
                         [
-                            'name' => 'Refleksi Peran sebagai GM',
+                            'name' => 'Refleksi Peran sebagai Posisi yang Dituju',
                             'indicator' =>
                                 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
                         ],

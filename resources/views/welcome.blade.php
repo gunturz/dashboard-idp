@@ -204,7 +204,7 @@
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(135deg, rgba(15, 23, 42, 0.90) 0%, rgba(15, 23, 42, 0.40) 50%, rgba(15, 23, 42, 0.95) 100%),
+                linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(15, 23, 42, 0.85) 50%, rgba(15, 23, 42, 0.99) 100%),
                 url("{{ asset('asset/Gambar%20TS.png') }}");
             background-size: cover;
             background-position: center;
@@ -940,7 +940,7 @@
                 font-size: 0.6rem;
                 letter-spacing: 1px;
             }
-            
+
             .nav-logo-text span:last-child {
                 font-size: 0.8rem;
                 white-space: normal;
@@ -956,7 +956,7 @@
                 font-size: 0.85rem;
                 gap: 4px;
             }
-            
+
             .btn-nav-primary svg {
                 width: 16px !important;
                 height: 16px !important;
@@ -1042,7 +1042,7 @@
             <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo">
             <div class="nav-logo-text">
                 <span>Portal</span>
-                <span>Individual Development Plan</span>
+                <span>IDP</span>
             </div>
         </a>
         <div class="nav-cta">
@@ -1065,7 +1065,7 @@
         <div style="position: relative; z-index: 2; width: 100%;">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Sistem Pengelolaan<br>Individual<br>Development Plan
+                    Individual<br> Development Plan
                 </h1>
 
                 <p class="hero-desc">

@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Progress Archive â€“ PDC Admin" :user="$user">
+<x-pdc_admin.layout title="Progress Archive – PDC Admin" :user="$user">
 
     <div class="px-2 pb-10">
         {{-- Page Header --}}

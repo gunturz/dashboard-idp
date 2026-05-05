@@ -62,55 +62,7 @@
                 transform: translateX(-2px);
             }
 
-            /* ── Profile header card ── */
-            .profile-card {
-                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
-                border-radius: 20px;
-                padding: 32px 36px;
-                display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-                margin-bottom: 28px;
-                position: relative;
-                overflow: hidden;
-                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-                color: white;
-            }
-            .profile-card::before {
-                content: '';
-                position: absolute;
-                top: -40px; right: -40px;
-                width: 200px; height: 200px;
-                border-radius: 50%;
-                background: rgba(20,184,166,0.08);
-            }
-            .profile-card::after {
-                content: '';
-                position: absolute;
-                bottom: -60px; left: 30%;
-                width: 250px; height: 250px;
-                border-radius: 50%;
-                background: rgba(255,255,255,0.04);
-            }
-            .profile-col-1 {
-                display: flex; align-items: center; gap: 16px;
-                border-right: 1px solid rgba(255, 255, 255, 0.2); padding-right: 16px;
-                position: relative; z-index: 1;
-            }
-            .profile-col-general {
-                display: flex; flex-direction: column; justify-content: center; gap: 12px;
-                position: relative; z-index: 1;
-            }
-            .profile-col-general:nth-child(2) {
-                border-right: 1px solid rgba(255, 255, 255, 0.2); padding-right: 16px;
-            }
-            .profile-avatar {
-                width: 80px; height: 80px; border-radius: 20px; object-fit: cover;
-                border: 2px solid rgba(255, 255, 255, 0.4); flex-shrink: 0;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            }
-            .profile-info h3 { font-size: 1.15rem; font-weight: 800; color: white; margin-bottom: 4px; }
-            .profile-info p { font-size: 0.8rem; color: #cbd5e1; font-style: italic; }
-            .meta-item { font-size: 0.82rem; color: #cbd5e1; }
-            .meta-item strong { color: white; font-weight: 700; font-size: 0.85rem; }
+
 
             /* ── Section title ── */
             .section-title {
@@ -120,7 +72,7 @@
             }
 
             /* ── Heatmap table ── */
-            .heatmap-container { background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+            .heatmap-container { background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
             .heatmap-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
             .heatmap-table th, .heatmap-table td { border: 1px solid #e2e8f0; padding: 9px 14px; text-align: center; }
             .heatmap-table .th-main { background: #f8fafc; font-weight: 700; color: #1e293b; }
@@ -165,17 +117,20 @@
                 box-shadow: 0 1px 4px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 24px;
             }
 
-            /* ── Project Table ── */
+            /* ── Project Table (matched to admin pdc-custom-table) ── */
             .proj-table { width:100%; border-collapse:collapse; background:white; border-radius:12px; overflow:hidden; border:1px solid #e2e8f0; }
-            .proj-table th { background:#f8fafc; padding:12px 16px; border:1px solid #e2e8f0; font-size:0.85rem; font-weight:800; color:#1e293b; text-align:center; }
-            .proj-table td { padding:14px 16px; border:1px solid #e2e8f0; font-size:0.85rem; text-align:center; color:#334155; }
+            .proj-table th { background:#f8fafc; padding:12px; border:1px solid #e2e8f0; font-size:0.85rem; font-weight:800; color:#1e293b; text-align:center; }
+            .proj-table td { padding:12px; border:1px solid #e2e8f0; font-size:0.85rem; text-align:center; color:#334155; }
+
+            /* ── Card Wrappers (matched to admin) ── */
+            .section-card { background:white; border:1px solid #e2e8f0; border-radius:16px; padding:24px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom:24px; overflow:hidden; }
+            .idp-card-container { background:#f8fafc; border-radius:16px; padding:24px; border:1px solid #e2e8f0; margin-bottom:24px; }
+            .donut-container { background:white; border-radius:16px; padding:30px; display:flex; justify-content:space-around; align-items:center; box-shadow:0 10px 15px -3px rgba(0,0,0,0.05); flex-wrap:wrap; gap:24px; }
 
             /* ── LogBook summary ── */
             /* Using inline tailwind classes */
 
             @media (max-width: 768px) {
-                .profile-card { grid-template-columns: 1fr; gap: 16px; padding: 24px; }
-                .profile-col-1, .profile-col-general:nth-child(2) { border-right: none; padding-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 16px; }
                 .donut-container { flex-direction: column; }
             }
         </style>
@@ -194,41 +149,9 @@
         </div>
     </div>
 
-    {{-- Profile Card --}}
-    <div class="profile-card">
-        {{-- Kolom 1: Profil --}}
-        <div class="profile-col-1">
-            <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=e0f2fe&color=0284c7' }}"
-                alt="{{ $talent->nama }}" class="profile-avatar">
-            <div class="profile-info">
-                <h3>{{ $talent->nama }}</h3>
-                <p>
-                     {{ $talent->position->position_name ?? '-' }}
-                     &rarr;
-                     {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
-                </p>
-            </div>
-        </div>
+    {{-- Profile Card (Using Shared Component) --}}
+    @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
 
-        {{-- Kolom 2: Perusahaan & Mentor --}}
-        <div class="profile-col-general">
-            <div class="meta-item"><strong>Perusahaan</strong><br>{{ optional($talent->company)->nama_company ?? '-' }}</div>
-            <div class="meta-item"><strong>Mentor</strong><br>
-                @php
-                    $mIds = optional($talent->promotion_plan)->mentor_ids ?? [];
-                    echo !empty($mIds)
-                        ? \App\Models\User::whereIn('id', $mIds)->pluck('nama')->implode(', ')
-                        : (optional($talent->mentor)->nama ?? '-');
-                @endphp
-            </div>
-        </div>
-
-        {{-- Kolom 3: Departemen & Atasan --}}
-        <div class="profile-col-general">
-            <div class="meta-item"><strong>Departemen</strong><br>{{ optional($talent->department)->nama_department ?? '-' }}</div>
-            <div class="meta-item"><strong>Atasan</strong><br>{{ optional($talent->atasan)->nama ?? '-' }}</div>
-        </div>
-    </div>
 
     {{-- ====== TOP 3 GAP ====== --}}
     <div class="section-title">
@@ -355,7 +278,8 @@
         ];
         $r = 38; $circ = 2 * M_PI * $r;
     @endphp
-    <div class="donut-container">
+    <div class="idp-card-container">
+        <div class="donut-container">
         @foreach($charts as $chart)
             @php $pct = $chart['done'] / $chart['total']; $filled = $pct * $circ; $empty = $circ - $filled; @endphp
             <div class="flex flex-col items-center gap-3">
@@ -382,6 +306,8 @@
             </div>
         @endforeach
     </div>
+        </div>
+    </div>
 
     {{-- ====== PROJECT IMPROVEMENT ====== --}}
     <div class="section-title">
@@ -391,6 +317,7 @@
         Project Improvement
     </div>
 
+    <div class="section-card">
     <table class="proj-table">
         <thead>
             <tr>
@@ -422,6 +349,7 @@
             @endforelse
         </tbody>
     </table>
+    </div>
 
     {{-- ====== LOGBOOK SUMMARY ====== --}}
     <div class="section-title">

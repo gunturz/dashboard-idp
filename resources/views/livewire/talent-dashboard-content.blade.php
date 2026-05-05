@@ -238,7 +238,7 @@
                         <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
                     </div>
                     <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'exposure') }}"
-                        class="mt-4 w-full block text-center bg-amber-400 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-500 transition active:scale-95' }}"
+                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
                         {{ optional($user->promotion_plan)->is_locked ? 'title="Progress telah dikunci"' : '' }}>
                         Upload
                     </a>
@@ -268,7 +268,7 @@
                         <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
                     </div>
                     <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'mentoring') }}"
-                        class="mt-4 w-full block text-center bg-amber-400 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-500 transition active:scale-95' }}"
+                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
                         {{ optional($user->promotion_plan)->is_locked ? 'title="Progress telah dikunci"' : '' }}>
                         Upload
                     </a>
@@ -299,7 +299,7 @@
                         <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
                     </div>
                     <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'learning') }}"
-                        class="mt-4 w-full block text-center bg-amber-400 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-500 transition active:scale-95' }}"
+                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
                         {{ optional($user->promotion_plan)->is_locked ? 'title="Progress telah dikunci"' : '' }}>
                         Upload
                     </a>

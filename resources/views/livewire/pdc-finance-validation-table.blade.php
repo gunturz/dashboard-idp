@@ -73,38 +73,19 @@
                 <option value="rejected">Rejected</option>
             </select>
         </div>
-        {{-- Loading indicator --}}
-        <div wire:loading class="flex items-center gap-1.5 text-xs text-[#14b8a6] font-medium">
-            <svg style="width:14px;height:14px;animation:lvwire-spin 1s linear infinite;"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle style="opacity:.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path style="opacity:.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-            </svg>
-            Memfilter...
-        </div>
     </div>
 
     {{-- Table --}}
     <div class="prem-card">
-        <div class="prem-card-header">
-            <span class="prem-card-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM9.75 17.25a.75.75 0 00-1.5 0V18a.75.75 0 001.5 0v-.75zm2.25-3a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0v-3a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0V18a.75.75 0 001.5 0v-4.5z"
-                        clip-rule="evenodd" />
-                </svg>
-                Daftar Permintaan Validasi
-            </span>
-        </div>
-        <div class="overflow-x-auto">
-        <table class="fv-table">
+        <div class="    overflow-x-auto finance-validation-wrapper">
+        <table class="prem-table">
             <thead>
                 <tr>
                     <th style="width: 16%; min-width: 150px;">Talent</th>
                     <th style="width: 22%; min-width: 200px;">Judul Project Improvement</th>
                     <th style="width: 7%; min-width: 80px;">File</th>
                     <th style="width: 10%; min-width: 130px;">Validasi Finance</th>
-                    <th style="width: 20%; min-width: 200px;">Feedback dari Finance</th>
+                    <th style="width: 20%; min-width: 200px;">Feedback Dari Finance</th>
                     <th style="width: 25%; min-width: 240px;">Aksi</th>
                 </tr>
             </thead>
@@ -410,6 +391,32 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* ── Finance Validation Table: Perjelas garis & judul kolom Capitalize ── */
+    .finance-validation-wrapper .prem-table th {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 0.8rem;
+        color: #1e293b;
+        border-bottom: 2px solid #cbd5e1;
+        border-right: 1px solid #d1d5db;
+        background: #f1f5f9;
+    }
+    .finance-validation-wrapper .prem-table th:last-child {
+        border-right: none;
+    }
+    .finance-validation-wrapper .prem-table td {
+        border-bottom: 1px solid #d1d5db;
+        border-right: 1px solid #e5e7eb;
+    }
+    .finance-validation-wrapper .prem-table td:last-child {
+        border-right: none;
+    }
+    .finance-validation-wrapper .prem-table tbody tr:last-child td {
+        border-bottom: 1px solid #d1d5db;
+    }
+</style>
 
 @push('scripts')
     <style>

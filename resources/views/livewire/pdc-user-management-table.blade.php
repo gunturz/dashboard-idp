@@ -37,7 +37,19 @@
     </div>{{-- /prem-stat-grid --}}
     </div>{{-- /overflow-x wrapper --}}
 
+    {{-- Tambah User Button (Atas, Kanan) --}}
+    <div class="flex justify-end mb-4">
+        <button type="button" onclick="openAddUserModal()"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2e3746] hover:bg-[#1e2736] text-white text-sm font-semibold rounded-xl transition-colors shadow-sm shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Tambah User
+        </button>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        {{-- Search --}}
         <div class="md:col-span-2 relative">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -47,6 +59,7 @@
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
         </div>
 
+        {{-- Filter Perusahaan --}}
         <div class="relative">
             <select wire:model.live="company"
                 class="w-full border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white appearance-none transition-all">
@@ -68,6 +81,7 @@
                 </select>
             </div>
         @endif
+
     </div>
 
     <div class="flex flex-col gap-8 relative">
@@ -85,7 +99,7 @@
                         $users = $usersByRole[$roleKey];
                         $showDepartmentAndPosition = !in_array($roleKey, ['finance', 'panelis']);
                         $showMultiRole = !in_array($roleKey, ['finance', 'panelis']);
-                        $emptyStateColspan = 4 + ($showDepartmentAndPosition ? 2 : 0) + ($showMultiRole ? 1 : 0);
+                        $emptyStateColspan = 5 + ($showDepartmentAndPosition ? 2 : 0) + ($showMultiRole ? 1 : 0);
                     @endphp
 
                     <div class="border border-[#e2e8f0] rounded-2xl overflow-hidden shadow-sm bg-white">
@@ -107,6 +121,7 @@
                             <table class="prem-table">
                                 <thead>
                                     <tr>
+                                        <th>Username</th>
                                         <th>Email</th>
                                         <th>Nama Lengkap</th>
                                         <th>Perusahaan</th>
@@ -124,11 +139,20 @@
                                     @forelse($users as $u)
                                         <tr wire:key="user-row-{{ $roleKey }}-{{ $u->id }}" class="bg-white hover:bg-gray-50/80 transition-colors">
                                             <td class="px-4 py-3">
+                                                <span class="block truncate max-w-[150px] text-sm font-medium text-[#475569]" title="{{ $u->username }}">
+                                                    {{ $u->username }}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3">
                                                 <span class="block truncate max-w-[180px] text-sm text-[#475569]" title="{{ $u->email }}">
                                                     {{ $u->email }}
                                                 </span>
                                             </td>
-                                            <td class="text-sm font-semibold text-[#2e3746] whitespace-nowrap px-4 py-3">{{ $u->nama }}</td>
+                                            <td class="px-4 py-3">
+                                                <span class="block truncate max-w-[180px] text-sm font-semibold text-[#2e3746]" title="{{ $u->nama }}">
+                                                    {{ $u->nama }}
+                                                </span>
+                                            </td>
                                             <td class="text-sm text-[#475569] px-4 py-3">{{ $u->company->nama_company ?? '—' }}</td>
                                             @if($showDepartmentAndPosition)
                                                 <td class="text-sm text-[#475569] px-4 py-3">{{ $u->department->nama_department ?? '—' }}</td>
@@ -147,10 +171,13 @@
                                             @endif
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openResetPasswordModal({{ $u->id }})"
-                                                        class="inline-flex items-center justify-center w-9 h-9 bg-[#F4F1EA] hover:bg-[#eadecc] border border-[#e5e1d8] rounded-lg transition-colors shadow-sm" title="Reset Password">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#475569]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                                    <button type="button" onclick="openEditUserModal({{ $u->id }}, '{{ addslashes($u->username) }}', '{{ addslashes($u->nama) }}', '{{ addslashes($u->email) }}', '{{ $u->company_id }}', '{{ $u->department_id }}', '{{ $u->position_id }}')"
+                                                        class="inline-flex items-center justify-center w-9 h-9 bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 hover:border-blue-200 rounded-lg transition-colors shadow-sm" title="Edit Profile">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[23px] w-[23px]" viewBox="0 0 24 24">
+                                                            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                                            <path fill="currentColor" fill-opacity="0.25" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                                                            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                                                            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487L19.5 7.125" />
                                                         </svg>
                                                     </button>
                                                     <button type="button" onclick="openDeleteModal({{ $u->id }})"

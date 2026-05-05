@@ -159,12 +159,16 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.target_score.update');
     Route::get('/pdc-admin/user-management', [\App\Http\Controllers\PDCAdminController::class, 'user_management'])
         ->name('pdc_admin.user_management');
+    Route::post('/pdc-admin/user', [\App\Http\Controllers\PDCAdminController::class, 'storeUser'])
+        ->name('pdc_admin.user.store');
     Route::post('/pdc-admin/assign-role/{id}', [\App\Http\Controllers\PDCAdminController::class, 'assignRole'])
         ->name('pdc_admin.assign_role');
     Route::post('/pdc-admin/reset-password/{id}', [\App\Http\Controllers\PDCAdminController::class, 'resetPassword'])
         ->name('pdc_admin.reset_password');
     Route::delete('/pdc-admin/user/{id}', [\App\Http\Controllers\PDCAdminController::class, 'destroyUser'])
         ->name('pdc_admin.user.destroy');
+    Route::put('/pdc-admin/user/{id}', [\App\Http\Controllers\PDCAdminController::class, 'updateUser'])
+        ->name('pdc_admin.user.update');
     // Company Management
     Route::get('/pdc-admin/company-management', [\App\Http\Controllers\PDCAdminController::class, 'companyManagement'])
         ->name('pdc_admin.company_management');

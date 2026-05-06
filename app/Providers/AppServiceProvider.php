@@ -20,7 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') === 'local') {
+        // Jika aplikasi diakses melalui proxy aman seperti Ngrok (HTTPS), 
+        // maka paksa semua routing & assets menjadi HTTPS.
+        // Jika diakses lokal murni (php artisan serve), biarkan tetap HTTP/Normal.
+        if (request()->server('HTTP_X_FORWARDED_PROTO') === 'https') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
     }

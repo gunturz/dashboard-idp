@@ -77,7 +77,7 @@ class PdcCompanyManagement extends Component
     public function render()
     {
         $companies = Company::when($this->search, fn($q) => $q->where('nama_company', 'like', '%' . $this->search . '%'))
-            ->orderBy('nama_company')
+            ->orderBy('id')
             ->get();
 
         return view('livewire.pdc-company-management', compact('companies'));

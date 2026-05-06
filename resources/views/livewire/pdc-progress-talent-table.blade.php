@@ -94,6 +94,7 @@
                                             $periodLabel = \Carbon\Carbon::parse($posData['start_date'])->translatedFormat('d M Y') . ' - ' . \Carbon\Carbon::parse($posData['target_date'])->translatedFormat('d M Y');
                                         }
                                         $groupLabel = trim(($posData['targetPosition']->position_name ?? '-') . ' - ' . ($posData['department_name'] ?? '-'));
+                                        $talentNames = $posData['talents']->pluck('nama')->filter()->implode(', ');
                                     @endphp
                                     @foreach ($posData['talents'] as $index => $talent)
                                         <tr class="talent-row">
@@ -167,7 +168,7 @@
                                                             <button type="button"
                                                                 class="inline-flex h-9 w-full items-center justify-center rounded-lg border border-red-500 bg-[#ef4444] text-white transition hover:bg-[#dc2626]"
                                                                 title="Hapus progress talent"
-                                                                wire:click="openDeleteModal('{{ route('pdc_admin.development_plan.destroy', $detailRouteParams) }}', '{{ addslashes($groupLabel) }}')">
+                                                                wire:click="openDeleteModal('{{ route('pdc_admin.development_plan.destroy', $detailRouteParams) }}', '{{ addslashes($groupLabel) }}', '{{ addslashes($talentNames) }}')">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 7.5h12M9.75 7.5V6a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v1.5m-7.5 0v10.125A1.875 1.875 0 008.625 19.5h6.75a1.875 1.875 0 001.875-1.875V7.5M10.5 10.5v5.25m3-5.25v5.25" />
                                                                 </svg>
@@ -206,7 +207,8 @@
                     </div>
                     <h3 class="text-center text-lg font-bold text-slate-800">Hapus Progress Talent?</h3>
                     <p class="mt-2 text-center text-sm leading-6 text-slate-500">
-                        Progress talent untuk posisi <span class="font-semibold text-slate-700">{{ $deletePositionName }}</span> akan dihapus.
+                        Progress talent untuk posisi <span class="font-semibold text-slate-700">{{ $deletePositionName }}</span> dengan nama talent 
+                        <span class="font-semibold text-slate-700">{{ $deleteTalentNames }}</span> akan dihapus.
                         Tindakan ini tidak bisa dibatalkan.
                     </p>
                 </div>
@@ -248,7 +250,7 @@
         border-bottom: 1px solid #d1d5db;
         border-right: 1px solid #e5e7eb;
     }
-    .progress-talent-wrapper .prem-table td:last-child {
+    .progress-talent-wrapper .prem-table td.action-cell {
         border-right: none;
     }
     .progress-talent-wrapper .prem-table tbody tr:last-child td {

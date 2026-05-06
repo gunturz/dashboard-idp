@@ -683,6 +683,7 @@
                             </form>
                         </div>
                     </div>
+                </div>
 
             {{-- -- Mobile Notif Dropdown (realtime, dedicated) -- --}}
             <div id="mobile-notif-dropdown"

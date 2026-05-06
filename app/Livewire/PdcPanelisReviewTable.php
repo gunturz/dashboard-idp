@@ -38,19 +38,21 @@ class PdcPanelisReviewTable extends Component
     public function getGroupedDataProperty()
     {
         $query = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
-            ->whereHas('promotion_plan', fn($q) => $q
-        ->whereNotNull('target_position_id')
-        ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
-        )
+            ->whereHas(
+                'promotion_plan',
+                fn($q) => $q
+                    ->whereNotNull('target_position_id')
+                    ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
+            )
             ->with([
-            'company',
-            'department',
-            'position',
-            'mentor',
-            'atasan',
-            'promotion_plan.targetPosition',
-            'improvementProjects',
-        ]);
+                'company',
+                'department',
+                'position',
+                'mentor',
+                'atasan',
+                'promotion_plan.targetPosition',
+                'improvementProjects',
+            ]);
 
         if ($this->search) {
             $query->where('nama', 'like', '%' . $this->search . '%');
@@ -66,48 +68,54 @@ class PdcPanelisReviewTable extends Component
         }
 
         $talents = $query->get()
-            ->sortByDesc(fn($t) =>
-        optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
-        ?? optional($t->promotion_plan)->created_at
-        ?? $t->created_at
-        )
+            ->sortByDesc(
+                fn($t) =>
+                optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
+                ?? optional($t->promotion_plan)->created_at
+                ?? $t->created_at
+            )
             ->values();
 
         return $talents->groupBy('company_id')
             ->map(function ($companyTalents) {
-            $sorted = $companyTalents->sortByDesc(fn($t) =>
-            optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
-            ?? optional($t->promotion_plan)->created_at
-            ?? $t->created_at
-            )->values();
-
-            return [
-                'company' => $sorted->first()->company,
-                'latest_project_at' => $sorted->max(fn($t) =>
-            optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
-            ?? optional($t->promotion_plan)->created_at
-            ?? $t->created_at
-            ),
-                'positions' => $sorted->groupBy(function ($item) {
-                $pos = $item->promotion_plan->target_position_id ?? 0;
-                $dept = $item->department_id ?? 0;
-                return $pos . '_' . $dept;
-            }
-            )
-                ->map(function ($positionTalents) {
-                $sortedPos = $positionTalents->sortByDesc(fn($t) =>
-                optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
-                ?? optional($t->promotion_plan)->created_at
-                ?? $t->created_at
+                $sorted = $companyTalents->sortByDesc(
+                    fn($t) =>
+                    optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
+                    ?? optional($t->promotion_plan)->created_at
+                    ?? $t->created_at
                 )->values();
+
                 return [
-                        'targetPosition' => $sortedPos->first()->promotion_plan->targetPosition ?? null,
-                        'talents' => $sortedPos,
-                    ];
-            }
-            ),
-            ];
-        })
+                    'company' => $sorted->first()->company,
+                    'latest_project_at' => $sorted->max(
+                        fn($t) =>
+                        optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
+                        ?? optional($t->promotion_plan)->created_at
+                        ?? $t->created_at
+                    ),
+                    'positions' => $sorted->groupBy(
+                        function ($item) {
+                            $pos = $item->promotion_plan->target_position_id ?? 0;
+                            $dept = $item->department_id ?? 0;
+                            return $pos . '_' . $dept;
+                        }
+                    )
+                        ->map(
+                            function ($positionTalents) {
+                                $sortedPos = $positionTalents->sortByDesc(
+                                    fn($t) =>
+                                    optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at
+                                    ?? optional($t->promotion_plan)->created_at
+                                    ?? $t->created_at
+                                )->values();
+                                return [
+                                    'targetPosition' => $sortedPos->first()->promotion_plan->targetPosition ?? null,
+                                    'talents' => $sortedPos,
+                                ];
+                            }
+                        ),
+                ];
+            })
             ->sortByDesc('latest_project_at');
     }
 
@@ -126,7 +134,7 @@ class PdcPanelisReviewTable extends Component
         foreach ($allTalents as $talent) {
             $alreadySent = in_array(
                 optional($talent->promotion_plan)->status_promotion,
-            ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
+                ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
             );
             $isReviewedByPanelis = PanelisAssessment::where('user_id_talent', $talent->id)->exists();
 
@@ -143,7 +151,7 @@ class PdcPanelisReviewTable extends Component
 
     public function render()
     {
-        $companies = Company::orderBy('nama_company')->get();
+        $companies = Company::orderBy('id')->get();
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
         $panelisUsers = User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director']))
             ->with(['company', 'position'])

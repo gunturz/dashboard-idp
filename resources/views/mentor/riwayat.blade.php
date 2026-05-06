@@ -32,27 +32,40 @@
             }
 
             .pdc-log-table th {
-                padding: 16px 24px;
-                background: #f8fafc;
-                font-weight: 800;
-                color: #475569;
-                font-size: 0.875rem;
+                padding: 12px 16px;
+                background: #f1f5f9;
+                font-weight: 700;
+                color: #1e293b;
+                font-size: 0.75rem;
                 text-align: center;
-                white-space: nowrap;
-                border-bottom: 1px solid #e2e8f0;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+            }
+
+            .pdc-log-table th:last-child {
+                border-right: none;
             }
 
             .pdc-log-table td {
-                padding: 16px 24px;
-                color: #64748b;
-                font-size: 0.875rem;
-                border-top: 1px solid #f1f5f9;
-                text-align: center;
+                padding: 12px 16px;
+                color: #334155;
+                font-size: 0.82rem;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
+                text-align: center;
+            }
+
+            .pdc-log-table td:last-child {
+                border-right: none;
+            }
+
+            .pdc-log-table tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
             }
 
             .pdc-log-table tr:hover td {
-                background: #fafafa;
+                background: #f8fafc;
             }
 
             @media (max-width: 767px) {

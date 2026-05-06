@@ -144,31 +144,46 @@
 
             /* ── Section heading ── */
             .section-heading {
-                font-size: 1rem;
+                position: relative;
+                padding-left: 14px;
+                font-size: 1.1rem;
                 font-weight: 800;
                 color: #1e293b;
                 margin-bottom: 14px;
+                display: flex;
+                align-items: center;
+            }
+            .section-heading::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 99px;
             }
 
             /* ── Aspek Table ── */
             .aspek-table {
                 width: 100%;
                 border-collapse: collapse;
-                border: 1px solid #e2e8f0;
+                border: 1px solid #d1d5db;
                 border-radius: 12px;
                 overflow: hidden;
                 margin-bottom: 28px;
             }
 
             .aspek-table th {
-                background: #f8fafc;
+                background: #f1f5f9;
                 font-size: 0.8rem;
                 font-weight: 700;
                 color: #1e293b;
                 padding: 12px 16px;
                 text-align: center;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
             }
 
             .aspek-table th:first-child {
@@ -181,10 +196,10 @@
 
             .aspek-table td {
                 padding: 12px 16px;
-                font-size: 0.82rem;
+                font-size: 0.88rem;
                 color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
             }
 
@@ -193,7 +208,7 @@
             }
 
             .aspek-table tbody tr:last-child td {
-                border-bottom: none;
+                border-bottom: 1px solid #d1d5db;
             }
 
             .aspek-table .col-aspek {
@@ -215,17 +230,17 @@
             .score-btns {
                 display: flex;
                 justify-content: center;
-                gap: 6px;
+                gap: 8px;
             }
 
             .score-btn {
-                width: 32px;
-                height: 32px;
-                border-radius: 6px;
+                width: 38px;
+                height: 38px;
+                border-radius: 8px;
                 border: 1.5px solid #cbd5e1;
                 background: white;
                 color: #64748b;
-                font-size: 0.82rem;
+                font-size: 0.95rem;
                 font-weight: 700;
                 cursor: pointer;
                 transition: all 0.15s;
@@ -449,21 +464,21 @@
             .rubrik-table {
                 width: 100%;
                 border-collapse: collapse;
-                border: 1px solid #e2e8f0;
+                border: 1px solid #d1d5db;
                 border-radius: 12px;
                 overflow: hidden;
-                font-size: 0.82rem;
+                font-size: 0.88rem;
             }
 
             .rubrik-table th {
-                background: #f8fafc;
-                font-size: 0.82rem;
+                background: #f1f5f9;
+                font-size: 0.8rem;
                 font-weight: 700;
                 color: #1e293b;
                 padding: 12px 16px;
                 text-align: left;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
             }
 
             .rubrik-table th:last-child {
@@ -473,8 +488,8 @@
             .rubrik-table td {
                 padding: 12px 16px;
                 color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
             }
 
@@ -483,7 +498,7 @@
             }
 
             .rubrik-table tbody tr:last-child td {
-                border-bottom: none;
+                border-bottom: 1px solid #d1d5db;
             }
 
             .rubrik-table .skor-cell {

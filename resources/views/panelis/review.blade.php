@@ -132,21 +132,21 @@
             .assessment-table {
                 width: 100%;
                 border-collapse: collapse;
-                border: 1px solid #e2e8f0;
+                border: 1px solid #d1d5db;
                 border-radius: 12px;
                 overflow: hidden;
                 margin-top: 16px;
             }
 
             .assessment-table th {
-                background: #f8fafc;
-                font-size: 0.85rem;
+                background: #f1f5f9;
+                font-size: 0.8rem;
                 font-weight: 700;
                 color: #1e293b;
-                padding: 14px 18px;
+                padding: 12px 16px;
                 text-align: left;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
             }
             .assessment-table th:last-child {
                 border-right: none;
@@ -154,11 +154,11 @@
             }
 
             .assessment-table td {
-                padding: 14px 18px;
-                font-size: 0.85rem;
+                padding: 12px 16px;
+                font-size: 0.88rem;
                 color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
             }
             .assessment-table td:last-child {
@@ -167,7 +167,7 @@
             }
 
             .assessment-table tbody tr:last-child td {
-                border-bottom: none;
+                border-bottom: 1px solid #d1d5db;
             }
 
             .score-badge {
@@ -400,146 +400,6 @@
                 if (!body || !arrow) return;
                 body.classList.toggle('open');
                 arrow.classList.toggle('rotated');
-            }
-        </script>
-    </x-slot>
-
-</x-panelis.layout>
-
-
-            <div class="review-card-header" onclick="toggleReviewCard({{ $idx }})">
-                <div class="talent-header-info">
-                    @if(optional($talent)->foto)
-                        <img src="{{ asset('storage/' . $talent->foto) }}" alt="{{ $talent->nama }}" class="talent-avatar">
-                    @else
-                        <div class="talent-avatar-placeholder">
-                            {{ strtoupper(substr(optional($talent)->nama ?? 'U', 0, 1)) }}
-                        </div>
-                    @endif
-                    <div class="talent-meta">
-                        <span class="talent-name">{{ optional($talent)->nama ?? '-' }}</span>
-                        <span class="talent-detail">
-                            {{ optional(optional($talent)->position)->position_name ?? '-' }} - Manager
-                            <em>{{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}</em>
-                        </span>
-                        <span class="talent-date">Dikirim: {{ $project->created_at ? $project->created_at->format('d F Y') : '-' }}</span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <span class="font-semibold text-sm text-gray-700">{{ $project->title ?? 'Judul Project' }}</span>
-                    <span class="badge-pending">Pending Review</span>
-                    <div class="toggle-arrow {{ $isFirstExpanded ? 'rotated' : '' }}" id="arrow-{{ $idx }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Card Body --}}
-            <div class="review-card-body {{ $isFirstExpanded ? 'open' : '' }}" id="body-{{ $idx }}">
-                {{-- Assessment Table --}}
-                <table class="assessment-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">Aspek yang Dinilai</th>
-                            <th style="width: 50%;">Indikator Penilaian</th>
-                            <th style="width: 20%;">Status Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $aspects = [
-                                ['name' => 'Pemahaman Bisnis & Strategi', 'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan', 'score' => 4],
-                                ['name' => 'Identifikasi Masalah', 'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data', 'score' => 4],
-                                ['name' => 'Analisis Akar Masalah', 'indicator' => 'Penggunaan tools (Fishbone, 5 Why\'s atau yang lain), logis dan mendalam', 'score' => 3],
-                                ['name' => 'Solusi yang Ditawarkan', 'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah', 'score' => 4],
-                                ['name' => 'Rencana Implementasi', 'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder', 'score' => 4],
-                                ['name' => 'Target Dampak & KPI', 'indicator' => 'Indikator keberhasilan terukur, baseline-target jelas', 'score' => 5],
-                                ['name' => 'Risiko & Mitigasi', 'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi', 'score' => 4],
-                                ['name' => 'Gaya Presentasi & Penguasaan Materi', 'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan', 'score' => 3],
-                                ['name' => 'Refleksi Peran sebagai GM', 'indicator' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.', 'score' => 4],
-                                ['name' => 'Nilai Tambah', 'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam', 'score' => 3],
-                            ];
-                        @endphp
-                        @foreach($aspects as $aspect)
-                            <tr>
-                                <td>{{ $aspect['name'] }}</td>
-                                <td>{{ $aspect['indicator'] }}</td>
-                                <td>
-                                    <span class="score-badge {{ $aspect['score'] >= 5 ? 'high' : ($aspect['score'] >= 4 ? 'medium' : 'low') }}">
-                                        {{ $aspect['score'] }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-                {{-- Comment Section --}}
-                <div class="comment-section">
-                    <p class="comment-label">Komentar / Catatan Penilai:</p>
-                    <textarea class="comment-textarea" placeholder="Tambahkan komentar ke talent.."></textarea>
-                </div>
-
-                {{-- Readiness Indicator --}}
-                <div class="readiness-section">
-                    <div class="readiness-dot green"></div>
-                    <div class="readiness-text">
-                        <strong>Ready in 1 – 2 Years</strong> <span>(Siap dengan pengembangan terarah)</span>
-                    </div>
-                </div>
-
-                {{-- Score Input --}}
-                <div class="score-section">
-                    <span class="score-label">Skor</span>
-                    <input type="number" class="score-input" placeholder="Masukkan skor talent dari skala 1 - 100" min="1" max="100">
-                </div>
-
-                {{-- Action Buttons --}}
-                <div class="action-buttons">
-                    <button class="btn-preview">Preview File</button>
-                    <button class="btn-edit">Edit</button>
-                </div>
-            </div>
-        </div>
-    @empty
-        <div class="review-card">
-            <div class="p-8 text-center text-gray-400">
-                Belum ada permintaan penilaian.
-            </div>
-        </div>
-    @endforelse
-
-    <x-slot name="scripts">
-        <script>
-            function toggleReviewCard(idx) {
-                const body = document.getElementById('body-' + idx);
-                const arrow = document.getElementById('arrow-' + idx);
-                
-                if (body.classList.contains('open')) {
-                    body.classList.remove('open');
-                    arrow.classList.remove('rotated');
-                } else {
-                    body.classList.add('open');
-                    arrow.classList.add('rotated');
-                }
-            }
-
-            function filterReviews() {
-                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
-                const cards = document.querySelectorAll('.review-card-item');
-
-                cards.forEach(card => {
-                    const name = card.getAttribute('data-name') || '';
-                    const project = card.getAttribute('data-project') || '';
-                    
-                    if (name.includes(searchTxt) || project.includes(searchTxt)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
             }
         </script>
     </x-slot>

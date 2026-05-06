@@ -61,9 +61,9 @@
         <div class="space-y-4" id="Kompetensi">
             <div class="page-header animate-title mb-2 mt-2">
                 <div class="page-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #38475a 100%);">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                         <path fill-rule="evenodd"
-                            d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                            d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
                             clip-rule="evenodd" />
                     </svg>
                 </div>
@@ -230,46 +230,46 @@
             </div>
 
             <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
-                <div class="overflow-x-auto rounded-[10px] border border-gray-200">
-                    <table class="w-full text-sm bg-gray-50 min-w-[600px]">
+                <div class="overflow-x-auto rounded-xl border border-[#d1d5db]">
+                    <table class="w-full text-sm bg-white min-w-[600px] border-collapse">
                         <thead>
-                            <tr class="bg-gray-100">
+                            <tr class="bg-[#f1f5f9]">
                                 <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200">
+                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-r border-[#cbd5e1] text-[0.8rem] uppercase">
                                     Judul Project Improvement</th>
                                 <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-gray-200 w-44">
+                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-[#cbd5e1] w-44 text-[0.8rem] uppercase">
                                     Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($projects as $project)
-                                <tr class="bg-white border-b border-gray-100">
-                                    <td class="px-4 py-3 text-gray-700 border-r border-gray-200 font-medium">
+                                <tr class="bg-white border-b border-[#d1d5db] hover:bg-[#f8fafc] transition-colors">
+                                    <td class="px-6 py-4 text-[#334155] border-r border-[#e5e7eb] font-bold text-[0.88rem]">
                                         {{ $project->judul_project }}
-                                        <div class="text-xs text-gray-400 font-normal mt-0.5">
+                                        <div class="text-[0.75rem] text-gray-400 font-medium mt-1">
                                             {{ \Carbon\Carbon::parse($project->created_at)->format('d M Y') }}</div>
                                     </td>
-                                    <td class="text-center px-4 py-3">
+                                    <td class="text-center px-6 py-4">
                                         @php
                                             $statusThemes = [
-                                                'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-gradient-to-br from-green-400 to-green-600 shadow-[0_0_8px_rgba(74,222,128,0.4)]'],
-                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-gradient-to-br from-red-400 to-red-600 shadow-[0_0_8px_rgba(248,113,113,0.4)]'],
-                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-gradient-to-br from-orange-400 to-orange-500 shadow-[0_0_8px_rgba(251,146,60,0.4)]'],
+                                                'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-green-500'],
+                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-red-500'],
+                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'],
                                             ];
-                                            $theme = $statusThemes[$project->status] ?? ['text' => 'text-orange-600', 'dot' => 'bg-gradient-to-br from-orange-400 to-orange-500 shadow-[0_0_8px_rgba(251,146,60,0.4)]'];
+                                            $theme = $statusThemes[$project->status] ?? ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'];
                                             $label = $project->status === 'Approved' ? 'Approved' : ($project->status === 'Rejected' ? 'Rejected' : 'Pending');
                                         @endphp
                                         <span
-                                            class="inline-flex items-center gap-1.5 {{ $theme['text'] }} text-xs font-semibold">
-                                            <span class="w-2 h-2 rounded-full {{ $theme['dot'] }} inline-block"></span>
+                                            class="inline-flex items-center gap-2 {{ $theme['text'] }} text-xs font-bold px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 shadow-sm">
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $theme['dot'] }} inline-block"></span>
                                             {{ $label }}
                                         </span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr class="bg-white">
-                                    <td class="px-4 py-5 text-gray-400 border-r border-gray-200 text-center text-xs"
+                                    <td class="px-4 py-8 text-gray-400 border-r border-[#e5e7eb] text-center italic text-sm"
                                         colspan="2">Belum ada project yang disubmit.</td>
                                 </tr>
                             @endforelse

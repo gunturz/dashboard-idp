@@ -378,7 +378,7 @@
             }
         }
         $totalCompany = count($groupedData);
-        $totalReviewed = \App\Models\PanelisAssessment::where('panelis_id', auth()->id())->count();
+        $totalReviewed = \App\Models\PanelisAssessment::where('panelis_id', auth()->id())->whereNotNull('panelis_score')->count();
     @endphp
 
     <div class="prem-stat-grid grid-cols-1 md:grid-cols-3">
@@ -421,8 +421,9 @@
         </div>
     </div>
 
-    {{-- Controls --}}
-    <div class="flex justify-end mb-6">
+    {{-- Section Title & Controls --}}
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 mt-4">
+        <div class="section-title !mb-0">Daftar Penilaian Talent</div>
         {{-- Live Search --}}
         <div class="relative w-full sm:w-80">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -431,7 +432,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input type="text" id="live-search-input" placeholder="Cari Nama Talent…"
-                class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
                 oninput="filterTalents()">
         </div>
     </div>

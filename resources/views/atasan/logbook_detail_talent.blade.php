@@ -34,24 +34,39 @@
             }
 
             .pdc-log-table th {
-                padding: 24px 32px;
-                background: #f8fafc;
-                font-weight: 800;
-                color: #475569;
-                font-size: 0.95rem;
+                padding: 12px 16px;
+                background: #f1f5f9;
+                font-weight: 700;
+                color: #1e293b;
+                font-size: 0.8rem;
                 text-align: center;
-                white-space: nowrap;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+            }
+
+            .pdc-log-table th:last-child {
+                border-right: none;
             }
 
             .pdc-log-table td {
-                padding: 32px;
-                color: #64748b;
-                font-size: 0.9rem;
-                border-top: 1px solid #f1f5f9;
+                padding: 12px 16px;
+                color: #334155;
+                font-size: 0.88rem;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
+                vertical-align: middle;
             }
 
-            .pdc-log-table tr:hover {
-                background: #fafafa;
+            .pdc-log-table td:last-child {
+                border-right: none;
+            }
+
+            .pdc-log-table tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
+            }
+
+            .pdc-log-table tr:hover td {
+                background: #f8fafc;
             }
 
             /* Tabs styling */
@@ -120,8 +135,8 @@
                             <tr>
                                 <th>Mentor</th>
                                 <th>Tema</th>
-                                <th>Tanggal Pengiriman/Update</th>
-                                <th>Tanggal Pelaksanaan</th>
+                                <th class="w-56 whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                                <th class="w-56 whitespace-nowrap">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -204,8 +219,8 @@
                             <tr>
                                 <th>Mentor</th>
                                 <th>Tema</th>
-                                <th>Tanggal Pengiriman/Update</th>
-                                <th>Tanggal Pelaksanaan</th>
+                                <th class="w-56 whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                                <th class="w-56 whitespace-nowrap">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -288,8 +303,8 @@
                             <tr>
                                 <th>Sumber</th>
                                 <th>Tema</th>
-                                <th>Tanggal Pengiriman/Update</th>
-                                <th>Tanggal Pelaksanaan</th>
+                                <th class="w-56 whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                                <th class="w-56 whitespace-nowrap">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>

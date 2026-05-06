@@ -854,6 +854,61 @@ class TalentDashboardController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
 
+            // ── Hasil Penilaian Panelis ──────────────────────────────────────
+            $panelisAssessments = \App\Models\PanelisAssessment::with('panelis')
+                ->where('user_id_talent', $user->id)
+                ->whereNotNull('panelis_scores_json')
+                ->get();
+
+            // Nama aspek penilaian (harus sama dengan urutan di form penilaian panelis)
+            $panelisAspects = [
+                'Pemahaman Bisnis & Strategi',
+                'Identifikasi Masalah',
+                'Analisis Akar Masalah',
+                'Solusi yang Ditawarkan',
+                'Rencana Implementasi',
+                'Target Dampak & KPI',
+                'Risiko & Mitigasi',
+                'Gaya Presentasi & Penguasaan Materi',
+                'Refleksi Peran sebagai Posisi yang Dituju',
+                'Nilai Tambah',
+            ];
+
+            // Hitung rata-rata per aspek dari semua panelis
+            $panelisAspectAverages = [];
+            $panelisCount = $panelisAssessments->count();
+
+            foreach ($panelisAspects as $idx => $aspectName) {
+                $sum = 0;
+                $validCount = 0;
+                foreach ($panelisAssessments as $pa) {
+                    $scores = $pa->panelis_scores_json ?? [];
+                    $score = isset($scores[$idx]) ? (int) $scores[$idx] : 0;
+                    if ($score > 0) {
+                        $sum += $score;
+                        $validCount++;
+                    }
+                }
+                $panelisAspectAverages[$aspectName] = $validCount > 0
+                    ? round($sum / $validCount, 2)
+                    : 0;
+            }
+
+            // Total skor rata-rata keseluruhan panelis
+            $panelisScoreTotal = $panelisCount > 0
+                ? round($panelisAssessments->avg('panelis_score'), 2)
+                : 0;
+
+            // Kumpulkan komentar dari semua panelis (non-empty)
+            $panelisKomentar = $panelisAssessments
+                ->filter(fn($pa) => !empty(trim($pa->panelis_komentar ?? '')))
+                ->map(fn($pa) => [
+                    'panelis' => optional($pa->panelis)->nama ?? 'Panelis',
+                    'komentar' => trim($pa->panelis_komentar),
+                ])
+                ->values()
+                ->toArray();
+
             return view('talent.riwayat-detail', compact(
                 'user',
                 'notifications',
@@ -862,7 +917,12 @@ class TalentDashboardController extends Controller
                 'exposureCount',
                 'learningCount',
                 'mentoringCount',
-                'projects'
+                'projects',
+                'panelisAspects',
+                'panelisAspectAverages',
+                'panelisScoreTotal',
+                'panelisKomentar',
+                'panelisCount'
             ));
         }
         catch (\Exception $e) {

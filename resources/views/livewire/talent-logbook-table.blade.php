@@ -22,19 +22,10 @@
             class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 whitespace-nowrap {{ $activeTab === 'learning' ? 'bg-[#0f172a] text-white shadow-sm' : 'text-[#64748b] hover:bg-[#cbd5e1] hover:text-[#0f172a]' }}">
             Learning
         </button>
-        <div wire:loading class="absolute right-[-40px] top-1/2 -translate-y-1/2">
-            <svg style="width:20px;height:20px;animation:lvwire-spin 1s linear infinite;color:#0d9488" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle style="opacity:.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path style="opacity:.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-            </svg>
-        </div>
     </div>
 
     {{-- Content Table --}}
     <div class="log-table-container custom-scrollbar overflow-x-auto mb-12 relative" style="min-height: 200px;">
-        {{-- Loading Overlay --}}
-        <div wire:loading.delay.shorter class="absolute inset-0 z-10 bg-white/50 backdrop-blur-sm flex items-center justify-center rounded-2xl">
-        </div>
 
         <table class="pdc-log-table w-full">
             <thead>

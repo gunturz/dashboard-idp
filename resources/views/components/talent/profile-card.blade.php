@@ -189,6 +189,9 @@
             </div>
             <div class="talent-hero-info flex-1 min-w-0">
                 <div class="talent-hero-name truncate">{{ $user->nama ?? $user->name }}</div>
+                <div class="talent-hero-sub truncate mt-1">
+                    {{ optional($user->position)->position_name ?? '-' }} &rarr; {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                </div>
                 <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
             </div>
             {{-- Chevron only shows on mobile and if collapsible is enabled --}}
@@ -255,7 +258,9 @@
             </div>
             <div class="talent-hero-info">
                 <div class="talent-hero-name">{{ $user->nama ?? $user->name }}</div>
-                <div class="talent-hero-sub">{{ $user->email }}</div>
+                <div class="talent-hero-sub">
+                    {{ optional($user->position)->position_name ?? '-' }} &rarr; {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                </div>
                 <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
             </div>
         </div>

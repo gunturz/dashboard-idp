@@ -804,14 +804,41 @@
                     mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent = nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
                 }
 
-                if (mobileMenuLinkBadge) {
-                    mobileMenuLinkBadge.textContent = nextBadgeCountFromElement(mobileMenuLinkBadge);
+                                if (mobileMenuLinkBadge) {
+                    let nextValue;
+                    if (typeof nextBadgeCountFromElement === 'function') {
+                        const res = nextBadgeCountFromElement(mobileMenuLinkBadge);
+                        nextValue = (typeof res === 'object') ? res.display : res;
+                    } else {
+                        const current = parseInt((mobileMenuLinkBadge.textContent || '').trim(), 10) || 0;
+                        const next = current + 1;
+                        nextValue = next > 99 ? '99+' : String(next);
+                    }
+                    mobileMenuLinkBadge.textContent = nextValue;
+                } else {
+                    let iconContainer = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector('#profile-dropdown a[href*="notifikasi"] .relative');
+                    if (iconContainer) {
+                        let badge = document.createElement('span');
+                        badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
+                        badge.setAttribute('data-mobile-unread-badge', '');
+                        badge.textContent = '1';
+                        iconContainer.appendChild(badge);
+                    }
                 }
 
                 if (mobileMenuLinkPill) {
                     const current = parseInt((mobileMenuLinkPill.textContent || '').trim(), 10) || 0;
                     const next = current + 1;
                     mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
+                } else {
+                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document.querySelector('#profile-dropdown a[href*="notifikasi"]');
+                    if (navLink) {
+                        let pill = document.createElement('span');
+                        pill.className = 'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
+                        pill.setAttribute('data-mobile-unread-pill', '');
+                        pill.textContent = '1 Baru';
+                        navLink.appendChild(pill);
+                    }
                 }
 
                 if (badge) {

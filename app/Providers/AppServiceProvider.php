@@ -20,8 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Set Carbon locale ke Bahasa Indonesia agar translatedFormat()
-        // menampilkan nama bulan dalam bahasa Indonesia (Januari, Februari, dst.)
-        Carbon::setLocale('id');
+        if (config('app.env') === 'local') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }

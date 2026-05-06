@@ -955,11 +955,66 @@ class PDCAdminController extends Controller
                 'company_id' => $dept->company_id,
             ])->values())
             ->toArray();
-        $positions = Position::all();
+        $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->get();
         $rolesData = Role::all(); // Provide all roles for the assign modal
         $companies = Company::orderBy('nama_company')->get();
 
         return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'departmentsByCompany', 'positions', 'rolesData', 'companies'));
+    }
+
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'username'   => ['required', 'string', 'max:255', 'unique:users'],
+            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
+            'password'   => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+            'nama'       => ['required', 'string', 'max:255'],
+            'role_id'    => ['required', 'exists:role,id'],
+            'company_id' => ['required', 'exists:company,id'],
+            'department_id' => ['nullable', 'exists:department,id'],
+            'position_id'   => ['nullable', 'exists:position,id'],
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'username.unique'   => 'Username tersebut sudah digunakan.',
+            'email.required'    => 'Email wajib diisi.',
+            'email.unique'      => 'Email tersebut sudah digunakan.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min'      => 'Password minimal 8 karakter.',
+            'password.regex'    => 'Password harus mengandung huruf kapital, huruf kecil, dan angka.',
+            'password.confirmed'=> 'Konfirmasi password tidak cocok.',
+            'nama.required'     => 'Nama lengkap wajib diisi.',
+            'role_id.required'  => 'Role wajib dipilih.',
+            'company_id.required' => 'Perusahaan wajib dipilih.',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'nama'          => $request->nama,
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => \Illuminate\Support\Facades\Hash::make($request->password),
+                'company_id'    => $request->company_id,
+                'department_id' => $request->department_id,
+                'position_id'   => $request->position_id,
+                'role_id'       => $request->role_id,
+            ]);
+
+            DB::table('user_role')->insert([
+                'id_user'    => $user->id,
+                'id_role'    => $request->role_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('pdc_admin.user_management')
+                ->with('success', 'User "' . $user->nama . '" berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->withErrors(['email' => 'Gagal menambahkan user: ' . $e->getMessage()]);
+        }
     }
 
     public function destroyUser($id)
@@ -1539,6 +1594,51 @@ class PDCAdminController extends Controller
         return back()->with('success', 'Manajemen Role berhasil diperbarui.');
     }
 
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            'nama' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'company_id' => 'required|exists:company,id',
+            'department_id' => 'required|exists:department,id',
+            'position_id' => 'required|exists:position,id',
+        ]);
+
+        $originalData = $user->getOriginal();
+
+        $user->update([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'company_id' => $request->company_id,
+            'department_id' => $request->department_id,
+            'position_id' => $request->position_id,
+        ]);
+
+        $changes = [];
+        if ($originalData['username'] !== $request->username) $changes[] = 'Username';
+        if ($originalData['nama'] !== $request->nama) $changes[] = 'Nama Lengkap';
+        if ($originalData['email'] !== $request->email) $changes[] = 'Email';
+        if ($originalData['company_id'] != $request->company_id) $changes[] = 'Perusahaan';
+        if ($originalData['department_id'] != $request->department_id) $changes[] = 'Departemen';
+        if ($originalData['position_id'] != $request->position_id) $changes[] = 'Posisi';
+
+        if (!empty($changes)) {
+            $changedFieldsStr = implode(', ', $changes);
+            $this->addNotificationToUser(
+                $user->id,
+                'Profil Diperbarui oleh Admin',
+                'PDC Admin telah memperbarui data profil Anda pada bagian: <span class="font-semibold">' . e($changedFieldsStr) . '</span>.',
+                'info'
+            );
+        }
+
+        return back()->with('success', 'Profil user berhasil diperbarui.');
+    }
+
     public function resetPassword($id)
     {
         $defaultPassword = 'Password123';
@@ -1548,7 +1648,14 @@ class PDCAdminController extends Controller
             'updated_at' => now(),
         ]);
 
-        return back()->with('success', 'Password user berhasil direset ke default.');
+        $this->addNotificationToUser(
+            $id,
+            'Password Direset',
+            'Password Anda telah direset ke default (Password123) oleh admin. Silakan segera mengubah password Anda demi keamanan.',
+            'warning'
+        );
+
+        return back()->with('success', 'Password user berhasil direset ke default (Password123).');
     }
 
     // ── Company Management ──────────────────────────────────────────

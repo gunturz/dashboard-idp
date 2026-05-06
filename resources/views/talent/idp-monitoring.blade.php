@@ -364,7 +364,7 @@
                                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                     </svg>
                                     <span id="uploadLabelText">Upload File</span>
-                                    <input type="file" name="documents[]" id="documentInput" class="hidden" {{ isset($editMode) ? '' : 'required' }}
+                                    <input type="file" name="documents[]" id="documentInput" class="hidden"
                                         multiple accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
                                 </label>
                             </div>
@@ -607,6 +607,18 @@
                     documentInput.addEventListener('change', function() {
                         // Jangan reset array agar file baru bertambah (append) bukan menggantikan pilihan sebelumnya di UI
                         addFiles(Array.from(this.files));
+                    });
+                }
+
+                const form = document.getElementById('idp-form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        const existingFiles = document.querySelectorAll('input[name="existing_documents_paths[]"]');
+                        if (allFiles.length === 0 && existingFiles.length === 0) {
+                            e.preventDefault();
+                            showWarning('Dokumentasi wajib dilampirkan minimal 1 file.');
+                            document.getElementById('uploadActionContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
                     });
                 }
             })();

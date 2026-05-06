@@ -113,32 +113,14 @@ class PdcPanelisReviewTable extends Component
 
     public function getStatsProperty(): array
     {
-        $totalProjectImprovement = ImprovementProject::count();
+        $totalProjectImprovement = ImprovementProject::where('is_active', true)->count();
 
-        $allTalents = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
-            ->whereHas('promotion_plan', fn($q) => $q->whereNotNull('target_position_id'))
-            ->with(['promotion_plan', 'improvementProjects'])
-            ->get();
+        // Stats berdasarkan penugasan panelis (PanelisAssessment)
+        $totalTargetPenilaian = PanelisAssessment::where('is_active', true)->count();
+        $penilaianSelesai = PanelisAssessment::where('is_active', true)->whereNotNull('panelis_score')->count();
+        $menungguPenilaian = PanelisAssessment::where('is_active', true)->whereNull('panelis_score')->count();
 
-        $belumDinilai = 0;
-        $sudahDinilai = 0;
-
-        foreach ($allTalents as $talent) {
-            $alreadySent = in_array(
-                optional($talent->promotion_plan)->status_promotion,
-            ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
-            );
-            $isReviewedByPanelis = PanelisAssessment::where('user_id_talent', $talent->id)->exists();
-
-            if (in_array(optional($talent->promotion_plan)->status_promotion, ['Approved Panelis', 'Promoted', 'Not Promoted'])) {
-                $sudahDinilai++;
-            }
-            if ($alreadySent && !$isReviewedByPanelis) {
-                $belumDinilai++;
-            }
-        }
-
-        return compact('totalProjectImprovement', 'belumDinilai', 'sudahDinilai');
+        return compact('totalProjectImprovement', 'totalTargetPenilaian', 'penilaianSelesai', 'menungguPenilaian');
     }
 
     public function render()

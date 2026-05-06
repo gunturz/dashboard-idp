@@ -191,11 +191,11 @@
             $mentorNames = optional($talent->mentor)->nama ?? '-';
         }
 
-        $startDate  = optional($talent->promotion_plan)->start_date;
+        $startDate = optional($talent->promotion_plan)->start_date;
         $targetDate = optional($talent->promotion_plan)->target_date;
         $periodeStr = ($startDate ? \Carbon\Carbon::parse($startDate)->format('d/m/Y') : '-')
-                    . ' – '
-                    . ($targetDate ? \Carbon\Carbon::parse($targetDate)->format('d/m/Y') : '-');
+            . ' – '
+            . ($targetDate ? \Carbon\Carbon::parse($targetDate)->format('d/m/Y') : '-');
     @endphp
 
     {{-- CSS identik dengan Talent profile-card --}}
@@ -211,43 +211,61 @@
             border-radius: 20px;
             margin-bottom: 28px;
         }
+
         .talent-prof-hero::before {
             content: '';
             position: absolute;
-            top: -40px; right: -40px;
-            width: 220px; height: 220px;
+            top: -40px;
+            right: -40px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             background: rgba(20, 184, 166, 0.08);
             pointer-events: none;
         }
+
         .talent-prof-hero::after {
             content: '';
             position: absolute;
-            bottom: -60px; left: 30%;
-            width: 280px; height: 280px;
+            bottom: -60px;
+            left: 30%;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.04);
             pointer-events: none;
         }
-        .talent-hero-avatar-wrap { position: relative; flex-shrink: 0; }
+
+        .talent-hero-avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
         .talent-hero-avatar-img {
-            width: 96px; height: 96px;
+            width: 96px;
+            height: 96px;
             border-radius: 20px;
             object-fit: cover;
-            border: 3px solid rgba(255,255,255,0.2);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
+
         .talent-hero-avatar-placeholder {
-            width: 96px; height: 96px;
+            width: 96px;
+            height: 96px;
             border-radius: 20px;
-            background: rgba(255,255,255,0.12);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.4rem; font-weight: 800;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            font-weight: 800;
             color: white;
-            border: 3px solid rgba(255,255,255,0.2);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             letter-spacing: -1px;
         }
+
         .talent-hero-section {
             flex: 1;
             display: flex;
@@ -258,68 +276,131 @@
             position: relative;
             z-index: 1;
         }
+
         .talent-hero-section-1 {
             flex: 1;
             display: flex;
             align-items: center;
             gap: 20px;
             padding: 0 28px 0 0;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
         }
+
         .talent-hero-divider {
             width: 1px;
             align-self: stretch;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             flex-shrink: 0;
             margin: 4px 0;
         }
-        .talent-hero-info { min-width: 0; }
+
+        .talent-hero-info {
+            min-width: 0;
+        }
+
         .talent-hero-name {
-            font-size: 1.35rem; font-weight: 800;
-            color: #ffffff; line-height: 1.2;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
         }
+
         .talent-hero-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(20,184,166,0.18);
-            border: 1px solid rgba(20,184,166,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(20, 184, 166, 0.18);
+            border: 1px solid rgba(20, 184, 166, 0.3);
             color: #5eead4;
-            font-size: 0.75rem; font-weight: 700;
-            padding: 4px 12px; border-radius: 99px;
-            margin-top: 10px; letter-spacing: .04em;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 99px;
+            margin-top: 10px;
+            letter-spacing: .04em;
         }
+
         .talent-hero-badge::before {
-            content: ''; width: 7px; height: 7px; border-radius: 50%;
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
             background: #14b8a6;
             animation: pulse-dot-hero 2s ease infinite;
         }
-        @keyframes pulse-dot-hero { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        @keyframes pulse-dot-hero {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
         .talent-hero-meta-label {
             font-size: 0.78rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             font-weight: 500;
             line-height: 1.2;
         }
+
         .talent-hero-meta-value {
             font-size: 0.9rem;
-            color: rgba(255,255,255,0.92);
+            color: rgba(255, 255, 255, 0.92);
             font-weight: 700;
             margin-top: 1px;
             line-height: 1.3;
         }
-        .talent-hero-meta-row { display: flex; flex-direction: column; }
-        @media (max-width: 1024px) {
-            .talent-hero-section { padding: 0 16px; }
-            .talent-hero-section-1 { padding: 0 16px 0 0; }
+
+        .talent-hero-meta-row {
+            display: flex;
+            flex-direction: column;
         }
+
+        @media (max-width: 1024px) {
+            .talent-hero-section {
+                padding: 0 16px;
+            }
+
+            .talent-hero-section-1 {
+                padding: 0 16px 0 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .talent-prof-hero {
-                flex-direction: column; align-items: stretch;
-                gap: 0; padding: 20px 20px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 20px 20px;
             }
-            .talent-hero-section, .talent-hero-section-1 { flex: none; }
-            .talent-hero-section-1 { padding: 0; flex-direction: row; align-items: center; }
-            .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 16px 0; }
-            .talent-hero-section { padding: 0; }
+
+            .talent-hero-section,
+            .talent-hero-section-1 {
+                flex: none;
+            }
+
+            .talent-hero-section-1 {
+                padding: 0;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .talent-hero-divider {
+                width: auto;
+                height: 1px;
+                align-self: auto;
+                margin: 16px 0;
+            }
+
+            .talent-hero-section {
+                padding: 0;
+            }
         }
     </style>
 
@@ -354,7 +435,8 @@
             </div>
             <div class="talent-hero-meta-row">
                 <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                <span class="talent-hero-meta-value">{{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                <span
+                    class="talent-hero-meta-value">{{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
             </div>
         </div>
 
@@ -383,8 +465,7 @@
     @if (session('success'))
         <div
             class="flex items-center gap-3 mb-5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20"
-                fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                     clip-rule="evenodd" />
@@ -406,19 +487,19 @@
         <table class="penilaian-table">
             <thead>
                 <tr>
-                    <th class="w-[22%]">Penilai Panelis</th>
-                    <th class="w-[26%]">Perusahaan</th>
-                    <th class="w-[12%]">Skor</th>
-                    <th class="w-[15%]">Feedback</th>
-                    <th class="w-[25%]">Status</th>
+                    <th class="w-[20%]">Penilai Panelis</th>
+                    <th class="w-[20%]">Perusahaan</th>
+                    <th class="w-[7%]">Skor</th>
+                    <th class="w-[33%]">Feedback</th>
+                    <th class="w-[20%]">Status</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($panelisUsers as $i => $panelis)
                     @php
                         $assessment = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)
-                                ->where('panelis_id', $panelis->id)
-                                ->first();
+                            ->where('panelis_id', $panelis->id)
+                            ->first();
                         $isAssessor = $assessment !== null;
                     @endphp
                     <tr>
@@ -426,8 +507,7 @@
                         <td class="text-left-cell">
                             <span class="font-semibold text-[#1e293b]">{{ $panelis->nama }}</span>
                             @if ($panelis->position)
-                                <span
-                                    class="block text-xs text-[#64748b] italic">{{ $panelis->position->position_name }}</span>
+                                <span class="block text-xs text-[#64748b] italic">{{ $panelis->position->position_name }}</span>
                             @endif
                         </td>
 
@@ -517,8 +597,8 @@
                     Tidak Diangkat ✓
                 </button>
             @else
-                <button class="btn-selesai"
-                    style="background: #e2e8f0; color: #64748b; box-shadow: none; cursor: default;" disabled>
+                <button class="btn-selesai" style="background: #e2e8f0; color: #64748b; box-shadow: none; cursor: default;"
+                    disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -680,7 +760,7 @@
 
             // Tutup modal jika klik overlay
             ['decisionModal', 'confirmModal'].forEach(id => {
-                document.getElementById(id).addEventListener('click', function(e) {
+                document.getElementById(id).addEventListener('click', function (e) {
                     if (e.target === this) {
                         if (id === 'decisionModal') closeDecisionModal();
                         else backToDecision();

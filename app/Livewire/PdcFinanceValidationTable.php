@@ -13,13 +13,14 @@ class PdcFinanceValidationTable extends Component
 
     public function render()
     {
-        $query = ImprovementProject::with([
-            'talent.position',
-            'talent.department',
-            'talent.promotion_plan.targetPosition',
-        ])->whereHas('talent.promotion_plan', function ($q) {
-            $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
-        });
+        $query = ImprovementProject::where('is_active', true)
+            ->with([
+                'talent.position',
+                'talent.department',
+                'talent.promotion_plan.targetPosition',
+            ])->whereHas('talent.promotion_plan', function ($q) {
+                $q->whereIn('status_promotion', ['Draft', 'In Progress']);
+            });
 
         // Filter: Status (Pending, Approved, Rejected) - Finance mapping
         // We match logic from the Blade where: 
@@ -54,15 +55,24 @@ class PdcFinanceValidationTable extends Component
 
         // Count base values (independent from filters to keep stat card static as original logic,
         // Wait, original logic shows stats of ALL projects. Let's compute overall stats separately)
-        $allProjects = ImprovementProject::whereHas('talent.promotion_plan', function ($q) {
-            $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
-        })->get();
+        $allProjects = ImprovementProject::where('is_active', true)
+            ->whereHas('talent.promotion_plan', function ($q) {
+                $q->whereIn('status_promotion', ['Draft', 'In Progress']);
+            })->get();
         // Here the dashboard wants overall values or filtered values? 
         // Original behavior: The counts are taken from DB before JS filter.
         $total = $allProjects->count();
-        $pending = $allProjects->where('status', 'Pending')->count();
-        $approved = $allProjects->where('status', 'Approved')->count();
-        $rejected = $allProjects->where('status', 'Rejected')->count();
+        $pending = $allProjects->filter(function ($project) {
+            return empty($project->finance_feedback) || 
+                   (!str_starts_with($project->finance_feedback, '[Approved]') && 
+                    !str_starts_with($project->finance_feedback, '[Rejected]'));
+        })->count();
+        $approved = $allProjects->filter(function ($project) {
+            return !empty($project->finance_feedback) && str_starts_with($project->finance_feedback, '[Approved]');
+        })->count();
+        $rejected = $allProjects->filter(function ($project) {
+            return !empty($project->finance_feedback) && str_starts_with($project->finance_feedback, '[Rejected]');
+        })->count();
 
         // Get Finance Users
         $financeUsers = User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))

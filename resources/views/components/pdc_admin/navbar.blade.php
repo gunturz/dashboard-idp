@@ -82,7 +82,7 @@
             </button>
 
             {{-- Bell Dropdown --}}
-            <div id="bell-dropdown"
+            <div id="bell-dropdown" style="display:none;"
                 class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                 <div class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -569,12 +569,20 @@
                     $initials = strtoupper(
                         substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''),
                     );
+                    $avatarUrl = !empty($user?->foto)
+                        ? asset('storage/' . $user->foto) . '?v=' . (optional($user->updated_at)->timestamp ?? time())
+                        : null;
                 @endphp
                 <div class="relative">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
-                        style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                        {{ $initials }}
-                    </div>
+                    @if ($avatarUrl)
+                        <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                            class="w-8 h-8 rounded-lg object-cover border border-white/15 flex-shrink-0">
+                    @else
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
+                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                            {{ $initials }}
+                        </div>
+                    @endif
                     @if ($hasUnreadNotif)
                         <span
                             class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] lg:hidden">{{ $displayCount }}</span>
@@ -603,15 +611,20 @@
 
             {{-- Profile Dropdown --}}
             {{-- Profile Dropdown: ukuran kecil di mobile --}}
-            <div id="profile-dropdown"
+            <div id="profile-dropdown" style="display:none;"
                 class="dropdown-panel hidden absolute right-0 mt-3 w-[290px] max-w-[calc(100vw-1rem)] lg:w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                 {{-- Header --}}
                 <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
-                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                            {{ $initials }}
-                        </div>
+                        @if ($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                class="w-11 h-11 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
+                        @else
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
+                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                {{ $initials }}
+                            </div>
+                        @endif
                         <div class="overflow-hidden">
                             <p class="text-sm font-bold text-white truncate">
                                 {{ $user->nama ?? ($user->name ?? '-') }}

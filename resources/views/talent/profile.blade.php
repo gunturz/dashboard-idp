@@ -549,16 +549,6 @@
 
     <x-slot name="scripts">
     <script>
-        // Dropdown menu handling outside
-        document.addEventListener('click', function(e) {
-            const inside = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'].some(id => {
-                const el = document.getElementById(id);
-                return el && el.contains(e.target);
-            });
-            if (!inside) {
-                document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.add('hidden'));
-            }
-        });
 
 
         // AJAX Load Department
@@ -644,4 +634,5 @@
         }
         document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === document.getElementById('confirm-modal')) closeConfirmModal(); });
     </script>
+    </x-slot>
 </x-talent.layout>

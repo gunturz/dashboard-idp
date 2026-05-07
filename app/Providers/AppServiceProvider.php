@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use App\Models\Document;
 use Illuminate\Support\ServiceProvider;
 use App\Models\IdpActivity;
 use App\Models\User;
+use App\Policies\DocumentPolicy;
 use App\Policies\ExportPdfPolicy;
 use App\Policies\FilePolicy;
 use App\Policies\PenilaianPolicy;
@@ -45,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // ── Registrasi Policy via Gate::policy ───────────────────
+        Gate::policy(Document::class, DocumentPolicy::class);
         Gate::policy(IdpActivity::class, FilePolicy::class);
         Gate::policy(User::class, ProfilePolicy::class);
         // ── Gate berbasis closure untuk yang tidak butuh model ────

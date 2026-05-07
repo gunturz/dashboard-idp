@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
             1 => 'PT Tiga Serangkai Inti corpora',
             2 => 'PT Tiga Serangkai Pustaka mandiri',
             3 => 'PT Wangsa Jatra Lestari',
-            4 => 'Assalam Hypermarket',
+            4 => 'PT Assalam Niaga Utama',
             5 => 'PT K33 Distribusi'
         ];
         $compIds = [];

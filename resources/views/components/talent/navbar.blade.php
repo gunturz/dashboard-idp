@@ -41,6 +41,9 @@
         $initials = strtoupper(
             substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''),
         );
+        $avatarUrl = !empty($user?->foto)
+            ? asset('storage/' . $user->foto) . '?v=' . (optional($user->updated_at)->timestamp ?? time())
+            : null;
 
         $unreadNotifications = isset($notifications) && $notifications
             ? (is_array($notifications) ? collect($notifications)->where('is_read', false) : $notifications->where('is_read', false))
@@ -60,10 +63,15 @@
                 aria-label="Profil dan notifikasi" id="mobile-menu-btn"
                 onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
                 <div class="relative">
-                    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
-                        style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                        {{ $initials }}
-                    </div>
+                    @if($avatarUrl)
+                        <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                            class="w-9 h-9 rounded-xl object-cover border border-white/15 flex-shrink-0">
+                    @else
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
+                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                            {{ $initials }}
+                        </div>
+                    @endif
                     @if($hasUnreadNotif)
                         <span
                             class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
@@ -80,10 +88,15 @@
                 {{-- Dropdown Header --}}
                 <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                     <div class="flex items-center gap-3.5">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
-                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                            {{ $initials }}
-                        </div>
+                            @if($avatarUrl)
+                                <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                    class="w-12 h-12 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
+                            @else
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
+                                    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                    {{ $initials }}
+                                </div>
+                            @endif
                         <div class="overflow-hidden">
                             <p class="text-[14px] font-bold text-white truncate">
                                 {{ $user->nama ?? ($user->name ?? '-') }}</p>
@@ -217,7 +230,7 @@
             </div>
 
             {{-- ── Mobile Notif Dropdown (realtime, dedicated) ── --}}
-            <div id="mobile-notif-dropdown"
+            <div id="mobile-notif-dropdown" style="display:none;"
                 class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
                 {{-- Header --}}
                 <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
@@ -347,10 +360,15 @@
         <div class="relative hidden lg:block" id="profile-wrapper">
             <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
                 class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
-                    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                    {{ $initials }}
-                </div>
+                @if($avatarUrl)
+                    <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                        class="w-8 h-8 rounded-lg object-cover border border-white/15 flex-shrink-0">
+                @else
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
+                        style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                        {{ $initials }}
+                    </div>
+                @endif
                 <div class="hidden lg:block text-left">
                     <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">
                         {{ $nama }}
@@ -367,10 +385,15 @@
                 class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                 <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
-                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                            {{ $initials }}
-                        </div>
+                        @if($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                class="w-11 h-11 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
+                        @else
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
+                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                {{ $initials }}
+                            </div>
+                        @endif
                         <div class="overflow-hidden">
                             <p class="text-sm font-bold text-white truncate">{{ $user->nama ?? ($user->name ?? '-') }}
                             </p>

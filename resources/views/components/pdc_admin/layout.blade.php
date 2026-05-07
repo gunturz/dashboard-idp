@@ -949,6 +949,52 @@
                 });
             }
         })();
+
+        document.addEventListener('click', function(e) {
+            const wrappers = ['bell-wrapper', 'profile-wrapper'];
+            const clickedInside = wrappers.some(id => {
+                const el = document.getElementById(id);
+                return el && el.contains(e.target);
+            });
+            if (!clickedInside) {
+                document.querySelectorAll('.dropdown-panel').forEach(el => {
+                    el.classList.add('hidden');
+                    el.style.display = 'none';
+                });
+            }
+        });
+
+        function toggleDropdown(dropdownId, btnId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+
+            const isHidden = dropdown.classList.contains('hidden') || dropdown.style.display === 'none';
+            
+            // Tutup semua dropdown lain
+            document.querySelectorAll('.dropdown-panel').forEach(el => {
+                el.classList.add('hidden');
+                el.style.display = 'none';
+            });
+            
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+                dropdown.style.display = 'block';
+            }
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+
+            if (!sidebar) return;
+
+            sidebar.classList.toggle('mobile-open');
+            if (sidebar.classList.contains('mobile-open')) {
+                if (overlay) overlay.classList.remove('hidden');
+            } else {
+                if (overlay) overlay.classList.add('hidden');
+            }
+        }
     </script>
 
     {{-- Overlay responsive --}}
@@ -1087,6 +1133,8 @@
             const mainContent = document.getElementById('main-content');
             const toggleIcon = document.getElementById('toggle-icon');
 
+            if (!sidebar || !mainContent || !toggleIcon) return;
+
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('collapsed');
 
@@ -1105,44 +1153,14 @@
             const mainContent = document.getElementById('main-content');
             const toggleIcon = document.getElementById('toggle-icon');
 
-            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            if (sidebar && mainContent && toggleIcon && localStorage.getItem('sidebarCollapsed') === 'true') {
                 sidebar.classList.add('collapsed');
                 mainContent.classList.add('collapsed');
                 toggleIcon.style.transform = 'rotate(180deg)';
             }
         });
 
-        function toggleDropdown(dropdownId, btnId) {
-            const dropdown = document.getElementById(dropdownId);
-            const isHidden = dropdown.classList.contains('hidden');
-            document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-            if (isHidden) dropdown.classList.remove('hidden');
-        }
 
-        document.addEventListener('click', function(e) {
-            const wrappers = ['bell-wrapper', 'profile-wrapper'];
-            const clickedInside = wrappers.some(id => {
-                const el = document.getElementById(id);
-                return el && el.contains(e.target);
-            });
-            if (!clickedInside) {
-                document.querySelectorAll('.dropdown-panel').forEach(el => el.classList.add('hidden'));
-            }
-        });
-
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mobile-overlay');
-
-            if (!sidebar) return;
-
-            sidebar.classList.toggle('mobile-open');
-            if (sidebar.classList.contains('mobile-open')) {
-                overlay.classList.remove('hidden');
-            } else {
-                overlay.classList.add('hidden');
-            }
-        }
     </script>
     <script>
         // Custom scripts block has been removed for SweetAlert

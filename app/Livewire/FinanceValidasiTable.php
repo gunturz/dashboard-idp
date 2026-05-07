@@ -30,10 +30,8 @@ class FinanceValidasiTable extends Component
             ->with(['talent', 'talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
             ->where('verify_by', Auth::id())
             ->whereNotNull('feedback')
-            ->where(function ($q) {
-            $q->where('status', 'Pending')
-                ->orWhereNotNull('finance_feedback');
-        })
+            ->where('status', 'Pending')
+            ->whereNull('finance_feedback')
             ->when($this->search, fn($q) => $q->where(function ($q2) {
             $q2->where('title', 'like', "%{$this->search}%")
                 ->orWhereHas('talent', fn($q3) => $q3->where('nama', 'like', "%{$this->search}%"));

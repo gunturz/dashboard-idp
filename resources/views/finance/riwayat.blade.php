@@ -11,27 +11,39 @@
             <div class="dash-header-title">Riwayat Validasi</div>
             <div class="dash-header-sub">Daftar semua project yang telah divalidasi</div>
         </div>
-        <div class="dash-header-date hidden md:block">
-            Hari ini
-            <span>{{ now()->translatedFormat('d F Y') }}</span>
-        </div>
     </div>
 
         {{-- Filter Bar --}}
-        <div class="filter-bar">
-            <div class="relative w-full sm:w-80">
+        <div class="filter-bar flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="relative flex-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                     class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <input type="text" id="searchInput" oninput="filterHistory()" placeholder="Cari Nama Talent..." class="filter-input w-full pl-9">
             </div>
+            <div class="flex-shrink-0 w-full sm:w-48">
+                <select id="statusFilter" onchange="filterHistory()" class="filter-input w-full">
+                    <option value="">Semua Status</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
         </div>
 
         {{-- History List --}}
         <div class="space-y-6">
             @forelse($projects as $index => $project)
-            <div class="prem-card filter-card">
+            @php
+                $finBadgeDecision = null;
+                if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) $finBadgeDecision = 'Approved';
+                elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) $finBadgeDecision = 'Rejected';
+                
+                $cleanFeedback = $project->finance_feedback
+                    ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback)
+                    : null;
+            @endphp
+            <div class="prem-card filter-card" data-status="{{ $finBadgeDecision }}">
                 {{-- Card Header --}}
                 <div class="prem-card-header cursor-pointer select-none hover:bg-gray-50 transition-colors" onclick="toggleAccordion('riwayat-content-{{ $project->id }}', 'riwayat-icon-{{ $project->id }}')">
                     
@@ -53,16 +65,8 @@
                     </div>
 
                     {{-- Badge & Toggle --}}
-                    <div class="flex items-center justify-between md:justify-end gap-6 w-full md:w-[25%] mt-2 md:mt-0">
-                        @php
-                            $finBadgeDecision = null;
-                            if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) $finBadgeDecision = 'Approved';
-                            elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) $finBadgeDecision = 'Rejected';
-                            
-                            $cleanFeedback = $project->finance_feedback
-                                ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback)
-                                : null;
-                        @endphp
+                    <div class="flex items-center justify-between md:justify-end gap-6 ml-auto mt-2 md:mt-0">
+
 
                         @if($finBadgeDecision === 'Approved')
                             <span class="badge badge-green">
@@ -175,11 +179,16 @@
 
         function filterHistory() {
             let searchValue = document.getElementById('searchInput').value.toLowerCase();
+            let statusValue = document.getElementById('statusFilter').value;
             
             document.querySelectorAll('.filter-card').forEach(card => {
                 let talentName = card.querySelector('.talent-name')?.innerText.toLowerCase() || "";
+                let cardStatus = card.getAttribute('data-status') || "";
                 
-                if (talentName.includes(searchValue)) {
+                let matchesSearch = talentName.includes(searchValue);
+                let matchesStatus = statusValue === "" || cardStatus === statusValue;
+                
+                if (matchesSearch && matchesStatus) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';

@@ -1,7 +1,7 @@
 <div>
     {{-- Search Bar & Filter --}}
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div class="relative w-full sm:w-80">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <div class="relative flex-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -9,8 +9,8 @@
             <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari by Talent / Project..."
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-teal-500 transition-all">
         </div>
-        <div class="flex gap-2">
-            <select wire:model.live="statusFilter" class="bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-500 transition-all">
+        <div class="flex-shrink-0 w-full sm:w-48">
+            <select wire:model.live="statusFilter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-500 transition-all">
                 <option value="">Semua Status</option>
                 <option value="Pending">Pending</option>
                 <option value="Approved">Approved</option>
@@ -44,7 +44,7 @@
                 </div>
 
                 {{-- Badge & Toggle --}}
-                <div class="flex items-center justify-between md:justify-end gap-6 w-full md:w-[25%] mt-2 md:mt-0">
+                <div class="flex items-center justify-between md:justify-end gap-6 ml-auto mt-2 md:mt-0">
                     <span class="badge {{ $project->status == 'Pending' ? 'badge-amber' : ($project->status == 'Approved' ? 'badge-green' : 'badge-red') }}">
                         {{ $project->status == 'Pending' ? 'Review' : $project->status }}
                     </span>

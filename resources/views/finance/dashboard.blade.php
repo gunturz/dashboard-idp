@@ -13,7 +13,7 @@
         </div>
         <div class="dash-header-date hidden md:block">
             Hari ini
-            <span>{{ now()->translatedFormat('d F Y') }}</span>
+            <span>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}</span>
         </div>
     </div>
 

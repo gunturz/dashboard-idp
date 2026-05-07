@@ -338,7 +338,7 @@
                 padding: 10px 32px;
                 border: none;
                 border-radius: 10px;
-                background: #343E4E;
+                background: #0f172a;
                 color: white;
                 font-size: 0.85rem;
                 font-weight: 600;
@@ -381,12 +381,57 @@
                     align-items: flex-start;
                 }
             }
+
+            /* ── Page Header ── */
+            .page-header {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+            .page-header-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 18px;
+                background: #0f172a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 8px 16px -4px rgba(30, 41, 59, 0.3);
+                flex-shrink: 0;
+                color: white;
+            }
+            .page-header-icon svg {
+                width: 26px;
+                height: 26px;
+            }
+            .page-header-title {
+                font-size: 1.75rem;
+                font-weight: 800;
+                color: #0f172a;
+                line-height: 1.15;
+                letter-spacing: -0.025em;
+            }
+            .page-header-sub {
+                font-size: 0.8rem;
+                color: #64748b;
+                margin-top: 3px;
+                font-weight: 400;
+            }
         </style>
     </x-slot>
 
     {{-- Page Title --}}
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <h2 class="text-2xl font-extrabold text-[#0f172a] animate-title">Permintaan Penilaian</h2>
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Permintaan Penilaian</div>
+            <div class="page-header-sub">Individual Development Plan – Panelis</div>
+        </div>
     </div>
 
     {{-- Livewire Component (search + cards + pagination) --}}

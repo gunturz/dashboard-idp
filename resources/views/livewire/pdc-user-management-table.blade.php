@@ -103,18 +103,18 @@
                     @endphp
 
                     <div class="border border-[#e2e8f0] rounded-2xl overflow-hidden shadow-sm bg-white">
-                        <div class="relative flex items-center justify-center py-3.5 border-b-2"
-                             style="border-bottom-color: {{ $cfg['hex'] }}; background: linear-gradient(135deg, {{ $cfg['hex'] }}0d 0%, white 60%);">
+                        <div class="relative flex items-center justify-center py-4 border-b-2"
+                             style="border-bottom-color: {{ $cfg['hex'] }}; background-color: {{ $cfg['hex'] }}22;">
                             <div class="absolute left-4 flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-lg flex items-center justify-center" style="background-color: {{ $cfg['hex'] }}22;">
+                                <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-white/80 shadow-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                        class="w-3.5 h-3.5" style="color: {{ $cfg['hex'] }}">
+                                        class="w-4 h-4" style="color: {{ $cfg['hex'] }}">
                                         {!! $roleIcons[$roleKey] !!}
                                     </svg>
                                 </div>
-                                <span class="text-xs font-medium text-gray-400">{{ $users->total() }} pengguna</span>
+                                <span class="text-xs font-semibold text-gray-500">{{ $users->total() }} pengguna</span>
                             </div>
-                            <h3 class="text-sm font-bold tracking-wide" style="color: {{ $cfg['hex'] }}">{{ $cfg['label'] }}</h3>
+                            <h3 class="text-sm font-bold tracking-widest uppercase" style="color: {{ $cfg['hex'] }}">{{ $cfg['label'] }}</h3>
                         </div>
 
                         <div class="overflow-x-auto user-management-wrapper">

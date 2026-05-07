@@ -1,31 +1,33 @@
 <x-panelis.layout title="Riwayat Penilaian – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
-            .page-title {
-                font-size: 1.35rem;
-                font-weight: 800;
-                color: #1e293b;
-                margin-bottom: 24px;
-            }
-
             /* ── Company divider ── */
             .company-divider {
-                text-align: center;
-                font-size: 0.92rem;
-                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                font-size: 1.15rem;
+                font-weight: 800;
                 color: #1e293b;
-                margin: 28px 0 16px 0;
+                margin: 36px 0 16px 0;
+            }
+            .company-divider::before,
+            .company-divider::after {
+                content: '';
+                flex: 1;
+                height: 1.5px;
+                background: #e2e8f0;
             }
             .company-divider:first-of-type { margin-top: 0; }
 
             /* ── Card ── */
             .hist-card {
-                background: white;
+                background: #f9fafb;
                 border: 1px solid #e2e8f0;
-                border-radius: 14px;
+                border-radius: 20px;
                 overflow: hidden;
-                margin-bottom: 14px;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+                margin-bottom: 16px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.04);
             }
             .hist-card:last-child { margin-bottom: 0; }
 
@@ -38,7 +40,7 @@
                 cursor: pointer;
             }
             .hist-avatar {
-                width: 48px; height: 48px;
+                width: 56px; height: 56px;
                 border-radius: 50%;
                 object-fit: cover;
                 border: 2px solid #e2e8f0;
@@ -47,25 +49,25 @@
             }
             .hist-meta { flex: 1; min-width: 0; }
             .hist-name {
-                font-size: 0.92rem;
+                font-size: 1rem;
                 font-weight: 800;
                 color: #1e293b;
                 display: block;
             }
             .hist-role {
-                font-size: 0.73rem;
+                font-size: 0.8rem;
                 color: #64748b;
                 display: block;
                 margin-top: 1px;
             }
             .hist-date {
-                font-size: 0.7rem;
+                font-size: 0.78rem;
                 color: #94a3b8;
                 display: block;
                 margin-top: 1px;
             }
             .hist-project-title {
-                font-size: 0.82rem;
+                font-size: 0.88rem;
                 font-weight: 600;
                 color: #475569;
                 flex: 1;
@@ -76,10 +78,10 @@
             .badge-done {
                 display: inline-flex;
                 align-items: center;
-                padding: 5px 15px;
+                padding: 6px 16px;
                 border: 1.5px solid #14b8a6;
                 border-radius: 20px;
-                font-size: 0.75rem;
+                font-size: 0.78rem;
                 font-weight: 700;
                 color: #0f766e;
                 background: #f0fdfa;
@@ -114,27 +116,27 @@
                 border-collapse: collapse;
             }
             .aspek-tbl th {
-                background: #f8fafc;
-                font-size: 0.78rem;
+                background: #f1f5f9;
+                font-size: 0.75rem;
                 font-weight: 700;
                 color: #1e293b;
-                padding: 11px 16px;
+                padding: 12px 16px;
                 text-align: center;
-                border-bottom: 1px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
             }
             .aspek-tbl th:first-child { text-align: left; }
             .aspek-tbl th:last-child  { border-right: none; }
             .aspek-tbl td {
-                padding: 11px 16px;
-                font-size: 0.8rem;
+                padding: 12px 16px;
+                font-size: 0.82rem;
                 color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
             }
             .aspek-tbl td:last-child  { border-right: none; text-align: center; }
-            .aspek-tbl tbody tr:last-child td { border-bottom: none; }
+            .aspek-tbl tbody tr:last-child td { border-bottom: 1px solid #d1d5db; }
 
             .score-ro {
                 display: inline-flex;
@@ -145,17 +147,17 @@
                 background: #14b8a6;
                 color: white;
                 font-weight: 800;
-                font-size: 0.88rem;
+                font-size: 0.82rem;
                 box-shadow: 0 2px 6px rgba(20,184,166,0.25);
             }
 
             /* ── Komentar ── */
             .komentar-wrap {
-                padding: 14px 16px;
+                padding: 16px 18px;
                 border-top: 1px solid #f1f5f9;
             }
             .komentar-label {
-                font-size: 0.8rem;
+                font-size: 0.88rem;
                 font-weight: 700;
                 color: #1e293b;
                 margin-bottom: 8px;
@@ -166,7 +168,7 @@
                 border: 1.5px solid #e2e8f0;
                 border-radius: 8px;
                 padding: 10px 13px;
-                font-size: 0.8rem;
+                font-size: 0.88rem;
                 color: #334155;
                 resize: vertical;
                 font-family: 'Poppins', sans-serif;
@@ -192,7 +194,7 @@
             .rd-dot.yellow { background: #f59e0b; }
             .rd-dot.red    { background: #ef4444; }
             .rd-text {
-                font-size: 0.8rem;
+                font-size: 0.88rem;
                 color: #334155;
             }
             .rd-text strong { font-weight: 700; }
@@ -207,7 +209,7 @@
                 gap: 10px;
             }
             .skor-lbl {
-                font-size: 0.8rem;
+                font-size: 0.88rem;
                 font-weight: 700;
                 color: #1e293b;
             }
@@ -215,7 +217,7 @@
                 border: 1.5px solid #e2e8f0;
                 border-radius: 7px;
                 padding: 5px 18px;
-                font-size: 0.85rem;
+                font-size: 0.95rem;
                 font-weight: 800;
                 color: #1e293b;
                 background: white;
@@ -236,7 +238,7 @@
                 border-radius: 7px;
                 background: white;
                 color: #475569;
-                font-size: 0.78rem;
+                font-size: 0.85rem;
                 font-weight: 600;
                 cursor: pointer;
                 font-family: 'Poppins', sans-serif;
@@ -250,9 +252,9 @@
                 padding: 8px 24px;
                 border: none;
                 border-radius: 7px;
-                background: #64748b;
+                background: #0f172a;
                 color: white;
-                font-size: 0.78rem;
+                font-size: 0.85rem;
                 font-weight: 700;
                 cursor: pointer;
                 font-family: 'Poppins', sans-serif;
@@ -261,7 +263,7 @@
                 align-items: center;
                 text-decoration: none;
             }
-            .btn-edit:hover { background: #475569; color: white; }
+            .btn-edit:hover { background: #1e293b; color: white; }
 
             /* ── Empty ── */
             .empty-state {
@@ -273,7 +275,17 @@
         </style>
     </x-slot>
 
-    <p class="page-title">Riwayat Penilaian</p>
+    <div class="page-header animate-title mb-8">
+        <div class="page-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Riwayat Penilaian</div>
+            <div class="page-header-sub">Individual Development Plan – Panelis</div>
+        </div>
+    </div>
 
     @php
         $aspectNames = [
@@ -285,7 +297,7 @@
             'Target Dampak & KPI',
             'Risiko & Mitigasi',
             'Gaya Presentasi & Penguasaan Materi',
-            'Refleksi Peran sebagai GM',
+            'Refleksi Peran sebagai Posisi yang Dituju',
             'Nilai Tambah',
         ];
         $aspectIndicators = [

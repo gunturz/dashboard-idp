@@ -49,6 +49,15 @@ class FilePreviewController extends Controller
             ], $this->noCacheHeaders()));
         }
 
+
+        
+         // Cek apakah file ini milik activity yang accessible oleh user ini
+        $fileContext = $this->resolveFileContext($path);
+        if ($fileContext['activity'] ?? null) {
+            $this->authorize('view', $fileContext['activity']); // ← tambah ini
+        }
+
+
         return response()->view('files.preview', [
             'path' => $path,
             'filename' => $fileContext['display_name'] ?? $fileContext['original_name'] ?? basename($path),
@@ -59,6 +68,19 @@ class FilePreviewController extends Controller
             'downloadUrl' => route('files.preview', ['path' => $path, 'download' => 1]),
         ], 200, $this->noCacheHeaders());
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     protected function canPreviewInBrowser(string $mimeType, string $extension): bool
     {

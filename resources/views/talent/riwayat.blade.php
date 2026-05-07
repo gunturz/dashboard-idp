@@ -60,38 +60,42 @@
             }
 
             .highlight-table thead {
-                background: #f8fafc;
+                background: #f1f5f9;
             }
 
             .highlight-table th {
-                padding: 18px 24px;
+                padding: 12px 16px;
                 text-align: center;
-                font-size: 0.9rem;
-                font-weight: 800;
-                color: #475569;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #1e293b;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
             }
 
             .highlight-table th:last-child { border-right: none; }
 
             .highlight-table td {
-                padding: 24px;
-                font-size: 0.9rem;
+                padding: 12px 16px;
+                font-size: 0.82rem;
                 color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
             }
 
             .highlight-table td:last-child { border-right: none; }
+
+            .highlight-table tr:hover td {
+                background: #f8fafc;
+            }
 
             /* Row hover removed per request */
 
             .talent-name-main {
                 display: block;
                 font-weight: 800;
-                font-size: 1.05rem;
+                font-size: 1rem;
                 color: #1e293b;
             }
 

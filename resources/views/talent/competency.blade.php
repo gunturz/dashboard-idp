@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kompetensi – Individual Development Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -41,6 +42,7 @@
         .bg-dark-slate {
             background-color: #334155;
         }
+
         .bg-teal-primary {
             background-color: #0f766e;
         }
@@ -52,7 +54,7 @@
             max-width: 72rem;
             background-color: #ffffff;
             border-radius: 9999px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
             padding: 0;
             display: flex;
             align-items: center;
@@ -112,14 +114,16 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
+
         .result-modal-overlay.open {
             opacity: 1;
             pointer-events: all;
         }
+
         .result-modal {
             background: #fff;
             border-radius: 1.25rem;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
             width: 100%;
             max-width: 780px;
             max-height: 88vh;
@@ -129,23 +133,28 @@
             transform: scale(0.92) translateY(20px);
             transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .result-modal-header {
             padding: 2rem 2.5rem 1.25rem;
             flex-shrink: 0;
         }
+
         .result-modal-body {
             flex: 1;
             overflow-y: auto;
             padding: 0 2.5rem;
         }
+
         .result-modal-footer {
             padding: 1.25rem 2.5rem 2rem;
             flex-shrink: 0;
             border-top: 1px solid #f1f5f9;
         }
+
         .result-modal-overlay.open .result-modal {
             transform: scale(1) translateY(0);
         }
+
         .score-badge {
             display: inline-flex;
             align-items: center;
@@ -155,11 +164,27 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        .score-1 { color:#1e293b; }
-        .score-2 { color:#1e293b; }
-        .score-3 { color:#1e293b; }
-        .score-4 { color:#1e293b; }
-        .score-5 { color:#1e293b; }
+
+        .score-1 {
+            color: #1e293b;
+        }
+
+        .score-2 {
+            color: #1e293b;
+        }
+
+        .score-3 {
+            color: #1e293b;
+        }
+
+        .score-4 {
+            color: #1e293b;
+        }
+
+        .score-5 {
+            color: #1e293b;
+        }
+
         .edit-row-btn {
             padding: 5px 16px;
             border-radius: 8px;
@@ -172,6 +197,7 @@
             transition: all 0.2s;
             transform: translateY(0);
         }
+
         .edit-row-btn:hover {
             background: #0f172a;
             transform: translateY(-1px);
@@ -191,20 +217,23 @@
             pointer-events: none;
             transition: opacity 0.2s ease;
         }
+
         .confirm-overlay.open {
             opacity: 1;
             pointer-events: all;
         }
+
         .confirm-box {
             background: #fff;
             border-radius: 1rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
             padding: 2rem 2.25rem;
             width: 100%;
             max-width: 440px;
             transform: scale(0.9) translateY(16px);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .confirm-overlay.open .confirm-box {
             transform: scale(1) translateY(0);
         }
@@ -220,6 +249,7 @@
             gap: 10px;
             margin-bottom: 12px;
         }
+
         .section-title::before {
             content: '';
             display: inline-block;
@@ -240,12 +270,12 @@
             <div class="flex items-center space-x-4">
                 <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo" class="h-10 object-contain">
                 <h1 class="text-xl font-bold text-slate-800 tracking-tight">Individual Development Plan</h1>
-                
+
                 <div class="h-8 w-px bg-gray-300 mx-2"></div>
-                
+
                 <h2 class="text-xl text-gray-500 font-medium">Kompetensi</h2>
             </div>
-            
+
             <!-- (Optional) Right side Profile / Home Link -->
             <div class="ml-auto flex items-center">
                 <!-- Fitur ke dashboard dihapus -->
@@ -258,10 +288,14 @@
 
         <!-- Top Level Categories: Core / Managerial -->
         <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-6" style="padding: 0;">
-            <button id="tab-core" class="flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm" style="border-radius: 9999px; margin: 0;">
+            <button id="tab-core"
+                class="flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm"
+                style="border-radius: 9999px; margin: 0;">
                 Core Competencies
             </button>
-            <button id="tab-managerial" class="flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 transition" style="border-radius: 9999px; margin: 0;">
+            <button id="tab-managerial"
+                class="flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 transition"
+                style="border-radius: 9999px; margin: 0;">
                 Managerial Competencies
             </button>
         </div>
@@ -301,14 +335,15 @@
             @csrf
             <!-- Hidden inputs akan ditambahkan via JS -->
             <div id="hidden-inputs-container"></div>
-            
-            
-            <div id="card-block" class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
+
+
+            <div id="card-block"
+                class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
                 <h3 id="level-title" class="section-title text-2xl mb-6">Level 1</h3>
-            
-            <p id="level-desc" class="text-gray-600 leading-relaxed mb-12 text-[15px] font-medium text-justify">
-                Memuat data pertanyaan...
-            </p>
+
+                <p id="level-desc" class="text-gray-600 leading-relaxed mb-12 text-[15px] font-medium text-justify">
+                    Memuat data pertanyaan...
+                </p>
 
                 <div class="flex items-center justify-end mt-auto">
                     {{-- Action Right: Ragu-ragu + Sudah Kompeten --}}
@@ -332,13 +367,16 @@
                 <!-- Icon -->
                 <div class="flex justify-center mb-4">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:#f0fdfa">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
+                            stroke="#0f766e" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
                 <!-- Text -->
-                <p id="confirm-message" class="text-center text-slate-700 font-medium text-[15px] leading-relaxed mb-6"></p>
+                <p id="confirm-message" class="text-center text-slate-700 font-medium text-[15px] leading-relaxed mb-6">
+                </p>
                 <!-- Buttons: Mode Normal -->
                 <div class="flex gap-3" id="confirm-btns-normal">
                     <button id="confirm-btn-no" onclick="confirmNo()"
@@ -375,11 +413,15 @@
                 <div class="result-modal-header flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Hasil Penilaian Kompetensi</h2>
-                        <p class="text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit. Klik <strong>Edit</strong> untuk mengubah nilai.</p>
+                        <p class="text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit. Klik
+                            <strong>Edit</strong> untuk mengubah nilai.</p>
                     </div>
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#f0fdfa;flex-shrink:0;margin-left:1rem">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center"
+                        style="background:#f0fdfa;flex-shrink:0;margin-left:1rem">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                            stroke="#0f766e" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
@@ -431,7 +473,8 @@
 
                 <!-- Modal Footer (fixed, tidak scroll) -->
                 <div class="result-modal-footer flex items-center justify-between">
-                    <p class="text-xs text-gray-400">Total: <strong id="result-total-filled" class="text-slate-700">0</strong> kompetensi dinilai</p>
+                    <p class="text-xs text-gray-400">Total: <strong id="result-total-filled"
+                            class="text-slate-700">0</strong> kompetensi dinilai</p>
                     <button onclick="showSubmitPopup()"
                         class="px-10 py-3 text-white font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5"
                         style="background: linear-gradient(135deg, #0f766e, #0d9488);">
@@ -446,22 +489,26 @@
         <div id="submit-overlay" class="confirm-overlay" role="dialog" aria-modal="true">
             <div class="confirm-box" style="max-width:400px; text-align:center;">
                 <div class="flex justify-center mb-4">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center"
+                        style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                            stroke="#0f766e" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
                 <h3 class="text-lg font-bold text-slate-800 mb-1">Kirim Assessment?</h3>
-                <p class="text-sm text-gray-500 mb-6">Pastikan semua jawaban sudah benar.<br>Data tidak dapat diubah setelah dikirim.</p>
+                <p class="text-sm text-gray-500 mb-6">Pastikan semua jawaban sudah benar.<br>Data tidak dapat diubah
+                    setelah dikirim.</p>
                 <div class="flex gap-3">
-                    <button onclick="document.getElementById('submit-overlay').classList.remove('open'); document.getElementById('result-modal-overlay').classList.add('open')"
+                    <button
+                        onclick="document.getElementById('submit-overlay').classList.remove('open'); document.getElementById('result-modal-overlay').classList.add('open')"
                         class="flex-1 py-2.5 rounded-lg font-semibold text-slate-700"
                         style="background:#f1f5f9; border:none; cursor:pointer;">
                         Batal
                     </button>
-                    <button onclick="doSubmitAssessment()"
-                        class="flex-1 py-2.5 rounded-lg font-semibold text-white"
+                    <button onclick="doSubmitAssessment()" class="flex-1 py-2.5 rounded-lg font-semibold text-white"
                         style="background:linear-gradient(135deg,#0f766e,#0d9488); border:none; cursor:pointer;">
                         Kirim
                     </button>
@@ -511,7 +558,7 @@
         };
 
         const categoryIds = ['cat-0', 'cat-1', 'cat-2', 'cat-3', 'cat-4'];
-        
+
         // Simpan nilai score user
         let userScores = {};
 
@@ -521,9 +568,7 @@
 
         // Fungsi mendapatkan maxLevel untuk kompeteni yang sedang aktif
         function getMaxLevelForCurrentCat() {
-            const currentCat = topTabs[currentTopLevel].categories[currentCategoryIndex];
-            const tl = parseInt(targetLevels[currentCat.id]);
-            return (!isNaN(tl) && tl >= 1 && tl <= 5) ? tl : 5;
+            return 5; // Selalu tampilkan semua level (1-5)
         }
 
         const activeTopTabClass = "flex-1 text-center py-3 font-semibold text-white bg-teal-primary rounded-full transition shadow-sm";
@@ -565,7 +610,7 @@
             // Update Top Level Tab Styling
             const coreTab = document.getElementById('tab-core');
             const managerialTab = document.getElementById('tab-managerial');
-            
+
             if (currentTopLevel === 'core') {
                 coreTab.className = 'flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm';
                 coreTab.style.borderRadius = '9999px';
@@ -592,7 +637,7 @@
             // Update Deskripsi dengan pertanyaan dari database
             const currentCat = currentCatList[currentCategoryIndex];
             const compData = competenciesData[currentCat.id];
-            
+
             let questionText = "Belum ada pertanyaan untuk level ini.";
             if (compData && compData.questions) {
                 const q = compData.questions.find(q => parseInt(q.level) === currentLevel);
@@ -600,7 +645,7 @@
                     questionText = q.question_text;
                 }
             }
-            
+
             document.getElementById('level-desc').innerHTML = `<strong>Kategori: ${currentCat.name}</strong><br><br>${questionText}`;
 
             // Trigger animasi CSS supaya tidak kaku saat ganti soal
@@ -828,7 +873,7 @@
         }
 
         // Inisialisasi fill saat halaman pertama kali load
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             updateUI();
         });
     </script>
@@ -839,6 +884,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

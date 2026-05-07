@@ -49,15 +49,26 @@
         /* ── Scrollbar ── */
         ::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #0d9488;
             border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f766e;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #0d9488 transparent;
         }
 
         /* ── Title Animation ── */
@@ -141,6 +152,28 @@
                 padding: 0 16px;
             }
         }
+
+        /* ── Section Title (Global) ── */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #1e293b;
+            padding: 4px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 20px;
+            background: linear-gradient(180deg, #14b8a6, #0f766e);
+            border-radius: 9999px;
+            box-shadow: 0 2px 4px rgba(20, 184, 166, 0.3);
+        }
+
         /* ── Background Decoration ── */
         .bg-decoration {
             position: fixed;
@@ -150,6 +183,7 @@
             pointer-events: none;
             background-color: #ffffff;
         }
+
         .bg-decoration::before {
             content: '';
             position: absolute;
@@ -158,6 +192,7 @@
             background-size: 32px 32px;
             opacity: 0.3;
         }
+
         /* Generic Page Header */
         .page-header {
             display: flex;
@@ -222,8 +257,10 @@
                 <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
                     Development Plan</h1>
             </div>
-            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
-                <div class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
+            <h1
+                class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
+                <div
+                    class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
                     <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
                 </div>
                 IDP Panelis
@@ -240,7 +277,7 @@
             <a href="{{ route('panelis.history') }}"
                 class="text-sm font-semibold transition-colors pb-0.5
                 {{ request()->routeIs('panelis.history') ? 'text-white border-b-2 border-[#14b8a6]' : 'text-white/60 hover:text-white' }}">
-                History
+                Riwayat
             </a>
         </div>
 
@@ -264,10 +301,13 @@
                             $unreadCount = $unreadNotifications->count();
                             $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
                         @endphp
-                        <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
+                        <span id="bell-red-badge"
+                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce"
+                            style="animation-duration: 2s;">
                             {{ $displayCount }}
                         </span>
-                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
+                        <span
+                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                     @endif
                 </button>
 
@@ -455,8 +495,9 @@
 
             {{-- Mobile Dropdown Menu --}}
             <div class="relative block lg:hidden ml-2" id="mobile-menu-wrapper">
+                {{-- Mobile: Hanya tampilkan avatar (tanpa nama) --}}
                 <button
-                    class="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95 max-w-[calc(100vw-7rem)]"
+                    class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95"
                     aria-label="Profil dan notifikasi" id="mobile-menu-btn"
                     onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
                     <div class="relative">
@@ -465,20 +506,18 @@
                             {{ $initials }}
                         </div>
                         @if ($hasUnreadNotif)
-                            <span class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
+                            <span
+                                class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
                         @endif
                     </div>
-                    <div class="min-w-0 text-left">
-                        <p class="text-white text-[13px] font-semibold leading-tight truncate max-w-[118px]">{{ $nama }}</p>
-                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Panelis</p>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/70 flex-shrink-0" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
+                {{-- Dropdown: ukuran lebih kecil di mobile --}}
                 <div id="mobile-menu-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] sm:w-[320px] sm:max-w-[calc(100vw-1.5rem)] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
+                    class="dropdown-panel hidden absolute right-0 mt-3 w-[290px] max-w-[calc(100vw-1rem)] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
                     {{-- Dropdown Header --}}
 
                     <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
@@ -512,13 +551,15 @@
                                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
                                     @if ($hasUnreadNotif)
-                                        <span data-mobile-unread-badge class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">{{ $displayCount }}</span>
+                                        <span data-mobile-unread-badge
+                                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">{{ $displayCount }}</span>
                                     @endif
                                 </div>
                                 <span class="font-medium">Notifikasi</span>
                                 @if ($hasUnreadNotif)
                                     <span data-mobile-unread-pill
-                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }} Baru</span>
+                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }}
+                                        Baru</span>
                                 @endif
                             </a>
                         </div>
@@ -615,59 +656,72 @@
         class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
         <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                     <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
                 <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
             </div>
-            <a href="{{ route('panelis.notifikasi') }}" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat Semua</a>
+            <a href="{{ route('panelis.notifikasi') }}"
+                class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat
+                Semua</a>
         </div>
         <ul id="panelis-mobile-notif-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
         <div id="panelis-mobile-notif-empty" class="flex flex-col items-center py-8 text-center px-4">
             <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
             </div>
             <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi baru</p>
         </div>
         <div class="px-5 py-3 border-t border-gray-100 text-center">
-            <a href="{{ route('panelis.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua notifikasi &#x2192;</a>
+            <a href="{{ route('panelis.notifikasi') }}"
+                class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua
+                notifikasi &#x2192;</a>
         </div>
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main id="main-content"
-        class="px-4 py-8 lg:px-6 min-h-[calc(100vh-80px)]">
+    <main id="main-content" class="px-4 py-8 lg:px-6 min-h-[calc(100vh-80px)]">
         {{ $slot }}
     </main>
 
     {{-- FOOTER --}}
-    @if(request()->routeIs('panelis.dashboard'))
-    <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
-        <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
-            {{-- Bagian Kiri: Logo & Deskripsi --}}
-            <div class="flex items-center gap-[12px]">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
-                <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
-                    <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
-                    Platform Individual Development Plan
+    @if (request()->routeIs('panelis.dashboard'))
+        <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
+            <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
+                {{-- Bagian Kiri: Logo & Deskripsi --}}
+                <div class="flex items-center gap-[12px]">
+                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo"
+                        class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl"
+                        style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
+                    <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
+                        <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
+                        Platform Individual Development Plan
+                    </div>
+                </div>
+
+                {{-- Bagian Tengah: Links --}}
+                <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
+                    <a href="{{ route('panelis.dashboard') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Dashboard</a>
+                    <a href="{{ route('panelis.history') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Riwayat</a>
+                </div>
+
+                {{-- Bagian Kanan: Copyright --}}
+                <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
+                    &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
                 </div>
             </div>
-
-            {{-- Bagian Tengah: Links --}}
-            <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
-                <a href="{{ route('panelis.dashboard') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Dashboard</a>
-                <a href="{{ route('panelis.history') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">History</a>
-            </div>
-
-            {{-- Bagian Kanan: Copyright --}}
-            <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
-                &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
-            </div>
-        </div>
-    </footer>
+        </footer>
     @endif
 
     <script>
@@ -738,11 +792,11 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const shouldShowPanelisNotifPopup = @json(session()->pull('panelis_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
 
             if (shouldShowPanelisNotifPopup) {
-                setTimeout(function () {
+                setTimeout(function() {
                     const bellDropdown = document.getElementById('bell-dropdown');
                     if (!bellDropdown) return;
 
@@ -752,12 +806,12 @@
                     bellDropdown.style.transform = 'scale(1)';
                     bellDropdown.style.opacity = '1';
 
-                    setTimeout(function () {
+                    setTimeout(function() {
                         if (!bellDropdown.classList.contains('hidden')) {
                             bellDropdown.style.transform = 'scale(0)';
                             bellDropdown.style.opacity = '0';
 
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 bellDropdown.classList.add('hidden');
                                 bellDropdown.style = '';
                             }, 500);
@@ -767,7 +821,7 @@
             }
         });
 
-        window.addEventListener('notifikasi-marked-read', function () {
+        window.addEventListener('notifikasi-marked-read', function() {
             const badge = document.getElementById('bell-red-badge');
             if (badge) badge.remove();
 
@@ -776,10 +830,12 @@
                 const ping = bellBtn.querySelector('.animate-ping');
                 if (ping) ping.remove();
             }
-            document.querySelectorAll('.mobile-trigger-notif-dot, [data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(el => el.remove());
+            document.querySelectorAll(
+                '.mobile-trigger-notif-dot, [data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(
+                el => el.remove());
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let panelisBellPopupTimeout = null;
             let panelisBellCleanupTimeout = null;
             let panelisRealtimeUiBound = false;
@@ -793,7 +849,7 @@
                 panelisShowToast(data.title || 'Notifikasi Baru', data.desc || '');
             }
 
-            window.addEventListener('app-notification-received', function (event) {
+            window.addEventListener('app-notification-received', function(event) {
                 if (!panelisRealtimeUiBound) return;
                 handlePanelisIncomingNotification(event.detail || {});
             });
@@ -810,18 +866,19 @@
                     return true;
                 }
 
-                if (window.__panelisNotificationChannelInitialized && window.__panelisNotificationChannelInitialized !== channelName) {
+                if (window.__panelisNotificationChannelInitialized && window
+                    .__panelisNotificationChannelInitialized !== channelName) {
                     window.Echo.leave(window.__panelisNotificationChannelInitialized);
                 }
 
                 window.Echo.private(channelName)
-                    .subscribed(function () {
+                    .subscribed(function() {
                         console.info('[Panelis Realtime] subscribed to', channelName);
                     })
-                    .error(function (error) {
+                    .error(function(error) {
                         console.error('[Panelis Realtime] subscription error', error);
                     })
-                    .listen('.notification.created', function (data) {
+                    .listen('.notification.created', function(data) {
                         window.dispatchEvent(new CustomEvent('app-notification-received', {
                             detail: data
                         }));
@@ -835,7 +892,7 @@
 
             if (!initPanelisRealtimeNotifications()) {
                 let retryCount = 0;
-                const retryTimer = setInterval(function () {
+                const retryTimer = setInterval(function() {
                     retryCount++;
 
                     if (initPanelisRealtimeNotifications() || retryCount >= 20) {
@@ -847,16 +904,16 @@
             window.addEventListener('load', initPanelisRealtimeNotifications);
             document.addEventListener('livewire:navigated', initPanelisRealtimeNotifications);
 
-            if (typeof window.Echo !== 'undefined'
-                && window.Echo.connector
-                && window.Echo.connector.pusher
-                && window.Echo.connector.pusher.connection) {
-                window.Echo.connector.pusher.connection.bind('connected', function () {
+            if (typeof window.Echo !== 'undefined' &&
+                window.Echo.connector &&
+                window.Echo.connector.pusher &&
+                window.Echo.connector.pusher.connection) {
+                window.Echo.connector.pusher.connection.bind('connected', function() {
                     console.info('[Panelis Realtime] websocket connected');
                     initPanelisRealtimeNotifications();
                 });
 
-                window.Echo.connector.pusher.connection.bind('error', function (error) {
+                window.Echo.connector.pusher.connection.bind('error', function(error) {
                     console.error('[Panelis Realtime] websocket error', error);
                 });
             }
@@ -866,7 +923,8 @@
                 if (!container) {
                     container = document.createElement('div');
                     container.id = 'panelis-rt-toast-container';
-                    container.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
+                    container.style.cssText =
+                        'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
                     document.body.appendChild(container);
                 }
 
@@ -920,7 +978,7 @@
                     });
                 });
 
-                setTimeout(function () {
+                setTimeout(function() {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translateX(40px) scale(.96)';
                     setTimeout(() => toast.remove(), 400);
@@ -930,8 +988,10 @@
             function panelisUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');
                 const mobileIndicatorHost = document.querySelector('#mobile-menu-btn .relative');
-                const mobileMenuLinkBadge = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-badge]');
-                const mobileMenuLinkPill = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-pill]');
+                const mobileMenuLinkBadge = document.querySelector(
+                    '#mobile-menu-dropdown [data-mobile-unread-badge]');
+                const mobileMenuLinkPill = document.querySelector(
+                '#mobile-menu-dropdown [data-mobile-unread-pill]');
 
                 function nextBadgeCountFromElement(element) {
                     const current = parseInt((element?.textContent || '').trim(), 10) || 0;
@@ -941,14 +1001,16 @@
 
                 if (mobileIndicatorHost && !mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot')) {
                     const dot = document.createElement('span');
-                    dot.className = 'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
+                    dot.className =
+                        'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
                     dot.textContent = '1';
                     mobileIndicatorHost.appendChild(dot);
                 } else if (mobileIndicatorHost) {
-                    mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent = nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
+                    mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent =
+                        nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
                 }
 
-                                if (mobileMenuLinkBadge) {
+                if (mobileMenuLinkBadge) {
                     let nextValue;
                     if (typeof nextBadgeCountFromElement === 'function') {
                         const res = nextBadgeCountFromElement(mobileMenuLinkBadge);
@@ -960,10 +1022,13 @@
                     }
                     mobileMenuLinkBadge.textContent = nextValue;
                 } else {
-                    let iconContainer = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector('#profile-dropdown a[href*="notifikasi"] .relative');
+                    let iconContainer = document.querySelector(
+                        '#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector(
+                        '#profile-dropdown a[href*="notifikasi"] .relative');
                     if (iconContainer) {
                         let badge = document.createElement('span');
-                        badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
+                        badge.className =
+                            'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
                         badge.setAttribute('data-mobile-unread-badge', '');
                         badge.textContent = '1';
                         iconContainer.appendChild(badge);
@@ -975,10 +1040,12 @@
                     const next = current + 1;
                     mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
                 } else {
-                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document.querySelector('#profile-dropdown a[href*="notifikasi"]');
+                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document
+                        .querySelector('#profile-dropdown a[href*="notifikasi"]');
                     if (navLink) {
                         let pill = document.createElement('span');
-                        pill.className = 'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
+                        pill.className =
+                            'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
                         pill.setAttribute('data-mobile-unread-pill', '');
                         pill.textContent = '1 Baru';
                         navLink.appendChild(pill);
@@ -997,13 +1064,15 @@
 
                 badge = document.createElement('span');
                 badge.id = 'bell-red-badge';
-                badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
+                badge.className =
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
                 badge.style.animationDuration = '2s';
                 badge.textContent = '1';
                 bellBtn.appendChild(badge);
 
                 const ping = document.createElement('span');
-                ping.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
+                ping.className =
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
                 bellBtn.appendChild(ping);
 
             }
@@ -1030,8 +1099,9 @@
                 }
 
                 const item = document.createElement('li');
-                item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                item.onclick = function () {
+                item.className =
+                    'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                item.onclick = function() {
                     window.location = '{{ route('panelis.notifikasi') }}';
                 };
                 item.innerHTML = `
@@ -1068,8 +1138,11 @@
                 if (!mobileList) return;
 
                 const mobileItem = document.createElement('li');
-                mobileItem.className = 'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                mobileItem.onclick = function () { window.location = '{{ route('panelis.notifikasi') }}'; };
+                mobileItem.className =
+                    'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                mobileItem.onclick = function() {
+                    window.location = '{{ route('panelis.notifikasi') }}';
+                };
                 mobileItem.innerHTML = `
                     <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1083,9 +1156,9 @@
                     </div>
                 `;
                 const mobileTitleEl = mobileItem.querySelectorAll('p')[0];
-                const mobileDescEl  = mobileItem.querySelectorAll('p')[1];
+                const mobileDescEl = mobileItem.querySelectorAll('p')[1];
                 if (mobileTitleEl) mobileTitleEl.innerHTML = title;
-                if (mobileDescEl)  mobileDescEl.innerHTML  = desc;
+                if (mobileDescEl) mobileDescEl.innerHTML = desc;
 
                 mobileList.prepend(mobileItem);
                 while (mobileList.children.length > 5) mobileList.removeChild(mobileList.lastElementChild);
@@ -1094,7 +1167,8 @@
             function panelisShowBellPopup() {
                 const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
                 // Mobile: buka panel notifikasi khusus
-                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
+                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' :
+                    'bell-dropdown');
                 if (!bellDropdown) return;
 
                 clearTimeout(panelisBellPopupTimeout);
@@ -1103,11 +1177,12 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
                 showDropdownPanel(bellDropdown, isMobileActive);
 
-                panelisBellPopupTimeout = setTimeout(function () {
+                panelisBellPopupTimeout = setTimeout(function() {
                     bellDropdown.style.opacity = '0';
-                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' :
+                        'scale(0.86) translateY(-8px)';
 
-                    panelisBellCleanupTimeout = setTimeout(function () {
+                    panelisBellCleanupTimeout = setTimeout(function() {
                         hideDropdownPanel(bellDropdown);
                     }, 350);
                 }, 4500);

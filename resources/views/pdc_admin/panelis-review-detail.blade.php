@@ -110,10 +110,9 @@
             }
 
             .decision-card {
-                flex: 1;
                 border: 2px solid #e2e8f0;
                 border-radius: 16px;
-                padding: 24px 16px;
+                padding: 18px 14px;
                 text-align: center;
                 cursor: pointer;
                 transition: all 0.22s;
@@ -125,56 +124,49 @@
                 box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             }
 
-            .decision-card.promoted:hover {
-                border-color: #22c55e;
-            }
-
-            .decision-card.not-promoted:hover {
-                border-color: #ef4444;
-            }
+            .decision-card.ready-now:hover     { border-color: #22c55e; }
+            .decision-card.ready-1-2:hover     { border-color: #3b82f6; }
+            .decision-card.ready-over-2:hover  { border-color: #f59e0b; }
+            .decision-card.not-ready:hover     { border-color: #ef4444; }
 
             .decision-card .card-icon {
-                width: 56px;
-                height: 56px;
+                width: 48px;
+                height: 48px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto 12px;
-                font-size: 1.6rem;
+                margin: 0 auto 10px;
+                font-size: 1.4rem;
             }
 
-            .decision-card.promoted .card-icon {
-                background: rgba(34, 197, 94, 0.12);
-            }
-
-            .decision-card.not-promoted .card-icon {
-                background: rgba(239, 68, 68, 0.1);
-            }
+            .decision-card.ready-now    .card-icon { background: rgba(34, 197, 94, 0.12); }
+            .decision-card.ready-1-2    .card-icon { background: rgba(59, 130, 246, 0.12); }
+            .decision-card.ready-over-2 .card-icon { background: rgba(245, 158, 11, 0.12); }
+            .decision-card.not-ready    .card-icon { background: rgba(239, 68, 68, 0.10); }
 
             .decision-card h4 {
-                font-size: 1rem;
+                font-size: 0.875rem;
                 font-weight: 800;
                 margin-bottom: 4px;
             }
 
-            .decision-card.promoted h4 {
-                color: #16a34a;
-            }
-
-            .decision-card.not-promoted h4 {
-                color: #dc2626;
-            }
+            .decision-card.ready-now    h4 { color: #16a34a; }
+            .decision-card.ready-1-2    h4 { color: #2563eb; }
+            .decision-card.ready-over-2 h4 { color: #d97706; }
+            .decision-card.not-ready    h4 { color: #dc2626; }
 
             .decision-card p {
-                font-size: 0.78rem;
+                font-size: 0.72rem;
                 color: #64748b;
                 line-height: 1.4;
             }
 
-            @media (max-width: 768px) {}
-
-            @media (max-width: 768px) {}
+            .decision-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
         </style>
     </x-slot>
 
@@ -582,28 +574,22 @@
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                             clip-rule="evenodd" />
-
                     </svg>
-                    Diangkat ✓
+                    Ready Now — Diangkat ✓
                 </button>
             @elseif ($statusPromo === 'Not Promoted')
                 <button class="btn-selesai"
-                    style="background: #ef4444; box-shadow: 0 2px 8px rgba(239,68,68,0.3); cursor: default;" disabled>
+                    style="background: #64748b; box-shadow: 0 2px 8px rgba(100,116,139,0.3); cursor: default;" disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                             clip-rule="evenodd" />
                     </svg>
-                    Tidak Diangkat ✓
+                    Keputusan Telah Ditetapkan ✓
                 </button>
             @else
                 <button class="btn-selesai" style="background: #e2e8f0; color: #64748b; box-shadow: none; cursor: default;"
                     disabled>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
-                    </svg>
                     Sudah Selesai
                 </button>
             @endif
@@ -628,7 +614,7 @@
     {{-- ── MODAL STEP 1: Pilih Keputusan ── --}}
     <div id="decisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
         style="background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in">
             {{-- Header --}}
             <div class="px-6 pt-6 pb-4">
                 <div class="flex items-center justify-between mb-1">
@@ -645,32 +631,37 @@
                 <p class="text-sm text-[#64748b]">Tentukan hasil promosi untuk <span
                         class="font-semibold text-[#1e293b]">{{ $talent->nama }}</span></p>
             </div>
-            {{-- Decision Cards --}}
-            <div class="px-6 pb-2 flex gap-4">
-                <div class="decision-card promoted" onclick="selectDecision('promoted')">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-600" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path fill-rule="evenodd"
-                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <h4>Promoted</h4>
-                    <p>Talent berhasil dipromosikan ke posisi target</p>
+            {{-- Decision Cards 2x2 Grid --}}
+            <div class="px-6 pb-2 decision-grid">
+
+                {{-- Ready Now --}}
+                <div class="decision-card ready-now" onclick="selectDecision('ready_now')">
+                    <div class="card-icon">🏆</div>
+                    <h4>Ready Now</h4>
+                    <p>Talent siap & resmi diangkat ke posisi target sekarang</p>
                 </div>
-                <div class="decision-card not-promoted" onclick="selectDecision('not_promoted')">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-600" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path fill-rule="evenodd"
-                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <h4>Not Promoted</h4>
-                    <p>Talent belum berhasil dipromosikan periode ini</p>
+
+                {{-- Ready in 1-2 Years --}}
+                <div class="decision-card ready-1-2" onclick="selectDecision('ready_1_2_years')">
+                    <div class="card-icon">📈</div>
+                    <h4>Ready in 1–2 Years</h4>
+                    <p>Diproyeksikan siap promosi dalam 1–2 tahun dengan pengembangan terarah</p>
                 </div>
+
+                {{-- Ready in > 2 Years --}}
+                <div class="decision-card ready-over-2" onclick="selectDecision('ready_over_2_years')">
+                    <div class="card-icon">🕐</div>
+                    <h4>Ready in &gt; 2 Years</h4>
+                    <p>Masih membutuhkan pengembangan signifikan sebelum siap promosi</p>
+                </div>
+
+                {{-- Not Ready --}}
+                <div class="decision-card not-ready" onclick="selectDecision('not_ready')">
+                    <div class="card-icon">❌</div>
+                    <h4>Not Ready</h4>
+                    <p>Belum direkomendasikan untuk jalur suksesi pada periode ini</p>
+                </div>
+
             </div>
             {{-- Footer --}}
             <div class="px-6 py-4 flex justify-end">
@@ -723,26 +714,46 @@
                 pendingDecision = decision;
                 document.getElementById('decisionModal').style.display = 'none';
 
-                const confirmIcon = document.getElementById('confirmIcon');
+                const confirmIcon  = document.getElementById('confirmIcon');
                 const confirmTitle = document.getElementById('confirmTitle');
-                const confirmDesc = document.getElementById('confirmDesc');
-                const confirmBtn = document.getElementById('confirmBtn');
+                const confirmDesc  = document.getElementById('confirmDesc');
+                const confirmBtn   = document.getElementById('confirmBtn');
 
-                if (decision === 'promoted') {
-                    confirmIcon.innerHTML = '🏆';
-                    confirmIcon.style.background = 'rgba(34,197,94,0.12)';
-                    confirmTitle.textContent = 'Konfirmasi: Diangkat';
-                    confirmDesc.innerHTML =
-                        'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> sebagai <strong class="text-green-600">DIANGKAT</strong> ke posisi target.';
-                    confirmBtn.style.background = '#22c55e';
-                } else {
-                    confirmIcon.innerHTML = '📋';
-                    confirmIcon.style.background = 'rgba(239,68,68,0.1)';
-                    confirmTitle.textContent = 'Konfirmasi: Tidak Diangkat';
-                    confirmDesc.innerHTML =
-                        'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> sebagai <strong class="text-red-600">TIDAK DIANGKAT</strong> pada periode ini.';
-                    confirmBtn.style.background = '#ef4444';
-                }
+                const decisionMap = {
+                    ready_now: {
+                        icon: '🏆', bg: 'rgba(34,197,94,0.12)',
+                        title: 'Konfirmasi: Ready Now',
+                        desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> sebagai <strong class="text-green-600">DIANGKAT</strong> ke posisi target sekarang. Posisi talent akan diperbarui otomatis.',
+                        btnColor: '#22c55e'
+                    },
+                    ready_1_2_years: {
+                        icon: '📈', bg: 'rgba(59,130,246,0.12)',
+                        title: 'Konfirmasi: Ready in 1–2 Years',
+                        desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> dengan keputusan <strong class="text-blue-600">READY IN 1–2 YEARS</strong>. Talent belum diangkat pada periode ini.',
+                        btnColor: '#3b82f6'
+                    },
+                    ready_over_2_years: {
+                        icon: '🕐', bg: 'rgba(245,158,11,0.12)',
+                        title: 'Konfirmasi: Ready in > 2 Years',
+                        desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> dengan keputusan <strong class="text-amber-600">READY IN &gt; 2 YEARS</strong>. Talent belum diangkat pada periode ini.',
+                        btnColor: '#f59e0b'
+                    },
+                    not_ready: {
+                        icon: '❌', bg: 'rgba(239,68,68,0.1)',
+                        title: 'Konfirmasi: Not Ready',
+                        desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> sebagai <strong class="text-red-600">NOT READY</strong>. Talent belum diangkat pada periode ini.',
+                        btnColor: '#ef4444'
+                    },
+                };
+
+                const cfg = decisionMap[decision];
+                if (!cfg) return;
+
+                confirmIcon.innerHTML = cfg.icon;
+                confirmIcon.style.background = cfg.bg;
+                confirmTitle.textContent = cfg.title;
+                confirmDesc.innerHTML = cfg.desc;
+                confirmBtn.style.background = cfg.btnColor;
 
                 document.getElementById('confirmModal').style.display = 'flex';
             }

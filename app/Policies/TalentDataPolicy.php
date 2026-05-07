@@ -25,8 +25,8 @@ class TalentDataPolicy
             $role === 'talent'   => $viewer->id === $talent->id,
             $role === 'atasan'   => $viewer->bawahanTalents()->where('id', $talent->id)->exists(),
             $role === 'mentor'   => $viewer->mentees()->where('id', $talent->id)->exists(),
-            $role === 'panelis'  => \App\Models\PdcPanelisReview::where('panelis_id', $viewer->id)
-                                        ->where('talent_id', $talent->id)->exists(),
+            $role === 'panelis'  => \App\Models\PanelisAssessment::where('panelis_id', $viewer->id)
+                                        ->where('user_id_talent', $talent->id)->exists(),
             default              => false,
         };
     }

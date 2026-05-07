@@ -86,7 +86,8 @@
                         </div>
                         <div class="overflow-hidden">
                             <p class="text-[14px] font-bold text-white truncate">
-                                {{ $user->nama ?? ($user->name ?? '-') }}</p>
+                                {{ $user->nama ?? ($user->name ?? '-') }}
+                            </p>
                             <p class="text-[11px] text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
                             <span
                                 class="inline-block mt-1.5 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Talent</span>

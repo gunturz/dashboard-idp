@@ -1355,14 +1355,15 @@ class PDCAdminController extends Controller
     public function panelisReviewComplete(Request $request, $talent_id)
     {
         $request->validate([
-            'decision' => 'required|in:promoted,not_promoted',
+            'decision' => 'required|in:ready_now,ready_1_2_years,ready_over_2_years,not_ready',
         ]);
 
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
         $talent = User::findOrFail($talent_id);
         $targetPosition = optional($plan->targetPosition)->position_name ?? 'posisi yang dituju';
 
-        if ($request->decision === 'promoted') {
+        if ($request->decision === 'ready_now') {
+            // ── READY NOW: Diangkat ke posisi target ──
             $plan->update(['status_promotion' => 'Promoted']);
 
             // Otomatis memperbarui posisi user (talent) ke posisi yang dituju
@@ -1376,26 +1377,74 @@ class PDCAdminController extends Controller
             );
 
             $message = 'Talent ' . $talent->nama . ' berhasil diangkat ke ' . $targetPosition . '.';
-        } else {
-            $plan->update(['status_promotion' => 'Not Promoted']);
+
+            // Arsip semua progress aktif
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+
+        } elseif ($request->decision === 'ready_1_2_years') {
+            // ── READY IN 1-2 YEARS: Belum diangkat, posisi tetap ──
+            $plan->update(['status_promotion' => 'Ready in 1-2 Years']);
 
             $this->addNotificationToUser(
                 $talent_id,
-                'Hasil Keputusan Promosi',
-                'PDC Admin telah menyelesaikan proses evaluasi Anda. Berdasarkan hasil penilaian, Anda <span class="font-semibold text-amber-600">belum diangkat</span> ke posisi <span class="font-semibold">' . $targetPosition . '</span> pada periode ini. Terus tingkatkan kompetensi Anda!',
+                '📋 Hasil Evaluasi Promosi',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-blue-600">Ready in 1–2 Years</span>. Anda diproyeksikan siap untuk promosi ke posisi <span class="font-semibold">' . $targetPosition . '</span> dalam 1–2 tahun ke depan. Terus kembangkan diri Anda!',
+                'info'
+            );
+
+            $message = 'Keputusan "Ready in 1–2 Years" untuk ' . $talent->nama . ' telah disimpan.';
+
+            // Arsip progress
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+
+        } elseif ($request->decision === 'ready_over_2_years') {
+            // ── READY IN > 2 YEARS: Belum diangkat, posisi tetap ──
+            $plan->update(['status_promotion' => 'Ready in > 2 Years']);
+
+            $this->addNotificationToUser(
+                $talent_id,
+                '📋 Hasil Evaluasi Promosi',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-amber-600">Ready in &gt; 2 Years</span>. Anda masih membutuhkan pengembangan lebih lanjut sebelum siap untuk posisi <span class="font-semibold">' . $targetPosition . '</span>. Terus tingkatkan kompetensi Anda!',
                 'warning'
             );
 
-            $message = 'Keputusan tidak diangkat untuk ' . $talent->nama . ' telah disimpan.';
-        }
+            $message = 'Keputusan "Ready in > 2 Years" untuk ' . $talent->nama . ' telah disimpan.';
 
-        // --- RESET PROGRESS (ARCHIVE) ---
-        // Sembunyikan progress dari dashboard aktif agar bisa mulai progress baru di masa depan
-        $talent->promotion_plan()->update(['is_active' => false]);
-        $talent->assessmentSession()->update(['is_active' => false]);
-        $talent->idpActivities()->update(['is_active' => false]);
-        $talent->improvementProjects()->update(['is_active' => false]);
-        $talent->panelisAssessments()->update(['is_active' => false]);
+            // Arsip progress
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+
+        } else {
+            // ── NOT READY: Belum siap, posisi tetap ──
+            $plan->update(['status_promotion' => 'Not Ready']);
+
+            $this->addNotificationToUser(
+                $talent_id,
+                '📋 Hasil Evaluasi Promosi',
+                'PDC Admin telah menyelesaikan proses evaluasi Anda. Berdasarkan hasil penilaian, Anda dinyatakan <span class="font-semibold text-red-600">Not Ready</span> untuk promosi ke posisi <span class="font-semibold">' . $targetPosition . '</span> pada periode ini. Terus tingkatkan kompetensi Anda!',
+                'warning'
+            );
+
+            $message = 'Keputusan "Not Ready" untuk ' . $talent->nama . ' telah disimpan.';
+
+            // Arsip progress
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+        }
 
         return redirect()->route('pdc_admin.progress_archive')->with('success', $message);
     }
@@ -1457,19 +1506,20 @@ class PDCAdminController extends Controller
             return $pos !== false ? $pos : 999;
         });
 
-        // Fetch talents whose promotion process is completed (Promoted or Not Promoted)
+        // Fetch talents whose promotion process is completed (all final decision statuses)
+        $finalStatuses = ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'Talent');
         })
-            ->whereHas('all_promotion_plans', function ($q) {
-                $q->where('is_active', false)->whereIn('status_promotion', ['Promoted', 'Not Promoted']);
+            ->whereHas('all_promotion_plans', function ($q) use ($finalStatuses) {
+                $q->where('is_active', false)->whereIn('status_promotion', $finalStatuses);
             })
             ->with([
                 'company',
                 'department',
                 'position',
-                'all_promotion_plans' => function ($q) {
-                    $q->where('is_active', false)->whereIn('status_promotion', ['Promoted', 'Not Promoted']);
+                'all_promotion_plans' => function ($q) use ($finalStatuses) {
+                    $q->where('is_active', false)->whereIn('status_promotion', $finalStatuses);
                 },
                 'all_improvementProjects'
             ])

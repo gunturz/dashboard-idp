@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\PdcPanelisReview; // Model assignment panelis
+use App\Models\PanelisAssessment; // Model assignment panelis
 
 class PenilaianPolicy
 {
@@ -19,8 +19,8 @@ class PenilaianPolicy
         }
 
         // Cek apakah panelis ini benar-benar di-assign ke talent tersebut
-        return PdcPanelisReview::where('panelis_id', $user->id)
-            ->where('talent_id', $talentId)
+        return PanelisAssessment::where('panelis_id', $user->id)
+            ->where('user_id_talent', $talentId)
             ->exists();
     }
 

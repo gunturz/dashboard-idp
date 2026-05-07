@@ -34,33 +34,35 @@ class PanelisController extends Controller
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-            $q->where('status_promotion', 'Pending Panelis')
-                ->whereNotNull('target_position_id');
-        })
+                $q->where('status_promotion', 'Pending Panelis')
+                    ->whereNotNull('target_position_id');
+            })
             ->whereNotIn('id', $alreadyAssessedTalentIds)
             // Hanya talent khusus untuk panelis ini (assignment)
             ->whereHas('panelisAssessments', function ($q) use ($user) {
-            $q->where('panelis_id', $user->id);
-        })
+                $q->where('panelis_id', $user->id);
+            })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
 
         // Group by company -> target position -> talents
         $groupedData = $talents->groupBy('company_id')->map(function ($companyTalents) {
             return [
-            'company' => $companyTalents->first()->company,
-            'positions' => $companyTalents->groupBy(function ($item) {
-                    return $item->promotion_plan->target_position_id ?? 0;
-                }
-                )->map(function ($positionTalents) {
-                    return [
-                    'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                    'talents' => $positionTalents,
-                    ];
-                }
-                ),
-                ];
-            });
+                'company' => $companyTalents->first()->company,
+                'positions' => $companyTalents->groupBy(
+                    function ($item) {
+                        return $item->promotion_plan->target_position_id ?? 0;
+                    }
+                )->map(
+                        function ($positionTalents) {
+                            return [
+                                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                                'talents' => $positionTalents,
+                            ];
+                        }
+                    ),
+            ];
+        });
 
         return view('panelis.dashboard', compact('user', 'groupedData'))
             ->with('notifications', $this->getNotifications());
@@ -111,7 +113,7 @@ class PanelisController extends Controller
         $competencies = Competence::all();
         $positionId = optional($talent->promotion_plan)->target_position_id;
         $standards = $positionId
-            ?PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
+            ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
         // IDP donut counts
@@ -124,13 +126,19 @@ class PanelisController extends Controller
         $gaps = collect();
         if ($details) {
             $overrides = $details->filter(fn($d) => str_starts_with($d->notes ?? '', 'priority_'))
-                ->sortBy(fn($d) => (int)explode('|', str_replace('priority_', '', $d->notes))[0]);
+                ->sortBy(fn($d) => (int) explode('|', str_replace('priority_', '', $d->notes))[0]);
             $gaps = $overrides->count() > 0 ? $overrides->values() : $details->sortBy('gap_score')->take(3)->values();
         }
 
         return view('panelis.detail', compact(
-            'user', 'talent', 'competencies', 'standards', 'gaps',
-            'exposureCount', 'mentoringCount', 'learningCount'
+            'user',
+            'talent',
+            'competencies',
+            'standards',
+            'gaps',
+            'exposureCount',
+            'mentoringCount',
+            'learningCount'
         ))->with('notifications', $this->getNotifications());
     }
 
@@ -151,8 +159,11 @@ class PanelisController extends Controller
         $learningActivities = $talent->idpActivities->where('type_idp', 3);
 
         return view('panelis.logbook', compact(
-            'user', 'talent',
-            'exposureActivities', 'mentoringActivities', 'learningActivities'
+            'user',
+            'talent',
+            'exposureActivities',
+            'mentoringActivities',
+            'learningActivities'
         ))->with('notifications', $this->getNotifications());
     }
 
@@ -189,6 +200,8 @@ class PanelisController extends Controller
      */
     public function simpanPenilaian(\Illuminate\Http\Request $request, $talent_id)
     {
+        \Illuminate\Support\Facades\Gate::authorize('submit-penilaian', (int) $talent_id);
+
         $user = auth()->user();
 
         $scores = $request->input('scores', []); // array of integers
@@ -196,24 +209,24 @@ class PanelisController extends Controller
 
         // Simpan / update penilaian panelis ini untuk talent ini (per panelis per talent)
         PanelisAssessment::updateOrCreate(
-        [
-            'user_id_talent' => $talent_id,
-            'panelis_id' => $user->id,
-        ],
-        [
-            'panelis_score' => $totalScore,
-            'panelis_scores_json' => $scores,
-            'panelis_komentar' => $request->input('komentar'),
-            'panelis_rekomendasi' => $request->input('rekomendasi'),
-            'panelis_tanggal_penilaian' => $request->input('tanggal_penilaian', now()->toDateString()),
-        ]
+            [
+                'user_id_talent' => $talent_id,
+                'panelis_id' => $user->id,
+            ],
+            [
+                'panelis_score' => $totalScore,
+                'panelis_scores_json' => $scores,
+                'panelis_komentar' => $request->input('komentar'),
+                'panelis_rekomendasi' => $request->input('rekomendasi'),
+                'panelis_tanggal_penilaian' => $request->input('tanggal_penilaian', now()->toDateString()),
+            ]
         );
 
         $talent = User::find($talent_id);
 
         $this->notifyPdcAdmins(
             'Review Panelis Selesai',
-            'Panelis <span class="font-semibold">' . e($user->nama) . '</span> telah memberikan review untuk talent <span class="font-semibold">' . e(optional($talent)->nama ?? 'Talent') . '</span> dengan total skor <span class="font-semibold">' . e((string)$totalScore) . '</span>.',
+            'Panelis <span class="font-semibold">' . e($user->nama) . '</span> telah memberikan review untuk talent <span class="font-semibold">' . e(optional($talent)->nama ?? 'Talent') . '</span> dengan total skor <span class="font-semibold">' . e((string) $totalScore) . '</span>.',
             'info'
         );
 
@@ -232,12 +245,12 @@ class PanelisController extends Controller
         $assessments = PanelisAssessment::where('panelis_id', $user->id)
             ->whereNotNull('panelis_score')
             ->with([
-            'talent.position',
-            'talent.department',
-            'talent.company',
-            'talent.promotion_plan.targetPosition',
-            'talent.improvementProjects',
-        ])
+                'talent.position',
+                'talent.department',
+                'talent.company',
+                'talent.promotion_plan.targetPosition',
+                'talent.improvementProjects',
+            ])
             ->orderBy('updated_at', 'desc')
             ->get();
 

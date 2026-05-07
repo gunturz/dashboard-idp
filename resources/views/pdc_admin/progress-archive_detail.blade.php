@@ -58,88 +58,214 @@
                 background: #0d9488;
             }
 
-            /* Profile header card */
-            .profile-card {
-                background: #0f172a;
-                border: none;
-                border-radius: 0;
-                padding: 24px;
-                margin-bottom: 24px;
-                margin-top: -32px;
-                margin-left: -16px;
-                margin-right: -16px;
-                width: calc(100% + 32px);
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 24px;
-                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-                color: white;
-            }
-
-            @media(min-width: 1024px) {
-                .profile-card {
-                    margin-left: -24px;
-                    margin-right: -24px;
-                    width: calc(100% + 48px);
-                    padding-left: 24px;
-                    padding-right: 24px;
-                }
-            }
-
-            .profile-col-1 {
+            /* Profile header card - Talent Hero Style */
+            .talent-prof-hero {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
+                padding: 28px 32px;
                 display: flex;
-                align-items: center;
-                gap: 16px;
-                border-right: 1px dashed rgba(255, 255, 255, 0.2);
-                padding-right: 16px;
+                align-items: stretch;
+                gap: 0;
+                position: relative;
+                overflow: hidden;
+                border-radius: 20px;
+                margin-bottom: 28px;
+                box-shadow: 0 8px 32px rgba(15, 23, 42, 0.35);
             }
 
-            .profile-col-general {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                gap: 12px;
-            }
-
-            .profile-col-general:nth-child(2) {
-                border-right: 1px dashed rgba(255, 255, 255, 0.2);
-                padding-right: 16px;
-            }
-
-            .profile-avatar {
-                width: 64px;
-                height: 64px;
+            .talent-prof-hero::before {
+                content: '';
+                position: absolute;
+                top: -40px;
+                right: -40px;
+                width: 220px;
+                height: 220px;
                 border-radius: 50%;
-                object-fit: cover;
-                border: 2px solid rgba(255, 255, 255, 0.3);
+                background: rgba(20, 184, 166, 0.08);
+                pointer-events: none;
+            }
+
+            .talent-prof-hero::after {
+                content: '';
+                position: absolute;
+                bottom: -60px;
+                left: 30%;
+                width: 280px;
+                height: 280px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.04);
+                pointer-events: none;
+            }
+
+            .talent-hero-avatar-wrap {
+                position: relative;
                 flex-shrink: 0;
             }
 
-            .profile-info h3 {
-                font-size: 1.1rem;
+            .talent-hero-avatar-img {
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                object-fit: cover;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            }
+
+            .talent-hero-avatar-placeholder {
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.4rem;
                 font-weight: 800;
                 color: white;
-                margin-bottom: 2px;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                letter-spacing: -1px;
             }
 
-            .profile-info p {
-                font-size: 0.78rem;
-                color: #cbd5e1;
-                font-style: italic;
+            .talent-hero-section {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                padding: 0 28px;
+                position: relative;
+                z-index: 1;
             }
 
-            .meta-item {
-                font-size: 0.78rem;
-                color: #cbd5e1;
-                display: grid;
-                grid-template-columns: 120px 1fr;
-                gap: 8px;
+            .talent-hero-section-1 {
+                flex: 1;
+                display: flex;
                 align-items: center;
+                gap: 20px;
+                padding: 0 28px 0 0;
+                position: relative;
+                z-index: 1;
             }
 
-            .meta-item strong {
-                color: white;
+            .talent-hero-divider {
+                width: 1px;
+                align-self: stretch;
+                background: rgba(255, 255, 255, 0.15);
+                flex-shrink: 0;
+                margin: 4px 0;
+            }
+
+            .talent-hero-info {
+                min-width: 0;
+            }
+
+            .talent-hero-name {
+                font-size: 1.35rem;
+                font-weight: 800;
+                color: #ffffff;
+                line-height: 1.2;
+            }
+
+            .talent-hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: rgba(20, 184, 166, 0.18);
+                border: 1px solid rgba(20, 184, 166, 0.3);
+                color: #5eead4;
+                font-size: 0.75rem;
                 font-weight: 700;
+                padding: 4px 12px;
+                border-radius: 99px;
+                margin-top: 10px;
+                letter-spacing: .04em;
+            }
+
+            .talent-hero-badge::before {
+                content: '';
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #14b8a6;
+                animation: pulse-dot-hero 2s ease infinite;
+            }
+
+            @keyframes pulse-dot-hero {
+
+                0%,
+                100% {
+                    opacity: 1
+                }
+
+                50% {
+                    opacity: .4
+                }
+            }
+
+            .talent-hero-meta-label {
+                font-size: 0.78rem;
+                color: rgba(255, 255, 255, 0.5);
+                font-weight: 500;
+                line-height: 1.2;
+            }
+
+            .talent-hero-meta-value {
+                font-size: 0.9rem;
+                color: rgba(255, 255, 255, 0.92);
+                font-weight: 700;
+                margin-top: 1px;
+                line-height: 1.3;
+            }
+
+            .talent-hero-meta-row {
+                display: flex;
+                flex-direction: column;
+            }
+
+            @media (max-width: 1024px) {
+                .talent-hero-section {
+                    padding: 0 16px;
+                }
+
+                .talent-hero-section-1 {
+                    padding: 0 16px 0 0;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .talent-prof-hero {
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 0;
+                    padding: 20px 20px;
+                }
+
+                .talent-hero-section,
+                .talent-hero-section-1 {
+                    flex: none;
+                }
+
+                .talent-hero-section-1 {
+                    padding: 0;
+                    flex-direction: row;
+                    align-items: center;
+                }
+
+                .talent-hero-divider {
+                    width: auto;
+                    height: 1px;
+                    align-self: auto;
+                    margin: 16px 0;
+                }
+
+                .talent-hero-section {
+                    padding: 0;
+                }
+            }
+
+            /* Legacy classes for compatibility */
+            .profile-card {
+                display: none;
             }
 
             /* Nav Tabs */
@@ -158,12 +284,15 @@
                 width: 100%;
                 max-width: 900px;
                 overflow-x: auto;
-                -ms-overflow-style: none; /* IE and Edge */
-                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none;
+                /* IE and Edge */
+                scrollbar-width: none;
+                /* Firefox */
             }
 
             .nav-tabs::-webkit-scrollbar {
-                display: none; /* Chrome, Safari and Opera */
+                display: none;
+                /* Chrome, Safari and Opera */
             }
 
             .tab-item {
@@ -206,6 +335,7 @@
                 color: #1e293b;
                 margin-bottom: 24px;
             }
+
             .section-title::before {
                 content: '';
                 position: absolute;
@@ -230,6 +360,7 @@
                 margin-bottom: 16px;
                 margin-top: 16px;
             }
+
             .sub-section-title::before {
                 content: '';
                 position: absolute;
@@ -395,8 +526,13 @@
                 font-size: 0.8rem;
             }
 
-            .heatmap-table th:last-child { border-right: none; }
-            .heatmap-table td:last-child { border-right: none; }
+            .heatmap-table th:last-child {
+                border-right: none;
+            }
+
+            .heatmap-table td:last-child {
+                border-right: none;
+            }
 
             .heatmap-table .th-main {
                 background: #f1f5f9;
@@ -549,52 +685,81 @@
         </style>
     </x-slot>
 
-    {{-- Profile Card --}}
-    <div class="profile-card">
-        {{-- Kolom 1: Profil --}}
-        <div class="profile-col-1">
-            <img src="{{ isset($talent) && $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode(isset($talent) ? $talent->nama : 'Yayang Guntur') . '&background=e0f2fe&color=0284c7' }}"
-                alt="{{ $talent->nama ?? 'Yayang Guntur' }}" class="profile-avatar">
-            <div class="profile-info">
-                <h3>{{ $talent->nama ?? 'Yayang Guntur' }}</h3>
-                <p>Talent</p>
+    {{-- Talent Profile Header - Hero Style --}}
+    @php
+        $namaTalent = $talent->nama ?? '-';
+        $parts = explode(' ', trim($namaTalent));
+        $initials = strtoupper(substr($parts[0], 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''));
+
+        $mentorIds = optional($talent->promotion_plan)->mentor_ids ?? [];
+        if (!empty($mentorIds)) {
+            $mentorNames = \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->implode(', ');
+        } else {
+            $mentorNames = optional($talent->mentor)->nama ?? '-';
+        }
+
+        $startDate = optional($talent->promotion_plan)->start_date;
+        $targetDate = optional($talent->promotion_plan)->target_date;
+        $periodeStr =
+            ($startDate ? \Carbon\Carbon::parse($startDate)->format('d/m/Y') : '-') .
+            ' – ' .
+            ($targetDate ? \Carbon\Carbon::parse($targetDate)->format('d/m/Y') : '-');
+    @endphp
+
+    <div class="talent-prof-hero">
+
+        {{-- Section 1: Avatar + Identity --}}
+        <div class="talent-hero-section-1">
+            <div class="talent-hero-avatar-wrap">
+                @if ($talent->foto ?? false)
+                    <img src="{{ asset('storage/' . $talent->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
+                @else
+                    <div class="talent-hero-avatar-placeholder">{{ $initials }}</div>
+                @endif
+            </div>
+            <div class="talent-hero-info">
+                <div class="talent-hero-name">{{ $namaTalent }}</div>
+                <div class="talent-hero-badge">Talent</div>
             </div>
         </div>
 
-        {{-- Kolom 2: Perusahaan & Mentor --}}
-        <div class="profile-col-general">
-            <div class="meta-item">
-                <strong>Perusahaan</strong><span>{{ isset($talent) && optional($talent->company)->nama_company ? $talent->company->nama_company : 'Tiga Serangkai' }}</span>
+        <div class="talent-hero-divider"></div>
+
+        {{-- Section 2: Perusahaan, Departemen, Posisi --}}
+        <div class="talent-hero-section flex-1">
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Perusahaan</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->company)->nama_company ?? '-' }}</span>
             </div>
-            <div class="meta-item">
-                <strong>Departemen</strong><span>{{ isset($talent) && optional($talent->department)->nama_department ? $talent->department->nama_department : 'Human Resource' }}</span>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Departemen</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->department)->nama_department ?? '-' }}</span>
             </div>
-            <div class="meta-item"><strong>Jabatan yang
-                    Dituju</strong><span>{{ isset($talent) && optional($talent->promotion_plan)->targetPosition ? $talent->promotion_plan->targetPosition->position_name : 'Manager' }}</span>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Posisi yang Dituju</span>
+                <span
+                    class="talent-hero-meta-value">{{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
             </div>
         </div>
 
-        {{-- Kolom 3: Departemen & Atasan --}}
-        <div class="profile-col-general">
-            <div class="meta-item"><strong>Mentor</strong>
-                <span>
-                    @php
-                        if (isset($talent) && isset($talent->promotion_plan)) {
-                            $mIds = $talent->promotion_plan->mentor_ids ?? [];
-                            echo !empty($mIds)
-                                ? \App\Models\User::whereIn('id', $mIds)->pluck('nama')->implode(', ')
-                                : (optional($talent->mentor)->nama ?? 'Setyo');
-                        } else {
-                            echo 'Setyo';
-                        }
-                    @endphp
-                </span>
+        <div class="talent-hero-divider"></div>
+
+        {{-- Section 3: Mentor, Atasan, Periode --}}
+        <div class="talent-hero-section flex-1">
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Mentor</span>
+                <span class="talent-hero-meta-value">{{ $mentorNames }}</span>
             </div>
-            <div class="meta-item">
-                <strong>Atasan</strong><span>{{ isset($talent) && optional($talent->atasan)->nama ? $talent->atasan->nama : 'Turgun' }}</span>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Atasan</span>
+                <span class="talent-hero-meta-value">{{ optional($talent->atasan)->nama ?? '-' }}</span>
             </div>
-            <div class="meta-item"><strong>Periode</strong><span>01/01/2026 - 01/06/2026</span></div>
+            <div class="talent-hero-meta-row">
+                <span class="talent-hero-meta-label">Periode</span>
+                <span class="talent-hero-meta-value">{{ $periodeStr }}</span>
+            </div>
         </div>
+
     </div>
 
     {{-- Nav Tabs --}}
@@ -616,8 +781,8 @@
         </div>
 
         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8 mt-4">
-            @if(isset($gaps) && count($gaps) > 0)
-                @foreach($gaps as $index => $gap)
+            @if (isset($gaps) && count($gaps) > 0)
+                @foreach ($gaps as $index => $gap)
                     <div class="gap-item prio-{{ $index + 1 }}">
                         <div class="flex items-center">
                             <span class="gap-number">{{ $index + 1 }}</span>
@@ -632,7 +797,8 @@
                     <div class="flex items-center"><span class="gap-number">1</span>Integrity</div><span>-2</span>
                 </div>
                 <div class="gap-item prio-2">
-                    <div class="flex items-center"><span class="gap-number">2</span>Problem Solving & Decision Making</div>
+                    <div class="flex items-center"><span class="gap-number">2</span>Problem Solving & Decision Making
+                    </div>
                     <span>-1.5</span>
                 </div>
                 <div class="gap-item prio-3">
@@ -661,11 +827,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(isset($competencies) && count($competencies) > 0)
-                            @foreach($competencies as $comp)
+                        @if (isset($competencies) && count($competencies) > 0)
+                            @foreach ($competencies as $comp)
                                 @php
                                     $standard = $standards[$comp->id] ?? 0;
-                                    $detail = $talent->assessmentSession ? $talent->assessmentSession->details->firstWhere('competence_id', $comp->id) : null;
+                                    $detail = $talent->assessmentSession
+                                        ? $talent->assessmentSession->details->firstWhere('competence_id', $comp->id)
+                                        : null;
                                     $sT = $detail->score_talent ?? 0;
                                     $sA = $detail->score_atasan ?? 0;
                                     $gap = $detail->gap_score ?? 0;
@@ -698,7 +866,8 @@
                                 <td>{{ number_format($avgA, 1) }}</td>
                                 <td>{{ number_format(($avgT + $avgA) / 2, 1) }}</td>
                                 <td class="text-center p-2"><span
-                                        class="gap-badge {{ $avgCls }}">{{ number_format($avgGap, 1) }}</span></td>
+                                        class="gap-badge {{ $avgCls }}">{{ number_format($avgGap, 1) }}</span>
+                                </td>
                             </tr>
                         @else
                             <!-- MOCKUP matching image -->
@@ -809,28 +978,45 @@
             <div class="donut-container p-6 md:p-12">
                 @php
                     $charts = [
-                        ['label' => 'Exposure', 'done' => isset($exposureCount) ? min($exposureCount, 6) : 0, 'total' => 6, 'color' => '#475569'],
-                        ['label' => 'Mentoring', 'done' => isset($mentoringCount) ? min($mentoringCount, 6) : 0, 'total' => 6, 'color' => '#eab308'],
-                        ['label' => 'Learning', 'done' => isset($learningCount) ? min($learningCount, 6) : 0, 'total' => 6, 'color' => '#14b8a6'],
+                        [
+                            'label' => 'Exposure',
+                            'done' => isset($exposureCount) ? min($exposureCount, 6) : 0,
+                            'total' => 6,
+                            'color' => '#475569',
+                        ],
+                        [
+                            'label' => 'Mentoring',
+                            'done' => isset($mentoringCount) ? min($mentoringCount, 6) : 0,
+                            'total' => 6,
+                            'color' => '#eab308',
+                        ],
+                        [
+                            'label' => 'Learning',
+                            'done' => isset($learningCount) ? min($learningCount, 6) : 0,
+                            'total' => 6,
+                            'color' => '#14b8a6',
+                        ],
                     ];
                     $r = 44;
                     $circ = 2 * M_PI * $r;
                 @endphp
-                @foreach($charts as $chart)
-                    @php $pct = $chart['done'] / $chart['total'];
+                @foreach ($charts as $chart)
+                    @php
+                        $pct = $chart['done'] / $chart['total'];
                         $filled = $pct * $circ;
-                    $empty = $circ - $filled; @endphp
+                        $empty = $circ - $filled;
+                    @endphp
                     <div class="flex flex-col items-center gap-4">
                         <div class="relative w-40 h-40">
                             <!-- Drop shadow SVG -->
                             <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 absolute">
-                                <circle cx="50" cy="50" r="{{ $r }}" fill="none" class="stroke-slate-200"
-                                    stroke-width="12" />
+                                <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                    class="stroke-slate-200" stroke-width="12" />
                             </svg>
                             <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 relative"
                                 style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
-                                <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}"
-                                    stroke-width="12"
+                                <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                    stroke="{{ $chart['color'] }}" stroke-width="12"
                                     stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
                                     stroke-linecap="butt" />
                             </svg>
@@ -838,7 +1024,8 @@
                                 class="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-full m-3 border border-slate-100 shadow-inner">
                                 <span
                                     class="text-[1.45rem] font-extrabold text-slate-800 tracking-tight">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
-                                <span class="text-[0.7rem] font-bold text-slate-400 italic">{{ round($pct * 100) }}%</span>
+                                <span
+                                    class="text-[0.7rem] font-bold text-slate-400 italic">{{ round($pct * 100) }}%</span>
                             </div>
                         </div>
                         <div class="border border-slate-300 bg-white px-6 py-1.5 rounded-full shadow-sm mt-2">
@@ -874,10 +1061,14 @@
                     @forelse($exposureActivities as $act)
                         @php
                             $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600', 'rejected' => 'text-red-600', default => 'text-yellow-600'
+                                'approved' => 'text-green-600',
+                                'rejected' => 'text-red-600',
+                                default => 'text-yellow-600',
                             };
                             $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500', 'rejected' => 'bg-red-500', default => 'bg-yellow-500'
+                                'approved' => 'bg-green-500',
+                                'rejected' => 'bg-red-500',
+                                default => 'bg-yellow-500',
                             };
                         @endphp
                         <tr>
@@ -892,9 +1083,9 @@
                             <td>
                                 <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
                                     class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
@@ -904,7 +1095,8 @@
                         </tr>
                     @empty
                         <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas Exposure</td>
+                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
+                                Exposure</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -930,10 +1122,14 @@
                     @forelse($mentoringActivities as $act)
                         @php
                             $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600', 'rejected' => 'text-red-600', default => 'text-yellow-600'
+                                'approved' => 'text-green-600',
+                                'rejected' => 'text-red-600',
+                                default => 'text-yellow-600',
                             };
                             $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500', 'rejected' => 'bg-red-500', default => 'bg-yellow-500'
+                                'approved' => 'bg-green-500',
+                                'rejected' => 'bg-red-500',
+                                default => 'bg-yellow-500',
                             };
                         @endphp
                         <tr>
@@ -948,9 +1144,9 @@
                             <td>
                                 <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
                                     class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
@@ -960,7 +1156,8 @@
                         </tr>
                     @empty
                         <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas Mentoring</td>
+                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
+                                Mentoring</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -986,10 +1183,14 @@
                     @forelse($learningActivities as $act)
                         @php
                             $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600', 'rejected' => 'text-red-600', default => 'text-yellow-600'
+                                'approved' => 'text-green-600',
+                                'rejected' => 'text-red-600',
+                                default => 'text-yellow-600',
                             };
                             $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500', 'rejected' => 'bg-red-500', default => 'bg-yellow-500'
+                                'approved' => 'bg-green-500',
+                                'rejected' => 'bg-red-500',
+                                default => 'bg-yellow-500',
                             };
                         @endphp
                         <tr>
@@ -1004,9 +1205,9 @@
                             <td>
                                 <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
                                     class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
@@ -1016,7 +1217,8 @@
                         </tr>
                     @empty
                         <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas Learning</td>
+                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
+                                Learning</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -1033,13 +1235,23 @@
         @forelse($projects as $project)
             @php
                 $verifier = $project->verifier;
-                $statusBadgeColor = match (strtolower($project->status ?? '')) {
+                // Determine status based on finance_feedback (same as PdcFinanceValidationTable)
+                $financeStatus = 'Pending';
+                if (!empty($project->finance_feedback)) {
+                    if (str_starts_with($project->finance_feedback, '[Approved]')) {
+                        $financeStatus = 'Approved';
+                    } elseif (str_starts_with($project->finance_feedback, '[Rejected]')) {
+                        $financeStatus = 'Rejected';
+                    }
+                }
+
+                $statusBadgeColor = match (strtolower($financeStatus)) {
                     'approved' => 'border-green-500 text-green-600 bg-green-50/50',
                     'rejected' => 'border-red-500 text-red-600 bg-red-50/50',
                     'pending' => 'border-yellow-500 text-yellow-600 bg-yellow-50/50',
                     default => 'border-slate-400 text-slate-600 bg-slate-50',
                 };
-                $dotBadgeColor = match (strtolower($project->status ?? '')) {
+                $dotBadgeColor = match (strtolower($financeStatus)) {
                     'approved' => 'bg-green-500',
                     'rejected' => 'bg-red-500',
                     'pending' => 'bg-yellow-500',
@@ -1051,10 +1263,16 @@
                 <div class="finance-box shadow-sm">
                     <div class="finance-header-row">
                         <div class="finance-info-grid">
-                            <div class="finance-row"><strong>Nama Finance</strong><span>{{ optional($verifier)->nama ?? '-' }}</span></div>
-                            <div class="finance-row"><strong>Email</strong><span>{{ optional($verifier)->email ?? '-' }}</span></div>
-                            <div class="finance-row"><strong>Perusahaan</strong><span>{{ optional($talent->company)->nama_company ?? '-' }}</span></div>
-                            <div class="finance-row mb-0"><strong>Judul Project</strong><span>{{ $project->title ?? '-' }}</span></div>
+                            <div class="finance-row"><strong>Nama
+                                    Finance</strong><span>{{ optional($verifier)->nama ?? '-' }}</span></div>
+                            <div class="finance-row">
+                                <strong>Email</strong><span>{{ optional($verifier)->email ?? '-' }}</span>
+                            </div>
+                            <div class="finance-row">
+                                <strong>Perusahaan</strong><span>{{ optional($talent->company)->nama_company ?? '-' }}</span>
+                            </div>
+                            <div class="finance-row mb-0"><strong>Judul
+                                    Project</strong><span>{{ $project->title ?? '-' }}</span></div>
                         </div>
                         <div class="finance-pill">
                             Tanggal &nbsp;&nbsp;&nbsp;&nbsp;
@@ -1065,7 +1283,8 @@
                     <div class="mt-4 mb-2"><strong class="text-[0.8rem] text-slate-800">Catatan Admin</strong></div>
                     <div class="finance-textarea-box">{{ $project->feedback ?? '-' }}</div>
 
-                    <div class="mt-6 mb-2"><strong class="text-[0.8rem] text-slate-800">Feedback Finance</strong></div>
+                    <div class="mt-6 mb-2"><strong class="text-[0.8rem] text-slate-800">Feedback Finance</strong>
+                    </div>
                     <div class="finance-textarea-box">
                         {{ preg_replace('/^\[(?:Approved|Rejected|Batal)\]\s*/i', '', $project->finance_feedback ?? '-') }}
                     </div>
@@ -1073,8 +1292,9 @@
                     <hr class="border-t border-slate-200 my-6">
 
                     <div class="flex items-center justify-between">
-                        @if($project->document_path)
-                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
+                        @if ($project->document_path)
+                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
+                                target="_blank"
                                 class="px-6 py-2 border border-slate-300 bg-white rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -1089,14 +1309,15 @@
                         <div
                             class="px-8 py-2 border rounded-full font-bold text-[0.8rem] flex items-center gap-2 shadow-sm {{ $statusBadgeColor }}">
                             <span class="w-2 h-2 rounded-full {{ $dotBadgeColor }}"></span>
-                            {{ ucfirst($project->status ?? 'Pending') }}
+                            {{ ucfirst($financeStatus ?? 'Pending') }}
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- ================= MOBILE VIEW ================= -->
-            <div class="block md:hidden bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4 mb-8 w-full overflow-hidden">
+            <div
+                class="block md:hidden bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4 mb-8 w-full overflow-hidden">
                 <div class="flex justify-end mb-4">
                     <div class="finance-pill">
                         Tanggal &nbsp;&nbsp;&nbsp;&nbsp;
@@ -1105,16 +1326,23 @@
                 </div>
                 <div class="finance-box shadow-sm">
                     <div class="finance-info-grid">
-                        <div class="finance-row"><strong>Nama Finance</strong><span>{{ optional($verifier)->nama ?? '-' }}</span></div>
-                        <div class="finance-row"><strong>Email</strong><span>{{ optional($verifier)->email ?? '-' }}</span></div>
-                        <div class="finance-row"><strong>Perusahaan</strong><span>{{ optional($talent->company)->nama_company ?? '-' }}</span></div>
-                        <div class="finance-row mb-0"><strong>Judul Project</strong><span>{{ $project->title ?? '-' }}</span></div>
+                        <div class="finance-row"><strong>Nama
+                                Finance</strong><span>{{ optional($verifier)->nama ?? '-' }}</span></div>
+                        <div class="finance-row">
+                            <strong>Email</strong><span>{{ optional($verifier)->email ?? '-' }}</span>
+                        </div>
+                        <div class="finance-row">
+                            <strong>Perusahaan</strong><span>{{ optional($talent->company)->nama_company ?? '-' }}</span>
+                        </div>
+                        <div class="finance-row mb-0"><strong>Judul
+                                Project</strong><span>{{ $project->title ?? '-' }}</span></div>
                     </div>
 
                     <div class="mt-6 mb-2"><strong class="text-[0.8rem] text-slate-800">Catatan Admin</strong></div>
                     <div class="finance-textarea-box">{{ $project->feedback ?? '-' }}</div>
 
-                    <div class="mt-6 mb-2"><strong class="text-[0.8rem] text-slate-800">Feedback Finance</strong></div>
+                    <div class="mt-6 mb-2"><strong class="text-[0.8rem] text-slate-800">Feedback Finance</strong>
+                    </div>
                     <div class="finance-textarea-box">
                         {{ preg_replace('/^\[(?:Approved|Rejected|Batal)\]\s*/i', '', $project->finance_feedback ?? '-') }}
                     </div>
@@ -1122,8 +1350,9 @@
                     <hr class="border-t border-slate-200 my-6">
 
                     <div class="flex flex-row items-center justify-between gap-2">
-                        @if($project->document_path)
-                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
+                        @if ($project->document_path)
+                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
+                                target="_blank"
                                 class="px-3 sm:px-6 py-2 border border-slate-300 bg-white rounded-lg text-[0.7rem] sm:text-xs font-bold flex justify-center items-center gap-1.5 sm:gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm flex-1 mr-1 sm:mr-2">
                                 <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -1138,7 +1367,7 @@
                         <div
                             class="shrink-0 px-4 sm:px-8 py-2 border rounded-full font-bold text-[0.75rem] sm:text-[0.8rem] flex justify-center items-center gap-1.5 sm:gap-2 shadow-sm {{ $statusBadgeColor }}">
                             <span class="w-2 h-2 rounded-full shrink-0 {{ $dotBadgeColor }}"></span>
-                            <span class="whitespace-nowrap">{{ ucfirst($project->status ?? 'Pending') }}</span>
+                            <span class="whitespace-nowrap">{{ ucfirst($financeStatus ?? 'Pending') }}</span>
                         </div>
                     </div>
                 </div>
@@ -1156,15 +1385,40 @@
         @php
             $latestProject = $talent->improvementProjects->sortByDesc('updated_at')->first();
             $panelisAspects = [
-                ['name' => 'Pemahaman Bisnis & Strategi', 'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan'],
-                ['name' => 'Identifikasi Masalah', 'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data'],
-                ['name' => 'Analisis Akar Masalah', 'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam"],
-                ['name' => 'Solusi yang Ditawarkan', 'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah'],
-                ['name' => 'Rencana Implementasi', 'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder'],
-                ['name' => 'Target Dampak & KPI', 'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas'],
+                [
+                    'name' => 'Pemahaman Bisnis & Strategi',
+                    'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan',
+                ],
+                [
+                    'name' => 'Identifikasi Masalah',
+                    'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
+                ],
+                [
+                    'name' => 'Analisis Akar Masalah',
+                    'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
+                ],
+                [
+                    'name' => 'Solusi yang Ditawarkan',
+                    'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah',
+                ],
+                [
+                    'name' => 'Rencana Implementasi',
+                    'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
+                ],
+                [
+                    'name' => 'Target Dampak & KPI',
+                    'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas',
+                ],
                 ['name' => 'Risiko & Mitigasi', 'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi'],
-                ['name' => 'Gaya Presentasi & Penguasaan Materi', 'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan'],
-                ['name' => 'Refleksi Peran sebagai GM', 'indicator' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.'],
+                [
+                    'name' => 'Gaya Presentasi & Penguasaan Materi',
+                    'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',
+                ],
+                [
+                    'name' => 'Refleksi Peran sebagai GM',
+                    'indicator' =>
+                        'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
+                ],
                 ['name' => 'Nilai Tambah', 'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam'],
             ];
         @endphp
@@ -1173,88 +1427,100 @@
         <div class="bg-white rounded-xl border border-slate-200 mt-2 shadow-sm overflow-hidden p-0 w-full">
             <div class="overflow-x-auto w-full">
                 <table class="logbook-table mb-0 border-none min-w-[900px]">
-                <thead>
-                    <tr class="border-b border-slate-200">
-                        <th style="width: 22%;" class="border-0 border-r border-slate-200">Panelis</th>
-                        <th style="width: 22%;" class="border-0 border-r border-slate-200">Perusahaan</th>
-                        <th style="width: 9%;" class="border-0 border-r border-slate-200">Skor</th>
-                        <th style="width: 20%;" class="border-0 border-r border-slate-200">Feedback</th>
-                        <th style="width: 17%;" class="border-0 border-r border-slate-200">Status</th>
-                        <th style="width: 10%;" class="border-0">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @forelse($talent->panelisAssessments as $idx => $assessment)
-                        @php
-                            $rekomen = $assessment->panelis_rekomendasi ?? '';
-                            $rekomenDesc = '';
-                            if (str_contains($rekomen, 'Ready Now'))
-                                $rekomenDesc = 'Siap dipromosikan dalam < 6 bulan';
-                            elseif (str_contains($rekomen, '1'))
-                                $rekomenDesc = 'Siap dengan pengembangan terarah';
-                            elseif (str_contains($rekomen, '2'))
-                                $rekomenDesc = 'Masih membutuhkan pengembangan signifikan';
-                            elseif (str_contains($rekomen, 'Not Ready'))
-                                $rekomenDesc = 'Belum direkomendasikan untuk jalur suksesi';
-                        @endphp
+                    <thead>
                         <tr class="border-b border-slate-200">
-                            <td class="font-bold text-slate-800 text-left pl-6 border-0 border-r border-slate-200">
-                                {{ optional($assessment->panelis)->nama ?? '-' }}</td>
-                            <td class="font-bold text-slate-700 text-left pl-6 border-0 border-r border-slate-200">
-                                {{ optional(optional($assessment->panelis)->company)->nama_company ?? '-' }}</td>
-                            <td class="font-bold text-slate-800 border-0 border-r border-slate-200">
-                                {{ $assessment->panelis_score ?? '-' }} / 50</td>
-                            <td class="text-slate-700 border-0 border-r border-slate-200 text-xs">
-                                {{ Str::limit($assessment->panelis_komentar ?? '-', 60) }}</td>
-                            <td class="border-0 border-r border-slate-200 text-left px-4">
-                                @if($rekomen)
-                                    <div class="font-bold text-slate-800 text-[0.8rem]">{{ $rekomen }}</div>
-                                    @if($rekomenDesc)
-                                    <div class="text-[0.65rem] text-slate-500 mt-0.5">{{ $rekomenDesc }}</div>@endif
-                                @else
-                                    <span class="text-slate-400 text-xs">-</span>
-                                @endif
-                            </td>
-                            <td class="border-0 text-center px-4">
-                                <!-- Desktop Button -->
-                                <button onclick="openPanelisModal({{ $idx }})"
-                                    class="hidden md:inline-block text-xs font-bold text-white bg-teal-500 hover:bg-teal-600 px-3 py-1.5 rounded-lg transition-colors">
-                                    Lihat Detail
-                                </button>
-                                <!-- Mobile Button -->
-                                <button onclick="openPanelisModal({{ $idx }})"
-                                    class="md:hidden mx-auto whitespace-nowrap px-4 py-2 border border-slate-300 bg-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm w-max">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Lihat Detail
-                                </button>
-                            </td>
+                            <th style="width: 22%;" class="border-0 border-r border-slate-200">Panelis</th>
+                            <th style="width: 22%;" class="border-0 border-r border-slate-200">Perusahaan</th>
+                            <th style="width: 9%;" class="border-0 border-r border-slate-200">Skor</th>
+                            <th style="width: 20%;" class="border-0 border-r border-slate-200">Feedback</th>
+                            <th style="width: 17%;" class="border-0 border-r border-slate-200">Status</th>
+                            <th style="width: 10%;" class="border-0">Aksi</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-6">Belum ada penilaian Panelis</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white">
+                        @forelse($talent->panelisAssessments as $idx => $assessment)
+                            @php
+                                $rekomen = $assessment->panelis_rekomendasi ?? '';
+                                $rekomenDesc = '';
+                                if (str_contains($rekomen, 'Ready Now')) {
+                                    $rekomenDesc = 'Siap dipromosikan dalam < 6 bulan';
+                                } elseif (str_contains($rekomen, '1')) {
+                                    $rekomenDesc = 'Siap dengan pengembangan terarah';
+                                } elseif (str_contains($rekomen, '2')) {
+                                    $rekomenDesc = 'Masih membutuhkan pengembangan signifikan';
+                                } elseif (str_contains($rekomen, 'Not Ready')) {
+                                    $rekomenDesc = 'Belum direkomendasikan untuk jalur suksesi';
+                                }
+                            @endphp
+                            <tr class="border-b border-slate-200">
+                                <td class="font-bold text-slate-800 text-left pl-6 border-0 border-r border-slate-200">
+                                    {{ optional($assessment->panelis)->nama ?? '-' }}</td>
+                                <td class="font-bold text-slate-700 text-left pl-6 border-0 border-r border-slate-200">
+                                    {{ optional(optional($assessment->panelis)->company)->nama_company ?? '-' }}</td>
+                                <td class="font-bold text-slate-800 border-0 border-r border-slate-200">
+                                    {{ $assessment->panelis_score ?? '-' }} / 50</td>
+                                <td class="text-slate-700 border-0 border-r border-slate-200 text-xs">
+                                    {{ Str::limit($assessment->panelis_komentar ?? '-', 60) }}</td>
+                                <td class="border-0 border-r border-slate-200 text-left px-4">
+                                    @if ($rekomen)
+                                        <div class="font-bold text-slate-800 text-[0.8rem]">{{ $rekomen }}</div>
+                                        @if ($rekomenDesc)
+                                            <div class="text-[0.65rem] text-slate-500 mt-0.5">{{ $rekomenDesc }}
+                                            </div>
+                                        @endif
+                                    @else
+                                        <span class="text-slate-400 text-xs">-</span>
+                                    @endif
+                                </td>
+                                <td class="border-0 text-center px-4">
+                                    <!-- Desktop Button -->
+                                    <button onclick="openPanelisModal({{ $idx }})"
+                                        class="hidden md:inline-block text-xs font-bold text-white bg-teal-500 hover:bg-teal-600 px-3 py-1.5 rounded-lg transition-colors">
+                                        Lihat Detail
+                                    </button>
+                                    <!-- Mobile Button -->
+                                    <button onclick="openPanelisModal({{ $idx }})"
+                                        class="md:hidden mx-auto whitespace-nowrap px-4 py-2 border border-slate-300 bg-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm w-max">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        Lihat Detail
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-slate-400 text-sm py-6">Belum ada penilaian
+                                    Panelis</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 
         {{-- ======= DATA JSON untuk modal (pass dari PHP ke JS) ======= --}}
         @php
-            $panelisModalDataRaw = $talent->panelisAssessments->map(function ($a) {
-                return [
-                    'nama' => optional($a->panelis)->nama ?? '-',
-                    'perusahaan' => optional(optional($a->panelis)->company)->nama_company ?? '-',
-                    'score' => $a->panelis_score ?? 0,
-                    'scores_json' => is_string($a->panelis_scores_json) ? json_decode($a->panelis_scores_json, true) : ($a->panelis_scores_json ?? []),
-                    'komentar' => $a->panelis_komentar ?? '',
-                    'rekomendasi' => $a->panelis_rekomendasi ?? '',
-                    'tanggal' => $a->panelis_tanggal_penilaian ? $a->panelis_tanggal_penilaian->format('d/m/Y') : '-',
-                ];
-            })->values();
+            $panelisModalDataRaw = $talent->panelisAssessments
+                ->map(function ($a) {
+                    return [
+                        'nama' => optional($a->panelis)->nama ?? '-',
+                        'perusahaan' => optional(optional($a->panelis)->company)->nama_company ?? '-',
+                        'score' => $a->panelis_score ?? 0,
+                        'scores_json' => is_string($a->panelis_scores_json)
+                            ? json_decode($a->panelis_scores_json, true)
+                            : $a->panelis_scores_json ?? [],
+                        'komentar' => $a->panelis_komentar ?? '',
+                        'rekomendasi' => $a->panelis_rekomendasi ?? '',
+                        'tanggal' => $a->panelis_tanggal_penilaian
+                            ? $a->panelis_tanggal_penilaian->format('d/m/Y')
+                            : '-',
+                    ];
+                })
+                ->values();
         @endphp
         <script>
             const panelisModalData = @json($panelisModalDataRaw);
@@ -1280,7 +1546,9 @@
                 if (Array.isArray(data.scores_json)) {
                     scores = data.scores_json;
                 } else if (typeof data.scores_json === 'string') {
-                    try { scores = JSON.parse(data.scores_json); } catch (e) { }
+                    try {
+                        scores = JSON.parse(data.scores_json);
+                    } catch (e) {}
                 } else if (typeof data.scores_json === 'object' && data.scores_json !== null) {
                     scores = Object.values(data.scores_json);
                 }
@@ -1312,9 +1580,9 @@
                 else if (rekomen.includes('1')) rekomenDesc = 'Siap dengan pengembangan terarah';
                 else if (rekomen.includes('2')) rekomenDesc = 'Masih membutuhkan pengembangan signifikan';
                 else if (rekomen.includes('Not Ready')) rekomenDesc = 'Belum direkomendasikan';
-                el('pm-rekomen').innerHTML = rekomen
-                    ? `<span class="inline-flex items-center gap-3"><span class="w-6 h-6 rounded bg-[#14b8a6] inline-block flex-shrink-0"></span> <strong>${rekomen}</strong> <span class="text-slate-500 font-normal">(${rekomenDesc})</span></span>`
-                    : '-';
+                el('pm-rekomen').innerHTML = rekomen ?
+                    `<span class="inline-flex items-center gap-3"><span class="w-6 h-6 rounded bg-[#14b8a6] inline-block flex-shrink-0"></span> <strong>${rekomen}</strong> <span class="text-slate-500 font-normal">(${rekomenDesc})</span></span>` :
+                    '-';
 
                 // Show detail page, hide others
                 document.getElementById('section-panelis').style.display = 'none';
@@ -1323,7 +1591,10 @@
                 document.getElementById('section-panelis-detail').style.display = 'block';
 
                 // Scroll to top of content
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
 
             function closePanelisModal() {
@@ -1333,7 +1604,10 @@
                 document.querySelector('.nav-tabs-container').style.display = ''; // show tabs
 
                 // Scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
         </script>
     </div>
@@ -1349,10 +1623,11 @@
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200">
                             <th class="text-left px-5 py-4 font-bold text-slate-700 w-[30%]">Aspek yang Dinilai</th>
-                            <th class="text-left px-5 py-4 font-bold text-slate-700 border-l border-slate-200">Indikator
+                            <th class="text-left px-5 py-4 font-bold text-slate-700 border-l border-slate-200">
+                                Indikator
                                 Penilaian</th>
                             <th
-                                class="text-center px-4 py-4 font-bold text-slate-700 border-l border-slate-200 w-[100px]">
+                                class="text-center px-4 py-4 font-bold text-slate-700 border-l border-slate-200 w-[200px]">
                                 Skor Penilaian</th>
                         </tr>
                     </thead>
@@ -1401,7 +1676,7 @@
             const sections = ['kompetensi', 'idp', 'finance', 'panelis'];
             let currentSectionIndex = 0;
 
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 // Ensure correct initial state
                 switchSection('kompetensi', document.querySelector('.tab-item.active'));
             });
@@ -1424,7 +1699,8 @@
                 if (element) {
                     element.classList.add('active');
                 } else {
-                    document.querySelector('.tab-item:nth-child(' + (sections.indexOf(sectionId) + 1) + ')').classList.add('active');
+                    document.querySelector('.tab-item:nth-child(' + (sections.indexOf(sectionId) + 1) + ')').classList.add(
+                        'active');
                 }
 
                 currentSectionIndex = sections.indexOf(sectionId);
@@ -1439,7 +1715,10 @@
                 }
 
                 // Scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
 
             // Removed nextSection and prevSection as they are no longer needed

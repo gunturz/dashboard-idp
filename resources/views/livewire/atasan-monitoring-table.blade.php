@@ -17,20 +17,16 @@
     {{-- Centered title block --}}
     <div class="text-center mb-8">
         @php
-            // Kumpulkan kombinasi posisi sekarang → posisi tujuan yang unik
-            $positionRoutes = $talents->map(function($t) {
-                $current = optional($t->position)->position_name ?? '-';
-                $target  = optional(optional($t->promotion_plan)->targetPosition)->position_name ?? '-';
-                return $current . ' → ' . $target;
-            })->unique()->values();
+            $headerTalent = $talents->first();
+            $headerRoute = $headerTalent
+                ? ((optional($headerTalent->position)->position_name ?? '-') . ' → ' . (optional(optional($headerTalent->promotion_plan)->targetPosition)->position_name ?? '-'))
+                : '- → -';
         @endphp
 
         {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
-        @foreach($positionRoutes as $route)
-            <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
-                {{ $route }}
-            </h2>
-        @endforeach
+        <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
+            {{ $headerRoute }}
+        </h2>
 
         {{-- Baris 2: Perusahaan --}}
         <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">

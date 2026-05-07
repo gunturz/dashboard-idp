@@ -46,15 +46,23 @@ class UserSeeder extends Seeder
      */
     private function seedCompany(): array
     {
-        $companys = ['PT. Tiga Serangkai Inti Corpora', 'PT. Tiga Serangkai Pustaka Mandiri', 'PT. Wangsa Jatra Lestari', 'Assalam Hypermarket', 'PT. K33 Distribusi'];
+        $companys = [
+            1 => 'PT Tiga Serangkai Inti corpora',
+            2 => 'PT Tiga Serangkai Pustaka mandiri',
+            3 => 'PT Wangsa Jatra Lestari',
+            4 => 'PT Assalam Niaga Utama',
+            5 => 'PT K33 Distribusi'
+        ];
         $compIds = [];
 
-        foreach ($companys as $name) {
-            $compIds[$name] = DB::table('company')->insertGetId([
+        foreach ($companys as $id => $name) {
+            DB::table('company')->insert([
+                'id' => $id,
                 'nama_company' => $name,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+            $compIds[$name] = $id;
         }
         return $compIds;
     }
@@ -145,7 +153,7 @@ class UserSeeder extends Seeder
                 'email' => 'pdc@admin.com',
                 'password' => Hash::make('password123'),
                 'role_id' => $roleIds['admin'],
-                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'company_id' => $companyIds['PT Tiga Serangkai Pustaka mandiri'],
                 'department_id' => $deptIds['Human Resources'],
                 'position_id' => $posIds['Super Admin'],
             ],
@@ -155,7 +163,7 @@ class UserSeeder extends Seeder
                 'email' => 'rizky@mail.com',
                 'password' => Hash::make('password123'),
                 'role_id' => $roleIds['panelis'],
-                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'company_id' => $companyIds['PT Tiga Serangkai Pustaka mandiri'],
                 'department_id' => $deptIds['Human Resources'],
                 'position_id' => $posIds['Panelis'],
             ],
@@ -169,7 +177,7 @@ class UserSeeder extends Seeder
                 'email' => "talent$i@mail.com",
                 'password' => Hash::make('password123'),
                 'role_id' => $roleIds['talent'],
-                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'company_id' => $companyIds['PT Tiga Serangkai Pustaka mandiri'],
                 'department_id' => $deptIds['Operations'],
                 'position_id' => $posIds['Staff'],
             ];
@@ -183,7 +191,7 @@ class UserSeeder extends Seeder
                 'email' => "atasan$i@mail.com",
                 'password' => Hash::make('password123'),
                 'role_id' => $roleIds['atasan'],
-                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'company_id' => $companyIds['PT Tiga Serangkai Pustaka mandiri'],
                 'department_id' => $deptIds['Operations'],
                 'position_id' => $posIds['Manager'],
             ];
@@ -197,7 +205,7 @@ class UserSeeder extends Seeder
                 'email' => "mentor$i@mail.com",
                 'password' => Hash::make('password123'),
                 'role_id' => $roleIds['mentor'],
-                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'company_id' => $companyIds['PT Tiga Serangkai Pustaka mandiri'],
                 'department_id' => $deptIds['Human Resources'],
                 'position_id' => $posIds['General Manager'],
             ];
@@ -211,7 +219,7 @@ class UserSeeder extends Seeder
                 'email' => "finance$i@mail.com",
                 'password' => Hash::make('password123'),
                 'role_id' => $roleIds['finance'],
-                'company_id' => $companyIds['PT. Tiga Serangkai Pustaka Mandiri'],
+                'company_id' => $companyIds['PT Tiga Serangkai Pustaka mandiri'],
                 'department_id' => $deptIds['Finance'],
                 'position_id' => $posIds['Manager'],
             ];
@@ -256,7 +264,7 @@ class UserSeeder extends Seeder
             DB::table('promotion_plan')->insert([
                 'user_id_talent' => $talentId,
                 'target_position_id' => $targetPosId,
-                'mentor_ids' => json_encode([(string)$mentorIdsDb[$index % count($mentorIdsDb)]]),
+                'mentor_ids' => json_encode([(string) $mentorIdsDb[$index % count($mentorIdsDb)]]),
                 'status_promotion' => 'In Progress',
                 'start_date' => now(),
                 'target_date' => now()->addYear(),

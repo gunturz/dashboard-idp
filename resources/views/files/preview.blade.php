@@ -25,10 +25,6 @@
                         class="inline-flex items-center rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 transition">
                         Download File
                     </a>
-                    <a href="{{ $fileUrl }}" target="_blank"
-                        class="inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
-                        Buka File Asli
-                    </a>
                 </div>
 
                 @if (str_starts_with($mimeType, 'image/'))

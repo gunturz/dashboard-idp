@@ -28,6 +28,9 @@
         count($nameParts) >= 2
             ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1))
             : strtoupper(substr($nameParts[0], 0, 2));
+    $avatarUrl = !empty($user?->foto)
+        ? asset('storage/' . $user->foto) . '?v=' . (optional($user->updated_at)->timestamp ?? time())
+        : null;
 @endphp
 
 <!DOCTYPE html>
@@ -738,7 +741,7 @@
                     @endif
                 </button>
 
-                <div id="bell-dropdown"
+                <div id="bell-dropdown" style="display:none;"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     <div
                         class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
@@ -808,10 +811,15 @@
             <div class="relative hidden lg:block" id="profile-wrapper">
                 <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
                     class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
-                        style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                        {{ $initials }}
-                    </div>
+                    @if ($avatarUrl)
+                        <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                            class="w-8 h-8 rounded-lg object-cover border border-white/15 flex-shrink-0">
+                    @else
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
+                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                            {{ $initials }}
+                        </div>
+                    @endif
                     <div class="hidden lg:block text-left">
                         <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">
                             {{ $nama }}</p>
@@ -824,14 +832,19 @@
                     </svg>
                 </button>
 
-                <div id="profile-dropdown"
+                <div id="profile-dropdown" style="display:none;"
                     class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                         <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
-                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                                {{ $initials }}
-                            </div>
+                            @if ($avatarUrl)
+                                <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                    class="w-11 h-11 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
+                            @else
+                                <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
+                                    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                    {{ $initials }}
+                                </div>
+                            @endif
                             <div class="overflow-hidden">
                                 <p class="text-sm font-bold text-white truncate">{{ $nama }}</p>
                                 <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
@@ -901,39 +914,46 @@
 
             <!-- Mobile Hamburger Button -->
             <div class="relative block xl:hidden ml-2" id="mobile-menu-wrapper">
+                {{-- Mobile: Hanya tampilkan avatar (tanpa nama) --}}
                 <button
-                    class="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95 max-w-[calc(100vw-7rem)]"
+                    class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95"
                     aria-label="Profil dan notifikasi" id="mobile-menu-btn"
                     onclick="toggleDropdown('mobile-menu-dropdown', 'mobile-menu-btn')">
                     <div class="relative">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
-                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                            {{ $initials }}
-                        </div>
+                        @if ($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                class="w-9 h-9 rounded-xl object-cover border border-white/15 flex-shrink-0">
+                        @else
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-extrabold text-white flex-shrink-0"
+                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                                {{ $initials }}
+                            </div>
+                        @endif
                         @if ($hasUnreadNotif)
                             <span
                                 class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
                         @endif
                     </div>
-                    <div class="min-w-0 text-left">
-                        <p class="text-white text-[13px] font-semibold leading-tight truncate max-w-[118px]">
-                            {{ $nama }}</p>
-                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Finance</p>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/70 flex-shrink-0"
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div id="mobile-menu-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] sm:w-[320px] sm:max-w-[calc(100vw-1.5rem)] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
+                {{-- Dropdown: ukuran lebih kecil di mobile --}}
+                <div id="mobile-menu-dropdown" style="display:none;"
+                    class="dropdown-panel hidden absolute right-0 mt-3 w-[290px] max-w-[calc(100vw-1rem)] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
                     {{-- Dropdown Header --}}
                     <div class="px-5 py-5 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
                         <div class="flex items-center gap-3.5">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
-                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                                {{ $initials }}
-                            </div>
+                            @if ($avatarUrl)
+                                <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                    class="w-12 h-12 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
+                            @else
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-base"
+                                    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                    {{ $initials }}
+                                </div>
+                            @endif
                             <div class="overflow-hidden">
                                 <p class="text-[14px] font-bold text-white truncate">
                                     {{ $user->nama ?? ($user->name ?? '-') }}</p>
@@ -1067,40 +1087,37 @@
                         </div>
                     </div>
                 </div>
-                {{-- -- Mobile Notif Dropdown (realtime, dedicated) -- --}}
-                <div id="mobile-notif-dropdown"
-                    class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
-                    <div
-                        class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                                <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                            </svg>
-                            <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
-                        </div>
-                        <a href="{{ route('finance.notifikasi') }}"
-                            class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat
-                            Semua</a>
+            </div>
+
+
+            
+            {{-- -- Mobile Notif Dropdown (realtime, dedicated) -- --}}
+            <div id="mobile-notif-dropdown" style="display:none;"
+                class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
+                <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                            <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                        </svg>
+                        <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
                     </div>
-                    <ul id="finance-mobile-notif-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
-                    <div id="finance-mobile-notif-empty" class="flex flex-col items-center py-8 text-center px-4">
-                        <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                        </div>
-                        <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi baru</p>
+                </div>
+                <ul id="finance-mobile-notif-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
+                <div id="finance-mobile-notif-empty" class="flex flex-col items-center py-8 text-center px-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
                     </div>
-                    <div class="px-5 py-3 border-t border-gray-100 text-center">
-                        <a href="{{ route('finance.notifikasi') }}"
-                            class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat
-                            semua notifikasi &#x2192;</a>
-                    </div>
+                    <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi baru</p>
+                </div>
+                <div class="px-5 py-3 border-t border-gray-100 text-center">
+                    <a href="{{ route('finance.notifikasi') }}"
+                        class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat
+                        semua notifikasi &#x2192;</a>
                 </div>
             </div>
 

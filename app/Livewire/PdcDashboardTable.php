@@ -12,13 +12,19 @@ class PdcDashboardTable extends Component
 
     public function getTableRowsProperty(): array
     {
+        // Menampilkan semua talent aktif dalam siklus promosi (belum Promoted/Not Promoted)
         $talents = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->whereHas('promotion_plan', fn($q) => $q
-        ->where('status_promotion', 'In Progress')
-        ->whereNotNull('target_position_id')
-        )
-            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
+                ->whereNotNull('target_position_id')
+                ->whereNotIn('status_promotion', ['Promoted', 'Not Promoted'])
+                ->where('is_active', true)
+            )
+            ->join('promotion_plan', function ($join) {
+                $join->on('users.id', '=', 'promotion_plan.user_id_talent')
+                     ->where('promotion_plan.is_active', true);
+            })
             ->select('users.*')
+            ->orderBy('promotion_plan.updated_at', 'desc')
             ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->when($this->search, fn($q) => $q->where('users.nama', 'like', '%' . $this->search . '%'))

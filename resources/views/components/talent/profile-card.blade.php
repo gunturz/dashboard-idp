@@ -13,43 +13,59 @@
         border-radius: 20px;
         margin: 16px 16px 0 16px;
     }
+
     .talent-prof-hero::before {
         content: '';
         position: absolute;
-        top: -40px; right: -40px;
-        width: 220px; height: 220px;
+        top: -40px;
+        right: -40px;
+        width: 220px;
+        height: 220px;
         border-radius: 50%;
         background: rgba(20, 184, 166, 0.08);
         pointer-events: none;
     }
+
     .talent-prof-hero::after {
         content: '';
         position: absolute;
-        bottom: -60px; left: 30%;
-        width: 280px; height: 280px;
+        bottom: -60px;
+        left: 30%;
+        width: 280px;
+        height: 280px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.04);
         pointer-events: none;
     }
 
     /* Avatar */
-    .talent-hero-avatar-wrap { position: relative; flex-shrink: 0; }
+    .talent-hero-avatar-wrap {
+        position: relative;
+        flex-shrink: 0;
+    }
+
     .talent-hero-avatar-img {
-        width: 96px; height: 96px;
+        width: 96px;
+        height: 96px;
         border-radius: 20px;
         object-fit: cover;
-        border: 3px solid rgba(255,255,255,0.2);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
+
     .talent-hero-avatar-placeholder {
-        width: 96px; height: 96px;
+        width: 96px;
+        height: 96px;
         border-radius: 20px;
-        background: rgba(255,255,255,0.12);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2.4rem; font-weight: 800;
+        background: rgba(255, 255, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        font-weight: 800;
         color: white;
-        border: 3px solid rgba(255,255,255,0.2);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         letter-spacing: -1px;
     }
 
@@ -64,6 +80,7 @@
         position: relative;
         z-index: 1;
     }
+
     /* Section 1: avatar + info */
     .talent-hero-section-1 {
         flex: 1;
@@ -71,95 +88,179 @@
         align-items: center;
         gap: 20px;
         padding: 0 28px 0 0;
-        position: relative; z-index: 1;
+        position: relative;
+        z-index: 1;
     }
+
     /* Section divider */
     .talent-hero-divider {
         width: 1px;
         align-self: stretch;
-        background: rgba(255,255,255,0.15);
+        background: rgba(255, 255, 255, 0.15);
         flex-shrink: 0;
         margin: 4px 0;
     }
 
     /* Info block */
-    .talent-hero-info { min-width: 0; }
+    .talent-hero-info {
+        min-width: 0;
+    }
+
     .talent-hero-name {
-        font-size: 1.35rem; font-weight: 800;
-        color: #ffffff; line-height: 1.2;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.2;
     }
-    .talent-hero-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 3px; }
+
+    .talent-hero-sub {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.55);
+        margin-top: 3px;
+    }
+
     .talent-hero-badge {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: rgba(20,184,166,0.18);
-        border: 1px solid rgba(20,184,166,0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(20, 184, 166, 0.18);
+        border: 1px solid rgba(20, 184, 166, 0.3);
         color: #5eead4;
-        font-size: 0.75rem; font-weight: 700;
-        padding: 4px 12px; border-radius: 99px;
-        margin-top: 10px; letter-spacing: .04em;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 99px;
+        margin-top: 10px;
+        letter-spacing: .04em;
     }
+
     .talent-hero-badge::before {
-        content: ''; width: 7px; height: 7px; border-radius: 50%;
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
         background: #14b8a6;
         animation: pulse-dot-hero 2s ease infinite;
     }
-    @keyframes pulse-dot-hero { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    @keyframes pulse-dot-hero {
+
+        0%,
+        100% {
+            opacity: 1
+        }
+
+        50% {
+            opacity: .4
+        }
+    }
 
     /* Meta items inside sections */
     .talent-hero-meta-label {
         font-size: 0.78rem;
-        color: rgba(255,255,255,0.5);
+        color: rgba(255, 255, 255, 0.5);
         font-weight: 500;
         line-height: 1.2;
     }
+
     .talent-hero-meta-value {
         font-size: 0.9rem;
-        color: rgba(255,255,255,0.92);
+        color: rgba(255, 255, 255, 0.92);
         font-weight: 700;
         margin-top: 1px;
         line-height: 1.3;
     }
-    .talent-hero-meta-row { display: flex; flex-direction: column; }
+
+    .talent-hero-meta-row {
+        display: flex;
+        flex-direction: column;
+    }
 
     /* Mobile compact toggle header */
     .talent-hero-mobile-header {
-        display: flex; align-items: center; gap: 12px;
-        padding: 14px 16px; cursor: pointer;
-        position: relative; z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
     }
+
     .talent-hero-mobile-avatar {
-        width: 46px; height: 46px; border-radius: 12px;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
         object-fit: cover;
-        border: 2px solid rgba(255,255,255,0.25);
+        border: 2px solid rgba(255, 255, 255, 0.25);
         flex-shrink: 0;
     }
+
     .talent-hero-mobile-avatar-placeholder {
-        width: 46px; height: 46px; border-radius: 12px;
-        background: rgba(255,255,255,0.12);
-        display: flex; align-items: center; justify-content: center;
-        border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0;
-        font-size: 1.15rem; font-weight: 800; color: white;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        flex-shrink: 0;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: white;
     }
+
     .mobile-profile-detail-panel {
-        max-height: 0; overflow: hidden;
+        max-height: 0;
+        overflow: hidden;
         transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .mobile-profile-detail-panel.open { max-height: 500px !important; }
+
+    .mobile-profile-detail-panel.open {
+        max-height: 500px !important;
+    }
 
     @media (max-width: 1024px) {
-        .talent-hero-section { padding: 0 16px; }
-        .talent-hero-section-1 { padding: 0 16px 0 0; }
+        .talent-hero-section {
+            padding: 0 16px;
+        }
+
+        .talent-hero-section-1 {
+            padding: 0 16px 0 0;
+        }
     }
+
     @media (max-width: 768px) {
         .talent-prof-hero {
-            flex-direction: column; align-items: stretch;
-            gap: 0; padding: 20px 20px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            padding: 20px 20px;
             margin: 18px 12px 0 12px;
         }
-        .talent-hero-section, .talent-hero-section-1 { flex: none; }
-        .talent-hero-section-1 { padding: 0; flex-direction: row; align-items: center; }
-        .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 16px 0; }
-        .talent-hero-section { padding: 0; }
+
+        .talent-hero-section,
+        .talent-hero-section-1 {
+            flex: none;
+        }
+
+        .talent-hero-section-1 {
+            padding: 0;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .talent-hero-divider {
+            width: auto;
+            height: 1px;
+            align-self: auto;
+            margin: 16px 0;
+        }
+
+        .talent-hero-section {
+            padding: 0;
+        }
     }
 </style>
 
@@ -168,10 +269,10 @@
     $mentorNames = collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ')
         ?: (optional($user->mentor)->nama ?? '-');
     $periode = (optional($user->promotion_plan)->start_date
-                    ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-')
-             . ' – '
-             . (optional($user->promotion_plan)->target_date
-                    ? \Carbon\Carbon::parse($user->promotion_plan->target_date)->format('d/m/Y') : '-');
+        ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-')
+        . ' – '
+        . (optional($user->promotion_plan)->target_date
+            ? \Carbon\Carbon::parse($user->promotion_plan->target_date)->format('d/m/Y') : '-');
 @endphp
 
 @if($mobileCollapsible)
@@ -179,27 +280,37 @@
     <div class="flex talent-prof-hero fade-up fade-up-1" style="box-shadow:0 8px 32px rgba(15,23,42,0.35);">
 
         {{-- Section 1: Avatar + Identity --}}
-        <div class="talent-hero-section-1 cursor-pointer md:cursor-default" onclick="toggleMobileProfile()">
-            <div class="talent-hero-avatar-wrap">
-                @if ($user->foto ?? false)
-                    <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
-                @else
-                    <div class="talent-hero-avatar-placeholder">{{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
-                @endif
-            </div>
-            <div class="talent-hero-info flex-1 min-w-0">
-                <div class="talent-hero-name truncate">{{ $user->nama ?? $user->name }}</div>
-                <div class="talent-hero-sub truncate mt-1">
-                    {{ optional($user->position)->position_name ?? '-' }} &rarr; {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+        <div class="talent-hero-section-1">
+            {{-- Avatar + Info: klik → navigasi ke halaman profil --}}
+            <a href="{{ route('profile.edit') }}"
+                class="flex items-center gap-4 flex-1 min-w-0 no-underline hover:opacity-90 transition-opacity"
+                style="text-decoration:none;">
+                <div class="talent-hero-avatar-wrap">
+                    @if ($user->foto ?? false)
+                        <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
+                    @else
+                        <div class="talent-hero-avatar-placeholder">
+                            {{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
+                    @endif
                 </div>
-                <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
-            </div>
-            {{-- Chevron only shows on mobile and if collapsible is enabled --}}
-            <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg" 
-                 class="h-6 w-6 text-white/40 md:hidden transition-transform duration-300" 
-                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+                <div class="talent-hero-info flex-1 min-w-0">
+                    <div class="talent-hero-name truncate">{{ $user->nama ?? $user->name }}</div>
+                    <div class="talent-hero-sub truncate mt-1">
+                        {{ optional($user->position)->position_name ?? '-' }} &rarr;
+                        {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                    </div>
+                    <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
+                </div>
+            </a>
+            {{-- Chevron: hanya toggle expand/collapse di mobile --}}
+            <button type="button" onclick="toggleMobileProfile()"
+                class="md:hidden flex items-center justify-center p-1 focus:outline-none" aria-label="Lihat detail profil">
+                <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-white/40 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
         </div>
 
         <div id="mobile-profile-detail" class="mobile-profile-detail-panel">
@@ -217,7 +328,8 @@
                 </div>
                 <div class="talent-hero-meta-row">
                     <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                    <span class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                    <span
+                        class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
                 </div>
             </div>
 
@@ -253,13 +365,15 @@
                 @if ($user->foto ?? false)
                     <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
                 @else
-                    <div class="talent-hero-avatar-placeholder">{{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
+                    <div class="talent-hero-avatar-placeholder">
+                        {{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
                 @endif
             </div>
             <div class="talent-hero-info">
                 <div class="talent-hero-name">{{ $user->nama ?? $user->name }}</div>
                 <div class="talent-hero-sub">
-                    {{ optional($user->position)->position_name ?? '-' }} &rarr; {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                    {{ optional($user->position)->position_name ?? '-' }} &rarr;
+                    {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
                 </div>
                 <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
             </div>
@@ -279,7 +393,8 @@
             </div>
             <div class="talent-hero-meta-row">
                 <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                <span class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                <span
+                    class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
             </div>
         </div>
 

@@ -137,8 +137,7 @@
                     <p class="text-sm text-gray-500 font-medium">Lihat ringkasan perjalanan program IDP Anda mulai dari
                         kompetensi, aktivitas logbook, hingga pencapaian yang telah dikompletasi.</p>
                 </div>
-                <a href="{{ route('talent.riwayat') }}"
-                    class="w-full md:w-auto btn-action-teal px-8 whitespace-nowrap">
+                <a href="{{ route('talent.riwayat') }}" class="w-full md:w-auto btn-action-teal px-8 whitespace-nowrap">
                     Lihat Riwayat
                 </a>
             </div>

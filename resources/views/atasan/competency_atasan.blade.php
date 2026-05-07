@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assessment Atasan – Individual Development Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -16,6 +17,7 @@
         .bg-dark-slate {
             background-color: #334155;
         }
+
         .bg-teal-primary {
             background-color: #0f766e;
         }
@@ -27,7 +29,7 @@
             max-width: 72rem;
             background-color: #ffffff;
             border-radius: 9999px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
             padding: 0;
             display: flex;
             align-items: center;
@@ -96,14 +98,16 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
+
         .result-modal-overlay.open {
             opacity: 1;
             pointer-events: all;
         }
+
         .result-modal {
             background: #fff;
             border-radius: 1.25rem;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
             width: 100%;
             max-width: 780px;
             max-height: 88vh;
@@ -113,15 +117,18 @@
             transform: scale(0.92) translateY(20px);
             transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .result-modal-header {
             padding: 1.5rem 1.5rem 1rem;
             flex-shrink: 0;
         }
+
         .result-modal-body {
             flex: 1;
             overflow-y: auto;
             padding: 0 1.5rem;
         }
+
         .result-modal-footer {
             padding: 1rem 1.5rem 1.5rem;
             flex-shrink: 0;
@@ -132,16 +139,20 @@
             .result-modal-header {
                 padding: 2rem 2.5rem 1.25rem;
             }
+
             .result-modal-body {
                 padding: 0 2.5rem;
             }
+
             .result-modal-footer {
                 padding: 1.25rem 2.5rem 2rem;
             }
         }
+
         .result-modal-overlay.open .result-modal {
             transform: scale(1) translateY(0);
         }
+
         .score-badge {
             display: inline-flex;
             align-items: center;
@@ -151,11 +162,27 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        .score-1 { color:#1e293b; }
-        .score-2 { color:#1e293b; }
-        .score-3 { color:#1e293b; }
-        .score-4 { color:#1e293b; }
-        .score-5 { color:#1e293b; }
+
+        .score-1 {
+            color: #1e293b;
+        }
+
+        .score-2 {
+            color: #1e293b;
+        }
+
+        .score-3 {
+            color: #1e293b;
+        }
+
+        .score-4 {
+            color: #1e293b;
+        }
+
+        .score-5 {
+            color: #1e293b;
+        }
+
         .edit-row-btn {
             padding: 4px 10px;
             border-radius: 6px;
@@ -168,6 +195,7 @@
             transition: all 0.2s;
             transform: translateY(0);
         }
+
         @media (min-width: 768px) {
             .edit-row-btn {
                 padding: 5px 16px;
@@ -175,6 +203,7 @@
                 font-size: 0.78rem;
             }
         }
+
         .edit-row-btn:hover {
             background: #0f172a;
             transform: translateY(-1px);
@@ -194,20 +223,23 @@
             pointer-events: none;
             transition: opacity 0.2s ease;
         }
+
         .confirm-overlay.open {
             opacity: 1;
             pointer-events: all;
         }
+
         .confirm-box {
             background: #fff;
             border-radius: 1rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
             padding: 2rem 2.25rem;
             width: 100%;
             max-width: 440px;
             transform: scale(0.9) translateY(16px);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .confirm-overlay.open .confirm-box {
             transform: scale(1) translateY(0);
         }
@@ -221,27 +253,32 @@
         <div class="px-6 py-3 border-b border-gray-100 flex items-center">
             <!-- Left Logo & Title -->
             <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo" class="h-8 md:h-10 object-contain flex-shrink-0">
-                
+                <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo"
+                    class="h-8 md:h-10 object-contain flex-shrink-0">
+
                 <h1 class="text-lg md:text-xl font-bold text-slate-800 tracking-tight flex-shrink-0">
                     <span class="hidden md:inline">Individual Development Plan</span>
                     <span class="md:hidden">IDP</span>
                 </h1>
-                
+
                 <div class="h-6 md:h-8 w-px bg-gray-300 mx-1 md:mx-2 flex-shrink-0"></div>
-                
+
                 <h2 class="text-sm md:text-xl text-gray-500 font-medium truncate">
-                    <span class="hidden md:inline">Assessment Atasan - {{ $talent->nama }} @if(optional($talent->promotion_plan)->targetPosition) | Target: {{ $talent->promotion_plan->targetPosition->position_name }} @endif</span>
+                    <span class="hidden md:inline">Assessment Atasan - {{ $talent->nama }}
+                        @if(optional($talent->promotion_plan)->targetPosition) | Target:
+                        {{ $talent->promotion_plan->targetPosition->position_name }} @endif</span>
                     <span class="md:hidden">Assessment - {{ $talent->nama }}</span>
                 </h2>
             </div>
-            
+
             <!-- (Optional) Right side Profile / Home Link -->
             <div class="ml-auto flex items-center flex-shrink-0">
                 <a href="{{ route('atasan.dashboard') }}"
                     class="px-2 md:px-4 py-1.5 md:py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.75rem] md:text-[0.875rem] flex items-center gap-1 md:gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit md:mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                        <path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"
+                            clip-rule="evenodd" />
                     </svg>
                     <span class="text-[#0f172a]">Kembali</span>
                 </a>
@@ -252,13 +289,15 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center">
         @if (session('error'))
-            <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                role="alert">
                 <strong class="font-bold">Error!</strong>
                 <span class="block sm:inline">{{ session('error') }}</span>
             </div>
         @endif
         @if ($errors->any())
-            <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                role="alert">
                 <strong class="font-bold">Validation Error!</strong>
                 <ul>
                     @foreach ($errors->all() as $error)
@@ -270,10 +309,12 @@
 
         <!-- Top Level Categories: Core / Managerial -->
         <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-6 p-0">
-            <button id="tab-core" class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0">
+            <button id="tab-core"
+                class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0">
                 Core Competencies
             </button>
-            <button id="tab-managerial" class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition rounded-full m-0">
+            <button id="tab-managerial"
+                class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition rounded-full m-0">
                 Managerial Competencies
             </button>
         </div>
@@ -295,13 +336,16 @@
             @csrf
             <!-- Hidden inputs akan ditambahkan via JS -->
             <div id="hidden-inputs-container"></div>
-            
-            <div id="card-block" class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-6 md:p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
-                <h3 id="level-title" class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 tracking-tight">Level 1</h3>
-            
-            <p id="level-desc" class="text-gray-600 leading-relaxed mb-8 md:mb-12 text-sm md:text-[15px] font-medium text-justify">
-                Memuat data pertanyaan...
-            </p>
+
+            <div id="card-block"
+                class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-6 md:p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
+                <h3 id="level-title" class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 tracking-tight">
+                    Level 1</h3>
+
+                <p id="level-desc"
+                    class="text-gray-600 leading-relaxed mb-8 md:mb-12 text-sm md:text-[15px] font-medium text-justify">
+                    Memuat data pertanyaan...
+                </p>
 
                 <div class="flex flex-col sm:flex-row items-center justify-end gap-3 mt-auto">
                     {{-- Action Right: Ragu-ragu + Sudah Kompeten --}}
@@ -323,13 +367,16 @@
                 <!-- Icon -->
                 <div class="flex justify-center mb-4">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:#f0fdfa">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
+                            stroke="#0f766e" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
                 <!-- Text -->
-                <p id="confirm-message" class="text-center text-slate-700 font-medium text-[15px] leading-relaxed mb-6"></p>
+                <p id="confirm-message" class="text-center text-slate-700 font-medium text-[15px] leading-relaxed mb-6">
+                </p>
                 <!-- Buttons: Mode Normal -->
                 <div class="flex gap-3" id="confirm-btns-normal">
                     <button id="confirm-btn-no" onclick="confirmNo()"
@@ -365,12 +412,17 @@
                 <!-- Modal Header (fixed, tidak scroll) -->
                 <div class="result-modal-header flex items-center justify-between gap-2">
                     <div class="min-w-0">
-                        <h2 class="text-lg md:text-2xl font-bold text-slate-800 tracking-tight truncate">Hasil Penilaian Kompetensi</h2>
-                        <p class="text-xs md:text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit. Klik <strong>Edit</strong> untuk mengubah nilai.</p>
+                        <h2 class="text-lg md:text-2xl font-bold text-slate-800 tracking-tight truncate">Hasil Penilaian
+                            Kompetensi</h2>
+                        <p class="text-xs md:text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit.
+                            Klik <strong>Edit</strong> untuk mengubah nilai.</p>
                     </div>
-                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-[#f0fdfa] flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div
+                        class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-[#f0fdfa] flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none"
+                            viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
@@ -387,10 +439,12 @@
                         <div class="overflow-hidden rounded-xl border border-gray-100">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider bg-[#f8fafc]">
+                                    <tr
+                                        class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider bg-[#f8fafc]">
                                         <th class="px-3 md:px-5 py-2 md:py-3 text-left font-semibold">Kompetensi</th>
                                         <th class="py-2 md:py-3 text-center font-semibold w-16 md:w-[120px]">Level</th>
-                                        <th class="px-3 md:px-5 py-2 md:py-3 text-right font-semibold w-16 md:w-[90px]">Aksi</th>
+                                        <th class="px-3 md:px-5 py-2 md:py-3 text-right font-semibold w-16 md:w-[90px]">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="result-table-core" class="divide-y divide-gray-50"></tbody>
@@ -402,15 +456,18 @@
                     <div class="mb-4">
                         <div class="flex items-center gap-2 mb-3">
                             <span class="w-3 h-3 rounded-full inline-block" style="background:#6366f1"></span>
-                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Managerial Competencies</h3>
+                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Managerial
+                                Competencies</h3>
                         </div>
                         <div class="overflow-hidden rounded-xl border border-gray-100">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider bg-[#f8fafc]">
+                                    <tr
+                                        class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider bg-[#f8fafc]">
                                         <th class="px-3 md:px-5 py-2 md:py-3 text-left font-semibold">Kompetensi</th>
                                         <th class="py-2 md:py-3 text-center font-semibold w-16 md:w-[120px]">Level</th>
-                                        <th class="px-3 md:px-5 py-2 md:py-3 text-right font-semibold w-16 md:w-[90px]">Aksi</th>
+                                        <th class="px-3 md:px-5 py-2 md:py-3 text-right font-semibold w-16 md:w-[90px]">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="result-table-managerial" class="divide-y divide-gray-50"></tbody>
@@ -422,7 +479,8 @@
 
                 <!-- Modal Footer (fixed, tidak scroll) -->
                 <div class="result-modal-footer flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p class="text-xs text-gray-400">Total: <strong id="result-total-filled" class="text-slate-700">0</strong> kompetensi dinilai</p>
+                    <p class="text-xs text-gray-400">Total: <strong id="result-total-filled"
+                            class="text-slate-700">0</strong> kompetensi dinilai</p>
                     <button onclick="showSubmitPopup()"
                         class="w-full md:w-auto px-6 md:px-10 py-2.5 md:py-3 text-white font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5 text-sm md:text-base"
                         style="background: linear-gradient(135deg, #0f766e, #0d9488);">
@@ -437,22 +495,26 @@
         <div id="submit-overlay" class="confirm-overlay" role="dialog" aria-modal="true">
             <div class="confirm-box" style="max-width:400px; text-align:center;">
                 <div class="flex justify-center mb-4">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="#0f766e" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center"
+                        style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                            stroke="#0f766e" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                 </div>
                 <h3 class="text-lg font-bold text-slate-800 mb-1">Kirim Assessment?</h3>
-                <p class="text-sm text-gray-500 mb-6">Pastikan semua jawaban sudah benar.<br>Data tidak dapat diubah setelah dikirim.</p>
+                <p class="text-sm text-gray-500 mb-6">Pastikan semua jawaban sudah benar.<br>Data tidak dapat diubah
+                    setelah dikirim.</p>
                 <div class="flex gap-3">
-                    <button onclick="document.getElementById('submit-overlay').classList.remove('open'); document.getElementById('result-modal-overlay').classList.add('open')"
+                    <button
+                        onclick="document.getElementById('submit-overlay').classList.remove('open'); document.getElementById('result-modal-overlay').classList.add('open')"
                         class="flex-1 py-2.5 rounded-lg font-semibold text-slate-700"
                         style="background:#f1f5f9; border:none; cursor:pointer;">
                         Batal
                     </button>
-                    <button onclick="doSubmitAssessment()"
-                        class="flex-1 py-2.5 rounded-lg font-semibold text-white"
+                    <button onclick="doSubmitAssessment()" class="flex-1 py-2.5 rounded-lg font-semibold text-white"
                         style="background:linear-gradient(135deg,#0f766e,#0d9488); border:none; cursor:pointer;">
                         Kirim
                     </button>
@@ -494,7 +556,7 @@
         };
 
         const categoryIds = ['cat-0', 'cat-1', 'cat-2', 'cat-3', 'cat-4'];
-        
+
         // Simpan nilai score user
         let userScores = {};
 
@@ -504,9 +566,7 @@
 
         // Fungsi mendapatkan maxLevel untuk kompetensi yang sedang aktif
         function getMaxLevelForCurrentCat() {
-            const currentCat = topTabs[currentTopLevel].categories[currentCategoryIndex];
-            const tl = parseInt(targetLevels[currentCat.id]);
-            return (!isNaN(tl) && tl >= 1 && tl <= 5) ? tl : 5;
+            return 5; // Selalu tampilkan semua level (1-5)
         }
 
         const activeTopTabClass = "flex-1 text-center py-3 font-semibold text-white bg-teal-primary rounded-full transition shadow-sm";
@@ -548,7 +608,7 @@
             // Update Top Level Tab Styling
             const coreTab = document.getElementById('tab-core');
             const managerialTab = document.getElementById('tab-managerial');
-            
+
             if (currentTopLevel === 'core') {
                 coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm';
                 coreTab.style.borderRadius = '9999px';
@@ -575,7 +635,7 @@
             // Update Deskripsi dengan pertanyaan dari database
             const currentCat = currentCatList[currentCategoryIndex];
             const compData = competenciesData[currentCat.id];
-            
+
             let questionText = "Belum ada pertanyaan untuk level ini.";
             if (compData && compData.questions) {
                 const q = compData.questions.find(q => parseInt(q.level) === currentLevel);
@@ -583,7 +643,7 @@
                     questionText = q.question_text;
                 }
             }
-            
+
             document.getElementById('level-desc').innerHTML = `<strong>Kategori: ${currentCat.name}</strong><br><br>${questionText}`;
 
             // Trigger animasi CSS supaya tidak kaku saat ganti soal
@@ -811,7 +871,7 @@
         }
 
         // Inisialisasi fill saat halaman pertama kali load
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             updateUI();
         });
     </script>
@@ -822,6 +882,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

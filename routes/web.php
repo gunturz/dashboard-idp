@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FilePreviewController;
 use App\Http\Controllers\NotificationFeedController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,10 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/notifications/feed', [NotificationFeedController::class, 'show'])->name('notifications.feed');
+
+    // Route uplpoad/download file dengan proteksi aksestions
+    Route::post('/secure-upload', [DocumentController::class, 'upload'])->name('document.upload');
+    Route::get('/secure-download/{document}', [DocumentController::class, 'download'])->name('document.download');
 
     // Route profile (edit)
     Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');

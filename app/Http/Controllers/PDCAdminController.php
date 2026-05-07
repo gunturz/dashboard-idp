@@ -72,17 +72,22 @@ class PDCAdminController extends Controller
         ];
 
         // Fetch the 8 most recent talents whose development plan is still active
+        // Menampilkan semua talent yang sedang aktif dalam siklus promosi (belum Promoted/Not Promoted)
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'In Progress')
-                    ->whereNotNull('target_position_id');
+                $q->whereNotNull('target_position_id')
+                    ->whereNotIn('status_promotion', ['Promoted', 'Not Promoted'])
+                    ->where('is_active', true);
             })
-            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
+            ->join('promotion_plan', function ($join) {
+                $join->on('users.id', '=', 'promotion_plan.user_id_talent')
+                     ->where('promotion_plan.is_active', true);
+            })
             ->select('users.*')
-            ->orderBy('promotion_plan.created_at', 'desc')
             ->orderBy('promotion_plan.updated_at', 'desc')
+            ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->take(8)
             ->get();
@@ -205,12 +210,12 @@ class PDCAdminController extends Controller
         }
 
         if ($targetPositionId) {
-            $sourcePositionId = $this->resolvePreviousPositionId((int) $targetPositionId);
+            $sourcePositionIds = $this->resolvePreviousPositionIds((int) $targetPositionId);
 
-            if ($sourcePositionId) {
-                $query->where('position_id', $sourcePositionId);
-            } else {
+            if (empty($sourcePositionIds)) {
                 $query->whereRaw('1 = 0');
+            } else {
+                $query->whereIn('position_id', $sourcePositionIds);
             }
         }
 
@@ -227,44 +232,75 @@ class PDCAdminController extends Controller
         return response()->json($talents);
     }
 
-    protected function resolvePreviousPositionId(int $targetPositionId): ?int
+    /**
+     * Returns an array of valid source position IDs for the given target position ID.
+     *
+     * Aturan:
+     * - Supervisor atau Officer  → source: [Staff]
+     * - Manager                  → source: [Supervisor, Officer]
+     * - General Manager          → source: [Manager]
+     */
+    protected function resolvePreviousPositionIds(int $targetPositionId): array
     {
         $targetPosition = Position::find($targetPositionId);
         if (!$targetPosition) {
-            return null;
+            return [];
         }
 
         $normalizedTarget = $this->normalizePositionName($targetPosition->position_name);
-        $orderedNames = [
-            'staff',
-            'supervisor',
-            'officer',
-            'manager',
-            'general manager',
-        ];
 
-        $targetIndex = array_search($normalizedTarget, $orderedNames, true);
-        if ($targetIndex !== false) {
-            if ($targetIndex === 0) {
-                return null;
-            }
-
-            $previousName = $orderedNames[$targetIndex - 1];
-
-            return Position::query()
-                ->get(['id', 'position_name'])
-                ->first(fn($position) => $this->normalizePositionName($position->position_name) === $previousName)
-                    ?->id;
+        // Supervisor / Officer → cari semua talent berposisi Staff
+        if (in_array($normalizedTarget, ['supervisor', 'officer'], true)) {
+            return Position::get(['id', 'position_name'])
+                ->filter(fn($p) => $this->normalizePositionName($p->position_name) === 'staff')
+                ->pluck('id')
+                ->values()
+                ->all();
         }
 
+        // Manager → cari talent berposisi Supervisor ATAU Officer
+        if ($normalizedTarget === 'manager') {
+            return Position::get(['id', 'position_name'])
+                ->filter(fn($p) => in_array(
+                    $this->normalizePositionName($p->position_name),
+                    ['supervisor', 'officer'],
+                    true
+                ))
+                ->pluck('id')
+                ->values()
+                ->all();
+        }
+
+        // General Manager → cari talent berposisi Manager
+        if ($normalizedTarget === 'general manager') {
+            return Position::get(['id', 'position_name'])
+                ->filter(fn($p) => $this->normalizePositionName($p->position_name) === 'manager')
+                ->pluck('id')
+                ->values()
+                ->all();
+        }
+
+        // Fallback: cari berdasarkan grade_level lebih rendah satu tingkat
         if ($targetPosition->grade_level !== null) {
-            return Position::where('grade_level', '<', $targetPosition->grade_level)
+            $ids = Position::where('grade_level', '<', $targetPosition->grade_level)
                 ->orderByDesc('grade_level')
-                ->value('id');
+                ->limit(1)
+                ->pluck('id')
+                ->all();
+            return $ids;
         }
 
-        return null;
+        return [];
     }
+
+    /** @deprecated Gunakan resolvePreviousPositionIds() — dipertahankan untuk backward compatibility */
+    protected function resolvePreviousPositionId(int $targetPositionId): ?int
+    {
+        $ids = $this->resolvePreviousPositionIds($targetPositionId);
+        return $ids[0] ?? null;
+    }
+
+
 
     protected function normalizePositionName(?string $name): string
     {
@@ -440,8 +476,8 @@ class PDCAdminController extends Controller
             'talents.*.mentors.*' => 'required|exists:users,id',
         ]);
 
-        $sourcePositionId = $this->resolvePreviousPositionId((int) $request->target_position_id);
-        if (!$sourcePositionId) {
+        $sourcePositionIds = $this->resolvePreviousPositionIds((int) $request->target_position_id);
+        if (empty($sourcePositionIds)) {
             throw ValidationException::withMessages([
                 'target_position_id' => 'Posisi yang dituju tidak memiliki urutan posisi sebelumnya yang valid.',
             ]);
@@ -465,7 +501,7 @@ class PDCAdminController extends Controller
             ->whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->where('company_id', $request->company_id)
             ->when($request->filled('department_id'), fn($q) => $q->where('department_id', $request->department_id))
-            ->where('position_id', $sourcePositionId)
+            ->whereIn('position_id', $sourcePositionIds)
             ->whereIn('id', $selectedTalentIds)
             ->pluck('id');
 
@@ -690,7 +726,7 @@ class PDCAdminController extends Controller
         return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
     }
 
-    public function detailTalent($talent_id)
+    public function detailTalent(int $talent_id)
     {
         $user = auth()->user();
         $talent = User::with([
@@ -701,6 +737,8 @@ class PDCAdminController extends Controller
             'atasan',
             'promotion_plan.targetPosition',
         ])->findOrFail($talent_id);
+        
+        $this->authorize('view-talent-data', $talent);
 
         // Build a single-item collection so the existing detail.blade.php loop still works
         $talents = collect([$talent]);
@@ -965,44 +1003,44 @@ class PDCAdminController extends Controller
     public function storeUser(Request $request)
     {
         $request->validate([
-            'username'   => ['required', 'string', 'max:255', 'unique:users'],
-            'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
-            'password'   => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
-            'nama'       => ['required', 'string', 'max:255'],
-            'role_id'    => ['required', 'exists:role,id'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+            'nama' => ['required', 'string', 'max:255'],
+            'role_id' => ['required', 'exists:role,id'],
             'company_id' => ['required', 'exists:company,id'],
             'department_id' => ['nullable', 'exists:department,id'],
-            'position_id'   => ['nullable', 'exists:position,id'],
+            'position_id' => ['nullable', 'exists:position,id'],
         ], [
             'username.required' => 'Username wajib diisi.',
-            'username.unique'   => 'Username tersebut sudah digunakan.',
-            'email.required'    => 'Email wajib diisi.',
-            'email.unique'      => 'Email tersebut sudah digunakan.',
+            'username.unique' => 'Username tersebut sudah digunakan.',
+            'email.required' => 'Email wajib diisi.',
+            'email.unique' => 'Email tersebut sudah digunakan.',
             'password.required' => 'Password wajib diisi.',
-            'password.min'      => 'Password minimal 8 karakter.',
-            'password.regex'    => 'Password harus mengandung huruf kapital, huruf kecil, dan angka.',
-            'password.confirmed'=> 'Konfirmasi password tidak cocok.',
-            'nama.required'     => 'Nama lengkap wajib diisi.',
-            'role_id.required'  => 'Role wajib dipilih.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.regex' => 'Password harus mengandung huruf kapital, huruf kecil, dan angka.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'nama.required' => 'Nama lengkap wajib diisi.',
+            'role_id.required' => 'Role wajib dipilih.',
             'company_id.required' => 'Perusahaan wajib dipilih.',
         ]);
 
         DB::beginTransaction();
         try {
             $user = User::create([
-                'nama'          => $request->nama,
-                'username'      => $request->username,
-                'email'         => $request->email,
-                'password'      => \Illuminate\Support\Facades\Hash::make($request->password),
-                'company_id'    => $request->company_id,
+                'nama' => $request->nama,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+                'company_id' => $request->company_id,
                 'department_id' => $request->department_id,
-                'position_id'   => $request->position_id,
-                'role_id'       => $request->role_id,
+                'position_id' => $request->position_id,
+                'role_id' => $request->role_id,
             ]);
 
             DB::table('user_role')->insert([
-                'id_user'    => $user->id,
-                'id_role'    => $request->role_id,
+                'id_user' => $user->id,
+                'id_role' => $request->role_id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -1317,14 +1355,15 @@ class PDCAdminController extends Controller
     public function panelisReviewComplete(Request $request, $talent_id)
     {
         $request->validate([
-            'decision' => 'required|in:promoted,not_promoted',
+            'decision' => 'required|in:ready_now,ready_1_2_years,ready_over_2_years,not_ready',
         ]);
 
         $plan = PromotionPlan::where('user_id_talent', $talent_id)->firstOrFail();
         $talent = User::findOrFail($talent_id);
         $targetPosition = optional($plan->targetPosition)->position_name ?? 'posisi yang dituju';
 
-        if ($request->decision === 'promoted') {
+        if ($request->decision === 'ready_now') {
+            // ── READY NOW: Diangkat ke posisi target ──
             $plan->update(['status_promotion' => 'Promoted']);
 
             // Otomatis memperbarui posisi user (talent) ke posisi yang dituju
@@ -1338,26 +1377,74 @@ class PDCAdminController extends Controller
             );
 
             $message = 'Talent ' . $talent->nama . ' berhasil diangkat ke ' . $targetPosition . '.';
-        } else {
-            $plan->update(['status_promotion' => 'Not Promoted']);
+
+            // Arsip semua progress aktif
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+
+        } elseif ($request->decision === 'ready_1_2_years') {
+            // ── READY IN 1-2 YEARS: Belum diangkat, posisi tetap ──
+            $plan->update(['status_promotion' => 'Ready in 1-2 Years']);
 
             $this->addNotificationToUser(
                 $talent_id,
-                'Hasil Keputusan Promosi',
-                'PDC Admin telah menyelesaikan proses evaluasi Anda. Berdasarkan hasil penilaian, Anda <span class="font-semibold text-amber-600">belum diangkat</span> ke posisi <span class="font-semibold">' . $targetPosition . '</span> pada periode ini. Terus tingkatkan kompetensi Anda!',
+                '📋 Hasil Evaluasi Promosi',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-blue-600">Ready in 1–2 Years</span>. Anda diproyeksikan siap untuk promosi ke posisi <span class="font-semibold">' . $targetPosition . '</span> dalam 1–2 tahun ke depan. Terus kembangkan diri Anda!',
+                'info'
+            );
+
+            $message = 'Keputusan "Ready in 1–2 Years" untuk ' . $talent->nama . ' telah disimpan.';
+
+            // Arsip progress
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+
+        } elseif ($request->decision === 'ready_over_2_years') {
+            // ── READY IN > 2 YEARS: Belum diangkat, posisi tetap ──
+            $plan->update(['status_promotion' => 'Ready in > 2 Years']);
+
+            $this->addNotificationToUser(
+                $talent_id,
+                '📋 Hasil Evaluasi Promosi',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-amber-600">Ready in &gt; 2 Years</span>. Anda masih membutuhkan pengembangan lebih lanjut sebelum siap untuk posisi <span class="font-semibold">' . $targetPosition . '</span>. Terus tingkatkan kompetensi Anda!',
                 'warning'
             );
 
-            $message = 'Keputusan tidak diangkat untuk ' . $talent->nama . ' telah disimpan.';
-        }
+            $message = 'Keputusan "Ready in > 2 Years" untuk ' . $talent->nama . ' telah disimpan.';
 
-        // --- RESET PROGRESS (ARCHIVE) ---
-        // Sembunyikan progress dari dashboard aktif agar bisa mulai progress baru di masa depan
-        $talent->promotion_plan()->update(['is_active' => false]);
-        $talent->assessmentSession()->update(['is_active' => false]);
-        $talent->idpActivities()->update(['is_active' => false]);
-        $talent->improvementProjects()->update(['is_active' => false]);
-        $talent->panelisAssessments()->update(['is_active' => false]);
+            // Arsip progress
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+
+        } else {
+            // ── NOT READY: Belum siap, posisi tetap ──
+            $plan->update(['status_promotion' => 'Not Ready']);
+
+            $this->addNotificationToUser(
+                $talent_id,
+                '📋 Hasil Evaluasi Promosi',
+                'PDC Admin telah menyelesaikan proses evaluasi Anda. Berdasarkan hasil penilaian, Anda dinyatakan <span class="font-semibold text-red-600">Not Ready</span> untuk promosi ke posisi <span class="font-semibold">' . $targetPosition . '</span> pada periode ini. Terus tingkatkan kompetensi Anda!',
+                'warning'
+            );
+
+            $message = 'Keputusan "Not Ready" untuk ' . $talent->nama . ' telah disimpan.';
+
+            // Arsip progress
+            $talent->promotion_plan()->update(['is_active' => false]);
+            $talent->assessmentSession()->update(['is_active' => false]);
+            $talent->idpActivities()->update(['is_active' => false]);
+            $talent->improvementProjects()->update(['is_active' => false]);
+            $talent->panelisAssessments()->update(['is_active' => false]);
+        }
 
         return redirect()->route('pdc_admin.progress_archive')->with('success', $message);
     }
@@ -1419,19 +1506,20 @@ class PDCAdminController extends Controller
             return $pos !== false ? $pos : 999;
         });
 
-        // Fetch talents whose promotion process is completed (Promoted or Not Promoted)
+        // Fetch talents whose promotion process is completed (all final decision statuses)
+        $finalStatuses = ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'Talent');
         })
-            ->whereHas('all_promotion_plans', function ($q) {
-                $q->where('is_active', false)->whereIn('status_promotion', ['Promoted', 'Not Promoted']);
+            ->whereHas('all_promotion_plans', function ($q) use ($finalStatuses) {
+                $q->where('is_active', false)->whereIn('status_promotion', $finalStatuses);
             })
             ->with([
                 'company',
                 'department',
                 'position',
-                'all_promotion_plans' => function ($q) {
-                    $q->where('is_active', false)->whereIn('status_promotion', ['Promoted', 'Not Promoted']);
+                'all_promotion_plans' => function ($q) use ($finalStatuses) {
+                    $q->where('is_active', false)->whereIn('status_promotion', $finalStatuses);
                 },
                 'all_improvementProjects'
             ])
@@ -1538,7 +1626,7 @@ class PDCAdminController extends Controller
     }
 
 
-    public function exportPdf($talent_id)
+    public function exportPdf(int $talent_id)
     {
         $talent = User::with([
             'company',
@@ -1553,6 +1641,8 @@ class PDCAdminController extends Controller
             'all_panelisAssessments.panelis.company',
             'all_panelisAssessments.panelis.position'
         ])->findOrFail($talent_id);
+
+        $this->authorize('export-pdf', $talent);
 
         // Map archived progress to original properties for view compatibility
         $talent->promotion_plan = $talent->all_promotion_plans->first();
@@ -1573,6 +1663,9 @@ class PDCAdminController extends Controller
         $filename = 'Talent_Report_' . str_replace(' ', '_', $talent->nama) . '.pdf';
         return $pdf->download($filename);
     }
+
+
+
 
     public function assignRole(Request $request, $id)
     {
@@ -1619,12 +1712,18 @@ class PDCAdminController extends Controller
         ]);
 
         $changes = [];
-        if ($originalData['username'] !== $request->username) $changes[] = 'Username';
-        if ($originalData['nama'] !== $request->nama) $changes[] = 'Nama Lengkap';
-        if ($originalData['email'] !== $request->email) $changes[] = 'Email';
-        if ($originalData['company_id'] != $request->company_id) $changes[] = 'Perusahaan';
-        if ($originalData['department_id'] != $request->department_id) $changes[] = 'Departemen';
-        if ($originalData['position_id'] != $request->position_id) $changes[] = 'Posisi';
+        if ($originalData['username'] !== $request->username)
+            $changes[] = 'Username';
+        if ($originalData['nama'] !== $request->nama)
+            $changes[] = 'Nama Lengkap';
+        if ($originalData['email'] !== $request->email)
+            $changes[] = 'Email';
+        if ($originalData['company_id'] != $request->company_id)
+            $changes[] = 'Perusahaan';
+        if ($originalData['department_id'] != $request->department_id)
+            $changes[] = 'Departemen';
+        if ($originalData['position_id'] != $request->position_id)
+            $changes[] = 'Posisi';
 
         if (!empty($changes)) {
             $changedFieldsStr = implode(', ', $changes);

@@ -80,7 +80,7 @@
                                 ['name' => 'Target Dampak & KPI', 'indicator' => 'Indikator keberhasilan terukur, baseline-target jelas', 'score' => 5],
                                 ['name' => 'Risiko & Mitigasi', 'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi', 'score' => 4],
                                 ['name' => 'Gaya Presentasi & Penguasaan Materi', 'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan', 'score' => 3],
-                                ['name' => 'Refleksi Peran sebagai GM', 'indicator' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.', 'score' => 4],
+                                ['name' => 'Refleksi Peran sebagai Posisi yang Dituju', 'indicator' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.', 'score' => 4],
                                 ['name' => 'Nilai Tambah', 'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam', 'score' => 3],
                             ];
                         @endphp

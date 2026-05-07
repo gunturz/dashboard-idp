@@ -18,13 +18,18 @@
             }
             .pdc-log-table { width: 100%; border-collapse: collapse; }
             .pdc-log-table th {
-                padding: 24px 32px; background: #f8fafc; font-weight: 800; color: #475569;
-                font-size: 0.95rem; text-align: center; white-space: nowrap;
+                padding: 12px 16px; background: #f1f5f9; font-weight: 700; color: #1e293b;
+                font-size: 0.8rem; text-align: center; border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
             }
+            .pdc-log-table th:last-child { border-right: none; }
             .pdc-log-table td {
-                padding: 32px; color: #64748b; font-size: 0.9rem; border-top: 1px solid #f1f5f9;
+                padding: 12px 16px; color: #334155; font-size: 0.88rem; border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb; vertical-align: middle;
             }
-            .pdc-log-table tr:hover { background: #fafafa; }
+            .pdc-log-table td:last-child { border-right: none; }
+            .pdc-log-table tr:last-child td { border-bottom: 1px solid #d1d5db; }
+            .pdc-log-table tr:hover td { background: #f8fafc; }
 
             .nav-tabs { display: flex; gap: 12px; }
             .tab-item {
@@ -60,15 +65,18 @@
             /* Tables */
             .pdc-custom-table {
                 width: 100%; border-collapse: collapse; background: white;
-                border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;
+                border-radius: 12px; overflow: hidden; border: 1px solid #d1d5db;
             }
             .pdc-custom-table th {
-                background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0;
-                font-size: 0.85rem; font-weight: 800; color: #1e293b;
+                background: #f1f5f9; padding: 12px 16px; border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db; font-size: 0.8rem; font-weight: 700; color: #1e293b;
             }
+            .pdc-custom-table th:last-child { border-right: none; }
             .pdc-custom-table td {
-                padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;
+                padding: 12px 16px; border-bottom: 1px solid #d1d5db; border-right: 1px solid #e5e7eb;
+                font-size: 0.88rem; color: #334155; text-align: center;
             }
+            .pdc-custom-table td:last-child { border-right: none; }
 
             .btn-status-action {
                 padding: 6px 16px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; transition: all 0.2s;
@@ -126,12 +134,22 @@
             .gap-item.prio-2 .gap-number { background: #c2410c; }
             .gap-item.prio-3 .gap-number { background: #1d4ed8; }
 
-            .heatmap-container { background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
-            .heatmap-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
-            .heatmap-table th, .heatmap-table td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: center; }
-            .heatmap-table .th-main { background: #f8fafc; font-weight: 700; color: #1e293b; }
-            .heatmap-table .th-sub { font-size: 0.65rem; font-weight: 700; color: #475569; text-transform: uppercase; background: #f8fafc; }
-            .heatmap-table .td-left { text-align: left; font-weight: 600; color: #334155; }
+            .heatmap-container { background: white; border: 1px solid #d1d5db; border-radius: 12px; overflow: hidden; }
+            .heatmap-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+            .heatmap-table th, .heatmap-table td { 
+                border-bottom: 1px solid #d1d5db; border-right: 1px solid #e5e7eb; 
+                padding: 12px 16px; text-align: center; 
+            }
+            .heatmap-table th { 
+                background: #f1f5f9; font-weight: 700; color: #1e293b; 
+                border-bottom: 2px solid #cbd5e1; border-right: 1px solid #d1d5db;
+                font-size: 0.8rem;
+            }
+            .heatmap-table th:last-child { border-right: none; }
+            .heatmap-table td:last-child { border-right: none; }
+            .heatmap-table .th-main { background: #f1f5f9; font-weight: 700; color: #1e293b; }
+            .heatmap-table .th-sub { font-size: 0.65rem; font-weight: 700; color: #475569; text-transform: uppercase; background: #f1f5f9; }
+            .heatmap-table .td-left { text-align: left; font-weight: 600; color: #334155; white-space: nowrap; }
             .gap-badge { display: block; width: 100%; height: 100%; padding: 4px; border-radius: 4px; font-weight: 700; color: white; }
             .gap-none { background-color: #f1f5f9; color: #64748b; }
             .gap-ok { background-color: #cbd5e1; color: #1e293b; }

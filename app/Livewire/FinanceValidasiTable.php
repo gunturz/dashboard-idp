@@ -26,7 +26,8 @@ class FinanceValidasiTable extends Component
 
     public function render()
     {
-        $projects = ImprovementProject::with(['talent', 'talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
+        $projects = ImprovementProject::where('is_active', true)
+            ->with(['talent', 'talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
             ->where('verify_by', Auth::id())
             ->whereNotNull('feedback')
             ->where(function ($q) {

@@ -26,11 +26,15 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
+
+
     public function boot(): void
     {
+
         // Force HTTPS in production / ngrok to prevent 419 Expired errors on mobile
         if (str_contains(config('app.url'), 'https://')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
+
         }
 
         // Jika aplikasi diakses melalui proxy aman seperti Ngrok (HTTPS), 
@@ -60,4 +64,5 @@ class AppServiceProvider extends ServiceProvider
             return (new PenilaianPolicy)->viewAll($user);
         });
     }
+
 }

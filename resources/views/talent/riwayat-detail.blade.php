@@ -52,6 +52,104 @@
                 box-shadow: none !important;
                 transform: none !important;
             }
+
+            /* ── Hasil Penilaian Panelis Styles ── */
+
+            /* Aspek table — identik dengan penilaian panelis */
+            .aspek-table-riwayat {
+                width: 100%;
+                border-collapse: collapse;
+                border: none;
+                border-radius: 0;
+            }
+
+            .aspek-table-riwayat th {
+                background: #f8fafc;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #1e293b;
+                padding: 14px 18px;
+                text-align: center;
+                border-bottom: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+            }
+
+            .aspek-table-riwayat th:first-child {
+                text-align: left;
+            }
+
+            .aspek-table-riwayat th:last-child {
+                border-right: none;
+            }
+
+            .aspek-table-riwayat td {
+                padding: 14px 18px;
+                font-size: 0.85rem;
+                color: #334155;
+                border-bottom: 1px solid #f1f5f9;
+                border-right: 1px solid #f1f5f9;
+                vertical-align: middle;
+            }
+
+            .aspek-table-riwayat td:last-child {
+                border-right: none;
+            }
+
+            .aspek-table-riwayat tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .aspek-table-riwayat .col-aspek {
+                text-align: left;
+                width: 30%;
+                font-weight: 600;
+            }
+
+            .aspek-table-riwayat .col-indikator {
+                width: 50%;
+            }
+
+            .aspek-table-riwayat .col-skor {
+                width: 20%;
+                text-align: center;
+            }
+
+            .skor-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+                border: 1.5px solid #14b8a6;
+                background: #14b8a6;
+                color: white;
+                font-size: 0.82rem;
+                font-weight: 700;
+                box-shadow: 0 2px 8px rgba(20, 184, 166, 0.28);
+            }
+
+            .komentar-bullet {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 10px 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .komentar-bullet:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            .komentar-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #0d9488;
+                flex-shrink: 0;
+                margin-top: 5px;
+            }
         </style>
     </x-slot>
 
@@ -61,9 +159,9 @@
         <div class="space-y-4" id="Kompetensi">
             <div class="page-header animate-title mb-2 mt-2">
                 <div class="page-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #38475a 100%);">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                         <path fill-rule="evenodd"
-                            d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                            d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
                             clip-rule="evenodd" />
                     </svg>
                 </div>
@@ -230,46 +328,47 @@
             </div>
 
             <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
-                <div class="overflow-x-auto rounded-[10px] border border-gray-200">
-                    <table class="w-full text-sm bg-gray-50 min-w-[600px]">
+                <div class="overflow-x-auto rounded-xl border border-[#d1d5db]">
+                    <table class="w-full text-sm bg-white min-w-[600px] border-collapse">
                         <thead>
-                            <tr class="bg-gray-100">
+                            <tr class="bg-[#f1f5f9]">
                                 <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200">
+                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-r border-[#cbd5e1] text-[0.8rem] uppercase">
                                     Judul Project Improvement</th>
                                 <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-gray-200 w-44">
+                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-[#cbd5e1] w-44 text-[0.8rem] uppercase">
                                     Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($projects as $project)
-                                <tr class="bg-white border-b border-gray-100">
-                                    <td class="px-4 py-3 text-gray-700 border-r border-gray-200 font-medium">
+                                <tr class="bg-white border-b border-[#d1d5db] hover:bg-[#f8fafc] transition-colors">
+                                    <td class="px-6 py-4 text-[#334155] border-r border-[#e5e7eb] font-bold text-[0.88rem]">
                                         {{ $project->judul_project }}
                                         <div class="text-xs text-gray-400 font-normal mt-0.5">
-                                            {{ \Carbon\Carbon::parse($project->created_at)->format('d M Y') }}</div>
+                                            {{ \Carbon\Carbon::parse($project->created_at)->format('d M Y') }}
+                                        </div>
                                     </td>
-                                    <td class="text-center px-4 py-3">
+                                    <td class="text-center px-6 py-4">
                                         @php
                                             $statusThemes = [
-                                                'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-gradient-to-br from-green-400 to-green-600 shadow-[0_0_8px_rgba(74,222,128,0.4)]'],
-                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-gradient-to-br from-red-400 to-red-600 shadow-[0_0_8px_rgba(248,113,113,0.4)]'],
-                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-gradient-to-br from-orange-400 to-orange-500 shadow-[0_0_8px_rgba(251,146,60,0.4)]'],
+                                                'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-green-500'],
+                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-red-500'],
+                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'],
                                             ];
-                                            $theme = $statusThemes[$project->status] ?? ['text' => 'text-orange-600', 'dot' => 'bg-gradient-to-br from-orange-400 to-orange-500 shadow-[0_0_8px_rgba(251,146,60,0.4)]'];
+                                            $theme = $statusThemes[$project->status] ?? ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'];
                                             $label = $project->status === 'Approved' ? 'Approved' : ($project->status === 'Rejected' ? 'Rejected' : 'Pending');
                                         @endphp
                                         <span
-                                            class="inline-flex items-center gap-1.5 {{ $theme['text'] }} text-xs font-semibold">
-                                            <span class="w-2 h-2 rounded-full {{ $theme['dot'] }} inline-block"></span>
+                                            class="inline-flex items-center gap-2 {{ $theme['text'] }} text-xs font-bold px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 shadow-sm">
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $theme['dot'] }} inline-block"></span>
                                             {{ $label }}
                                         </span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr class="bg-white">
-                                    <td class="px-4 py-5 text-gray-400 border-r border-gray-200 text-center text-xs"
+                                    <td class="px-4 py-8 text-gray-400 border-r border-[#e5e7eb] text-center italic text-sm"
                                         colspan="2">Belum ada project yang disubmit.</td>
                                 </tr>
                             @endforelse
@@ -278,5 +377,90 @@
                 </div>
             </div>
         </div>
+
+        {{-- ══════════════════════════════ HASIL PENILAIAN PANELIS ══════════════════════════════ --}}
+        @if ($panelisCount > 0)
+            <div class="space-y-4" id="Hasil Penilaian Panelis">
+                <div class="page-header animate-title mb-2 mt-6">
+                    <div class="page-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #38475a 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.625 1.5H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875ZM9.75 14.25a.75.75 0 0 0 0 1.5H15a.75.75 0 0 0 0-1.5H9.75Zm0-3a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H9.75Z"
+                                clip-rule="evenodd" />
+                            <path
+                                d="M14.25 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 16.5 7.5h-1.875a.375.375 0 0 1-.375-.375V5.25Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="page-header-title">Hasil Penilaian Panelis</div>
+                        <div class="page-header-sub">Rata-rata penilaian dari {{ $panelisCount }} panelis pada sesi ini
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prem-card fade-up fade-up-4 overflow-hidden" style="padding: 0;">
+                    @php
+                        $panelisIndicators = [
+                            'Pemahaman Bisnis & Strategi' => 'Memahami konteks industri, Business proses dan arah perusahaan',
+                            'Identifikasi Masalah' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
+                            'Analisis Akar Masalah' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
+                            'Solusi yang Ditawarkan' => 'Solusi konkret, realistis, dan menjawab akar masalah',
+                            'Rencana Implementasi' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
+                            'Target Dampak & KPI' => 'Indikator keberhasilan terukur, baseline–target jelas',
+                            'Risiko & Mitigasi' => 'Mengenali risiko dan menyusun strategi antisipasi',
+                            'Gaya Presentasi & Penguasaan Materi' => 'Komunikatif, percaya diri, menjawab pertanyaan',
+                            'Refleksi Peran sebagai Posisi yang Dituju' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
+                            'Nilai Tambah' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',
+                        ];
+                    @endphp
+
+                    <div class="flex flex-col">
+
+                        {{-- Sub-box atas: Tabel penilaian --}}
+                        <div class="overflow-x-auto">
+                            <table class="aspek-table-riwayat">
+                                <thead>
+                                    <tr>
+                                        <th class="col-aspek">Aspek yang Dinilai</th>
+                                        <th class="col-indikator">Indikator Penilaian</th>
+                                        <th class="col-skor">Skor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($panelisAspectAverages as $aspectName => $avgScore)
+                                        @php $indicator = $panelisIndicators[$aspectName] ?? '-'; @endphp
+                                        <tr>
+                                            <td class="col-aspek">{{ $aspectName }}</td>
+                                            <td class="col-indikator">{{ $indicator }}</td>
+                                            <td class="col-skor">
+                                                <div class="skor-badge">{{ number_format($avgScore, 1) }}</div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    
+                                    @if (!empty($panelisKomentar))
+                                        <tr>
+                                            <td colspan="3" style="padding: 20px 16px; text-align: left; border-bottom: none;">
+                                                <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 10px;">Komentar / Catatan Penilai:</div>
+                                                <div style="width: 100%; min-height: 80px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px 16px; font-size: 0.82rem; color: #334155; background: white; font-family: 'Poppins', sans-serif;">
+                                                    @foreach ($panelisKomentar as $item)
+                                                        <div class="komentar-bullet" style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
+                                                            <div class="komentar-dot"></div>
+                                                            <p style="margin: 0; line-height: 1.5; flex: 1;">{{ $item['komentar'] }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        @endif
+
     </div>
 </x-talent.layout>

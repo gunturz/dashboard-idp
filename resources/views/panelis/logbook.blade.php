@@ -8,6 +8,7 @@
                 gap: 16px;
                 margin-bottom: 28px;
             }
+
             .page-header-icon {
                 width: 52px;
                 height: 52px;
@@ -21,7 +22,12 @@
                 color: white;
                 border: 1px solid rgba(255, 255, 255, 0.1);
             }
-            .page-header-icon svg { width: 26px; height: 26px; }
+
+            .page-header-icon svg {
+                width: 26px;
+                height: 26px;
+            }
+
             .page-header-title {
                 font-size: 1.75rem;
                 font-weight: 800;
@@ -29,27 +35,33 @@
                 line-height: 1.15;
                 letter-spacing: -0.025em;
             }
+
             .page-header-sub {
                 font-size: 0.8rem;
                 color: #64748b;
                 margin-top: 3px;
                 font-weight: 400;
             }
+
             .custom-scrollbar::-webkit-scrollbar {
                 height: 8px;
             }
+
             .custom-scrollbar::-webkit-scrollbar-track {
                 background: #f8fafc;
                 border-radius: 10px;
             }
+
             .custom-scrollbar::-webkit-scrollbar-thumb {
                 background: #0d9488;
                 border-radius: 10px;
                 border: 2px solid #f8fafc;
             }
+
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                 background: #0f766e;
             }
+
             @media (max-width: 767px) {
                 .custom-scrollbar {
                     max-width: calc(100vw - 1.5rem);
@@ -71,24 +83,39 @@
             }
 
             .pdc-log-table th {
-                padding: 24px 32px;
-                background: #f8fafc;
-                font-weight: 800;
-                color: #475569;
-                font-size: 0.95rem;
+                padding: 12px 16px;
+                background: #f1f5f9;
+                font-weight: 700;
+                color: #1e293b;
+                font-size: 0.8rem;
                 text-align: center;
-                white-space: nowrap;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+            }
+
+            .pdc-log-table th:last-child {
+                border-right: none;
             }
 
             .pdc-log-table td {
-                padding: 24px 32px;
-                color: #64748b;
-                font-size: 0.9rem;
-                border-top: 1px solid #f1f5f9;
+                padding: 12px 16px;
+                color: #334155;
+                font-size: 0.88rem;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
+                vertical-align: middle;
+            }
+
+            .pdc-log-table td:last-child {
+                border-right: none;
+            }
+
+            .pdc-log-table tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
             }
 
             .pdc-log-table tr:hover td {
-                background: #fafafa;
+                background: #f8fafc;
             }
         </style>
     </x-slot>
@@ -101,12 +128,14 @@
         <div class="page-header animate-title">
             <div class="page-header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
-                    <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.707V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                    <path
+                        d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.707V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
                 </svg>
             </div>
             <div>
                 <div class="page-header-title">LogBook Talent : {{ $talent->nama }}</div>
-                <div class="page-header-sub">Rekap detail seluruh aktivitas pengembangan yang telah dilaksanakan oleh talent</div>
+                <div class="page-header-sub">Rekap detail seluruh aktivitas pengembangan yang telah dilaksanakan oleh
+                    talent</div>
             </div>
         </div>
 
@@ -129,8 +158,8 @@
                         <tr>
                             <th>Mentor</th>
                             <th>Tema</th>
-                            <th>Tgl. Pengiriman/Update</th>
-                            <th>Tgl. Pelaksanaan</th>
+                            <th class="w-44 whitespace-nowrap">Tgl. Pengiriman/Update</th>
+                            <th class="w-44 whitespace-nowrap">Tgl. Pelaksanaan</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -139,21 +168,29 @@
                         @forelse($exposureActivities as $act)
                             <tr>
                                 <td class="text-center font-medium">{{ optional($act->verifier)->nama ?? '-' }}</td>
-                                <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d M Y') : '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d M Y') : '-' }}</td>
+                                <td class="text-center font-bold text-[#1e293b] w-48">
+                                    {{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}</td>
+                                <td class="text-center whitespace-nowrap">
+                                    {{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d M Y') : '-' }}
+                                </td>
+                                <td class="text-center whitespace-nowrap">
+                                    {{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d M Y') : '-' }}
+                                </td>
                                 <td class="text-center whitespace-nowrap w-32">
                                     @php
                                         $st = $act->status ?? 'Pending';
                                         $isApprove = in_array($st, ['Approve', 'Approved', 'Verified']);
                                     @endphp
-                                    @if($isApprove)
-                                        <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                    @if ($isApprove)
+                                        <span
+                                            class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $st }}
+                                        <span
+                                            class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                            {{ $st }}
                                         </span>
                                     @endif
                                 </td>
@@ -161,9 +198,12 @@
                                     <a href="{{ route('panelis.logbook.detail', $act->id) }}"
                                         class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
                                         title="Detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                         Detail
                                     </a>
@@ -171,7 +211,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                    Exposure yang dicatat.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -188,8 +229,8 @@
                         <tr>
                             <th>Mentor</th>
                             <th>Tema</th>
-                            <th>Tgl. Pengiriman/Update</th>
-                            <th>Tgl. Pelaksanaan</th>
+                            <th class="w-44 whitespace-nowrap">Tgl. Pengiriman/Update</th>
+                            <th class="w-44 whitespace-nowrap">Tgl. Pelaksanaan</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -198,21 +239,29 @@
                         @forelse($mentoringActivities as $act)
                             <tr>
                                 <td class="text-center font-medium">{{ optional($act->verifier)->nama ?? '-' }}</td>
-                                <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d M Y') : '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d M Y') : '-' }}</td>
+                                <td class="text-center font-bold text-[#1e293b] w-48">
+                                    {{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}</td>
+                                <td class="text-center whitespace-nowrap">
+                                    {{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d M Y') : '-' }}
+                                </td>
+                                <td class="text-center whitespace-nowrap">
+                                    {{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d M Y') : '-' }}
+                                </td>
                                 <td class="text-center whitespace-nowrap w-32">
                                     @php
                                         $st = $act->status ?? 'Pending';
                                         $isApprove = in_array($st, ['Approve', 'Approved', 'Verified']);
                                     @endphp
-                                    @if($isApprove)
-                                        <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                    @if ($isApprove)
+                                        <span
+                                            class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $st }}
+                                        <span
+                                            class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                            {{ $st }}
                                         </span>
                                     @endif
                                 </td>
@@ -220,9 +269,12 @@
                                     <a href="{{ route('panelis.logbook.detail', $act->id) }}"
                                         class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
                                         title="Detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                         Detail
                                     </a>
@@ -230,7 +282,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                    Mentoring yang dicatat.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -247,8 +300,8 @@
                         <tr>
                             <th>Sumber</th>
                             <th>Tema</th>
-                            <th>Tgl. Pengiriman/Update</th>
-                            <th>Tgl. Pelaksanaan</th>
+                            <th class="w-44 whitespace-nowrap">Tgl. Pengiriman/Update</th>
+                            <th class="w-44 whitespace-nowrap">Tgl. Pelaksanaan</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -257,11 +310,17 @@
                         @forelse($learningActivities as $act)
                             <tr>
                                 <td class="text-center font-medium">{{ $act->activity ?? '-' }}</td>
-                                <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d M Y') : '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d M Y') : '-' }}</td>
+                                <td class="text-center font-bold text-[#1e293b] w-48">
+                                    {{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}</td>
+                                <td class="text-center whitespace-nowrap">
+                                    {{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->format('d M Y') : '-' }}
+                                </td>
+                                <td class="text-center whitespace-nowrap">
+                                    {{ $act->activity_date ? \Carbon\Carbon::parse($act->activity_date)->format('d M Y') : '-' }}
+                                </td>
                                 <td class="text-center whitespace-nowrap w-32">
-                                    <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                    <span
+                                        class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                         <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Verified
                                     </span>
                                 </td>
@@ -269,9 +328,12 @@
                                     <a href="{{ route('panelis.logbook.detail', $act->id) }}"
                                         class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
                                         title="Detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                         Detail
                                     </a>
@@ -279,7 +341,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Learning yang dicatat.</td>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                    Learning yang dicatat.</td>
                             </tr>
                         @endforelse
                     </tbody>

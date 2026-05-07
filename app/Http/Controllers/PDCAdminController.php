@@ -45,10 +45,21 @@ class PDCAdminController extends Controller
 
         // Summary Cards
         $totalUsers = User::whereDoesntHave('role', fn($q) => $q->where('role_name', 'admin'))->count();
-        $onProgressTalent = PromotionPlan::where('status_promotion', 'In Progress')
-            ->whereNotNull('target_position_id')
-            ->count();
-        $pendingFinance = ImprovementProject::where('status', 'Pending')->count();
+        $onProgressTalent = User::whereHas('roles', function ($q) {
+            $q->where('role_name', 'talent');
+        })->whereHas('promotion_plan', function ($q) {
+            $q->whereNotNull('target_position_id')
+                ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
+        })->count();
+        $pendingFinance = ImprovementProject::whereHas('talent.promotion_plan', function ($q) {
+            $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
+        })->where(function ($q) {
+            $q->whereNull('finance_feedback')
+              ->orWhere(function ($q2) {
+                  $q2->where('finance_feedback', 'not like', '[Approved]%')
+                     ->where('finance_feedback', 'not like', '[Rejected]%');
+              });
+        })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
 
         // Role statistics
@@ -824,9 +835,17 @@ class PDCAdminController extends Controller
             ->get();
 
         $total = $projects->count();
-        $pending = $projects->where('status', 'Pending')->count();
-        $approved = $projects->where('status', 'Approved')->count();
-        $rejected = $projects->where('status', 'Rejected')->count();
+        $pending = $projects->filter(function ($project) {
+            return empty($project->finance_feedback) || 
+                   (!str_starts_with($project->finance_feedback, '[Approved]') && 
+                    !str_starts_with($project->finance_feedback, '[Rejected]'));
+        })->count();
+        $approved = $projects->filter(function ($project) {
+            return !empty($project->finance_feedback) && str_starts_with($project->finance_feedback, '[Approved]');
+        })->count();
+        $rejected = $projects->filter(function ($project) {
+            return !empty($project->finance_feedback) && str_starts_with($project->finance_feedback, '[Rejected]');
+        })->count();
 
         $financeUsers = \App\Models\User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->get();
 
@@ -835,15 +854,23 @@ class PDCAdminController extends Controller
 
     public function updateFinanceValidation(Request $request, $id)
     {
-        $request->validate(['status' => 'required|in:Verified,Rejected']);
+        $request->validate(['status' => 'required|in:Verified,Approved,Rejected']);
 
         $project = ImprovementProject::findOrFail($id);
 
+        $dbStatus = $request->status === 'Approved' ? 'Verified' : $request->status;
+
         $updateData = [
-            'status' => $request->status,
+            'status' => $dbStatus,
             'verify_by' => auth()->id(),
             'verify_at' => now(),
         ];
+
+        // Jika diproses langsung oleh Admin PDC tanpa via Finance, set finance_feedback
+        if (empty($project->finance_feedback)) {
+            $finStatus = $dbStatus === 'Verified' ? 'Approved' : $dbStatus;
+            $updateData['finance_feedback'] = "[$finStatus] Diproses langsung oleh PDC Admin tanpa review Finance.";
+        }
 
         // Simpan feedback PDC Admin jika diisi (tambahkan ke kolom 'feedback' agar tidak menghapus 'finance_feedback')
         if ($request->filled('pdc_feedback')) {
@@ -860,8 +887,8 @@ class PDCAdminController extends Controller
         $this->addNotificationToUser(
             $project->user_id_talent,
             'Keputusan Project Improvement dari PDC Admin',
-            'PDC Admin telah menindaklanjuti hasil finance validation dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $request->status . '</span>.' . $feedbackNote,
-            $request->status == 'Verified' ? 'success' : 'warning'
+            'PDC Admin telah menindaklanjuti hasil finance validation dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $dbStatus . '</span>.' . $feedbackNote,
+            $dbStatus === 'Verified' ? 'success' : 'warning'
         );
 
         return back()->with('success', 'Status berhasil diperbarui.');

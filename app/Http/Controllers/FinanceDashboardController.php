@@ -120,15 +120,19 @@ class FinanceDashboardController extends Controller
 
         $project = ImprovementProject::findOrFail($id);
 
-        // Finance hanya menyimpan keputusan & feedback ke finance_feedback
+        // Finance menyimpan keputusan & feedback
         // Format: '[Approved] catatan...' atau '[Rejected] catatan...'
         $decision = $request->finance_decision;
         $feedbackText = $request->finance_feedback ?? '';
         $stored = '[' . $decision . ']' . ($feedbackText ? ' ' . $feedbackText : '');
 
+        $dbStatus = $decision === 'Approved' ? 'Verified' : 'Rejected';
+
         $project->update([
             'finance_feedback' => $stored,
-            // TIDAK mengubah 'status' — keputusan final ada di tangan PDC Admin
+            'status' => $dbStatus,
+            'verify_by' => $user->id,
+            'verify_at' => now(),
         ]);
 
         // Notifikasi ke seluruh PDC Admin bahwa Finance sudah memberi keputusan
@@ -138,12 +142,20 @@ class FinanceDashboardController extends Controller
             $this->addNotificationToUser(
                 $adminId,
                 'Validasi Finance Diterima',
-                'Finance (<strong>' . ($user->nama ?? $user->name) . '</strong>) telah memberikan keputusan <span class="font-semibold">' . $decision . '</span> untuk Project Improvement milik <strong>' . ($project->talent->nama ?? '-') . '</strong>. Silakan tinjau dan berikan keputusan akhir.',
+                'Finance (<strong>' . ($user->nama ?? $user->name) . '</strong>) telah memberikan keputusan <span class="font-semibold">' . $decision . '</span> untuk Project Improvement milik <strong>' . ($project->talent->nama ?? '-') . '</strong>.',
                 $decision === 'Approved' ? 'success' : 'warning'
             );
         }
 
-        return redirect()->route('finance.riwayat')->with('success', 'Keputusan validasi finance berhasil disimpan.');
+        // Notifikasi langsung ke Talent dari keputusan Finance
+        $this->addNotificationToUser(
+            $project->user_id_talent,
+            'Keputusan Project Improvement dari Finance',
+            'Finance telah meninjau dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $dbStatus . '</span>.' . ($feedbackText ? ' Catatan: <em>' . e($feedbackText) . '</em>' : ''),
+            $dbStatus === 'Verified' ? 'success' : 'warning'
+        );
+
+        return redirect()->route('finance.riwayat')->with('success', 'Keputusan validasi finance berhasil disimpan dan diteruskan ke Talent.');
     }
 
     /**

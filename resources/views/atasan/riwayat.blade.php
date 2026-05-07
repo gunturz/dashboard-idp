@@ -46,7 +46,7 @@
             .highlight-table th {
                 padding: 12px 16px;
                 text-align: left;
-                font-size: 0.85rem;
+                font-size: 0.75rem;
                 font-weight: 700;
                 color: #475569;
                 border-bottom: 1px solid #e2e8f0;
@@ -76,7 +76,7 @@
 
             .highlight-table td {
                 padding: 16px;
-                font-size: 0.95rem;
+                font-size: 0.82rem;
                 color: #334155;
                 text-align: left;
                 vertical-align: middle;
@@ -96,7 +96,7 @@
             }
 
             .talent-position {
-                font-size: 0.85rem;
+                font-size: 0.78rem;
                 color: #64748b;
                 font-style: italic;
                 display: block;
@@ -111,7 +111,7 @@
                 background: #f1f5f9;
                 border: 1px solid #d1d5db;
                 border-radius: 7px;
-                font-size: 0.9rem;
+                font-size: 0.8rem;
                 font-weight: 600;
                 color: #475569;
                 text-decoration: none;

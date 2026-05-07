@@ -6,7 +6,7 @@ Desain identik dengan template notifikasi PDC Admin yang sudah ada.
 <div wire:poll.10s="loadNotifications" x-data @app-notification-received.window="$wire.loadNotifications()">
 
     {{-- ── Page Header Actions ── --}}
-    <div class="page-header animate-title">
+    <div class="page-header animate-title" style="flex-wrap: wrap;">
         <div class="page-header-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path
@@ -18,17 +18,17 @@ Desain identik dengan template notifikasi PDC Admin yang sudah ada.
             <div class="page-header-title">Notifikasi</div>
             <div class="page-header-sub">Semua pemberitahuan aktivitas sistem</div>
         </div>
-        <div class="page-header-actions" style="margin-top: 30px;">
+        <div class="page-header-actions flex-wrap" style="margin-top: 0;">
             @if(count($notifications) > 0)
                 @if($unreadCount > 0)
-                    <button type="button" wire:click="markAllRead" class="btn-prem btn-teal"
+                    <button type="button" wire:click="markAllRead" class="btn-prem btn-teal whitespace-nowrap"
                         style="padding: 8px 16px; font-size: 0.85rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                             <path fill-rule="evenodd"
                                 d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
                                 clip-rule="evenodd" />
                         </svg>
-                        Tandai Semua Dibaca
+                        Tandai Semua <span class="hidden sm:inline">Dibaca</span>
                     </button>
                 @else
                     @if(!$isEditMode)

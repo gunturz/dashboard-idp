@@ -72,17 +72,22 @@ class PDCAdminController extends Controller
         ];
 
         // Fetch the 8 most recent talents whose development plan is still active
+        // Menampilkan semua talent yang sedang aktif dalam siklus promosi (belum Promoted/Not Promoted)
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })
             ->whereHas('promotion_plan', function ($q) {
-                $q->where('status_promotion', 'In Progress')
-                    ->whereNotNull('target_position_id');
+                $q->whereNotNull('target_position_id')
+                    ->whereNotIn('status_promotion', ['Promoted', 'Not Promoted'])
+                    ->where('is_active', true);
             })
-            ->join('promotion_plan', 'users.id', '=', 'promotion_plan.user_id_talent')
+            ->join('promotion_plan', function ($join) {
+                $join->on('users.id', '=', 'promotion_plan.user_id_talent')
+                     ->where('promotion_plan.is_active', true);
+            })
             ->select('users.*')
-            ->orderBy('promotion_plan.created_at', 'desc')
             ->orderBy('promotion_plan.updated_at', 'desc')
+            ->orderBy('promotion_plan.created_at', 'desc')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->take(8)
             ->get();

@@ -710,7 +710,7 @@ class PDCAdminController extends Controller
         return view('pdc_admin.detail', compact('user', 'company', 'targetPosition', 'talents', 'competencies', 'standards', 'financeUsers'));
     }
 
-    public function detailTalent($talent_id)
+    public function detailTalent(int $talent_id)
     {
         $user = auth()->user();
         $talent = User::with([
@@ -721,6 +721,8 @@ class PDCAdminController extends Controller
             'atasan',
             'promotion_plan.targetPosition',
         ])->findOrFail($talent_id);
+        
+        $this->authorize('view-talent-data', $talent);
 
         // Build a single-item collection so the existing detail.blade.php loop still works
         $talents = collect([$talent]);
@@ -1542,7 +1544,7 @@ class PDCAdminController extends Controller
     }
 
 
-    public function exportPdf($talent_id)
+    public function exportPdf(int $talent_id)
     {
         $talent = User::with([
             'company',
@@ -1557,6 +1559,8 @@ class PDCAdminController extends Controller
             'all_panelisAssessments.panelis.company',
             'all_panelisAssessments.panelis.position'
         ])->findOrFail($talent_id);
+
+        $this->authorize('export-pdf', $talent);
 
         // Map archived progress to original properties for view compatibility
         $talent->promotion_plan = $talent->all_promotion_plans->first();
@@ -1577,6 +1581,9 @@ class PDCAdminController extends Controller
         $filename = 'Talent_Report_' . str_replace(' ', '_', $talent->nama) . '.pdf';
         return $pdf->download($filename);
     }
+
+
+
 
     public function assignRole(Request $request, $id)
     {

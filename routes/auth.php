@@ -9,7 +9,6 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\KandidatDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -35,8 +34,6 @@ Route::middleware('guest')->group(function () {
 
     Route::get('auth/google/callback', [AuthenticatedSessionController::class, 'handleGoogleCallback'])
         ->name('auth.google.callback');
-
-
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
@@ -77,13 +74,10 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
-
-
-
 });
 
-    // Talent Routes
-    Route::middleware('auth')->group(function () {
+// ── TALENT ROUTES ─────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'talent.only'])->group(function () {
     Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class, 'index'])
         ->name('talent.dashboard');
     Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class, 'riwayat'])
@@ -114,10 +108,10 @@ Route::middleware('auth')->group(function () {
         ->name('talent.logbook.detail');
     Route::post('/talent/project', [\App\Http\Controllers\TalentDashboardController::class, 'storeProject'])
         ->name('talent.project.store');
-    Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class, 'riwayat'])
-        ->name('talent.riwayat');
+});
 
-    // PDC Admin Routes
+// ── PDC ADMIN ROUTES ──────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'pdc_admin.only'])->group(function () {
     Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class, 'dashboard'])
         ->name('pdc_admin.dashboard');
     Route::get('/pdc-admin/progress-talent', [\App\Http\Controllers\PDCAdminController::class, 'progressTalent'])
@@ -193,7 +187,6 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.progress_archive');
     Route::get('/pdc-admin/progress-archive/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'exportDetail'])
         ->name('pdc_admin.progress_archive.detail');
-
     Route::get('/pdc-admin/panelis-review', [\App\Http\Controllers\PDCAdminController::class, 'panelisReview'])
         ->name('pdc_admin.panelis_review');
     Route::post('/pdc-admin/panelis-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'sendPanelisReview'])
@@ -206,12 +199,10 @@ Route::middleware('auth')->group(function () {
         ->name('pdc_admin.panelis_review.toggle_lock');
     Route::get('/pdc-admin/talent/{talent_id}/export-pdf', [\App\Http\Controllers\PDCAdminController::class, 'exportPdf'])
         ->name('pdc_admin.export_pdf');
+});
 
-
-
-
-
-    // Atasan Routes
+// ── ATASAN ROUTES ─────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'atasan.only'])->group(function () {
     Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class, 'dashboard'])
         ->name('atasan.dashboard');
     Route::get('/atasan/notifikasi', [\App\Http\Controllers\AtasanDashboardController::class, 'notifikasi'])
@@ -236,8 +227,10 @@ Route::middleware('auth')->group(function () {
         ->name('atasan.monitoring.detail');
     Route::get('/atasan/monitoring/{talentId}/logbook', [\App\Http\Controllers\AtasanDashboardController::class, 'talentLogbookDetail'])
         ->name('atasan.monitoring.logbook');
+});
 
-    // Mentor Routes
+// ── MENTOR ROUTES ─────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'mentor.only'])->group(function () {
     Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class, 'dashboard'])
         ->name('mentor.dashboard');
     Route::get('/mentor/notifikasi', [\App\Http\Controllers\MentorDashboardController::class, 'notifikasi'])
@@ -254,8 +247,10 @@ Route::middleware('auth')->group(function () {
         ->name('mentor.riwayat');
     Route::get('/mentor/riwayat/talent/{talentId}/logbook', [\App\Http\Controllers\MentorDashboardController::class, 'riwayatLogbook'])
         ->name('mentor.riwayat.logbook');
+});
 
-    // Finance Routes
+// ── FINANCE ROUTES ────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'finance.only'])->group(function () {
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class, 'dashboard'])
         ->name('finance.dashboard');
     Route::get('/finance/riwayat', [\App\Http\Controllers\FinanceDashboardController::class, 'riwayat'])
@@ -268,8 +263,10 @@ Route::middleware('auth')->group(function () {
         ->name('finance.notifikasi');
     Route::post('/finance/notifikasi/mark-all-read', [\App\Http\Controllers\FinanceDashboardController::class, 'markAllNotificationsRead'])
         ->name('finance.notifikasi.markAllRead');
+});
 
-    // Panelis Routes
+// ── PANELIS ROUTES ────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'panelis.only'])->group(function () {
     Route::get('/panelis/dashboard', [\App\Http\Controllers\PanelisController::class, 'dashboard'])
         ->name('panelis.dashboard');
     Route::get('/panelis/review', [\App\Http\Controllers\PanelisController::class, 'review'])
@@ -293,3 +290,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/panelis/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])
         ->name('panelis.profile');
 });
+

@@ -6,16 +6,8 @@
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari by Talent / Project..."
+            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari Talent / Project"
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-teal-500 transition-all">
-        </div>
-        <div class="flex-shrink-0 w-full sm:w-48">
-            <select wire:model.live="statusFilter" class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-teal-500 transition-all">
-                <option value="">Semua Status</option>
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-            </select>
         </div>
     </div>
 
@@ -24,23 +16,38 @@
         @forelse($projects as $index => $project)
         <div class="prem-card">
             {{-- Card Header --}}
-            <div class="prem-card-header cursor-pointer select-none hover:bg-gray-50 transition-colors" onclick="toggleAccordion('content-{{ $project->id }}', 'icon-{{ $project->id }}')">
+            <div class="prem-card-header !py-6 md:!py-8 cursor-pointer select-none hover:bg-gray-50 transition-colors" onclick="toggleAccordion('content-{{ $project->id }}', 'icon-{{ $project->id }}')">
                 
                 {{-- Profile Info --}}
                 <div class="flex items-center gap-4 w-full md:w-[40%]">
-                    <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden font-bold text-lg bg-teal-50 text-teal-700 border border-teal-100">
-                        {{ collect(explode(' ', $project->talent->nama ?? 'A'))->map(fn($n)=>substr($n,0,1))->take(2)->join('') }}
+                    <div class="flex-shrink-0">
+                        @if($project->talent->foto)
+                            <img src="{{ asset('storage/' . $project->talent->foto) }}" alt="{{ $project->talent->nama }}" class="w-16 h-16 rounded-xl object-cover border-2 border-gray-100 shadow-sm">
+@else
+                            <div class="w-16 h-16 rounded-xl bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-2xl border-2 border-teal-50">
+                                {{ collect(explode(' ', $project->talent->nama ?? 'A'))->map(fn($n)=>substr($n,0,1))->take(2)->join('') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="flex-grow min-w-0">
-                        <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
-                        <p class="text-[11px] text-gray-500 italic leading-tight mt-0.5">{{ $project->talent->position->position_name ?? '-' }} &rarr; {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}</p>
-                        <p class="text-[11px] text-gray-500 italic">{{ $project->talent->department->nama_department ?? '-' }}</p>
+                        <p class="text-gray-800" style="font-size: 0.9rem; font-weight: 600; line-height: 1.2;">
+                            {{ $project->talent->nama ?? '-' }}
+                        </p>
+                        <p class="text-gray-500 italic leading-tight mt-0.5" style="font-size: 0.9rem;">
+                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->position->position_name ?? '-') }} &rarr;
+                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->promotion_plan->targetPosition->position_name ?? '?') }}
+                        </p>
+                        <p class="text-gray-500 italic" style="font-size: 0.9rem;">
+                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->department->nama_department ?? '-') }}
+                        </p>
                     </div>
                 </div>
 
                 {{-- Project Title --}}
-                <div class="w-full md:w-[35%] py-2 md:py-0 md:px-6 md:border-l border-gray-200 flex items-center">
-                    <p class="font-bold text-gray-700 text-sm">{{ $project->title }}</p>
+                <div class="w-full md:w-[35%] py-2 md:py-0 md:px-6 flex items-center">
+                    <p class="text-gray-700" style="font-size: 0.9rem; font-weight: 700; line-height: 1.3;">
+                        {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}
+                    </p>
                 </div>
 
                 {{-- Badge & Toggle --}}
@@ -64,26 +71,26 @@
                             {{-- Catatan dari Admin PDC (read-only) --}}
                             @if($project->feedback)
                             <div>
-                                <div class="font-bold text-gray-700 text-[12px] mb-1.5 flex items-center gap-2">
+                                <div class="font-bold text-gray-700 mb-1.5 flex items-center gap-2" style="font-size: 0.9rem;">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                                     </svg>
                                     Catatan Admin PDC:
                                 </div>
-                                <div class="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-3 text-xs text-gray-600 leading-relaxed min-h-[60px]">
+                                <div class="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-3 text-gray-600 leading-relaxed min-h-[60px]" style="font-size: 0.9rem;">
                                     {{ $project->feedback }}
                                 </div>
                             </div>
                             @endif
                             {{-- Feedback Finance --}}
                             <div>
-                                <div class="font-bold text-gray-700 text-[12px] mb-1.5 flex items-center gap-2">
+                                <div class="font-bold text-gray-700 mb-1.5 flex items-center gap-2" style="font-size: 0.9rem;">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                     Feedback Finance:
                                 </div>
-                                <textarea name="finance_feedback" class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs text-gray-700 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all min-h-[100px] resize-y" placeholder="Ketikkan feedback atau catatan persetujuan / penolakan di sini...">{{ $project->finance_feedback }}</textarea>
+                                <textarea name="finance_feedback" class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all min-h-[100px] resize-y" style="font-size: 0.9rem;" placeholder="Ketikkan feedback atau catatan persetujuan / penolakan di sini...">{{ $project->finance_feedback }}</textarea>
                             </div>
                         </div>
                         <div class="flex flex-col gap-3 min-w-[240px] w-full lg:w-auto xl:w-[25%] flex-shrink-0 mt-2 lg:mt-5">
@@ -143,7 +150,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <h3>Tidak ada permintaan</h3>
-                <p>Tidak ada hasil yang sesuai dengan filter Anda.</p>
+                <p>Belum ada permintaan yang menunggu validasi atau hasil pencarian tidak ditemukan.</p>
             </div>
         </div>
         @endforelse

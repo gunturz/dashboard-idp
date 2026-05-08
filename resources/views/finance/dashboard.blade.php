@@ -1,4 +1,114 @@
 <x-finance.layout title="Dashboard Finance" :user="$user">
+    <x-slot name="styles">
+        <style>
+            .highlight-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: .9rem;
+            }
+
+            .highlight-table th {
+                background: #f1f5f9;
+                color: #1e293b;
+                font-weight: 700;
+                text-align: left;
+                padding: 11px 16px;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+                white-space: nowrap;
+                font-size: .85rem;
+                text-transform: none;
+                letter-spacing: 0;
+            }
+
+            .highlight-table th:last-child {
+                border-right: none;
+            }
+
+            .highlight-table td {
+                padding: 13px 16px;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
+                vertical-align: middle;
+                color: #334155;
+            }
+
+            .highlight-table td:last-child {
+                border-right: none;
+            }
+
+            .table-row {
+                transition: background .15s;
+            }
+
+            .table-row:hover td {
+                background: #f0fdfa !important;
+            }
+
+            .row-even td {
+                background: #fafbfc;
+            }
+
+            .td-position {
+                font-weight: 700;
+                color: #1e293b;
+            }
+
+            .td-sub {
+                font-size: .82rem;
+                color: #94a3b8;
+                margin-top: 2px;
+                font-style: italic;
+            }
+
+            .td-name {
+                font-weight: 600;
+                color: #1e293b;
+            }
+
+            .td-muted {
+                color: #64748b;
+            }
+            .section-title {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                font-size: 1.2rem;
+                font-weight: 800;
+                color: #1e293b;
+                margin-bottom: 24px;
+                margin-top: 40px;
+                text-align: center;
+            }
+
+            .section-title::before,
+            .section-title::after {
+                content: '';
+                flex: 1;
+                height: 1.5px;
+                background: #cbd5e1;
+            }
+
+            .section-subtitle {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                font-size: 1.25rem;
+                font-weight: 800;
+                color: #1e293b;
+                margin-top: 32px;
+                margin-bottom: 24px;
+            }
+
+            .section-subtitle svg {
+                width: 28px;
+                height: 28px;
+                color: #0f172a;
+            }
+        </style>
+    </x-slot>
+
     <div class="mb-8">
         {{-- ── Page Header ── --}}
         <div class="dash-header animate-title">
@@ -10,21 +120,13 @@
                 </svg>
             </div>
             <div>
-                <div class="dash-header-title">Dashboard Finance</div>
-                <div class="dash-header-sub">{{ $user->company->nama_company ?? 'Individual Development Plan' }}</div>
+                <div class="dash-header-title">Dashboard</div>
+                <div class="dash-header-sub">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $user->company->nama_company ?? 'Finance Validation & Review Module') }}</div>
             </div>
             <div class="dash-header-date hidden md:block">
                 Hari ini
-                <span>{{ now()->translatedFormat('d F Y') }}</span>
+                <span>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}</span>
             </div>
-        </div>
-        <div>
-            <div class="dash-header-title">Dashboard Finance</div>
-            <div class="dash-header-sub">{{ $user->company->nama_company ?? 'Individual Development Plan' }}</div>
-        </div>
-        <div class="dash-header-date hidden md:block">
-            Hari ini
-            <span>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}</span>
         </div>
     </div>
 
@@ -38,7 +140,7 @@
                     </svg>
                 </div>
                 <div class="prem-stat-value">{{ $total }}</div>
-                <div class="prem-stat-label">Total Request</div>
+                <div class="prem-stat-label">Total Permintaan</div>
             </div>
             <div class="prem-stat prem-stat-amber">
                 <div class="prem-stat-icon si-amber">
@@ -49,7 +151,7 @@
                     </svg>
                 </div>
                 <div class="prem-stat-value">{{ $pending }}</div>
-                <div class="prem-stat-label">Pending Review</div>
+                <div class="prem-stat-label">Menunggu Validasi</div>
             </div>
             <div class="prem-stat prem-stat-green">
                 <div class="prem-stat-icon si-green">
@@ -60,7 +162,7 @@
                     </svg>
                 </div>
                 <div class="prem-stat-value">{{ $approved }}</div>
-                <div class="prem-stat-label">Approved</div>
+                <div class="prem-stat-label">Telah Disetujui</div>
             </div>
             <div class="prem-stat prem-stat-red">
                 <div class="prem-stat-icon si-red">
@@ -71,11 +173,12 @@
                     </svg>
                 </div>
                 <div class="prem-stat-value">{{ $rejected }}</div>
-                <div class="prem-stat-label">Rejected</div>
+                <div class="prem-stat-label">Ditolak</div>
             </div>
         </div>
 
         {{-- Notification Alert --}}
+        @if($pending > 0)
         <div
             class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between shadow-sm mb-8">
             <div class="flex items-center gap-4 mb-3 sm:mb-0">
@@ -89,61 +192,62 @@
                 </div>
                 <p class="text-amber-900 font-medium text-sm">
                     Ada <span class="font-bold text-amber-600">{{ $pending }} Permintaan</span> yang menunggu validasi
-                    anda
+                    Anda
                 </p>
             </div>
             <a href="{{ route('finance.permintaan_validasi') }}" class="btn-prem btn-teal px-8 py-2.5">
                 Review Sekarang
             </a>
         </div>
+        @endif
+
+        <div class="section-subtitle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375ZM6 12a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V12Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 15a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V15Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 18a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V18Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+            </svg>
+            Daftar Permintaan Validasi
+        </div>
 
         {{-- Menunggu Validasi Tables Grouped by Position --}}
         @forelse($groupedPendingProjects as $groupTitle => $projectsGroup)
+            <div class="section-title">
+                {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $groupTitle) }}
+            </div>
+
             <div class="prem-card">
-                <div class="prem-card-header">
-                    <div class="prem-card-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                        <span>Daftar Permintaan - {{ $groupTitle }}</span>
-                    </div>
-                </div>
                 <div class="overflow-x-auto">
-                    <table class="prem-table">
+                    <table class="highlight-table">
                         <thead>
                             <tr>
                                 <th class="w-[25%]">Talent</th>
-                                <th class="w-[20%]">Project</th>
+                                <th class="w-[25%]">Project / Dept</th>
                                 <th class="w-[20%]">Catatan Admin</th>
                                 <th class="w-[20%]">Feedback Finance</th>
-                                <th class="w-[15%] text-center">Status</th>
+                                <th class="w-[10%]">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($projectsGroup as $project)
-                                <tr>
-                                    <td class="text-left px-6">
-                                        <div class="flex flex-col">
-                                            <span class="font-bold text-gray-800">{{ $project->talent->nama ?? '-' }}</span>
-                                            <span
-                                                class="text-[11px] text-gray-500 italic leading-tight mt-1">{{ $project->talent->position->position_name ?? '-' }}
-                                                &rarr;
-                                                {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}</span>
-                                            <span
-                                                class="text-[11px] text-gray-500 italic">{{ $project->talent->department->nama_department ?? '-' }}</span>
+                            @foreach($projectsGroup as $idx => $project)
+                                <tr class="table-row {{ $idx % 2 === 0 ? 'row-even' : '' }}">
+                                    <td>
+                                        <div class="td-name">{{ $project->talent->nama ?? '-' }}</div>
+                                        <div class="td-sub">
+                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->position->position_name ?? '-') }} &rarr;
+                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->promotion_plan->targetPosition->position_name ?? '?') }}
                                         </div>
                                     </td>
-                                    <td class="font-bold text-gray-700">
-                                        {{ $project->title }}
+                                    <td>
+                                        <div class="td-position">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}</div>
+                                        <div class="td-sub">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->department->nama_department ?? '-') }}</div>
                                     </td>
-                                    <td class="text-gray-500 text-xs">
+                                    <td class="td-muted">
                                         {{ $project->feedback ?? '-' }}
                                     </td>
-                                    <td class="text-gray-500 text-xs">
+                                    <td class="td-muted">
                                         {{ $project->finance_feedback ?? '-' }}
                                     </td>
-                                    <td class="text-center">
+                                    <td>
                                         <span class="badge badge-amber">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
                                                 fill="currentColor">

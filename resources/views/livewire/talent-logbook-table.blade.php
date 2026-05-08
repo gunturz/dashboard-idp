@@ -1,15 +1,19 @@
 <div>
     @if(session('success'))
-        <div class="mb-6 px-5 py-3.5 bg-green-50 border border-green-300 text-green-700 text-sm font-semibold rounded-xl flex items-center gap-3 shadow-sm">
+        <div
+            class="mb-6 px-5 py-3.5 bg-green-50 border border-green-300 text-green-700 text-sm font-semibold rounded-xl flex items-center gap-3 shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
             </svg>
             {{ session('success') }}
         </div>
     @endif
 
     {{-- Tab Navigation --}}
-    <div class="flex gap-1.5 p-1.5 bg-[#f9fafb] border border-[#e2e8f0] rounded-full w-fit mb-8 shadow-inner overflow-x-auto relative">
+    <div
+        class="flex gap-1.5 p-1.5 bg-[#f9fafb] border border-[#e2e8f0] rounded-full w-fit mb-8 shadow-inner overflow-x-auto relative">
         <button wire:click="setTab('exposure')"
             class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 whitespace-nowrap {{ $activeTab === 'exposure' ? 'bg-[#0f172a] text-white shadow-sm' : 'text-[#64748b] hover:bg-[#cbd5e1] hover:text-[#0f172a]' }}">
             Exposure
@@ -25,21 +29,21 @@
     </div>
 
     {{-- Content Table --}}
-    <div class="log-table-container custom-scrollbar overflow-x-auto mb-12 relative" style="min-height: 200px;">
+    <div class="log-table-container custom-scrollbar overflow-x-auto mb-12 relative">
 
-        <table class="pdc-log-table w-full">
+        <table class="pdc-log-table w-full" style="table-layout: fixed; min-width: 950px;">
             <thead>
                 <tr>
                     @if($activeTab === 'learning')
-                        <th>Sumber</th>
+                        <th style="width: 185px;">Sumber</th>
                     @else
-                        <th>Mentor</th>
+                        <th style="width: 185px;">Mentor</th>
                     @endif
-                    <th>Tema</th>
-                    <th>Tanggal Pengiriman/Update</th>
-                    <th>Tanggal Pelaksanaan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th style="width: 190px;">Tema</th>
+                    <th style="width: 160px; white-space: nowrap;">Tanggal Pengiriman/Update</th>
+                    <th style="width: 130px; white-space: nowrap;">Tanggal Pelaksanaan</th>
+                    <th style="width: 90px;">Status</th>
+                    <th style="width: 140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,22 +65,23 @@
                         <td class="text-center whitespace-nowrap">
                             {{ date('d F Y', strtotime($item['tanggal'])) }}
                         </td>
-                        <td class="text-center whitespace-nowrap w-32">
-                            @if($activeTab === 'learning')
-                                <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Verified
+                        <td class="text-center whitespace-nowrap">
+                            @if (in_array($item['status'], ['Approve', 'Approved']))
+                                <span
+                                    class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                </span>
+                            @elseif (in_array($item['status'], ['Reject', 'Rejected']))
+                                <span
+                                    class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                 </span>
                             @else
-                                @if (in_array($item['status'], ['Approve', 'Approved']))
-                                    <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
-                                        {{ $item['status'] ?: 'Pending' }}
-                                    </span>
-                                @endif
+                                <span
+                                    class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                    {{ $item['status'] ?: 'Pending' }}
+                                </span>
                             @endif
                         </td>
                         <td class="text-center">
@@ -84,8 +89,8 @@
                                 <a href="{{ route('talent.logbook.detail', $item['id']) }}"
                                     class="flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
                                     title="Detail">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -93,26 +98,24 @@
                                     </svg> Detail
                                 </a>
                                 @if(!$trainingDone)
-                                <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring.edit', $item['id']) }}"
-                                    class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-blue-100 transition-colors' }}"
-                                    title="Edit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </a>
-                                <button type="button"
-                                    wire:click="openDeleteModal({{ $item['id'] }})"
-                                    class="flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-red-100 transition-colors' }}"
-                                    title="Hapus"
-                                    {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
+                                    <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring.edit', $item['id']) }}"
+                                        class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-blue-100 transition-colors' }}"
+                                        title="Edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </a>
+                                    <button type="button" wire:click="openDeleteModal({{ $item['id'] }})"
+                                        class="flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-red-100 transition-colors' }}"
+                                        title="Hapus" {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
                                 @endif
                             </div>
                         </td>

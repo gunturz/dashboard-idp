@@ -1,8 +1,8 @@
 <x-talent.layout title="Riwayat Talent – Individual Development Plan" :user="$user" :notifications="$notifications">
     <x-slot name="styles">
         <style>
-             /* ── Page Header (Dashboard Style) ── */
-             .page-header {
+            /* ── Page Header (Dashboard Style) ── */
+            .page-header {
                 display: flex;
                 align-items: center;
                 gap: 16px;
@@ -73,7 +73,9 @@
                 border-right: 1px solid #d1d5db;
             }
 
-            .highlight-table th:last-child { border-right: none; }
+            .highlight-table th:last-child {
+                border-right: none;
+            }
 
             .highlight-table td {
                 padding: 12px 16px;
@@ -84,7 +86,9 @@
                 vertical-align: middle;
             }
 
-            .highlight-table td:last-child { border-right: none; }
+            .highlight-table td:last-child {
+                border-right: none;
+            }
 
             .highlight-table tr:hover td {
                 background: #f8fafc;
@@ -171,8 +175,15 @@
             }
 
             @keyframes reveal {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
         </style>
     </x-slot>
@@ -183,7 +194,9 @@
         <div class="page-header mt-2">
             <div class="page-header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"
+                        clip-rule="evenodd" />
                 </svg>
             </div>
             <div>
@@ -192,61 +205,81 @@
             </div>
         </div>
 
-        {{-- Table Section (Dashboard Style) --}}
-        <div class="prem-card mb-12 overflow-x-auto">
-            <table class="highlight-table">
-                <thead>
-                    <tr>
-                        <th style="width: 25%; text-align: left;">Talent</th>
-                        <th style="width: 30%; text-align: left;">Perusahaan</th>
-                        <th style="width: 15%;">Start Date</th>
-                        <th style="width: 15%;">Due Date</th>
-                        <th style="width: 15%;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($sessions as $session)
-                        @php
-                            $startDate = \Carbon\Carbon::parse($session->created_at);
-                            $dueDate = \Carbon\Carbon::parse($session->created_at)->addMonths(6);
-                            // Gunakan posisi yang di-snapshot saat sesi dibuat
-                            $posName   = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
-                            $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';
-                        @endphp
+        {{-- Content Section --}}
+        @if(!($isDecisionFinal ?? false))
+            {{-- Keputusan PDC belum ditetapkan --}}
+            <div
+                class="flex flex-col items-center justify-center p-8 mt-6 bg-amber-50 border border-amber-200 rounded-2xl shadow-sm max-w-2xl mx-auto text-center">
+                <div class="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-600" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="text-amber-800 font-bold text-lg mb-2">Riwayat Belum Tersedia</h3>
+                <p class="text-amber-700 text-sm max-w-md">Data riwayat program pengembangan Anda akan muncul setelah proses
+                    penilaian akhir selesai dilakukan.</p>
+            </div>
+        @else
+            {{-- Table Section (Dashboard Style) --}}
+            <div class="prem-card mb-12 overflow-x-auto mt-2">
+                <table class="highlight-table">
+                    <thead>
                         <tr>
-                            <td style="text-align: left;">
-                                <span class="talent-name-main">{{ $user->nama }}</span>
-                                <span class="talent-role-sub">{{ $posName }} – {{ $targetPos }}</span>
-                            </td>
-                            <td style="text-align: left;">
-                                {{ optional($user->company)->nama_perusahaan ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
-                            </td>
-                            <td class="text-center font-bold text-gray-500">
-                                {{ $startDate->translatedFormat('d F Y') }}
-                            </td>
-                            <td class="text-center font-bold text-gray-500">
-                                {{ $dueDate->translatedFormat('d F Y') }}
-                            </td>
-                            <td class="text-center">
-                                <a href="{{ route('talent.riwayat.detail', $session->id) }}" class="btn-action-teal">
-                                    Lihat Detail
-                                </a>
-                            </td>
+                            <th style="width: 25%; text-align: left;">Talent</th>
+                            <th style="width: 30%; text-align: left;">Perusahaan</th>
+                            <th style="width: 15%;">Start Date</th>
+                            <th style="width: 15%;">Due Date</th>
+                            <th style="width: 15%;">Aksi</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="py-24 text-center">
-                                <div class="flex flex-col items-center justify-center text-gray-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                    <p class="font-bold text-lg">Belum ada riwayat</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @forelse($sessions as $session)
+                            @php
+                                $startDate = \Carbon\Carbon::parse($session->created_at);
+                                $dueDate = \Carbon\Carbon::parse($session->created_at)->addMonths(6);
+                                // Gunakan posisi yang di-snapshot saat sesi dibuat
+                                $posName = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
+                                $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';
+                            @endphp
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span class="talent-name-main">{{ $user->nama }}</span>
+                                    <span class="talent-role-sub">{{ $posName }} – {{ $targetPos }}</span>
+                                </td>
+                                <td style="text-align: left;">
+                                    {{ optional($user->company)->nama_perusahaan ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
+                                </td>
+                                <td class="text-center font-bold text-gray-500">
+                                    {{ $startDate->translatedFormat('d F Y') }}
+                                </td>
+                                <td class="text-center font-bold text-gray-500">
+                                    {{ $dueDate->translatedFormat('d F Y') }}
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('talent.riwayat.detail', $session->id) }}" class="btn-action-teal">
+                                        Lihat Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-16 text-center">
+                                    <div class="flex flex-col items-center justify-center text-gray-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-20" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                        <p class="font-bold text-lg">Belum ada riwayat</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 </x-talent.layout>

@@ -387,7 +387,7 @@
                     Talent</p>
                 <div class="status-modal-actions">
                     <button class="btn-status-reject" onclick="submitProjectStatus('Rejected')">Reject</button>
-                    <button class="btn-status-approve" onclick="submitProjectStatus('Verified')">Approve</button>
+                    <button class="btn-status-approve" onclick="submitProjectStatus('Approved')">Approve</button>
                 </div>
                 <button class="btn-status-batal" onclick="closeUpdateStatusModal()">Batal</button>
                 <form id="update-status-form" method="POST" style="display:none;">
@@ -446,12 +446,15 @@
                                             File</a>
                                     </td>
                                     <td>
+                                        @php
+                                            $projectStatus = $proj->status === 'Verified' ? 'Approved' : $proj->status;
+                                        @endphp
                                         <div class="flex items-center justify-center gap-2">
                                             <div
-                                                class="w-2 h-2 rounded-full {{ $proj->status === 'Verified' ? 'bg-green-500' : 'bg-orange-500' }}">
+                                                class="w-2 h-2 rounded-full {{ $projectStatus === 'Approved' ? 'bg-green-500' : ($projectStatus === 'Rejected' ? 'bg-red-500' : 'bg-orange-500') }}">
                                             </div>
                                             <span
-                                                class="font-bold">{{ $proj->status === 'Verified' ? 'Approve' : ($proj->status ?: 'Pending') }}</span>
+                                                class="font-bold">{{ $projectStatus ?: 'Pending' }}</span>
                                         </div>
                                     </td>
                                 </tr>

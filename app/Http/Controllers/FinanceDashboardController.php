@@ -120,7 +120,7 @@ class FinanceDashboardController extends Controller
         $feedbackText = $request->finance_feedback ?? '';
         $stored = '[' . $decision . ']' . ($feedbackText ? ' ' . $feedbackText : '');
 
-        $dbStatus = $decision === 'Approved' ? 'Verified' : 'Rejected';
+        $dbStatus = $decision;
 
         $project->update([
             'finance_feedback' => $stored,
@@ -146,7 +146,7 @@ class FinanceDashboardController extends Controller
             $project->user_id_talent,
             'Keputusan Project Improvement dari Finance',
             'Finance telah meninjau dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $dbStatus . '</span>.' . ($feedbackText ? ' Catatan: <em>' . e($feedbackText) . '</em>' : ''),
-            $dbStatus === 'Verified' ? 'success' : 'warning'
+            $dbStatus === 'Approved' ? 'success' : 'warning'
         );
 
         return redirect()->route('finance.riwayat')->with('success', 'Keputusan validasi finance berhasil disimpan dan diteruskan ke Talent.');

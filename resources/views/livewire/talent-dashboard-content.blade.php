@@ -197,7 +197,7 @@
                                     style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                             </div>
                         </div>
-                        <a href="{{ route('talent.logbook') }}#{{ strtolower($label) }}"
+                        <a href="{{ route('talent.logbook', ['tab' => strtolower($label)]) }}"
                             class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5">
                             <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -448,12 +448,15 @@
                                         @endif
                                     </td>
                                     <td class="text-center px-4 py-3">
-                                        @if($project->status === 'Approved')
+                                        @php
+                                            $projectStatus = $project->status === 'Verified' ? 'Approved' : $project->status;
+                                        @endphp
+                                        @if($projectStatus === 'Approved')
                                             <span class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
                                                 <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
                                                 Approved
                                             </span>
-                                        @elseif($project->status === 'Rejected')
+                                        @elseif($projectStatus === 'Rejected')
                                             <span class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
                                                 <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>
                                                 Rejected

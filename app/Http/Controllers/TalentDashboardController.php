@@ -34,6 +34,20 @@ class TalentDashboardController extends Controller
             ->all();
     }
 
+    protected function notifyLogbookStakeholders(User $user, ?int $verifyById, string $title, string $mentorDesc, string $pdcDesc, string $type = 'info'): void
+    {
+        $mentorRecipientIds = $this->resolveMentorNotificationRecipients($user, $verifyById);
+
+        $this->addNotificationToUsers(
+            $mentorRecipientIds,
+            $title,
+            $mentorDesc,
+            $type
+        );
+
+        $this->notifyPdcAdmins($title, $pdcDesc, $type);
+    }
+
     public function index()
     {
         try {
@@ -451,10 +465,15 @@ class TalentDashboardController extends Controller
 
 
 
-    public function logbookDetail()
+    public function logbookDetail(Request $request)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role', 'mentor', 'atasan']);
         $notifications = $this->getNotifications();
+        $activeTab = strtolower((string) $request->query('tab', 'exposure'));
+
+        if (!in_array($activeTab, ['exposure', 'mentoring', 'learning'], true)) {
+            $activeTab = 'exposure';
+        }
 
         $activities = \App\Models\IdpActivity::with(['type', 'verifier'])
             ->where('user_id_talent', $user->id)
@@ -536,7 +555,8 @@ class TalentDashboardController extends Controller
             'notifications',
             'exposureData',
             'mentoringData',
-            'learningData'
+            'learningData',
+            'activeTab'
         ));
     }
 
@@ -716,11 +736,12 @@ class TalentDashboardController extends Controller
                 'status' => 'Pending', // Kembalikan ke Pending bila diedit
             ]);
 
-            $mentorRecipientIds = $this->resolveMentorNotificationRecipients($user, $verifyById);
-            $this->addNotificationToUsers(
-                $mentorRecipientIds,
+            $this->notifyLogbookStakeholders(
+                $user,
+                $verifyById,
                 'IDP Activity Diperbarui',
                 $user->nama . ' telah memperbarui IDP Monitoring (<span class="font-semibold">' . ucfirst($tab) . '</span>) dengan tema <span class="font-semibold">' . e($validated['theme']) . '</span>.',
+                'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah memperbarui aktivitas IDP Monitoring <span class="font-semibold">' . e(ucfirst($tab)) . '</span> dengan tema <span class="font-semibold">' . e($validated['theme']) . '</span>.',
                 'info'
             );
 
@@ -744,10 +765,14 @@ class TalentDashboardController extends Controller
                 return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
             }
 
-            $act = IdpActivity::findOrFail($id);
+            $act = IdpActivity::with('type')->findOrFail($id);
             if ($act->user_id_talent !== Auth::id()) {
                 abort(403, 'Unauthorized action.');
             }
+
+            $activityType = strtolower($act->type->type_name ?? 'exposure');
+            $activityTheme = $act->theme ?? '-';
+            $verifyById = $act->verify_by;
 
             // Optionally delete old file path from storage
             if ($act->document_path) {
@@ -763,6 +788,16 @@ class TalentDashboardController extends Controller
             }
 
             $act->delete();
+
+            $this->notifyLogbookStakeholders(
+                $user,
+                $verifyById,
+                'IDP Activity Dihapus',
+                $user->nama . ' telah menghapus IDP Monitoring (<span class="font-semibold">' . ucfirst($activityType) . '</span>) dengan tema <span class="font-semibold">' . e($activityTheme) . '</span>.',
+                'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah menghapus aktivitas IDP Monitoring <span class="font-semibold">' . e(ucfirst($activityType)) . '</span> dengan tema <span class="font-semibold">' . e($activityTheme) . '</span>.',
+                'warning'
+            );
+
             return redirect()->back()->with('success', 'Data logbook berhasil dihapus.');
         }
         catch (\Exception $e) {

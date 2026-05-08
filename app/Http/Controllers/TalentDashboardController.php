@@ -781,23 +781,39 @@ class TalentDashboardController extends Controller
 
             $notifications = $this->getNotifications();
 
-            // Ambil semua sesi assessment milik talent
-            // Sertakan nama posisi asal (satu level di bawah target) dan posisi target
-            // dari promotion_plan — tanpa mengubah skema database
-            $sessions = DB::table('assessment_session as a')
-                ->leftJoin('promotion_plan as pp', 'pp.user_id_talent', '=', 'a.user_id_talent')
-                ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
-                ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
-                ->where('a.user_id_talent', $user->id)
-                ->orderBy('a.created_at', 'desc')
-                ->select(
-                    'a.*',
-                    'sp.position_name as source_position_name',
-                    'tp.position_name as target_position_name'
-                )
-                ->get();
+            // Status keputusan final yang ditetapkan oleh PDC
+            // Data riwayat hanya ditampilkan setelah PDC menentukan keputusan akhir
+            $finalStatuses = [
+                'Promoted',
+                'Not Promoted',
+                'Ready Now',
+                'Ready in 1-2 Years',
+                'Ready in > 2 Years',
+                'Not Ready',
+            ];
 
-            return view('talent.riwayat', compact('user', 'notifications', 'sessions'));
+            $currentStatus = optional($user->promotion_plan)->status_promotion;
+            $isDecisionFinal = in_array($currentStatus, $finalStatuses);
+
+            // Hanya ambil sesi assessment jika PDC sudah menentukan keputusan akhir
+            if ($isDecisionFinal) {
+                $sessions = DB::table('assessment_session as a')
+                    ->leftJoin('promotion_plan as pp', 'pp.user_id_talent', '=', 'a.user_id_talent')
+                    ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
+                    ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
+                    ->where('a.user_id_talent', $user->id)
+                    ->orderBy('a.created_at', 'desc')
+                    ->select(
+                        'a.*',
+                        'sp.position_name as source_position_name',
+                        'tp.position_name as target_position_name'
+                    )
+                    ->get();
+            } else {
+                $sessions = collect();
+            }
+
+            return view('talent.riwayat', compact('user', 'notifications', 'sessions', 'isDecisionFinal'));
         }
         catch (\Exception $e) {
             Log::error('talent riwayat error: ' . $e->getMessage());

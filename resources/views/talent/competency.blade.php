@@ -47,14 +47,14 @@
             background-color: #0f766e;
         }
 
-        /* Sub-category progress bar wrapper */
         .subcategory-bar {
             position: relative;
             width: 100%;
-            max-width: 72rem;
+            max-width: 80rem;
             background-color: #ffffff;
             border-radius: 9999px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+            box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
             padding: 0;
             display: flex;
             align-items: center;
@@ -282,10 +282,23 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center">
+    <main class="flex-grow max-w-[1400px] mx-auto w-full px-2 md:px-4 py-8 flex flex-col items-center">
+
+        <!-- Talent Profile Card -->
+        <div class="w-full max-w-7xl mb-6">
+            <style>
+                .talent-prof-hero {
+                    margin: 0 !important;
+                    border-radius: 1rem !important;
+                    padding: 16px 24px !important;
+                }
+            </style>
+            @include('components.talent.profile-card', ['user' => $user, 'mobileCollapsible' => false])
+        </div>
 
         <!-- Top Level Categories: Core / Managerial -->
-        <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-6" style="padding: 0;">
+        <div class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-6"
+            style="padding: 0; box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);">
             <button id="tab-core"
                 class="flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm"
                 style="border-radius: 9999px; margin: 0;">
@@ -312,13 +325,13 @@
 
         <!-- Block Error/Session Display -->
         @if(session('error'))
-            <div class="w-full max-w-6xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
+            <div class="w-full max-w-7xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
                 <strong class="font-bold">Gagal!</strong>
                 <span class="block sm:inline">{{ session('error') }}</span>
             </div>
         @endif
         @if($errors->any())
-            <div class="w-full max-w-6xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
+            <div class="w-full max-w-7xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
                 <strong class="font-bold">Oops, Data tidak valid:</strong>
                 <ul class="list-disc list-inside mt-1 text-sm">
                     @foreach ($errors->all() as $err)
@@ -336,7 +349,7 @@
 
 
             <div id="card-block"
-                class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
+                class="w-full max-w-7xl bg-white rounded-2xl border border-slate-200 p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
                 <h3 id="level-title" class="section-title text-2xl mb-6">Level 1</h3>
 
                 <p id="level-desc" class="text-gray-600 leading-relaxed mb-12 text-[15px] font-medium text-justify">
@@ -351,7 +364,7 @@
                             Ragu - ragu
                         </button>
                         <button type="button" onclick="handleSudahKompeten()"
-                            class="px-8 py-2.5 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
+                            class="px-8 py-2.5 bg-[#0f766e] hover:bg-[#0d9488] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
                             Sudah Kompeten
                         </button>
                     </div>
@@ -631,7 +644,7 @@
 
             // Update Text Title
             const maxLvl = getMaxLevelForCurrentCat();
-            document.getElementById('level-title').textContent = 'Level ' + currentLevel + ' / ' + maxLvl;
+            document.getElementById('level-title').textContent = 'Level ' + currentLevel;
 
             // Update Deskripsi dengan pertanyaan dari database
             const currentCat = currentCatList[currentCategoryIndex];

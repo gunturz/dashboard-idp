@@ -26,10 +26,11 @@
         .subcategory-bar {
             position: relative;
             width: 100%;
-            max-width: 72rem;
+            max-width: 80rem;
             background-color: #ffffff;
             border-radius: 9999px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+            box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
             padding: 0;
             display: flex;
             align-items: center;
@@ -289,16 +290,16 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 flex flex-col items-center">
+    <main class="flex-grow max-w-[1400px] mx-auto w-full px-2 md:px-4 py-4 flex flex-col items-center">
         @if (session('error'))
-            <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            <div class="w-full max-w-7xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
                 role="alert">
                 <strong class="font-bold">Error!</strong>
                 <span class="block sm:inline">{{ session('error') }}</span>
             </div>
         @endif
         @if ($errors->any())
-            <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            <div class="w-full max-w-7xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
                 role="alert">
                 <strong class="font-bold">Validation Error!</strong>
                 <ul>
@@ -310,7 +311,7 @@
         @endif
 
         <!-- Talent Profile Card -->
-        <div class="w-full max-w-6xl mb-4 -mx-4 md:mx-0">
+        <div class="w-full max-w-7xl mb-4 -mx-4 md:mx-0">
             <style>
                 .talent-prof-hero {
                     margin: 0 !important;
@@ -322,7 +323,9 @@
         </div>
 
         <!-- Top Level Categories: Core / Managerial -->
-        <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-4 p-0">
+        <div
+            class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-4 p-0"
+            style="box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);">
             <button id="tab-core"
                 class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0">
                 Core Competencies
@@ -352,7 +355,7 @@
             <div id="hidden-inputs-container"></div>
 
             <div id="card-block"
-                class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-6 md:p-8 flex flex-col animate-[slideUp_0.5s_ease-out]">
+                class="w-full max-w-7xl bg-white rounded-2xl border border-slate-200 p-6 md:p-8 flex flex-col animate-[slideUp_0.5s_ease-out]">
                 <h3 id="level-title" class="section-title text-xl md:text-2xl mb-4 md:mb-6">Level 1</h3>
 
                 <p id="level-desc"
@@ -367,7 +370,7 @@
                         Ragu - ragu
                     </button>
                     <button type="button" onclick="handleSudahKompeten()"
-                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
+                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#0f766e] hover:bg-[#0d9488] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
                         Sudah Kompeten
                     </button>
                 </div>
@@ -639,7 +642,7 @@
 
             // Update Text Title
             const maxLvl = getMaxLevelForCurrentCat();
-            document.getElementById('level-title').textContent = 'Level ' + currentLevel + ' / ' + maxLvl;
+            document.getElementById('level-title').textContent = 'Level ' + currentLevel;
 
             // Update Deskripsi dengan pertanyaan dari database
             const currentCat = currentCatList[currentCategoryIndex];

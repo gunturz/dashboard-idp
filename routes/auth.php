@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // ── TALENT ROUTES ─────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'talent.only'])->group(function () {
+Route::middleware(['auth', 'verified', 'talent.only', \App\Http\Middleware\Ensure2FaIsVerified::class])->group(function () {
     Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class, 'index'])
         ->name('talent.dashboard');
     Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class, 'riwayat'])
@@ -113,7 +113,7 @@ Route::middleware(['auth', 'verified', 'talent.only'])->group(function () {
 });
 
 // ── PDC ADMIN ROUTES ──────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'pdc_admin.only'])->group(function () {
+Route::middleware(['auth', 'verified', 'pdc_admin.only', \App\Http\Middleware\Ensure2FaIsVerified::class])->group(function () {
     Route::get('/pdc-admin/dashboard', [\App\Http\Controllers\PDCAdminController::class, 'dashboard'])
         ->name('pdc_admin.dashboard');
     Route::get('/pdc-admin/progress-talent', [\App\Http\Controllers\PDCAdminController::class, 'progressTalent'])
@@ -204,7 +204,7 @@ Route::middleware(['auth', 'verified', 'pdc_admin.only'])->group(function () {
 });
 
 // ── ATASAN ROUTES ─────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'atasan.only'])->group(function () {
+Route::middleware(['auth', 'verified', 'atasan.only', \App\Http\Middleware\Ensure2FaIsVerified::class])->group(function () {
     Route::get('/atasan/dashboard', [\App\Http\Controllers\AtasanDashboardController::class, 'dashboard'])
         ->name('atasan.dashboard');
     Route::get('/atasan/notifikasi', [\App\Http\Controllers\AtasanDashboardController::class, 'notifikasi'])
@@ -232,7 +232,7 @@ Route::middleware(['auth', 'verified', 'atasan.only'])->group(function () {
 });
 
 // ── MENTOR ROUTES ─────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'mentor.only'])->group(function () {
+Route::middleware(['auth', 'verified', 'mentor.only', \App\Http\Middleware\Ensure2FaIsVerified::class])->group(function () {
     Route::get('/mentor/dashboard', [\App\Http\Controllers\MentorDashboardController::class, 'dashboard'])
         ->name('mentor.dashboard');
     Route::get('/mentor/notifikasi', [\App\Http\Controllers\MentorDashboardController::class, 'notifikasi'])
@@ -252,7 +252,7 @@ Route::middleware(['auth', 'verified', 'mentor.only'])->group(function () {
 });
 
 // ── FINANCE ROUTES ────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'finance.only'])->group(function () {
+Route::middleware(['auth', 'verified', 'finance.only', \App\Http\Middleware\Ensure2FaIsVerified::class])->group(function () {
     Route::get('/finance/dashboard', [\App\Http\Controllers\FinanceDashboardController::class, 'dashboard'])
         ->name('finance.dashboard');
     Route::get('/finance/riwayat', [\App\Http\Controllers\FinanceDashboardController::class, 'riwayat'])
@@ -268,7 +268,7 @@ Route::middleware(['auth', 'verified', 'finance.only'])->group(function () {
 });
 
 // ── PANELIS ROUTES ────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'panelis.only'])->group(function () {
+Route::middleware(['auth', 'verified', 'panelis.only', \App\Http\Middleware\Ensure2FaIsVerified::class])->group(function () {
     Route::get('/panelis/dashboard', [\App\Http\Controllers\PanelisController::class, 'dashboard'])
         ->name('panelis.dashboard');
     Route::get('/panelis/review', [\App\Http\Controllers\PanelisController::class, 'review'])

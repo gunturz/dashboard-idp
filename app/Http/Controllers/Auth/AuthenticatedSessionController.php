@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
+use App\Services\AuditLogger;
 use Throwable;
 
 class AuthenticatedSessionController extends Controller
@@ -29,12 +30,27 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+         // authenticate() akan melempar ValidationException jika gagal
+        // (event login_failed sudah ditangani di Langkah 7 via LoginRequest)
         $request->authenticate();
 
         $request->session()->regenerate();
 
+        // ✅ LOG: Login berhasil
+        AuditLogger::log(
+            event: 'login_success',
+            description: 'User berhasil login via form.',
+            properties: [
+                'email'  => $request->input('email'),
+                'method' => 'form',
+            ]
+        );
+
         return $this->sendLoginResponse();
     }
+
+
+
 
     public function redirectToGoogle(): RedirectResponse
     {
@@ -80,6 +96,16 @@ class AuthenticatedSessionController extends Controller
 
         Auth::login($user, true);
         $request->session()->regenerate();
+
+        // ✅ LOG: Login berhasil via Google
+        AuditLogger::log(
+            event: 'login_success',
+            description: 'User berhasil login via Google OAuth.',
+            properties: [
+                'email'  => $user->email,
+                'method' => 'google',
+            ]
+        );
 
         return $this->sendLoginResponse();
     }
@@ -155,7 +181,7 @@ class AuthenticatedSessionController extends Controller
 
     protected function googleDriver()
     {
-        return Socialite::driver('google')->stateless();
+        return Socialite::driver('google');
     }
 
     /**
@@ -163,6 +189,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // ✅ LOG: Logout sebelum session di-invalidate
+        if (Auth::check()) {
+            AuditLogger::log(
+                event: 'logout',
+                description: 'User melakukan logout.',
+                properties: ['email' => Auth::user()->email]
+            );
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

@@ -13,6 +13,7 @@ use App\Models\Department;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\PromotionPlan;
+use App\Services\AuditLogger;
 
 class ProfileController extends Controller
 {
@@ -133,6 +134,22 @@ class ProfileController extends Controller
         \Illuminate\Support\Facades\DB::table('users')
             ->where('id', $user->id)
             ->update($data);
+
+        // ✅ LOG: Data profil diperbarui
+        // Menggunakan array keys dari $data karena update bypass metode getChanges() eloquent
+        $changedFields = array_keys($data);
+        if (($key = array_search('password', $changedFields)) !== false) {
+            unset($changedFields[$key]); // keamanan tambahan, meski di atas $data['password'] sudah disaring hash-nya jika ada
+        }
+        $changedFields = array_values($changedFields);
+
+        AuditLogger::log(
+            event: 'user_updated',
+            description: "User [{$user->email}] memperbarui profil: " . implode(', ', $changedFields),
+            properties: [
+                'changed_fields' => $changedFields,
+            ]
+        );
 
         // Update target position ke tabel promotion_plan jika ada
         if (!is_null($targetPositionId)) {

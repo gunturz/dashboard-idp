@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use App\Services\AuditLogger;
 use Illuminate\View\View;
 
 class NewPasswordController extends Controller
@@ -69,6 +70,17 @@ class NewPasswordController extends Controller
             ]);
 
         event(new PasswordReset($user));
+
+        // ✅ LOG: Password berhasil direset
+        AuditLogger::log(
+            event: 'password_reset',
+            description: "Password direset untuk akun [{$user->email}].",
+            properties: [
+                'email'   => $user->email,
+                'user_id' => $user->id,
+            ],
+            userId: $user->id
+        );
 
         return redirect()->route('login')->with('status', 'Password berhasil direset.');
     }

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'mentor_id',
         'atasan_id',
         'foto',
+        'google2fa_secret'
     ];
 
     protected $hidden = [

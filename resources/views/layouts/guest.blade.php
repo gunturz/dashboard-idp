@@ -37,8 +37,7 @@
 
         .login-bg {
             background-image:
-                linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(15, 23, 42, 0.85) 50%, rgba(15, 23, 42, 0.99) 100%),
-                url("{{ asset('asset/Gambar%20TS.png') }}");
+                linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(15, 23, 42, 0.99) 100%);
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -504,7 +503,7 @@
             <!-- Title hanya muncul di halaman login -->
             @if (request()->routeIs('login'))
                 <div class="login-logo-wrapper">
-                    <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo">
+                    <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
                 </div>
                 <h1 class="login-title">Individual<br>Development Plan</h1>
             @endif

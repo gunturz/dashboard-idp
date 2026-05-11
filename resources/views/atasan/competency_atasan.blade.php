@@ -253,7 +253,7 @@
         <div class="px-6 py-3 border-b border-gray-100 flex items-center">
             <!-- Left Logo & Title -->
             <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo"
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
                     class="h-8 md:h-10 object-contain flex-shrink-0">
 
                 <h1 class="text-lg md:text-xl font-bold text-slate-800 tracking-tight flex-shrink-0">

@@ -268,7 +268,7 @@
         <div class="px-6 py-3 border-b border-gray-100 flex items-center">
             <!-- Left Logo & Title -->
             <div class="flex items-center space-x-4">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Tiga Serangkai Logo" class="h-10 object-contain">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-10 object-contain">
                 <h1 class="text-xl font-bold text-slate-800 tracking-tight">Individual Development Plan</h1>
 
                 <div class="h-8 w-px bg-gray-300 mx-2"></div>

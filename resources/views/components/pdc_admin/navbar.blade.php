@@ -16,24 +16,12 @@
         @endif
 
         {{-- Logo + Title --}}
-        <a href="{{ route('pdc_admin.dashboard') }}"
-            class="flex items-center gap-3 hover:opacity-90 transition-opacity">
-            {{-- Logo box --}}
-            <div
-                class="hidden sm:flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 bg-white rounded-xl shadow-md flex-shrink-0 ring-2 ring-white/20">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 lg:w-9 lg:h-9 object-contain">
+        <a href="{{ route('pdc_admin.dashboard') }}" class="nav-logo">
+            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
+            <div class="nav-logo-text">
+                <span>Portal</span>
+                <span>IDP</span>
             </div>
-
-            {{-- Brand text --}}
-            <div class="hidden sm:block">
-                <div class="flex items-center gap-2">
-                    <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
-                        Development Plan</h1>
-                </div>
-            </div>
-
-            {{-- Mobile-only short title --}}
-            <h1 class="text-white font-bold text-base sm:hidden">IDP Admin</h1>
         </a>
     </div>
 

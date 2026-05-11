@@ -107,6 +107,45 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
+        /* ── Landing Page Style Logo ── */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 48px;
+            width: 48px;
+            object-fit: contain;
+            background: #ffffff;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .nav-logo-text span:first-child {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #10b981;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo-text span:last-child {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
         /* ── Dropdown panel ── */
         .dropdown-panel {
             transform-origin: top right;
@@ -250,24 +289,12 @@
     <div class="navbar-outer">
 
         {{-- Logo + Title --}}
-        <a href="{{ route('panelis.dashboard') }}"
-            class="flex items-center gap-3 hover:opacity-90 transition-opacity flex-shrink-0">
-            <div
-                class="hidden sm:flex items-center justify-center w-11 h-11 lg:w-12 lg:h-12 bg-white rounded-xl shadow-md flex-shrink-0 ring-2 ring-white/20">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 lg:w-9 lg:h-9 object-contain">
+        <a href="{{ route('panelis.dashboard') }}" class="nav-logo">
+            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
+            <div class="nav-logo-text">
+                <span>Portal</span>
+                <span>IDP</span>
             </div>
-            <div class="hidden sm:block">
-                <h1 class="text-white font-extrabold text-lg lg:text-xl leading-tight tracking-wide">Individual
-                    Development Plan</h1>
-            </div>
-            <h1
-                class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
-                <div
-                    class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
-                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
-                </div>
-                IDP Panelis
-            </h1>
         </a>
 
         {{-- Desktop Nav Links --}}
@@ -720,7 +747,7 @@
             <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
                 {{-- Bagian Kiri: Logo & Deskripsi --}}
                 <div class="flex items-center gap-[12px]">
-                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo"
+                    <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
                         class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl"
                         style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
                     <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">

@@ -125,13 +125,53 @@
             right: 0;
             z-index: 50;
             width: 100%;
+            height: 80px;
             display: flex;
             align-items: center;
             background: #0f172a;
-            padding: 1rem 1.75rem;
+            padding: 0 1.75rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ── Landing Page Style Logo ── */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 48px;
+            width: 48px;
+            object-fit: contain;
+            background: #ffffff;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .nav-logo-text span:first-child {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #10b981;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo-text span:last-child {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
         }
 
         .navbar-outer.nav-hidden {
@@ -368,7 +408,7 @@
         <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
             {{-- Bagian Kiri: Logo & Deskripsi --}}
             <div class="flex items-center gap-[12px]">
-                <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
                 <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
                     <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
                     Platform Individual Development Plan

@@ -44,6 +44,7 @@ class PdcPanelisReviewTable extends Component
                     ->whereNotNull('target_position_id')
                     ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
             )
+            ->whereHas('improvementProjects')
             ->with([
                 'company',
                 'department',

@@ -76,102 +76,110 @@
     </div>
 
     {{-- Table --}}
-    <div class="prem-card">
-        <div class="    overflow-x-auto finance-validation-wrapper">
-            <table class="prem-table">
-                <thead>
-                    <tr>
-                        <th style="width: 16%; min-width: 150px;">Talent</th>
-                        <th style="width: 22%; min-width: 200px;">Judul Project Improvement</th>
-                        <th style="width: 7%; min-width: 80px;">File</th>
-                        <th style="width: 10%; min-width: 130px;">Validasi Finance</th>
-                        <th style="width: 30%; min-width: 300px;">Feedback Dari Finance</th>
-                        <th style="width: 15%; min-width: 140px;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($projects as $project)
-                        @php
-                            $finDec = 'Pending';
-                            if ($project->finance_feedback) {
-                                if (str_starts_with($project->finance_feedback, '[Approved]'))
-                                    $finDec = 'Approved';
-                                elseif (str_starts_with($project->finance_feedback, '[Rejected]'))
-                                    $finDec = 'Rejected';
-                            }
-                            $cleanFeedback = $project->finance_feedback ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback) : '—';
-                            if (trim($cleanFeedback) === '')
-                                $cleanFeedback = '—';
-                        @endphp
-                        <tr class="finance-row">
-                            <td>
-                                <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
-                                <p class="text-xs text-gray-500 italic mt-1">
-                                    {{ $project->talent->position->position_name ?? '-' }}
-                                    &rarr;
-                                    {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}
-                                </p>
-                            </td>
-                            <td class="text-left">{{ $project->title }}</td>
-                            <td>
-                                @if ($project->document_path)
-                                    <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
-                                        class="file-link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                        </svg>
-                                        Lihat
-                                    </a>
-                                @else
-                                    <span class="text-gray-400 text-xs">—</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($finDec === 'Approved')
-                                    <span class="status-dot status-approve">Approved</span>
-                                @elseif($finDec === 'Rejected')
-                                    <span class="status-dot status-rejected">Rejected</span>
-                                @else
-                                    <span class="status-dot status-pending">Pending</span>
-                                @endif
-                            </td>
-                            <td class="text-left text-xs text-gray-600">{{ $cleanFeedback }}</td>
-                            <td>
-                                @php
-                                    $isSentToFinance = !empty($project->feedback);
-                                    $alreadyActed = in_array($project->status, ['Approved', 'Verified', 'Rejected']);
-                                @endphp
-                                <div class="w-full">
-                                    {{-- Tombol: Pilih Aksi (PDC Admin ubah status Approved/Rejected atau Kirim Finance)
-                                    --}}
-                                    @if($isSentToFinance || $alreadyActed)
-                                        <button type="button" disabled
-                                            class="w-full px-3 py-2 text-[11px] font-semibold text-gray-500 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
-                                            ✓ Sudah Dipilih
-                                        </button>
-                                    @else
-                                        <button type="button"
-                                            onclick="openActionModal({{ $project->id }}, '{{ addslashes($project->talent->nama ?? '-') }}', '{{ route('pdc_admin.finance_validation.update', $project->id) }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', '{{ addslashes($project->title) }}', '{{ $project->document_path ? route('files.preview', ['path' => $project->document_path]) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
-                                            title="Ubah status Project Improvement talent ini atau kirim ke finance"
-                                            class="w-full px-3 py-2 text-[11px] font-semibold text-white bg-[#F5A623] hover:bg-[#e0961e] rounded-lg transition-colors shadow-sm">
-                                            Pilih Aksi
-                                        </button>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
+    @if ($projects->isNotEmpty())
+        <div class="prem-card">
+            <div class="    overflow-x-auto finance-validation-wrapper">
+                <table class="prem-table">
+                    <thead>
                         <tr>
-                            <td colspan="6" class="py-12 text-gray-400 text-sm text-center">Belum ada permintaan
-                                validasi.</td>
+                            <th style="width: 16%; min-width: 150px;">Talent</th>
+                            <th style="width: 22%; min-width: 200px;">Judul Project Improvement</th>
+                            <th style="width: 7%; min-width: 80px;">File</th>
+                            <th style="width: 10%; min-width: 130px;">Validasi Finance</th>
+                            <th style="width: 30%; min-width: 300px;">Feedback Dari Finance</th>
+                            <th style="width: 15%; min-width: 140px;">Aksi</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>{{-- /overflow-x-auto --}}
-    </div>{{-- /prem-card --}}
+                    </thead>
+                    <tbody>
+                        @foreach ($projects as $project)
+                            @php
+                                $finDec = 'Pending';
+                                if ($project->finance_feedback) {
+                                    if (str_starts_with($project->finance_feedback, '[Approved]')) {
+                                        $finDec = 'Approved';
+                                    } elseif (str_starts_with($project->finance_feedback, '[Rejected]')) {
+                                        $finDec = 'Rejected';
+                                    }
+                                }
+                                $cleanFeedback = $project->finance_feedback ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback) : '—';
+                                if (trim($cleanFeedback) === '') {
+                                    $cleanFeedback = '—';
+                                }
+                            @endphp
+                            <tr class="finance-row">
+                                <td>
+                                    <p class="font-bold text-gray-800 text-sm">{{ $project->talent->nama ?? '-' }}</p>
+                                    <p class="text-xs text-gray-500 italic mt-1">
+                                        {{ $project->talent->position->position_name ?? '-' }}
+                                        &rarr;
+                                        {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                                    </p>
+                                </td>
+                                <td class="text-left">{{ $project->title }}</td>
+                                <td>
+                                    @if ($project->document_path)
+                                        <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
+                                            class="file-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                            Lihat
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 text-xs">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($finDec === 'Approved')
+                                        <span class="status-dot status-approve">Approved</span>
+                                    @elseif($finDec === 'Rejected')
+                                        <span class="status-dot status-rejected">Rejected</span>
+                                    @else
+                                        <span class="status-dot status-pending">Pending</span>
+                                    @endif
+                                </td>
+                                <td class="text-left text-xs text-gray-600">{{ $cleanFeedback }}</td>
+                                <td>
+                                    @php
+                                        $isSentToFinance = !empty($project->feedback);
+                                        $alreadyActed = in_array($project->status, ['Approved', 'Verified', 'Rejected']);
+                                    @endphp
+                                    <div class="w-full">
+                                        @if ($isSentToFinance || $alreadyActed)
+                                            <button type="button" disabled
+                                                class="w-full px-3 py-2 text-[11px] font-semibold text-gray-500 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                                ✓ Sudah Dipilih
+                                            </button>
+                                        @else
+                                            <button type="button"
+                                                onclick="openActionModal({{ $project->id }}, '{{ addslashes($project->talent->nama ?? '-') }}', '{{ route('pdc_admin.finance_validation.update', $project->id) }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', '{{ addslashes($project->title) }}', '{{ $project->document_path ? route('files.preview', ['path' => $project->document_path]) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
+                                                title="Ubah status Project Improvement talent ini atau kirim ke finance"
+                                                class="w-full px-3 py-2 text-[11px] font-semibold text-white bg-[#F5A623] hover:bg-[#e0961e] rounded-lg transition-colors shadow-sm">
+                                                Pilih Aksi
+                                            </button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>{{-- /overflow-x-auto --}}
+        </div>{{-- /prem-card --}}
+    @else
+        <div class="empty-prem" style="margin-top: 40px">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3>Belum Ada Project Improvement Talent</h3>
+            <p>{{ $search || $statusFilter ? 'Tidak ada data yang cocok dengan filter yang dipilih.' : 'Data akan muncul setelah talent meng-upload project improvement.' }}
+            </p>
+        </div>
+    @endif
     <div id="actionModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-[440px] shadow-2xl overflow-hidden">
             {{-- Header --}}

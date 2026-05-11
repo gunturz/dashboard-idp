@@ -128,6 +128,21 @@
                 font-weight: 400;
             }
 
+            .dash-header-date {
+                margin-left: auto;
+                font-size: 0.78rem;
+                color: #94a3b8;
+                font-weight: 500;
+                text-align: right;
+            }
+
+            .dash-header-date span {
+                display: block;
+                font-size: 1rem;
+                font-weight: 700;
+                color: #475569;
+            }
+
             .animate-title {
                 animation: titleReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
             }
@@ -383,6 +398,10 @@
             <div>
                 <div class="dash-header-title">Dashboard</div>
                 <div class="dash-header-sub">Individual Development Plan – Panelis</div>
+            </div>
+            <div class="dash-header-date hidden md:block">
+                Hari ini
+                <span>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}</span>
             </div>
         </div>
     </div>

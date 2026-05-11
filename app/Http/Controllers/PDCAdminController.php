@@ -1218,6 +1218,7 @@ class PDCAdminController extends Controller
         $query = User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
             ->whereHas('promotion_plan', fn($q) => $q->whereNotNull('target_position_id')
                 ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']))
+            ->whereHas('improvementProjects')
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition', 'improvementProjects']);
 
         // Filters

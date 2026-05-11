@@ -888,7 +888,8 @@ class PDCAdminController extends Controller
 
         $project = ImprovementProject::findOrFail($id);
 
-        $dbStatus = $request->status === 'Approved' ? 'Verified' : $request->status;
+        // Normalize legacy "Verified" submissions to the user-facing "Approved" status.
+        $dbStatus = $request->status === 'Verified' ? 'Approved' : $request->status;
 
         $updateData = [
             'status' => $dbStatus,
@@ -898,8 +899,7 @@ class PDCAdminController extends Controller
 
         // Jika diproses langsung oleh Admin PDC tanpa via Finance, set finance_feedback
         if (empty($project->finance_feedback)) {
-            $finStatus = $dbStatus === 'Verified' ? 'Approved' : $dbStatus;
-            $updateData['finance_feedback'] = "[$finStatus] Diproses langsung oleh PDC Admin tanpa review Finance.";
+            $updateData['finance_feedback'] = "[$dbStatus] Diproses langsung oleh PDC Admin tanpa review Finance.";
         }
 
         // Simpan feedback PDC Admin jika diisi (tambahkan ke kolom 'feedback' agar tidak menghapus 'finance_feedback')
@@ -918,7 +918,7 @@ class PDCAdminController extends Controller
             $project->user_id_talent,
             'Keputusan Project Improvement dari PDC Admin',
             'PDC Admin telah menindaklanjuti hasil finance validation dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $dbStatus . '</span>.' . $feedbackNote,
-            $dbStatus === 'Verified' ? 'success' : 'warning'
+            $dbStatus === 'Approved' ? 'success' : 'warning'
         );
 
         return back()->with('success', 'Status berhasil diperbarui.');

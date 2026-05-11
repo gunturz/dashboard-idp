@@ -100,7 +100,7 @@
             height: 80px;
             display: flex;
             align-items: center;
-            background: #343E4E;
+            background: #0f172a;
             padding: 0 1.75rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
@@ -732,7 +732,7 @@
                     </svg>
                     @if ($financeUnreadCount > 0)
                         <span
-                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#343E4E] animate-bounce"
+                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce"
                             style="animation-duration: 2s;" id="bell-red-badge">
                             {{ $displayCount }}
                         </span>
@@ -931,7 +931,7 @@
                         @endif
                         @if ($hasUnreadNotif)
                             <span
-                                class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#343E4E]">{{ $displayCount }}</span>
+                                class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
                         @endif
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0"
@@ -1127,7 +1127,7 @@
 
     {{-- MAIN CONTENT --}}
     <div class="flex-1">
-        <main id="main-content" class="p-4 lg:p-8 min-h-[calc(100vh-80px)] mt-4 mx-4 lg:mx-6 lg:mt-6">
+        <main id="main-content" class="px-4 py-8 lg:px-6 min-h-[calc(100vh-80px)]">
             {{ $slot }}
         </main>
     </div>
@@ -1400,7 +1400,7 @@
                 if (mobileIndicatorHost && !mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot')) {
                     const dot = document.createElement('span');
                     dot.className =
-                        'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#343E4E]';
+                        'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
                     dot.textContent = '1';
                     mobileIndicatorHost.appendChild(dot);
                 } else if (mobileIndicatorHost) {
@@ -1458,7 +1458,7 @@
                 badge = document.createElement('span');
                 badge.id = 'bell-red-badge';
                 badge.className =
-                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#343E4E] animate-bounce';
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
                 badge.style.animationDuration = '2s';
                 badge.textContent = '1';
                 bellBtn.appendChild(badge);

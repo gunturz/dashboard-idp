@@ -11,10 +11,6 @@
             <div class="dash-header-title">Permintaan Validasi</div>
             <div class="dash-header-sub">Review dan validasi dokumen project talent</div>
         </div>
-        <div class="dash-header-date hidden md:block">
-            Hari ini
-            <span>{{ now()->translatedFormat('d F Y') }}</span>
-        </div>
     </div>
         {{-- Livewire Component --}}
         <livewire:finance-validasi-table />

@@ -21,12 +21,12 @@ class FinanceDashboardController extends Controller
 
         $total = $projects->count();
         // Pending = Finance belum memberi keputusan
-        $pending = $projects->filter(fn($p) => !$p->finance_feedback || (!str_starts_with($p->finance_feedback, '[Approved]') && !str_starts_with($p->finance_feedback, '[Rejected]')))->count();
+        $pending = $projects->filter(fn($p) => $p->status === 'Pending' && !$p->finance_feedback)->count();
         $approved = $projects->filter(fn($p) => str_starts_with($p->finance_feedback ?? '', '[Approved]'))->count();
         $rejected = $projects->filter(fn($p) => str_starts_with($p->finance_feedback ?? '', '[Rejected]'))->count();
 
         // Belum beri keputusan
-        $pendingProjects = $projects->filter(fn($p) => !str_starts_with($p->finance_feedback ?? '', '[Approved]') && !str_starts_with($p->finance_feedback ?? '', '[Rejected]'));
+        $pendingProjects = $projects->filter(fn($p) => $p->status === 'Pending' && !$p->finance_feedback);
         // Sudah beri keputusan
         $historyProjects = $projects->filter(fn($p) => str_starts_with($p->finance_feedback ?? '', '[Approved]') || str_starts_with($p->finance_feedback ?? '', '[Rejected]'));
 
@@ -57,14 +57,8 @@ class FinanceDashboardController extends Controller
             })
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
-            ->where(function ($q) {
-            $q->whereNull('finance_feedback')
-                ->orWhere(function ($q2) {
-                $q2->where('finance_feedback', 'not like', '[Approved]%')
-                    ->where('finance_feedback', 'not like', '[Rejected]%');
-            }
-            );
-        })
+            ->where('status', 'Pending')
+            ->whereNull('finance_feedback')
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -126,7 +120,7 @@ class FinanceDashboardController extends Controller
         $feedbackText = $request->finance_feedback ?? '';
         $stored = '[' . $decision . ']' . ($feedbackText ? ' ' . $feedbackText : '');
 
-        $dbStatus = $decision === 'Approved' ? 'Verified' : 'Rejected';
+        $dbStatus = $decision;
 
         $project->update([
             'finance_feedback' => $stored,
@@ -152,7 +146,7 @@ class FinanceDashboardController extends Controller
             $project->user_id_talent,
             'Keputusan Project Improvement dari Finance',
             'Finance telah meninjau dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $dbStatus . '</span>.' . ($feedbackText ? ' Catatan: <em>' . e($feedbackText) . '</em>' : ''),
-            $dbStatus === 'Verified' ? 'success' : 'warning'
+            $dbStatus === 'Approved' ? 'success' : 'warning'
         );
 
         return redirect()->route('finance.riwayat')->with('success', 'Keputusan validasi finance berhasil disimpan dan diteruskan ke Talent.');

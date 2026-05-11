@@ -78,7 +78,7 @@
         </style>
     </x-slot>
 
-    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up"> 
+    <div class="w-full px-3 md:px-6 pt-4 pb-6">
 
         <div class="page-header animate-title">
             <div class="page-header-icon">
@@ -94,7 +94,7 @@
         </div>
 
         {{-- Livewire Tab & Table Content --}}
-        <livewire:talent-logbook-table />
+        <livewire:talent-logbook-table :active-tab="$activeTab ?? 'exposure'" />
 
     </div>
 

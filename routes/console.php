@@ -21,5 +21,15 @@ Artisan::command('send-mail', function () {
         apiKey: '<YOUR_API_TOKEN>'
     )->send($email);
 
+    
+    // Audit dependency setiap Senin jam 07:00
+    Schedule::command('security:dependency-audit --notify')
+        ->weeklyOn(1, '07:00')
+        ->withoutOverlapping()
+        ->onFailure(function () {
+            Log::channel('security')->critical('Dependency audit schedule gagal dijalankan!');
+        });
+
+
     var_dump(ResponseHelper::toArray($response));
 })->purpose('Send Mail');

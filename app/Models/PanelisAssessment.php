@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PanelisAssessment extends Model
 {
+    use SoftDeletes;
     protected $table = 'panelis_assessments';
 
     protected $fillable = [
@@ -25,11 +27,11 @@ class PanelisAssessment extends Model
 
     public function talent()
     {
-        return $this->belongsTo(User::class , 'user_id_talent');
+        return $this->belongsTo(User::class, 'user_id_talent');
     }
 
     public function panelis()
     {
-        return $this->belongsTo(User::class , 'panelis_id');
+        return $this->belongsTo(User::class, 'panelis_id');
     }
 }

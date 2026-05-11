@@ -55,10 +55,10 @@ class PDCAdminController extends Controller
             $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
         })->where(function ($q) {
             $q->whereNull('finance_feedback')
-              ->orWhere(function ($q2) {
-                  $q2->where('finance_feedback', 'not like', '[Approved]%')
-                     ->where('finance_feedback', 'not like', '[Rejected]%');
-              });
+                ->orWhere(function ($q2) {
+                    $q2->where('finance_feedback', 'not like', '[Approved]%')
+                        ->where('finance_feedback', 'not like', '[Rejected]%');
+                });
         })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
 
@@ -83,7 +83,7 @@ class PDCAdminController extends Controller
             })
             ->join('promotion_plan', function ($join) {
                 $join->on('users.id', '=', 'promotion_plan.user_id_talent')
-                     ->where('promotion_plan.is_active', true);
+                    ->where('promotion_plan.is_active', true);
             })
             ->select('users.*')
             ->orderBy('promotion_plan.updated_at', 'desc')
@@ -101,13 +101,13 @@ class PDCAdminController extends Controller
                         return $item->promotion_plan->target_position_id ?? 0;
                     }
                 )->map(
-                        function ($positionTalents) {
-                            return [
-                                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                                'talents' => $positionTalents,
-                            ];
-                        }
-                    ),
+                    function ($positionTalents) {
+                        return [
+                            'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                            'talents' => $positionTalents,
+                        ];
+                    }
+                ),
             ];
         });
 
@@ -170,17 +170,17 @@ class PDCAdminController extends Controller
                             return $item->promotion_plan->target_position_id ?? 0;
                         }
                     )->map(
-                            function ($positionTalents) {
-                                $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
-                                    return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
-                                })->values();
+                        function ($positionTalents) {
+                            $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                                return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
+                            })->values();
 
-                                return [
-                                    'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
-                                    'talents' => $sortedPositionTalents,
-                                ];
-                            }
-                        ),
+                            return [
+                                'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                                'talents' => $sortedPositionTalents,
+                            ];
+                        }
+                    ),
                 ];
             })
             ->sortByDesc('latest_plan_at');
@@ -453,7 +453,7 @@ class PDCAdminController extends Controller
                     'atasan_id' => null,
                 ]);
 
-                $talent->promotion_plan()->delete();
+                $talent->promotion_plan()->update(['is_active' => false]);
             }
         });
 
@@ -569,13 +569,24 @@ class PDCAdminController extends Controller
                         'atasan_id' => null,
                     ]);
 
-                    PromotionPlan::whereIn('user_id_talent', $removedTalentIds->all())->delete();
+                    PromotionPlan::whereIn('user_id_talent', $removedTalentIds->all())
+                        ->where('is_active', true)
+                        ->update(['is_active' => false]);
                 }
             }
 
             foreach ($request->talents as $talentData) {
                 $talentId = $talentData['talent_id'];
-                $existingPlan = PromotionPlan::where('user_id_talent', $talentId)->first();
+                $existingPlan = PromotionPlan::where('user_id_talent', $talentId)
+                    ->where('is_active', true)
+                    ->first();
+
+                // If there's an active plan with completed status, archive it (don't delete!)
+                if ($existingPlan && in_array($existingPlan->status_promotion, ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'])) {
+                    $existingPlan->update(['is_active' => false]);
+                    $existingPlan = null; // Reset for fresh creation
+                }
+
                 $planAlreadyExists = (bool) $existingPlan;
                 $existingMentorIds = collect($existingPlan?->mentor_ids ?? [])
                     ->map(fn($id) => (string) $id)
@@ -601,16 +612,30 @@ class PDCAdminController extends Controller
                     'atasan_id' => $request->atasan_id,
                 ]);
 
-                $plan = PromotionPlan::updateOrCreate(
-                    ['user_id_talent' => $talentId],
-                    [
+                // If active plan exists, update it; otherwise create new one
+                if ($planAlreadyExists) {
+                    $plan = PromotionPlan::where('user_id_talent', $talentId)
+                        ->where('is_active', true)
+                        ->first();
+
+                    $plan->update([
                         'target_position_id' => $request->target_position_id,
                         'mentor_ids' => $mentorIds,
                         'status_promotion' => 'In Progress',
                         'start_date' => $request->start_date,
                         'target_date' => $request->target_date,
-                    ]
-                );
+                    ]);
+                } else {
+                    $plan = PromotionPlan::create([
+                        'user_id_talent' => $talentId,
+                        'target_position_id' => $request->target_position_id,
+                        'mentor_ids' => $mentorIds,
+                        'status_promotion' => 'In Progress',
+                        'start_date' => $request->start_date,
+                        'target_date' => $request->target_date,
+                        'is_active' => true,
+                    ]);
+                }
 
                 if ($plan->wasRecentlyCreated && $request->query('plan_created_at')) {
                     $plan->timestamps = false;
@@ -737,7 +762,7 @@ class PDCAdminController extends Controller
             'atasan',
             'promotion_plan.targetPosition',
         ])->findOrFail($talent_id);
-        
+
         $this->authorize('view-talent-data', $talent);
 
         // Build a single-item collection so the existing detail.blade.php loop still works
@@ -841,8 +866,8 @@ class PDCAdminController extends Controller
 
         $total = $projects->count();
         $pending = $projects->filter(function ($project) {
-            return empty($project->finance_feedback) || 
-                   (!str_starts_with($project->finance_feedback, '[Approved]') && 
+            return empty($project->finance_feedback) ||
+                (!str_starts_with($project->finance_feedback, '[Approved]') &&
                     !str_starts_with($project->finance_feedback, '[Rejected]'));
         })->count();
         $approved = $projects->filter(function ($project) {
@@ -1077,9 +1102,14 @@ class PDCAdminController extends Controller
             \App\Models\AssessmentSession::where('user_id_atasan', $id)->update(['user_id_atasan' => null]);
 
             // Hapus session jika dia adalah talent (ini akan butuh hapus details dulu)
-            $sessions = \App\Models\AssessmentSession::where('user_id_talent', $id)->get();
+            $sessions = \App\Models\AssessmentSession::withTrashed()
+                ->where('user_id_talent', $id)
+                ->get();
+
             foreach ($sessions as $session) {
-                \App\Models\DetailAssessment::where('assessment_id', $session->id)->delete();
+                \App\Models\DetailAssessment::withTrashed()
+                    ->where('assessment_id', $session->id)
+                    ->delete();
                 $session->delete();
             }
 
@@ -1092,17 +1122,17 @@ class PDCAdminController extends Controller
             // Jika user adalah Panelis
             \App\Models\PanelisAssessment::where('panelis_id', $id)->delete();
 
-            // Hapus role (pivot)
-            $targetUser->roles()->detach();
+            // Keep role pivot records so data can be restored later if needed
+            // $targetUser->roles()->detach();
 
-            // Hapus data dependen lainnya
-            \Illuminate\Support\Facades\DB::table('password_resets')->where('user_id', $id)->delete();
+            // Preserve password reset tokens instead of hard deleting them
+            // \Illuminate\Support\Facades\DB::table('password_resets')->where('user_id', $id)->delete();
 
-            // Selesaikan hapus
+            // Selesaikan soft delete user
             $targetUser->delete();
         });
 
-        return back()->with('success', 'User berhasil dihapus beserta data terkait.');
+        return back()->with('success', 'User berhasil dihapus (soft delete) beserta data terkait.');
     }
 
     public function requestFinanceValidation(Request $request)
@@ -1255,19 +1285,19 @@ class PDCAdminController extends Controller
                             return $item->promotion_plan->target_position_id ?? 0;
                         }
                     )->map(
-                            function ($positionTalents) {
-                                $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
-                                    return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
-                                        ?? optional($talent->promotion_plan)->created_at
-                                        ?? $talent->created_at;
-                                })->values();
+                        function ($positionTalents) {
+                            $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                                return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                                    ?? optional($talent->promotion_plan)->created_at
+                                    ?? $talent->created_at;
+                            })->values();
 
-                                return [
-                                    'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
-                                    'talents' => $sortedPositionTalents,
-                                ];
-                            }
-                        ),
+                            return [
+                                'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                                'talents' => $sortedPositionTalents,
+                            ];
+                        }
+                    ),
                 ];
             })
             ->sortByDesc('latest_project_at');
@@ -1384,7 +1414,6 @@ class PDCAdminController extends Controller
             $talent->idpActivities()->update(['is_active' => false]);
             $talent->improvementProjects()->update(['is_active' => false]);
             $talent->panelisAssessments()->update(['is_active' => false]);
-
         } elseif ($request->decision === 'ready_1_2_years') {
             // ── READY IN 1-2 YEARS: Belum diangkat, posisi tetap ──
             $plan->update(['status_promotion' => 'Ready in 1-2 Years']);
@@ -1404,7 +1433,6 @@ class PDCAdminController extends Controller
             $talent->idpActivities()->update(['is_active' => false]);
             $talent->improvementProjects()->update(['is_active' => false]);
             $talent->panelisAssessments()->update(['is_active' => false]);
-
         } elseif ($request->decision === 'ready_over_2_years') {
             // ── READY IN > 2 YEARS: Belum diangkat, posisi tetap ──
             $plan->update(['status_promotion' => 'Ready in > 2 Years']);
@@ -1424,7 +1452,6 @@ class PDCAdminController extends Controller
             $talent->idpActivities()->update(['is_active' => false]);
             $talent->improvementProjects()->update(['is_active' => false]);
             $talent->panelisAssessments()->update(['is_active' => false]);
-
         } else {
             // ── NOT READY: Belum siap, posisi tetap ──
             $plan->update(['status_promotion' => 'Not Ready']);

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ImprovementProject extends Model
 {
+    use SoftDeletes;
     protected $table = 'improvement_project';
 
     protected $fillable = [
@@ -31,11 +33,11 @@ class ImprovementProject extends Model
 
     public function talent()
     {
-        return $this->belongsTo(User::class , 'user_id_talent');
+        return $this->belongsTo(User::class, 'user_id_talent');
     }
 
     public function verifier()
     {
-        return $this->belongsTo(User::class , 'verify_by');
+        return $this->belongsTo(User::class, 'verify_by');
     }
 }

@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PromotionPlan extends Model
 {
+    use SoftDeletes;
     protected $table = 'promotion_plan';
-    protected $fillable = ['user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date', 'is_locked'];
+    protected $fillable = ['user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date', 'is_locked', 'is_active'];
 
     protected $casts = [
         'mentor_ids'  => 'array',
@@ -17,6 +19,7 @@ class PromotionPlan extends Model
 
     protected $attributes = [
         'status_promotion' => 'Draft',
+        'is_active' => true,
     ];
 
     protected static function booted()
@@ -33,7 +36,7 @@ class PromotionPlan extends Model
 
     public function targetPosition()
     {
-        return $this->belongsTo(Position::class , 'target_position_id');
+        return $this->belongsTo(Position::class, 'target_position_id');
     }
 
     /**
@@ -41,9 +44,9 @@ class PromotionPlan extends Model
      */
     public function mentors()
     {
-        return $this->belongsToMany(User::class , null, null, null)
+        return $this->belongsToMany(User::class, null, null, null)
             ->whereIn('users.id', $this->mentor_ids ?? []);
-    // Use a simple query instead; see accessor below
+        // Use a simple query instead; see accessor below
     }
 
     /**

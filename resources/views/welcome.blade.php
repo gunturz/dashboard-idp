@@ -203,8 +203,9 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(15, 23, 42, 0.99) 100%);
+            background-image: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(15, 23, 42, 0.9) 100%),
+                url("{{ asset('asset/Gambar TS.png') }}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;

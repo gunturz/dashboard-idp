@@ -36,17 +36,29 @@
         }
 
         .login-bg {
-            background-image:
-                linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(15, 23, 42, 0.99) 100%);
+            background-image: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(15, 23, 42, 0.9) 100%),
+                url("{{ asset('asset/Gambar TS.png') }}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-color: #1e293b;
-            /* fallback color */
+            background-color: #0f172a;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── NOISE OVERLAY ─── */
+        .login-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
         }
 
         .login-card {

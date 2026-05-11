@@ -72,12 +72,52 @@
             right: 0;
             z-index: 50;
             width: 100%;
+            height: 80px;
             display: flex;
             align-items: center;
             background: #0f172a;
-            padding: 1rem 1.75rem;
+            padding: 0 1.75rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ── Landing Page Style Logo ── */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 48px;
+            width: 48px;
+            object-fit: contain;
+            background: #ffffff;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .nav-logo-text span:first-child {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #10b981;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo-text span:last-child {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
         }
 
         .navbar-outer.nav-hidden {
@@ -589,24 +629,12 @@
 
     <div class="navbar-outer">
         {{-- Logo + Title --}}
-        <a href="{{ route('atasan.dashboard') }}"
-            class="flex items-center gap-2 lg:gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div
-                class="bg-white p-1.5 lg:p-2 rounded-[8px] lg:rounded-[10px] shadow-sm flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14 hidden sm:flex">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
+        <a href="{{ route('atasan.dashboard') }}" class="nav-logo">
+            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
+            <div class="nav-logo-text">
+                <span>Portal</span>
+                <span>IDP</span>
             </div>
-            {{-- Desktop: Full title --}}
-            <h1 class="text-white text-base lg:text-xl font-bold tracking-wide whitespace-nowrap hidden sm:block">
-                Individual Development Plan
-            </h1>
-            <h1
-                class="text-white text-base font-bold tracking-wide whitespace-nowrap sm:hidden flex items-center gap-2.5">
-                <div
-                    class="flex items-center justify-center w-11 h-11 bg-white rounded-lg shadow-md flex-shrink-0 ring-2 ring-white/20">
-                    <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="w-8 h-8 object-contain">
-                </div>
-                IDP Atasan
-            </h1>
         </a>
 
         {{-- Desktop Nav Links --}}
@@ -1497,7 +1525,7 @@
         <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
             {{-- Bagian Kiri: Logo & Deskripsi --}}
             <div class="flex items-center gap-[12px]">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
                 <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
                     <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
                     Platform Individual Development Plan

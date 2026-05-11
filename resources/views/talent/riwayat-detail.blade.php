@@ -344,25 +344,37 @@
                             @forelse($projects as $project)
                                 <tr class="bg-white border-b border-[#d1d5db] hover:bg-[#f8fafc] transition-colors">
                                     <td class="px-6 py-4 text-[#334155] border-r border-[#e5e7eb] font-bold text-[0.88rem]">
-                                        {{ $project->judul_project }}
+                                        {{ $project->title }}
                                         <div class="text-xs text-gray-400 font-normal mt-0.5">
                                             {{ \Carbon\Carbon::parse($project->created_at)->format('d M Y') }}
                                         </div>
                                     </td>
                                     <td class="text-center px-6 py-4">
                                         @php
+                                            // Ambil status dari Finance Validation (via feedback)
+                                            $finDec = 'Pending';
+                                            if ($project->finance_feedback) {
+                                                if (str_starts_with($project->finance_feedback, '[Approved]')) {
+                                                    $finDec = 'Approved';
+                                                } elseif (str_starts_with($project->finance_feedback, '[Rejected]')) {
+                                                    $finDec = 'Rejected';
+                                                }
+                                            }
+                                            
+                                            // Gunakan status akhir (keputusan PDC) jika sudah ada, jika belum gunakan status Finance
+                                            $displayStatus = in_array($project->status, ['Approved', 'Rejected']) ? $project->status : $finDec;
+
                                             $statusThemes = [
                                                 'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-green-500'],
                                                 'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-red-500'],
                                                 'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'],
                                             ];
-                                            $theme = $statusThemes[$project->status] ?? ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'];
-                                            $label = $project->status === 'Approved' ? 'Approved' : ($project->status === 'Rejected' ? 'Rejected' : 'Pending');
+                                            $theme = $statusThemes[$displayStatus] ?? ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'];
                                         @endphp
                                         <span
                                             class="inline-flex items-center gap-2 {{ $theme['text'] }} text-xs font-bold px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 shadow-sm">
                                             <span class="w-1.5 h-1.5 rounded-full {{ $theme['dot'] }} inline-block"></span>
-                                            {{ $label }}
+                                            {{ $displayStatus }}
                                         </span>
                                     </td>
                                 </tr>
@@ -423,7 +435,7 @@
                                     <tr>
                                         <th class="col-aspek">Aspek yang Dinilai</th>
                                         <th class="col-indikator">Indikator Penilaian</th>
-                                        <th class="col-skor">Skor</th>
+                                        <th class="col-skor">Rata-rata</th>
                                     </tr>
                                 </thead>
                                 <tbody>

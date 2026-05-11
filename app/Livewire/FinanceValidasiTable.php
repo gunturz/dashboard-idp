@@ -38,8 +38,12 @@ class FinanceValidasiTable extends Component
         }
         ))
             ->when($this->statusFilter, function ($q) {
-            $mappedStatus = $this->statusFilter === 'Approved' ? 'Verified' : $this->statusFilter;
-            $q->where('status', $mappedStatus);
+            if ($this->statusFilter === 'Approved') {
+                $q->whereIn('status', ['Approved', 'Verified']);
+                return;
+            }
+
+            $q->where('status', $this->statusFilter);
         })
             ->latest()
             ->paginate($this->perPage);

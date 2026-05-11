@@ -243,14 +243,35 @@
         .confirm-overlay.open .confirm-box {
             transform: scale(1) translateY(0);
         }
+
+        /* ── Section Title (Admin Style) ── */
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1e293b;
+            padding: 4px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #14b8a6, #0d9488);
+            border-radius: 99px;
+        }
     </style>
 </head>
 
-<body class="bg-dark-slate text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
     <!-- Header / Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="px-6 py-3 border-b border-gray-100 flex items-center">
+    <header class="shadow-md sticky top-0 z-50" style="background-color: #0E1629;">
+        <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
             <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
                 <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
@@ -271,23 +292,16 @@
                 </h2>
             </div>
 
-            <!-- (Optional) Right side Profile / Home Link -->
-            <div class="ml-auto flex items-center flex-shrink-0">
-                <a href="{{ route('atasan.dashboard') }}"
-                    class="px-2 md:px-4 py-1.5 md:py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.75rem] md:text-[0.875rem] flex items-center gap-1 md:gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit md:mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                        <path fill-rule="evenodd"
-                            d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="text-[#0f172a]">Kembali</span>
-                </a>
+            <!-- Right side Kompetensi -->
+            <div class="flex items-center gap-4 md:gap-6 pr-2">
+
+                <h2 class="text-[15px] font-semibold text-white border-b-2 border-white pb-1">Kompetensi</h2>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center">
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 flex flex-col items-center">
         @if (session('error'))
             <div class="w-full max-w-6xl mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
                 role="alert">
@@ -307,8 +321,20 @@
             </div>
         @endif
 
+        <!-- Talent Profile Card -->
+        <div class="w-full max-w-6xl mb-4 -mx-4 md:mx-0">
+            <style>
+                .talent-prof-hero {
+                    margin: 0 !important;
+                    border-radius: 1rem !important;
+                    padding: 16px 24px !important;
+                }
+            </style>
+            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
+        </div>
+
         <!-- Top Level Categories: Core / Managerial -->
-        <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-6 p-0">
+        <div class="w-full bg-white rounded-full flex shadow-md overflow-hidden max-w-6xl mb-4 p-0">
             <button id="tab-core"
                 class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0">
                 Core Competencies
@@ -320,7 +346,7 @@
         </div>
 
         <!-- Sub Categories (Progress Bar Style) -->
-        <div class="subcategory-bar" id="subcategory-bar">
+        <div class="subcategory-bar" id="subcategory-bar" style="margin-bottom: 1.25rem;">
             <!-- Teal fill layer -->
             <div class="subcategory-fill" id="subcategory-fill"></div>
             <!-- Buttons -->
@@ -338,12 +364,11 @@
             <div id="hidden-inputs-container"></div>
 
             <div id="card-block"
-                class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-6 md:p-10 flex flex-col animate-[slideUp_0.5s_ease-out]">
-                <h3 id="level-title" class="text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 tracking-tight">
-                    Level 1</h3>
+                class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-6 md:p-8 flex flex-col animate-[slideUp_0.5s_ease-out]">
+                <h3 id="level-title" class="section-title text-xl md:text-2xl mb-4 md:mb-6">Level 1</h3>
 
                 <p id="level-desc"
-                    class="text-gray-600 leading-relaxed mb-8 md:mb-12 text-sm md:text-[15px] font-medium text-justify">
+                    class="text-gray-600 leading-relaxed mb-6 md:mb-8 text-sm md:text-[15px] font-medium text-justify">
                     Memuat data pertanyaan...
                 </p>
 
@@ -610,15 +635,11 @@
             const managerialTab = document.getElementById('tab-managerial');
 
             if (currentTopLevel === 'core') {
-                coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm';
-                coreTab.style.borderRadius = '9999px';
-                managerialTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition';
-                managerialTab.style.borderRadius = '9999px';
+                coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0';
+                managerialTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition rounded-full m-0';
             } else {
-                coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition';
-                coreTab.style.borderRadius = '9999px';
-                managerialTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm';
-                managerialTab.style.borderRadius = '9999px';
+                coreTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-gray-600 hover:bg-gray-50 transition rounded-full m-0';
+                managerialTab.className = 'flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0';
             }
 
             // Update Categories Text

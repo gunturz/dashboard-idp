@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IdpActivity extends Model
 {
+    use SoftDeletes;
     protected $table = 'idp_activity';
 
     protected $fillable = [

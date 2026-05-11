@@ -261,11 +261,11 @@
     </style>
 </head>
 
-<body class="bg-dark-slate text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
     <!-- Header / Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="px-6 py-3 border-b border-gray-100 flex items-center">
+    <header class="shadow-md sticky top-0 z-50" style="background-color: #0E1629;">
+        <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
             <div class="flex items-center space-x-4">
                 <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-10 object-contain">
@@ -276,9 +276,9 @@
                 <h2 class="text-xl text-gray-500 font-medium">Kompetensi</h2>
             </div>
 
-            <!-- (Optional) Right side Profile / Home Link -->
-            <div class="ml-auto flex items-center">
-                <!-- Fitur ke dashboard dihapus -->
+            <!-- Right side Kompetensi -->
+            <div class="flex items-center pr-2">
+                <h2 class="text-[15px] font-semibold text-white border-b-2 border-white pb-1">Kompetensi</h2>
             </div>
         </div>
     </header>
@@ -414,7 +414,8 @@
                     <div>
                         <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Hasil Penilaian Kompetensi</h2>
                         <p class="text-sm text-gray-500 mt-1">Periksa hasil assessment Anda sebelum submit. Klik
-                            <strong>Edit</strong> untuk mengubah nilai.</p>
+                            <strong>Edit</strong> untuk mengubah nilai.
+                        </p>
                     </div>
                     <div class="w-12 h-12 rounded-full flex items-center justify-center"
                         style="background:#f0fdfa;flex-shrink:0;margin-left:1rem">

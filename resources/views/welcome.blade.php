@@ -203,9 +203,9 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(15, 23, 42, 0.85) 50%, rgba(15, 23, 42, 0.99) 100%),
-                url("{{ asset('asset/Gambar%20TS.png') }}");
+            background-image: 
+                linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(15, 23, 42, 0.9) 100%),
+                url("{{ asset('asset/Gambar TS.png') }}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -1039,7 +1039,7 @@
     <!-- ─── NAVBAR ─── -->
     <nav class="navbar" id="navbar">
         <a href="#" class="nav-logo">
-            <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo">
+            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
             <div class="nav-logo-text">
                 <span>Portal</span>
                 <span>IDP</span>
@@ -1447,7 +1447,7 @@
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-logo">
-                <img src="{{ asset('asset/logo%20ts.png') }}" alt="Logo">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
                 <div class="footer-text">
                     <strong style="color: rgba(255,255,255,0.5); font-size: 0.8rem;">IDP Dashboard</strong><br>
                     Platform Individual Development Plan

@@ -274,11 +274,23 @@
     <header class="shadow-md sticky top-0 z-50" style="background-color: #0E1629;">
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
-            <div class="flex items-center space-x-3">
-                <div class="bg-white p-1 rounded-xl flex items-center justify-center w-11 h-11">
-                    <img src="{{ asset('asset/logo ts.png') }}" alt="IDP Logo" class="h-8 w-8 object-contain">
-                </div>
-                <h1 class="text-xl font-extrabold text-white tracking-wide">IDP</h1>
+            <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
+                    class="h-8 md:h-10 object-contain flex-shrink-0">
+
+                <h1 class="text-lg md:text-xl font-bold text-slate-800 tracking-tight flex-shrink-0">
+                    <span class="hidden md:inline">Individual Development Plan</span>
+                    <span class="md:hidden">IDP</span>
+                </h1>
+
+                <div class="h-6 md:h-8 w-px bg-gray-300 mx-1 md:mx-2 flex-shrink-0"></div>
+
+                <h2 class="text-sm md:text-xl text-gray-500 font-medium truncate">
+                    <span class="hidden md:inline">Assessment Atasan - {{ $talent->nama }}
+                        @if(optional($talent->promotion_plan)->targetPosition) | Target:
+                        {{ $talent->promotion_plan->targetPosition->position_name }} @endif</span>
+                    <span class="md:hidden">Assessment - {{ $talent->nama }}</span>
+                </h2>
             </div>
 
             <!-- Right side Kompetensi -->

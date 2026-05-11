@@ -32,11 +32,51 @@
             left: 0;
             right: 0;
             z-index: 50;
+            height: 80px;
             display: flex;
             align-items: center;
             background: #0f172a;
-            padding: 1rem 1.75rem;
+            padding: 0 1.75rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* ── Landing Page Style Logo ── */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 48px;
+            width: 48px;
+            object-fit: contain;
+            background: #ffffff;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .nav-logo-text span:first-child {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #10b981;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo-text span:last-child {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
         }
 
         .notif-badge {
@@ -195,12 +235,13 @@
 
     {{-- ===== DESKTOP NAVBAR (tampilan asli laptop) ===== --}}
     <div class="navbar-outer hidden md:flex">
-        <a href="{{ route('talent.dashboard') }}"
-            class="flex items-center gap-4 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-2 rounded-xl shadow-sm flex items-center justify-center w-14 h-14">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
+        {{-- Logo + Title --}}
+        <a href="{{ route('talent.dashboard') }}" class="nav-logo">
+            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
+            <div class="nav-logo-text">
+                <span>Portal</span>
+                <span>IDP</span>
             </div>
-            <h1 class="text-white text-xl font-bold tracking-wide whitespace-nowrap">Individual Development Plan</h1>
         </a>
 
         <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
@@ -312,13 +353,13 @@
 
     {{-- ===== MOBILE NAVBAR (device HP only) ===== --}}
     <div class="mobile-profile-navbar md:hidden">
-        <a href="{{ route('talent.dashboard') }}"
-            class="flex items-center gap-2 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div class="bg-white p-1.5 rounded-lg shadow-sm flex items-center justify-center w-10 h-10">
-                <img src="{{ asset('asset/logo ts.png') }}" alt="Logo TS" class="w-full h-full object-contain">
+        {{-- Logo + Title --}}
+        <a href="{{ route('talent.dashboard') }}" class="nav-logo">
+            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" style="height: 40px; width: 40px;">
+            <div class="nav-logo-text">
+                <span style="font-size: 0.65rem;">Portal</span>
+                <span style="font-size: 0.95rem;">IDP</span>
             </div>
-            <h1 class="text-white text-base font-bold tracking-wide whitespace-nowrap truncate max-w-[150px]">IDP Talent
-            </h1>
         </a>
         <div class="flex items-center ml-auto">
             <div class="relative" id="mobile-menu-wrapper">

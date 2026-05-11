@@ -267,11 +267,13 @@
     <header class="shadow-md sticky top-0 z-50" style="background-color: #0E1629;">
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
-            <div class="flex items-center space-x-3">
-                <div class="bg-white p-1 rounded-xl flex items-center justify-center w-11 h-11">
-                    <img src="{{ asset('asset/logo ts.png') }}" alt="IDP Logo" class="h-8 w-8 object-contain">
-                </div>
-                <h1 class="text-xl font-extrabold text-white tracking-wide">IDP</h1>
+            <div class="flex items-center space-x-4">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-10 object-contain">
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Individual Development Plan</h1>
+
+                <div class="h-8 w-px bg-gray-300 mx-2"></div>
+
+                <h2 class="text-xl text-gray-500 font-medium">Kompetensi</h2>
             </div>
 
             <!-- Right side Kompetensi -->

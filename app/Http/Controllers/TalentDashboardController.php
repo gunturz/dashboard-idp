@@ -828,25 +828,34 @@ class TalentDashboardController extends Controller
             ];
 
             $currentStatus = optional($user->promotion_plan)->status_promotion;
-            $isDecisionFinal = in_array($currentStatus, $finalStatuses);
+            $isDecisionFinalCurrent = in_array($currentStatus, $finalStatuses);
 
-            // Hanya ambil sesi assessment jika PDC sudah menentukan keputusan akhir
-            if ($isDecisionFinal) {
-                $sessions = DB::table('assessment_session as a')
-                    ->leftJoin('promotion_plan as pp', 'pp.user_id_talent', '=', 'a.user_id_talent')
-                    ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
-                    ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
-                    ->where('a.user_id_talent', $user->id)
-                    ->orderBy('a.created_at', 'desc')
-                    ->select(
-                        'a.*',
-                        'sp.position_name as source_position_name',
-                        'tp.position_name as target_position_name'
-                    )
-                    ->get();
-            } else {
-                $sessions = collect();
-            }
+            // Ambil semua sesi: sertakan sesi arsip (is_active=false) SELALU, 
+            // dan sertakan sesi aktif (is_active=true) HANYA JIKA keputusannya sudah final.
+            $sessions = DB::table('assessment_session as a')
+                ->leftJoin('promotion_plan as pp', function ($join) {
+                    $join->on('pp.user_id_talent', '=', 'a.user_id_talent')
+                        ->on('pp.is_active', '=', 'a.is_active');
+                })
+                ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
+                ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
+                ->where('a.user_id_talent', $user->id)
+                ->where(function ($q) use ($isDecisionFinalCurrent) {
+                    $q->where('a.is_active', false); // Selalu tampilkan riwayat lama
+                    if ($isDecisionFinalCurrent) {
+                        $q->orWhere('a.is_active', true); // Tampilkan sesi sekarang jika sudah final
+                    }
+                })
+                ->orderBy('a.created_at', 'desc')
+                ->select(
+                    'a.*',
+                    'sp.position_name as source_position_name',
+                    'tp.position_name as target_position_name'
+                )
+                ->get();
+
+            // Riwayat dianggap tersedia jika ada sesi yang bisa ditampilkan
+            $isDecisionFinal = $sessions->isNotEmpty();
 
             return view('talent.riwayat', compact('user', 'notifications', 'sessions', 'isDecisionFinal'));
         }
@@ -875,6 +884,17 @@ class TalentDashboardController extends Controller
                 abort(404, 'Data riwayat tidak ditemukan.');
             }
 
+            // Ensure the profile card shows data from the viewed session's cycle
+            $sessionPlan = \App\Models\PromotionPlan::with(['targetPosition'])
+                ->where('user_id_talent', $user->id)
+                ->where('is_active', $session->is_active)
+                ->orderBy('updated_at', 'desc')
+                ->first();
+
+            if ($sessionPlan) {
+                $user->setRelation('promotion_plan', $sessionPlan);
+            }
+
             // Data Kompetensi dari sesi ini
             $details = DB::table('detail_assessment')
                 ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
@@ -894,6 +914,10 @@ class TalentDashboardController extends Controller
             // IDP Monitoring (Aktivitas)
             $idpActivities = IdpActivity::with('type')
                 ->where('user_id_talent', $user->id)
+                ->when(
+                    $this->hasIsActiveColumn('idp_activity'),
+                    fn($query) => $query->where('is_active', false)
+                )
                 ->get();
 
             $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
@@ -902,6 +926,10 @@ class TalentDashboardController extends Controller
 
             // Project Improvement
             $projects = ImprovementProject::where('user_id_talent', $user->id)
+                ->when(
+                    $this->hasIsActiveColumn('improvement_project'),
+                    fn($query) => $query->where('is_active', false)
+                )
                 ->orderBy('created_at', 'desc')
                 ->get();
 
@@ -909,6 +937,10 @@ class TalentDashboardController extends Controller
             $panelisAssessments = \App\Models\PanelisAssessment::with('panelis')
                 ->where('user_id_talent', $user->id)
                 ->whereNotNull('panelis_scores_json')
+                ->when(
+                    $this->hasIsActiveColumn('panelis_assessments'),
+                    fn($query) => $query->where('is_active', false)
+                )
                 ->get();
 
             // Nama aspek penilaian (harus sama dengan urutan di form penilaian panelis)

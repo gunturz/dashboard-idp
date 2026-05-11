@@ -20,6 +20,11 @@ class TalentLogbookTable extends Component
         }
     }
 
+    protected function hasIsActiveColumn(string $table): bool
+    {
+        return \Illuminate\Support\Facades\Schema::hasColumn($table, 'is_active');
+    }
+
     public function setTab($tab)
     {
         $this->activeTab = $tab;
@@ -149,6 +154,10 @@ class TalentLogbookTable extends Component
             ->whereHas('type', function ($q) use ($tabName) {
                 $q->where('type_name', $tabName);
             })
+            ->when(
+                $this->hasIsActiveColumn('idp_activity'),
+                fn($query) => $query->where('is_active', true)
+            )
             ->orderBy('created_at', 'desc')
             ->get();
 

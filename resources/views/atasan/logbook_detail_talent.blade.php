@@ -42,6 +42,7 @@
                 text-align: center;
                 border-bottom: 2px solid #cbd5e1;
                 border-right: 1px solid #d1d5db;
+                text-transform: capitalize;
             }
 
             .pdc-log-table th:last-child {

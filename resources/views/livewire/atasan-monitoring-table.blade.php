@@ -118,7 +118,7 @@
                     Heatmap Kompetensi
                 </div>
                 <div class="legend">
-                    <span>Keterangan GAP</span>
+                    <span>KETERANGAN GAP</span>
                     <div class="legend-item"><div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)</div>
                     <div class="legend-item"><div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)</div>
                     <div class="legend-item"><div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5)</div>
@@ -128,13 +128,13 @@
                     <table class="heatmap-table">
                         <thead>
                             <tr>
-                                <th rowspan="2" class="th-main min-w-[200px]">KOMPETENSI</th>
-                                <th rowspan="2" class="th-main w-[80px]">STANDAR</th>
-                                @foreach ($talents as $talent) <th colspan="4" class="th-main">{{ strtoupper($talent->nama) }}</th> @endforeach
+                                <th rowspan="2" class="th-main min-w-[200px]">Kompetensi</th>
+                                <th rowspan="2" class="th-main w-[80px]">Standar</th>
+                                @foreach ($talents as $talent) <th colspan="4" class="th-main">{{ ucwords(strtolower($talent->nama)) }}</th> @endforeach
                             </tr>
                             <tr>
                                 @foreach ($talents as $talent)
-                                    <th class="th-sub w-[60px]">Talent</th><th class="th-sub w-[60px]">Atasan</th><th class="th-sub w-[60px]">Final</th><th class="th-sub w-[60px]">GAP</th>
+                                    <th class="th-sub" style="min-width:100px">Skor Talent</th><th class="th-sub" style="min-width:100px">Skor Atasan</th><th class="th-sub" style="min-width:100px">Final Score</th><th class="th-sub" style="min-width:80px">Gap</th>
                                 @endforeach
                             </tr>
                         </thead>

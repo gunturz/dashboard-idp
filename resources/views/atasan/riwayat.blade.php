@@ -51,7 +51,7 @@
                 color: #475569;
                 border-bottom: 1px solid #e2e8f0;
                 white-space: nowrap;
-                text-transform: uppercase;
+                text-transform: capitalize;
                 letter-spacing: 0.05em;
             }
 

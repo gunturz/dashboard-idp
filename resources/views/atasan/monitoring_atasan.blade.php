@@ -134,6 +134,28 @@
             .gap-item.prio-2 .gap-number { background: #c2410c; }
             .gap-item.prio-3 .gap-number { background: #1d4ed8; }
 
+            .donut-label-btn {
+                border-radius: 8px;
+                padding: 8px 24px;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: white;
+                cursor: pointer;
+                transition: all 0.2s;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                border: none;
+            }
+            .donut-label-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                filter: brightness(1.1);
+                color: white;
+            }
+
             .heatmap-container { background: white; border: 1px solid #d1d5db; border-radius: 12px; overflow: hidden; }
             .heatmap-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
             .heatmap-table th, .heatmap-table td { 
@@ -148,7 +170,7 @@
             .heatmap-table th:last-child { border-right: none; }
             .heatmap-table td:last-child { border-right: none; }
             .heatmap-table .th-main { background: #f1f5f9; font-weight: 700; color: #1e293b; }
-            .heatmap-table .th-sub { font-size: 0.68rem; font-weight: 700; color: #475569; text-transform: capitalize; letter-spacing: 0.04em; background: #f1f5f9; white-space: nowrap; }
+            .heatmap-table .th-sub { font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: capitalize; letter-spacing: 0.04em; background: #f1f5f9; white-space: nowrap; }
             .heatmap-table .td-left { text-align: left; font-weight: 600; color: #334155; white-space: nowrap; }
             .gap-badge { display: inline-flex; align-items: center; justify-content: center; padding: 6px 16px; border-radius: 5px; font-weight: 700; min-width: 56px; }
             .gap-none  { background: #f1f5f9; color: #64748b; }

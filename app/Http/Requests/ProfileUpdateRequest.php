@@ -25,8 +25,10 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            // Fields sensitif (role_id, company_id, department_id, position_id)
+            // Fields sensitif (role_id, position_id)
             // SENGAJA tidak dimasukkan di sini — hanya Admin yang boleh mengubahnya
+            'company_id' => ['nullable', 'integer', 'exists:company,id'],
+            'department_id' => ['nullable', 'integer', 'exists:department,id'],
             'target_position_id' => ['nullable', 'integer', 'exists:position,id'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'foto_base64' => ['nullable', 'string'],

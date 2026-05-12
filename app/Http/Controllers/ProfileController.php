@@ -43,6 +43,20 @@ class ProfileController extends Controller
             $view = 'profile.dashboard'; // fallback
         }
 
+        if (in_array($roleName, ['talent', 'kandidat', 'mentor', 'atasan'])) {
+            $hasDevPlan = \App\Models\PromotionPlan::where('is_active', true)
+                ->whereNotIn('status_promotion', ['Promoted', 'Not Promoted'])
+                ->where(function ($query) use ($user) {
+                    $query->where('user_id_talent', $user->id)
+                        ->orWhereJsonContains('mentor_ids', (string) $user->id)
+                        ->orWhereIn('user_id_talent', function ($subquery) use ($user) {
+                            $subquery->select('id')->from('users')->where('atasan_id', $user->id);
+                        });
+                })->exists();
+        } else {
+            $hasDevPlan = false;
+        }
+
         return view($view, [
             'user' => $user,
             'notifications' => $this->getNotifications(),
@@ -51,6 +65,7 @@ class ProfileController extends Controller
             'roles' => Role::all(),
             'positions' => Position::all(),
             'activeRoleName' => $roleName,
+            'hasDevPlan' => $hasDevPlan,
         ]);
     }
 
@@ -80,7 +95,7 @@ class ProfileController extends Controller
             unset($data['password']); // Jangan update password jika kosong
         }
 
-        
+
         // Handle upload foto (base64 from cropper)
         if (!empty($data['foto_base64'])) {
             $image_parts = explode(";base64,", $data['foto_base64']);
@@ -123,7 +138,7 @@ class ProfileController extends Controller
             }
         }
 
-        
+
         // Handle upload foto (regular file, fallback)
         elseif ($request->hasFile('foto')) {
             // Hapus foto lama jika ada

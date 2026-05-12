@@ -138,30 +138,43 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         setTimeout(function () {
-                            const bellDropdown = document.getElementById('bell-dropdown');
-                            if (bellDropdown && bellDropdown.classList.contains('hidden')) {
-                                bellDropdown.classList.remove('hidden');
+                            const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
+                            const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
+                            if (!bellDropdown) return;
 
-                                // Siapkan state untuk efek menyusut ke arah lonceng
-                                bellDropdown.style.transformOrigin = 'top right';
-                                bellDropdown.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                                bellDropdown.style.transform = 'scale(1)';
-                                bellDropdown.style.opacity = '1';
+                            document.querySelectorAll('.dropdown-panel').forEach(el => {
+                                el.classList.add('hidden');
+                                el.style.display = 'none';
+                            });
+
+                            bellDropdown.classList.remove('hidden');
+                            bellDropdown.style.display = '';
+                            bellDropdown.style.opacity = '0';
+                            bellDropdown.style.transformOrigin = 'top right';
+                            bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(.96) translateY(-6px)';
+                            bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+
+                            requestAnimationFrame(function () {
+                                requestAnimationFrame(function () {
+                                    bellDropdown.style.opacity = '1';
+                                    bellDropdown.style.transform = 'translateY(0) scale(1)';
+                                });
+                            });
+
+                            setTimeout(function () {
+                                bellDropdown.style.opacity = '0';
+                                bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
 
                                 setTimeout(function () {
-                                    if (!bellDropdown.classList.contains('hidden')) {
-                                        // Trigger efek tersedot (menyusut ekstrem) ke arah lonceng (top right)
-                                        bellDropdown.style.transform = 'scale(0)';
-                                        bellDropdown.style.opacity = '0';
-
-                                        setTimeout(function () {
-                                            bellDropdown.classList.add('hidden');
-                                            bellDropdown.style = ''; // Bersihkan style agar tombol aslinya tidak terganggu
-                                        }, 500);
-                                    }
-                                }, 5000);
-                            }
-                        }, 200);
+                                    bellDropdown.classList.add('hidden');
+                                    bellDropdown.style.display = 'none';
+                                    bellDropdown.style.transition = '';
+                                    bellDropdown.style.transformOrigin = '';
+                                    bellDropdown.style.opacity = '';
+                                    bellDropdown.style.transform = '';
+                                }, 350);
+                            }, 5000);
+                        }, 250);
                     });
                 </script>
             @endif
@@ -332,17 +345,17 @@
                         ].join(';');
 
                         toast.innerHTML = `
-                                    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#fee2e2,#fecaca);display:flex;align-items:center;justify-content:center;">
-                                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#dc2626' style='width:20px;height:20px;'>
-                                            <path d='M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z'/>
-                                        </svg>
-                                    </div>
-                                    <div style="flex:1;min-width:0;">
-                                        <div style="font-size:.85rem;font-weight:700;color:#1e293b;margin-bottom:3px;">🔴 ${title}</div>
-                                        <div style="font-size:.78rem;color:#64748b;line-height:1.5;">${desc}</div>
-                                    </div>
-                                    <div style="position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#ef4444,#f87171);width:100%;transform-origin:left;animation:pdcBarShrink 5s linear forwards;border-radius:0 0 0 14px;"></div>
-                                `;
+                                        <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#fee2e2,#fecaca);display:flex;align-items:center;justify-content:center;">
+                                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#dc2626' style='width:20px;height:20px;'>
+                                                <path d='M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z'/>
+                                            </svg>
+                                        </div>
+                                        <div style="flex:1;min-width:0;">
+                                            <div style="font-size:.85rem;font-weight:700;color:#1e293b;margin-bottom:3px;">🔴 ${title}</div>
+                                            <div style="font-size:.78rem;color:#64748b;line-height:1.5;">${desc}</div>
+                                        </div>
+                                        <div style="position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#ef4444,#f87171);width:100%;transform-origin:left;animation:pdcBarShrink 5s linear forwards;border-radius:0 0 0 14px;"></div>
+                                    `;
 
                         // Inject keyframes once
                         if (!document.getElementById('pdc-toast-style')) {
@@ -425,16 +438,16 @@
                             window.location = '{{ route('pdc_admin.notifikasi') }}';
                         };
                         item.innerHTML = `
-                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-semibold text-gray-800 truncate"></p>
-                                        <p class="text-xs text-gray-500 truncate"></p>
-                                    </div>
-                                `;
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-800 truncate"></p>
+                                            <p class="text-xs text-gray-500 truncate"></p>
+                                        </div>
+                                    `;
 
                         const titleEl = item.querySelector('p.text-sm');
                         const descEl = item.querySelector('p.text-xs');
@@ -462,17 +475,17 @@
                         mobileItem.className = 'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
                         mobileItem.onclick = function () { window.location = '{{ route('pdc_admin.notifikasi') }}'; };
                         mobileItem.innerHTML = `
-                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-[13px] font-semibold text-gray-800 leading-snug"></p>
-                                        <p class="mt-0.5 text-[11px] text-gray-500 leading-relaxed"></p>
-                                        <p class="mt-1 text-[10px] text-[#14b8a6] font-medium">Baru saja</p>
-                                    </div>
-                                `;
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-[13px] font-semibold text-gray-800 leading-snug"></p>
+                                            <p class="mt-0.5 text-[11px] text-gray-500 leading-relaxed"></p>
+                                            <p class="mt-1 text-[10px] text-[#14b8a6] font-medium">Baru saja</p>
+                                        </div>
+                                    `;
                         const mobileTitleEl = mobileItem.querySelectorAll('p')[0];
                         const mobileDescEl = mobileItem.querySelectorAll('p')[1];
                         if (mobileTitleEl) mobileTitleEl.innerHTML = title;

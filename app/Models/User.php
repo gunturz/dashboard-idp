@@ -24,8 +24,7 @@ class User extends Authenticatable
         'role_id',
         'mentor_id',
         'atasan_id',
-        'foto',
-        'google2fa_secret'
+        'foto'
     ];
 
     protected $hidden = [
@@ -168,26 +167,26 @@ class User extends Authenticatable
                 $q->whereHas(
                     'promotion_plan',
                     function ($query) use ($id) {
-                        $query->whereNotNull('mentor_ids')
-                            ->where(
-                                function ($inner) use ($id) {
-                                    $inner->whereJsonContains('mentor_ids', (string)$id)
-                                        ->orWhereJsonContains('mentor_ids', $id);
-                                }
-                            );
-                    }
+                    $query->whereNotNull('mentor_ids')
+                        ->where(
+                            function ($inner) use ($id) {
+                                $inner->whereJsonContains('mentor_ids', (string) $id)
+                                    ->orWhereJsonContains('mentor_ids', $id);
+                            }
+                        );
+                }
                 )
                     // ATAU talent yang belum punya promotion_plan dengan mentor_ids, tapi punya mentor_id lama ini
                     ->orWhere(
                         function ($q2) use ($id) {
-                            $q2->where('mentor_id', $id)
-                                ->whereDoesntHave(
-                                    'promotion_plan',
-                                    function ($query) {
-                                        $query->whereNotNull('mentor_ids');
-                                    }
-                                );
-                        }
+                        $q2->where('mentor_id', $id)
+                            ->whereDoesntHave(
+                                'promotion_plan',
+                                function ($query) {
+                                    $query->whereNotNull('mentor_ids');
+                                }
+                            );
+                    }
                     );
             })->get();
     }

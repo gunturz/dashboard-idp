@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 use App\Services\AuditLogger;
 use App\Services\SecurityAlerter;
+
 
 class DocumentController extends Controller
 {

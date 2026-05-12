@@ -1048,25 +1048,41 @@
 
             if (shouldShowMentorNotifPopup) {
                 setTimeout(function () {
-                    const bellDropdown = document.getElementById('bell-dropdown');
+                    const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
+                    const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
                     if (!bellDropdown) return;
 
+                    document.querySelectorAll('.dropdown-panel').forEach(el => {
+                        el.classList.add('hidden');
+                        el.style.display = 'none';
+                    });
+
                     bellDropdown.classList.remove('hidden');
+                    bellDropdown.style.display = '';
+                    bellDropdown.style.opacity = '0';
                     bellDropdown.style.transformOrigin = 'top right';
-                    bellDropdown.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                    bellDropdown.style.transform = 'scale(1)';
-                    bellDropdown.style.opacity = '1';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(.96) translateY(-6px)';
+                    bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            bellDropdown.style.opacity = '1';
+                            bellDropdown.style.transform = 'translateY(0) scale(1)';
+                        });
+                    });
 
                     setTimeout(function () {
-                        if (!bellDropdown.classList.contains('hidden')) {
-                            bellDropdown.style.transform = 'scale(0)';
-                            bellDropdown.style.opacity = '0';
-
-                            setTimeout(function () {
-                                bellDropdown.classList.add('hidden');
-                                bellDropdown.style = '';
-                            }, 500);
-                        }
+                        bellDropdown.style.opacity = '0';
+                        bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
+                        
+                        setTimeout(function () {
+                            bellDropdown.classList.add('hidden');
+                            bellDropdown.style.display = 'none';
+                            bellDropdown.style.transition = '';
+                            bellDropdown.style.transformOrigin = '';
+                            bellDropdown.style.opacity = '';
+                            bellDropdown.style.transform = '';
+                        }, 350);
                     }, 5000);
                 }, 250);
             }

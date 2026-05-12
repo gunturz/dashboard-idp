@@ -70,12 +70,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/preview-file/{path}', [FilePreviewController::class, 'show'])
         ->where('path', '.*')
         ->name('files.preview');
-
-    Route::get('/2fa/resend', [\App\Http\Controllers\Auth\TwoFactorController::class, 'resend'])->name('2fa.resend')->middleware('throttle:3,1');
-    Route::get('/2fa/verify', [\App\Http\Controllers\Auth\TwoFactorController::class, 'index'])->name('2fa.index');
-    Route::post('/2fa/verify', [\App\Http\Controllers\Auth\TwoFactorController::class, 'verify'])
-        ->name('2fa.verify')
-        ->middleware('throttle:5,1');
 });
 
 require __DIR__ . '/auth.php';

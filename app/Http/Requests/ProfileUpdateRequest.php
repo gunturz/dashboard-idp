@@ -25,14 +25,18 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'company_id' => ['nullable', 'integer', 'exists:company,id'],
-            'department_id' => ['nullable', 'integer', 'exists:department,id'],
-            'position_id' => ['nullable', 'integer', 'exists:position,id'],
+            // Fields sensitif (role_id, company_id, department_id, position_id)
+            // SENGAJA tidak dimasukkan di sini — hanya Admin yang boleh mengubahnya
             'target_position_id' => ['nullable', 'integer', 'exists:position,id'],
-            'role_id' => ['nullable', 'integer', 'exists:role,id'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'foto_base64' => ['nullable', 'string'],
-            'password' => ['nullable', 'string', 'min:8'],
+            'password' => [
+                'nullable',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+            ],
             'should_delete_foto' => ['nullable', 'boolean'],
         ];
     }

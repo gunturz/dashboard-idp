@@ -37,10 +37,11 @@ class TwoFactorController extends Controller
     private function sendEmailOtp()
     {
         // 6 angka acak
-        $otp = rand(100000, 999999);
-
-        session(['email_otp_code' => $otp]);
-        session(['email_otp_expires' => now()->addMinutes(10)]); // Kedaluwarsa 10 menit
+        $otp = random_int(100000, 999999); // ✅ Cryptographically secure
+        // Simpan HASH OTP, bukan plaintext
+        session(['email_otp_hash' => hash('sha256', (string) $otp)]);
+        session(['email_otp_expires' => now()->addMinutes(10)]);
+        session(['email_otp_attempts' => 0]); // Counter percobaan
 
         $user = auth()->user();
 
@@ -55,23 +56,41 @@ class TwoFactorController extends Controller
         }
     }
 
+    // public function verify(Request $request)
+    // {
+    //     $request->validate([
+    //         'one_time_password' => 'required|numeric',
+    //     ]);
+
+    //     if (now()->greaterThan(session('email_otp_expires'))) {
+    //         return back()->withErrors(['error' => 'Kode OTP kedaluwarsa. Silakan klik tombol kirim ulang.']);
+    //     }
+
+    //     if ((int) $request->one_time_password === (int) session('email_otp_code')) {
+    //         session(['2fa_passed' => true]);
+    //         session()->forget(['email_otp_code', 'email_otp_expires']); // Cleanup
+
+    //         return redirect()->route('dashboard');
+    //     }
+
+    //     return back()->withErrors(['error' => 'Kode OTP salah. Harap periksa angka terbaru di Email Anda.']);
+    // },
+
     public function verify(Request $request)
     {
-        $request->validate([
-            'one_time_password' => 'required|numeric',
-        ]);
-
-        if (now()->greaterThan(session('email_otp_expires'))) {
-            return back()->withErrors(['error' => 'Kode OTP kedaluwarsa. Silakan klik tombol kirim ulang.']);
+        // Rate limit percobaan
+        $attempts = session('email_otp_attempts', 0);
+        if ($attempts >= 5) {
+            session()->forget(['email_otp_hash', 'email_otp_expires', 'email_otp_attempts']);
+            return back()->withErrors(['error' => 'Terlalu banyak percobaan. Silakan minta OTP baru.']);
         }
-
-        if ((int) $request->one_time_password === (int) session('email_otp_code')) {
+        session(['email_otp_attempts' => $attempts + 1]);
+        // Bandingkan hash, bukan plaintext
+        if (hash('sha256', $request->one_time_password) === session('email_otp_hash')) {
             session(['2fa_passed' => true]);
-            session()->forget(['email_otp_code', 'email_otp_expires']); // Cleanup
-
+            session()->forget(['email_otp_hash', 'email_otp_expires', 'email_otp_attempts']);
             return redirect()->route('dashboard');
         }
-
-        return back()->withErrors(['error' => 'Kode OTP salah. Harap periksa angka terbaru di Email Anda.']);
+        return back()->withErrors(['error' => 'Kode OTP salah. Silakan coba lagi.']);
     }
 }

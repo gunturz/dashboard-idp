@@ -70,33 +70,21 @@ class DocumentController extends Controller
      */
     public function download(Document $document)
     {
-        // 1. Authorization Gate/Policy
-        // Sistem hanya memperbolehkan akses jika policy lolos.
-        // Anda juga dapat melakukan pengecekan manual, misal: if ($document->user_id !== auth()->id()) abort(403);
-        $this->authorize('view', $document);
-
-        // ── Cek akses ──────────────────────────────────────────────────────
-        try {
-            $this->authorize('view', $document);
-        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
-            // ✅ ALERT: Akses file tidak sah!
+        // Gunakan Gate::allows() untuk cek tanpa throw, agar bisa log alert
+        if (!Gate::allows('view', $document)) {
             SecurityAlerter::unauthorizedFileAccess(
-                userId:     auth()->id(),
+                userId: auth()->id(),
                 documentId: $document->id,
-                ip:         request()->ip()
+                ip: request()->ip()
             );
-            // LOG ke audit juga
             AuditLogger::log(
                 event: 'file_download_unauthorized',
-                description: "Percobaan akses tidak sah ke Document [{$document->id}: {$document->original_name}].",
-                properties: [
-                    'document_id'   => $document->id,
-                    'original_name' => $document->original_name,
-                    'owner_user_id' => $document->user_id,
-                ]
+                description: "Percobaan akses tidak sah ke Document [{$document->id}].",
+                properties: ['document_id' => $document->id]
             );
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
+
 
              
         // 2. Cek apakah file fisik eksis di private storage

@@ -945,26 +945,33 @@ class PDCAdminController extends Controller
 
     public function updateQuestions(Request $request)
     {
-        $competenceId = $request->competence_id;
-
+         $request->validate([
+            'competence_id' => 'required|exists:competence,id',
+            'questions' => 'required|array',
+            'questions.*.level' => 'required|integer|min:1|max:5',
+            'questions.*.text' => 'nullable|string|max:1000',
+            'questions.*.id' => 'nullable|exists:question,id',
+        ]);
+        
         foreach ($request->questions as $levelData) {
-            $level = $levelData['level'];
-            $text = $levelData['text'] ?? '';
-            $id = $levelData['id'] ?? null;
-
-            if ($id) {
-                \App\Models\Question::where('id', $id)->update(['question_text' => $text]);
-            } elseif ($text) {
-                \App\Models\Question::create([
-                    'competence_id' => $competenceId,
-                    'level' => $level,
-                    'question_text' => $text,
+            if ($levelData['id'] ?? null) {
+                // Scope ke competence yang benar
+                Question::where('id', $levelData['id'])
+                    ->where('competence_id', $request->competence_id)
+                    ->update(['question_text' => strip_tags($levelData['text'] ?? '')]);
+            } elseif ($levelData['text'] ?? '') {
+                Question::create([
+                    'competence_id' => $request->competence_id,
+                    'level' => $levelData['level'],
+                    'question_text' => strip_tags($levelData['text']),
                 ]);
             }
         }
 
         return back()->with('success', 'Questions berhasil diperbarui.');
     }
+
+
 
     public function updateTargetScores(Request $request, $position_id)
     {

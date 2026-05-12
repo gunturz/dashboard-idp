@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-         // authenticate() akan melempar ValidationException jika gagal
+        // authenticate() akan melempar ValidationException jika gagal
         // (event login_failed sudah ditangani di Langkah 7 via LoginRequest)
         $request->authenticate();
 
@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
             event: 'login_success',
             description: 'User berhasil login via form.',
             properties: [
-                'email'  => $request->input('email'),
+                'email' => $request->input('email'),
                 'method' => 'form',
             ]
         );
@@ -59,13 +59,18 @@ class AuthenticatedSessionController extends Controller
 
     public function handleGoogleCallback(Request $request): RedirectResponse
     {
+        // Verifikasi state parameter ada untuk mencegah CSRF OAuth
+        if (!$request->has('state') || !session()->has('state')) {
+            return redirect()->route('login')
+                ->withErrors(['google' => 'Session kedaluwarsa. Silakan coba login lagi.']);
+        }
+
         try {
             $googleUser = $this->googleDriver()->user();
-        }
-        catch (Throwable $exception) {
+        } catch (Throwable $exception) {
             Log::error('Google login callback failed.', [
                 'message' => $exception->getMessage(),
-                'type' => $exception::class ,
+                'type' => $exception::class,
                 'url' => $request->fullUrl(),
             ]);
 
@@ -73,7 +78,7 @@ class AuthenticatedSessionController extends Controller
                 ->withErrors(['google' => 'Login dengan Google gagal. Silakan coba lagi.']);
         }
 
-        $email = strtolower((string)$googleUser->getEmail());
+        $email = strtolower((string) $googleUser->getEmail());
 
         if ($email === '') {
             return redirect()->route('login')
@@ -102,7 +107,7 @@ class AuthenticatedSessionController extends Controller
             event: 'login_success',
             description: 'User berhasil login via Google OAuth.',
             properties: [
-                'email'  => $user->email,
+                'email' => $user->email,
                 'method' => 'google',
             ]
         );
@@ -152,8 +157,7 @@ class AuthenticatedSessionController extends Controller
         if ($roles && $roles->count() === 1) {
             $role = strtolower($roles->first()->role_name);
             session(['active_role' => $role]);
-        }
-        else {
+        } else {
             $role = strtolower(Auth::user()->role->role_name ?? '');
             session(['active_role' => $role]);
         }
@@ -181,7 +185,8 @@ class AuthenticatedSessionController extends Controller
 
     protected function googleDriver()
     {
-        return Socialite::driver('google');
+        return Socialite::driver('google')
+            ->with(['prompt' => 'select_account']); // Paksa user confirm akun
     }
 
     /**

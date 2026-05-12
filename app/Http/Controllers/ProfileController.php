@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -79,21 +80,50 @@ class ProfileController extends Controller
             unset($data['password']); // Jangan update password jika kosong
         }
 
+        
         // Handle upload foto (base64 from cropper)
         if (!empty($data['foto_base64'])) {
-            if ($user->foto) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
-            }
             $image_parts = explode(";base64,", $data['foto_base64']);
             if (count($image_parts) == 2) {
                 $image_type_aux = explode("image/", $image_parts[0]);
-                $image_type = $image_type_aux[1];
-                $image_base64 = base64_decode($image_parts[1]);
-                $fileName = 'foto-profil/' . uniqid() . '.' . $image_type;
+                $image_type = strtolower($image_type_aux[1] ?? '');
+                $image_base64 = base64_decode($image_parts[1], true);
+
+                if ($image_base64 === false) {
+                    return back()->withErrors(['foto' => 'Data gambar tidak valid.'])->withInput();
+                }
+
+                $allowedTypes = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
+                if (!in_array($image_type, $allowedTypes, true)) {
+                    return back()->withErrors(['foto' => 'Format gambar tidak valid.'])->withInput();
+                }
+
+                $tempPath = tempnam(sys_get_temp_dir(), 'foto_');
+                if ($tempPath === false) {
+                    return back()->withErrors(['foto' => 'Gagal memproses gambar.'])->withInput();
+                }
+
+                file_put_contents($tempPath, $image_base64);
+                $imageInfo = getimagesize($tempPath);
+
+                if (!$imageInfo || !in_array($imageInfo[2], [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP], true)) {
+                    unlink($tempPath);
+                    return back()->withErrors(['foto' => 'File bukan gambar yang valid.'])->withInput();
+                }
+
+                unlink($tempPath);
+
+                if ($user->foto) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto);
+                }
+
+                $fileName = 'foto-profil/' . Str::uuid() . '.' . $image_type;
                 \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $image_base64);
                 $data['foto'] = $fileName;
             }
         }
+
+        
         // Handle upload foto (regular file, fallback)
         elseif ($request->hasFile('foto')) {
             // Hapus foto lama jika ada

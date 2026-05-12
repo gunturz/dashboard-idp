@@ -10,7 +10,8 @@ echo.
 echo [1/4] Menjalankan composer audit...
 composer audit
 if %ERRORLEVEL% NEQ 0 (
-    echo PERINGATAN: Ada vulnerability ditemukan!
+    echo PERINGATAN: Ada vulnerability ditemukan! Mengirim notifikasi...
+    php artisan security:notify-audit-failed --message="Composer Audit menemukan vulnerability."
 )
 
 echo.
@@ -27,6 +28,10 @@ php artisan view:clear
 echo.
 echo [4/4] Audit npm packages...
 npm audit
+if %ERRORLEVEL% NEQ 0 (
+    echo PERINGATAN: NPM vulnerability ditemukan! Mengirim notifikasi...
+    php artisan security:notify-audit-failed --message="NPM Audit menemukan vulnerability."
+)
 
 echo.
 echo ============================================

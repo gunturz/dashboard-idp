@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class DependencyAudit extends Command
 {
-    protected $signature   = 'security:dependency-audit {--notify : Kirim email jika ada vulnerability}';
+    protected $signature = 'security:dependency-audit {--notify : Kirim email jika ada vulnerability}';
     protected $description = 'Jalankan composer audit untuk cek vulnerability dependency';
 
     public function handle(): int
@@ -15,9 +15,9 @@ class DependencyAudit extends Command
         $this->info('Menjalankan composer audit...');
 
         // Jalankan composer audit dalam format JSON
-        $output     = [];
+        $output = [];
         $returnCode = 0;
-        $basePath   = base_path();
+        $basePath = base_path();
 
         exec(
             "cd {$basePath} && composer audit --format=json 2>&1",
@@ -26,7 +26,7 @@ class DependencyAudit extends Command
         );
 
         $jsonOutput = implode("\n", $output);
-        $auditData  = json_decode($jsonOutput, true);
+        $auditData = json_decode($jsonOutput, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->warn('composer audit output tidak bisa diparsing sebagai JSON.');
@@ -39,7 +39,7 @@ class DependencyAudit extends Command
 
         if ($totalVulns === 0) {
             $this->info('✅ Tidak ada vulnerability yang ditemukan!');
-            Log::channel('security')->info('Dependency audit: BERSIH', [
+            Log::channel('security_log')->info('Dependency audit: BERSIH', [
                 'total_packages' => $auditData['packages'] ?? 'unknown',
             ]);
             return self::SUCCESS;
@@ -57,9 +57,9 @@ class DependencyAudit extends Command
             }
         }
 
-        Log::channel('security')->critical('Dependency audit: VULNERABILITY DITEMUKAN', [
-            'total'       => $totalVulns,
-            'advisories'  => $advisories,
+        Log::channel('security_log')->critical('Dependency audit: VULNERABILITY DITEMUKAN', [
+            'total' => $totalVulns,
+            'advisories' => $advisories,
         ]);
 
         // Kirim notifikasi email
@@ -83,7 +83,7 @@ class DependencyAudit extends Command
                 \Illuminate\Support\Facades\Mail::raw(
                     $body,
                     fn($m) => $m->to($adminEmail)
-                              ->subject('[SECURITY] Vulnerability Ditemukan - Dashboard IDP')
+                        ->subject('[SECURITY] Vulnerability Ditemukan - Dashboard IDP')
                 );
             }
         }

@@ -267,36 +267,23 @@
     <header class="shadow-md sticky top-0 z-50" style="background-color: #0E1629;">
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
-            <div class="flex items-center space-x-4">
-                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-10 object-contain">
-                <h1 class="text-xl font-bold text-slate-800 tracking-tight">Individual Development Plan</h1>
-
-                <div class="h-8 w-px bg-gray-300 mx-2"></div>
-
-                <h2 class="text-xl text-gray-500 font-medium">Kompetensi</h2>
+            <div class="flex items-center gap-[12px] no-underline">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-[48px] w-[48px] object-contain bg-white p-[5px] rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                <div class="flex flex-col leading-[1.1]">
+                    <span class="text-[0.75rem] font-semibold text-[#10b981] tracking-[1.5px] uppercase">Portal</span>
+                    <span class="text-[1.15rem] font-extrabold text-white tracking-[-0.3px]">IDP</span>
+                </div>
             </div>
 
             <!-- Right side Kompetensi -->
             <div class="flex items-center pr-2">
-                <h2 class="text-[15px] font-semibold text-white border-b-2 border-white pb-1">Kompetensi</h2>
+                <h2 class="text-lg font-bold text-white">Kompetensi</h2>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-grow max-w-[1400px] mx-auto w-full px-2 md:px-4 py-8 flex flex-col items-center">
-
-        <!-- Talent Profile Card -->
-        <div class="w-full max-w-7xl mb-6">
-            <style>
-                .talent-prof-hero {
-                    margin: 0 !important;
-                    border-radius: 1rem !important;
-                    padding: 16px 24px !important;
-                }
-            </style>
-            @include('components.talent.profile-card', ['user' => $user, 'mobileCollapsible' => false])
-        </div>
 
         <!-- Top Level Categories: Core / Managerial -->
         <div class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-6"

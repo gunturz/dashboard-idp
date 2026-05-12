@@ -237,7 +237,7 @@
             align-items: stretch;
             gap: 0;
             padding: 20px 20px;
-            margin: 18px 12px 0 12px;
+            margin: 36px 12px 0 12px;
         }
 
         .talent-hero-section,

@@ -177,7 +177,7 @@
     </x-slot>
 
     {{-- ══════════════════════════════ FORM AREA ══════════════════════════════ --}}
-    <div class="w-full px-4 lg:px-6 pt-5 pb-6 flex-grow fade-up fade-up-2">
+    <div class="w-full px-4 lg:px-6 pt-10 md:pt-5 pb-6 flex-grow fade-up fade-up-2">
 
         {{-- Custom Title --}}
         <div class="page-header animate-title">

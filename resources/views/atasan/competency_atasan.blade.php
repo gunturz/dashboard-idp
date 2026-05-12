@@ -274,29 +274,18 @@
     <header class="shadow-md sticky top-0 z-50" style="background-color: #0E1629;">
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
-            <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
+            <div class="flex items-center gap-[12px] no-underline">
                 <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
-                    class="h-8 md:h-10 object-contain flex-shrink-0">
-
-                <h1 class="text-lg md:text-xl font-bold text-slate-800 tracking-tight flex-shrink-0">
-                    <span class="hidden md:inline">Individual Development Plan</span>
-                    <span class="md:hidden">IDP</span>
-                </h1>
-
-                <div class="h-6 md:h-8 w-px bg-gray-300 mx-1 md:mx-2 flex-shrink-0"></div>
-
-                <h2 class="text-sm md:text-xl text-gray-500 font-medium truncate">
-                    <span class="hidden md:inline">Assessment Atasan - {{ $talent->nama }}
-                        @if(optional($talent->promotion_plan)->targetPosition) | Target:
-                        {{ $talent->promotion_plan->targetPosition->position_name }} @endif</span>
-                    <span class="md:hidden">Assessment - {{ $talent->nama }}</span>
-                </h2>
+                    class="h-[48px] w-[48px] object-contain bg-white p-[5px] rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                <div class="flex flex-col leading-[1.1]">
+                    <span class="text-[0.75rem] font-semibold text-[#10b981] tracking-[1.5px] uppercase">Portal</span>
+                    <span class="text-[1.15rem] font-extrabold text-white tracking-[-0.3px]">IDP</span>
+                </div>
             </div>
 
             <!-- Right side Kompetensi -->
-            <div class="flex items-center gap-4 md:gap-6 pr-2">
-
-                <h2 class="text-[15px] font-semibold text-white border-b-2 border-white pb-1">Kompetensi</h2>
+            <div class="flex items-center pr-2">
+                <h2 class="text-lg font-bold text-white">Kompetensi</h2>
             </div>
         </div>
     </header>
@@ -335,8 +324,7 @@
         </div>
 
         <!-- Top Level Categories: Core / Managerial -->
-        <div
-            class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-4 p-0"
+        <div class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-4 p-0"
             style="box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);">
             <button id="tab-core"
                 class="flex-1 text-center py-2.5 md:py-3 text-xs md:text-base font-semibold text-white bg-teal-primary transition shadow-sm rounded-full m-0">

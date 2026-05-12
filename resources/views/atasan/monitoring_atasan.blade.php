@@ -20,7 +20,7 @@
             .pdc-log-table th {
                 padding: 12px 16px; background: #f1f5f9; font-weight: 700; color: #1e293b;
                 font-size: 0.8rem; text-align: center; border-bottom: 2px solid #cbd5e1;
-                border-right: 1px solid #d1d5db;
+                border-right: 1px solid #d1d5db; text-transform: capitalize;
             }
             .pdc-log-table th:last-child { border-right: none; }
             .pdc-log-table td {
@@ -148,16 +148,16 @@
             .heatmap-table th:last-child { border-right: none; }
             .heatmap-table td:last-child { border-right: none; }
             .heatmap-table .th-main { background: #f1f5f9; font-weight: 700; color: #1e293b; }
-            .heatmap-table .th-sub { font-size: 0.65rem; font-weight: 700; color: #475569; text-transform: uppercase; background: #f1f5f9; }
+            .heatmap-table .th-sub { font-size: 0.68rem; font-weight: 700; color: #475569; text-transform: capitalize; letter-spacing: 0.04em; background: #f1f5f9; white-space: nowrap; }
             .heatmap-table .td-left { text-align: left; font-weight: 600; color: #334155; white-space: nowrap; }
-            .gap-badge { display: block; width: 100%; height: 100%; padding: 4px; border-radius: 4px; font-weight: 700; color: white; }
-            .gap-none { background-color: #f1f5f9; color: #64748b; }
-            .gap-ok { background-color: #cbd5e1; color: #1e293b; }
-            .gap-small { background-color: #f97316; color: white; }
-            .gap-large { background-color: #ef4444; color: white; }
-            .legend { display: flex; gap: 16px; font-size: 0.65rem; font-weight: 700; color: #64748b; margin-bottom: 12px; text-transform: uppercase; }
-            .legend-item { display: flex; align-items: center; gap: 4px; }
-            .legend-box { width: 12px; height: 12px; border-radius: 2px; }
+            .gap-badge { display: inline-flex; align-items: center; justify-content: center; padding: 6px 16px; border-radius: 5px; font-weight: 700; min-width: 56px; }
+            .gap-none  { background: #f1f5f9; color: #64748b; }
+            .gap-ok    { background: #cbd5e1; color: #1e293b; }
+            .gap-small { background: #f97316; color: white; }
+            .gap-large { background: #ef4444; color: white; }
+            .legend { display: flex; gap: 16px; font-size: 0.65rem; font-weight: 700; color: #64748b; margin-bottom: 12px; text-transform: uppercase; align-items: center; flex-wrap: wrap; }
+            .legend-item { display: flex; align-items: center; gap: 6px; }
+            .legend-box { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
 
 
             /* ══ MOBILE ONLY — does NOT affect desktop ══ */

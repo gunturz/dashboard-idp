@@ -78,7 +78,7 @@
                 font-size: 1.125rem;
                 font-weight: 800;
                 color: #1e293b;
-                text-transform: uppercase;
+                text-transform: capitalize;
                 letter-spacing: 0.5px;
             }
 
@@ -158,66 +158,69 @@
             /* --- Heatmap Table --- */
             .heatmap-table {
                 width: 100%;
-                border-collapse: separate;
-                border-spacing: 0;
-                border: 1.5px solid #e2e8f0;
-                border-radius: 12px;
-                overflow: hidden;
+                border-collapse: collapse;
+                font-size: 0.88rem;
+            }
+
+            .heatmap-table th,
+            .heatmap-table td {
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
+                padding: 12px 16px;
+                text-align: center;
             }
 
             .heatmap-table th {
-                background: #f8fafc;
-                padding: 12px;
+                background: #f1f5f9;
+                font-weight: 700;
+                color: #1e293b;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+                font-size: 0.8rem;
+            }
+
+            .heatmap-table th:last-child { border-right: none; }
+            .heatmap-table td:last-child { border-right: none; }
+
+            .heatmap-table .th-main {
+                background: #f1f5f9;
+                font-weight: 700;
+                color: #1e293b;
+            }
+
+            .heatmap-table .th-sub {
                 font-size: 0.75rem;
-                font-weight: 800;
+                font-weight: 700;
                 color: #475569;
-                text-transform: uppercase;
-                border-bottom: 1.5px solid #e2e8f0;
-                border-right: 1px solid #e2e8f0;
-                text-align: center;
+                background: #f1f5f9;
             }
 
-            .heatmap-table td {
-                padding: 12px;
-                font-size: 0.813rem;
-                color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                border-right: 1px solid #f1f5f9;
-                text-align: center;
-            }
-
-            .heatmap-table td:first-child {
+            .heatmap-table .td-left {
                 text-align: left;
                 font-weight: 600;
-                padding-left: 20px;
+                color: #334155;
+                white-space: nowrap;
             }
 
             .gap-badge {
-                display: block;
-                padding: 6px;
-                border-radius: 4px;
-                font-weight: 800;
-                color: white;
-                min-width: 40px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 6px 16px;
+                border-radius: 5px;
+                font-weight: 700;
+                min-width: 56px;
             }
 
-            .gap-red {
-                background: #ef4444;
-            }
-
-            .gap-orange {
-                background: #f97316;
-            }
-
-            .gap-none {
-                background: transparent;
-                color: #334155;
-            }
+            .gap-none  { background: #f1f5f9; color: #64748b; }
+            .gap-ok    { background: #cbd5e1; color: #1e293b; }
+            .gap-small { background: #f97316; color: white; }
+            .gap-large { background: #ef4444; color: white; }
 
             .row-summary td {
                 background: #f8fafc;
                 font-weight: 800;
-                border-top: 1.5px solid #e2e8f0;
+                border-top: 2px solid #cbd5e1;
             }
 
             /* --- IDP Monitoring --- */
@@ -562,12 +565,12 @@
                     <table class="heatmap-table">
                         <thead>
                             <tr>
-                                <th class="w-[30%]">kompetensi</th>
-                                <th>standar</th>
-                                <th>Skor Talent</th>
-                                <th>Skor Atasan</th>
-                                <th>Final Score</th>
-                                <th>GAP</th>
+                                <th class="th-main" style="width:30%">Kompetensi</th>
+                                <th class="th-main" style="width:70px">Standar</th>
+                                <th class="th-sub">Skor Talent</th>
+                                <th class="th-sub">Skor Atasan</th>
+                                <th class="th-sub">Final Score</th>
+                                <th class="th-sub" style="background:#ef4444;color:white;border-color:#ef4444;width:110px">Gap</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -582,19 +585,20 @@
 
                                     $gapClass = 'gap-none';
                                     if ($gap <= -2)
-                                        $gapClass = 'gap-red';
+                                        $gapClass = 'gap-large';
                                     elseif ($gap < 0)
-                                        $gapClass = 'gap-orange';
+                                        $gapClass = 'gap-small';
+                                    elseif ($gap > 0)
+                                        $gapClass = 'gap-ok';
                                 @endphp
                                 <tr>
-                                    <td>{{ $comp->name }}</td>
+                                    <td class="td-left">{{ $comp->name }}</td>
                                     <td>{{ $standard % 1 == 0 ? (int) $standard : number_format($standard, 1) }}</td>
-                                    <td>{{ $scoreTalent % 1 == 0 ? (int) $scoreTalent : number_format($scoreTalent, 1) }}
-                                    </td>
-                                    <td>{{ $scoreAtasan ?: '0' }}</td>
-                                    <td>{{ $finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1) }}</td>
-                                    <td><span
-                                            class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
+                                    <td><span class="font-bold">{{ $scoreTalent ?: '-' }}</span></td>
+                                    <td><span class="font-bold">{{ $scoreAtasan ?: '-' }}</span></td>
+                                    <td><span class="font-bold">{{ $finalScore ? ($finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1)) : '-' }}</span></td>
+                                    <td class="text-center p-2">
+                                        <span class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -608,18 +612,21 @@
 
                             $avgGapClass = 'gap-none';
                             if ($avgGap <= -2)
-                                $avgGapClass = 'gap-red';
+                                $avgGapClass = 'gap-large';
                             elseif ($avgGap < 0)
-                                $avgGapClass = 'gap-orange';
+                                $avgGapClass = 'gap-small';
+                            elseif ($avgGap > 0)
+                                $avgGapClass = 'gap-ok';
                         @endphp
                         <tfoot>
                             <tr class="row-summary">
-                                <td>Nilai Rata-Rata</td>
+                                <td class="td-left">Nilai Rata-Rata</td>
                                 <td>{{ number_format($avgStandard, 1) }}</td>
                                 <td>{{ number_format($avgTalent, 1) }}</td>
                                 <td>{{ number_format($avgAtasan, 1) }}</td>
                                 <td>{{ number_format($avgFinal, 1) }}</td>
-                                <td><span class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 2) }}</span>
+                                <td class="text-center p-2">
+                                    <span class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 2) }}</span>
                                 </td>
                             </tr>
                         </tfoot>

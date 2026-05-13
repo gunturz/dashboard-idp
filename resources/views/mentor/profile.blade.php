@@ -379,7 +379,11 @@
                         <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}"
                                class="edit-field prof-input hidden">
                     @elseif ($field['type'] === 'select')
+                        @php
+                            $isLocked = (isset($hasDevPlan) && $hasDevPlan && in_array($field['key'], ['company_id', 'department_id']));
+                        @endphp
                         <select name="{{ $field['key'] }}" class="edit-field prof-input hidden"
+                                {{ $isLocked ? 'disabled title="Tidak bisa diubah karena Anda memiliki Development Plan aktif"' : '' }}
                                 {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                             <option value="" disabled>Pilih {{ $field['label'] }}</option>
                             @foreach ($field['options'] as $opt)

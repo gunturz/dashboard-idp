@@ -844,7 +844,7 @@ class TalentDashboardController extends Controller
             $sessions = DB::table('development_sessions as ds')
                 ->leftJoin('promotion_plan as pp', 'pp.development_session_id', '=', 'ds.id')
                 ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
-                ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
+                ->leftJoin('position as sp', 'sp.id', '=', 'ds.source_position_id')
                 ->where('ds.user_id_talent', $user->id)
                 ->where(function ($q) use ($finalStatuses) {
                     $q->where('ds.is_active', false)
@@ -855,10 +855,19 @@ class TalentDashboardController extends Controller
                     'ds.*',
                     'pp.start_date',
                     'pp.target_date',
-                    'sp.position_name as source_position_name',
+                    'pp.target_position_id',
+                    'pp.status_promotion',
                     'tp.position_name as target_position_name'
                 )
-                ->get();
+                ->get()
+                ->map(function ($session) {
+                    $session->source_position_name = $this->resolveSourcePositionNameForHistory(
+                        $session->target_position_id,
+                        $session->target_position_name
+                    );
+
+                    return $session;
+                });
 
             // Riwayat dianggap tersedia jika ada sesi yang bisa ditampilkan
             $isDecisionFinal = $sessions->isNotEmpty();
@@ -868,6 +877,40 @@ class TalentDashboardController extends Controller
             Log::error('talent riwayat error: ' . $e->getMessage());
             throw $e;
         }
+    }
+
+    protected function resolveSourcePositionNameForHistory(?int $targetPositionId, ?string $targetPositionName): ?string
+    {
+        $normalizedTarget = $this->normalizePositionNameForHistory($targetPositionName);
+
+        if (in_array($normalizedTarget, ['supervisor', 'officer'], true)) {
+            return 'Staff';
+        }
+
+        if ($normalizedTarget === 'manager') {
+            return 'Supervisor/Officer';
+        }
+
+        if ($normalizedTarget === 'general manager') {
+            return 'Manager';
+        }
+
+        if ($targetPositionId) {
+            $targetPosition = \App\Models\Position::find($targetPositionId);
+
+            if ($targetPosition?->grade_level !== null) {
+                return \App\Models\Position::where('grade_level', '<', $targetPosition->grade_level)
+                    ->orderByDesc('grade_level')
+                    ->value('position_name');
+            }
+        }
+
+        return null;
+    }
+
+    protected function normalizePositionNameForHistory(?string $name): string
+    {
+        return strtolower(trim((string) $name));
     }
     public function riwayatDetail($id)
     {
@@ -908,6 +951,11 @@ class TalentDashboardController extends Controller
             if ($sessionPlan) {
                 $user->setRelation('promotion_plan', $sessionPlan);
             }
+
+            $user->history_source_position_name = $this->resolveSourcePositionNameForHistory(
+                $sessionPlan?->target_position_id ?? $developmentSession->target_position_id,
+                optional($sessionPlan?->targetPosition)->position_name
+            );
 
             // Data Kompetensi dari sesi ini
             $details = DB::table('detail_assessment')

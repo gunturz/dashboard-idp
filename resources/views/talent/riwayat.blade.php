@@ -227,11 +227,12 @@
                 <table class="highlight-table">
                     <thead>
                         <tr>
-                            <th style="width: 25%; text-align: left;">Talent</th>
-                            <th style="width: 30%; text-align: left;">Perusahaan</th>
-                            <th style="width: 15%;">Start Date</th>
-                            <th style="width: 15%;">Due Date</th>
-                            <th style="width: 15%;">Aksi</th>
+                            <th style="width: 20%; text-align: left;">Talent</th>
+                            <th style="width: 25%; text-align: left;">Perusahaan</th>
+                            <th style="width: 14%;">Start Date</th>
+                            <th style="width: 14%;">Due Date</th>
+                            <th style="width: 15%;">Status Promosi</th>
+                            <th style="width: 12%;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -257,6 +258,34 @@
                                 <td class="text-center font-bold text-gray-500">
                                     {{ $dueDate->translatedFormat('d F Y') }}
                                 </td>
+                                <td class="text-center" style="vertical-align: middle;">
+                                    @php $promoStatus = $session->status_promotion; @endphp
+                                    @if ($promoStatus === 'Promoted')
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
+                                            Ready Now
+                                        </span>
+                                    @elseif ($promoStatus === 'Ready in 1-2 Years')
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                                            Ready 1–2 Years
+                                        </span>
+                                    @elseif ($promoStatus === 'Ready in > 2 Years')
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
+                                            Ready &gt;2 Years
+                                        </span>
+                                    @elseif ($promoStatus === 'Not Ready')
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                                            Not Ready
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                            {{ $promoStatus ?? '-' }}
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <a href="{{ route('talent.riwayat.detail', $session->id) }}" class="btn-action-teal">
                                         Lihat Detail
@@ -265,7 +294,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-16 text-center">
+                                <td colspan="6" class="py-16 text-center">
                                     <div class="flex flex-col items-center justify-center text-gray-400">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-20" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">

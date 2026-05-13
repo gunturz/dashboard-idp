@@ -253,6 +253,7 @@ class PanelisController extends Controller
             ->whereNotNull('panelis_score')
             ->with([
                 'developmentSession.promotionPlan.targetPosition',
+                'developmentSession.sourcePosition',
                 'developmentSession.improvementProjects',
                 'talent.position',
                 'talent.department',
@@ -265,6 +266,9 @@ class PanelisController extends Controller
         foreach ($assessments as $assessment) {
             if ($assessment->talent && $assessment->developmentSession?->promotionPlan) {
                 $assessment->talent->setRelation('promotion_plan', $assessment->developmentSession->promotionPlan);
+            }
+            if ($assessment->talent && $assessment->developmentSession?->sourcePosition) {
+                $assessment->talent->setRelation('position', $assessment->developmentSession->sourcePosition);
             }
         }
 

@@ -20,11 +20,14 @@
     <div style="overflow-x: auto; margin: -12px -4px -8px; padding: 12px 4px 8px;">
     <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(5, minmax(140px, 1fr)); min-width: 700px;">
         @foreach($roleConfig as $key => $cfg)
-            <div wire:key="stat-{{ $key }}"
+            <button type="button"
+                 wire:key="stat-{{ $key }}"
                  wire:click="toggleRole('{{ $key }}')"
-                 class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer transition-all select-none
-                        {{ $selectedRole === $key ? 'ring-2 ring-offset-1 shadow-lg -translate-y-1' : 'opacity-80 hover:opacity-100' }}"
-                 style="{{ $selectedRole === $key ? 'ring-color:' . $cfg['hex'] : '' }}">
+                 wire:loading.attr="disabled"
+                 wire:target="toggleRole"
+                 class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer transition-all select-none text-left disabled:cursor-wait disabled:opacity-90
+                        {{ $selectedRole === $key ? 'ring-2 ring-offset-1 shadow-lg -translate-y-1 opacity-100' : 'opacity-80 hover:opacity-100' }}"
+                 style="{{ $selectedRole === $key ? '--tw-ring-color: ' . $cfg['hex'] . ';' : '' }}">
                 <div class="prem-stat-icon si-{{ $cfg['color'] }}">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         {!! $roleIcons[$key] !!}
@@ -32,7 +35,7 @@
                 </div>
                 <div class="prem-stat-value">{{ $counts[$cfg['label']] }}</div>
                 <div class="prem-stat-label">{{ $cfg['label'] }}</div>
-            </div>
+            </button>
         @endforeach
     </div>{{-- /prem-stat-grid --}}
     </div>{{-- /overflow-x wrapper --}}
@@ -85,7 +88,7 @@
     </div>
 
     <div class="flex flex-col gap-8 relative">
-        <div wire:loading.flex class="absolute inset-0 z-10 hidden items-start justify-center pt-20 bg-white/40 backdrop-blur-[1px] rounded-2xl">
+        <div wire:loading.flex wire:target="toggleRole,search,company,department,nextPage,previousPage,gotoPage" class="absolute inset-0 z-10 hidden items-start justify-center pt-20 bg-white/40 backdrop-blur-[1px] rounded-2xl">
             <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-b-[#14b8a6]"></div>
         </div>
 
@@ -171,7 +174,7 @@
                                             @endif
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center justify-center gap-2">
-                                                    <button type="button" onclick="openEditUserModal({{ $u->id }}, '{{ addslashes($u->username) }}', '{{ addslashes($u->nama) }}', '{{ addslashes($u->email) }}', '{{ $u->company_id }}', '{{ $u->department_id }}', '{{ $u->position_id }}')"
+                                                    <button type="button" onclick="openEditUserModal({{ $u->id }}, '{{ addslashes($u->username) }}', '{{ addslashes($u->nama) }}', '{{ addslashes($u->email) }}', '{{ $u->company_id }}', '{{ $u->department_id }}', '{{ $u->position_id }}', '{{ $roleKey }}')"
                                                         class="inline-flex items-center justify-center w-9 h-9 bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200 hover:border-blue-200 rounded-lg transition-colors shadow-sm" title="Edit Profile">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-[23px] w-[23px]" viewBox="0 0 24 24">
                                                             <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -223,30 +226,30 @@
             </div>
         @endforeach
     </div>
-</div>
 
-<style>
-    /* ── User Management Table: Perjelas garis & judul kolom Capitalize ── */
-    .user-management-wrapper .prem-table th {
-        text-transform: none;
-        letter-spacing: 0;
-        font-size: 0.8rem;
-        color: #1e293b;
-        border-bottom: 2px solid #cbd5e1;
-        border-right: 1px solid #d1d5db;
-        background: #f1f5f9;
-    }
-    .user-management-wrapper .prem-table th:last-child {
-        border-right: none;
-    }
-    .user-management-wrapper .prem-table td {
-        border-bottom: 1px solid #d1d5db;
-        border-right: 1px solid #e5e7eb;
-    }
-    .user-management-wrapper .prem-table td:last-child {
-        border-right: none;
-    }
-    .user-management-wrapper .prem-table tbody tr:last-child td {
-        border-bottom: 1px solid #d1d5db;
-    }
-</style>
+    <style>
+        /* ── User Management Table: Perjelas garis & judul kolom Capitalize ── */
+        .user-management-wrapper .prem-table th {
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 0.8rem;
+            color: #1e293b;
+            border-bottom: 2px solid #cbd5e1;
+            border-right: 1px solid #d1d5db;
+            background: #f1f5f9;
+        }
+        .user-management-wrapper .prem-table th:last-child {
+            border-right: none;
+        }
+        .user-management-wrapper .prem-table td {
+            border-bottom: 1px solid #d1d5db;
+            border-right: 1px solid #e5e7eb;
+        }
+        .user-management-wrapper .prem-table td:last-child {
+            border-right: none;
+        }
+        .user-management-wrapper .prem-table tbody tr:last-child td {
+            border-bottom: 1px solid #d1d5db;
+        }
+    </style>
+</div>

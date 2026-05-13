@@ -11,6 +11,7 @@ class DevelopmentSession extends Model
 
     protected $fillable = [
         'user_id_talent',
+        'source_position_id',
         'target_position_id',
         'atasan_id',
         'mentor_ids',
@@ -42,6 +43,11 @@ class DevelopmentSession extends Model
     public function targetPosition()
     {
         return $this->belongsTo(Position::class, 'target_position_id');
+    }
+
+    public function sourcePosition()
+    {
+        return $this->belongsTo(Position::class, 'source_position_id');
     }
 
     public function atasan()

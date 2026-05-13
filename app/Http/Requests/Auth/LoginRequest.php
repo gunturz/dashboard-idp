@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Services\AuditLogger;
+use App\Services\SecurityAlerter;
 use App\Models\User;
 
 class LoginRequest extends FormRequest
@@ -38,6 +40,8 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
@@ -48,8 +52,29 @@ class LoginRequest extends FormRequest
         // Deteksi apakah input adalah email atau username
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
+
         if (!Auth::attempt([$field => $login, 'password' => $password], $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            // Ambil jumlah attempts saat ini
+            $attempts = RateLimiter::attempts($this->throttleKey());
+            $ip = $this->ip();
+
+            // ✅ LOG: Login gagal ke audit log
+            AuditLogger::log(
+                event: 'login_failed',
+                description: "Login gagal untuk login [{$login}] (attempt ke-{$attempts}).",
+                properties: [
+                    'login_input' => $login,
+                    'attempts' => $attempts,
+                ],
+                userId: null // belum diketahui siapa usernya
+            );
+
+            // ✅ ALERT: Jika sudah >= 5 kali gagal, kirim alert brute force
+            if ($attempts >= 5) {
+                SecurityAlerter::loginBruteForce($login, $ip, $attempts);
+            }
 
             throw ValidationException::withMessages([
                 'username' => trans('auth.failed'),
@@ -58,6 +83,8 @@ class LoginRequest extends FormRequest
 
         RateLimiter::clear($this->throttleKey());
     }
+
+
 
     /**
      * Ensure the login request is not rate limited.

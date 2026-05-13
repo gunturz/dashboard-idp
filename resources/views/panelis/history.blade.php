@@ -333,6 +333,12 @@
                     $scoreArr  = $assessment->panelis_scores_json ?? [];
                     $totalScore = $assessment->panelis_score ?? 0;
                     $maxScore   = 50;
+                    $sourcePositionName = optional(optional($assessment->developmentSession)->sourcePosition)->position_name
+                        ?? optional(optional($assessment->talent)->position)->position_name
+                        ?? '-';
+                    $targetPositionName = optional(optional(optional($assessment->developmentSession)->promotionPlan)->targetPosition)->position_name
+                        ?? optional(optional(optional($assessment->talent)->promotion_plan)->targetPosition)->position_name
+                        ?? '?';
 
                     // Determine rekomendasi dot color
                     $rekomenColor = 'yellow';
@@ -349,9 +355,9 @@
                         <div class="hist-meta">
                             <span class="hist-name">{{ optional($talent)->nama ?? '-' }}</span>
                             <span class="hist-role">
-                                {{ $talent->position->position_name ?? '-' }}
+                                {{ $sourcePositionName }}
                                 &rarr;
-                                {{ $talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                                {{ $targetPositionName }}
                             </span>
                             <span class="hist-role">
                                 {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}

@@ -36,6 +36,15 @@ class FilePreviewController extends Controller
             $extension
         );
 
+
+        // Cek apakah file ini milik activity yang accessible oleh user ini
+        $fileContext = $this->resolveFileContext($path);
+        if ($fileContext['activity'] ?? null) {
+            $this->authorize('view', $fileContext['activity']);
+        }
+
+
+        // Baru setelah lolos authorization, serve file
         if ($request->boolean('raw')) {
             return response()->file($absolutePath, array_merge([
                 'Content-Type' => $mimeType,
@@ -50,12 +59,7 @@ class FilePreviewController extends Controller
         }
 
 
-        
-         // Cek apakah file ini milik activity yang accessible oleh user ini
-        $fileContext = $this->resolveFileContext($path);
-        if ($fileContext['activity'] ?? null) {
-            $this->authorize('view', $fileContext['activity']); // ← tambah ini
-        }
+
 
 
         return response()->view('files.preview', [

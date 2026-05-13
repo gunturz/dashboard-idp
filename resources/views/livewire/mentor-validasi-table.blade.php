@@ -28,6 +28,41 @@
         .pdc-log-table tr:hover td {
             background: #fafafa;
         }
+
+        .pdc-log-table .col-person {
+            width: 14%;
+        }
+
+        .pdc-log-table .col-theme {
+            width: 28%;
+        }
+
+        .pdc-log-table .col-date {
+            width: 17%;
+        }
+
+        .pdc-log-table .col-status {
+            width: 10%;
+        }
+
+        .pdc-log-table .col-action {
+            width: 14%;
+        }
+
+        .pdc-log-table .person-cell {
+            min-width: 170px;
+        }
+
+        .pdc-log-table .theme-cell {
+            min-width: 260px;
+            white-space: normal;
+            line-height: 1.45;
+        }
+
+        .pdc-log-table .date-cell {
+            min-width: 170px;
+            font-size: 0.86rem;
+        }
     </style>
 
     {{-- Flash Messages --}}
@@ -151,29 +186,29 @@
                             <thead>
                                 <tr>
                                     @if($currentTab == 'learning')
-                                        <th>Sumber</th>
+                                        <th class="col-person">Sumber</th>
                                     @else
-                                        <th>Mentor</th>
+                                        <th class="col-person">Mentor</th>
                                     @endif
-                                    <th>Tema</th>
-                                    <th>Tanggal Pengiriman/Update</th>
-                                    <th>Tanggal Pelaksanaan</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
+                                    <th class="col-theme">Tema</th>
+                                    <th class="col-date">Tanggal Pengiriman/Update</th>
+                                    <th class="col-date">Tanggal Pelaksanaan</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-action">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($dataList as $data)
                                 <tr>
                                     @if($currentTab == 'learning')
-                                        <td class="text-center font-medium">{{ $data['sumber'] ?: '-' }}</td>
+                                        <td class="text-center font-medium person-cell">{{ $data['sumber'] ?: '-' }}</td>
                                     @else
-                                        <td class="text-center font-medium">{{ $data['mentor'] }}</td>
+                                        <td class="text-center font-medium person-cell">{{ $data['mentor'] }}</td>
                                     @endif
-                                    <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 35) ?: '-' }}</td>
-                                    <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                    <td class="text-center whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
-                                    <td class="text-center whitespace-nowrap w-32">
+                                    <td class="text-center font-bold text-[#1e293b] theme-cell">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 55) ?: '-' }}</td>
+                                    <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                                    <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
+                                    <td class="text-center whitespace-nowrap">
                                         @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')
                                             <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
@@ -239,29 +274,29 @@
                 <thead>
                     <tr>
                         @if($currentTab == 'learning')
-                            <th>Sumber</th>
+                            <th class="col-person">Sumber</th>
                         @else
-                            <th>Mentor</th>
+                            <th class="col-person">Mentor</th>
                         @endif
-                        <th>Tema</th>
-                        <th>Tanggal Pengiriman/Update</th>
-                        <th>Tanggal Pelaksanaan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="col-theme">Tema</th>
+                        <th class="col-date">Tanggal Pengiriman/Update</th>
+                        <th class="col-date">Tanggal Pelaksanaan</th>
+                        <th class="col-status">Status</th>
+                        <th class="col-action">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($dataList as $data)
                     <tr>
                         @if($currentTab == 'learning')
-                            <td class="text-center font-medium">{{ $data['sumber'] ?: '-' }}</td>
+                            <td class="text-center font-medium person-cell">{{ $data['sumber'] ?: '-' }}</td>
                         @else
-                            <td class="text-center font-medium">{{ $data['mentor'] }}</td>
+                            <td class="text-center font-medium person-cell">{{ $data['mentor'] }}</td>
                         @endif
-                        <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 35) ?: '-' }}</td>
-                        <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                        <td class="text-center whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
-                        <td class="text-center whitespace-nowrap w-32">
+                        <td class="text-center font-bold text-[#1e293b] theme-cell">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 55) ?: '-' }}</td>
+                        <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                        <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
+                        <td class="text-center whitespace-nowrap">
                             @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')
                                 <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                                     <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending

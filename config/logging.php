@@ -127,6 +127,44 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        
+        // ============================================================
+        // CHANNEL 1: Application Log — error teknis aplikasi
+        // Driver 'daily' otomatis merotasi file per hari
+        // Dipanggil dengan: Log::channel('app_log')->error(...)
+        // ============================================================
+        'app_log' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/app/app.log'),
+            'level'  => 'debug',
+            'days'   => 30,
+            'replace_placeholders' => true,
+        ],
+        // ============================================================
+        // CHANNEL 2: Audit Log — rekam jejak aktivitas user
+        // Level 'info' cukup karena ini bukan error, melainkan catatan
+        // Dipanggil dengan: Log::channel('audit_log')->info(...)
+        // ============================================================
+        'audit_log' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/audit/audit.log'),
+            'level'  => 'info',
+            'days'   => 90,   // simpan 90 hari untuk kebutuhan compliance
+            'replace_placeholders' => true,
+        ],
+        // ============================================================
+        // CHANNEL 3: Security Log — peristiwa keamanan & ancaman
+        // Level 'warning' ke atas — tidak peduli dengan info rutin
+        // Dipanggil dengan: Log::channel('security_log')->warning(...)
+        // ============================================================
+        'security_log' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/security/security.log'),
+            'level'  => 'warning',
+            'days'   => 180,  // simpan 6 bulan untuk investigasi insiden
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];

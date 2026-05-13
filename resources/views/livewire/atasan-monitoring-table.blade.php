@@ -14,6 +14,7 @@
         </div>
     </div>
 
+    @if($talents->isNotEmpty())
     {{-- Centered title block --}}
     <div class="text-center mb-8">
         @php
@@ -36,6 +37,8 @@
         {{-- Baris 3: Jumlah talent --}}
         <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mt-1">{{ $talents->count() }} TALENT</p>
     </div>
+
+    @endif
 
     @if($talents->isEmpty())
         <div class="text-center py-20 bg-white border border-gray-200 rounded-xl shadow-sm">

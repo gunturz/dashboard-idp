@@ -109,16 +109,22 @@
 
         {{-- Table --}}
         @php
-            $sortedGroupedData = collect($groupedData)->sortBy(function ($group) {
-                $name = $group['company']->nama_company ?? '';
-                if (strpos($name, 'PT. Tiga Serangkai Inti Corpora') !== false) {
-                    return '1';
-                }
-                if (strpos($name, 'PT. Tiga Serangkai Pustaka Mandiri') !== false) {
-                    return '2';
-                }
-                return '3-' . $name;
-            });
+            $archiveRows = collect($groupedData)
+                ->flatMap(function ($group) {
+                    $companyName = $group['company']->nama_company ?? '-';
+
+                    return $group['talents']->map(function ($talent) use ($companyName) {
+                        $talent->archive_company_name = $companyName;
+
+                        return $talent;
+                    });
+                })
+                ->sortByDesc(function ($talent) {
+                    return optional(optional($talent->promotion_plan)->developmentSession)->completed_at
+                        ?? optional($talent->promotion_plan)->updated_at
+                        ?? optional($talent->promotion_plan)->created_at;
+                })
+                ->values();
             $totalRows = 0;
         @endphp
 
@@ -136,35 +142,34 @@
                         </tr>
                     </thead>
                     <tbody id="archiveTbody">
-                        @foreach ($sortedGroupedData as $compId => $group)
-                            @php $compName = $group['company']->nama_company ?? '-'; @endphp
-                            @foreach ($group['talents'] as $talent)
-                                @php
-                                    $totalRows++;
-                                    $startDate = optional($talent->promotion_plan)->start_date
-                                        ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat(
-                                            'd F Y',
-                                        )
-                                        : '-';
-                                    $dueDate = optional($talent->promotion_plan)->target_date
-                                        ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat(
-                                            'd F Y',
-                                        )
-                                        : '-';
-                                    $currentPos = $talent->position->position_name ?? '-';
-                                    $targetPos =
-                                        optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
-                                    $periodLabel = '';
-                                    if (optional($talent->promotion_plan)->target_date) {
-                                        $periodLabel = \Carbon\Carbon::parse(
-                                            $talent->promotion_plan->target_date,
-                                        )->format('Y');
-                                    }
-                                @endphp
-                                <tr class="archive-row border-b border-slate-300 hover:bg-slate-50 transition-colors"
-                                    data-name="{{ strtolower($talent->nama) }}" data-company="{{ $compName }}"
-                                    data-period="{{ $periodLabel }}"
-                                    data-status="{{ optional($talent->promotion_plan)->status_promotion }}">
+                        @foreach ($archiveRows as $talent)
+                            @php
+                                $totalRows++;
+                                $compName = $talent->archive_company_name ?? '-';
+                                $startDate = optional($talent->promotion_plan)->start_date
+                                    ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat(
+                                        'd F Y',
+                                    )
+                                    : '-';
+                                $dueDate = optional($talent->promotion_plan)->target_date
+                                    ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat(
+                                        'd F Y',
+                                    )
+                                    : '-';
+                                $currentPos = $talent->archive_source_position_name ?? ($talent->position->position_name ?? '-');
+                                $targetPos =
+                                    optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
+                                $periodLabel = '';
+                                if (optional($talent->promotion_plan)->target_date) {
+                                    $periodLabel = \Carbon\Carbon::parse(
+                                        $talent->promotion_plan->target_date,
+                                    )->format('Y');
+                                }
+                            @endphp
+                            <tr class="archive-row border-b border-slate-300 hover:bg-slate-50 transition-colors"
+                                data-name="{{ strtolower($talent->nama) }}" data-company="{{ $compName }}"
+                                data-period="{{ $periodLabel }}"
+                                data-status="{{ optional($talent->promotion_plan)->status_promotion }}">
                                     <td>
                                         <p class="font-bold text-[#0f172a]">{{ $talent->nama }}</p>
                                         <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr;
@@ -220,7 +225,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
                         @endforeach
 
                         {{-- Empty state row --}}

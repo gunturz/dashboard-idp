@@ -220,7 +220,7 @@
 
                                 $periodeLabel = '';
                                 if ($startDate && $targetDate) {
-                                    $periodeLabel = $startDate->format('Y') . ' – ' . $targetDate->format('Y');
+                                    $periodeLabel = $startDate->format('Y') . '/' . $targetDate->format('Y');
                                 }
                             @endphp
                             <tr class="riwayat-row-item" data-name="{{ strtolower($talent->nama) }}"
@@ -250,7 +250,7 @@
 
                                 {{-- Aksi --}}
                                 <td class="text-center">
-                                    <a href="{{ route('atasan.riwayat.detail', $talent->id) }}"
+                                    <a href="{{ route('atasan.riwayat.detail', ['talentId' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
                                         class="btn-prem btn-teal px-4 py-1.5 rounded-lg shadow-sm">
                                         Lihat Detail
                                     </a>

@@ -134,7 +134,7 @@
                             </tr>
                             <tr>
                                 @foreach ($talents as $talent)
-                                    <th class="th-sub" style="min-width:100px">Skor Talent</th><th class="th-sub" style="min-width:100px">Skor Atasan</th><th class="th-sub" style="min-width:100px">Final Score</th><th class="th-sub" style="min-width:80px">Gap</th>
+                                    <th class="th-sub" style="min-width:100px">Skor Talent</th><th class="th-sub" style="min-width:100px">Skor Atasan</th><th class="th-sub" style="min-width:100px">Final Score</th><th class="th-sub" style="min-width:80px">GAP</th>
                                 @endforeach
                             </tr>
                         </thead>
@@ -199,32 +199,44 @@
                         </div>
                         <div class="donut-container !shadow-none !border !border-gray-50 !bg-[#f8fafc]">
                             @php
+                                $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
+                                $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
+                                $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
+
                                 $charts = [
-                                    ['label' => 'Exposure', 'done' => min($talent->idpActivities->where('type_idp', 1)->count(), 6), 'total' => 6, 'color' => '#1e293b'],
-                                    ['label' => 'Mentoring', 'done' => min($talent->idpActivities->where('type_idp', 2)->count(), 6), 'total' => 6, 'color' => '#f59e0b'],
-                                    ['label' => 'Learning', 'done' => min($talent->idpActivities->where('type_idp', 3)->count(), 6), 'total' => 6, 'color' => '#0f766e']
+                                    ['label' => 'Exposure',  'done' => min($exposureCount,  6), 'total' => 6, 'color' => '#334155'],
+                                    ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
+                                    ['label' => 'Learning',  'done' => min($learningCount,  6), 'total' => 6, 'color' => '#0d9488'],
                                 ];
                                 $r = 38;
                                 $circ = 2 * M_PI * $r;
                             @endphp
                             @foreach($charts as $chart)
-                                @php $pct = $chart['done'] / $chart['total'];
+                                @php
+                                    $pct    = $chart['done'] / $chart['total'];
                                     $filled = $pct * $circ;
-                                $empty = $circ - $filled; @endphp
-                                <div class="flex flex-col items-center justify-center gap-4 w-1/3">
-                                    <div class="relative w-40 h-40 drop-shadow-md">
+                                    $empty  = $circ - $filled;
+                                @endphp
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="relative w-48 h-48 drop-shadow-sm">
                                         <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-                                            <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#e2e8f0" stroke-width="12" />
-                                            <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" style="transition: stroke-dasharray 0.8s ease;" />
+                                            <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="10" />
+                                            <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                                stroke="{{ $chart['color'] }}" stroke-width="10" stroke-linecap="round"
+                                                stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
+                                                style="transition: stroke-dasharray 0.8s ease;" />
                                         </svg>
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center pt-1">
-                                            <span class="text-[32px] font-extrabold" style="color: {{ $chart['color'] }}">{{ round($pct * 100) }}%</span>
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                            <span class="text-3xl font-extrabold" style="color: {{ $chart['color'] }}">{{ round($pct * 100) }}%</span>
                                         </div>
                                     </div>
-                                    <a href="{{ route('atasan.monitoring.logbook', ['talentId' => $talent->id, 'tab' => strtolower($chart['label'])]) }}" class="inline-flex items-center justify-center gap-2 text-white text-[14px] font-bold px-7 py-2 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-md" style="background-color: {{ $chart['color'] }}">
-                                        <span>{{ $chart['label'] }}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 stroke-2" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    <a href="{{ route('atasan.monitoring.logbook', ['talentId' => $talent->id, 'tab' => strtolower($chart['label'])]) }}"
+                                        class="donut-label-btn inline-flex items-center justify-center gap-2"
+                                        style="background-color: {{ $chart['color'] }};"
+                                        title="Lihat logbook {{ $chart['label'] }}">
+                                        {{ $chart['label'] }}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                                         </svg>
                                     </a>
                                 </div>
@@ -260,7 +272,12 @@
                                             <tr class="border-b border-gray-100 hover:bg-slate-50/50 transition duration-150">
                                                 <td class="py-4 px-6 font-bold text-sm text-slate-800">{{ $proj->title }}</td>
                                                 <td class="py-4 px-6 text-center">
-                                                    <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 hover:bg-teal-50 px-3 py-1.5 rounded-lg transition-colors font-bold text-xs" target="_blank">LIHAT</a>
+                                                    <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}" 
+                                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all" 
+                                                        target="_blank">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                                        Lihat File
+                                                    </a>
                                                 </td>
                                                 <td class="py-4 px-6 text-center">
                                                     <div class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
@@ -370,7 +387,11 @@
                                                                 @if(count($dPaths) > 0)
                                                                     <div class="flex flex-col gap-2">
                                                                         @foreach($dPaths as $di => $dp)
-                                                                            <a href="{{ route('files.preview', ['path' => $dp]) }}" target="_blank" class="text-sm font-bold text-teal-600 hover:text-teal-700 hover:underline flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 shadow-sm">{{ $dNames[$di] ?? 'Dokumen' }}</a>
+                                                                            <a href="{{ route('files.preview', ['path' => $dp]) }}" target="_blank"
+                                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                                                                {{ $dNames[$di] ?? 'Dokumen' }}
+                                                                            </a>
                                                                         @endforeach
                                                                     </div>
                                                                 @else

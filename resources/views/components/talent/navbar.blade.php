@@ -97,8 +97,22 @@
                 </div>
 
                 <div class="py-2.5">
-                    {{-- Quick Action: Notifikasi --}}
-                    <div class="px-3 mb-1">
+                    {{-- Section: Top Actions --}}
+                    <div class="px-3 space-y-0.5">
+                        <a href="{{ route('profile.edit') }}"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <span class="font-medium">Lihat Profil</span>
+                        </a>
+
                         <a href="{{ route('talent.notifikasi') }}"
                             class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
                             <div
@@ -185,19 +199,6 @@
 
                     {{-- Section: Account --}}
                     <div class="px-3">
-                        <a href="{{ route('profile.edit') }}"
-                            class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <span class="font-medium">Lihat Profil</span>
-                        </a>
                         <form method="POST" action="{{ route('logout') }}" class="m-0">
                             @csrf
                             <button type="submit"

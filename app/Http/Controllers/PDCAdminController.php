@@ -101,13 +101,13 @@ class PDCAdminController extends Controller
                         return $item->promotion_plan->target_position_id ?? 0;
                     }
                 )->map(
-                    function ($positionTalents) {
-                        return [
-                            'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                            'talents' => $positionTalents,
-                        ];
-                    }
-                ),
+                        function ($positionTalents) {
+                            return [
+                                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                                'talents' => $positionTalents,
+                            ];
+                        }
+                    ),
             ];
         });
 
@@ -170,17 +170,17 @@ class PDCAdminController extends Controller
                             return $item->promotion_plan->target_position_id ?? 0;
                         }
                     )->map(
-                        function ($positionTalents) {
-                            $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
-                                return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
-                            })->values();
+                            function ($positionTalents) {
+                                $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                                    return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
+                                })->values();
 
-                            return [
-                                'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
-                                'talents' => $sortedPositionTalents,
-                            ];
-                        }
-                    ),
+                                return [
+                                    'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                                    'talents' => $sortedPositionTalents,
+                                ];
+                            }
+                        ),
                 ];
             })
             ->sortByDesc('latest_plan_at');
@@ -945,14 +945,14 @@ class PDCAdminController extends Controller
 
     public function updateQuestions(Request $request)
     {
-         $request->validate([
+        $request->validate([
             'competence_id' => 'required|exists:competence,id',
             'questions' => 'required|array',
             'questions.*.level' => 'required|integer|min:1|max:5',
             'questions.*.text' => 'nullable|string|max:1000',
             'questions.*.id' => 'nullable|exists:question,id',
         ]);
-        
+
         foreach ($request->questions as $levelData) {
             if ($levelData['id'] ?? null) {
                 // Scope ke competence yang benar
@@ -1293,19 +1293,19 @@ class PDCAdminController extends Controller
                             return $item->promotion_plan->target_position_id ?? 0;
                         }
                     )->map(
-                        function ($positionTalents) {
-                            $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
-                                return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
-                                    ?? optional($talent->promotion_plan)->created_at
-                                    ?? $talent->created_at;
-                            })->values();
+                            function ($positionTalents) {
+                                $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                                    return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                                        ?? optional($talent->promotion_plan)->created_at
+                                        ?? $talent->created_at;
+                                })->values();
 
-                            return [
-                                'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
-                                'talents' => $sortedPositionTalents,
-                            ];
-                        }
-                    ),
+                                return [
+                                    'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                                    'talents' => $sortedPositionTalents,
+                                ];
+                            }
+                        ),
                 ];
             })
             ->sortByDesc('latest_project_at');
@@ -1731,20 +1731,30 @@ class PDCAdminController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'company_id' => 'required|exists:company,id',
-            'department_id' => 'required|exists:department,id',
-            'position_id' => 'required|exists:position,id',
+            'department_id' => 'nullable|exists:department,id',
+            'position_id' => 'nullable|exists:position,id',
         ]);
 
         $originalData = $user->getOriginal();
 
-        $user->update([
+        // Selalu update field dasar
+        $updateData = [
             'username' => $request->username,
             'nama' => $request->nama,
             'email' => $request->email,
             'company_id' => $request->company_id,
-            'department_id' => $request->department_id,
-            'position_id' => $request->position_id,
-        ]);
+        ];
+
+        // Hanya update departemen & posisi jika dikirim (Talent/Mentor/Atasan)
+        // Finance & Panelis tidak memiliki field ini di modal edit
+        if ($request->filled('department_id')) {
+            $updateData['department_id'] = $request->department_id;
+        }
+        if ($request->filled('position_id')) {
+            $updateData['position_id'] = $request->position_id;
+        }
+
+        $user->update($updateData);
 
         $changes = [];
         if ($originalData['username'] !== $request->username)
@@ -1755,9 +1765,9 @@ class PDCAdminController extends Controller
             $changes[] = 'Email';
         if ($originalData['company_id'] != $request->company_id)
             $changes[] = 'Perusahaan';
-        if ($originalData['department_id'] != $request->department_id)
+        if (isset($updateData['department_id']) && $originalData['department_id'] != $updateData['department_id'])
             $changes[] = 'Departemen';
-        if ($originalData['position_id'] != $request->position_id)
+        if (isset($updateData['position_id']) && $originalData['position_id'] != $updateData['position_id'])
             $changes[] = 'Posisi';
 
         if (!empty($changes)) {

@@ -347,9 +347,6 @@
                 <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Selesai!</h3>
                 <p class="text-slate-500 text-base max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh
                     talent di tim Anda</p>
-                <a href="{{ route('atasan.riwayat') }}"
-                    class="mt-6 px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold text-base rounded-xl hover:bg-slate-50 transition-all shadow-sm">Buka
-                    Halaman Riwayat</a>
             </div>
         @endforelse
     </div>

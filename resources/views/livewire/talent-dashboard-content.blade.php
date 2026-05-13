@@ -327,7 +327,11 @@
         <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
             @if (session('success_project'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm"
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" 
+                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm"
                     role="alert">
                     <strong class="font-bold">Berhasil!</strong>
                     <span class="block sm:inline">{{ session('success_project') }}</span>

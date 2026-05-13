@@ -138,25 +138,25 @@
                                 <tbody>
                                     @forelse($users as $u)
                                         <tr wire:key="user-row-{{ $roleKey }}-{{ $u->id }}" class="bg-white hover:bg-gray-50/80 transition-colors">
-                                            <td class="px-4 py-3">
-                                                <span class="block truncate max-w-[150px] text-sm font-medium text-[#475569]" title="{{ $u->username }}">
+                                            <td class="px-4 py-3 text-center">
+                                                <span class="block truncate max-w-[150px] mx-auto text-sm font-medium text-[#475569]" title="{{ $u->username }}">
                                                     {{ $u->username }}
                                                 </span>
                                             </td>
-                                            <td class="px-4 py-3">
-                                                <span class="block truncate max-w-[180px] text-sm text-[#475569]" title="{{ $u->email }}">
+                                            <td class="px-4 py-3 text-center">
+                                                <span class="block truncate max-w-[180px] mx-auto text-sm text-[#475569]" title="{{ $u->email }}">
                                                     {{ $u->email }}
                                                 </span>
                                             </td>
-                                            <td class="px-4 py-3">
-                                                <span class="block truncate max-w-[180px] text-sm font-semibold text-[#2e3746]" title="{{ $u->nama }}">
+                                            <td class="px-4 py-3 text-center">
+                                                <span class="block truncate max-w-[180px] mx-auto text-sm font-semibold text-[#2e3746]" title="{{ $u->nama }}">
                                                     {{ $u->nama }}
                                                 </span>
                                             </td>
-                                            <td class="text-sm text-[#475569] px-4 py-3">{{ $u->company->nama_company ?? '—' }}</td>
+                                            <td class="text-sm text-[#475569] px-4 py-3 text-center">{{ $u->company->nama_company ?? '—' }}</td>
                                             @if($showDepartmentAndPosition)
-                                                <td class="text-sm text-[#475569] px-4 py-3">{{ $u->department->nama_department ?? '—' }}</td>
-                                                <td class="text-sm text-[#475569] px-4 py-3">{{ $u->position->position_name ?? '—' }}</td>
+                                                <td class="text-sm text-[#475569] px-4 py-3 text-center">{{ $u->department->nama_department ?? '—' }}</td>
+                                                <td class="text-sm text-[#475569] px-4 py-3 text-center">{{ $u->position->position_name ?? '—' }}</td>
                                             @endif
                                             @if($showMultiRole)
                                                 <td class="px-4 py-3 text-center">

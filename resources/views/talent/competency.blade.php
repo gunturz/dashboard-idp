@@ -349,11 +349,11 @@
                     {{-- Action Right: Ragu-ragu + Sudah Kompeten --}}
                     <div class="flex items-center gap-3">
                         <button type="button" onclick="handleRaguRagu()"
-                            class="px-8 py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
+                            class="px-8 py-2.5 bg-[#f59e0b] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
                             Ragu - ragu
                         </button>
                         <button type="button" onclick="handleSudahKompeten()"
-                            class="px-8 py-2.5 bg-[#0f766e] hover:bg-[#0d9488] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
+                            class="px-8 py-2.5 bg-[#0f766e] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
                             Sudah Kompeten
                         </button>
                     </div>

@@ -366,11 +366,11 @@
                 <div class="flex flex-col sm:flex-row items-center justify-end gap-3 mt-auto">
                     {{-- Action Right: Ragu-ragu + Sudah Kompeten --}}
                     <button type="button" onclick="handleRaguRagu()"
-                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#f59e0b] hover:bg-[#d97706] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
+                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#f59e0b] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
                         Ragu - ragu
                     </button>
                     <button type="button" onclick="handleSudahKompeten()"
-                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#0f766e] hover:bg-[#0d9488] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
+                        class="w-full sm:w-auto px-6 md:px-8 py-2.5 bg-[#0f766e] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 text-sm md:text-base text-center">
                         Sudah Kompeten
                     </button>
                 </div>

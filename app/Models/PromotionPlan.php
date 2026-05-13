@@ -9,7 +9,7 @@ class PromotionPlan extends Model
 {
     use SoftDeletes;
     protected $table = 'promotion_plan';
-    protected $fillable = ['user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date', 'is_locked', 'is_active'];
+    protected $fillable = ['development_session_id', 'user_id_talent', 'target_position_id', 'mentor_ids', 'status_promotion', 'start_date', 'target_date', 'is_locked', 'is_active'];
 
     protected $casts = [
         'mentor_ids'  => 'array',
@@ -37,6 +37,11 @@ class PromotionPlan extends Model
     public function targetPosition()
     {
         return $this->belongsTo(Position::class, 'target_position_id');
+    }
+
+    public function developmentSession()
+    {
+        return $this->belongsTo(DevelopmentSession::class, 'development_session_id');
     }
 
     /**

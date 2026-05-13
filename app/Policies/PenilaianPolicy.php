@@ -21,6 +21,7 @@ class PenilaianPolicy
         // Cek apakah panelis ini benar-benar di-assign ke talent tersebut
         return PanelisAssessment::where('panelis_id', $user->id)
             ->where('user_id_talent', $talentId)
+            ->where('is_active', true)
             ->exists();
     }
 

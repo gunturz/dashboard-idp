@@ -11,12 +11,21 @@ use Illuminate\Support\Str;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
 use App\Models\User;
+use App\Models\DevelopmentSession;
 
 class TalentDashboardController extends Controller
 {
     protected function hasIsActiveColumn(string $table): bool
     {
         return Schema::hasColumn($table, 'is_active');
+    }
+
+    protected function activeDevelopmentSessionFor(User $user): ?DevelopmentSession
+    {
+        return DevelopmentSession::where('user_id_talent', $user->id)
+            ->where('is_active', true)
+            ->latest('created_at')
+            ->first();
     }
 
     protected function resolveMentorNotificationRecipients(User $user, ?int $verifyById = null): array
@@ -63,8 +72,7 @@ class TalentDashboardController extends Controller
                 'user',
                 'notifications'
             ));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talentDashboard error: ' . $e->getMessage());
             throw $e;
         }
@@ -78,9 +86,11 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent yang bisa mengakses halaman ini.');
             }
 
-            $competencies = \App\Models\Competence::with(['questions' => function ($q) {
-                $q->orderBy('level');
-            }])->get();
+            $competencies = \App\Models\Competence::with([
+                'questions' => function ($q) {
+                    $q->orderBy('level');
+                }
+            ])->get();
 
             // Ambil target level per kompetensi sesuai posisi yang dituju talent
             $targetPositionId = optional($user->promotion_plan)->target_position_id;
@@ -92,8 +102,7 @@ class TalentDashboardController extends Controller
             }
 
             return view('talent.competency', compact('user', 'competencies', 'targetLevels'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talent competency error: ' . $e->getMessage());
             throw $e;
         }
@@ -111,6 +120,11 @@ class TalentDashboardController extends Controller
                 return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
             }
 
+            $developmentSession = $this->activeDevelopmentSessionFor($user);
+            if (!$developmentSession) {
+                return back()->with('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
+            }
+
             // Validasi Input Array Score dari request POST
             // min:0 karena Level 1 + Ragu-ragu = skor 0
             $data = $request->validate([
@@ -123,11 +137,21 @@ class TalentDashboardController extends Controller
             $bulanTahun = now()->format('F Y');
             $userIdAtasan = $user->atasan_id ?: null;
 
+            // 0. Nonaktifkan sesi assessment aktif sebelumnya (jika ada)
+            // Agar hanya ada 1 sesi assessment yang aktif (is_active = true) per talent.
+            DB::table('assessment_session')
+                ->where('user_id_talent', $user->id)
+                ->where('development_session_id', $developmentSession->id)
+                ->where('is_active', true)
+                ->update(['is_active' => false]);
+
             // 1. Buat Header / Sesi Assessment Baru
             $assessmentId = DB::table('assessment_session')->insertGetId([
+                'development_session_id' => $developmentSession->id,
                 'user_id_talent' => $user->id,
                 'user_id_atasan' => $userIdAtasan,
                 'period' => "Assessment {$bulanTahun}",
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -137,9 +161,9 @@ class TalentDashboardController extends Controller
             foreach ($data['scores'] as $competenceId => $scoreTalent) {
                 $details[] = [
                     'assessment_id' => $assessmentId,
-                    'competence_id' => (int)$competenceId,
+                    'competence_id' => (int) $competenceId,
                     'score_atasan' => 0, // diisi nanti oleh Atasan
-                    'score_talent' => (int)$scoreTalent,
+                    'score_talent' => (int) $scoreTalent,
                     'gap_score' => 0, // diisi nanti
                     'notes' => 'Completed by talent',
                     'created_at' => now(),
@@ -169,12 +193,10 @@ class TalentDashboardController extends Controller
 
             return redirect()->route('talent.dashboard')
                 ->with('success', 'Berhasil! Penilaian kompetensi Anda telah tersimpan.');
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()
                 ->with('error', 'Data assessment tidak valid. Pastikan semua kompetensi sudah dinilai.');
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error('talent store competency error: ' . $e->getMessage());
             return back()->with('error', 'Gagal memproses penilaian kompetensi: ' . $e->getMessage());
@@ -196,8 +218,7 @@ class TalentDashboardController extends Controller
             $notifications = $this->getNotifications();
 
             return view('talent.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans', 'notifications'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talentDashboard idpMonitoring error: ' . $e->getMessage());
             throw $e;
         }
@@ -215,6 +236,11 @@ class TalentDashboardController extends Controller
                 return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
             }
 
+            $developmentSession = $this->activeDevelopmentSessionFor($user);
+            if (!$developmentSession) {
+                return back()->with('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
+            }
+
             // ── Validasi input ──────────────────────────────────────────────
             $rules = [
                 'theme' => 'required|string|max:255',
@@ -226,8 +252,7 @@ class TalentDashboardController extends Controller
             if ($tab === 'learning') {
                 $rules['activity'] = 'required|string|max:255';
                 $rules['platform'] = 'required|string|max:255';
-            }
-            else {
+            } else {
                 $rules['mentor_name'] = 'required|string|max:255';
                 $rules['location'] = 'required|string|max:255';
             }
@@ -235,8 +260,7 @@ class TalentDashboardController extends Controller
             if ($tab === 'mentoring') {
                 $rules['description'] = 'required|string';
                 $rules['action_plan'] = 'required|string';
-            }
-            elseif ($tab === 'exposure') {
+            } elseif ($tab === 'exposure') {
                 $rules['activity'] = 'required|string';
                 $rules['description'] = 'required|string';
             }
@@ -245,14 +269,12 @@ class TalentDashboardController extends Controller
             $tab_from_request = $request->input('tab_type', $tab);
             if ($tab_from_request === 'learning') {
                 $request->merge(['activity' => $request->input('activity_learning')]);
-            }
-            elseif ($tab_from_request === 'exposure') {
+            } elseif ($tab_from_request === 'exposure') {
                 $request->merge([
                     'activity' => $request->input('activity_exposure'),
                     'description' => $request->input('description_exposure')
                 ]);
-            }
-            elseif ($tab_from_request === 'mentoring') {
+            } elseif ($tab_from_request === 'mentoring') {
                 $request->merge(['description' => $request->input('description_mentoring')]);
             }
 
@@ -286,7 +308,7 @@ class TalentDashboardController extends Controller
 
             $documentPath = count($documentPaths) === 1
                 ? $documentPaths[0] // satu file → simpan string biasa
-                 : (count($documentPaths) > 1 ? json_encode($documentPaths) : ''); // banyak → JSON
+                : (count($documentPaths) > 1 ? json_encode($documentPaths) : ''); // banyak → JSON
 
             $fileName = count($fileNames) === 1
                 ? $fileNames[0]
@@ -301,6 +323,7 @@ class TalentDashboardController extends Controller
             // ── Simpan ke DB ────────────────────────────────────────────────
             IdpActivity::create([
                 'user_id_talent' => $user->id,
+                'development_session_id' => $developmentSession->id,
                 'type_idp' => $typeId,
                 'verify_by' => $verifyById,
                 'theme' => $validated['theme'],
@@ -331,11 +354,9 @@ class TalentDashboardController extends Controller
 
             return redirect(route('talent.dashboard') . '#IDP Monitoring')
                 ->with('success', 'IDP Activity berhasil disubmit.');
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talentDashboard storeIdpMonitoring error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
@@ -347,6 +368,11 @@ class TalentDashboardController extends Controller
             $user = Auth::user();
             if (optional($user->promotion_plan)->is_locked) {
                 return back()->with('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
+            }
+
+            $developmentSession = $this->activeDevelopmentSessionFor($user);
+            if (!$developmentSession) {
+                return back()->with('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
             }
 
             $request->validate([
@@ -367,6 +393,7 @@ class TalentDashboardController extends Controller
 
             ImprovementProject::create([
                 'user_id_talent' => Auth::id(),
+                'development_session_id' => $developmentSession->id,
                 'title' => $request->judul_project,
                 'document_path' => $documentPath,
                 'status' => 'Pending',
@@ -380,11 +407,9 @@ class TalentDashboardController extends Controller
 
             return redirect(route('talent.dashboard') . '#Project Improvement')
                 ->with('success_project', 'Project Improvement berhasil disubmit.');
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('storeProject error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menyimpan project.');
         }
@@ -498,8 +523,7 @@ class TalentDashboardController extends Controller
                 if (str_starts_with($act->document_path, '["')) {
                     $docPaths = json_decode($act->document_path, true) ?? [];
                     $docNames = $act->file_name ? explode(', ', $act->file_name) : [];
-                }
-                else {
+                } else {
                     $docPaths = [$act->document_path];
                     $docNames = [$act->file_name ?? ''];
                 }
@@ -519,8 +543,7 @@ class TalentDashboardController extends Controller
                     'file_names' => $docNames,
                     'status' => $act->status,
                 ];
-            }
-            elseif ($typeName === 'Mentoring') {
+            } elseif ($typeName === 'Mentoring') {
                 $mentoringData[] = [
                     'id' => $act->id,
                     'mentor' => $act->verifier ? $act->verifier->nama : '-',
@@ -534,8 +557,7 @@ class TalentDashboardController extends Controller
                     'file_names' => $docNames,
                     'status' => $act->status,
                 ];
-            }
-            elseif ($typeName === 'Learning') {
+            } elseif ($typeName === 'Learning') {
                 $learningData[] = [
                     'id' => $act->id,
                     'sumber' => $act->activity,
@@ -599,8 +621,7 @@ class TalentDashboardController extends Controller
             $editMode = true;
 
             return view('talent.idp-monitoring', compact('user', 'tab', 'mentors', 'atasans', 'notifications', 'activity', 'editMode'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talentDashboard editIdpMonitoring error: ' . $e->getMessage());
             return back()->with('error', 'Gagal memuat form edit logbook.');
         }
@@ -634,8 +655,7 @@ class TalentDashboardController extends Controller
             if ($tab === 'learning') {
                 $rules['activity'] = 'required|string|max:255';
                 $rules['platform'] = 'required|string|max:255';
-            }
-            else {
+            } else {
                 $rules['mentor_name'] = 'required|string|max:255';
                 $rules['location'] = 'required|string|max:255';
             }
@@ -643,8 +663,7 @@ class TalentDashboardController extends Controller
             if ($tab === 'mentoring') {
                 $rules['description'] = 'required|string';
                 $rules['action_plan'] = 'required|string';
-            }
-            elseif ($tab === 'exposure') {
+            } elseif ($tab === 'exposure') {
                 $rules['activity'] = 'required|string';
                 $rules['description'] = 'required|string';
             }
@@ -653,14 +672,12 @@ class TalentDashboardController extends Controller
             $tab_from_request = $request->input('tab_type', $tab);
             if ($tab_from_request === 'learning') {
                 $request->merge(['activity' => $request->input('activity_learning')]);
-            }
-            elseif ($tab_from_request === 'exposure') {
+            } elseif ($tab_from_request === 'exposure') {
                 $request->merge([
                     'activity' => $request->input('activity_exposure'),
                     'description' => $request->input('description_exposure')
                 ]);
-            }
-            elseif ($tab_from_request === 'mentoring') {
+            } elseif ($tab_from_request === 'mentoring') {
                 $request->merge(['description' => $request->input('description_mentoring')]);
             }
 
@@ -683,8 +700,7 @@ class TalentDashboardController extends Controller
                 $oldPaths = [];
                 if (str_starts_with($activity->document_path, '["')) {
                     $oldPaths = json_decode($activity->document_path, true);
-                }
-                else {
+                } else {
                     $oldPaths = [$activity->document_path];
                 }
 
@@ -747,11 +763,9 @@ class TalentDashboardController extends Controller
 
             return redirect(route('talent.dashboard') . '#IDP Monitoring')
                 ->with('success', 'IDP Activity berhasil diperbarui.');
-        }
-        catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talentDashboard updateIdpMonitoring error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
@@ -781,8 +795,7 @@ class TalentDashboardController extends Controller
                     foreach ($paths as $path) {
                         \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
                     }
-                }
-                else {
+                } else {
                     \Illuminate\Support\Facades\Storage::disk('public')->delete($act->document_path);
                 }
             }
@@ -799,8 +812,7 @@ class TalentDashboardController extends Controller
             );
 
             return redirect()->back()->with('success', 'Data logbook berhasil dihapus.');
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talentDashboard destroyIdpMonitoring error: ' . $e->getMessage());
             return back()->with('error', 'Gagal menghapus data logbook.');
         }
@@ -827,28 +839,22 @@ class TalentDashboardController extends Controller
                 'Not Ready',
             ];
 
-            $currentStatus = optional($user->promotion_plan)->status_promotion;
-            $isDecisionFinalCurrent = in_array($currentStatus, $finalStatuses);
-
-            // Ambil semua sesi: sertakan sesi arsip (is_active=false) SELALU, 
-            // dan sertakan sesi aktif (is_active=true) HANYA JIKA keputusannya sudah final.
-            $sessions = DB::table('assessment_session as a')
-                ->leftJoin('promotion_plan as pp', function ($join) {
-                    $join->on('pp.user_id_talent', '=', 'a.user_id_talent')
-                        ->on('pp.is_active', '=', 'a.is_active');
-                })
+            // Riwayat sekarang berbasis Development Session, sehingga satu talent bisa
+            // mempunyai banyak siklus promosi tanpa data antar siklus tercampur.
+            $sessions = DB::table('development_sessions as ds')
+                ->leftJoin('promotion_plan as pp', 'pp.development_session_id', '=', 'ds.id')
                 ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
                 ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
-                ->where('a.user_id_talent', $user->id)
-                ->where(function ($q) use ($isDecisionFinalCurrent) {
-                    $q->where('a.is_active', false); // Selalu tampilkan riwayat lama
-                    if ($isDecisionFinalCurrent) {
-                        $q->orWhere('a.is_active', true); // Tampilkan sesi sekarang jika sudah final
-                    }
+                ->where('ds.user_id_talent', $user->id)
+                ->where(function ($q) use ($finalStatuses) {
+                    $q->where('ds.is_active', false)
+                        ->orWhereIn('ds.status', $finalStatuses);
                 })
-                ->orderBy('a.created_at', 'desc')
+                ->orderBy('ds.created_at', 'desc')
                 ->select(
-                    'a.*',
+                    'ds.*',
+                    'pp.start_date',
+                    'pp.target_date',
                     'sp.position_name as source_position_name',
                     'tp.position_name as target_position_name'
                 )
@@ -858,8 +864,7 @@ class TalentDashboardController extends Controller
             $isDecisionFinal = $sessions->isNotEmpty();
 
             return view('talent.riwayat', compact('user', 'notifications', 'sessions', 'isDecisionFinal'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talent riwayat error: ' . $e->getMessage());
             throw $e;
         }
@@ -874,20 +879,29 @@ class TalentDashboardController extends Controller
 
             $notifications = $this->getNotifications();
 
-            // Sesi Assessment yang dipilih
-            $session = DB::table('assessment_session')
-                ->where('id', $id)
+            // Development Session yang dipilih
+            $developmentSession = DevelopmentSession::where('id', $id)
                 ->where('user_id_talent', $user->id)
                 ->first();
 
-            if (!$session) {
+            if (!$developmentSession) {
                 abort(404, 'Data riwayat tidak ditemukan.');
+            }
+
+            $session = DB::table('assessment_session')
+                ->where('development_session_id', $developmentSession->id)
+                ->where('user_id_talent', $user->id)
+                ->orderByDesc('created_at')
+                ->first();
+
+            if (!$session) {
+                abort(404, 'Data assessment pada riwayat ini tidak ditemukan.');
             }
 
             // Ensure the profile card shows data from the viewed session's cycle
             $sessionPlan = \App\Models\PromotionPlan::with(['targetPosition'])
                 ->where('user_id_talent', $user->id)
-                ->where('is_active', $session->is_active)
+                ->where('development_session_id', $developmentSession->id)
                 ->orderBy('updated_at', 'desc')
                 ->first();
 
@@ -914,10 +928,7 @@ class TalentDashboardController extends Controller
             // IDP Monitoring (Aktivitas)
             $idpActivities = IdpActivity::with('type')
                 ->where('user_id_talent', $user->id)
-                ->when(
-                    $this->hasIsActiveColumn('idp_activity'),
-                    fn($query) => $query->where('is_active', false)
-                )
+                ->where('development_session_id', $developmentSession->id)
                 ->get();
 
             $exposureCount = $idpActivities->filter(fn($act) => $act->type && $act->type->type_name === 'Exposure')->count();
@@ -926,21 +937,15 @@ class TalentDashboardController extends Controller
 
             // Project Improvement
             $projects = ImprovementProject::where('user_id_talent', $user->id)
-                ->when(
-                    $this->hasIsActiveColumn('improvement_project'),
-                    fn($query) => $query->where('is_active', false)
-                )
+                ->where('development_session_id', $developmentSession->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
 
             // ── Hasil Penilaian Panelis ──────────────────────────────────────
             $panelisAssessments = \App\Models\PanelisAssessment::with('panelis')
                 ->where('user_id_talent', $user->id)
+                ->where('development_session_id', $developmentSession->id)
                 ->whereNotNull('panelis_scores_json')
-                ->when(
-                    $this->hasIsActiveColumn('panelis_assessments'),
-                    fn($query) => $query->where('is_active', false)
-                )
                 ->get();
 
             // Nama aspek penilaian (harus sama dengan urutan di form penilaian panelis)
@@ -1007,8 +1012,7 @@ class TalentDashboardController extends Controller
                 'panelisKomentar',
                 'panelisCount'
             ));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('talent riwayatDetail error: ' . $e->getMessage());
             throw $e;
         }

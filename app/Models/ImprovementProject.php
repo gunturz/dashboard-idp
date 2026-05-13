@@ -12,6 +12,7 @@ class ImprovementProject extends Model
 
     protected $fillable = [
         'user_id_talent',
+        'development_session_id',
         'title',
         'document_path',
         'status',
@@ -25,6 +26,7 @@ class ImprovementProject extends Model
         'panelis_rekomendasi',
         'panelis_dinilai_oleh',
         'panelis_tanggal_penilaian',
+        'is_active',
     ];
 
     protected $casts = [
@@ -34,6 +36,11 @@ class ImprovementProject extends Model
     public function talent()
     {
         return $this->belongsTo(User::class, 'user_id_talent');
+    }
+
+    public function developmentSession()
+    {
+        return $this->belongsTo(DevelopmentSession::class, 'development_session_id');
     }
 
     public function verifier()

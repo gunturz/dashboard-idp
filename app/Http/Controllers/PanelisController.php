@@ -23,12 +23,6 @@ class PanelisController extends Controller
     {
         $user = auth()->user();
 
-        // IDs talent yang sudah dinilai SELESAI oleh panelis yang sedang login
-        $alreadyAssessedTalentIds = PanelisAssessment::where('panelis_id', $user->id)
-            ->whereNotNull('panelis_score')
-            ->pluck('user_id_talent')
-            ->toArray();
-
         // Fetch talents with status Pending Panelis yang di-assign ke panelis ini
         $talents = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
@@ -37,10 +31,11 @@ class PanelisController extends Controller
                 $q->where('status_promotion', 'Pending Panelis')
                     ->whereNotNull('target_position_id');
             })
-            ->whereNotIn('id', $alreadyAssessedTalentIds)
             // Hanya talent khusus untuk panelis ini (assignment)
             ->whereHas('panelisAssessments', function ($q) use ($user) {
-                $q->where('panelis_id', $user->id);
+                $q->where('panelis_id', $user->id)
+                    ->where('is_active', true)
+                    ->whereNull('panelis_score');
             })
             ->with(['company', 'department', 'position', 'mentor', 'atasan', 'promotion_plan.targetPosition'])
             ->get();
@@ -187,8 +182,14 @@ class PanelisController extends Controller
         $project = $talent->improvementProjects->last();
 
         // Cek apakah panelis ini sudah pernah menilai talent ini
+        $activePlan = PromotionPlan::where('user_id_talent', $talent_id)
+            ->where('is_active', true)
+            ->latest('created_at')
+            ->first();
+
         $existingAssessment = PanelisAssessment::where('user_id_talent', $talent_id)
             ->where('panelis_id', $user->id)
+            ->when($activePlan?->development_session_id, fn($q) => $q->where('development_session_id', $activePlan->development_session_id))
             ->first();
 
         return view('panelis.penilaian', compact('user', 'talent', 'project', 'existingAssessment'))
@@ -206,11 +207,16 @@ class PanelisController extends Controller
 
         $scores = $request->input('scores', []); // array of integers
         $totalScore = array_sum($scores);
+        $activePlan = PromotionPlan::where('user_id_talent', $talent_id)
+            ->where('is_active', true)
+            ->latest('created_at')
+            ->firstOrFail();
 
         // Simpan / update penilaian panelis ini untuk talent ini (per panelis per talent)
         PanelisAssessment::updateOrCreate(
             [
                 'user_id_talent' => $talent_id,
+                'development_session_id' => $activePlan->development_session_id,
                 'panelis_id' => $user->id,
             ],
             [
@@ -219,6 +225,7 @@ class PanelisController extends Controller
                 'panelis_komentar' => $request->input('komentar'),
                 'panelis_rekomendasi' => $request->input('rekomendasi'),
                 'panelis_tanggal_penilaian' => $request->input('tanggal_penilaian', now()->toDateString()),
+                'is_active' => true,
             ]
         );
 
@@ -245,14 +252,21 @@ class PanelisController extends Controller
         $assessments = PanelisAssessment::where('panelis_id', $user->id)
             ->whereNotNull('panelis_score')
             ->with([
+                'developmentSession.promotionPlan.targetPosition',
+                'developmentSession.improvementProjects',
                 'talent.position',
                 'talent.department',
                 'talent.company',
                 'talent.promotion_plan.targetPosition',
-                'talent.improvementProjects',
             ])
             ->orderBy('updated_at', 'desc')
             ->get();
+
+        foreach ($assessments as $assessment) {
+            if ($assessment->talent && $assessment->developmentSession?->promotionPlan) {
+                $assessment->talent->setRelation('promotion_plan', $assessment->developmentSession->promotionPlan);
+            }
+        }
 
         return view('panelis.history', compact('user', 'assessments'))
             ->with('notifications', $this->getNotifications());

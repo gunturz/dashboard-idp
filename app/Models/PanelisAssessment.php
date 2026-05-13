@@ -12,12 +12,14 @@ class PanelisAssessment extends Model
 
     protected $fillable = [
         'user_id_talent',
+        'development_session_id',
         'panelis_id',
         'panelis_score',
         'panelis_scores_json',
         'panelis_komentar',
         'panelis_rekomendasi',
         'panelis_tanggal_penilaian',
+        'is_active',
     ];
 
     protected $casts = [
@@ -28,6 +30,11 @@ class PanelisAssessment extends Model
     public function talent()
     {
         return $this->belongsTo(User::class, 'user_id_talent');
+    }
+
+    public function developmentSession()
+    {
+        return $this->belongsTo(DevelopmentSession::class, 'development_session_id');
     }
 
     public function panelis()

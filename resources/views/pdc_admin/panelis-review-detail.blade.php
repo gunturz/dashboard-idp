@@ -489,9 +489,7 @@
             <tbody>
                 @forelse ($panelisUsers as $i => $panelis)
                     @php
-                        $assessment = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)
-                            ->where('panelis_id', $panelis->id)
-                            ->first();
+                        $assessment = $panelisAssessmentsByPanelis[$panelis->id] ?? null;
                         $isAssessor = $assessment !== null;
                     @endphp
                     <tr>

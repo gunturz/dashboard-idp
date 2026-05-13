@@ -237,8 +237,8 @@
                     <tbody>
                         @forelse($sessions as $session)
                             @php
-                                $startDate = \Carbon\Carbon::parse($session->created_at);
-                                $dueDate = \Carbon\Carbon::parse($session->created_at)->addMonths(6);
+                                $startDate = \Carbon\Carbon::parse($session->start_date ?? $session->created_at);
+                                $dueDate = \Carbon\Carbon::parse($session->target_date ?? $session->created_at)->addMonths(isset($session->target_date) ? 0 : 6);
                                 // Gunakan posisi yang di-snapshot saat sesi dibuat
                                 $posName = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
                                 $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';

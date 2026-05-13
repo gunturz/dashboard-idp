@@ -15,9 +15,8 @@ class AtasanDashboardController extends Controller
     protected function applyActiveTalentScope($query, int $atasanId)
     {
         return $query->where('atasan_id', $atasanId)
-            ->whereDoesntHave('all_promotion_plans', function ($q) {
-                $q->where('is_active', false)
-                    ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
+            ->whereHas('promotion_plan', function ($q) {
+                $q->where('is_active', true);
             });
     }
 
@@ -70,7 +69,7 @@ class AtasanDashboardController extends Controller
         $talents = $allTalents->filter(function ($talent) {
             $session = $talent->assessmentSession;
             if (!$session || !$session->details || $session->details->isEmpty()) {
-                return true; // Belum ada sesi assessment — tampilkan
+                return false; // Belum ada sesi assessment — jangan tampilkan
             }
             $totalAtasanScore = $session->details->sum('score_atasan');
             return $totalAtasanScore == 0; // Hanya tampilkan yang belum dinilai
@@ -141,6 +140,17 @@ class AtasanDashboardController extends Controller
             ->with(['promotion_plan.targetPosition', 'position'])
             ->findOrFail($talentId);
 
+        // Find the ACTIVE assessment session for this talent
+        $session = DB::table('assessment_session')
+            ->where('user_id_talent', $talentId)
+            ->where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (!$session) {
+            return redirect()->route('atasan.dashboard')->with('error', 'Assessment session belum dibuat oleh talent.');
+        }
+
         $competencies = Competence::with([
             'questions' => function ($q) {
                 $q->orderBy('level');
@@ -165,9 +175,11 @@ class AtasanDashboardController extends Controller
             'scores.*' => 'required|integer|min:0|max:5',
         ]);
 
-        // Find the assessment session for this talent
+        // Find the ACTIVE assessment session for this talent
+        // Filter by is_active = true ensures we don't accidentally update an archived session
         $session = DB::table('assessment_session')
             ->where('user_id_talent', $talentId)
+            ->where('is_active', true)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -230,6 +242,7 @@ class AtasanDashboardController extends Controller
     public function riwayat(Request $request)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
+        $finalStatuses = ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
         $search = $request->input('search');
         $filterPeriode = $request->input('periode');
         $filterPerusahaan = $request->input('perusahaan');
@@ -238,7 +251,7 @@ class AtasanDashboardController extends Controller
         $talentsQuery = User::where('atasan_id', $user->id)
             ->whereHas('all_promotion_plans', function ($q) {
                 $q->where('is_active', false)
-                    ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
+                    ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
             })
             ->with([
                 'position',
@@ -246,7 +259,7 @@ class AtasanDashboardController extends Controller
                 'company',
                 'all_promotion_plans' => function ($q) {
                     $q->where('is_active', false)
-                        ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted'])
+                        ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'])
                         ->with('targetPosition')
                         ->orderByDesc('created_at');
                 },
@@ -261,9 +274,15 @@ class AtasanDashboardController extends Controller
         $talents = $talentsQuery->get();
 
         foreach ($talents as $talent) {
-            $talent->promotion_plan = $talent->all_promotion_plans->first();
-            $talent->assessmentSession = $talent->all_assessmentSessions->first();
-            $talent->improvementProjects = $talent->all_improvementProjects;
+            $archivedPlan = $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active && in_array($plan->status_promotion, $finalStatuses));
+            $sessionId = $archivedPlan?->development_session_id;
+            $talent->promotion_plan = $archivedPlan;
+            $talent->assessmentSession = $sessionId
+                ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
+                : $talent->all_assessmentSessions->first();
+            $talent->improvementProjects = $sessionId
+                ? $talent->all_improvementProjects->where('development_session_id', $sessionId)->values()
+                : $talent->all_improvementProjects;
         }
 
         $competencies = Competence::orderBy('id')->get();
@@ -356,6 +375,7 @@ class AtasanDashboardController extends Controller
     public function riwayatDetail($talentId)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
+        $finalStatuses = ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
         $talent = User::where('atasan_id', $user->id)
             ->with([
                 'position',
@@ -374,19 +394,26 @@ class AtasanDashboardController extends Controller
             ])
             ->findOrFail($talentId);
 
-        if (!$talent->promotion_plan && $talent->all_promotion_plans->isNotEmpty()) {
-            $talent->promotion_plan = $talent->all_promotion_plans->firstWhere('is_active', false) ?? $talent->all_promotion_plans->first();
+        $archivedPlan = $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active && in_array($plan->status_promotion, $finalStatuses));
+        $sessionId = $archivedPlan?->development_session_id;
+
+        if ($archivedPlan) {
+            $talent->promotion_plan = $archivedPlan;
         }
 
-        if (!$talent->assessmentSession && $talent->all_assessmentSessions->isNotEmpty()) {
+        if ($sessionId) {
+            $talent->assessmentSession = $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId);
+            $talent->idpActivities = $talent->all_idpActivities->where('development_session_id', $sessionId)->values();
+            $talent->improvementProjects = $talent->all_improvementProjects->where('development_session_id', $sessionId)->values();
+        } elseif (!$talent->assessmentSession && $talent->all_assessmentSessions->isNotEmpty()) {
             $talent->assessmentSession = $talent->all_assessmentSessions->firstWhere('is_active', false) ?? $talent->all_assessmentSessions->first();
         }
 
-        if ($talent->idpActivities->isEmpty() && $talent->all_idpActivities->isNotEmpty()) {
+        if (!$sessionId && $talent->idpActivities->isEmpty() && $talent->all_idpActivities->isNotEmpty()) {
             $talent->idpActivities = $talent->all_idpActivities;
         }
 
-        if ($talent->improvementProjects->isEmpty() && $talent->all_improvementProjects->isNotEmpty()) {
+        if (!$sessionId && $talent->improvementProjects->isEmpty() && $talent->all_improvementProjects->isNotEmpty()) {
             $talent->improvementProjects = $talent->all_improvementProjects;
         }
 

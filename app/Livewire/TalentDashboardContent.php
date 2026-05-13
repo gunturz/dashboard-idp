@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
+use App\Models\DevelopmentSession;
 
 class TalentDashboardContent extends Component
 {
@@ -32,6 +33,16 @@ class TalentDashboardContent extends Component
             return;
         }
 
+        $developmentSession = DevelopmentSession::where('user_id_talent', $user->id)
+            ->where('is_active', true)
+            ->latest('created_at')
+            ->first();
+
+        if (!$developmentSession) {
+            session()->flash('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
+            return;
+        }
+
         $this->validate([
             'judul_project' => 'required|string|max:255',
             'project_file' => 'required|file|max:10240|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx,zip',
@@ -50,6 +61,7 @@ class TalentDashboardContent extends Component
 
             ImprovementProject::create([
                 'user_id_talent' => $user->id,
+                'development_session_id' => $developmentSession->id,
                 'title' => $this->judul_project,
                 'document_path' => $documentPath,
                 'status' => 'Pending',
@@ -111,12 +123,17 @@ class TalentDashboardContent extends Component
     public function render()
     {
         $user = Auth::user();
+        $developmentSession = DevelopmentSession::where('user_id_talent', $user->id)
+            ->where('is_active', true)
+            ->latest('created_at')
+            ->first();
 
         // 1. Kinerja (Kompetensi) Logic
         $hasDevPlan = !is_null(optional($user->promotion_plan)->target_position_id);
 
         $latestAssessment = DB::table('assessment_session')
             ->where('user_id_talent', $user->id)
+            ->when($developmentSession, fn($query) => $query->where('development_session_id', $developmentSession->id))
             ->when(
                 $this->hasIsActiveColumn('assessment_session'),
                 fn($query) => $query->where('is_active', true)
@@ -151,6 +168,7 @@ class TalentDashboardContent extends Component
         // 2. IDP Charts
         $idpActivities = IdpActivity::with('type')
             ->where('user_id_talent', $user->id)
+            ->when($developmentSession, fn($query) => $query->where('development_session_id', $developmentSession->id))
             ->when(
                 $this->hasIsActiveColumn('idp_activity'),
                 fn($query) => $query->where('is_active', true)
@@ -163,6 +181,7 @@ class TalentDashboardContent extends Component
 
         // 3. Projects
         $projects = ImprovementProject::where('user_id_talent', $user->id)
+            ->when($developmentSession, fn($query) => $query->where('development_session_id', $developmentSession->id))
             ->when(
                 $this->hasIsActiveColumn('improvement_project'),
                 fn($query) => $query->where('is_active', true)

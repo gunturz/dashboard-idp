@@ -172,7 +172,7 @@
 
                     {{-- Aksi --}}
                     <td>
-                        <a href="{{ route('mentor.riwayat.logbook', $talent->id) }}"
+                        <a href="{{ route('mentor.riwayat.logbook', ['talentId' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
                             class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

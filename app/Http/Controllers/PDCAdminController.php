@@ -586,6 +586,7 @@ class PDCAdminController extends Controller
 
             foreach ($request->talents as $talentData) {
                 $talentId = $talentData['talent_id'];
+                $sourcePositionId = User::where('id', $talentId)->value('position_id');
                 $existingPlan = PromotionPlan::where('user_id_talent', $talentId)
                     ->where('is_active', true)
                     ->first();
@@ -602,6 +603,7 @@ class PDCAdminController extends Controller
                 if ($planAlreadyExists && !$developmentSession) {
                     $developmentSession = DevelopmentSession::create([
                         'user_id_talent' => $talentId,
+                        'source_position_id' => $sourcePositionId,
                         'target_position_id' => $existingPlan->target_position_id,
                         'atasan_id' => $request->atasan_id,
                         'mentor_ids' => $existingPlan->mentor_ids,
@@ -645,6 +647,7 @@ class PDCAdminController extends Controller
 
                     $developmentSession->update([
                         'target_position_id' => $request->target_position_id,
+                        'source_position_id' => $developmentSession->source_position_id ?: $sourcePositionId,
                         'atasan_id' => $request->atasan_id,
                         'mentor_ids' => $mentorIds,
                         'status' => 'In Progress',
@@ -665,6 +668,7 @@ class PDCAdminController extends Controller
                 } else {
                     $developmentSession = DevelopmentSession::create([
                         'user_id_talent' => $talentId,
+                        'source_position_id' => $sourcePositionId,
                         'target_position_id' => $request->target_position_id,
                         'atasan_id' => $request->atasan_id,
                         'mentor_ids' => $mentorIds,
@@ -1640,6 +1644,7 @@ class PDCAdminController extends Controller
                 'all_promotion_plans' => function ($q) use ($finalStatuses) {
                     $q->where('is_active', false)->whereIn('status_promotion', $finalStatuses);
                 },
+                'all_promotion_plans.developmentSession.sourcePosition',
                 'all_improvementProjects'
             ])
             ->get();
@@ -1667,6 +1672,8 @@ class PDCAdminController extends Controller
                 $archiveRow->setRelations($talent->getRelations());
                 $archiveRow->promotion_plan = $plan;
                 $archiveRow->archive_session_id = $plan->development_session_id;
+                $archiveRow->archive_source_position_name = optional(optional($plan->developmentSession)->sourcePosition)->position_name
+                    ?? optional($talent->position)->position_name;
                 $archiveRow->improvementProjects = $plan->development_session_id
                     ? $talent->all_improvementProjects->where('development_session_id', $plan->development_session_id)->values()
                     : $talent->all_improvementProjects;
@@ -1705,6 +1712,7 @@ class PDCAdminController extends Controller
             'mentor',
             'atasan',
             'all_promotion_plans.targetPosition',
+            'all_promotion_plans.developmentSession.sourcePosition',
             'all_assessmentSessions.details.competence',
             'all_idpActivities.type',
             'all_improvementProjects.verifier',
@@ -1719,6 +1727,9 @@ class PDCAdminController extends Controller
             : $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active);
         $sessionId = $archivedPlan?->development_session_id;
         $talent->promotion_plan = $archivedPlan ?? $talent->all_promotion_plans->first();
+        if ($archivedPlan?->developmentSession?->sourcePosition) {
+            $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+        }
         $talent->assessmentSession = $sessionId
             ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
             : $talent->all_assessmentSessions->first();
@@ -1788,6 +1799,7 @@ class PDCAdminController extends Controller
             'mentor',
             'atasan',
             'all_promotion_plans.targetPosition',
+            'all_promotion_plans.developmentSession.sourcePosition',
             'all_assessmentSessions.details.competence',
             'all_idpActivities.type',
             'all_improvementProjects.verifier',
@@ -1803,6 +1815,9 @@ class PDCAdminController extends Controller
             : $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active);
         $sessionId = $archivedPlan?->development_session_id;
         $talent->promotion_plan = $archivedPlan ?? $talent->all_promotion_plans->first();
+        if ($archivedPlan?->developmentSession?->sourcePosition) {
+            $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+        }
         $talent->assessmentSession = $sessionId
             ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
             : $talent->all_assessmentSessions->first();

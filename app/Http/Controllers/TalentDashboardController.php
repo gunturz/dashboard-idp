@@ -844,7 +844,7 @@ class TalentDashboardController extends Controller
             $sessions = DB::table('development_sessions as ds')
                 ->leftJoin('promotion_plan as pp', 'pp.development_session_id', '=', 'ds.id')
                 ->leftJoin('position as tp', 'tp.id', '=', 'pp.target_position_id')
-                ->leftJoin('position as sp', 'sp.grade_level', '=', DB::raw('tp.grade_level - 1'))
+                ->leftJoin('position as sp', 'sp.id', '=', 'ds.source_position_id')
                 ->where('ds.user_id_talent', $user->id)
                 ->where(function ($q) use ($finalStatuses) {
                     $q->where('ds.is_active', false)

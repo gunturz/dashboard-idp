@@ -248,19 +248,25 @@ class AtasanDashboardController extends Controller
         $filterPerusahaan = $request->input('perusahaan');
         $filterDepartemen = $request->input('departemen');
 
-        $talentsQuery = User::where('atasan_id', $user->id)
-            ->whereHas('all_promotion_plans', function ($q) {
+        $talentsQuery = User::whereHas('all_promotion_plans', function ($q) use ($user, $finalStatuses) {
                 $q->where('is_active', false)
-                    ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
+                    ->whereIn('status_promotion', $finalStatuses)
+                    ->whereHas('developmentSession', function ($sessionQuery) use ($user) {
+                        $sessionQuery->where('atasan_id', $user->id);
+                    });
             })
             ->with([
                 'position',
                 'department',
                 'company',
-                'all_promotion_plans' => function ($q) {
+                'all_promotion_plans' => function ($q) use ($user, $finalStatuses) {
                     $q->where('is_active', false)
-                        ->whereIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'])
+                        ->whereIn('status_promotion', $finalStatuses)
+                        ->whereHas('developmentSession', function ($sessionQuery) use ($user) {
+                            $sessionQuery->where('atasan_id', $user->id);
+                        })
                         ->with('targetPosition')
+                        ->with('developmentSession.sourcePosition')
                         ->orderByDesc('created_at');
                 },
                 'all_assessmentSessions.details.competence',
@@ -271,19 +277,45 @@ class AtasanDashboardController extends Controller
             $talentsQuery->where('nama', 'like', '%' . $search . '%');
         }
 
-        $talents = $talentsQuery->get();
+        $talentModels = $talentsQuery->get();
+        $talents = collect();
 
-        foreach ($talents as $talent) {
-            $archivedPlan = $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active && in_array($plan->status_promotion, $finalStatuses));
-            $sessionId = $archivedPlan?->development_session_id;
-            $talent->promotion_plan = $archivedPlan;
-            $talent->assessmentSession = $sessionId
-                ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
-                : $talent->all_assessmentSessions->first();
-            $talent->improvementProjects = $sessionId
-                ? $talent->all_improvementProjects->where('development_session_id', $sessionId)->values()
-                : $talent->all_improvementProjects;
+        foreach ($talentModels as $talent) {
+            foreach ($talent->all_promotion_plans as $archivedPlan) {
+                if ($archivedPlan->is_active || !in_array($archivedPlan->status_promotion, $finalStatuses, true)) {
+                    continue;
+                }
+
+                $sessionId = $archivedPlan->development_session_id;
+                $historyRow = $talent->replicate();
+                $historyRow->id = $talent->id;
+                $historyRow->exists = true;
+                $historyRow->setRelations($talent->getRelations());
+                $historyRow->promotion_plan = $archivedPlan;
+                $historyRow->archive_session_id = $sessionId;
+
+                if ($archivedPlan->developmentSession?->sourcePosition) {
+                    $historyRow->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+                }
+
+                $historyRow->assessmentSession = $sessionId
+                    ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
+                    : $talent->all_assessmentSessions->first();
+                $historyRow->improvementProjects = $sessionId
+                    ? $talent->all_improvementProjects->where('development_session_id', $sessionId)->values()
+                    : $talent->all_improvementProjects;
+
+                $talents->push($historyRow);
+            }
         }
+
+        $talents = $talents
+            ->sortByDesc(function ($talent) {
+                return optional(optional($talent->promotion_plan)->developmentSession)->completed_at
+                    ?? optional($talent->promotion_plan)->updated_at
+                    ?? optional($talent->promotion_plan)->created_at;
+            })
+            ->values();
 
         $competencies = Competence::orderBy('id')->get();
 
@@ -341,6 +373,7 @@ class AtasanDashboardController extends Controller
                 'idpActivities.type',
                 'improvementProjects',
                 'all_promotion_plans.targetPosition',
+                'all_promotion_plans.developmentSession.sourcePosition',
                 'all_assessmentSessions.details.competence',
                 'all_idpActivities.type',
                 'all_improvementProjects'
@@ -372,12 +405,11 @@ class AtasanDashboardController extends Controller
         return view('atasan.monitoring_detail_talent', compact('user', 'talent', 'competencies', 'standards'));
     }
 
-    public function riwayatDetail($talentId)
+    public function riwayatDetail(Request $request, $talentId)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
         $finalStatuses = ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
-        $talent = User::where('atasan_id', $user->id)
-            ->with([
+        $talent = User::with([
                 'position',
                 'department',
                 'company',
@@ -388,17 +420,32 @@ class AtasanDashboardController extends Controller
                 'idpActivities.type',
                 'improvementProjects',
                 'all_promotion_plans.targetPosition',
+                'all_promotion_plans.developmentSession.sourcePosition',
                 'all_assessmentSessions.details.competence',
                 'all_idpActivities.type',
                 'all_improvementProjects'
             ])
             ->findOrFail($talentId);
 
-        $archivedPlan = $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active && in_array($plan->status_promotion, $finalStatuses));
+        $requestedSessionId = $request->query('session_id');
+        $archivedPlan = $requestedSessionId
+            ? $talent->all_promotion_plans->firstWhere('development_session_id', (int) $requestedSessionId)
+            : $talent->all_promotion_plans->first(function ($plan) use ($finalStatuses, $user) {
+                return !$plan->is_active
+                    && in_array($plan->status_promotion, $finalStatuses, true)
+                    && (int) optional($plan->developmentSession)->atasan_id === (int) $user->id;
+            });
         $sessionId = $archivedPlan?->development_session_id;
+
+        if (!$archivedPlan || (int) optional($archivedPlan->developmentSession)->atasan_id !== (int) $user->id) {
+            abort(404);
+        }
 
         if ($archivedPlan) {
             $talent->promotion_plan = $archivedPlan;
+            if ($archivedPlan->developmentSession?->sourcePosition) {
+                $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+            }
         }
 
         if ($sessionId) {
@@ -423,24 +470,48 @@ class AtasanDashboardController extends Controller
         $standards = PositionTargetCompetence::where('position_id', $positionId)
             ->pluck('target_level', 'competence_id');
 
-        return view('atasan.riwayat_detail_talent', compact('user', 'talent', 'competencies', 'standards'));
+        return view('atasan.riwayat_detail_talent', compact('user', 'talent', 'competencies', 'standards', 'sessionId'));
     }
 
     public function talentLogbookDetail(Request $request, $talentId)
     {
         $user = Auth::user()->load(['company', 'department', 'position', 'role']);
-        $talent = User::where('atasan_id', $user->id)
-            ->with([
+        $talent = User::with([
+                'position',
+                'department',
+                'company',
                 'idpActivities.type',
                 'idpActivities.verifier',
                 'all_idpActivities.type',
                 'all_idpActivities.verifier',
+                'all_promotion_plans.targetPosition',
+                'all_promotion_plans.developmentSession.sourcePosition',
             ])
             ->findOrFail($talentId);
 
-        $activities = $talent->idpActivities->isNotEmpty()
-            ? $talent->idpActivities
-            : $talent->all_idpActivities;
+        $sessionId = $request->query('session_id');
+        $archivedPlan = $sessionId
+            ? $talent->all_promotion_plans->firstWhere('development_session_id', (int) $sessionId)
+            : null;
+
+        if ($archivedPlan) {
+            if ((int) optional($archivedPlan->developmentSession)->atasan_id !== (int) $user->id) {
+                abort(404);
+            }
+
+            $talent->promotion_plan = $archivedPlan;
+            if ($archivedPlan->developmentSession?->sourcePosition) {
+                $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+            }
+        } elseif ((int) $talent->atasan_id !== (int) $user->id) {
+            abort(404);
+        }
+
+        $activities = $sessionId
+            ? $talent->all_idpActivities->where('development_session_id', (int) $sessionId)->values()
+            : ($talent->idpActivities->isNotEmpty()
+                ? $talent->idpActivities
+                : $talent->all_idpActivities);
         $idpTypes = IdpType::all();
 
         // Process data for tabs (similar to talent dashboard)

@@ -121,6 +121,7 @@ class MentorValidasiTable extends Component
 
         $activitiesByTalent = IdpActivity::with(['type', 'verifier', 'talent'])
             ->whereIn('user_id_talent', $rawMentees->pluck('id'))
+            ->where('is_active', true)
             ->where(function ($q) use ($user) {
                 $q->where('verify_by', $user->id)
                     ->orWhereHas('type', function ($qType) {
@@ -147,6 +148,10 @@ class MentorValidasiTable extends Component
 
         if (!$showAllTalents && $this->selectedTalentId) {
             $selectedTalent = $mentees->find($this->selectedTalentId);
+            if (!$selectedTalent) {
+                $this->selectedTalentId = 0;
+                $showAllTalents = true;
+            }
         }
 
         if ($showAllTalents || $selectedTalent) {

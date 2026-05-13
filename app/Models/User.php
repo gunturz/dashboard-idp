@@ -173,34 +173,27 @@ class User extends Authenticatable
     public function getMenteesAttribute()
     {
         $id = $this->id;
-        return User::with(['position', 'promotion_plan.targetPosition'])
+
+        return User::with(['position', 'department', 'promotion_plan.targetPosition'])
             ->where(function ($q) use ($id) {
-                // Talent yang punya promotion_plan dengan mentor_ids berisi ID ini
-                $q->whereHas(
-                    'promotion_plan',
-                    function ($query) use ($id) {
+                $q->whereHas('promotion_plan', function ($query) use ($id) {
                     $query->whereNotNull('mentor_ids')
-                        ->where(
-                            function ($inner) use ($id) {
-                                $inner->whereJsonContains('mentor_ids', (string) $id)
-                                    ->orWhereJsonContains('mentor_ids', $id);
-                            }
-                        );
-                }
-                )
-                    // ATAU talent yang belum punya promotion_plan dengan mentor_ids, tapi punya mentor_id lama ini
-                    ->orWhere(
-                        function ($q2) use ($id) {
-                        $q2->where('mentor_id', $id)
-                            ->whereDoesntHave(
-                                'promotion_plan',
-                                function ($query) {
-                                    $query->whereNotNull('mentor_ids');
-                                }
-                            );
-                    }
-                    );
-            })->get();
+                        ->where(function ($inner) use ($id) {
+                            $inner->whereJsonContains('mentor_ids', (string) $id)
+                                ->orWhereJsonContains('mentor_ids', $id);
+                        });
+                })
+                    ->orWhere(function ($legacyQuery) use ($id) {
+                        $legacyQuery->where('mentor_id', $id)
+                            ->whereHas('promotion_plan', function ($query) {
+                                $query->where(function ($emptyMentorQuery) {
+                                    $emptyMentorQuery->whereNull('mentor_ids')
+                                        ->orWhereJsonLength('mentor_ids', 0);
+                                });
+                            });
+                    });
+            })
+            ->get();
     }
 
     public function subordinates()

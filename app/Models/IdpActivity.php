@@ -12,6 +12,7 @@ class IdpActivity extends Model
 
     protected $fillable = [
         'user_id_talent',
+        'development_session_id',
         'type_idp',
         'verify_by',
         'theme',
@@ -24,6 +25,7 @@ class IdpActivity extends Model
         'file_name',
         'status',
         'platform',
+        'is_active',
     ];
 
     public function type()
@@ -39,5 +41,10 @@ class IdpActivity extends Model
     public function talent()
     {
         return $this->belongsTo(User::class, 'user_id_talent');
+    }
+
+    public function developmentSession()
+    {
+        return $this->belongsTo(DevelopmentSession::class, 'development_session_id');
     }
 }

@@ -209,11 +209,11 @@
                                     </td>
                                     <td>
                                         <div class="flex items-center justify-center gap-2">
-                                            <a href="{{ route('pdc_admin.progress_archive.detail', $talent->id) }}"
+                                            <a href="{{ route('pdc_admin.progress_archive.detail', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
                                                 class="inline-block px-4 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-100 transition-colors whitespace-nowrap">
                                                 Lihat Detail
                                             </a>
-                                            <a href="{{ route('pdc_admin.export_pdf', $talent->id) }}"
+                                            <a href="{{ route('pdc_admin.export_pdf', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
                                                 class="inline-block px-5 py-1.5 bg-[#EE5353] hover:bg-[#d94444] text-white rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shadow-sm">
                                                 Export
                                             </a>

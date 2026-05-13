@@ -208,11 +208,15 @@
                                             {{-- Aksi --}}
                                             <td>
                                                 @php
+                                                    $sessionId = optional($talent->promotion_plan)->development_session_id;
                                                     $alreadySent = in_array(
                                                         optional($talent->promotion_plan)->status_promotion,
                                                         ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
                                                     );
-                                                    $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)->whereNotNull('panelis_score')->exists();
+                                                    $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)
+                                                        ->when($sessionId, fn($q) => $q->where('development_session_id', $sessionId))
+                                                        ->whereNotNull('panelis_score')
+                                                        ->exists();
                                                 @endphp
                                                 @if ($alreadySent || $isReviewedByPanelis)
                                                     <div class="flex items-center justify-center gap-2">

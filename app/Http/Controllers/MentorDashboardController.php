@@ -52,8 +52,9 @@ class MentorDashboardController extends Controller
                     }
 
                     // Hitung status IDP logbook HANYA UNTUK mentor ini, tetapi ikut sertakan Learning
-                    $idpActivities = IdpActivity::with('type')
+                $idpActivities = IdpActivity::with('type')
                         ->where('user_id_talent', $talent->id)
+                        ->where('is_active', true)
                         ->where(function ($q) use ($user) {
                 $q->where('verify_by', $user->id)
                     ->orWhereHas('type', function ($qType) {
@@ -168,6 +169,7 @@ class MentorDashboardController extends Controller
                 // langsung terlihat setelah aksi validasi tanpa berpindah halaman
                 $activities = IdpActivity::with(['type', 'verifier'])
                     ->where('user_id_talent', $selectedTalent->id)
+                    ->where('is_active', true)
                     ->where(function ($q) use ($user) {
                     $q->where('verify_by', $user->id)
                         ->orWhereHas('type', function ($qType) {
@@ -257,13 +259,17 @@ class MentorDashboardController extends Controller
 
         // Filter: hanya tampilkan yang sudah selesai penilaian panelis atau sudah diputuskan (Approved Panelis, Promoted, Not Promoted)
         $completedTalents = $allMentees->filter(function ($mentee) {
-            $plan = $mentee->all_promotion_plans->first();
-            return in_array(optional($plan)->status_promotion, ['Approved Panelis', 'Promoted', 'Not Promoted']);
+            $plan = $mentee->all_promotion_plans->first(function ($plan) {
+                return !$plan->is_active;
+            });
+            return in_array(optional($plan)->status_promotion, ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
         })->values();
 
         // Map archived plans to original property for view compatibility
         foreach ($completedTalents as $mentee) {
-            $mentee->promotion_plan = $mentee->all_promotion_plans->first();
+            $mentee->promotion_plan = $mentee->all_promotion_plans->first(function ($plan) {
+                return !$plan->is_active;
+            });
         }
 
         // Load relasi yang diperlukan untuk tabel riwayat

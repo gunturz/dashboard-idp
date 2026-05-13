@@ -13,11 +13,12 @@ class FinanceDashboardController extends Controller
     {
         $user = auth()->user();
 
-        $projects = ImprovementProject::with(['talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
+        $projects = ImprovementProject::with(['developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
             ->orderBy('updated_at', 'desc')
             ->get();
+        $this->applyProjectSessionPlan($projects);
 
         $total = $projects->count();
         // Pending = Finance belum memberi keputusan
@@ -51,7 +52,7 @@ class FinanceDashboardController extends Controller
         $user = auth()->user();
 
         // Tampilkan semua project yang dikirim ke finance ini (feedback = ada), belum ada keputusan dari Finance
-        $projects = ImprovementProject::with(['talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
+        $projects = ImprovementProject::with(['developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
             ->whereHas('talent.promotion_plan', function ($q) {
                 $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
             })
@@ -61,6 +62,7 @@ class FinanceDashboardController extends Controller
             ->whereNull('finance_feedback')
             ->orderBy('updated_at', 'desc')
             ->get();
+        $this->applyProjectSessionPlan($projects);
 
         $notifications = $this->getNotifications();
 
@@ -74,7 +76,7 @@ class FinanceDashboardController extends Controller
         $search = $request->input('search');
 
         // Riwayat = project yang sudah diberi keputusan oleh Finance (ada [Approved] atau [Rejected] di finance_feedback)
-        $projectsQuery = ImprovementProject::with(['talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
+        $projectsQuery = ImprovementProject::with(['developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
             ->where(function ($q) {
@@ -90,6 +92,7 @@ class FinanceDashboardController extends Controller
         }
 
         $projects = $projectsQuery->get();
+        $this->applyProjectSessionPlan($projects);
 
         $companies = $projects->pluck('talent.company.nama_company')->filter()->unique()->values();
 
@@ -120,7 +123,7 @@ class FinanceDashboardController extends Controller
         $feedbackText = $request->finance_feedback ?? '';
         $stored = '[' . $decision . ']' . ($feedbackText ? ' ' . $feedbackText : '');
 
-        $dbStatus = $decision;
+        $dbStatus = $decision === 'Approved' ? 'Verified' : 'Rejected';
 
         $project->update([
             'finance_feedback' => $stored,
@@ -145,11 +148,20 @@ class FinanceDashboardController extends Controller
         $this->addNotificationToUser(
             $project->user_id_talent,
             'Keputusan Project Improvement dari Finance',
-            'Finance telah meninjau dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $dbStatus . '</span>.' . ($feedbackText ? ' Catatan: <em>' . e($feedbackText) . '</em>' : ''),
-            $dbStatus === 'Approved' ? 'success' : 'warning'
+            'Finance telah meninjau dan memperbarui Project Improvement Anda menjadi <span class="font-semibold">' . $decision . '</span>.' . ($feedbackText ? ' Catatan: <em>' . e($feedbackText) . '</em>' : ''),
+            $decision === 'Approved' ? 'success' : 'warning'
         );
 
         return redirect()->route('finance.riwayat')->with('success', 'Keputusan validasi finance berhasil disimpan dan diteruskan ke Talent.');
+    }
+
+    protected function applyProjectSessionPlan($projects): void
+    {
+        foreach ($projects as $project) {
+            if ($project->talent && $project->developmentSession?->promotionPlan) {
+                $project->talent->setRelation('promotion_plan', $project->developmentSession->promotionPlan);
+            }
+        }
     }
 
     /**

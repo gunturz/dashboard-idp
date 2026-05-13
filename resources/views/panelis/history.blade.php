@@ -325,7 +325,9 @@
             @foreach($companyProjects as $idx => $assessment)
                 @php
                     $talent    = $assessment->talent;
-                    $latestProject = $talent ? $talent->improvementProjects->sortByDesc('updated_at')->first() : null;
+                    $latestProject = $assessment->developmentSession
+                        ? $assessment->developmentSession->improvementProjects->sortByDesc('updated_at')->first()
+                        : null;
                     $cardId    = 'hc-' . $assessment->id;
                     $expanded  = false;
                     $scoreArr  = $assessment->panelis_scores_json ?? [];

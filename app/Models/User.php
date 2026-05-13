@@ -86,7 +86,7 @@ class User extends Authenticatable
     public function promotion_plan()
     {
         return $this->applyActiveFilter(
-            $this->hasOne(PromotionPlan::class, 'user_id_talent'),
+            $this->hasOne(PromotionPlan::class, 'user_id_talent')->latestOfMany(),
             'promotion_plan'
         );
     }
@@ -101,6 +101,18 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'mentor_id');
     }
 
+    public function developmentSessions()
+    {
+        return $this->hasMany(DevelopmentSession::class, 'user_id_talent')->orderBy('created_at', 'desc');
+    }
+
+    public function activeDevelopmentSession()
+    {
+        return $this->hasOne(DevelopmentSession::class, 'user_id_talent')
+            ->where('is_active', true)
+            ->latestOfMany();
+    }
+
     public function atasan()
     {
         return $this->belongsTo(User::class, 'atasan_id');
@@ -109,7 +121,7 @@ class User extends Authenticatable
     public function assessmentSession()
     {
         return $this->applyActiveFilter(
-            $this->hasOne(AssessmentSession::class, 'user_id_talent'),
+            $this->hasOne(AssessmentSession::class, 'user_id_talent')->latestOfMany(),
             'assessment_session'
         );
     }

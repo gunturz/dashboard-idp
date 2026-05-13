@@ -52,6 +52,7 @@ class PdcPanelisReviewTable extends Component
                 'mentor',
                 'atasan',
                 'promotion_plan.targetPosition',
+                'activeDevelopmentSession',
                 'improvementProjects',
             ]);
 
@@ -69,6 +70,15 @@ class PdcPanelisReviewTable extends Component
         }
 
         $talents = $query->get()
+            ->each(function ($talent) {
+                $sessionId = optional($talent->promotion_plan)->development_session_id;
+                if ($sessionId) {
+                    $talent->improvementProjects = $talent->improvementProjects
+                        ->where('development_session_id', $sessionId)
+                        ->values();
+                }
+            })
+            ->filter(fn($talent) => $talent->improvementProjects->isNotEmpty())
             ->sortByDesc(
                 fn($t) =>
                 optional($t->improvementProjects->sortByDesc('created_at')->first())->created_at

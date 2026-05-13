@@ -266,8 +266,19 @@
 
 @php
     /* Shared data helpers */
-    $mentorNames = collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ')
-        ?: (optional($user->mentor)->nama ?? '-');
+    $hasActivePlan = !empty($user->promotion_plan);
+    $mentorNames = $hasActivePlan
+        ? (collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-'))
+        : '-';
+    $atasanName = $hasActivePlan ? (optional($user->atasan)->nama ?? '-') : '-';
+    $sourcePositionName = $user->history_source_position_name ?? optional($user->position)->position_name ?? '-';
+    $targetPositionName = optional(optional($user->promotion_plan)->targetPosition)->position_name;
+    $targetPositionDisplay = $targetPositionName ?? '-';
+
+    $roleDisplay = ($hasActivePlan && $targetPositionName)
+        ? "{$sourcePositionName} &rarr; {$targetPositionName}"
+        : $sourcePositionName;
+
     $periode = (optional($user->promotion_plan)->start_date
         ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-')
         . ' – '
@@ -290,14 +301,14 @@
                         <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
                     @else
                         <div class="talent-hero-avatar-placeholder">
-                            {{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
+                            {{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}
+                        </div>
                     @endif
                 </div>
                 <div class="talent-hero-info flex-1 min-w-0">
                     <div class="talent-hero-name truncate">{{ $user->nama ?? $user->name }}</div>
                     <div class="talent-hero-sub truncate mt-1">
-                        {{ optional($user->position)->position_name ?? '-' }} &rarr;
-                        {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                        {!! $roleDisplay !!}
                     </div>
                     <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
                 </div>
@@ -328,8 +339,7 @@
                 </div>
                 <div class="talent-hero-meta-row">
                     <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                    <span
-                        class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                    <span class="talent-hero-meta-value">{{ $targetPositionDisplay }}</span>
                 </div>
             </div>
 
@@ -343,7 +353,7 @@
                 </div>
                 <div class="talent-hero-meta-row">
                     <span class="talent-hero-meta-label">Atasan</span>
-                    <span class="talent-hero-meta-value">{{ optional($user->atasan)->nama ?? '-' }}</span>
+                    <span class="talent-hero-meta-value">{{ $atasanName }}</span>
                 </div>
                 <div class="talent-hero-meta-row">
                     <span class="talent-hero-meta-label">Periode</span>
@@ -366,14 +376,14 @@
                     <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
                 @else
                     <div class="talent-hero-avatar-placeholder">
-                        {{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}</div>
+                        {{ strtoupper(substr($user->nama ?? $user->name ?? 'T', 0, 1)) }}
+                    </div>
                 @endif
             </div>
             <div class="talent-hero-info">
                 <div class="talent-hero-name">{{ $user->nama ?? $user->name }}</div>
                 <div class="talent-hero-sub">
-                    {{ optional($user->position)->position_name ?? '-' }} &rarr;
-                    {{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                    {!! $roleDisplay !!}
                 </div>
                 <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
             </div>
@@ -393,8 +403,7 @@
             </div>
             <div class="talent-hero-meta-row">
                 <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                <span
-                    class="talent-hero-meta-value">{{ optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '-' }}</span>
+                <span class="talent-hero-meta-value">{{ $targetPositionDisplay }}</span>
             </div>
         </div>
 
@@ -408,7 +417,7 @@
             </div>
             <div class="talent-hero-meta-row">
                 <span class="talent-hero-meta-label">Atasan</span>
-                <span class="talent-hero-meta-value">{{ optional($user->atasan)->nama ?? '-' }}</span>
+                <span class="talent-hero-meta-value">{{ $atasanName }}</span>
             </div>
             <div class="talent-hero-meta-row">
                 <span class="talent-hero-meta-label">Periode</span>

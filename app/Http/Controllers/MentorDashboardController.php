@@ -144,18 +144,8 @@ class MentorDashboardController extends Controller
         // Tampilkan semua mentee yang memiliki aktivitas terkait mentor (tidak hanya yang pending)
         // agar setelah validasi talent tetap muncul di dropdown
         $mentees = $user->mentees->filter(function ($mentee) use ($user) {
-
             return IdpActivity::where('user_id_talent', $mentee->id)
-            ->where('is_active', true)
-            ->where(function ($q) use ($user) {
-                    $q->where('verify_by', $user->id)
-                        ->orWhereHas('type', function ($qType) {
-                    $qType->where('type_name', 'Learning');
-                }
-                );
-            }
-
-            return IdpActivity::where('user_id_talent', $mentee->id)
+                ->where('is_active', true)
                 ->where(
                     function ($q) use ($user) {
                         $q->where('verify_by', $user->id)

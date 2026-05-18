@@ -455,8 +455,8 @@
 
     {{-- ── Success Message ── --}}
     @if (session('success'))
-        <div
-            class="flex items-center gap-3 mb-5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium">
+        <div id="success-alert"
+            class="flex items-center gap-3 mb-5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -775,6 +775,19 @@
                         else backToDecision();
                     }
                 });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const alert = document.getElementById('success-alert');
+                if (alert) {
+                    setTimeout(function () {
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(function () {
+                            alert.remove();
+                        }, 500);
+                    }, 5000);
+                }
             });
         </script>
     </x-slot>

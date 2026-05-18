@@ -15,37 +15,6 @@
     </div>
 
     @if($talents->isNotEmpty())
-    {{-- Centered title block --}}
-    <div class="text-center mb-8">
-        @php
-            $headerTalent = $talents->first();
-            $headerRoute = $headerTalent
-                ? ((optional($headerTalent->position)->position_name ?? '-') . ' → ' . (optional(optional($headerTalent->promotion_plan)->targetPosition)->position_name ?? '-'))
-                : '- → -';
-        @endphp
-
-        {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
-        <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
-            {{ $headerRoute }}
-        </h2>
-
-        {{-- Baris 2: Perusahaan --}}
-        <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">
-            {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
-        </p>
-
-        {{-- Baris 3: Jumlah talent --}}
-        <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mt-1">{{ $talents->count() }} TALENT</p>
-    </div>
-
-    @endif
-
-    @if($talents->isEmpty())
-        <div class="text-center py-20 bg-white border border-gray-200 rounded-xl shadow-sm">
-            <h3 class="text-xl font-bold text-slate-700 mb-2">Talent tidak ditemukan</h3>
-            <p class="text-gray-500 text-sm">Anda belum memiliki talent untuk dimonitor.</p>
-        </div>
-    @else
         {{-- Centered title block --}}
         <div class="text-center mb-8">
             @php
@@ -68,6 +37,16 @@
             {{-- Baris 3: Jumlah talent --}}
             <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mt-1">{{ $talents->count() }} TALENT</p>
         </div>
+
+    @endif
+
+    @if($talents->isEmpty())
+        <div class="text-center py-20 bg-white border border-gray-200 rounded-xl shadow-sm">
+            <h3 class="text-xl font-bold text-slate-700 mb-2">Talent tidak ditemukan</h3>
+            <p class="text-gray-500 text-sm">Anda belum memiliki talent untuk dimonitor.</p>
+        </div>
+    @else
+
 
         {{-- KOMPETENSI --}}
         @if($activeSection === 'kompetensi')
@@ -229,18 +208,18 @@
                                 $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
 
                                 $charts = [
-                                    ['label' => 'Exposure',  'done' => min($exposureCount,  6), 'total' => 6, 'color' => '#334155'],
+                                    ['label' => 'Exposure', 'done' => min($exposureCount, 6), 'total' => 6, 'color' => '#334155'],
                                     ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
-                                    ['label' => 'Learning',  'done' => min($learningCount,  6), 'total' => 6, 'color' => '#0d9488'],
+                                    ['label' => 'Learning', 'done' => min($learningCount, 6), 'total' => 6, 'color' => '#0d9488'],
                                 ];
                                 $r = 38;
                                 $circ = 2 * M_PI * $r;
                             @endphp
                             @foreach($charts as $chart)
                                 @php
-                                    $pct    = $chart['done'] / $chart['total'];
+                                    $pct = $chart['done'] / $chart['total'];
                                     $filled = $pct * $circ;
-                                    $empty  = $circ - $filled;
+                                    $empty = $circ - $filled;
                                 @endphp
                                 <div class="flex flex-col items-center gap-3">
                                     <div class="relative w-48 h-48 drop-shadow-sm">

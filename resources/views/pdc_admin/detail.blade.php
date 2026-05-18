@@ -925,10 +925,11 @@
                 background: #f8fafc;
                 font-weight: 700;
                 color: #1e293b;
+                font-size: 0.90rem;
             }
 
             .heatmap-table .th-sub {
-                font-size: 0.65rem;
+                font-size: 0.80rem;
                 font-weight: 700;
                 color: #475569;
                 text-transform: uppercase;

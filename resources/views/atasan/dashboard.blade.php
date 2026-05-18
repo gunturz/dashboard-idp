@@ -172,7 +172,7 @@
             </svg>
         </div>
         <div>
-            <div class="dash-header-title">Dashboard Atasan</div>
+            <div class="dash-header-title">Dashboard</div>
             <div class="dash-header-sub">Pantau perkembangan kompetensi dan progress talent Anda</div>
         </div>
         <div class="dash-header-date hidden md:block">
@@ -259,7 +259,7 @@
                             </span>
                             <div class="mt-1.5">
                                 <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                                    class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 capitalize tracking-wider">{{ optional($talent->department)->nama_department ?? '-' }}</span>
                             </div>
                         </div>
                     </div>

@@ -419,7 +419,7 @@
                                     class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200">
                                     Judul Project Improvement</th>
                                 <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200 w-32">
+                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200 w-44">
                                     File</th>
                                 <th
                                     class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-gray-200 w-44">

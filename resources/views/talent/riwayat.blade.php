@@ -208,18 +208,21 @@
         {{-- Content Section --}}
         @if(!($isDecisionFinal ?? false))
             {{-- Keputusan PDC belum ditetapkan --}}
-            <div
-                class="flex flex-col items-center justify-center p-8 mt-6 bg-amber-50 border border-amber-200 rounded-2xl shadow-sm max-w-2xl mx-auto text-center">
-                <div class="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-600" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 mt-2">
+                <div class="flex flex-col items-center justify-center py-8">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                        style="background: linear-gradient(135deg, #fef3c7, #fde68a);">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <p class="text-base font-bold text-gray-700">Riwayat Belum Tersedia</p>
+                    <p class="text-sm text-gray-500 mt-1 text-center max-w-md leading-relaxed">
+                        Data riwayat program pengembangan Anda akan muncul setelah proses penilaian akhir selesai dan keputusan PDC telah ditetapkan.
+                    </p>
                 </div>
-                <h3 class="text-amber-800 font-bold text-lg mb-2">Riwayat Belum Tersedia</h3>
-                <p class="text-amber-700 text-sm max-w-md">Data riwayat program pengembangan Anda akan muncul setelah proses
-                    penilaian akhir selesai dilakukan.</p>
             </div>
         @else
             {{-- Table Section (Dashboard Style) --}}

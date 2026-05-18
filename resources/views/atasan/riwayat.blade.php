@@ -92,7 +92,7 @@
                 font-weight: 600;
                 color: #1e293b;
                 display: block;
-                text-align: left;
+                text-align: center;
             }
 
             .talent-position {
@@ -100,7 +100,7 @@
                 color: #64748b;
                 font-style: italic;
                 display: block;
-                text-align: left;
+                text-align: center;
                 margin-top: 2px;
             }
 
@@ -193,101 +193,89 @@
         </div>
     </div>
 
-     <div class="prem-card">
-        <div class="p-6">
-            <div class="overflow-x-auto custom-scrollbar">
-                <table class="highlight-table">
-                    <thead>
-                        <tr>
-                            <th style="min-width: 200px;">Talent</th>
-                            <th>Perusahaan</th>
-                            <th>Departemen</th>
-                            <th>Start Date</th>
-                            <th>Due Date</th>
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="riwayat-tbody">
-                        @forelse($talents as $talent)
-                            @php
-                                $plan = $talent->promotion_plan;
-                                $startDate = $plan?->start_date;
-                                $targetDate = $plan?->target_date;
-                                $posName = $talent->position?->position_name ?? '-';
-                                $targetPos = $plan?->targetPosition?->position_name ?? '?';
-                                $compName = $talent->company?->nama_company ?? '-';
-                                $deptName = $talent->department?->nama_department ?? '-';
+    <div class="log-table-container custom-scrollbar overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-sm">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center" style="min-width: 200px;">Talent</th>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Perusahaan</th>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Departemen</th>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Start Date</th>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Due Date</th>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="riwayat-tbody">
+                @forelse($talents as $talent)
+                    @php
+                        $plan = $talent->promotion_plan;
+                        $startDate = $plan?->start_date;
+                        $targetDate = $plan?->target_date;
+                        $posName = $talent->position?->position_name ?? '-';
+                        $targetPos = $plan?->targetPosition?->position_name ?? '?';
+                        $compName = $talent->company?->nama_company ?? '-';
+                        $deptName = $talent->department?->nama_department ?? '-';
 
-                                $periodeLabel = '';
-                                if ($startDate && $targetDate) {
-                                    $periodeLabel = $startDate->format('Y') . ' – ' . $targetDate->format('Y');
-                                }
-                            @endphp
-                            <tr class="riwayat-row-item" data-name="{{ strtolower($talent->nama) }}"
-                                data-periode="{{ $periodeLabel }}" data-perusahaan="{{ $compName }}"
-                                data-departemen="{{ $deptName }}">
-                                {{-- Talent --}}
-                                <td>
-                                    <span class="talent-name">{{ $talent->nama }}</span>
-                                    <span class="talent-position">{{ $posName }} – {{ $targetPos }}</span>
-                                </td>
+                        $periodeLabel = '';
+                        if ($startDate && $targetDate) {
+                            $periodeLabel = $startDate->format('Y') . ' – ' . $targetDate->format('Y');
+                        }
+                    @endphp
+                    <tr class="riwayat-row-item border-b border-gray-100 hover:bg-slate-50/50 transition duration-150" 
+                        data-name="{{ strtolower($talent->nama) }}"
+                        data-periode="{{ $periodeLabel }}" data-perusahaan="{{ $compName }}"
+                        data-departemen="{{ $deptName }}">
+                        {{-- Talent --}}
+                        <td class="py-4 px-6 text-center text-sm">
+                            <span class="talent-name font-bold text-slate-800 block">{{ $talent->nama }}</span>
+                            <span class="talent-position text-xs text-gray-400 italic font-medium block mt-1">{{ $posName }} – {{ $targetPos }}</span>
+                        </td>
 
-                                {{-- Perusahaan --}}
-                                <td>{{ $compName }}</td>
+                        {{-- Perusahaan --}}
+                        <td class="py-4 px-6 text-center text-sm font-bold text-slate-800">{{ $compName }}</td>
 
-                                {{-- Departemen --}}
-                                <td>{{ $deptName }}</td>
+                        {{-- Departemen --}}
+                        <td class="py-4 px-6 text-center text-sm font-semibold text-slate-600">{{ $deptName }}</td>
 
-                                {{-- Start Date --}}
-                                <td>
-                                    {{ $startDate ? $startDate->translatedFormat('d F Y') : '-' }}
-                                </td>
+                        {{-- Start Date --}}
+                        <td class="py-4 px-6 text-center text-sm font-medium text-slate-800 whitespace-nowrap">
+                            {{ $startDate ? $startDate->translatedFormat('d F Y') : '-' }}
+                        </td>
 
-                                {{-- Due Date --}}
-                                <td>
-                                    {{ $targetDate ? $targetDate->translatedFormat('d F Y') : '-' }}
-                                </td>
+                        {{-- Due Date --}}
+                        <td class="py-4 px-6 text-center text-sm font-medium text-slate-800 whitespace-nowrap">
+                            {{ $targetDate ? $targetDate->translatedFormat('d F Y') : '-' }}
+                        </td>
 
-                                {{-- Aksi --}}
-                                <td class="text-center">
-                                    <a href="{{ route('atasan.riwayat.detail', $talent->id) }}"
-                                        class="btn-prem btn-teal px-4 py-1.5 rounded-lg shadow-sm">
-                                        Lihat Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr id="empty-row">
-                                <td colspan="6">
-                                    <div class="py-12 flex flex-col items-center justify-center text-gray-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-20"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        <p class="font-medium">Tidak ada data talent yang ditemukan.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
+                        {{-- Aksi --}}
+                        <td class="py-4 px-6 text-center">
+                            <a href="{{ route('atasan.riwayat.detail', $talent->id) }}"
+                                class="inline-flex items-center gap-1.5 font-bold text-xs bg-slate-100 text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-200 transition-colors border border-slate-200 shadow-sm">
+                                INFO
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr id="empty-row">
+                        <td colspan="6">
+                            <div class="py-12 flex flex-col items-center justify-center text-gray-400">
+                                <p class="font-medium">Tidak ada data talent yang ditemukan.</p>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
 
-                        {{-- Hidden empty row for JS filtering --}}
-                        <tr id="js-empty-row" class="hidden">
-                            <td colspan="6">
-                                <div class="py-12 flex flex-col items-center justify-center text-gray-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-20"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    <p class="font-medium">Tidak ada data yang sesuai dengan filter.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                {{-- Hidden empty row for JS filtering --}}
+                <tr id="js-empty-row" class="hidden">
+                    <td colspan="6">
+                        <div class="py-12 flex flex-col items-center justify-center text-gray-400">
+                            <p class="font-medium">Tidak ada data yang sesuai dengan filter.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
         <x-slot name="scripts">
             <script>

@@ -606,6 +606,10 @@
                     });
                     return;
                 }
+                if (path.includes('/notifikasi')) {
+                    links.forEach(l => l.classList.remove('active'));
+                    return;
+                }
 
                 let currentSection = '';
                 links.forEach(link => {
@@ -651,6 +655,8 @@
                     if (l.getAttribute('data-section') === 'Kompetensi') l.classList.add('active');
                     else l.classList.remove('active');
                 });
+            } else if (path.includes('/notifikasi')) {
+                links.forEach(l => l.classList.remove('active'));
             } else if (hash) {
                 links.forEach(l => {
                     if (l.getAttribute('data-section') === hash) l.classList.add('active');

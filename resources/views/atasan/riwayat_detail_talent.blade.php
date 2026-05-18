@@ -176,7 +176,7 @@
                 color: #1e293b;
                 border-bottom: 2px solid #cbd5e1;
                 border-right: 1px solid #d1d5db;
-                font-size: 0.8rem;
+                font-size: 0.90rem;
             }
 
             .heatmap-table th:last-child { border-right: none; }
@@ -189,7 +189,7 @@
             }
 
             .heatmap-table .th-sub {
-                font-size: 0.75rem;
+                font-size: 0.80rem;
                 font-weight: 700;
                 color: #475569;
                 background: #f1f5f9;

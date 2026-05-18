@@ -366,8 +366,8 @@
                                                     stroke-dasharray="{{ $pct }}, 100"/>
                                             </svg>
                                             <div class="flex flex-col items-center font-bold text-[#0f172a] leading-tight">
-                                                <span class="text-[15px] tracking-tight">{{ $cnt }}/{{ $tgt }}</span>
-                                                <span class="text-xs text-[#475569] italic">{{ $pct }}%</span>
+                                                <span class="text-[17px] tracking-tight">{{ $pct }}%</span>
+                                                <span class="text-xs text-[#475569] tracking-tight">{{ $cnt }}/{{ $tgt }}</span>
                                             </div>
                                         </div>
                                         <span class="border border-[#cbd5e1] text-[#475569] bg-white text-xs font-medium px-3 py-1 rounded-full shadow-sm">{{ $prog['label'] }}</span>

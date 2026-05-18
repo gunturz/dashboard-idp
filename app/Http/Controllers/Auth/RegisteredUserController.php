@@ -200,7 +200,9 @@ class RegisteredUserController extends Controller
         }
         catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Registration failed: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return back()->withInput()->withErrors(['email' => 'Proses pendaftaran gagal: ' . $e->getMessage()]);
         }
     }
 }
+ 

@@ -102,13 +102,13 @@ class PDCAdminController extends Controller
                         return $item->promotion_plan->target_position_id ?? 0;
                     }
                 )->map(
-                    function ($positionTalents) {
-                        return [
-                            'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
-                            'talents' => $positionTalents,
-                        ];
-                    }
-                ),
+                        function ($positionTalents) {
+                            return [
+                                'targetPosition' => $positionTalents->first()->promotion_plan->targetPosition ?? null,
+                                'talents' => $positionTalents,
+                            ];
+                        }
+                    ),
             ];
         });
 
@@ -171,17 +171,17 @@ class PDCAdminController extends Controller
                             return $item->promotion_plan->target_position_id ?? 0;
                         }
                     )->map(
-                        function ($positionTalents) {
-                            $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
-                                return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
-                            })->values();
+                            function ($positionTalents) {
+                                $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                                    return optional($talent->promotion_plan)->created_at ?? $talent->created_at;
+                                })->values();
 
-                            return [
-                                'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
-                                'talents' => $sortedPositionTalents,
-                            ];
-                        }
-                    ),
+                                return [
+                                    'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                                    'talents' => $sortedPositionTalents,
+                                ];
+                            }
+                        ),
                 ];
             })
             ->sortByDesc('latest_plan_at');
@@ -586,6 +586,7 @@ class PDCAdminController extends Controller
 
             foreach ($request->talents as $talentData) {
                 $talentId = $talentData['talent_id'];
+                $sourcePositionId = User::where('id', $talentId)->value('position_id');
                 $existingPlan = PromotionPlan::where('user_id_talent', $talentId)
                     ->where('is_active', true)
                     ->first();
@@ -602,6 +603,7 @@ class PDCAdminController extends Controller
                 if ($planAlreadyExists && !$developmentSession) {
                     $developmentSession = DevelopmentSession::create([
                         'user_id_talent' => $talentId,
+                        'source_position_id' => $sourcePositionId,
                         'target_position_id' => $existingPlan->target_position_id,
                         'atasan_id' => $request->atasan_id,
                         'mentor_ids' => $existingPlan->mentor_ids,
@@ -645,6 +647,7 @@ class PDCAdminController extends Controller
 
                     $developmentSession->update([
                         'target_position_id' => $request->target_position_id,
+                        'source_position_id' => $developmentSession->source_position_id ?: $sourcePositionId,
                         'atasan_id' => $request->atasan_id,
                         'mentor_ids' => $mentorIds,
                         'status' => 'In Progress',
@@ -665,6 +668,7 @@ class PDCAdminController extends Controller
                 } else {
                     $developmentSession = DevelopmentSession::create([
                         'user_id_talent' => $talentId,
+                        'source_position_id' => $sourcePositionId,
                         'target_position_id' => $request->target_position_id,
                         'atasan_id' => $request->atasan_id,
                         'mentor_ids' => $mentorIds,
@@ -994,26 +998,33 @@ class PDCAdminController extends Controller
 
     public function updateQuestions(Request $request)
     {
-        $competenceId = $request->competence_id;
+        $request->validate([
+            'competence_id' => 'required|exists:competence,id',
+            'questions' => 'required|array',
+            'questions.*.level' => 'required|integer|min:1|max:5',
+            'questions.*.text' => 'nullable|string|max:1000',
+            'questions.*.id' => 'nullable|exists:question,id',
+        ]);
 
         foreach ($request->questions as $levelData) {
-            $level = $levelData['level'];
-            $text = $levelData['text'] ?? '';
-            $id = $levelData['id'] ?? null;
-
-            if ($id) {
-                \App\Models\Question::where('id', $id)->update(['question_text' => $text]);
-            } elseif ($text) {
-                \App\Models\Question::create([
-                    'competence_id' => $competenceId,
-                    'level' => $level,
-                    'question_text' => $text,
+            if ($levelData['id'] ?? null) {
+                // Scope ke competence yang benar
+                Question::where('id', $levelData['id'])
+                    ->where('competence_id', $request->competence_id)
+                    ->update(['question_text' => strip_tags($levelData['text'] ?? '')]);
+            } elseif ($levelData['text'] ?? '') {
+                Question::create([
+                    'competence_id' => $request->competence_id,
+                    'level' => $levelData['level'],
+                    'question_text' => strip_tags($levelData['text']),
                 ]);
             }
         }
 
         return back()->with('success', 'Questions berhasil diperbarui.');
     }
+
+
 
     public function updateTargetScores(Request $request, $position_id)
     {
@@ -1339,19 +1350,19 @@ class PDCAdminController extends Controller
                             return $item->promotion_plan->target_position_id ?? 0;
                         }
                     )->map(
-                        function ($positionTalents) {
-                            $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
-                                return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
-                                    ?? optional($talent->promotion_plan)->created_at
-                                    ?? $talent->created_at;
-                            })->values();
+                            function ($positionTalents) {
+                                $sortedPositionTalents = $positionTalents->sortByDesc(function ($talent) {
+                                    return optional($talent->improvementProjects->sortByDesc('created_at')->first())->created_at
+                                        ?? optional($talent->promotion_plan)->created_at
+                                        ?? $talent->created_at;
+                                })->values();
 
-                            return [
-                                'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
-                                'talents' => $sortedPositionTalents,
-                            ];
-                        }
-                    ),
+                                return [
+                                    'targetPosition' => $sortedPositionTalents->first()->promotion_plan->targetPosition ?? null,
+                                    'talents' => $sortedPositionTalents,
+                                ];
+                            }
+                        ),
                 ];
             })
             ->sortByDesc('latest_project_at');
@@ -1640,6 +1651,7 @@ class PDCAdminController extends Controller
                 'all_promotion_plans' => function ($q) use ($finalStatuses) {
                     $q->where('is_active', false)->whereIn('status_promotion', $finalStatuses);
                 },
+                'all_promotion_plans.developmentSession.sourcePosition',
                 'all_improvementProjects'
             ])
             ->get();
@@ -1667,6 +1679,8 @@ class PDCAdminController extends Controller
                 $archiveRow->setRelations($talent->getRelations());
                 $archiveRow->promotion_plan = $plan;
                 $archiveRow->archive_session_id = $plan->development_session_id;
+                $archiveRow->archive_source_position_name = optional(optional($plan->developmentSession)->sourcePosition)->position_name
+                    ?? optional($talent->position)->position_name;
                 $archiveRow->improvementProjects = $plan->development_session_id
                     ? $talent->all_improvementProjects->where('development_session_id', $plan->development_session_id)->values()
                     : $talent->all_improvementProjects;
@@ -1705,6 +1719,7 @@ class PDCAdminController extends Controller
             'mentor',
             'atasan',
             'all_promotion_plans.targetPosition',
+            'all_promotion_plans.developmentSession.sourcePosition',
             'all_assessmentSessions.details.competence',
             'all_idpActivities.type',
             'all_improvementProjects.verifier',
@@ -1719,6 +1734,9 @@ class PDCAdminController extends Controller
             : $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active);
         $sessionId = $archivedPlan?->development_session_id;
         $talent->promotion_plan = $archivedPlan ?? $talent->all_promotion_plans->first();
+        if ($archivedPlan?->developmentSession?->sourcePosition) {
+            $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+        }
         $talent->assessmentSession = $sessionId
             ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
             : $talent->all_assessmentSessions->first();
@@ -1788,6 +1806,7 @@ class PDCAdminController extends Controller
             'mentor',
             'atasan',
             'all_promotion_plans.targetPosition',
+            'all_promotion_plans.developmentSession.sourcePosition',
             'all_assessmentSessions.details.competence',
             'all_idpActivities.type',
             'all_improvementProjects.verifier',
@@ -1803,6 +1822,9 @@ class PDCAdminController extends Controller
             : $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active);
         $sessionId = $archivedPlan?->development_session_id;
         $talent->promotion_plan = $archivedPlan ?? $talent->all_promotion_plans->first();
+        if ($archivedPlan?->developmentSession?->sourcePosition) {
+            $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+        }
         $talent->assessmentSession = $sessionId
             ? $talent->all_assessmentSessions->firstWhere('development_session_id', $sessionId)
             : $talent->all_assessmentSessions->first();
@@ -1861,20 +1883,30 @@ class PDCAdminController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'company_id' => 'required|exists:company,id',
-            'department_id' => 'required|exists:department,id',
-            'position_id' => 'required|exists:position,id',
+            'department_id' => 'nullable|exists:department,id',
+            'position_id' => 'nullable|exists:position,id',
         ]);
 
         $originalData = $user->getOriginal();
 
-        $user->update([
+        // Selalu update field dasar
+        $updateData = [
             'username' => $request->username,
             'nama' => $request->nama,
             'email' => $request->email,
             'company_id' => $request->company_id,
-            'department_id' => $request->department_id,
-            'position_id' => $request->position_id,
-        ]);
+        ];
+
+        // Hanya update departemen & posisi jika dikirim (Talent/Mentor/Atasan)
+        // Finance & Panelis tidak memiliki field ini di modal edit
+        if ($request->filled('department_id')) {
+            $updateData['department_id'] = $request->department_id;
+        }
+        if ($request->filled('position_id')) {
+            $updateData['position_id'] = $request->position_id;
+        }
+
+        $user->update($updateData);
 
         $changes = [];
         if ($originalData['username'] !== $request->username)
@@ -1885,9 +1917,9 @@ class PDCAdminController extends Controller
             $changes[] = 'Email';
         if ($originalData['company_id'] != $request->company_id)
             $changes[] = 'Perusahaan';
-        if ($originalData['department_id'] != $request->department_id)
+        if (isset($updateData['department_id']) && $originalData['department_id'] != $updateData['department_id'])
             $changes[] = 'Departemen';
-        if ($originalData['position_id'] != $request->position_id)
+        if (isset($updateData['position_id']) && $originalData['position_id'] != $updateData['position_id'])
             $changes[] = 'Posisi';
 
         if (!empty($changes)) {

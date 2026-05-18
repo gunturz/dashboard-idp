@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
+use App\Services\AuditLogger;
+use App\Services\SecurityAlerter;
+
 
 class DocumentController extends Controller
 {
@@ -49,6 +53,18 @@ class DocumentController extends Controller
             'file_path' => $path, // Contoh hasil: secure_documents/a7x..y7z.pdf
             'mime_type' => $file->getMimeType(),
         ]);
+
+        // ✅ LOG: File berhasil diupload
+        AuditLogger::log(
+            event: 'file_upload',
+            description: "File [{$file->getClientOriginalName()}] berhasil diunggah.",
+            properties: [
+                'original_name' => $file->getClientOriginalName(),
+                'mime_type'     => $file->getMimeType(),
+                'size_bytes'    => $file->getSize(),
+                'stored_path'   => $path,
+            ]
+        );
         return redirect()->back()->with('success', 'Dokumen aman telah diunggah!');
     }
     /**
@@ -56,14 +72,39 @@ class DocumentController extends Controller
      */
     public function download(Document $document)
     {
-        // 1. Authorization Gate/Policy
-        // Sistem hanya memperbolehkan akses jika policy lolos.
-        // Anda juga dapat melakukan pengecekan manual, misal: if ($document->user_id !== auth()->id()) abort(403);
-        $this->authorize('view', $document);
+        // Gunakan Gate::allows() untuk cek tanpa throw, agar bisa log alert
+        if (!Gate::allows('view', $document)) {
+            SecurityAlerter::unauthorizedFileAccess(
+                userId: auth()->id(),
+                documentId: $document->id,
+                ip: request()->ip()
+            );
+            AuditLogger::log(
+                event: 'file_download_unauthorized',
+                description: "Percobaan akses tidak sah ke Document [{$document->id}].",
+                properties: ['document_id' => $document->id]
+            );
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+
+             
         // 2. Cek apakah file fisik eksis di private storage
         if (!Storage::disk('private')->exists($document->file_path)) {
             abort(404, 'File secara fisik tidak ditemukan di sistem.');
         }
+
+         // ✅ LOG: Download file sukses
+        AuditLogger::log(
+            event: 'file_download',
+            description: "File [{$document->original_name}] berhasil didownload.",
+            properties: [
+                'document_id'   => $document->id,
+                'original_name' => $document->original_name,
+                'owner_user_id' => $document->user_id,
+            ]
+        );
+        
         // 3. Beri return file via controller, yang disembunyikan streamnya ke pengguna 
         return Storage::disk('private')->download(
             $document->file_path, 

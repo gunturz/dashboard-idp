@@ -52,7 +52,8 @@ Route::middleware('guest')->group(function () {
 
 // API: fetch departments filtered by company — accessible to both guest and logged-in users
 Route::get('register/departments', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'getDepartmentsByCompany'])
-    ->name('register.departments_by_company');
+    ->name('register.departments_by_company')
+    ->middleware('throttle:30,1'); // Minimal rate limit
 
 Route::middleware('auth')->group(function () {
 

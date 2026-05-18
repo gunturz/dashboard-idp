@@ -1,4 +1,69 @@
 <div>
+    <style>
+        .pdc-log-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pdc-log-table th {
+            padding: 16px 24px;
+            background: #f8fafc;
+            font-weight: 800;
+            color: #475569;
+            font-size: 0.925rem;
+            text-align: center;
+            white-space: nowrap;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .pdc-log-table td {
+            padding: 16px 24px;
+            color: #64748b;
+            font-size: 0.925rem;
+            border-top: 1px solid #f1f5f9;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .pdc-log-table tr:hover td {
+            background: #fafafa;
+        }
+
+        .pdc-log-table .col-person {
+            width: 14%;
+        }
+
+        .pdc-log-table .col-theme {
+            width: 28%;
+        }
+
+        .pdc-log-table .col-date {
+            width: 17%;
+        }
+
+        .pdc-log-table .col-status {
+            width: 10%;
+        }
+
+        .pdc-log-table .col-action {
+            width: 14%;
+        }
+
+        .pdc-log-table .person-cell {
+            min-width: 170px;
+        }
+
+        .pdc-log-table .theme-cell {
+            min-width: 260px;
+            white-space: normal;
+            line-height: 1.45;
+        }
+
+        .pdc-log-table .date-cell {
+            min-width: 170px;
+            font-size: 0.86rem;
+        }
+    </style>
 
     {{-- Flash Messages --}}
     @if(session('success'))
@@ -235,6 +300,7 @@
                         <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
                         <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
                         <td class="py-4 px-6 text-center w-32">
+
                             @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')
                                 <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                                     <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending

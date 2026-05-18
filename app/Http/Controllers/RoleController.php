@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\AuditLogger;
 
 class RoleController extends Controller
 {
@@ -39,6 +40,16 @@ class RoleController extends Controller
         if ($user->hasRole($request->role_name)) {
             $roleName = strtolower($request->role_name);
             session(['active_role' => $roleName]);
+            
+            // ✅ LOG: Role berhasil diganti
+            AuditLogger::log(
+                event: 'role_change',
+                description: "User [{$user->email}] beralih ke role [{$roleName}].",
+                properties: [
+                    'email'    => $user->email,
+                    'new_role' => $roleName,
+                ]
+            );
 
             if (in_array($roleName, ['admin', 'pdc_admin'])) {
                 session()->put('pdc_admin_just_logged_in', true);
@@ -56,6 +67,9 @@ class RoleController extends Controller
                 session()->put('mentor_just_logged_in', true);
             }
 
+            $request->session()->regenerate();
+
+            
             return redirect()->route('dashboard');
         }
 

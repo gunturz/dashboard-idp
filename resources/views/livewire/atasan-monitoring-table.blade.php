@@ -16,7 +16,6 @@
             </button>
         </div>
     </div>
-
     {{-- Centered title block --}}
     <div class="text-center mb-8">
         @php
@@ -28,15 +27,15 @@
                 : '- → -';
         @endphp
 
-        {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
-        <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
-            {{ $headerRoute }}
-        </h2>
+            {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
+            <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
+                {{ $headerRoute }}
+            </h2>
 
-        {{-- Baris 2: Perusahaan --}}
-        <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">
-            {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
-        </p>
+            {{-- Baris 2: Perusahaan --}}
+            <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">
+                {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
+            </p>
 
         {{-- Baris 3: Jumlah talent --}}
         <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mt-1">{{ $talents->count() }}

@@ -81,15 +81,15 @@ class MentorValidasiTable extends Component
 
     protected function resolvePendingTab($exposureData, $mentoringData, $learningData): string
     {
-        if ($exposureData->contains(fn ($row) => $this->isPendingStatus($row['status'] ?? null))) {
+        if ($exposureData->contains(fn($row) => $this->isPendingStatus($row['status'] ?? null))) {
             return 'exposure';
         }
 
-        if ($mentoringData->contains(fn ($row) => $this->isPendingStatus($row['status'] ?? null))) {
+        if ($mentoringData->contains(fn($row) => $this->isPendingStatus($row['status'] ?? null))) {
             return 'mentoring';
         }
 
-        if ($learningData->contains(fn ($row) => $this->isPendingStatus($row['status'] ?? null))) {
+        if ($learningData->contains(fn($row) => $this->isPendingStatus($row['status'] ?? null))) {
             return 'learning';
         }
 
@@ -111,16 +111,23 @@ class MentorValidasiTable extends Component
     protected function hasPendingRows($exposureRows, $mentoringRows, $learningRows): bool
     {
         return collect([$exposureRows, $mentoringRows, $learningRows])
-            ->contains(fn ($rows) => $rows->contains(fn ($row) => $this->isPendingStatus($row['status'] ?? null)));
+            ->contains(fn($rows) => $rows->contains(fn($row) => $this->isPendingStatus($row['status'] ?? null)));
     }
 
     public function render()
     {
         $user = Auth::user();
-        $rawMentees = $user->mentees;
+        $rawMentees = $user->mentees->filter(function ($mentee) {
+            $latestPlan = $mentee->all_promotion_plans->first();
+            if ($latestPlan && !$latestPlan->is_active && in_array($latestPlan->status_promotion, ['Approved Panelis', 'Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'])) {
+                return false;
+            }
+            return true;
+        })->values();
 
         $activitiesByTalent = IdpActivity::with(['type', 'verifier', 'talent'])
             ->whereIn('user_id_talent', $rawMentees->pluck('id'))
+            ->where('is_active', true)
             ->where(function ($q) use ($user) {
                 $q->where('verify_by', $user->id)
                     ->orWhereHas('type', function ($qType) {
@@ -133,7 +140,7 @@ class MentorValidasiTable extends Component
             ->groupBy('user_id_talent');
 
         $mentees = $rawMentees
-            ->filter(fn ($mentee) => $activitiesByTalent->has($mentee->id))
+            ->filter(fn($mentee) => $activitiesByTalent->has($mentee->id))
             ->sortByDesc(function ($mentee) use ($activitiesByTalent) {
                 return optional($activitiesByTalent->get($mentee->id)?->max('updated_at'))?->timestamp ?? 0;
             })
@@ -147,6 +154,10 @@ class MentorValidasiTable extends Component
 
         if (!$showAllTalents && $this->selectedTalentId) {
             $selectedTalent = $mentees->find($this->selectedTalentId);
+            if (!$selectedTalent) {
+                $this->selectedTalentId = 0;
+                $showAllTalents = true;
+            }
         }
 
         if ($showAllTalents || $selectedTalent) {

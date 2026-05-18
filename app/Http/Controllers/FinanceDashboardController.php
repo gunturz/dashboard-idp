@@ -13,7 +13,7 @@ class FinanceDashboardController extends Controller
     {
         $user = auth()->user();
 
-        $projects = ImprovementProject::with(['developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
+        $projects = ImprovementProject::with(['developmentSession.sourcePosition', 'developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
             ->orderBy('updated_at', 'desc')
@@ -52,7 +52,7 @@ class FinanceDashboardController extends Controller
         $user = auth()->user();
 
         // Tampilkan semua project yang dikirim ke finance ini (feedback = ada), belum ada keputusan dari Finance
-        $projects = ImprovementProject::with(['developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
+        $projects = ImprovementProject::with(['developmentSession.sourcePosition', 'developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.promotion_plan.targetPosition'])
             ->whereHas('talent.promotion_plan', function ($q) {
                 $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
             })
@@ -76,7 +76,7 @@ class FinanceDashboardController extends Controller
         $search = $request->input('search');
 
         // Riwayat = project yang sudah diberi keputusan oleh Finance (ada [Approved] atau [Rejected] di finance_feedback)
-        $projectsQuery = ImprovementProject::with(['developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
+        $projectsQuery = ImprovementProject::with(['developmentSession.sourcePosition', 'developmentSession.promotionPlan.targetPosition', 'talent.position', 'talent.department', 'talent.company', 'talent.promotion_plan.targetPosition'])
             ->whereNotNull('feedback')
             ->where('verify_by', $user->id)
             ->where(function ($q) {
@@ -160,6 +160,9 @@ class FinanceDashboardController extends Controller
         foreach ($projects as $project) {
             if ($project->talent && $project->developmentSession?->promotionPlan) {
                 $project->talent->setRelation('promotion_plan', $project->developmentSession->promotionPlan);
+            }
+            if ($project->talent && $project->developmentSession?->sourcePosition) {
+                $project->talent->setRelation('position', $project->developmentSession->sourcePosition);
             }
         }
     }

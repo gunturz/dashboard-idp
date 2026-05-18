@@ -781,7 +781,7 @@
                                         terintegrasi.</p>
                                 </div>
                             </div>
-                            <a href="{{ route('atasan.riwayat.logbook', $talent->id) }}"
+                            <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'session_id' => $sessionId ?? optional($talent->promotion_plan)->development_session_id]) }}"
                                 class="btn-prem btn-teal px-8 py-3 rounded-xl shadow-md whitespace-nowrap">
                                 Lihat Detail Selengkapnya
                             </a>

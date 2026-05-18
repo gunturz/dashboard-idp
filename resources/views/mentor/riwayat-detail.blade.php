@@ -1,5 +1,5 @@
 <x-mentor.layout title="Detail Logbook" :user="$user" :notifications="$notifications">
-    <div class="w-full">
+    <div class="w-full px-4 md:px-8 pt-10 md:pt-6 pb-8">
         {{-- ── Page Header ── --}}
         <div class="page-header animate-title mb-4 flex justify-between items-center">
             <div class="flex items-center gap-4">

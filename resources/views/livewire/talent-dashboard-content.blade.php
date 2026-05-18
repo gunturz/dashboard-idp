@@ -415,30 +415,25 @@
                 </div>
 
                 {{-- Project Table --}}
-                <div class="overflow-x-auto rounded-2xl border border-gray-200">
-                    <table class="w-full text-sm bg-gray-50 min-w-[600px]">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200">
-                                    Judul Project Improvement</th>
-                                <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200 w-44">
-                                    File</th>
-                                <th
-                                    class="text-center px-4 py-3 font-semibold text-gray-700 border-b border-gray-200 w-44">
-                                    Status</th>
+                <div class="rounded-xl overflow-hidden border border-gray-200">
+                    <table class="w-full text-left bg-white">
+                        <thead class="bg-slate-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project Improvement</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($projects as $project)
-                                <tr class="bg-white border-b border-gray-100">
-                                    <td class="px-4 py-3 text-gray-700 border-r border-gray-200 font-medium">
+                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                    <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
                                         {{ $project->title }}
                                         <div class="text-xs text-gray-400 font-normal mt-0.5">
-                                            {{ \Carbon\Carbon::parse($project->created_at)->format('d M Y') }}</div>
+                                            {{ \Carbon\Carbon::parse($project->created_at)->locale('id')->translatedFormat('d F Y') }}
+                                        </div>
                                     </td>
-                                    <td class="text-center px-4 py-3 border-r border-gray-200">
+                                    <td class="py-4 px-6 text-center w-48">
                                         @if($project->document_path)
                                             <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
                                                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all" title="Lihat/Download File Project">
@@ -451,32 +446,28 @@
                                             <span class="text-gray-400 text-xs italic">-</span>
                                         @endif
                                     </td>
-                                    <td class="text-center px-4 py-3">
+                                    <td class="py-4 px-6 text-center w-48">
                                         @php
                                             $projectStatus = $project->status === 'Verified' ? 'Approved' : $project->status;
                                         @endphp
                                         @if($projectStatus === 'Approved')
-                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
-                                                Approved
+                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
                                             </span>
                                         @elseif($projectStatus === 'Rejected')
-                                            <span class="inline-flex items-center gap-1.5 text-red-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>
-                                                Rejected
+                                            <span class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-xs font-semibold">
-                                                <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
-                                                Pending
+                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
                                             </span>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="bg-white">
-                                    <td class="px-4 py-5 text-gray-400 border-r border-gray-200 text-center text-xs"
-                                        colspan="3">
+                                <tr>
+                                    <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="3">
                                         Belum ada project yang disubmit.
                                     </td>
                                 </tr>

@@ -31,9 +31,19 @@
                             Edit
                         </button>
                     @else
-                        <button wire:click="selectAll" class="btn-prem btn-blue" style="padding: 8px 16px; font-size: 0.85rem; background: #3b82f6; color: white;">
-                            Pilih Semua
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">{{ count($selectedNotifications) }} dipilih</span>
+                            <button wire:click="selectAll" class="btn-prem btn-blue" style="padding: 8px 16px; font-size: 0.85rem; background: #3b82f6; color: white;">
+                                Pilih Semua
+                            </button>
+                            <button wire:click="toggleEditMode" class="btn-prem btn-ghost" style="padding: 8px 16px; font-size: 0.85rem;">
+                                Batal
+                            </button>
+                            <button wire:click="deleteSelected" class="btn-prem btn-red flex items-center gap-2" style="padding: 8px 16px; font-size: 0.85rem;" @if(empty($selectedNotifications)) disabled style="opacity: 0.5; cursor: not-allowed;" @endif>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" /></svg>
+                                Hapus
+                            </button>
+                        </div>
                     @endif
                 @endif
             @endif
@@ -109,15 +119,6 @@
 
 
 
-    @if($isEditMode)
-        <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-lg border border-gray-100 animate-title">
-            <span class="text-sm font-semibold text-gray-600 mr-2">{{ count($selectedNotifications) }} dipilih</span>
-            <button wire:click="toggleEditMode" class="btn-prem btn-ghost" style="padding: 6px 14px; border-radius: 99px;">Batal</button>
-            <button wire:click="deleteSelected" class="btn-prem btn-red" style="padding: 6px 14px; border-radius: 99px;" @if(empty($selectedNotifications)) disabled @endif>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                Delete
-            </button>
-        </div>
-    @endif
+
 
 </div>

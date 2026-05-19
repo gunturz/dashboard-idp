@@ -415,7 +415,7 @@
             }
         }
         $totalCompany = count($groupedData);
-        $totalReviewed = \App\Models\PanelisAssessment::where('panelis_id', auth()->id())->whereNotNull('panelis_score')->count();
+        $totalReviewed = \App\Models\PanelisAssessment::where('panelis_id', auth()->id())->whereNotNull('panelis_score')->where('is_active', true)->count();
     @endphp
 
     <div class="prem-stat-grid grid-cols-1 md:grid-cols-3">

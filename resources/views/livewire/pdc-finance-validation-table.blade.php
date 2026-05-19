@@ -82,12 +82,12 @@
                 <table class="prem-table">
                     <thead>
                         <tr>
-                            <th style="width: 16%; min-width: 150px;">Talent</th>
-                            <th style="width: 22%; min-width: 200px;">Judul Project Improvement</th>
-                            <th style="width: 7%; min-width: 80px;">File</th>
-                            <th style="width: 10%; min-width: 130px;">Validasi Finance</th>
-                            <th style="width: 30%; min-width: 300px;">Feedback Dari Finance</th>
-                            <th style="width: 15%; min-width: 140px;">Aksi</th>
+                            <th style="width: 16%; min-width: 145px;">Talent</th>
+                            <th style="width: 22%; min-width: 190px;">Judul Project Improvement</th>
+                            <th style="width: 7%; min-width: 70px;">File</th>
+                            <th style="width: 10%; min-width: 80px;">Validasi Finance</th>
+                            <th style="width: 30%; min-width: 268px;">Feedback Dari Finance</th>
+                            <th style="width: 15%; min-width: 105px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

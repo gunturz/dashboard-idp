@@ -1,11 +1,9 @@
 <?php
 
+use App\Services\SecurityAlerter;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Services\SecurityAlerter;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,9 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(
             at: env('TRUSTED_PROXIES', '127.0.0.1'),
             headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
-                    \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
-                    \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
-                    \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
+                \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
+                \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
+                \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
         );
 
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
@@ -38,29 +36,35 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->report(function (\Throwable $e) {
-            // Log error ke channel app_log
-            Log::channel('app_log')->error('[APP_ERROR] ' . get_class($e) . ': ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'url'  => request()->fullUrl(),
-                'user' => auth()->id(),
-            ]);
-            // ── Deteksi Error Spike ──────────────────────────────────────
-            // Hitung berapa kali error terjadi dalam 5 menit terakhir
-            $errorCountKey = 'error_spike_count_' . date('YmdHi'); // key per menit
-            $currentCount  = Cache::increment($errorCountKey);
-            // Set TTL hanya pada increment pertama
-            if ($currentCount === 1) {
-                Cache::put($errorCountKey, 1, now()->addMinutes(5));
-            }
-            // Jika dalam 5 menit ada lebih dari 20 error, kirim alert
-            $THRESHOLD = 20;
-            if ($currentCount >= $THRESHOLD) {
-                SecurityAlerter::errorSpike(
-                    errorType: get_class($e),
-                    count:     $currentCount,
-                    threshold: '5 menit'
-                );
+            try {
+                // Jangan gunakan facade di bootstrap exception handler:
+                // saat error awal terjadi, facade root bisa belum tersedia.
+                app('log')->channel('app_log')->error('[APP_ERROR] ' . get_class($e) . ': ' . $e->getMessage(), [
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'url' => request()?->fullUrl(),
+                    'user' => auth()->id(),
+                ]);
+
+                // Deteksi error spike dalam jendela 5 menit.
+                $errorCountKey = 'error_spike_count_' . date('YmdHi');
+                $cache = app('cache')->store();
+                $currentCount = $cache->increment($errorCountKey);
+
+                if ($currentCount === 1) {
+                    $cache->put($errorCountKey, 1, now()->addMinutes(5));
+                }
+
+                $threshold = 20;
+                if ($currentCount >= $threshold) {
+                    SecurityAlerter::errorSpike(
+                        errorType: get_class($e),
+                        count: $currentCount,
+                        threshold: '5 menit'
+                    );
+                }
+            } catch (\Throwable $loggingError) {
+                // Hindari exception handler memicu exception baru saat bootstrap.
             }
         });
     })->create();

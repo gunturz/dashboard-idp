@@ -174,7 +174,7 @@
             .heatmap-table .td-left { text-align: left; font-weight: 600; color: #334155; white-space: nowrap; }
             .gap-badge { display: inline-flex; align-items: center; justify-content: center; padding: 6px 16px; border-radius: 5px; font-weight: 700; min-width: 56px; }
             .gap-none  { background: #f1f5f9; color: #64748b; }
-            .gap-ok    { background: #cbd5e1; color: #1e293b; }
+            .gap-ok    { background: #6293ffff; color: white; }
             .gap-small { background: #f97316; color: white; }
             .gap-large { background: #ef4444; color: white; }
             .legend { display: flex; gap: 16px; font-size: 0.65rem; font-weight: 700; color: #64748b; margin-bottom: 12px; text-transform: uppercase; align-items: center; flex-wrap: wrap; }

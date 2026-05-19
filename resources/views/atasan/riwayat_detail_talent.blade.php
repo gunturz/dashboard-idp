@@ -179,8 +179,13 @@
                 font-size: 0.90rem;
             }
 
-            .heatmap-table th:last-child { border-right: none; }
-            .heatmap-table td:last-child { border-right: none; }
+            .heatmap-table th:last-child {
+                border-right: none;
+            }
+
+            .heatmap-table td:last-child {
+                border-right: none;
+            }
 
             .heatmap-table .th-main {
                 background: #f1f5f9;
@@ -212,10 +217,25 @@
                 min-width: 56px;
             }
 
-            .gap-none  { background: #f1f5f9; color: #64748b; }
-            .gap-ok    { background: #cbd5e1; color: #1e293b; }
-            .gap-small { background: #f97316; color: white; }
-            .gap-large { background: #ef4444; color: white; }
+            .gap-none {
+                background: #f1f5f9;
+                color: #64748b;
+            }
+
+            .gap-ok {
+                background: #6293ffff;
+                color: white;
+            }
+
+            .gap-small {
+                background: #f97316;
+                color: white;
+            }
+
+            .gap-large {
+                background: #ef4444;
+                color: white;
+            }
 
             .row-summary td {
                 background: #f8fafc;
@@ -444,6 +464,7 @@
                 font-size: 1.25rem !important;
                 gap: 14px !important;
             }
+
             .prem-card-title svg {
                 width: 28px !important;
                 height: 28px !important;
@@ -570,7 +591,7 @@
                                 <th class="th-sub">Skor Talent</th>
                                 <th class="th-sub">Skor Atasan</th>
                                 <th class="th-sub">Final Score</th>
-                                <th class="th-sub" style="background:#ef4444;color:white;border-color:#ef4444;width:110px">Gap</th>
+                                <th class="th-sub" style="width:110px">Gap</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -596,9 +617,12 @@
                                     <td>{{ $standard % 1 == 0 ? (int) $standard : number_format($standard, 1) }}</td>
                                     <td><span class="font-bold">{{ $scoreTalent ?: '-' }}</span></td>
                                     <td><span class="font-bold">{{ $scoreAtasan ?: '-' }}</span></td>
-                                    <td><span class="font-bold">{{ $finalScore ? ($finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1)) : '-' }}</span></td>
+                                    <td><span
+                                            class="font-bold">{{ $finalScore ? ($finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1)) : '-' }}</span>
+                                    </td>
                                     <td class="text-center p-2">
-                                        <span class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
+                                        <span
+                                            class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -625,170 +649,175 @@
                                 <td>{{ number_format($avgTalent, 1) }}</td>
                                 <td>{{ number_format($avgAtasan, 1) }}</td>
                                 <td>{{ number_format($avgFinal, 1) }}</td>
-                                <td class="text-center p-2">
-                                    <span class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 2) }}</span>
+                                <td class="text-center p-2 font-bold text-[#1e293b]">
+                                    {{ number_format($avgGap, 2) }}
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
+            </div>
+        </div>
 
-                {{-- IDP Monitoring --}}
-                <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.3s;">
-                    <div class="prem-card-header">
-                        <div class="prem-card-title">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                    clip-rule="evenodd" />
-                                <path
-                                    d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                            </svg>
-                            IDP Monitoring
-                        </div>
-                    </div>
-                    <div class="p-8">
+        {{-- IDP Monitoring --}}
+        <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.3s;">
+            <div class="prem-card-header">
+                <div class="prem-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                            clip-rule="evenodd" />
+                        <path
+                            d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                    </svg>
+                    IDP Monitoring
+                </div>
+            </div>
+            <div class="p-8">
+                @php
+                    $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
+                    $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
+                    $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
+
+                    $charts = [
+                        ['label' => 'Exposure', 'done' => min($exposureCount, 6), 'total' => 6, 'color' => '#0f172a'],
+                        ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
+                        ['label' => 'Learning', 'done' => min($learningCount, 6), 'total' => 6, 'color' => '#0d9488']
+                    ];
+                    $r = 38;
+                    $circ = 2 * M_PI * $r;
+                @endphp
+
+                <div class="flex flex-col md:flex-row justify-around items-center gap-10">
+                    @foreach($charts as $chart)
                         @php
-                            $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
-                            $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
-                            $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
-
-                            $charts = [
-                                ['label' => 'Exposure', 'done' => min($exposureCount, 6), 'total' => 6, 'color' => '#0f172a'],
-                                ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
-                                ['label' => 'Learning', 'done' => min($learningCount, 6), 'total' => 6, 'color' => '#0d9488']
-                            ];
-                            $r = 38;
-                            $circ = 2 * M_PI * $r;
+                            $pct = $chart['done'] / $chart['total'];
+                            $filled = $pct * $circ;
+                            $empty = $circ - $filled;
                         @endphp
-
-                        <div class="flex flex-col md:flex-row justify-around items-center gap-10">
-                            @foreach($charts as $chart)
-                                @php
-                                    $pct = $chart['done'] / $chart['total'];
-                                    $filled = $pct * $circ;
-                                    $empty = $circ - $filled;
-                                @endphp
-                                <div class="flex flex-col items-center gap-5">
-                                    <div class="relative w-36 h-36">
-                                        <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-                                            <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9"
-                                                stroke-width="10" />
-                                            <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}"
-                                                stroke-width="10" stroke-linecap="round"
-                                                stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" />
-                                        </svg>
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                            <span
-                                                class="text-2xl font-black text-[#1e293b] leading-none">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
-                                            <span
-                                                class="text-[10px] text-gray-400 font-bold uppercase mt-1">{{ round($pct * 100) }}%</span>
-                                        </div>
-                                    </div>
-                                    <span
-                                        class="px-5 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-xs font-bold text-[#475569] shadow-sm">{{ $chart['label'] }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Project Improvement --}}
-                <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.4s;">
-                    <div class="prem-card-header">
-                        <div class="project-section-title">
-                            <span class="project-section-icon" aria-hidden="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M19.5 6h-6.879a1.5 1.5 0 0 1-1.06-.44l-.622-.62A1.5 1.5 0 0 0 9.88 4.5H6A2.25 2.25 0 0 0 3.75 6.75v10.5A2.25 2.25 0 0 0 6 19.5h13.5a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 19.5 6Z" />
+                        <div class="flex flex-col items-center gap-5">
+                            <div class="relative w-36 h-36">
+                                <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9"
+                                        stroke-width="10" />
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}"
+                                        stroke-width="10" stroke-linecap="round"
+                                        stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" />
                                 </svg>
-                            </span>
-                            <span>Project Improvement</span>
-                        </div>
-                    </div>
-                    <div class="p-0">
-                        <div class="overflow-x-auto custom-scrollbar">
-                            <table class="highlight-table project-improvement-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Judul Project Improvement</th>
-                                        <th class="text-center">File</th>
-                                        <th class="text-center">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($talent->improvementProjects as $proj)
-                                        <tr>
-                                            <td class="project-title-cell">{{ $proj->title }}</td>
-                                            <td class="project-action-cell">
-                                                <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
-                                                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
-                                                    target="_blank">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                                    </svg>
-                                                    Lihat File
-                                                </a>
-                                            </td>
-                                            <td class="project-status-cell">
-                                                @if(in_array($proj->status, ['Approved', 'Approve']))
-                                                    <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
-                                                    </span>
-                                                @elseif(in_array($proj->status, ['Rejected', 'Reject']))
-                                                    <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
-                                                    </span>
-                                                @else
-                                                    <span class="inline-flex items-center gap-1 text-orange-600 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Pending
-                                                    </span>
-                                                @endif
-                                                </td>
-                                            </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="py-12 text-center text-gray-400 font-medium italic">Belum
-                                                ada project improvement yang diupload.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- LogBook --}}
-                <div class="prem-card mb-12 animate-fade-in" style="animation-delay: 0.5s;">
-                    <div class="p-8">
-                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                            <div class="flex items-center gap-6">
-                                <div
-                                    class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100 shadow-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-[#1e293b] mb-1">Rekap Aktivitas LogBook</h4>
-                                    <p class="text-sm text-gray-500 leading-relaxed md:max-w-md">Pantau progress
-                                        Exposure, Mentoring, dan Learning secara lengkap melalui dashboard logbook
-                                        terintegrasi.</p>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span
+                                        class="text-2xl font-black text-[#1e293b] leading-none">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
+                                    <span
+                                        class="text-[10px] text-gray-400 font-bold uppercase mt-1">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'session_id' => $sessionId ?? optional($talent->promotion_plan)->development_session_id]) }}"
-                                class="btn-prem btn-teal px-8 py-3 rounded-xl shadow-md whitespace-nowrap">
-                                Lihat Detail Selengkapnya
-                            </a>
+                            <span
+                                class="px-5 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-xs font-bold text-[#475569] shadow-sm">{{ $chart['label'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- Project Improvement --}}
+        <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.4s;">
+            <div class="prem-card-header">
+                <div class="project-section-title">
+                    <span class="project-section-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M19.5 6h-6.879a1.5 1.5 0 0 1-1.06-.44l-.622-.62A1.5 1.5 0 0 0 9.88 4.5H6A2.25 2.25 0 0 0 3.75 6.75v10.5A2.25 2.25 0 0 0 6 19.5h13.5a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 19.5 6Z" />
+                        </svg>
+                    </span>
+                    <span>Project Improvement</span>
+                </div>
+            </div>
+            <div class="p-0">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="highlight-table project-improvement-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Judul Project Improvement</th>
+                                <th class="text-center">File</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($talent->improvementProjects as $proj)
+                                <tr>
+                                    <td class="project-title-cell">{{ $proj->title }}</td>
+                                    <td class="project-action-cell">
+                                        <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                            target="_blank">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                            Lihat File
+                                        </a>
+                                    </td>
+                                    <td class="project-status-cell">
+                                        @if(in_array($proj->status, ['Approved', 'Approve']))
+                                            <span
+                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                            </span>
+                                        @elseif(in_array($proj->status, ['Rejected', 'Reject']))
+                                            <span
+                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center gap-1 text-orange-600 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Pending
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="py-12 text-center text-gray-400 font-medium italic">Belum
+                                        ada project improvement yang diupload.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {{-- LogBook --}}
+        <div class="prem-card mb-12 animate-fade-in" style="animation-delay: 0.5s;">
+            <div class="p-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex items-center gap-6">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-[#1e293b] mb-1">Rekap Aktivitas LogBook</h4>
+                            <p class="text-sm text-gray-500 leading-relaxed md:max-w-md">Pantau progress
+                                Exposure, Mentoring, dan Learning secara lengkap melalui dashboard logbook
+                                terintegrasi.</p>
                         </div>
                     </div>
+                    <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'session_id' => $sessionId ?? optional($talent->promotion_plan)->development_session_id]) }}"
+                        class="btn-prem btn-teal px-8 py-3 rounded-xl shadow-md whitespace-nowrap">
+                        Lihat Detail Selengkapnya
+                    </a>
                 </div>
-
-                <div class="h-8"></div>
             </div>
+        </div>
+
+        <div class="h-8"></div>
+    </div>
 </x-atasan.layout>

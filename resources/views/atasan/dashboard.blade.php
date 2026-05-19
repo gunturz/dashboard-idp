@@ -213,17 +213,20 @@
                 </svg>
             </div>
             <div class="prem-stat-value animate-counter" data-target="{{ $onTrack }}">0</div>
-            <div class="prem-stat-label">On Track</div>
+            <div class="prem-stat-label">Completed</div>
         </div>
     </div>
 
     <div class="flex items-center gap-4 mb-8 mt-10">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:28px;height:28px;color:#0f172a;flex-shrink:0;">
-            <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+            style="width:28px;height:28px;color:#0f172a;flex-shrink:0;">
+            <path
+                d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
         </svg>
         <div>
             <h3 class="text-xl font-bold text-[#1e293b]">Daftar Talent</h3>
-            <p class="text-sm text-gray-500 mt-0.5 font-medium">Kelola dan lihat perkembangan kompetensi setiap talent</p>
+            <p class="text-sm text-gray-500 mt-0.5 font-medium">Kelola dan lihat perkembangan kompetensi setiap talent
+            </p>
         </div>
     </div>
 
@@ -245,13 +248,11 @@
                         <div class="talent-name-block">
                             <span class="name">{{ $talent->nama }}</span>
                             <span class="role">
-                                <span
-                                    class="text-gray-500">{{ optional($talent->position)->position_name ?? '-' }}</span>
+                                <span class="text-gray-500">{{ optional($talent->position)->position_name ?? '-' }}</span>
                                 @if (optional($talent->promotion_plan)->targetPosition)
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-300 mx-1"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-300 mx-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                     <span
                                         class="text-gray-500">{{ $talent->promotion_plan->targetPosition->position_name }}</span>
@@ -290,7 +291,7 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $comp->name }}</td>
-                                    <td class="font-bold text-gray-800">{{ number_format((float)$standard, 1) }}</td>
+                                    <td class="font-bold text-gray-800">{{ number_format((float) $standard, 1) }}</td>
                                     <td>
                                         @if ($scoreTalent)
                                             <span class="font-bold text-[#0d9488]">{{ $scoreTalent }}</span>
@@ -334,20 +335,36 @@
                 </div>
             </div>
         @empty
-            <div
-                class="col-span-1 lg:col-span-2 text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
+            @if($totalTalents == 0)
                 <div
-                    class="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mb-5 ring-8 ring-emerald-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    class="col-span-1 lg:col-span-2 text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
+                    <div
+                        class="relative w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-5 ring-8 ring-slate-50">
+                        <!-- Garis kuning bercahaya di dalam lingkaran -->
+                        <div class="absolute inset-1.5 rounded-full border-2 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-500 relative z-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-2">Belum Ada Talent</h3>
+                    <p class="text-slate-500 text-base max-w-sm">Saat ini belum ada talent yang terhubung dengan Anda untuk dilakukan penilaian assessment.</p>
                 </div>
-                <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Selesai!</h3>
-                <p class="text-slate-500 text-base max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh
-                    talent di tim Anda</p>
-            </div>
+            @else
+                <div
+                    class="col-span-1 lg:col-span-2 text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
+                    <div
+                        class="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mb-5 ring-8 ring-emerald-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Selesai!</h3>
+                    <p class="text-slate-500 text-base max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh
+                        talent di tim Anda</p>
+                </div>
+            @endif
         @endforelse
     </div>
 

@@ -140,18 +140,21 @@
                     </svg>
                     Heatmap Kompetensi
                 </div>
-                <div class="legend">
+                <div class="legend flex-wrap">
                     <span>KETERANGAN GAP</span>
                     <div class="legend-item">
-                        <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai
-                        Standar (0)
+                        <div class="legend-box" style="background: #6293ffff;"></div> Di Atas Standar (> 0)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)
                     </div>
                     <div class="legend-item">
                         <div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
                     </div>
                     <div class="legend-item">
-                        <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5)</div>
+                        <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5)
                     </div>
+                </div>
 
                     <div class="heatmap-container overflow-x-auto shadow-sm">
                         <table class="heatmap-table">

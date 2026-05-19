@@ -1,73 +1,20 @@
 <x-finance.layout title="Dashboard Finance" :user="$user">
     <x-slot name="styles">
         <style>
-            .highlight-table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: .9rem;
+            .custom-scrollbar::-webkit-scrollbar { 
+                height: 8px; 
             }
-
-            .highlight-table th {
-                background: #f1f5f9;
-                color: #1e293b;
-                font-weight: 700;
-                text-align: left;
-                padding: 11px 16px;
-                border-bottom: 2px solid #cbd5e1;
-                border-right: 1px solid #d1d5db;
-                white-space: nowrap;
-                font-size: .85rem;
-                text-transform: none;
-                letter-spacing: 0;
+            .custom-scrollbar::-webkit-scrollbar-track { 
+                background: #f8fafc; 
+                border-radius: 10px; 
             }
-
-            .highlight-table th:last-child {
-                border-right: none;
+            .custom-scrollbar::-webkit-scrollbar-thumb { 
+                background: #0d9488; 
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
             }
-
-            .highlight-table td {
-                padding: 13px 16px;
-                border-bottom: 1px solid #d1d5db;
-                border-right: 1px solid #e5e7eb;
-                vertical-align: middle;
-                color: #334155;
-            }
-
-            .highlight-table td:last-child {
-                border-right: none;
-            }
-
-            .table-row {
-                transition: background .15s;
-            }
-
-            .table-row:hover td {
-                background: #f0fdfa !important;
-            }
-
-            .row-even td {
-                background: #fafbfc;
-            }
-
-            .td-position {
-                font-weight: 700;
-                color: #1e293b;
-            }
-
-            .td-sub {
-                font-size: .82rem;
-                color: #94a3b8;
-                margin-top: 2px;
-                font-style: italic;
-            }
-
-            .td-name {
-                font-weight: 600;
-                color: #1e293b;
-            }
-
-            .td-muted {
-                color: #64748b;
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+                background: #0f766e; 
             }
             .section-title {
                 display: flex;
@@ -215,54 +162,65 @@
                 {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $groupTitle) }}
             </div>
 
-            <div class="prem-card">
-                <div class="overflow-x-auto">
-                    <table class="highlight-table">
-                        <thead>
-                            <tr>
-                                <th class="w-[25%]">Talent</th>
-                                <th class="w-[25%]">Project / Dept</th>
-                                <th class="w-[20%]">Catatan Admin</th>
-                                <th class="w-[20%]">Feedback Finance</th>
-                                <th class="w-[10%]">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($projectsGroup as $idx => $project)
-                                <tr class="table-row {{ $idx % 2 === 0 ? 'row-even' : '' }}">
-                                    <td>
-                                        <div class="td-name">{{ $project->talent->nama ?? '-' }}</div>
-                                        <div class="td-sub">
-                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->position->position_name ?? '-') }} &rarr;
-                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->promotion_plan->targetPosition->position_name ?? '?') }}
+            <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
+                <table class="w-full min-w-[900px] table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[25%]">Talent</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[25%]">Project / Dept</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[20%]">Catatan Admin</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[20%]">Feedback Finance</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[10%]">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($projectsGroup as $idx => $project)
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 text-sm text-slate-800">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-shrink-0">
+                                            @if($project->talent->foto)
+                                                <img src="{{ asset('storage/' . $project->talent->foto) }}" alt="{{ $project->talent->nama }}" class="w-10 h-10 rounded-full object-cover border-2 border-slate-100 shadow-sm">
+                                            @else
+                                                <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-sm border-2 border-teal-50">
+                                                    {{ collect(explode(' ', $project->talent->nama ?? 'A'))->map(fn($n)=>substr($n,0,1))->take(2)->join('') }}
+                                                </div>
+                                            @endif
                                         </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-position">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}</div>
-                                        <div class="td-sub">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->department->nama_department ?? '-') }}</div>
-                                    </td>
-                                    <td class="td-muted">
-                                        {{ $project->feedback ?? '-' }}
-                                    </td>
-                                    <td class="td-muted">
-                                        {{ $project->finance_feedback ?? '-' }}
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-amber">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            Review
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                        <div class="text-left">
+                                            <span class="block font-bold text-[#1e293b] text-sm">{{ $project->talent->nama ?? '-' }}</span>
+                                            <span class="block text-xs text-gray-500 italic mt-0.5">
+                                                {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->position->position_name ?? '-') }} &rarr;
+                                                {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->promotion_plan->targetPosition->position_name ?? '?') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 text-sm text-slate-800 text-center">
+                                    <div class="block font-bold text-[#1e293b]">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}</div>
+                                    <div class="block text-xs text-gray-500 italic mt-0.5">{{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->department->nama_department ?? '-') }}</div>
+                                </td>
+                                <td class="py-4 px-6 text-sm text-slate-600 text-center">
+                                    {{ $project->feedback ?? '-' }}
+                                </td>
+                                <td class="py-4 px-6 text-sm text-slate-600 text-center">
+                                    {{ $project->finance_feedback ?? '-' }}
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <span class="badge badge-amber w-full justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        Review
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         @empty
             <div class="prem-card">

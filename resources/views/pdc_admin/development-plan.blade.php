@@ -375,6 +375,7 @@
                         'nama' => $m->nama,
                         'company_id' => $m->company_id,
                         'department_id' => $m->department_id,
+                        'grade_level' => optional($m->position)->grade_level,
                     ])->values()->all()
                 );
 
@@ -384,6 +385,7 @@
                         'nama' => $a->nama,
                         'company_id' => $a->company_id,
                         'department_id' => $a->department_id,
+                        'grade_level' => optional($a->position)->grade_level,
                     ])->values()->all()
                 );
             @endphp
@@ -409,7 +411,7 @@
                 });
             }
 
-            function getFilteredUsers(users) {
+            function getFilteredUsers(users, minGradeLevel = null) {
                 const companyId = document.getElementById('dp-company')?.value || '';
                 const departmentId = document.getElementById('dp-department')?.value || '';
 
@@ -417,8 +419,17 @@
                     if (!companyId) return false;
                     if (String(user.company_id ?? '') !== String(companyId)) return false;
                     if (departmentId && String(user.department_id ?? '') !== String(departmentId)) return false;
+                    if (minGradeLevel !== null && Number(user.grade_level ?? -1) <= Number(minGradeLevel)) return false;
                     return true;
                 });
+            }
+
+            function getSelectedTalentGrade(block) {
+                const selectedTalentId = block?.querySelector('.talent-select')?.value;
+                if (!selectedTalentId) return null;
+
+                const talent = cachedTalents.find(item => String(item.id) === String(selectedTalentId));
+                return talent?.grade_level ?? null;
             }
 
             function buildOptions(users, placeholder) {
@@ -428,10 +439,10 @@
             }
 
             function refreshMentorOptions() {
-                const filteredMentors = getFilteredUsers(mentorUsers);
-                const mentorHtml = buildOptions(filteredMentors, '- Pilih Mentor -');
-
                 document.querySelectorAll('.mentor-stack select').forEach(select => {
+                    const block = select.closest('.talent-block');
+                    const filteredMentors = getFilteredUsers(mentorUsers, getSelectedTalentGrade(block));
+                    const mentorHtml = buildOptions(filteredMentors, '- Pilih Mentor -');
                     const currentValue = select.value;
                     select.innerHTML = mentorHtml;
                     if (filteredMentors.some(user => String(user.id) === String(currentValue))) {
@@ -444,7 +455,11 @@
                 const atasanSelect = document.getElementById('dp-atasan');
                 if (!atasanSelect) return;
 
-                const filteredAtasans = getFilteredUsers(atasanUsers);
+                const selectedGrades = Array.from(document.querySelectorAll('.talent-block'))
+                    .map(block => getSelectedTalentGrade(block))
+                    .filter(grade => grade !== null && grade !== undefined);
+                const minGradeLevel = selectedGrades.length ? Math.max(...selectedGrades.map(Number)) : null;
+                const filteredAtasans = getFilteredUsers(atasanUsers, minGradeLevel);
                 const currentValue = atasanSelect.value;
                 atasanSelect.innerHTML = buildOptions(filteredAtasans, '- Pilih Atasan -');
                 if (filteredAtasans.some(user => String(user.id) === String(currentValue))) {
@@ -530,6 +545,10 @@
                 const block = wrapper.firstElementChild;
                 const talentSelect = block.querySelector('.talent-select');
                 talentSelect.dataset.selectedTalent = prefill?.talent_id ?? '';
+                talentSelect.addEventListener('change', () => {
+                    refreshMentorOptions();
+                    refreshAtasanOptions();
+                });
 
                 container.appendChild(block);
 
@@ -541,6 +560,7 @@
 
                 refreshTalentSelect(talentSelect, prefill?.talent_id ?? null);
                 refreshMentorOptions();
+                refreshAtasanOptions();
 
                 if (prefill?.mentors) {
                     const mentorSelects = block.querySelectorAll('.mentor-stack select');

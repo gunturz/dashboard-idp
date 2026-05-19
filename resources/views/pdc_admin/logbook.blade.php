@@ -102,29 +102,33 @@
         </div>
 
         <div id="panel-exposure" class="mb-12">
-            <div class="log-table-container custom-scrollbar overflow-x-auto">
-                <table class="pdc-log-table w-full">
-                    <thead>
+            <div class="rounded-xl overflow-hidden border border-gray-200">
+                <table class="w-full min-w-[900px] table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
-                            <th>Mentor</th>
-                            <th>Tema</th>
-                            <th>Tanggal Pengiriman/Update</th>
-                            <th>Tanggal Pelaksanaan</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal Pengiriman/<br>Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal<br>Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($exposureData as $data)
-                            <tr>
-                                <td class="text-center font-medium">{{ $data['mentor'] }}</td>
-                                <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ date('d F Y', strtotime($data['tanggal'])) }}</td>
-                                <td class="text-center whitespace-nowrap w-32">
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['mentor'] }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? \Carbon\Carbon::parse($data['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($data['tanggal'])->locale('id')->translatedFormat('d F Y') }}</td>
+                                <td class="py-4 px-6 text-center w-32">
                                     @if (in_array($data['status'], ['Approve', 'Approved']))
                                         <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                        </span>
+                                    @elseif (in_array($data['status'], ['Reject', 'Rejected']))
+                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
@@ -133,19 +137,18 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <a href="{{ route('pdc_admin.logbook.detail', $data['id']) }}"
-                                        class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
-                                        title="Detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                        Detail
-                                    </a>
+                                <td class="py-4 px-6 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('pdc_admin.logbook.detail', $data['id']) }}"
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                            title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Detail
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -159,29 +162,33 @@
         </div>
 
         <div id="panel-mentoring" class="mb-12 hidden">
-            <div class="log-table-container custom-scrollbar overflow-x-auto">
-                <table class="pdc-log-table w-full">
-                    <thead>
+            <div class="rounded-xl overflow-hidden border border-gray-200">
+                <table class="w-full min-w-[900px] table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
-                            <th>Mentor</th>
-                            <th>Tema</th>
-                            <th>Tanggal Pengiriman/Update</th>
-                            <th>Tanggal Pelaksanaan</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal Pengiriman/<br>Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal<br>Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($mentoringData as $data)
-                            <tr>
-                                <td class="text-center font-medium">{{ $data['mentor'] }}</td>
-                                <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ date('d F Y', strtotime($data['tanggal'])) }}</td>
-                                <td class="text-center whitespace-nowrap w-32">
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['mentor'] }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? \Carbon\Carbon::parse($data['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($data['tanggal'])->locale('id')->translatedFormat('d F Y') }}</td>
+                                <td class="py-4 px-6 text-center w-32">
                                     @if (in_array($data['status'], ['Approve', 'Approved']))
                                         <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                        </span>
+                                    @elseif (in_array($data['status'], ['Reject', 'Rejected']))
+                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
@@ -190,19 +197,18 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <a href="{{ route('pdc_admin.logbook.detail', $data['id']) }}"
-                                        class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
-                                        title="Detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                        Detail
-                                    </a>
+                                <td class="py-4 px-6 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('pdc_admin.logbook.detail', $data['id']) }}"
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                            title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Detail
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -216,29 +222,33 @@
         </div>
 
         <div id="panel-learning" class="mb-12 hidden">
-            <div class="log-table-container custom-scrollbar overflow-x-auto">
-                <table class="pdc-log-table w-full">
-                    <thead>
+            <div class="rounded-xl overflow-hidden border border-gray-200">
+                <table class="w-full min-w-[900px] table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
-                            <th>Sumber</th>
-                            <th>Tema</th>
-                            <th>Tanggal Pengiriman/Update</th>
-                            <th>Tanggal Pelaksanaan</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal Pengiriman/<br>Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal<br>Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($learningData as $data)
-                            <tr>
-                                <td class="text-center font-medium">{{ $data['sumber'] }}</td>
-                                <td class="text-center font-bold text-[#1e293b] w-48">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
-                                <td class="text-center whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                <td class="text-center whitespace-nowrap">{{ date('d F Y', strtotime($data['tanggal'])) }}</td>
-                                <td class="text-center whitespace-nowrap w-32">
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['sumber'] }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'], 35) }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? \Carbon\Carbon::parse($data['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($data['tanggal'])->locale('id')->translatedFormat('d F Y') }}</td>
+                                <td class="py-4 px-6 text-center w-32">
                                     @if (in_array($data['status'], ['Approve', 'Approved', 'Verified']))
                                         <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> {{ in_array($data['status'], ['Approve', 'Approved']) ? 'Approved' : 'Verified' }}
+                                        </span>
+                                    @elseif (in_array($data['status'], ['Reject', 'Rejected']))
+                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
@@ -247,19 +257,18 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <a href="{{ route('pdc_admin.logbook.detail', $data['id']) }}"
-                                        class="inline-flex items-center gap-1.5 font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100"
-                                        title="Detail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                        Detail
-                                    </a>
+                                <td class="py-4 px-6 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('pdc_admin.logbook.detail', $data['id']) }}"
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                            title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Detail
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -272,17 +281,7 @@
             </div>
         </div>
 
-        <div class="mt-8 flex justify-start">
-            <a href="javascript:history.back()"
-                class="inline-flex items-center gap-2 text-gray-500 hover:text-slate-800 bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-full transition-colors text-sm font-bold shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Kembali
-            </a>
-        </div>
+
     </div>
 
     <x-slot name="scripts">

@@ -78,16 +78,19 @@
     {{-- Header & Talent Selector Row --}}
     <div class="flex flex-col {{ $showAllTalents ? 'gap-3 mb-5' : 'gap-6 mb-8' }}">
         {{-- Dropdown (Now Above) --}}
-        <div class="relative w-full">
-            <select wire:model.live="selectedTalentId" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] font-medium outline-none focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf] bg-white appearance-none cursor-pointer">
-                <option value="0">Tampilkan Semua Talent</option>
-                @foreach($mentees as $m)
-                    <option value="{{ $m->id }}">{{ $m->nama }}</option>
-                @endforeach
-            </select>
-            <svg class="w-4 h-4 text-[#94a3b8] absolute right-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
+        <div class="flex items-center gap-3 w-full">
+            <span class="text-sm font-bold text-[#475569] whitespace-nowrap">Pilih Talent:</span>
+            <div class="relative flex-1">
+                <select wire:model.live="selectedTalentId" class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] font-medium outline-none focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf] bg-white appearance-none cursor-pointer">
+                    <option value="0">Tampilkan Semua Talent</option>
+                    @foreach($mentees as $m)
+                        <option value="{{ $m->id }}">{{ $m->nama }}</option>
+                    @endforeach
+                </select>
+                <svg class="w-4 h-4 text-[#94a3b8] absolute right-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
         </div>
 
         {{-- Talent Profile/Title (Now Below) --}}
@@ -181,34 +184,34 @@
                 </div>
 
                 <div class="px-5 pb-5">
-                    <div class="log-table-container custom-scrollbar overflow-x-auto">
-                        <table class="pdc-log-table w-full">
-                            <thead>
+                    <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
+                        <table class="w-full min-w-[900px] table-fixed text-left bg-white">
+                            <thead class="bg-slate-50 border-b border-gray-200">
                                 <tr>
                                     @if($currentTab == 'learning')
-                                        <th class="col-person">Sumber</th>
+                                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
                                     @else
-                                        <th class="col-person">Mentor</th>
+                                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
                                     @endif
-                                    <th class="col-theme">Tema</th>
-                                    <th class="col-date">Tanggal Pengiriman/Update</th>
-                                    <th class="col-date">Tanggal Pelaksanaan</th>
-                                    <th class="col-status">Status</th>
-                                    <th class="col-action">Aksi</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal Pengiriman/<br>Update</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal<br>Pelaksanaan</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($dataList as $data)
-                                <tr>
+                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                     @if($currentTab == 'learning')
-                                        <td class="text-center font-medium person-cell">{{ $data['sumber'] ?: '-' }}</td>
+                                        <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['sumber'] ?: '-' }}</td>
                                     @else
-                                        <td class="text-center font-medium person-cell">{{ $data['mentor'] }}</td>
+                                        <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['mentor'] }}</td>
                                     @endif
-                                    <td class="text-center font-bold text-[#1e293b] theme-cell">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 55) ?: '-' }}</td>
-                                    <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                    <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
-                                    <td class="text-center whitespace-nowrap">
+                                    <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 35) ?: '-' }}</td>
+                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
+                                    <td class="py-4 px-6 text-center w-32">
                                         @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')
                                             <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
@@ -223,9 +226,9 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td class="py-4 px-6 text-center">
                                         <a href="{{ route('mentor.riwayat.detail', $data['id']) }}"
-                                            class="inline-flex items-center gap-2 font-black text-[11px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105 uppercase tracking-wider"
+                                            class="inline-flex items-center gap-2 font-bold text-[13px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105"
                                             title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -269,34 +272,35 @@
             </div>
         </div>
 
-        <div class="log-table-container custom-scrollbar overflow-x-auto">
-            <table class="pdc-log-table w-full">
-                <thead>
+        <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
+            <table class="w-full min-w-[900px] table-fixed text-left bg-white">
+                <thead class="bg-slate-50 border-b border-gray-200">
                     <tr>
                         @if($currentTab == 'learning')
-                            <th class="col-person">Sumber</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
                         @else
-                            <th class="col-person">Mentor</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
                         @endif
-                        <th class="col-theme">Tema</th>
-                        <th class="col-date">Tanggal Pengiriman/Update</th>
-                        <th class="col-date">Tanggal Pelaksanaan</th>
-                        <th class="col-status">Status</th>
-                        <th class="col-action">Aksi</th>
+                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal Pengiriman/<br>Update</th>
+                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal<br>Pelaksanaan</th>
+                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($dataList as $data)
-                    <tr>
+                    <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                         @if($currentTab == 'learning')
-                            <td class="text-center font-medium person-cell">{{ $data['sumber'] ?: '-' }}</td>
+                            <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['sumber'] ?: '-' }}</td>
                         @else
-                            <td class="text-center font-medium person-cell">{{ $data['mentor'] }}</td>
+                            <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['mentor'] }}</td>
                         @endif
-                        <td class="text-center font-bold text-[#1e293b] theme-cell">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 55) ?: '-' }}</td>
-                        <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                        <td class="text-center whitespace-nowrap date-cell">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
-                        <td class="text-center whitespace-nowrap">
+                        <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 35) ?: '-' }}</td>
+                        <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
+                        <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
+                        <td class="py-4 px-6 text-center w-32">
+
                             @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')
                                 <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                                     <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
@@ -311,9 +315,9 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="text-center">
+                        <td class="py-4 px-6 text-center">
                             <a href="{{ route('mentor.riwayat.detail', $data['id']) }}"
-                                class="inline-flex items-center gap-2 font-black text-[11px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105 uppercase tracking-wider"
+                                class="inline-flex items-center gap-2 font-bold text-[13px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105"
                                 title="Detail">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

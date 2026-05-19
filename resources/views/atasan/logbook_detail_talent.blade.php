@@ -129,253 +129,187 @@
 
         {{-- Exposure Panel --}}
         <div id="panel-exposure" class="tab-panel {{ ($activeTab ?? 'exposure') === 'exposure' ? '' : 'hidden' }}">
-            <div class="prem-card">
-                <div class="p-0 overflow-x-auto custom-scrollbar">
-                    <table class="pdc-log-table">
-                        <thead>
-                            <tr>
-                                <th>Mentor</th>
-                                <th>Tema</th>
-                                <th class="w-56 whitespace-nowrap">Tanggal Pengiriman/Update</th>
-                                <th class="w-56 whitespace-nowrap">Tanggal Pelaksanaan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+            <div class="rounded-xl overflow-hidden border border-gray-200">
+                <table class="w-full table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($exposureData as $item)
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $item['mentor'] }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($item['tema'], 35) }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $item['tanggal_update'] ? \Carbon\Carbon::parse($item['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->translatedFormat('d F Y') }}</td>
+                                <td class="py-4 px-6 text-center">
+                                    @php
+                                        $statusTxt = strtolower(trim($item['status'] ?? 'pending'));
+                                        $statusLabel = in_array($statusTxt, ['approve', 'approved']) ? 'Approved' : ($statusTxt === 'rejected' ? 'Rejected' : 'Pending');
+                                    @endphp
+                                    @if($statusLabel === 'Approved')
+                                        <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                        </span>
+                                    @elseif($statusLabel === 'Rejected')
+                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <a href="{{ route('atasan.logbook.detail', $item['id']) }}"
+                                        class="inline-flex items-center gap-2 font-bold text-[13px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105"
+                                        title="Detail">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Detail
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($exposureData as $item)
-                                <tr>
-                                    <td class="text-center font-medium">{{ $item['mentor'] }}</td>
-                                    <td class="text-center font-bold text-[#1e293b] w-48">
-                                        {{ \Illuminate\Support\Str::limit($item['tema'], 35) }}</td>
-                                    <td class="text-center whitespace-nowrap">
-                                        {{ $item['tanggal_update'] ? \Carbon\Carbon::parse($item['tanggal_update'])->format('d F Y') : '-' }}
-                                    </td>
-                                    <td class="text-center whitespace-nowrap">
-                                        {{ \Carbon\Carbon::parse($item['tanggal'])->format('d F Y') }}</td>
-                                    <td class="text-center whitespace-nowrap w-32">
-                                        @php
-                                            $statusTxt = strtolower(trim($item['status'] ?? 'pending'));
-                                            $statusLabel = in_array($statusTxt, ['approve', 'approved']) ? 'Approved' : ($statusTxt === 'rejected' ? 'Rejected' : 'Pending');
-                                        @endphp
-                                        @if($statusLabel === 'Approved')
-                                            <span
-                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
-                                            </span>
-                                        @elseif($statusLabel === 'Rejected')
-                                            <span
-                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('atasan.logbook.detail', $item['id']) }}"
-                                            class="flex items-center justify-center font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100 mx-auto w-fit"
-                                            title="Detail">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="py-12 px-6 text-center">
-                                        <div class="flex flex-col items-center justify-center p-6"><svg
-                                                class="w-12 h-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor" stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z">
-                                                </path>
-                                            </svg>
-                                            <p class="text-gray-500 font-semibold">Belum ada data dari talent</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 
         {{-- Mentoring Panel --}}
         <div id="panel-mentoring" class="tab-panel {{ ($activeTab ?? 'exposure') === 'mentoring' ? '' : 'hidden' }}">
-            <div class="prem-card">
-                <div class="p-0 overflow-x-auto custom-scrollbar">
-                    <table class="pdc-log-table">
-                        <thead>
-                            <tr>
-                                <th>Mentor</th>
-                                <th>Tema</th>
-                                <th class="w-56 whitespace-nowrap">Tanggal Pengiriman/Update</th>
-                                <th class="w-56 whitespace-nowrap">Tanggal Pelaksanaan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+            <div class="rounded-xl overflow-hidden border border-gray-200">
+                <table class="w-full table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($mentoringData as $item)
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $item['mentor'] }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($item['tema'], 35) }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $item['tanggal_update'] ? \Carbon\Carbon::parse($item['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->translatedFormat('d F Y') }}</td>
+                                <td class="py-4 px-6 text-center">
+                                    @php
+                                        $statusTxt = strtolower(trim($item['status'] ?? 'pending'));
+                                        $statusLabel = in_array($statusTxt, ['approve', 'approved']) ? 'Approved' : ($statusTxt === 'rejected' ? 'Rejected' : 'Pending');
+                                    @endphp
+                                    @if($statusLabel === 'Approved')
+                                        <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                        </span>
+                                    @elseif($statusLabel === 'Rejected')
+                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <a href="{{ route('atasan.logbook.detail', $item['id']) }}"
+                                        class="inline-flex items-center gap-2 font-bold text-[13px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105"
+                                        title="Detail">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Detail
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($mentoringData as $item)
-                                <tr>
-                                    <td class="text-center font-medium">{{ $item['mentor'] }}</td>
-                                    <td class="text-center font-bold text-[#1e293b] w-48">
-                                        {{ \Illuminate\Support\Str::limit($item['tema'], 35) }}</td>
-                                    <td class="text-center whitespace-nowrap">
-                                        {{ $item['tanggal_update'] ? \Carbon\Carbon::parse($item['tanggal_update'])->format('d F Y') : '-' }}
-                                    </td>
-                                    <td class="text-center whitespace-nowrap">
-                                        {{ \Carbon\Carbon::parse($item['tanggal'])->format('d F Y') }}</td>
-                                    <td class="text-center whitespace-nowrap w-32">
-                                        @php
-                                            $statusTxt = strtolower(trim($item['status'] ?? 'pending'));
-                                            $statusLabel = in_array($statusTxt, ['approve', 'approved']) ? 'Approved' : ($statusTxt === 'rejected' ? 'Rejected' : 'Pending');
-                                        @endphp
-                                        @if($statusLabel === 'Approved')
-                                            <span
-                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
-                                            </span>
-                                        @elseif($statusLabel === 'Rejected')
-                                            <span
-                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('atasan.logbook.detail', $item['id']) }}"
-                                            class="flex items-center justify-center font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100 mx-auto w-fit"
-                                            title="Detail">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="py-12 px-6 text-center">
-                                        <div class="flex flex-col items-center justify-center p-6"><svg
-                                                class="w-12 h-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor" stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z">
-                                                </path>
-                                            </svg>
-                                            <p class="text-gray-500 font-semibold">Belum ada data dari talent</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 
         {{-- Learning Panel --}}
         <div id="panel-learning" class="tab-panel {{ ($activeTab ?? 'exposure') === 'learning' ? '' : 'hidden' }}">
-            <div class="prem-card">
-                <div class="p-0 overflow-x-auto custom-scrollbar">
-                    <table class="pdc-log-table">
-                        <thead>
-                            <tr>
-                                <th>Sumber</th>
-                                <th>Tema</th>
-                                <th class="w-56 whitespace-nowrap">Tanggal Pengiriman/Update</th>
-                                <th class="w-56 whitespace-nowrap">Tanggal Pelaksanaan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+            <div class="rounded-xl overflow-hidden border border-gray-200">
+                <table class="w-full table-fixed text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($learningData as $item)
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $item['sumber'] }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($item['tema'], 35) }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $item['tanggal_update'] ? \Carbon\Carbon::parse($item['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->translatedFormat('d F Y') }}</td>
+                                <td class="py-4 px-6 text-center">
+                                    @php
+                                        $statusTxt = strtolower(trim($item['status'] ?? 'pending'));
+                                        $statusLabel = in_array($statusTxt, ['approve', 'approved']) ? 'Approved' : ($statusTxt === 'rejected' ? 'Rejected' : 'Pending');
+                                    @endphp
+                                    @if($statusLabel === 'Approved')
+                                        <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                        </span>
+                                    @elseif($statusLabel === 'Rejected')
+                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <a href="{{ route('atasan.logbook.detail', $item['id']) }}"
+                                        class="inline-flex items-center gap-2 font-bold text-[13px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105"
+                                        title="Detail">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Detail
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($learningData as $item)
-                                <tr>
-                                    <td class="text-center font-medium">{{ $item['sumber'] }}</td>
-                                    <td class="text-center font-bold text-[#1e293b] w-48">
-                                        {{ \Illuminate\Support\Str::limit($item['tema'], 35) }}</td>
-                                    <td class="text-center whitespace-nowrap">
-                                        {{ $item['tanggal_update'] ? \Carbon\Carbon::parse($item['tanggal_update'])->format('d F Y') : '-' }}
-                                    </td>
-                                    <td class="text-center whitespace-nowrap">
-                                        {{ \Carbon\Carbon::parse($item['tanggal'])->format('d F Y') }}</td>
-                                    <td class="text-center whitespace-nowrap w-32">
-                                        @php
-                                            $statusTxt = strtolower(trim($item['status'] ?? 'pending'));
-                                            $statusLabel = in_array($statusTxt, ['approve', 'approved']) ? 'Approved' : ($statusTxt === 'rejected' ? 'Rejected' : 'Pending');
-                                        @endphp
-                                        @if($statusLabel === 'Approved')
-                                            <span
-                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
-                                            </span>
-                                        @elseif($statusLabel === 'Rejected')
-                                            <span
-                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('atasan.logbook.detail', $item['id']) }}"
-                                            class="flex items-center justify-center font-bold text-xs bg-teal-50 text-teal-600 px-3 py-1.5 rounded-lg hover:bg-teal-100 transition-colors border border-teal-100 mx-auto w-fit"
-                                            title="Detail">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="py-12 px-6 text-center">
-                                        <div class="flex flex-col items-center justify-center p-6"><svg
-                                                class="w-12 h-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor" stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z">
-                                                </path>
-                                            </svg>
-                                            <p class="text-gray-500 font-semibold">Belum ada data dari talent</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Learning yang dicatat.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     

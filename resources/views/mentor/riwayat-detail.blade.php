@@ -1,7 +1,7 @@
 <x-mentor.layout title="Detail Logbook" :user="$user" :notifications="$notifications">
-    <div class="w-full">
+    <div class="w-full px-4 md:px-8 pt-10 md:pt-6 pb-8">
         {{-- ── Page Header ── --}}
-        <div class="page-header animate-title mb-8 flex justify-between items-center">
+        <div class="page-header animate-title mb-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <div class="page-header-icon bg-[#0f172a] text-white shadow-lg shadow-slate-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
@@ -19,115 +19,74 @@
             </div>
         </div>
 
-        <div class="prem-card border border-slate-200 shadow-xl shadow-slate-200/50 p-8 bg-slate-100">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="prem-card border border-slate-200 shadow-xl shadow-slate-200/50 p-6" style="background-color: #f1f5f9 !important;">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {{-- Row 1 --}}
                 @if ($activity->type_idp == 1 || $activity->type_idp == 2)
-                    <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Mentor</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Mentor</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-bold whitespace-pre-wrap leading-snug">{{ $activity->verifier->nama ?? '-' }}</div>
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->verifier->nama ?? '-' }}</div>
                     </div>
                 @elseif ($activity->type_idp == 3)
-                    <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20l-7-7m0 0l-7 7m7-7V4" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Sumber</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Sumber</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-bold whitespace-pre-wrap leading-snug">{{ $activity->activity ?? '-' }}</div>
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->activity ?? '-' }}</div>
                     </div>
                 @endif
 
-                <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                <div class="p-5 bg-white rounded-xl border border-slate-200">
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                            </svg>
-                        </div>
-                        <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Tema</span>
+                        <span class="text-[15px] font-extrabold text-black tracking-normal">Tema</span>
                     </div>
-                    <div class="text-[15px] text-slate-800 font-bold whitespace-pre-wrap leading-snug">{{ $activity->theme ?? '-' }}</div>
+                    <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->theme ?? '-' }}</div>
                 </div>
 
-                <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                <div class="p-5 bg-white rounded-xl border border-slate-200">
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002-2z" />
-                            </svg>
-                        </div>
-                        <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Tanggal Pelaksanaan</span>
+                        <span class="text-[15px] font-extrabold text-black tracking-normal">Tanggal Pelaksanaan</span>
                     </div>
-                    <div class="text-[15px] text-slate-800 font-bold leading-snug">
-                        {{ \Carbon\Carbon::parse($activity->activity_date)->format('d F Y') }}
+                    <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
+                        {{ \Carbon\Carbon::parse($activity->activity_date)->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y') }}
                     </div>
                 </div>
 
                 {{-- Row 2 --}}
-                <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                <div class="p-5 bg-white rounded-xl border border-slate-200">
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                        </div>
-                        <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Update Terakhir</span>
+                        <span class="text-[15px] font-extrabold text-black tracking-normal">Update Terakhir</span>
                     </div>
-                    <div class="text-[15px] text-slate-800 font-bold leading-snug">
-                        {{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->format('d F Y, H:i') : '-' }}
+                    <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
+                        {{ $activity->updated_at ? \Carbon\Carbon::parse($activity->updated_at)->timezone('Asia/Jakarta')->locale('id')->translatedFormat('d F Y, H:i') . ' WIB' : '-' }}
                     </div>
                 </div>
 
                 @if ($activity->type_idp == 1 || $activity->type_idp == 2)
-                    <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Lokasi</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Lokasi</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-bold leading-snug">
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
                             {{ $activity->location ?? '-' }}
                         </div>
                     </div>
                 @elseif ($activity->type_idp == 3)
-                    <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Platform</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Platform</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-bold leading-snug">
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
                             {{ $activity->platform ?? '-' }}
                         </div>
                     </div>
                 @endif
 
-                <div class="p-6 bg-white rounded-2xl border border-slate-200 border-l-4 border-l-transparent transition-all group hover:border-l-teal-500">
+                <div class="p-5 bg-white rounded-xl border border-slate-200">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                            </svg>
-                        </div>
-                        <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Dokumentasi</span>
+                        <span class="text-[15px] font-extrabold text-black tracking-normal">Dokumentasi</span>
                     </div>
                     @php
                         $dPaths = [];
@@ -159,44 +118,29 @@
 
                 {{-- Full width sections --}}
                 @if ($activity->type_idp == 1)
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 border-l-4 border-l-transparent md:col-span-3 transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200 md:col-span-3">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Aktivitas</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Aktivitas</span>
                         </div>
                         <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->activity ?? '-' }}</div>
                     </div>
                 @endif
 
                 @if ($activity->type_idp != 3)
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 border-l-4 border-l-transparent md:col-span-3 transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200 md:col-span-3">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Deskripsi</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Deskripsi</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 leading-relaxed font-medium break-words italic">
-                            "{{ $activity->description ?? '-' }}"
+                        <div class="text-[15px] text-slate-800 leading-relaxed font-medium break-words">
+                            {{ $activity->description ?? '-' }}
                         </div>
                     </div>
                 @endif
 
                 @if ($activity->type_idp == 2)
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 border-l-4 border-l-transparent md:col-span-3 transition-all group hover:border-l-teal-500">
+                    <div class="p-5 bg-white rounded-xl border border-slate-200 md:col-span-3">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:text-teal-500 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
-                            </div>
-                            <span class="text-[15px] font-extrabold text-slate-600 tracking-normal">Action Plan</span>
+                            <span class="text-[15px] font-extrabold text-black tracking-normal">Action Plan</span>
                         </div>
                         <div class="text-[15px] text-slate-800 leading-relaxed font-medium break-words">
                             {{ $activity->action_plan ?? '-' }}
@@ -213,9 +157,9 @@
             @if (
                 $isAuthorizedValidator &&
                     ($activity->status === 'Pending' || $activity->status === null || $activity->status === ''))
-                <div class="mt-12 flex justify-end gap-4 pt-8 border-t border-slate-100">
+                <div class="mt-3 flex justify-end gap-4 pt-3 border-t border-slate-100">
                     <button type="button" onclick="openConfirmModal('Rejected')"
-                        class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-red-500 text-red-500 bg-white font-black text-sm rounded-xl hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 transform hover:-translate-y-1">
+                        class="inline-flex items-center gap-2 px-8 py-3.5 bg-red-500 text-white font-black text-sm rounded-xl hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 transform hover:-translate-y-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -223,7 +167,7 @@
                         Reject
                     </button>
                     <button type="button" onclick="openConfirmModal('Approved')"
-                        class="inline-flex items-center gap-2 px-8 py-3.5 border-2 border-emerald-500 text-emerald-600 bg-white font-black text-sm rounded-xl hover:bg-emerald-500 hover:text-white hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300 transform hover:-translate-y-1">
+                        class="inline-flex items-center gap-2 px-8 py-3.5 bg-[#14b8a6] text-white font-black text-sm rounded-xl hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 transform hover:-translate-y-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />

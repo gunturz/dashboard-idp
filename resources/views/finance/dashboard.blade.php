@@ -1,73 +1,23 @@
 <x-finance.layout title="Dashboard Finance" :user="$user">
     <x-slot name="styles">
         <style>
-            .highlight-table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: .9rem;
+            .custom-scrollbar::-webkit-scrollbar {
+                height: 8px;
             }
 
-            .highlight-table th {
-                background: #f1f5f9;
-                color: #1e293b;
-                font-weight: 700;
-                text-align: left;
-                padding: 11px 16px;
-                border-bottom: 2px solid #cbd5e1;
-                border-right: 1px solid #d1d5db;
-                white-space: nowrap;
-                font-size: .85rem;
-                text-transform: none;
-                letter-spacing: 0;
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f8fafc;
+                border-radius: 10px;
             }
 
-            .highlight-table th:last-child {
-                border-right: none;
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #0d9488;
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
             }
 
-            .highlight-table td {
-                padding: 13px 16px;
-                border-bottom: 1px solid #d1d5db;
-                border-right: 1px solid #e5e7eb;
-                vertical-align: middle;
-                color: #334155;
-            }
-
-            .highlight-table td:last-child {
-                border-right: none;
-            }
-
-            .table-row {
-                transition: background .15s;
-            }
-
-            .table-row:hover td {
-                background: #f0fdfa !important;
-            }
-
-            .row-even td {
-                background: #fafbfc;
-            }
-
-            .td-position {
-                font-weight: 700;
-                color: #1e293b;
-            }
-
-            .td-sub {
-                font-size: .82rem;
-                color: #94a3b8;
-                margin-top: 2px;
-                font-style: italic;
-            }
-
-            .td-name {
-                font-weight: 600;
-                color: #1e293b;
-            }
-
-            .td-muted {
-                color: #64748b;
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #0f766e;
             }
 
             .section-title {

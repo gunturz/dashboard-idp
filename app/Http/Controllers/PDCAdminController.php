@@ -116,8 +116,8 @@ class PDCAdminController extends Controller
         $companies = Company::orderBy('nama_company')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::with('position:id,grade_level')->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::with('position:id,grade_level')->whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
         return view('pdc_admin.dashboard', compact(
             'user',
@@ -228,6 +228,7 @@ class PDCAdminController extends Controller
                 'nama' => $talent->nama,
                 'position_id' => $talent->position_id,
                 'position_name' => optional($talent->position)->position_name,
+                'grade_level' => optional($talent->position)->grade_level,
             ]);
 
         return response()->json($talents);
@@ -331,8 +332,8 @@ class PDCAdminController extends Controller
         $departments = Department::orderBy('nama_department')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::with('position:id,grade_level')->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::with('position:id,grade_level')->whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
         $editMode = false;
         $editingTalent = null;
@@ -365,8 +366,8 @@ class PDCAdminController extends Controller
             ])->values())
             ->toArray();
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
-        $mentors = User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
-        $atasans = User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
+        $mentors = User::with('position:id,grade_level')->whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->orderBy('nama')->get();
+        $atasans = User::with('position:id,grade_level')->whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->orderBy('nama')->get();
 
         $departmentId = request()->query('department_id');
         $planCreatedAt = request()->query('plan_created_at');
@@ -512,16 +513,28 @@ class PDCAdminController extends Controller
             ]);
         }
 
+        $selectedTalentPositions = User::query()
+            ->with('position:id,grade_level')
+            ->whereIn('id', $selectedTalentIds)
+            ->get(['id', 'position_id'])
+            ->keyBy('id');
+
+        $minimumAtasanGrade = $selectedTalentPositions
+            ->map(fn($talent) => optional($talent->position)->grade_level)
+            ->filter(fn($grade) => $grade !== null)
+            ->max();
+
         $validAtasan = User::query()
             ->where('id', $request->atasan_id)
             ->whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))
             ->where('company_id', $request->company_id)
             ->when($request->filled('department_id'), fn($q) => $q->where('department_id', $request->department_id))
+            ->when($minimumAtasanGrade !== null, fn($q) => $q->whereHas('position', fn($positionQuery) => $positionQuery->where('grade_level', '>', $minimumAtasanGrade)))
             ->exists();
 
         if (!$validAtasan) {
             throw ValidationException::withMessages([
-                'atasan_id' => 'Atasan harus sesuai perusahaan dan departemen yang dipilih.',
+                'atasan_id' => 'Atasan harus sesuai perusahaan, departemen, dan memiliki posisi lebih tinggi dari talent yang dipilih.',
             ]);
         }
 
@@ -557,6 +570,30 @@ class PDCAdminController extends Controller
             throw ValidationException::withMessages([
                 'talents' => 'Mentor yang dipilih harus sesuai perusahaan dan departemen yang dipilih.',
             ]);
+        }
+
+        foreach ($request->talents as $index => $talentData) {
+            $talentGrade = optional(optional($selectedTalentPositions->get($talentData['talent_id']))->position)->grade_level;
+
+            if ($talentGrade === null) {
+                continue;
+            }
+
+            $mentorIdsForTalent = collect($talentData['mentors'] ?? [])
+                ->filter()
+                ->unique()
+                ->values();
+
+            $higherMentorCount = User::query()
+                ->whereIn('id', $mentorIdsForTalent)
+                ->whereHas('position', fn($positionQuery) => $positionQuery->where('grade_level', '>', $talentGrade))
+                ->count();
+
+            if ($higherMentorCount !== $mentorIdsForTalent->count()) {
+                throw ValidationException::withMessages([
+                    "talents.$index.mentors" => 'Mentor harus memiliki posisi lebih tinggi dari talent yang dipilih.',
+                ]);
+            }
         }
 
         DB::transaction(function () use ($request, $editingTalentIds, $selectedTalentIds, $isEditMode, $talentNames, $targetPositionName, $atasanName, $mentorNamesById, $periodLabel, &$mentorNotifications, &$talentNotifications, &$atasanNotifications) {

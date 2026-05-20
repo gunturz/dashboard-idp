@@ -238,7 +238,7 @@
             }
 
             .row-summary td {
-                background: #f8fafc;
+                background: #f1f5f9;
                 font-weight: 800;
                 border-top: 2px solid #cbd5e1;
             }
@@ -347,6 +347,8 @@
                 display: flex;
                 align-items: center;
                 gap: 14px;
+                font-size: 1.25rem;
+                font-weight: 800;
             }
 
             .project-section-icon {
@@ -581,7 +583,7 @@
                     Heatmap Kompetensi
                 </div>
             </div>
-            <div class="p-6">
+            <div class="p-0">
                 <div class="overflow-x-auto custom-scrollbar">
                     <table class="heatmap-table">
                         <thead>
@@ -698,8 +700,7 @@
                         <div class="flex flex-col items-center gap-5">
                             <div class="relative w-36 h-36">
                                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9"
-                                        stroke-width="10" />
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="10" />
                                     <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}"
                                         stroke-width="10" stroke-linecap="round"
                                         stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" />
@@ -752,8 +753,7 @@
                                             target="_blank">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                             </svg>
                                             Lihat File
@@ -797,8 +797,8 @@
                     <div class="flex items-center gap-6">
                         <div
                             class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>

@@ -180,6 +180,11 @@ class AuthenticatedSessionController extends Controller
             session()->put('mentor_just_logged_in', true);
         }
 
+        if ($role === 'talent' && !Auth::user()->all_assessmentSessions()->exists()) {
+            return redirect()->route('talent.competency')
+                ->with('info', 'Silakan isi assessment kompetensi terlebih dahulu untuk memulai proses pengembangan Anda.');
+        }
+
         return redirect()->intended(route('dashboard'));
     }
 

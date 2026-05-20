@@ -150,6 +150,100 @@
                 flex-shrink: 0;
                 margin-top: 5px;
             }
+
+            .panelis-total-card {
+                width: 100%;
+                min-height: 150px;
+                height: 150px;
+                border: 1px solid #cbd5e1;
+                border-radius: 10px;
+                padding: 16px 18px 26px;
+                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+            }
+
+            .panelis-total-score {
+                font-size: 2rem;
+                font-weight: 800;
+                color: #0f766e;
+                line-height: 1;
+                text-align: center;
+                margin: auto 0;
+            }
+
+            .panelis-bottom-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1.22fr) minmax(210px, 0.40fr);
+                gap: 16px;
+                align-items: stretch;
+                padding: 20px 16px 28px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .panelis-comment-card {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                align-self: stretch;
+                height: 100%;
+            }
+
+            .panelis-score-side {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                align-self: stretch;
+                height: 100%;
+                box-sizing: border-box;
+            }
+
+            .panelis-section-label {
+                min-height: 30px;
+                display: flex;
+                align-items: center;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #1e293b;
+                margin-bottom: 10px;
+            }
+
+            .panelis-score-spacer {
+                min-height: 30px;
+                margin-bottom: 10px;
+                visibility: hidden;
+            }
+
+            .panelis-comment-box {
+                width: 100%;
+                min-height: 150px;
+                height: 150px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                padding: 16px 18px 24px;
+                font-size: 0.82rem;
+                color: #334155;
+                background: white;
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+            }
+
+            @media (max-width: 1024px) {
+                .panelis-bottom-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .panelis-comment-card,
+                .panelis-score-side {
+                    width: 100%;
+                }
+
+                .panelis-score-side {
+                    margin-top: 0;
+                }
+            }
         </style>
     </x-slot>
 
@@ -410,7 +504,7 @@
                     </div>
                 </div>
 
-                <div class="prem-card fade-up fade-up-4 overflow-hidden" style="padding: 0;">
+                <div class="prem-card fade-up fade-up-4 overflow-visible" style="padding: 0;">
                     @php
                         $panelisIndicators = [
                             'Pemahaman Bisnis & Strategi' => 'Memahami konteks industri, Business proses dan arah perusahaan',
@@ -449,26 +543,33 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    
-                                    @if (!empty($panelisKomentar))
-                                        <tr>
-                                            <td colspan="3" style="padding: 20px 16px; text-align: left; border-bottom: none;">
-                                                <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 10px;">Komentar / Catatan Penilai:</div>
-                                                <div style="width: 100%; min-height: 80px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px 16px; font-size: 0.82rem; color: #334155; background: white; font-family: 'Poppins', sans-serif;">
-                                                    @foreach ($panelisKomentar as $item)
-                                                        <div class="komentar-bullet" style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
-                                                            <div class="komentar-dot"></div>
-                                                            <p style="margin: 0; line-height: 1.5; flex: 1;">{{ $item['komentar'] }}</p>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endif
                                 </tbody>
                             </table>
                         </div>
 
+                        <div class="panelis-bottom-layout">
+                            <div class="panelis-comment-card">
+                                <div class="panelis-section-label">Komentar / Catatan Penilai:</div>
+                                <div class="panelis-comment-box">
+                                    @forelse ($panelisKomentar as $item)
+                                        <div class="komentar-bullet" style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
+                                            <div class="komentar-dot"></div>
+                                            <p style="margin: 0; line-height: 1.5; flex: 1;">{{ $item['komentar'] }}</p>
+                                        </div>
+                                    @empty
+                                        <p style="margin: 0; color: #94a3b8;">Belum ada komentar dari panelis.</p>
+                                    @endforelse
+                                </div>
+                            </div>
+
+                            <div class="panelis-score-side">
+                                <div class="panelis-score-spacer" aria-hidden="true">.</div>
+                                <div class="panelis-total-card">
+                                    <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 10px;">Total Skor</div>
+                                    <div class="panelis-total-score">{{ number_format($panelisScoreTotalDikaliDua, 2) }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

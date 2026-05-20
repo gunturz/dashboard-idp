@@ -121,9 +121,6 @@ class TalentDashboardController extends Controller
             }
 
             $developmentSession = $this->activeDevelopmentSessionFor($user);
-            if (!$developmentSession) {
-                return back()->with('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
-            }
 
             // Validasi Input Array Score dari request POST
             // min:0 karena Level 1 + Ragu-ragu = skor 0
@@ -135,22 +132,22 @@ class TalentDashboardController extends Controller
             DB::beginTransaction();
 
             $bulanTahun = now()->format('F Y');
-            $userIdAtasan = $user->atasan_id ?: null;
+            $userIdAtasan = $developmentSession?->atasan_id ?: ($user->atasan_id ?: null);
 
-            // 0. Nonaktifkan sesi assessment aktif sebelumnya (jika ada)
-            // Agar hanya ada 1 sesi assessment yang aktif (is_active = true) per talent.
+            // Pastikan hanya ada satu assessment aktif terbaru per talent.
             DB::table('assessment_session')
                 ->where('user_id_talent', $user->id)
-                ->where('development_session_id', $developmentSession->id)
                 ->where('is_active', true)
                 ->update(['is_active' => false]);
 
             // 1. Buat Header / Sesi Assessment Baru
             $assessmentId = DB::table('assessment_session')->insertGetId([
-                'development_session_id' => $developmentSession->id,
+                'development_session_id' => $developmentSession?->id,
                 'user_id_talent' => $user->id,
                 'user_id_atasan' => $userIdAtasan,
-                'period' => "Assessment {$bulanTahun}",
+                'period' => $developmentSession
+                    ? "Assessment {$bulanTahun}"
+                    : "Assessment Awal {$bulanTahun}",
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -191,8 +188,12 @@ class TalentDashboardController extends Controller
                 'info'
             );
 
+            $successMessage = $developmentSession
+                ? 'Berhasil! Penilaian kompetensi Anda telah tersimpan.'
+                : 'Berhasil! Assessment kompetensi awal Anda telah tersimpan. Anda dapat melanjutkan proses tanpa menunggu Development Plan dibuat.';
+
             return redirect()->route('talent.dashboard')
-                ->with('success', 'Berhasil! Penilaian kompetensi Anda telah tersimpan.');
+                ->with('success', $successMessage);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()
                 ->with('error', 'Data assessment tidak valid. Pastikan semua kompetensi sudah dinilai.');
@@ -1035,6 +1036,8 @@ class TalentDashboardController extends Controller
                 ? round($panelisAssessments->avg('panelis_score'), 2)
                 : 0;
 
+            $panelisScoreTotalDikaliDua = round($panelisScoreTotal * 2, 2);
+
             // Kumpulkan komentar dari semua panelis (non-empty)
             $panelisKomentar = $panelisAssessments
                 ->filter(fn($pa) => !empty(trim($pa->panelis_komentar ?? '')))
@@ -1057,6 +1060,7 @@ class TalentDashboardController extends Controller
                 'panelisAspects',
                 'panelisAspectAverages',
                 'panelisScoreTotal',
+                'panelisScoreTotalDikaliDua',
                 'panelisKomentar',
                 'panelisCount'
             ));

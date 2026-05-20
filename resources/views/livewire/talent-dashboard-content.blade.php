@@ -17,21 +17,7 @@
 
         {{-- ── Kompetensi Bar Chart (full width) ── --}}
         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 fade-up fade-up-2">
-            @if(!$hasDevPlan)
-                {{-- Belum ada development plan dari PDC Admin --}}
-                <div class="flex flex-col items-center justify-center py-8 text-center">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <p class="text-base font-bold text-gray-700">Menunggu Development Plan</p>
-                    <p class="text-sm text-gray-500 mt-1 max-w-[700px] leading-relaxed">
-                        PDC Admin belum menetapkan posisi yang dituju, mentor, dan atasan untuk Anda.<br>
-                        Data kompetensi akan tampil setelah development plan dibuat.
-                    </p>
-                </div>
-            @elseif(!$latestAssessment)
+            @if(!$latestAssessment)
                 <div class="flex flex-col items-center justify-center py-6">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
@@ -41,7 +27,12 @@
                         </svg>
                     </div>
                     <p class="text-base font-bold text-gray-700">Belum Ada Data Assessment</p>
-                    <p class="text-sm text-gray-500 mt-1 mb-2 text-center max-w-sm">Anda belum mengisi assessment kompetensi. Silakan isi terlebih dahulu untuk melihat data kompetensi Anda.</p>
+                    <p class="text-sm text-gray-500 mt-1 mb-2 text-center max-w-md">
+                        Anda belum mengisi assessment kompetensi.
+                        {{ $hasDevPlan
+                            ? 'Silakan isi terlebih dahulu untuk melihat data kompetensi Anda.'
+                            : 'Anda sudah bisa mulai mengisi assessment kompetensi awal meskipun Development Plan belum dibuat oleh PDC Admin.' }}
+                    </p>
                     <a href="{{ route('talent.competency') }}"
                         class="mt-5 inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
                         style="background: linear-gradient(135deg, #0d9488, #10b981);">
@@ -50,6 +41,19 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
+                </div>
+            @elseif(!$hasDevPlan)
+                <div class="flex flex-col items-center justify-center py-8 text-center">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <p class="text-base font-bold text-gray-700">Assessment Awal Sudah Tersimpan</p>
+                    <p class="text-sm text-gray-500 mt-1 max-w-[700px] leading-relaxed">
+                        Assessment kompetensi awal Anda sudah masuk.<br>
+                        Saat ini sistem masih menunggu PDC Admin menetapkan Development Plan, mentor, dan atasan agar proses lanjutan bisa dimulai.
+                    </p>
                 </div>
             @elseif(!$atasanHasScored)
                 <div class="flex flex-col items-center justify-center py-6">

@@ -170,61 +170,61 @@
                                 data-name="{{ strtolower($talent->nama) }}" data-company="{{ $compName }}"
                                 data-period="{{ $periodLabel }}"
                                 data-status="{{ optional($talent->promotion_plan)->status_promotion }}">
-                                    <td>
-                                        <p class="font-bold text-[#0f172a]">{{ $talent->nama }}</p>
-                                        <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr;
-                                            {{ $targetPos }}
-                                        </p>
-                                    </td>
-                                    <td>{{ $compName }}</td>
-                                    <td>{{ $startDate }}</td>
-                                    <td>{{ $dueDate }}</td>
-                                    <td>
-                                        @php $promoStatus = optional($talent->promotion_plan)->status_promotion; @endphp
-                                        @if ($promoStatus === 'Promoted')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
-                                                Ready Now
-                                            </span>
-                                        @elseif ($promoStatus === 'Ready in 1-2 Years')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
-                                                Ready 1–2 Years
-                                            </span>
-                                        @elseif ($promoStatus === 'Ready in > 2 Years')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
-                                                Ready &gt;2 Years
-                                            </span>
-                                        @elseif ($promoStatus === 'Not Ready')
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                                                Not Ready
-                                            </span>
-                                        @else
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
-                                                {{ $promoStatus ?? '-' }}
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center justify-center gap-2">
-                                            <a href="{{ route('pdc_admin.progress_archive.detail', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
-                                                class="inline-block px-4 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-100 transition-colors whitespace-nowrap">
-                                                Lihat Detail
-                                            </a>
-                                            <a href="{{ route('pdc_admin.export_pdf', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
-                                                class="inline-block px-5 py-1.5 bg-[#EE5353] hover:bg-[#d94444] text-white rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shadow-sm">
-                                                Export
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <td>
+                                    <p class="font-bold text-[#0f172a]">{{ $talent->nama }}</p>
+                                    <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr;
+                                        {{ $targetPos }}
+                                    </p>
+                                </td>
+                                <td>{{ $compName }}</td>
+                                <td>{{ $startDate }}</td>
+                                <td>{{ $dueDate }}</td>
+                                <td>
+                                    @php $promoStatus = optional($talent->promotion_plan)->status_promotion; @endphp
+                                    @if ($promoStatus === 'Promoted')
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
+                                            Ready Now
+                                        </span>
+                                    @elseif ($promoStatus === 'Ready in 1-2 Years')
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                                            Ready 1–2 Years
+                                        </span>
+                                    @elseif ($promoStatus === 'Ready in > 2 Years')
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
+                                            Ready &gt;2 Years
+                                        </span>
+                                    @elseif ($promoStatus === 'Not Ready')
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                                            Not Ready
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                            {{ $promoStatus ?? '-' }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('pdc_admin.progress_archive.detail', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
+                                            class="inline-flex items-center gap-1.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-xs font-bold px-4 py-1.5 rounded-xl border-none transition-all shadow-sm whitespace-nowrap">
+                                            Lihat Detail
+                                        </a>
+                                        <a href="{{ route('pdc_admin.export_pdf', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
+                                            class="inline-block px-5 py-1.5 bg-[#EE5353] hover:bg-[#d94444] text-white rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shadow-sm">
+                                            Export
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
 
                         {{-- Empty state row --}}

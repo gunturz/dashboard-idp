@@ -859,14 +859,13 @@
                                 $avgGap = $sess ? $sess->details->avg('gap_score') ?? 0 : 0;
                                 $avgCls = $avgGap > 0 ? 'gap-positive' : ($avgGap == 0 ? 'gap-none' : ($avgGap <= -1.5 ? 'gap-large' : 'gap-small'));
                             @endphp
-                            <tr class="font-bold bg-gray-50 border-t-2 border-slate-200">
+                            <tr class="font-bold bg-[#f1f5f9] border-t-2 border-slate-200">
                                 <td class="td-left">Nilai Rata-Rata</td>
                                 <td>{{ number_format(collect($standards)->avg() ?: 0, 1) }}</td>
                                 <td>{{ number_format($avgT, 1) }}</td>
                                 <td>{{ number_format($avgA, 1) }}</td>
                                 <td>{{ number_format(($avgT + $avgA) / 2, 1) }}</td>
-                                <td class="text-center p-2"><span
-                                        class="gap-badge {{ $avgCls }}">{{ number_format($avgGap, 1) }}</span>
+                                <td class="text-center p-2"><span class="font-bold text-[#334155]">{{ number_format($avgGap, 1) }}</span>
                                 </td>
                             </tr>
                         @else
@@ -951,13 +950,13 @@
                                 <td><span class="font-bold">3</span></td>
                                 <td class="text-center p-2"><span class="gap-badge gap-small">-1</span></td>
                             </tr>
-                            <tr class="font-bold bg-gray-50 border-t-2 border-slate-200">
+                            <tr class="font-bold bg-[#f1f5f9] border-t-2 border-slate-200">
                                 <td class="td-left">Nilai Rata-Rata</td>
                                 <td>3.9</td>
                                 <td>2.8</td>
                                 <td>3.1</td>
                                 <td>3.0</td>
-                                <td class="text-center p-2"><span class="gap-badge gap-small">-0.95</span></td>
+                                <td class="text-center p-2"><span class="font-bold text-[#334155]">-0.95</span></td>
                             </tr>
                         @endif
                     </tbody>
@@ -1023,9 +1022,9 @@
                             <div
                                 class="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-full m-3 border border-slate-100 shadow-inner">
                                 <span
-                                    class="text-[1.45rem] font-extrabold text-slate-800 tracking-tight">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
+                                    class="text-[1.45rem] font-extrabold text-slate-1500 tracking-tight">{{ round($pct * 100) }}%</span>
                                 <span
-                                    class="text-[0.7rem] font-bold text-slate-400 italic">{{ round($pct * 100) }}%</span>
+                                    class="text-[0.7rem] font-bold text-slate-1350 tracking-tight">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
                             </div>
                         </div>
                         <div class="border border-slate-300 bg-white px-6 py-1.5 rounded-full shadow-sm mt-2">

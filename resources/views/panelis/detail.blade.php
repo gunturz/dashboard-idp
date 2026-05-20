@@ -161,6 +161,11 @@
                 color: #64748b;
             }
 
+            .gap-positive {
+                background: #3b82f6;
+                color: white;
+            }
+
             .gap-ok {
                 background: #cbd5e1;
                 color: #1e293b;
@@ -517,6 +522,9 @@
         <div class="legend">
             <span>Keterangan GAP</span>
             <div class="legend-item">
+                <div class="legend-box" style="background:#3b82f6;"></div> Di Atas Standar (> 0)
+            </div>
+            <div class="legend-item">
                 <div class="legend-box" style="background:#f1f5f9;border:1px solid #e2e8f0;"></div> Sesuai Standar (0)
             </div>
             <div class="legend-item">
@@ -550,9 +558,9 @@
                                 $gap = $detail->gap_score ?? 0;
                                 $final = $sA > 0 ? ($sT + $sA) / 2 : ($sT > 0 ? $sT : 0);
 
-                                $cls = 'gap-ok';
-                                if ($gap == 0) {
-                                    $cls = 'gap-none';
+                                $cls = 'gap-none';
+                                if ($gap > 0) {
+                                    $cls = 'gap-positive';
                                 } elseif ($gap < -1.5) {
                                     $cls = 'gap-large';
                                 } elseif ($gap < 0) {
@@ -577,9 +585,9 @@
                             $avgA = $sess ? $sess->details->avg('score_atasan') ?? 0 : 0;
                             $avgGap = $sess ? $sess->details->avg('gap_score') ?? 0 : 0;
 
-                            $avgCls = 'gap-ok';
-                            if ($avgGap == 0) {
-                                $avgCls = 'gap-none';
+                            $avgCls = 'gap-none';
+                            if ($avgGap > 0) {
+                                $avgCls = 'gap-positive';
                             } elseif ($avgGap < -1.5) {
                                 $avgCls = 'gap-large';
                             } elseif ($avgGap < 0) {
@@ -592,8 +600,7 @@
                             <td>{{ number_format($avgT, 1) }}</td>
                             <td>{{ number_format($avgA, 1) }}</td>
                             <td>{{ number_format(($avgT + $avgA) / 2, 1) }}</td>
-                            <td class="p-1"><span
-                                    class="gap-badge {{ $avgCls }}">{{ number_format($avgGap, 1) }}</span></td>
+                            <td class="p-1"><span class="font-bold text-[#334155]">{{ number_format($avgGap, 1) }}</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -643,8 +650,8 @@
                                 </svg>
                                 <div class="absolute inset-0 flex flex-col items-center justify-center">
                                     <span
-                                        class="text-2xl font-extrabold text-[#1e293b]">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
-                                    <span class="text-xs font-bold text-gray-400">{{ round($pct * 100) }}%</span>
+                                        class="text-2xl font-extrabold text-[#1e293b]">{{ round($pct * 100) }}%</span>
+                                    <span class="text-xs font-bold text-gray-400">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
                                 </div>
                             </div>
                             <a href="{{ route('panelis.logbook', $talent->id) }}#{{ strtolower($chart['label']) }}"

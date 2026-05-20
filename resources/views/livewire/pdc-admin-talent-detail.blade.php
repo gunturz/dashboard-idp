@@ -180,15 +180,15 @@
                     <div class="legend-box" style="background: #6293ffff;"></div> Di Atas Standar (> 0)
                 </div>
                 <div class="legend-item">
-                    <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)
+                    <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai
+                    Standar (0)
                 </div>
                 <div class="legend-item">
                     <div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
                 </div>
                 <div class="legend-item">
-                    <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5)
+                    <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5) </div>
                 </div>
-            </div>
 
                 <div class="heatmap-container overflow-x-auto">
                     <table class="heatmap-table">
@@ -459,7 +459,12 @@
                                         <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
                                             class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
                                             target="_blank">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                                </path>
+                                            </svg>
                                             Lihat File
                                         </a>
                                     </td>
@@ -471,8 +476,7 @@
                                             <div
                                                 class="w-2 h-2 rounded-full {{ $projectStatus === 'Approved' ? 'bg-green-500' : ($projectStatus === 'Rejected' ? 'bg-red-500' : 'bg-orange-500') }}">
                                             </div>
-                                            <span
-                                                class="font-bold">{{ $projectStatus ?: 'Pending' }}</span>
+                                            <span class="font-bold">{{ $projectStatus ?: 'Pending' }}</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -530,43 +534,64 @@
                         @if (!$logbookFilterType || $logbookFilterType == 1)
                             <div class="log-table-type exposure-table">
                                 <div class="rounded-xl overflow-hidden border border-gray-200">
-                                    <table class="w-full table-fixed text-left bg-white">
+                                    <table class="w-full table-auto text-left bg-white">
                                         <thead class="bg-slate-50 border-b border-gray-200">
                                             <tr>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">
+                                                    Mentor</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema
+                                                </th>
+                                                <th
+                                                    class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                                    Tanggal Pengiriman/Update</th>
+                                                <th
+                                                    class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                                    Tanggal Pelaksanaan</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">
+                                                    Status</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php $expActivities = $talent->idpActivities->where('type_idp', 1); @endphp
                                             @forelse($expActivities as $act)
-                                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                                <tr
+                                                    class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                                     <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
                                                         {{ $act->verifier->nama ?? '-' }}</td>
-                                                    <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
+                                                    <td
+                                                        class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
                                                         {{ \Illuminate\Support\Str::limit($act->theme, 35) }}</td>
-                                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
+                                                    <td
+                                                        class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
                                                         {{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->locale('id')->translatedFormat('d F Y') : '-' }}
                                                     </td>
-                                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
+                                                    <td
+                                                        class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
                                                         {{ \Carbon\Carbon::parse($act->activity_date)->locale('id')->translatedFormat('d F Y') }}
                                                     </td>
                                                     <td class="py-4 px-6 text-center w-32">
                                                         @if (in_array($act->status, ['Approve', 'Approved']))
-                                                            <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                                Approved
                                                             </span>
                                                         @elseif (in_array($act->status, ['Reject', 'Rejected']))
-                                                            <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                                                Rejected
                                                             </span>
                                                         @else
-                                                            <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $act->status ?: 'Pending' }}
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                                                {{ $act->status ?: 'Pending' }}
                                                             </span>
                                                         @endif
                                                     </td>
@@ -575,9 +600,16 @@
                                                             <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
                                                                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
                                                                 title="Detail">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    stroke-width="2">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                                 </svg>
                                                                 Detail
                                                             </a>
@@ -586,7 +618,8 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Exposure yang dicatat.</td>
+                                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">
+                                                        Belum ada aktivitas Exposure yang dicatat.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -599,43 +632,64 @@
                         @if ($logbookFilterType == 2)
                             <div class="log-table-type mentoring-table">
                                 <div class="rounded-xl overflow-hidden border border-gray-200">
-                                    <table class="w-full table-fixed text-left bg-white">
+                                    <table class="w-full table-auto text-left bg-white">
                                         <thead class="bg-slate-50 border-b border-gray-200">
                                             <tr>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">
+                                                    Mentor</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema
+                                                </th>
+                                                <th
+                                                    class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                                    Tanggal Pengiriman/Update</th>
+                                                <th
+                                                    class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                                    Tanggal Pelaksanaan</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">
+                                                    Status</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php $menActivities = $talent->idpActivities->where('type_idp', 2); @endphp
                                             @forelse($menActivities as $act)
-                                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                                <tr
+                                                    class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                                     <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
                                                         {{ $act->verifier->nama ?? '-' }}</td>
-                                                    <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
+                                                    <td
+                                                        class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
                                                         {{ \Illuminate\Support\Str::limit($act->theme, 35) }}</td>
-                                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
+                                                    <td
+                                                        class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
                                                         {{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->locale('id')->translatedFormat('d F Y') : '-' }}
                                                     </td>
-                                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
+                                                    <td
+                                                        class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
                                                         {{ \Carbon\Carbon::parse($act->activity_date)->locale('id')->translatedFormat('d F Y') }}
                                                     </td>
                                                     <td class="py-4 px-6 text-center w-32">
                                                         @if (in_array($act->status, ['Approve', 'Approved']))
-                                                            <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                                Approved
                                                             </span>
                                                         @elseif (in_array($act->status, ['Reject', 'Rejected']))
-                                                            <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                                                Rejected
                                                             </span>
                                                         @else
-                                                            <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $act->status ?: 'Pending' }}
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                                                {{ $act->status ?: 'Pending' }}
                                                             </span>
                                                         @endif
                                                     </td>
@@ -644,9 +698,16 @@
                                                             <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
                                                                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
                                                                 title="Detail">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    stroke-width="2">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                                 </svg>
                                                                 Detail
                                                             </a>
@@ -655,7 +716,8 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Mentoring yang dicatat.</td>
+                                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">
+                                                        Belum ada aktivitas Mentoring yang dicatat.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -668,43 +730,64 @@
                         @if ($logbookFilterType == 3)
                             <div class="log-table-type learning-table">
                                 <div class="rounded-xl overflow-hidden border border-gray-200">
-                                    <table class="w-full table-fixed text-left bg-white">
+                                    <table class="w-full table-auto text-left bg-white">
                                         <thead class="bg-slate-50 border-b border-gray-200">
                                             <tr>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
-                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">
+                                                    Sumber</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema
+                                                </th>
+                                                <th
+                                                    class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                                    Tanggal Pengiriman/Update</th>
+                                                <th
+                                                    class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                                    Tanggal Pelaksanaan</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">
+                                                    Status</th>
+                                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php $leaActivities = $talent->idpActivities->where('type_idp', 3); @endphp
                                             @forelse($leaActivities as $act)
-                                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                                <tr
+                                                    class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                                     <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
                                                         {{ $act->activity }}</td>
-                                                    <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
+                                                    <td
+                                                        class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
                                                         {{ \Illuminate\Support\Str::limit($act->theme, 35) }}</td>
-                                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
+                                                    <td
+                                                        class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
                                                         {{ $act->updated_at ? \Carbon\Carbon::parse($act->updated_at)->locale('id')->translatedFormat('d F Y') : '-' }}
                                                     </td>
-                                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
+                                                    <td
+                                                        class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">
                                                         {{ \Carbon\Carbon::parse($act->activity_date)->locale('id')->translatedFormat('d F Y') }}
                                                     </td>
                                                     <td class="py-4 px-6 text-center w-32">
                                                         @if (in_array($act->status, ['Approve', 'Approved', 'Verified']))
-                                                            <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> {{ $act->status === 'Verified' ? 'Verified' : 'Approved' }}
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                                {{ $act->status === 'Verified' ? 'Verified' : 'Approved' }}
                                                             </span>
                                                         @elseif (in_array($act->status, ['Reject', 'Rejected']))
-                                                            <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                                                Rejected
                                                             </span>
                                                         @else
-                                                            <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $act->status ?: 'Pending' }}
+                                                            <span
+                                                                class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                                <span
+                                                                    class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                                                {{ $act->status ?: 'Pending' }}
                                                             </span>
                                                         @endif
                                                     </td>
@@ -713,9 +796,16 @@
                                                             <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
                                                                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
                                                                 title="Detail">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    stroke-width="2">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                                 </svg>
                                                                 Detail
                                                             </a>
@@ -724,7 +814,8 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Learning yang dicatat.</td>
+                                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">
+                                                        Belum ada aktivitas Learning yang dicatat.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -1110,4 +1201,5 @@
                 </div>
             </form>
         </div>
-    </div></div>
+    </div>
+</div>

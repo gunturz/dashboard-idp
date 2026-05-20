@@ -47,10 +47,10 @@
             @endphp
             <div class="prem-card filter-card" data-status="{{ $finBadgeDecision }}">
                 {{-- Card Header --}}
-                <div class="prem-card-header !py-6 md:!py-8 cursor-pointer select-none hover:bg-gray-50 transition-colors" onclick="toggleAccordion('riwayat-content-{{ $project->id }}', 'riwayat-icon-{{ $project->id }}')">
+                <div class="prem-card-header !py-6 md:!py-8 cursor-pointer select-none hover:bg-gray-50 transition-colors !grid !grid-cols-1 md:!grid-cols-12 !gap-4 !items-center" onclick="toggleAccordion('riwayat-content-{{ $project->id }}', 'riwayat-icon-{{ $project->id }}')">
                     
                     {{-- Profile Info --}}
-                    <div class="flex items-center gap-4 w-full md:w-[40%]">
+                    <div class="flex items-center gap-4 col-span-1 md:col-span-5 min-w-0">
                         <div class="flex-shrink-0">
                             @if($project->talent->foto)
                                 <img src="{{ asset('storage/' . $project->talent->foto) }}" alt="{{ $project->talent->nama }}" class="w-16 h-16 rounded-xl object-cover border-2 border-gray-100 shadow-sm">
@@ -73,14 +73,14 @@
                     </div>
 
                     {{-- Project Title --}}
-                    <div class="w-full md:w-[35%] py-2 md:py-0 md:px-6 flex items-center">
+                    <div class="col-span-1 md:col-span-4 py-2 md:py-0 md:px-6 flex items-center min-w-0">
                         <p class="text-gray-700" style="font-size: 0.9rem; font-weight: 700; line-height: 1.3;">
                             {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}
                         </p>
                     </div>
 
                     {{-- Badge & Toggle --}}
-                    <div class="flex items-center justify-between md:justify-end gap-6 ml-auto mt-2 md:mt-0">
+                    <div class="flex items-center justify-between md:justify-end gap-6 col-span-1 md:col-span-3 mt-2 md:mt-0 justify-self-stretch md:justify-self-end">
 
 
                         @if($finBadgeDecision === 'Approved')
@@ -108,7 +108,7 @@
                 </div>
 
                 {{-- Card Content (Expandable) --}}
-                <div id="riwayat-content-{{ $project->id }}" class="px-6 border-t border-gray-100 bg-white transition-all overflow-hidden pb-0 pt-0 max-h-0 opacity-0">
+                <div id="riwayat-content-{{ $project->id }}" class="px-6 border-gray-100 bg-white transition-all overflow-hidden pb-0 pt-0 max-h-0 opacity-0">
                     <div class="flex flex-col lg:flex-row gap-6 items-start pb-6 pt-5">
                         <div class="w-full flex flex-col lg:flex-row gap-6 items-start">
                             <div class="w-full lg:w-auto flex-grow flex flex-col gap-4">
@@ -116,9 +116,6 @@
                                 @if($project->feedback)
                                 <div>
                                     <div class="font-bold text-gray-700 mb-1.5 flex items-center gap-2" style="font-size: 0.9rem;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                        </svg>
                                         Catatan Admin PDC:
                                     </div>
                                     <div class="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-3 text-gray-600 leading-relaxed min-h-[50px]" style="font-size: 0.9rem;">
@@ -129,9 +126,6 @@
                                 {{-- Feedback Finance (tanpa prefix) --}}
                                 <div>
                                     <div class="font-bold text-gray-700 mb-1.5 flex items-center gap-2" style="font-size: 0.9rem;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
                                         Feedback Finance:
                                     </div>
                                     <div class="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-3 text-gray-600 leading-relaxed min-h-[50px]" style="font-size: 0.9rem;">
@@ -159,9 +153,14 @@
             @empty
             <div class="prem-card">
                 <div class="empty-prem">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+                        style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                            style="width: 32px !important; height: 32px !important; color: #0d9488 !important; margin: 0 !important;">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
                     <h3>Belum ada riwayat</h3>
                     <p>Belum ada riwayat validasi atau hasil pencarian tidak ditemukan.</p>
                 </div>
@@ -179,12 +178,12 @@
             if (content.classList.contains('max-h-0')) {
                 // Expanding
                 content.classList.remove('max-h-0', 'opacity-0', 'pb-0', 'pt-0');
-                content.classList.add('max-h-[1000px]', 'opacity-100', 'pb-6', 'pt-5');
+                content.classList.add('max-h-[1000px]', 'opacity-100', 'pb-6', 'pt-5', 'border-t');
                 icon.classList.add('rotate-180');
             } else {
                 // Collapsing
                 content.classList.add('max-h-0', 'opacity-0', 'pb-0', 'pt-0');
-                content.classList.remove('max-h-[1000px]', 'opacity-100', 'pb-6', 'pt-5');
+                content.classList.remove('max-h-[1000px]', 'opacity-100', 'pb-6', 'pt-5', 'border-t');
                 icon.classList.remove('rotate-180');
             }
         }

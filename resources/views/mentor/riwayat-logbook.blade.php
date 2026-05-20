@@ -60,29 +60,19 @@
         </style>
     </x-slot>
 
-    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up">
+    <div class="fade-up">
         {{-- ── Page Header ── --}}
-        <div class="page-header animate-title flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="page-header-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                </div>
-                <div>
-                    <div class="page-header-title">Riwayat Logbook</div>
-                    <div class="page-header-sub">Rekam jejak aktivitas pengembangan talent {{ $talent->nama }}</div>
-                </div>
-            </div>
-
-            <a href="{{ route('mentor.riwayat') }}"
-                class="inline-flex items-center gap-2 text-gray-500 hover:text-slate-800 bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-full transition-colors text-sm font-bold shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                Kembali
-            </a>
+            </div>
+            <div>
+                <h1 class="page-header-title">Riwayat Logbook</h1>
+                <p class="page-header-sub">Rekam jejak aktivitas pengembangan talent {{ $talent->nama }}</p>
+            </div>
         </div>
 
         {{-- Talent Profile --}}

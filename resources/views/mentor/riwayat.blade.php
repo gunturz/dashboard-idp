@@ -114,10 +114,10 @@
                     <td class="py-4 px-6 font-semibold text-slate-800 text-center">{{ $deptName }}</td>
 
                     {{-- Start Date --}}
-                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $startDate ? $startDate->translatedFormat('d F Y') : '-' }}</td>
+                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $startDate ? $startDate->locale('id')->translatedFormat('d F Y') : '-' }}</td>
 
                     {{-- Due Date --}}
-                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $targetDate ? $targetDate->translatedFormat('d F Y') : '-' }}</td>
+                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $targetDate ? $targetDate->locale('id')->translatedFormat('d F Y') : '-' }}</td>
 
                     {{-- Aksi --}}
                     <td class="py-4 px-6 text-center">

@@ -209,8 +209,8 @@
                                         <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['mentor'] }}</td>
                                     @endif
                                     <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 35) ?: '-' }}</td>
-                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
+                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? \Carbon\Carbon::parse($data['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? \Carbon\Carbon::parse($data['tanggal'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                                     <td class="py-4 px-6 text-center w-32">
                                         @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')
                                             <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
@@ -297,8 +297,8 @@
                             <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">{{ $data['mentor'] }}</td>
                         @endif
                         <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">{{ \Illuminate\Support\Str::limit($data['tema'] ?? '', 35) ?: '-' }}</td>
-                        <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? date('d F Y', strtotime($data['tanggal_update'])) : '-' }}</td>
-                        <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? date('d F Y', strtotime($data['tanggal'])) : '-' }}</td>
+                        <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal_update'] ? \Carbon\Carbon::parse($data['tanggal_update'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                        <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap">{{ $data['tanggal'] ? \Carbon\Carbon::parse($data['tanggal'])->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                         <td class="py-4 px-6 text-center w-32">
 
                             @if($data['status'] === 'Pending' || $data['status'] === null || $data['status'] === '')

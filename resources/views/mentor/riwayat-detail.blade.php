@@ -1,9 +1,8 @@
 <x-mentor.layout title="Detail Logbook" :user="$user" :notifications="$notifications">
-    <div class="w-full px-4 md:px-8 pt-10 md:pt-6 pb-8">
+    <div class="fade-up">
         {{-- ── Page Header ── --}}
-        <div class="page-header animate-title mb-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="page-header-icon bg-[#0f172a] text-white shadow-lg shadow-slate-900/20">
+        <div class="page-header animate-title mb-4">
+            <div class="page-header-icon bg-[#0f172a] text-white shadow-lg shadow-slate-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z"
@@ -16,7 +15,6 @@
                     <h1 class="page-header-title text-slate-800">Detail Logbook - {{ $activity->type->type_name ?? 'Aktivitas' }}</h1>
                     <p class="page-header-sub text-slate-500">Tinjau informasi mendalam mengenai aktivitas pengembangan talent.</p>
                 </div>
-            </div>
         </div>
 
         <div class="prem-card border border-slate-200 shadow-xl shadow-slate-200/50 p-6" style="background-color: #f1f5f9 !important;">
@@ -188,8 +186,8 @@
             style="transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
             <div class="bg-white rounded-[28px] shadow-2xl w-full max-w-[400px] p-8 text-center transform scale-90 transition-transform duration-400 ease-out"
                 id="confirmModalContent">
-                <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900 mb-6 shadow-xl shadow-slate-900/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div id="modalIconContainer" class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900 mb-6 shadow-xl shadow-slate-900/20">
+                    <svg id="modalIconSvg" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
@@ -208,7 +206,7 @@
                             class="w-full bg-slate-100 text-slate-500 font-black py-3.5 rounded-2xl hover:bg-slate-200 transition-all duration-200">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="submit" id="confirmSubmitBtn"
                             class="w-full bg-[#14b8a6] text-white font-black py-3.5 rounded-2xl hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-200">
                             Konfirmasi
                         </button>
@@ -224,9 +222,26 @@
                     const modalContent = document.getElementById('confirmModalContent');
                     const actionText = document.getElementById('modalActionText');
                     const inputStatus = document.getElementById('actionStatusInput');
+                    const iconContainer = document.getElementById('modalIconContainer');
+                    const iconSvg = document.getElementById('modalIconSvg');
+                    const submitBtn = document.getElementById('confirmSubmitBtn');
 
                     inputStatus.value = status;
-                    actionText.textContent = status === 'Approved' ? 'meng-Approve' : 'me-Reject';
+                    actionText.textContent = status === 'Approved' ? 'Approve' : 'Reject';
+
+                    // Reset classes
+                    iconContainer.className = "mx-auto flex h-20 w-20 items-center justify-center rounded-full mb-6 shadow-xl";
+                    submitBtn.className = "w-full text-white font-black py-3.5 rounded-2xl transition-all duration-200";
+
+                    if (status === 'Approved') {
+                        iconContainer.classList.add('bg-[#14b8a6]', 'shadow-teal-500/30');
+                        submitBtn.classList.add('bg-[#14b8a6]', 'hover:bg-teal-600', 'hover:shadow-lg', 'hover:shadow-teal-500/30');
+                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />`;
+                    } else {
+                        iconContainer.classList.add('bg-red-500', 'shadow-red-500/30');
+                        submitBtn.classList.add('bg-red-500', 'hover:bg-red-600', 'hover:shadow-lg', 'hover:shadow-red-500/30');
+                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />`;
+                    }
 
                     modal.classList.remove('hidden');
                     setTimeout(() => {

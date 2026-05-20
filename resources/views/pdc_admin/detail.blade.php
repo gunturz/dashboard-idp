@@ -521,6 +521,7 @@
                 margin-top: 40px;
                 margin-bottom: 24px;
             }
+
             .section-title::before {
                 content: '';
                 position: absolute;
@@ -958,8 +959,8 @@
             }
 
             .gap-ok {
-                background-color: #cbd5e1;
-                color: #1e293b;
+                background-color: #6293ff;
+                color: white;
             }
 
             .gap-small {
@@ -1072,6 +1073,7 @@
     </x-slot>
 
     {{-- Modal pilih GAP --}}
-    
-    <livewire:pdc-admin-talent-detail :user="$user" :company="$company" :targetPosition="$targetPosition" :talents="$talents" :competencies="$competencies" :standards="$standards" :financeUsers="$financeUsers" />
+
+    <livewire:pdc-admin-talent-detail :user="$user" :company="$company" :targetPosition="$targetPosition"
+        :talents="$talents" :competencies="$competencies" :standards="$standards" :financeUsers="$financeUsers" />
 </x-pdc_admin.layout>

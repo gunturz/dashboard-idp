@@ -225,16 +225,20 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    @empty
-        <div class="prem-card">
-            <div class="empty-prem">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                <h3>Tidak ada permintaan validasi</h3>
-                <p>Semua permintaan telah diproses atau belum ada yang baru.</p>
+        @empty
+            <div class="prem-card">
+                <div class="empty-prem">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+                        style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                            style="width: 32px !important; height: 32px !important; color: #0d9488 !important; margin: 0 !important;">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3>Tidak ada permintaan validasi</h3>
+                    <p>Semua permintaan telah diproses atau belum ada yang baru.</p>
+                </div>
             </div>
         </div>
     @endforelse

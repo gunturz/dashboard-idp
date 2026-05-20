@@ -153,7 +153,7 @@
         {{-- Exposure Section --}}
         <div id="panel-exposure" class="mb-12">
             <div class="rounded-xl overflow-hidden border border-gray-200">
-                <table class="w-full table-fixed text-left bg-white">
+                <table class="w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
@@ -170,7 +170,8 @@
                         @forelse($exposureActivities as $act)
                             <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                 <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
-                                    {{ optional($act->verifier)->nama ?? '-' }}</td>
+                                    {{ optional($act->verifier)->nama ?? '-' }}
+                                </td>
                                 <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
                                     {{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}
                                 </td>
@@ -198,7 +199,10 @@
                                     @else
                                         <span
                                             class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $st }}
+
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                            {{ $st }}
+
                                         </span>
                                     @endif
                                 </td>
@@ -221,8 +225,10 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Exposure
-                                    yang dicatat.</td>
+
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                    Exposure yang dicatat.</td>
+
                             </tr>
                         @endforelse
                     </tbody>
@@ -234,7 +240,7 @@
         {{-- Mentoring Section --}}
         <div id="panel-mentoring" class="mb-12 hidden">
             <div class="rounded-xl overflow-hidden border border-gray-200">
-                <table class="w-full table-fixed text-left bg-white">
+                <table class="w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
@@ -251,7 +257,8 @@
                         @forelse($mentoringActivities as $act)
                             <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                 <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
-                                    {{ optional($act->verifier)->nama ?? '-' }}</td>
+                                    {{ optional($act->verifier)->nama ?? '-' }}
+                                </td>
                                 <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
                                     {{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}
                                 </td>
@@ -279,7 +286,10 @@
                                     @else
                                         <span
                                             class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $st }}
+
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                            {{ $st }}
+
                                         </span>
                                     @endif
                                 </td>
@@ -301,9 +311,10 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Mentoring
-                                    yang dicatat.</td>
+
+                            <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                Mentoring yang dicatat.</td>
+
                             </tr>
                         @endforelse
                     </tbody>
@@ -315,15 +326,17 @@
         {{-- Learning Section --}}
         <div id="panel-learning" class="mb-12 hidden">
             <div class="rounded-xl overflow-hidden border border-gray-200">
-                <table class="w-full table-fixed text-left bg-white">
+                <table class="w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
-                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal
-                                Pengiriman/Update</th>
-                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal
-                                Pelaksanaan</th>
+
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                Tanggal Pengiriman/Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                                Tanggal Pelaksanaan</th>
+
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                         </tr>
@@ -332,7 +345,8 @@
                         @forelse($learningActivities as $act)
                             <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                 <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
-                                    {{ $act->activity ?? '-' }}</td>
+                                    {{ $act->activity ?? '-' }}
+                                </td>
                                 <td class="py-4 px-6 text-sm font-semibold text-slate-800 w-48 text-center">
                                     {{ \Illuminate\Support\Str::limit($act->theme, 35) ?? '-' }}
                                 </td>
@@ -360,7 +374,10 @@
                                     @else
                                         <span
                                             class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> {{ $st }}
+
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                            {{ $st }}
+
                                         </span>
                                     @endif
                                 </td>
@@ -369,8 +386,10 @@
                                         <a href="{{ route('panelis.logbook.detail', $act->id) }}"
                                             class="inline-flex items-center gap-1.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-xs font-bold px-4 py-1.5 rounded-xl border-none transition-all shadow-sm whitespace-nowrap"
                                             title="Detail">
+
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -383,8 +402,10 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas Learning
-                                    yang dicatat.</td>
+
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                    Learning yang dicatat.</td>
+
                             </tr>
                         @endforelse
                     </tbody>

@@ -27,15 +27,15 @@
                 : '- → -';
         @endphp
 
-            {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
-            <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
-                {{ $headerRoute }}
-            </h2>
+        {{-- Baris 1: Posisi sekarang → Posisi tujuan --}}
+        <h2 class="text-[1.35rem] font-extrabold text-[#1e293b] leading-snug">
+            {{ $headerRoute }}
+        </h2>
 
-            {{-- Baris 2: Perusahaan --}}
-            <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">
-                {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
-            </p>
+        {{-- Baris 2: Perusahaan --}}
+        <p class="text-[1.20rem] font-extrabold text-[#1e293b] leading-snug mt-1">
+            {{ optional($user->company)->nama_company ?? 'Nama Perusahaan' }}
+        </p>
 
         {{-- Baris 3: Jumlah talent --}}
         <p class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest mt-1">{{ $talents->count() }}
@@ -146,15 +146,15 @@
                         <div class="legend-box" style="background: #6293ffff;"></div> Di Atas Standar (> 0)
                     </div>
                     <div class="legend-item">
-                        <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)
+                        <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai
+                        Standar (0)
                     </div>
                     <div class="legend-item">
                         <div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
                     </div>
                     <div class="legend-item">
-                        <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5)
+                        <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (< -1.5) </div>
                     </div>
-                </div>
 
                     <div class="heatmap-container overflow-x-auto shadow-sm">
                         <table class="heatmap-table">
@@ -264,7 +264,8 @@
                     <div class="idp-card-container bg-white border border-gray-200">
                         <div class="flex items-center gap-4 mb-6 p-2">
                             <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random&color=fff&bold=true' }}"
-                                class="w-16 h-16 rounded-full border-2 border-white shadow-sm bg-white" alt="">
+                                class="w-16 h-16 rounded-full border-2 border-white shadow-sm bg-white"
+                                alt="">
                             <div>
                                 <h4 class="text-xl font-extrabold text-[#1e293b]">{{ $talent->nama }}</h4>
                                 <p class="text-sm text-gray-400 italic font-medium">
@@ -359,10 +360,11 @@
                                 </div>
                             </div>
                             <div class="rounded-xl overflow-hidden border border-gray-200">
-                                <table class="w-full table-fixed text-left bg-white">
+                                <table class="w-full table-auto text-left bg-white">
                                     <thead class="bg-slate-50 border-b border-gray-200">
                                         <tr>
-                                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[50%]">Judul
+                                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[50%]">
+                                                Judul
                                                 Project Improvement</th>
                                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">File
                                             </th>
@@ -392,16 +394,23 @@
                                                 </td>
                                                 <td class="py-4 px-6 text-center">
                                                     @if (in_array($proj->status, ['Approved', 'Approve']))
-                                                        <span class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                                        <span
+                                                            class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                            Approved
                                                         </span>
                                                     @elseif(in_array($proj->status, ['Rejected', 'Reject']))
-                                                        <span class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                                        <span
+                                                            class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                                            Rejected
                                                         </span>
                                                     @else
-                                                        <span class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                                        <span
+                                                            class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                            <span
+                                                                class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                                            Pending
                                                         </span>
                                                     @endif
                                                 </td>

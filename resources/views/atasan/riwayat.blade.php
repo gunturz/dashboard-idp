@@ -106,23 +106,30 @@
 
             /* Lihat Detail button */
             .btn-detail {
-                display: inline-block;
-                padding: 7px 18px;
-                background: #f1f5f9;
-                border: 1px solid #d1d5db;
-                border-radius: 7px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                color: #475569;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 20px;
+                background: #14b8a6;
+                border: none;
+                border-radius: 12px;
+                font-size: 0.813rem;
+                font-weight: 700;
+                color: #ffffff;
                 text-decoration: none;
                 transition: all 0.2s;
                 white-space: nowrap;
             }
 
+            .btn-detail svg {
+                width: 16px;
+                height: 16px;
+                stroke-width: 2.5;
+            }
+
             .btn-detail:hover {
-                background: #e2e8f0;
-                border-color: #14b8a6;
-                color: #0d9488;
+                background: #0d9488;
+                color: #ffffff;
             }
 
             /* Empty state */
@@ -159,32 +166,39 @@
     <div class="flex flex-col md:flex-row gap-4 mb-6">
         {{-- Cari Nama --}}
         <div class="relative flex-grow group">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…" 
+            <input type="text" id="live-search-input" placeholder="Cari Nama Talent…"
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
                 oninput="filterRiwayat()">
         </div>
 
         {{-- Filters --}}
         <div class="flex flex-wrap gap-4">
-            <select id="filter-periode" class="min-w-[160px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" onchange="filterRiwayat()">
+            <select id="filter-periode"
+                class="min-w-[160px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                onchange="filterRiwayat()">
                 <option value="">Semua Periode</option>
                 @foreach($periodeOptions as $opt)
                     <option value="{{ $opt }}">{{ $opt }}</option>
                 @endforeach
             </select>
 
-            <select id="filter-perusahaan" class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" onchange="filterRiwayat()">
+            <select id="filter-perusahaan"
+                class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                onchange="filterRiwayat()">
                 <option value="">Semua Perusahaan</option>
                 @foreach($perusahaanOptions as $opt)
                     <option value="{{ $opt }}">{{ $opt }}</option>
                 @endforeach
             </select>
 
-            <select id="filter-departemen" class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all" onchange="filterRiwayat()">
+            <select id="filter-departemen"
+                class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                onchange="filterRiwayat()">
                 <option value="">Semua Departemen</option>
                 @foreach($departemenOptions as $opt)
                     <option value="{{ $opt }}">{{ $opt }}</option>
@@ -193,11 +207,13 @@
         </div>
     </div>
 
-    <div class="log-table-container custom-scrollbar overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-sm">
+    <div
+        class="log-table-container custom-scrollbar overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-sm">
         <table class="w-full text-left">
             <thead class="bg-slate-50 border-b border-slate-200">
                 <tr>
-                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center" style="min-width: 200px;">Talent</th>
+                    <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center"
+                        style="min-width: 200px;">Talent</th>
                     <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Perusahaan</th>
                     <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Departemen</th>
                     <th class="py-4 px-6 text-sm font-bold text-slate-700 tracking-wider text-center">Start Date</th>
@@ -221,14 +237,14 @@
                             $periodeLabel = $startDate->format('Y') . ' – ' . $targetDate->format('Y');
                         }
                     @endphp
-                    <tr class="riwayat-row-item border-b border-gray-100 hover:bg-slate-50/50 transition duration-150" 
-                        data-name="{{ strtolower($talent->nama) }}"
-                        data-periode="{{ $periodeLabel }}" data-perusahaan="{{ $compName }}"
-                        data-departemen="{{ $deptName }}">
+                    <tr class="riwayat-row-item border-b border-gray-100 hover:bg-slate-50/50 transition duration-150"
+                        data-name="{{ strtolower($talent->nama) }}" data-periode="{{ $periodeLabel }}"
+                        data-perusahaan="{{ $compName }}" data-departemen="{{ $deptName }}">
                         {{-- Talent --}}
                         <td class="py-4 px-6 text-center text-sm">
                             <span class="talent-name font-bold text-slate-800 block">{{ $talent->nama }}</span>
-                            <span class="talent-position text-xs text-gray-400 italic font-medium block mt-1">{{ $posName }} – {{ $targetPos }}</span>
+                            <span class="talent-position text-xs text-gray-400 italic font-medium block mt-1">{{ $posName }}
+                                – {{ $targetPos }}</span>
                         </td>
 
                         {{-- Perusahaan --}}
@@ -251,9 +267,12 @@
                         <td class="py-4 px-6 text-center">
                             <a href="{{ route('atasan.riwayat.detail', $talent->id) }}"
                                 class="btn-detail inline-flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                                 Lihat Detail
                             </a>
@@ -281,54 +300,54 @@
         </table>
     </div>
 
-        <x-slot name="scripts">
-            <script>
-                function filterRiwayat() {
-                    const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
-                    const periode = document.getElementById('filter-periode').value;
-                    const perusahaan = document.getElementById('filter-perusahaan').value;
-                    const departemen = document.getElementById('filter-departemen').value;
+    <x-slot name="scripts">
+        <script>
+            function filterRiwayat() {
+                const searchTxt = document.getElementById('live-search-input').value.toLowerCase().trim();
+                const periode = document.getElementById('filter-periode').value;
+                const perusahaan = document.getElementById('filter-perusahaan').value;
+                const departemen = document.getElementById('filter-departemen').value;
 
-                    const rows = document.querySelectorAll('.riwayat-row-item');
-                    let visibleCount = 0;
+                const rows = document.querySelectorAll('.riwayat-row-item');
+                let visibleCount = 0;
 
-                    rows.forEach(row => {
-                        const rowName = row.getAttribute('data-name') || '';
-                        const rowPeriode = row.getAttribute('data-periode') || '';
-                        const rowPerusahaan = row.getAttribute('data-perusahaan') || '';
-                        const rowDepartemen = row.getAttribute('data-departemen') || '';
+                rows.forEach(row => {
+                    const rowName = row.getAttribute('data-name') || '';
+                    const rowPeriode = row.getAttribute('data-periode') || '';
+                    const rowPerusahaan = row.getAttribute('data-perusahaan') || '';
+                    const rowDepartemen = row.getAttribute('data-departemen') || '';
 
-                        const matchName = rowName.includes(searchTxt);
-                        const matchPeriode = periode === '' || rowPeriode === periode;
-                        const matchPerusahaan = perusahaan === '' || rowPerusahaan === perusahaan;
-                        const matchDepartemen = departemen === '' || rowDepartemen === departemen;
+                    const matchName = rowName.includes(searchTxt);
+                    const matchPeriode = periode === '' || rowPeriode === periode;
+                    const matchPerusahaan = perusahaan === '' || rowPerusahaan === perusahaan;
+                    const matchDepartemen = departemen === '' || rowDepartemen === departemen;
 
-                        if (matchName && matchPeriode && matchPerusahaan && matchDepartemen) {
-                            row.style.display = '';
-                            visibleCount++;
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
-
-                    const emptyRow = document.getElementById('js-empty-row');
-                    if (emptyRow) {
-                        emptyRow.classList.toggle('hidden', visibleCount > 0);
+                    if (matchName && matchPeriode && matchPerusahaan && matchDepartemen) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
                     }
-                }
+                });
 
-                { { --Auto - open bell notif setelah beri nilai-- } }
-                @if(session('open_bell_notif'))
-                    document.addEventListener('DOMContentLoaded', () => {
-                        setTimeout(() => {
-                            const bellBtn = document.getElementById('bell-btn');
-                            if (bellBtn && typeof toggleDropdown === 'function') {
-                                toggleDropdown('bell-dropdown', 'bell-btn');
-                            }
-                        }, 100);
-                    });
-                @endif
-            </script>
-        </x-slot>
+                const emptyRow = document.getElementById('js-empty-row');
+                if (emptyRow) {
+                    emptyRow.classList.toggle('hidden', visibleCount > 0);
+                }
+            }
+
+            { { --Auto - open bell notif setelah beri nilai-- } }
+            @if(session('open_bell_notif'))
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(() => {
+                        const bellBtn = document.getElementById('bell-btn');
+                        if (bellBtn && typeof toggleDropdown === 'function') {
+                            toggleDropdown('bell-dropdown', 'bell-btn');
+                        }
+                    }, 100);
+                });
+            @endif
+        </script>
+    </x-slot>
 
 </x-atasan.layout>

@@ -569,9 +569,9 @@
                 color: #64748b;
             }
 
-            .gap-ok {
-                background: #cbd5e1;
-                color: #1e293b;
+            .gap-positive {
+                background: #3b82f6;
+                color: white;
             }
 
             .gap-small {
@@ -838,7 +838,7 @@
                                     $sA = $detail->score_atasan ?? 0;
                                     $gap = $detail->gap_score ?? 0;
                                     $final = $sA > 0 ? ($sT + $sA) / 2 : ($sT > 0 ? $sT : 0);
-                                    $cls = $gap >= 0 ? 'gap-none' : ($gap <= -1.5 ? 'gap-large' : 'gap-small');
+                                    $cls = $gap > 0 ? 'gap-positive' : ($gap == 0 ? 'gap-none' : ($gap <= -1.5 ? 'gap-large' : 'gap-small'));
                                 @endphp
                                 <tr>
                                     <td class="td-left">{{ $comp->name }}</td>
@@ -857,7 +857,7 @@
                                 $avgT = $sess ? $sess->details->avg('score_talent') ?? 0 : 0;
                                 $avgA = $sess ? $sess->details->avg('score_atasan') ?? 0 : 0;
                                 $avgGap = $sess ? $sess->details->avg('gap_score') ?? 0 : 0;
-                                $avgCls = $avgGap >= 0 ? 'gap-none' : ($avgGap <= -1.5 ? 'gap-large' : 'gap-small');
+                                $avgCls = $avgGap > 0 ? 'gap-positive' : ($avgGap == 0 ? 'gap-none' : ($avgGap <= -1.5 ? 'gap-large' : 'gap-small'));
                             @endphp
                             <tr class="font-bold bg-gray-50 border-t-2 border-slate-200">
                                 <td class="td-left">Nilai Rata-Rata</td>
@@ -893,7 +893,7 @@
                                 <td><span class="font-bold">4</span></td>
                                 <td><span class="font-bold">2</span></td>
                                 <td><span class="font-bold">3</span></td>
-                                <td class="text-center p-2"><span class="gap-badge gap-none">0</span></td>
+                                <td class="text-center p-2"><span class="gap-badge gap-positive">0.5</span></td>
                             </tr>
                             <tr>
                                 <td class="td-left">Customer Orientation</td>
@@ -1467,18 +1467,12 @@
                                 <td class="border-0 text-center px-4">
                                     <!-- Desktop Button -->
                                     <button onclick="openPanelisModal({{ $idx }})"
-                                        class="hidden md:inline-block text-xs font-bold text-white bg-teal-500 hover:bg-teal-600 px-3 py-1.5 rounded-lg transition-colors">
+                                        class="hidden md:inline-flex items-center gap-1.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-xs font-bold px-4 py-1.5 rounded-xl border-none transition-all whitespace-nowrap">
                                         Lihat Detail
                                     </button>
                                     <!-- Mobile Button -->
                                     <button onclick="openPanelisModal({{ $idx }})"
-                                        class="md:hidden mx-auto whitespace-nowrap px-4 py-2 border border-slate-300 bg-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm w-max">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
+                                        class="md:hidden mx-auto whitespace-nowrap inline-flex items-center gap-1.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-xs font-bold px-4 py-1.5 rounded-xl border-none transition-all w-max">
                                         Lihat Detail
                                     </button>
                                 </td>

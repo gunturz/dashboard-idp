@@ -510,8 +510,6 @@
             }
 
             .section-title {
-                position: relative;
-                padding-left: 14px;
                 display: flex;
                 align-items: center;
                 gap: 12px;
@@ -520,18 +518,6 @@
                 color: #1e293b;
                 margin-top: 40px;
                 margin-bottom: 24px;
-            }
-
-            .section-title::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 4px;
-                height: 20px;
-                background: linear-gradient(180deg, #14b8a6, #0d9488);
-                border-radius: 99px;
             }
 
             /* --- IDP DONUT CHARTS --- */
@@ -1074,6 +1060,6 @@
 
     {{-- Modal pilih GAP --}}
 
-    <livewire:pdc-admin-talent-detail :user="$user" :company="$company" :targetPosition="$targetPosition"
-        :talents="$talents" :competencies="$competencies" :standards="$standards" :financeUsers="$financeUsers" />
+    <livewire:pdc-admin-talent-detail :user="$user" :company="$company" :targetPosition="$targetPosition" :talents="$talents"
+        :competencies="$competencies" :standards="$standards" :financeUsers="$financeUsers" />
 </x-pdc_admin.layout>

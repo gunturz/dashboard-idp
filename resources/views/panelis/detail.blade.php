@@ -89,46 +89,28 @@
             .heatmap-container {
                 background: white;
                 border: 1px solid #e2e8f0;
-                border-radius: 16px;
+                border-radius: 12px;
                 overflow: hidden;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
 
             .heatmap-table {
                 width: 100%;
                 border-collapse: collapse;
-                font-size: 0.88rem;
+                font-size: 0.8125rem;
             }
 
             .heatmap-table th,
             .heatmap-table td {
-                border-bottom: 1px solid #d1d5db;
-                border-right: 1px solid #e5e7eb;
-                padding: 12px 16px;
+                border: 1px solid #e2e8f0;
+                padding: 8px 12px;
                 text-align: center;
             }
 
-            .heatmap-table th {
-                background: #f1f5f9;
-                font-weight: 700;
-                color: #1e293b;
-                border-bottom: 2px solid #cbd5e1;
-                border-right: 1px solid #d1d5db;
-                font-size: 0.90rem;
-            }
-
-            .heatmap-table th:last-child {
-                border-right: none;
-            }
-
-            .heatmap-table td:last-child {
-                border-right: none;
-            }
-
             .heatmap-table .th-main {
-                background: #f1f5f9;
+                background: #f8fafc;
                 font-weight: 700;
                 color: #1e293b;
+                font-size: 0.90rem;
             }
 
             .heatmap-table .th-sub {
@@ -136,7 +118,7 @@
                 font-weight: 700;
                 color: #475569;
                 text-transform: uppercase;
-                background: #f1f5f9;
+                background: #f8fafc;
             }
 
             .heatmap-table .td-left {
@@ -167,8 +149,8 @@
             }
 
             .gap-ok {
-                background: #cbd5e1;
-                color: #1e293b;
+                background: #6293ff;
+                color: white;
             }
 
             .gap-small {
@@ -623,45 +605,75 @@
             </div>
 
             @php
-                $charts = [
-                    ['label' => 'Exposure', 'done' => min($exposureCount, 6), 'total' => 6, 'color' => '#334155'],
-                    ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
-                    ['label' => 'Learning', 'done' => min($learningCount, 6), 'total' => 6, 'color' => '#0d9488'],
+                $idpChartData = [
+                    'Exposure' => [
+                        'done' => min($exposureCount ?? 0, 6),
+                        'total' => 6,
+                        'from' => '#334155',
+                        'to' => '#334155',
+                        'id' => 'grad-exposure',
+                        'btn_color' => 'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-lg',
+                    ],
+                    'Mentoring' => [
+                        'done' => min($mentoringCount ?? 0, 6),
+                        'total' => 6,
+                        'from' => '#f59e0b',
+                        'to' => '#f59e0b',
+                        'id' => 'grad-mentoring',
+                        'btn_color' => 'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-lg',
+                    ],
+                    'Learning' => [
+                        'done' => min($learningCount ?? 0, 6),
+                        'total' => 6,
+                        'from' => '#0d9488',
+                        'to' => '#0d9488',
+                        'id' => 'grad-learning',
+                        'btn_color' => 'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-lg',
+                    ],
                 ];
                 $r = 38;
                 $circ = 2 * M_PI * $r;
             @endphp
             <div class="idp-card-container">
-                <div class="donut-container">
-                    @foreach ($charts as $chart)
+                <div class="donut-container" style="box-shadow: none; padding: 24px;">
+                    @foreach ($idpChartData as $label => $d)
                         @php
-                            $pct = $chart['done'] / $chart['total'];
+                            $pct = $d['done'] / $d['total'];
                             $filled = $pct * $circ;
                             $empty = $circ - $filled;
                         @endphp
                         <div class="flex flex-col items-center gap-3">
-                            <div class="relative w-36 h-36">
+                            <div class="relative w-48 h-48 drop-shadow-sm">
                                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                                    <defs>
+                                        <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%"
+                                            x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="{{ $d['from'] }}" />
+                                            <stop offset="100%" stop-color="{{ $d['to'] }}" />
+                                        </linearGradient>
+                                    </defs>
                                     <circle cx="50" cy="50" r="{{ $r }}" fill="none"
                                         stroke="#f1f5f9" stroke-width="10" />
                                     <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                        stroke="{{ $chart['color'] }}" stroke-width="10" stroke-linecap="round"
-                                        stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" />
+                                        stroke="url(#{{ $d['id'] }})" stroke-width="10" stroke-linecap="round"
+                                        stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
+                                        style="transition: stroke-dasharray 0.8s ease;" />
                                 </svg>
+
                                 <div class="absolute inset-0 flex flex-col items-center justify-center">
                                     <span
                                         class="text-2xl font-extrabold text-[#1e293b]">{{ round($pct * 100) }}%</span>
                                     <span class="text-xs font-bold text-gray-400">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
                                 </div>
                             </div>
-                            <a href="{{ route('panelis.logbook', $talent->id) }}#{{ strtolower($chart['label']) }}"
-                                class="flex items-center justify-center transition-colors hover:brightness-90 text-white px-5 py-2.5 rounded-xl shadow-md font-bold text-sm min-w-[130px]"
-                                style="background-color: {{ $chart['color'] }};">
-                                {{ $chart['label'] }}
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 max-w-full"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
+                            <a href="{{ route('panelis.logbook', $talent->id) }}#{{ strtolower($label) }}"
+                                class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer">
+                                <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M9 5l7 7-7 7" />
                                 </svg>
                             </a>
                         </div>
@@ -702,7 +714,12 @@
                                     <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
                                         target="_blank"
                                         class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                            </path>
+                                        </svg>
                                         Lihat File
                                     </a>
                                 @else

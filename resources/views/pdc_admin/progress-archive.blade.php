@@ -120,9 +120,9 @@
                     });
                 })
                 ->sortByDesc(function ($talent) {
-                    return optional(optional($talent->promotion_plan)->developmentSession)->completed_at
-                        ?? optional($talent->promotion_plan)->updated_at
-                        ?? optional($talent->promotion_plan)->created_at;
+                    return optional(optional($talent->promotion_plan)->developmentSession)->completed_at ??
+                        (optional($talent->promotion_plan)->updated_at ??
+                            optional($talent->promotion_plan)->created_at);
                 })
                 ->values();
             $totalRows = 0;
@@ -156,14 +156,14 @@
                                         'd F Y',
                                     )
                                     : '-';
-                                $currentPos = $talent->archive_source_position_name ?? ($talent->position->position_name ?? '-');
-                                $targetPos =
-                                    optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
+                                $currentPos =
+                                    $talent->archive_source_position_name ?? ($talent->position->position_name ?? '-');
+                                $targetPos = optional($talent->promotion_plan)->targetPosition->position_name ?? '-';
                                 $periodLabel = '';
                                 if (optional($talent->promotion_plan)->target_date) {
-                                    $periodLabel = \Carbon\Carbon::parse(
-                                        $talent->promotion_plan->target_date,
-                                    )->format('Y');
+                                    $periodLabel = \Carbon\Carbon::parse($talent->promotion_plan->target_date)->format(
+                                        'Y',
+                                    );
                                 }
                             @endphp
                             <tr class="archive-row border-b border-slate-300 hover:bg-slate-50 transition-colors"
@@ -300,24 +300,14 @@
                 font-size: 0.8rem;
                 color: #1e293b;
                 border-bottom: 2px solid #cbd5e1;
-                border-right: 1px solid #d1d5db;
                 background: #f1f5f9;
             }
 
-            .progress-archive-wrapper .prem-table th:last-child {
-                border-right: none;
+            .progress-archive-wrapper .prem-table tbody tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
             }
 
             .progress-archive-wrapper .prem-table td {
-                border-bottom: 1px solid #d1d5db;
-                border-right: 1px solid #e5e7eb;
-            }
-
-            .progress-archive-wrapper .prem-table td:last-child {
-                border-right: none;
-            }
-
-            .progress-archive-wrapper .prem-table tbody tr:last-child td {
                 border-bottom: 1px solid #d1d5db;
             }
 

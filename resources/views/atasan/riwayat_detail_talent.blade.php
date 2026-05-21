@@ -156,48 +156,39 @@
             }
 
             /* --- Heatmap Table --- */
+            .heatmap-container {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+
             .heatmap-table {
                 width: 100%;
                 border-collapse: collapse;
-                font-size: 0.88rem;
+                font-size: 0.8125rem;
             }
 
             .heatmap-table th,
             .heatmap-table td {
-                border-bottom: 1px solid #d1d5db;
-                border-right: 1px solid #e5e7eb;
-                padding: 12px 16px;
+                border: 1px solid #e2e8f0;
+                padding: 8px 12px;
                 text-align: center;
             }
 
-            .heatmap-table th {
-                background: #f1f5f9;
-                font-weight: 700;
-                color: #1e293b;
-                border-bottom: 2px solid #cbd5e1;
-                border-right: 1px solid #d1d5db;
-                font-size: 0.90rem;
-            }
-
-            .heatmap-table th:last-child {
-                border-right: none;
-            }
-
-            .heatmap-table td:last-child {
-                border-right: none;
-            }
-
             .heatmap-table .th-main {
-                background: #f1f5f9;
+                background: #f8fafc;
                 font-weight: 700;
                 color: #1e293b;
+                font-size: 0.90rem;
             }
 
             .heatmap-table .th-sub {
                 font-size: 0.80rem;
                 font-weight: 700;
                 color: #475569;
-                background: #f1f5f9;
+                text-transform: uppercase;
+                background: #f8fafc;
             }
 
             .heatmap-table .td-left {
@@ -211,10 +202,10 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                padding: 6px 16px;
-                border-radius: 5px;
+                padding: 4px;
+                border-radius: 4px;
                 font-weight: 700;
-                min-width: 56px;
+                min-width: 40px;
             }
 
             .gap-none {
@@ -223,7 +214,7 @@
             }
 
             .gap-ok {
-                background: #6293ffff;
+                background: #6293ff;
                 color: white;
             }
 
@@ -538,11 +529,13 @@
                     $gaps = collect();
                     if ($details && $details->sum('score_atasan') > 0) {
                         // Check for manual overrides first (notes starting with priority_)
-                        $overrides = $details->filter(function ($d) {
-                            return str_starts_with($d->notes ?? '', 'priority_');
-                        })->sortBy(function ($d) {
-                            return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
-                        });
+                        $overrides = $details
+                            ->filter(function ($d) {
+                                return str_starts_with($d->notes ?? '', 'priority_');
+                            })
+                            ->sortBy(function ($d) {
+                                return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
+                            });
 
                         if ($overrides->count() > 0) {
                             $gaps = $overrides->values();
@@ -597,7 +590,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($competencies as $comp)
+                            @foreach ($competencies as $comp)
                                 @php
                                     $detail = $details ? $details->firstWhere('competence_id', $comp->id) : null;
                                     $standard = (float) ($standards[$comp->id] ?? 0);
@@ -607,12 +600,13 @@
                                     $gap = $finalScore - $standard;
 
                                     $gapClass = 'gap-none';
-                                    if ($gap <= -2)
+                                    if ($gap <= -2) {
                                         $gapClass = 'gap-large';
-                                    elseif ($gap < 0)
+                                    } elseif ($gap < 0) {
                                         $gapClass = 'gap-small';
-                                    elseif ($gap > 0)
+                                    } elseif ($gap > 0) {
                                         $gapClass = 'gap-ok';
+                                    }
                                 @endphp
                                 <tr>
                                     <td class="td-left">{{ $comp->name }}</td>
@@ -637,12 +631,13 @@
                             $avgGap = $avgFinal - $avgStandard;
 
                             $avgGapClass = 'gap-none';
-                            if ($avgGap <= -2)
+                            if ($avgGap <= -2) {
                                 $avgGapClass = 'gap-large';
-                            elseif ($avgGap < 0)
+                            } elseif ($avgGap < 0) {
                                 $avgGapClass = 'gap-small';
-                            elseif ($avgGap > 0)
+                            } elseif ($avgGap > 0) {
                                 $avgGapClass = 'gap-ok';
+                            }
                         @endphp
                         <tfoot>
                             <tr class="row-summary">
@@ -681,39 +676,69 @@
                     $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
                     $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
 
-                    $charts = [
-                        ['label' => 'Exposure', 'done' => min($exposureCount, 6), 'total' => 6, 'color' => '#0f172a'],
-                        ['label' => 'Mentoring', 'done' => min($mentoringCount, 6), 'total' => 6, 'color' => '#f59e0b'],
-                        ['label' => 'Learning', 'done' => min($learningCount, 6), 'total' => 6, 'color' => '#0d9488']
+                    $idpChartData = [
+                        'Exposure' => [
+                            'done' => min($exposureCount ?? 0, 6),
+                            'total' => 6,
+                            'from' => '#334155',
+                            'to' => '#334155',
+                            'id' => 'grad-exposure',
+                            'btn_color' => 'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-lg',
+                        ],
+                        'Mentoring' => [
+                            'done' => min($mentoringCount ?? 0, 6),
+                            'total' => 6,
+                            'from' => '#f59e0b',
+                            'to' => '#f59e0b',
+                            'id' => 'grad-mentoring',
+                            'btn_color' => 'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-lg',
+                        ],
+                        'Learning' => [
+                            'done' => min($learningCount ?? 0, 6),
+                            'total' => 6,
+                            'from' => '#0d9488',
+                            'to' => '#0d9488',
+                            'id' => 'grad-learning',
+                            'btn_color' => 'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-lg',
+                        ],
                     ];
                     $r = 38;
                     $circ = 2 * M_PI * $r;
                 @endphp
 
                 <div class="flex flex-col md:flex-row justify-around items-center gap-10">
-                    @foreach($charts as $chart)
+                    @foreach ($idpChartData as $label => $d)
                         @php
-                            $pct = $chart['done'] / $chart['total'];
+                            $pct = $d['done'] / $d['total'];
                             $filled = $pct * $circ;
                             $empty = $circ - $filled;
                         @endphp
-                        <div class="flex flex-col items-center gap-5">
-                            <div class="relative w-36 h-36">
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="relative w-48 h-48 drop-shadow-sm">
                                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="10" />
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="{{ $chart['color'] }}"
-                                        stroke-width="10" stroke-linecap="round"
-                                        stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}" />
+                                    <defs>
+                                        <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%"
+                                            x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="{{ $d['from'] }}" />
+                                            <stop offset="100%" stop-color="{{ $d['to'] }}" />
+                                        </linearGradient>
+                                    </defs>
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                        stroke="#f1f5f9" stroke-width="10" />
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                        stroke="url(#{{ $d['id'] }})" stroke-width="10" stroke-linecap="round"
+                                        stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
+                                        style="transition: stroke-dasharray 0.8s ease;" />
                                 </svg>
-                                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span
-                                        class="text-2xl font-black text-[#1e293b] leading-none">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
-                                    <span
-                                        class="text-[10px] text-gray-400 font-bold uppercase mt-1">{{ round($pct * 100) }}%</span>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-4xl font-bold"
+                                        style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <span
-                                class="px-5 py-1.5 bg-gray-50 border border-gray-100 rounded-full text-xs font-bold text-[#475569] shadow-sm">{{ $chart['label'] }}</span>
+                            <div
+                                class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2">
+                                <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -751,8 +776,8 @@
                                         <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
                                             class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
                                             target="_blank">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                             </svg>
@@ -760,7 +785,7 @@
                                         </a>
                                     </td>
                                     <td class="project-status-cell">
-                                        @if(in_array($proj->status, ['Approved', 'Approve']))
+                                        @if (in_array($proj->status, ['Approved', 'Approve']))
                                             <span
                                                 class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
@@ -780,7 +805,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-12 text-center text-gray-400 font-medium italic">Belum
+                                    <td colspan="3" class="py-12 text-center text-gray-400 font-medium italic">
+                                        Belum
                                         ada project improvement yang diupload.</td>
                                 </tr>
                             @endforelse
@@ -797,8 +823,8 @@
                     <div class="flex items-center gap-6">
                         <div
                             class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>

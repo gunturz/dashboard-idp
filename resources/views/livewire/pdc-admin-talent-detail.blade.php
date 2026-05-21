@@ -323,59 +323,74 @@
                             $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
                             $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
 
-                            $charts = [
-                                [
-                                    'label' => 'Exposure',
-                                    'done' => min($exposureCount, 6),
+                            $idpChartData = [
+                                'Exposure' => [
+                                    'done' => min($exposureCount ?? 0, 6),
                                     'total' => 6,
-                                    'color' => '#334155',
+                                    'from' => '#334155',
+                                    'to' => '#334155',
+                                    'id' => 'grad-exposure',
+                                    'btn_color' =>
+                                        'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-lg',
                                 ],
-                                [
-                                    'label' => 'Mentoring',
-                                    'done' => min($mentoringCount, 6),
+                                'Mentoring' => [
+                                    'done' => min($mentoringCount ?? 0, 6),
                                     'total' => 6,
-                                    'color' => '#f59e0b',
+                                    'from' => '#f59e0b',
+                                    'to' => '#f59e0b',
+                                    'id' => 'grad-mentoring',
+                                    'btn_color' =>
+                                        'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-lg',
                                 ],
-                                [
-                                    'label' => 'Learning',
-                                    'done' => min($learningCount, 6),
+                                'Learning' => [
+                                    'done' => min($learningCount ?? 0, 6),
                                     'total' => 6,
-                                    'color' => '#0d9488',
+                                    'from' => '#0d9488',
+                                    'to' => '#0d9488',
+                                    'id' => 'grad-learning',
+                                    'btn_color' =>
+                                        'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-lg',
                                 ],
                             ];
                             $r = 38;
-                            $circ = 2 * M_PI * $r;
+                            $circ = 2 * M_PI * $r; // ≈ 238.76
                         @endphp
-
-                        @foreach ($charts as $chart)
+                        @foreach ($idpChartData as $label => $d)
                             @php
-                                $pct = $chart['done'] / $chart['total'];
+                                $pct = $d['done'] / $d['total'];
                                 $filled = $pct * $circ;
                                 $empty = $circ - $filled;
-                                $typeId = ['Exposure' => 1, 'Mentoring' => 2, 'Learning' => 3][$chart['label']] ?? 1;
                             @endphp
                             <div class="flex flex-col items-center gap-3">
                                 <div class="relative w-48 h-48 drop-shadow-sm">
                                     <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                                        <defs>
+                                            <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%"
+                                                x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="{{ $d['from'] }}" />
+                                                <stop offset="100%" stop-color="{{ $d['to'] }}" />
+                                            </linearGradient>
+                                        </defs>
                                         <circle cx="50" cy="50" r="{{ $r }}" fill="none"
                                             stroke="#f1f5f9" stroke-width="10" />
                                         <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                            stroke="{{ $chart['color'] }}" stroke-width="10" stroke-linecap="round"
+                                            stroke="url(#{{ $d['id'] }})" stroke-width="10"
+                                            stroke-linecap="round"
                                             stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
                                             style="transition: stroke-dasharray 0.8s ease;" />
                                     </svg>
-                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                        <span class="text-3xl font-extrabold"
-                                            style="color: {{ $chart['color'] }}">{{ round($pct * 100) }}%</span>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-4xl font-bold"
+                                            style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                     </div>
                                 </div>
-                                <a href="{{ route('pdc_admin.talent.logbook', $talent->id) }}#{{ strtolower($chart['label']) }}"
-                                    class="donut-label-btn inline-flex items-center justify-center gap-2"
-                                    style="background-color: {{ $chart['color'] }};"
-                                    title="Lihat logbook {{ $chart['label'] }}">
-                                    {{ $chart['label'] }}
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <a href="{{ route('pdc_admin.talent.logbook', $talent->id) }}#{{ strtolower($label) }}"
+                                    class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer"
+                                    title="Lihat logbook {{ $label }}">
+                                    <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                                     </svg>
                                 </a>

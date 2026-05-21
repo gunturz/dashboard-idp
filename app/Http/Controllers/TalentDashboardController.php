@@ -188,12 +188,7 @@ class TalentDashboardController extends Controller
                 'info'
             );
 
-            $successMessage = $developmentSession
-                ? 'Berhasil! Penilaian kompetensi Anda telah tersimpan.'
-                : 'Berhasil! Assessment kompetensi awal Anda telah tersimpan. Anda dapat melanjutkan proses tanpa menunggu Development Plan dibuat.';
-
-            return redirect()->route('talent.dashboard')
-                ->with('success', $successMessage);
+            return redirect()->route('talent.dashboard');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()
                 ->with('error', 'Data assessment tidak valid. Pastikan semua kompetensi sudah dinilai.');

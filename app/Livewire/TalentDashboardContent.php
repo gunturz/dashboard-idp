@@ -112,7 +112,7 @@ class TalentDashboardContent extends Component
                     (string) $type
                 ));
             } catch (\Throwable $e) {
-                Log::warning('Broadcast notification failed after project submission: '.$e->getMessage(), [
+                Log::warning('Broadcast notification failed after project submission: ' . $e->getMessage(), [
                     'admin_id' => $adminId,
                     'notification_id' => $notification->id,
                 ]);
@@ -131,6 +131,11 @@ class TalentDashboardContent extends Component
         // 1. Kinerja (Kompetensi) Logic
         $hasDevPlan = !is_null(optional($user->promotion_plan)->target_position_id);
 
+        // Cek apakah talent pernah mengisi assessment SAMA SEKALI (tidak peduli devSession)
+        $hasAnyAssessment = DB::table('assessment_session')
+            ->where('user_id_talent', $user->id)
+            ->exists();
+
         $latestAssessment = DB::table('assessment_session')
             ->where('user_id_talent', $user->id)
             ->when($developmentSession, fn($query) => $query->where('development_session_id', $developmentSession->id))
@@ -140,6 +145,19 @@ class TalentDashboardContent extends Component
             )
             ->orderBy('created_at', 'desc')
             ->first();
+
+        // Jika tidak ada assessment untuk devSession saat ini, ambil assessment terbaru manapun
+        // agar atasan score dan kompetensiData tetap bisa ditampilkan
+        if (!$latestAssessment && $hasAnyAssessment) {
+            $latestAssessment = DB::table('assessment_session')
+                ->where('user_id_talent', $user->id)
+                ->when(
+                    $this->hasIsActiveColumn('assessment_session'),
+                    fn($query) => $query->where('is_active', true)
+                )
+                ->orderBy('created_at', 'desc')
+                ->first();
+        }
 
         $kompetensiData = [];
         $atasanHasScored = false;
@@ -192,6 +210,7 @@ class TalentDashboardContent extends Component
         return view('livewire.talent-dashboard-content', compact(
             'hasDevPlan',
             'latestAssessment',
+            'hasAnyAssessment',
             'atasanHasScored',
             'kompetensiData',
             'exposureCount',

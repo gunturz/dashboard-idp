@@ -107,12 +107,6 @@
     </x-slot>
 
     <div class="w-full px-4 lg:px-6 pt-5 pb-6 space-y-8 flex-grow">
-        @if (session('success'))
-            <div class="rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700">
-                <strong class="font-bold">Berhasil!</strong>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
 
         @if (session('info'))
             <div class="rounded-2xl border border-sky-200 bg-sky-50 px-5 py-4 text-sm text-sky-700">

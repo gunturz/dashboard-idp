@@ -136,6 +136,18 @@
 
         <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
+            @if (session('success'))
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
+                    x-transition:leave="transition ease-out duration-500"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700"
+                    role="alert">
+                    <strong class="font-bold">Berhasil!</strong>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
             {{-- Smooth Progress Circle Charts --}}
             @php
                 $idpChartData = [
@@ -329,8 +341,8 @@
         <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
             @if (session('success_project'))
-                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" 
-                    x-transition:leave="transition ease-in duration-300"
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
+                    x-transition:leave="transition ease-out duration-500"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm"

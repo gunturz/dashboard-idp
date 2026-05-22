@@ -665,7 +665,7 @@
                                     <span
                                         class="text-2xl font-extrabold text-[#1e293b]">{{ round($pct * 100) }}%</span>
                                     <span
-                                        class="text-xs font-bold text-gray-400">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
+                                        class="text-xs font-bold text-gray-400">{{ $d['done'] }}/{{ $d['total'] }}</span>
                                 </div>
                             </div>
                             <a href="{{ route('panelis.logbook', $talent->id) }}#{{ strtolower($label) }}"

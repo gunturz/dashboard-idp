@@ -16,11 +16,11 @@
         @forelse($projects as $index => $project)
             <div class="prem-card">
                 {{-- Card Header --}}
-                <div class="prem-card-header !py-6 md:!py-8 cursor-pointer select-none hover:bg-gray-50 transition-colors"
+                <div class="prem-card-header !py-6 md:!py-8 cursor-pointer select-none hover:bg-gray-50 transition-colors !grid !grid-cols-1 md:!grid-cols-12 !gap-4 !items-center"
                     onclick="toggleAccordion('content-{{ $project->id }}', 'icon-{{ $project->id }}')">
 
                     {{-- Profile Info --}}
-                    <div class="flex items-center gap-4 w-full md:w-[40%]">
+                    <div class="flex items-center gap-4 col-span-1 md:col-span-5 min-w-0">
                         <div class="flex-shrink-0">
                             @if ($project->talent->foto)
                                 <img src="{{ asset('storage/' . $project->talent->foto) }}"
@@ -49,14 +49,14 @@
                     </div>
 
                     {{-- Project Title --}}
-                    <div class="w-full md:w-[35%] py-2 md:py-0 md:px-6 flex items-center">
+                    <div class="col-span-1 md:col-span-4 py-2 md:py-0 md:px-6 flex items-center min-w-0">
                         <p class="text-gray-700" style="font-size: 0.9rem; font-weight: 700; line-height: 1.3;">
                             {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}
                         </p>
                     </div>
 
                     {{-- Badge & Toggle --}}
-                    <div class="flex items-center justify-between md:justify-end gap-6 ml-auto mt-2 md:mt-0">
+                    <div class="flex items-center justify-between md:justify-end gap-6 col-span-1 md:col-span-3 mt-2 md:mt-0 justify-self-stretch md:justify-self-end">
                         <span
                             class="badge {{ $project->status == 'Pending' ? 'badge-amber' : ($project->status == 'Approved' ? 'badge-green' : 'badge-red') }}">
                             {{ $project->status == 'Pending' ? 'Review' : $project->status }}
@@ -72,9 +72,9 @@
 
                 {{-- Card Content --}}
                 <div id="content-{{ $project->id }}"
-                    class="px-6 border-t border-gray-100 bg-white transition-all overflow-hidden {{ $index === 0 && !$search ? 'pb-6 pt-5 max-h-[1000px] opacity-100' : 'pb-0 pt-0 max-h-0 opacity-0' }}">
+                    class="px-6 border-gray-100 bg-white transition-all overflow-hidden {{ $index === 0 && !$search ? 'border-t pb-6 pt-5 max-h-[1000px] opacity-100' : 'pb-0 pt-0 max-h-0 opacity-0' }}">
                     <div class="flex flex-col lg:flex-row gap-6 items-start">
-                        <form action="{{ route('finance.permintaan_validasi.update', $project->id) }}" method="POST"
+                        <form id="validation-form-{{ $project->id }}" action="{{ route('finance.permintaan_validasi.update', $project->id) }}" method="POST"
                             class="w-full flex flex-col lg:flex-row gap-6 items-start">
                             @csrf
                             @method('PATCH')
@@ -84,11 +84,6 @@
                                     <div>
                                         <div class="font-bold text-gray-700 mb-1.5 flex items-center gap-2"
                                             style="font-size: 0.9rem;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                            </svg>
                                             Catatan Admin PDC:
                                         </div>
                                         <div class="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-3 text-gray-600 leading-relaxed min-h-[60px]"
@@ -101,11 +96,6 @@
                                 <div>
                                     <div class="font-bold text-gray-700 mb-1.5 flex items-center gap-2"
                                         style="font-size: 0.9rem;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-teal-500"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
                                         Feedback Finance:
                                     </div>
                                     <textarea name="finance_feedback"
@@ -170,16 +160,16 @@
                                     </div>
                                 @else
                                     <div class="grid grid-cols-2 gap-3 mt-2">
-                                        <button type="submit" name="finance_decision" value="Approved"
-                                            class="btn-prem btn-teal py-3 text-[13px]"
-                                            onclick="return confirm('Apakah Anda yakin ingin menyetujui (Approve) permintaan validasi ini?');">
-                                            Approve
-                                        </button>
-                                        <button type="submit" name="finance_decision" value="Rejected"
-                                            class="btn-prem btn-red py-3 text-[13px]"
-                                            onclick="return confirm('Apakah Anda yakin ingin menolak (Reject) permintaan validasi ini?');">
-                                            Reject
-                                        </button>
+                                         <button type="submit" name="finance_decision" value="Approved"
+                                             class="btn-prem btn-teal py-3 text-[13px]"
+                                             onclick="showConfirmModal(event, 'validation-form-{{ $project->id }}', 'Approved', '{{ str_replace("'", "\\'", $project->talent->nama ?? '') }}', '{{ str_replace("'", "\\'", $project->title ?? '') }}')">
+                                             Approve
+                                         </button>
+                                         <button type="submit" name="finance_decision" value="Rejected"
+                                             class="btn-prem btn-red py-3 text-[13px]"
+                                             onclick="showConfirmModal(event, 'validation-form-{{ $project->id }}', 'Rejected', '{{ str_replace("'", "\\'", $project->talent->nama ?? '') }}', '{{ str_replace("'", "\\'", $project->title ?? '') }}')">
+                                             Reject
+                                         </button>
                                     </div>
                                 @endif
                             </div>
@@ -190,11 +180,14 @@
         @empty
             <div class="prem-card">
                 <div class="empty-prem">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                        style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                            style="width: 32px !important; height: 32px !important; color: #0d9488 !important; margin: 0 !important;">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
                     <h3>Tidak ada permintaan</h3>
                     <p>Belum ada permintaan yang menunggu validasi atau hasil pencarian tidak ditemukan.</p>
                 </div>

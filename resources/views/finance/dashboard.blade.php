@@ -173,46 +173,57 @@
             {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $groupTitle) }}
         </div>
 
-        <div class="prem-card">
+        <div
+            class="bg-white border border-slate-200 rounded-[20px] shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden mb-10">
             <div class="overflow-x-auto">
-                <table class="highlight-table">
-                    <thead>
+                <table class="w-full border-collapse font-sans">
+                    <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
-                            <th class="w-[25%]">Talent</th>
-                            <th class="w-[25%]">Project / Dept</th>
-                            <th class="w-[20%]">Catatan Admin</th>
-                            <th class="w-[20%]">Feedback Finance</th>
-                            <th class="w-[10%]">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[25%]">Talent</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[25%]">Project / Dept
+                            </th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[20%]">Catatan Admin
+                            </th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[20%]">Feedback Finance
+                            </th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-[10%]">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-gray-100">
                         @foreach ($projectsGroup as $idx => $project)
-                            <tr class="table-row {{ $idx % 2 === 0 ? 'row-even' : '' }}">
-                                <td>
-                                    <div class="td-name">{{ $project->talent->nama ?? '-' }}</div>
-                                    <div class="td-sub">
-                                        {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->position->position_name ?? '-') }}
-                                        &rarr;
-                                        {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->promotion_plan->targetPosition->position_name ?? '?') }}
+                            <tr class="hover:bg-gray-50/60 transition-colors">
+                                <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                    <div style="text-align: center; display: inline-block; width: 100%;">
+                                        <div class="font-bold text-sm text-slate-800 leading-tight">
+                                            {{ $project->talent->nama ?? '-' }}</div>
+                                        <div class="text-xs text-gray-500 font-medium mt-1">
+                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->position->position_name ?? '-') }}
+                                            &rarr;
+                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->promotion_plan->targetPosition->position_name ?? '?') }}
+                                        </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <div class="td-position">
-                                        {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}</div>
-                                    <div class="td-sub">
-                                        {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->department->nama_department ?? '-') }}
+                                <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                    <div style="text-align: center; display: inline-block; width: 100%;">
+                                        <div class="font-bold text-sm text-slate-800 leading-tight">
+                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->title) }}</div>
+                                        <div class="text-xs text-gray-500 font-medium mt-1">
+                                            {{ str_ireplace(['pt ', 'pt.'], ['PT ', 'PT.'], $project->talent->department->nama_department ?? '-') }}
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="td-muted">
-                                    {{ $project->feedback ?? '-' }}
+                                <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                    <span class="text-sm text-slate-700">{{ $project->feedback ?? '-' }}</span>
                                 </td>
-                                <td class="td-muted">
-                                    {{ $project->finance_feedback ?? '-' }}
+                                <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                    <span
+                                        class="text-sm text-slate-700">{{ $project->finance_feedback ?? '-' }}</span>
                                 </td>
-                                <td>
-                                    <span class="badge badge-amber">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20"
-                                            fill="currentColor">
+                                <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                    <span
+                                        class="inline-flex items-center justify-center bg-amber-50 border border-amber-200 text-amber-600 font-bold text-xs px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1"
+                                            viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd"
                                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
                                                 clip-rule="evenodd" />
@@ -227,14 +238,20 @@
             </div>
         </div>
     @empty
-        <div class="prem-card">
-            <div class="empty-prem">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                <h3>Tidak ada permintaan validasi</h3>
-                <p>Semua permintaan telah diproses atau belum ada yang baru.</p>
+        <div
+            class="bg-white border border-slate-200 rounded-[20px] shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden mb-10">
+            <div class="flex flex-col items-center justify-center py-10 text-center">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+                    style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <p class="text-base font-bold text-gray-700">Tidak ada permintaan validasi</p>
+                <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed mx-auto">Semua permintaan telah diproses
+                    atau belum ada yang baru.</p>
             </div>
         </div>
     @endforelse

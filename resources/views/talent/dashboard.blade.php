@@ -108,6 +108,13 @@
 
     <div class="w-full px-4 lg:px-6 pt-5 pb-6 space-y-8 flex-grow">
 
+        @if (session('info'))
+            <div class="rounded-2xl border border-sky-200 bg-sky-50 px-5 py-4 text-sm text-sky-700">
+                <strong class="font-bold">Info:</strong>
+                <span>{{ session('info') }}</span>
+            </div>
+        @endif
+
         {{-- Main Dashboard - Titles updated below --}}
 
         {{-- Main Dashboard Content (Kompetensi, IDP, Project) via Livewire --}}

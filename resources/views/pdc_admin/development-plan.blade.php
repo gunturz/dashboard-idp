@@ -202,7 +202,7 @@
 
     @php
         $oldTalentRows = old('talents');
-        $initialTalentRows = is_array($oldTalentRows) ? array_values($oldTalentRows) : ($prefillData['talents'] ?? []);
+        $initialTalentRows = is_array($oldTalentRows) ? array_values($oldTalentRows) : $prefillData['talents'] ?? [];
         $formCompanyId = old('company_id', $prefillData['company_id'] ?? null);
         $formDepartmentId = old('department_id', $prefillData['department_id'] ?? null);
         $formTargetPositionId = old('target_position_id', $prefillData['target_position_id'] ?? null);
@@ -215,30 +215,40 @@
         <div class="page-header animate-title mb-8">
             <div class="page-header-icon shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd" />
-                    <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963 5.23 5.23 0 00-3.434-1.279h-1.875a.375.375 0 01-.375-.375V5.25z" />
+                    <path fill-rule="evenodd"
+                        d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z"
+                        clip-rule="evenodd" />
+                    <path
+                        d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963 5.23 5.23 0 00-3.434-1.279h-1.875a.375.375 0 01-.375-.375V5.25z" />
                 </svg>
             </div>
             <div>
-                <div class="page-header-title">{{ $editMode ? 'Edit Development Plan' : 'Setup Development Plan' }}</div>
-                <div class="page-header-sub">{{ $editMode ? 'Perbarui data development plan talent yang sudah ada.' : 'Atur perusahaan, talent, mentor, dan tanggal untuk program baru.' }}</div>
+                <div class="page-header-title">{{ $editMode ? 'Edit Development Plan' : 'Setup Development Plan' }}
+                </div>
+                <div class="page-header-sub">
+                    {{ $editMode ? 'Perbarui data development plan talent yang sudah ada.' : 'Atur perusahaan, talent, mentor, dan tanggal untuk program baru.' }}
+                </div>
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="mb-6 px-5 py-3.5 bg-green-50 border border-green-300 text-green-700 text-sm font-semibold rounded-xl flex items-center gap-3 shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        @if (session('success'))
+            <div
+                class="mb-6 px-5 py-3.5 bg-green-50 border border-green-300 text-green-700 text-sm font-semibold rounded-xl flex items-center gap-3 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
                 </svg>
                 {{ session('success') }}
             </div>
         @endif
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="mb-6 px-5 py-3.5 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl shadow-sm">
                 <p class="font-semibold mb-1">Terjadi kesalahan:</p>
                 <ul class="list-disc list-inside text-xs space-y-0.5">
-                    @foreach($errors->all() as $e)
+                    @foreach ($errors->all() as $e)
                         <li>{{ $e }}</li>
                     @endforeach
                 </ul>
@@ -246,19 +256,23 @@
         @endif
 
         <div class="prem-card p-8">
-            <form method="POST" action="{{ $editMode ? route('pdc_admin.development_plan.update', ['company_id' => $prefillData['group_company_id'], 'position_id' => $prefillData['group_position_id'], 'department_id' => $prefillData['group_department_id'] ?? null, 'plan_created_at' => $prefillData['group_plan_created_at'] ?? null]) : route('pdc_admin.development_plan.store') }}" id="dev-plan-form">
+            <form method="POST"
+                action="{{ $editMode ? route('pdc_admin.development_plan.update', ['company_id' => $prefillData['group_company_id'], 'position_id' => $prefillData['group_position_id'], 'department_id' => $prefillData['group_department_id'] ?? null, 'plan_created_at' => $prefillData['group_plan_created_at'] ?? null]) : route('pdc_admin.development_plan.store') }}"
+                id="dev-plan-form">
                 @csrf
-                @if($editMode)
+                @if ($editMode)
                     @method('PUT')
                 @endif
 
                 <div class="field-row">
                     <span class="field-label">Perusahaan</span>
                     <div class="flex-1">
-                        <select name="company_id" id="dp-company" class="dp-select" onchange="handleTalentFilterChange()">
+                        <select name="company_id" id="dp-company" class="dp-select"
+                            onchange="handleTalentFilterChange()">
                             <option value="">- Pilih Perusahaan -</option>
-                            @foreach($companies as $c)
-                                <option value="{{ $c->id }}" {{ $formCompanyId == $c->id ? 'selected' : '' }}>{{ $c->nama_company }}</option>
+                            @foreach ($companies as $c)
+                                <option value="{{ $c->id }}" {{ $formCompanyId == $c->id ? 'selected' : '' }}>
+                                    {{ $c->nama_company }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -267,7 +281,8 @@
                 <div class="field-row">
                     <span class="field-label">Departemen</span>
                     <div class="flex-1">
-                        <select name="department_id" id="dp-department" class="dp-select" data-old="{{ $formDepartmentId }}" onchange="handleTalentFilterChange()">
+                        <select name="department_id" id="dp-department" class="dp-select"
+                            data-old="{{ $formDepartmentId }}" onchange="handleTalentFilterChange()">
                             <option value="">- Pilih Departemen -</option>
                         </select>
                     </div>
@@ -276,10 +291,13 @@
                 <div class="field-row">
                     <span class="field-label">Posisi yang dituju</span>
                     <div class="flex-1">
-                        <select name="target_position_id" id="dp-position" class="dp-select" onchange="handleTalentFilterChange()">
+                        <select name="target_position_id" id="dp-position" class="dp-select"
+                            onchange="handleTalentFilterChange()">
                             <option value="">- Pilih Posisi -</option>
-                            @foreach($positions as $p)
-                                <option value="{{ $p->id }}" {{ $formTargetPositionId == $p->id ? 'selected' : '' }}>{{ $p->position_name }}</option>
+                            @foreach ($positions as $p)
+                                <option value="{{ $p->id }}"
+                                    {{ $formTargetPositionId == $p->id ? 'selected' : '' }}>{{ $p->position_name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -291,7 +309,10 @@
 
                 <div class="flex items-center gap-4" id="add-talent-wrapper">
                     <button type="button" onclick="addTalentRow()" class="btn-add-talent">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
                         Tambah Talent
                     </button>
                 </div>
@@ -303,26 +324,30 @@
                     <div class="flex-1">
                         <select name="atasan_id" id="dp-atasan" class="dp-select">
                             <option value="">- Pilih Atasan -</option>
-                            @foreach($atasans as $a)
-                                <option value="{{ $a->id }}" {{ $formAtasanId == $a->id ? 'selected' : '' }}>{{ $a->nama }}</option>
+                            @foreach ($atasans as $a)
+                                <option value="{{ $a->id }}" {{ $formAtasanId == $a->id ? 'selected' : '' }}>
+                                    {{ $a->nama }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mb-12 pt-4">
+                <div class="grid grid-cols-2 gap-4 mb-4 pt-4">
                     <div class="w-full">
                         <span class="field-label block mb-2">Start Date</span>
-                        <input type="date" name="start_date" class="dp-select dp-date w-full" value="{{ $formStartDate }}" required>
+                        <input type="date" name="start_date" class="dp-select dp-date w-full"
+                            value="{{ $formStartDate }}" required>
                     </div>
                     <div class="w-full">
                         <span class="field-label block mb-2">Due Date</span>
-                        <input type="date" name="target_date" class="dp-select dp-date w-full" value="{{ $formTargetDate }}" required>
+                        <input type="date" name="target_date" class="dp-select dp-date w-full"
+                            value="{{ $formTargetDate }}" required>
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-3 pb-10">
-                    <a href="{{ route('pdc_admin.progress_talent') }}" class="btn-batal inline-flex items-center justify-center">
+                <div class="flex justify-end gap-5 pb-4 mt-12">
+                    <a href="{{ route('pdc_admin.progress_talent') }}"
+                        class="btn-batal inline-flex items-center justify-center">
                         Batal
                     </a>
                     <button type="submit" class="btn-simpan">
@@ -349,9 +374,11 @@
                             <option value="">- Pilih Mentor -</option>
                             __MENTOR_OPTIONS__
                         </select>
-                        <button type="button" onclick="removeTalentRow(this)" class="btn-remove-talent" title="Hapus baris">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        <button type="button" onclick="removeTalentRow(this)" class="btn-remove-talent"
+                            title="Hapus baris">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
@@ -359,7 +386,10 @@
             </div>
             <div class="flex justify-end mt-3 pr-8">
                 <button type="button" onclick="addMentor(this)" class="btn-add-mentor">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
                     Tambah Mentor
                 </button>
             </div>
@@ -370,23 +400,33 @@
         <script>
             @php
                 $mentorUsersJson = json_encode(
-                    $mentors->map(fn ($m) => [
-                        'id' => $m->id,
-                        'nama' => $m->nama,
-                        'company_id' => $m->company_id,
-                        'department_id' => $m->department_id,
-                        'grade_level' => optional($m->position)->grade_level,
-                    ])->values()->all()
+                    $mentors
+                        ->map(
+                            fn($m) => [
+                                'id' => $m->id,
+                                'nama' => $m->nama,
+                                'company_id' => $m->company_id,
+                                'department_id' => $m->department_id,
+                                'grade_level' => optional($m->position)->grade_level,
+                            ],
+                        )
+                        ->values()
+                        ->all(),
                 );
 
                 $atasanUsersJson = json_encode(
-                    $atasans->map(fn ($a) => [
-                        'id' => $a->id,
-                        'nama' => $a->nama,
-                        'company_id' => $a->company_id,
-                        'department_id' => $a->department_id,
-                        'grade_level' => optional($a->position)->grade_level,
-                    ])->values()->all()
+                    $atasans
+                        ->map(
+                            fn($a) => [
+                                'id' => $a->id,
+                                'nama' => $a->nama,
+                                'company_id' => $a->company_id,
+                                'department_id' => $a->department_id,
+                                'grade_level' => optional($a->position)->grade_level,
+                            ],
+                        )
+                        ->values()
+                        ->all(),
                 );
             @endphp
 
@@ -398,7 +438,7 @@
             const isEditMode = @json($editMode);
 
             const mentorOptions = `
-                @foreach($mentors as $m)
+                @foreach ($mentors as $m)
                 <option value="{{ $m->id }}">{{ $m->nama }}</option>
                 @endforeach
             `.trim();
@@ -481,8 +521,10 @@
                 }
 
                 await fetch(`/register/departments?company_id=${companyId}`, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                })
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
                     .then(res => res.json())
                     .then(data => {
                         const oldDeptVal = deptSelect.getAttribute('data-old') || deptSelect.value;
@@ -499,7 +541,9 @@
                     })
                     .catch(err => console.error('Error fetching departments:', err));
 
-                const params = new URLSearchParams({ company_id: companyId });
+                const params = new URLSearchParams({
+                    company_id: companyId
+                });
                 if (deptSelect.value) {
                     params.set('department_id', deptSelect.value);
                 }
@@ -508,7 +552,9 @@
                 }
 
                 const resp = await fetch(`/pdc-admin/talents-by-company?${params.toString()}`, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 });
                 cachedTalents = await resp.json();
 
@@ -578,9 +624,9 @@
             }
 
             function addMentor(btnOrBlock) {
-                const block = btnOrBlock.classList?.contains('talent-block')
-                    ? btnOrBlock
-                    : btnOrBlock.closest('.talent-block');
+                const block = btnOrBlock.classList?.contains('talent-block') ?
+                    btnOrBlock :
+                    btnOrBlock.closest('.talent-block');
                 const stack = block.querySelector('.mentor-stack');
                 const idx = block.getAttribute('data-row-index');
 
@@ -601,7 +647,7 @@
                 refreshMentorOptions();
             }
 
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 if (initialTalentRows.length > 0) {
                     initialTalentRows.forEach(row => addTalentRow(row));
                 } else {

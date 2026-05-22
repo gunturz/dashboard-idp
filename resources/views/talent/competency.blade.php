@@ -319,6 +319,12 @@
                 <span class="block sm:inline">{{ session('error') }}</span>
             </div>
         @endif
+        @if(session('info'))
+            <div class="w-full max-w-7xl mb-6 bg-sky-50 border border-sky-200 text-sky-700 px-5 py-4 rounded-xl shadow-sm">
+                <strong class="font-bold">Info:</strong>
+                <span class="block sm:inline">{{ session('info') }}</span>
+            </div>
+        @endif
         @if($errors->any())
             <div class="w-full max-w-7xl mb-6 bg-red-50 border border-red-200 text-red-700 px-5 py-4 rounded-xl shadow-sm">
                 <strong class="font-bold">Oops, Data tidak valid:</strong>

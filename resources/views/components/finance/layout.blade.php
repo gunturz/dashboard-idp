@@ -740,7 +740,7 @@
         </div>
 
         <div
-            class="flex items-center space-x-2 sm:space-x-3 pl-0 xl:pl-6 border-l-0 xl:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0">
+            class="flex items-center space-x-2 sm:space-x-3 pl-0 lg:pl-6 border-l-0 lg:border-l border-white/20 lg:ml-0 ml-auto flex-shrink-0">
             {{-- ═══ Notification Bell ═══ --}}
             <div class="relative hidden lg:block" id="bell-wrapper">
                 @php
@@ -940,7 +940,7 @@
             </div>
 
             <!-- Mobile Hamburger Button -->
-            <div class="relative block xl:hidden ml-2" id="mobile-menu-wrapper">
+            <div class="relative block lg:hidden ml-2" id="mobile-menu-wrapper">
                 {{-- Mobile: Hanya tampilkan avatar (tanpa nama) --}}
                 <button
                     class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-[1.02] active:scale-95"

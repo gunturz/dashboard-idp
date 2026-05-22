@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ERD Dashboard IDP</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a237e;
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .tab-btn {
+            padding: 8px 22px;
+            border-radius: 20px;
+            border: 2px solid #3949ab;
+            background: #fff;
+            color: #3949ab;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all .2s;
+        }
+
+        .tab-btn.active {
+            background: #3949ab;
+            color: #fff;
+        }
+
+        #tab-diagram {
+            display: block;
+        }
+
+        #tab-desc {
+            display: none;
+        }
+
+        #erd-canvas-wrap {
+            background: #1e1e2e;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #3949ab;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        #erd-canvas {
+            display: block;
+            cursor: grab;
+        }
+
+        #erd-canvas:active {
+            cursor: grabbing;
+        }
+
+        .canvas-hint {
+            text-align: center;
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .section {
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid #3949ab;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            background: #3949ab;
+            color: #fff;
+            font-weight: bold;
+            padding: 8px 12px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-body {
+            padding: 10px 12px;
+        }
+
+        .table-block {
+            margin-bottom: 14px;
+        }
+
+        .table-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .table-name {
+            font-weight: bold;
+            color: #1a237e;
+            font-size: 12.5px;
+            border-bottom: 1px dashed #c5cae9;
+            padding-bottom: 3px;
+            margin-bottom: 5px;
+        }
+
+        .table-desc {
+            color: #444;
+            margin-bottom: 6px;
+            font-size: 11.5px;
+            line-height: 1.5;
+        }
+
+        .cols {
+            margin-left: 0;
+            list-style: none;
+        }
+
+        .cols li {
+            font-size: 11px;
+            color: #333;
+            padding: 1px 0;
+            display: flex;
+            gap: 6px;
+            align-items: flex-start;
+        }
+
+        .badge {
+            display: inline-block;
+            border-radius: 3px;
+            padding: 0 4px;
+            font-size: 9.5px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .pk {
+            background: #ffe082;
+            color: #5d4037;
+        }
+
+        .fk {
+            background: #b3e5fc;
+            color: #01579b;
+        }
+
+        .col-name {
+            font-weight: 600;
+            color: #222;
+        }
+
+        .col-type {
+            color: #888;
+            font-style: italic;
+        }
+
+        .col-note {
+            color: #555;
+        }
+
+        .legend {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #444;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        .relations {
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid #1565c0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .relations .section-header {
+            background: #1565c0;
+        }
+
+        .rel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11.5px;
+        }
+
+        .rel-table th {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 6px 10px;
+            text-align: left;
+            border-bottom: 2px solid #90caf9;
+        }
+
+        .rel-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .rel-table tr:hover td {
+            background: #f5f5f5;
+        }
+
+        .arr {
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        .self-ref {
+            color: #e65100;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📊 ERD — Dashboard IDP (Individual Development Plan)</h1>
+    <p class="subtitle">Diagram Entity Relationship lengkap berdasarkan seluruh migration Laravel</p>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" id="btn-diagram" onclick="showTab('diagram')">📊 ERD Diagram</button>
+        <button class="tab-btn" id="btn-desc" onclick="showTab('desc')">📋 Deskripsi Tabel</button>
+    </div>
+
+    <div id="tab-diagram">
+        <div id="erd-canvas-wrap"><canvas id="erd-canvas"></canvas></div>
+        <p class="canvas-hint">🖱️ Drag untuk geser • Scroll untuk zoom • Hover tabel untuk highlight relasi</p>
+    </div>
+
+    <div id="tab-desc">
+        <div class="legend">
+            <div class="legend-item">
+                <div class="dot" style="background:#ffe082;border:1px solid #ccc;"></div> Primary Key (PK)
+            </div>
+            <div class="legend-item">
+                <div class="dot" style="background:#b3e5fc;border:1px solid #ccc;"></div> Foreign Key (FK)
+            </div>
+            <div class="legend-item">
+                <div class="dot" style="background:#f3f3f3;border:1px solid #ccc;"></div> Kolom Biasa
+            </div>
+        </div>
+        <div class="grid">
+
+            <!-- ===== BAGIAN USER ===== -->
+            <div class="section" style="grid-column: span 1;">
+                <div class="section-header">🧑 DATABASE BAGIAN USER</div>
+                <div class="section-body">
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: users</div>
+                        <div class="table-desc"><b>Tabel utama pengguna sistem.</b> Menyimpan semua akun dari berbagai
+                            role: Talent (kandidat promosi), Mentor (pembimbing), Atasan (supervisor langsung), Panelis
+                            (penguji independen), Finance, dan PDC Admin. Kolom <b>mentor_id</b> dan <b>atasan_id</b>
+                            adalah <i>self-referencing FK</i> yang menunjuk ke tabel users itu sendiri — artinya mentor
+                            dan atasan juga merupakan user dalam sistem. Saat login, sistem akan mengarahkan user ke
+                            halaman yang sesuai role-nya. Kolom <b>role_id</b> adalah role utama user, sedangkan tabel
+                            <b>user_role</b> menyimpan kemungkinan peran tambahan.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">username</span> <span class="col-type">string, unique</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">password</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">nama</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">email</span> <span class="col-type">string, unique</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">company_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ company</span>
+                            </li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">department_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ department</span>
+                            </li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">position_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ position</span>
+                            </li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">role_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ role</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">mentor_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users
+                                    (self)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">atasan_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users
+                                    (self)</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">foto</span> <span class="col-type">string, nullable</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">deleted_at</span> <span class="col-type">timestamp (soft
+                                    delete)</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: user_role</div>
+                        <div class="table-desc"><b>Tabel pivot many-to-many antara users dan role.</b> Digunakan karena
+                            satu orang bisa memiliki lebih dari satu peran. Contoh: seseorang yang menjabat sebagai
+                            Mentor sekaligus Atasan akan memiliki 2 baris di sini. Sistem menggunakan tabel ini untuk
+                            menentukan menu dan halaman apa saja yang boleh diakses user saat login. Kolom
+                            <b>id_user</b> → users, <b>id_role</b> → role.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">id_user</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">id_role</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ role</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: company</div>
+                        <div class="table-desc"><b>Master data perusahaan/cabang.</b> Satu perusahaan dapat memiliki
+                            banyak departemen (<b>department</b>) dan banyak karyawan (<b>users</b>). Kolom
+                            <b>nama_company</b> adalah nama resmi perusahaan. Mendukung multi-company sehingga sistem
+                            bisa dipakai oleh beberapa anak perusahaan sekaligus dalam satu platform.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">nama_company</span> <span class="col-type">string</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: department</div>
+                        <div class="table-desc"><b>Master data departemen di bawah sebuah perusahaan.</b> Contoh: HRD,
+                            Finance, IT, Operations, dll. Kolom <b>company_id</b> (FK) mengikat departemen ke perusahaan
+                            induknya. Satu departemen hanya milik satu perusahaan, tetapi satu perusahaan bisa punya
+                            banyak departemen. User (karyawan) akan ditempatkan ke salah satu departemen via kolom
+                            <b>department_id</b> di tabel users.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">company_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ company</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">nama_department</span> <span class="col-type">string</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: position</div>
+                        <div class="table-desc"><b>Master data jabatan/posisi dalam organisasi.</b> Contoh: Staff,
+                            Supervisor, Officer, Manager, General Manager, BOD. Kolom <b>grade_level</b> adalah angka
+                            hierarki jabatan (1=Staff terendah, 5=BOD tertinggi) yang digunakan untuk menentukan arah
+                            promosi (selalu naik grade). Tabel ini direferensikan oleh: users (jabatan saat ini),
+                            development_sessions (jabatan asal &amp; tujuan), promotion_plan (target jabatan), dan
+                            position_target_competence (standar kompetensi per jabatan).</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">position_name</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">grade_level</span> <span class="col-type">tinyint</span> <span
+                                    class="col-note">1=Staff, 5=BOD</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: role</div>
+                        <div class="table-desc"><b>Master data peran/role pengguna.</b> Berisi 6 role utama sistem:
+                            <b>Talent</b> (kandidat yang sedang diproses promosi), <b>Mentor</b> (pembimbing talent
+                            selama pengembangan), <b>Atasan</b> (supervisor langsung yang menilai talent),
+                            <b>Panelis</b> (penguji independen tahap akhir), <b>Finance</b> (memvalidasi aspek anggaran
+                            improvement project), dan <b>PDC Admin</b> (admin yang mengelola seluruh data sistem).
+                            Setiap role memiliki dashboard, menu, dan hak akses berbeda.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">role_name</span> <span class="col-type">string</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN SESSION & PROMOSI ===== -->
+            <div class="section" style="grid-column: span 1;">
+                <div class="section-header">🚀 DATABASE BAGIAN DEVELOPMENT SESSION & PROMOSI</div>
+                <div class="section-body">
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: development_sessions</div>
+                        <div class="table-desc"><b>⭐ Tabel HUB/PUSAT seluruh sistem IDP.</b> Setiap baris mewakili satu
+                            siklus pengembangan talent dari jabatan asal ke jabatan tujuan. Semua tabel aktivitas
+                            (promotion_plan, assessment_session, idp_activity, improvement_project, panelis_assessments)
+                            memiliki FK ke tabel ini via kolom <b>development_session_id</b>. Ini memungkinkan semua
+                            aktivitas dalam satu periode dikelompokkan bersama. Satu talent bisa punya beberapa session
+                            jika siklus pengembangan diulang. Kolom <b>source_position_id</b> = jabatan awal,
+                            <b>target_position_id</b> = jabatan yang dituju. Kolom <b>is_active</b> menandai session
+                            yang sedang berjalan vs yang sudah selesai/diarsipkan.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_talent</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">source_position_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ position (jabatan
+                                    asal)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">target_position_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ position (jabatan
+                                    tujuan)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">atasan_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">mentor_ids</span> <span class="col-type">json</span> <span
+                                    class="col-note">array ID mentor</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">status</span> <span class="col-type">string</span> <span
+                                    class="col-note">In Progress, Promoted, dll</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">start_date / target_date</span> <span class="col-type">date</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_active</span> <span class="col-type">boolean</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">completed_at</span> <span class="col-type">timestamp,
+                                    nullable</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">deleted_at</span> <span class="col-type">timestamp (soft
+                                    delete)</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: promotion_plan</div>
+                        <div class="table-desc"><b>Rencana promosi resmi talent.</b> Satu baris = satu rencana promosi
+                            talent ke jabatan tertentu. Alur status lengkap: <b>Draft</b> → <b>In Progress</b> →
+                            <b>Pending Panelis</b> → <b>Approved/Rejected Panelis</b> → <b>Ready</b> → <b>Promoted/Not
+                                Promoted</b>. Jika sudah melalui sidang panelis, status diperinci menjadi: <b>Ready
+                                Now</b>, <b>Ready in 1-2 Years</b>, <b>Ready in &gt;2 Years</b>, atau <b>Not Ready</b>.
+                            Kolom <b>is_locked</b> mencegah talent mengedit data setelah dikunci oleh admin. Kolom
+                            <b>mentor_ids</b> menyimpan array JSON ID mentor yang mendampingi (bisa lebih dari satu).
+                            Terhubung ke <b>development_sessions</b> sebagai konteks sesi pengembangan.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_talent</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">target_position_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ position</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">development_session_id</span>
+                                <span class="col-type">bigint, nullable</span> <span class="col-note">→
+                                    development_sessions</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">mentor_ids</span> <span class="col-type">json</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">status_promotion</span> <span class="col-type">enum</span> <span
+                                    class="col-note">Draft, In Progress, Pending Panelis, Approved Panelis, Rejected
+                                    Panelis, Ready, Promoted, Not Promoted, Ready Now, Ready in 1-2 Years, Ready in >2
+                                    Years, Not Ready</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">start_date / target_date</span> <span class="col-type">date</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_locked</span> <span class="col-type">boolean</span> <span
+                                    class="col-note">dikunci oleh admin</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_active</span> <span class="col-type">boolean</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: password_resets</div>
+                        <div class="table-desc"><b>Manajemen token reset password.</b> Saat user meminta reset password,
+                            sistem membuat token unik (hash/MD5) dan menyimpannya di sini. Kolom <b>expires_at</b>
+                            membatasi masa berlaku token (misal: 1 jam). Kolom <b>is_used</b> = false artinya token
+                            belum dipakai; setelah token digunakan untuk ganti password, nilainya diubah ke true agar
+                            tidak bisa dipakai ulang (one-time use). Terhubung ke <b>users</b> via <b>user_id</b>,
+                            sehingga setiap permintaan reset diketahui milik siapa.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">email</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">token</span> <span class="col-type">string</span> <span
+                                    class="col-note">varchar MD5/hash</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">expires_at</span> <span class="col-type">timestamp</span> <span
+                                    class="col-note">batas berlaku token</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_used</span> <span class="col-type">boolean</span> <span
+                                    class="col-note">false=belum, true=sudah dipakai</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN ASSESSMENT ===== -->
+            <div class="section" style="grid-column: span 1;">
+                <div class="section-header">📋 DATABASE BAGIAN ASSESSMENT</div>
+                <div class="section-body">
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: assessment_session</div>
+                        <div class="table-desc"><b>Sesi penilaian kompetensi antara talent dan atasan.</b> Setiap baris
+                            merepresentasikan satu sesi assessment di mana atasan menilai talent secara komprehensif. Di
+                            dalam satu sesi, setiap kompetensi dinilai secara terpisah (lihat tabel
+                            <b>detail_assessment</b>). Kolom <b>period</b> menyatakan periode penilaian (misal:
+                            Q1-2026). Kolom <b>user_id_atasan</b> nullable karena pada beberapa kasus atasan belum
+                            ditentukan saat session dibuat. Kolom <b>is_active</b> memisahkan assessment aktif dari
+                            arsip session lama.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_talent</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users (yang dinilai)</span>
+                            </li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_atasan</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users
+                                    (penilai)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">development_session_id</span>
+                                <span class="col-type">bigint, nullable</span> <span class="col-note">→
+                                    development_sessions</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">period</span> <span class="col-type">string</span> <span
+                                    class="col-note">periode assessment</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_active</span> <span class="col-type">boolean</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: detail_assessment</div>
+                        <div class="table-desc"><b>Nilai per kompetensi dalam satu sesi assessment.</b> Setiap baris
+                            menyimpan penilaian satu kompetensi dalam satu sesi. Kolom <b>score_atasan</b>: nilai yang
+                            diberikan atasan; <b>score_talent</b>: nilai self-assessment oleh talent sendiri;
+                            <b>gap_score</b>: selisih (score_atasan - score_talent), nilai positif = talent overestimate
+                            diri sendiri, nilai negatif = atasan tidak puas. <b>notes</b>: catatan penjelasan. Hasil gap
+                            score ini digunakan untuk menentukan area kompetensi mana yang perlu diprioritaskan dalam
+                            IDP.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">assessment_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ assessment_session</span>
+                            </li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">competence_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ competencies</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">score_atasan</span> <span class="col-type">int</span> <span
+                                    class="col-note">nilai dari atasan</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">score_talent</span> <span class="col-type">int</span> <span
+                                    class="col-note">self-assessment talent</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">gap_score</span> <span class="col-type">decimal</span> <span
+                                    class="col-note">selisih nilai</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">notes</span> <span class="col-type">string</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: competencies</div>
+                        <div class="table-desc"><b>Master data daftar kompetensi yang diukur dalam sistem.</b> Contoh
+                            kompetensi: Leadership, Communication, Problem Solving, Technical Skill, dll. Tabel ini
+                            menjadi titik referensi untuk 3 tabel lain: (1) <b>detail_assessment</b> — kompetensi apa
+                            yang dinilai dalam assessment, (2) <b>question</b> — soal kuesioner self-assessment per
+                            kompetensi, (3) <b>position_target_competence</b> — standar level minimum kompetensi yang
+                            dibutuhkan per jabatan.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">name</span> <span class="col-type">string</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: question</div>
+                        <div class="table-desc"><b>Bank soal kuesioner self-assessment berbasis kompetensi.</b> Setiap
+                            soal terikat ke satu kompetensi dan memiliki tingkat <b>level</b> (1–5). Ketika talent
+                            mengisi self-assessment, sistem menampilkan pertanyaan-pertanyaan dari tabel ini berdasarkan
+                            level kompetensi yang sedang diukur. Jawaban talent menjadi dasar <b>score_talent</b> di
+                            tabel detail_assessment.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">competence_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ competencies</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">level</span> <span class="col-type">tinyint</span> <span
+                                    class="col-note">level soal (1-5)</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">question_text</span> <span class="col-type">text, nullable</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: position_target_competence</div>
+                        <div class="table-desc"><b>Standar kompetensi minimum per jabatan (pivot position ↔
+                                competencies).</b> Menentukan level kompetensi minimum yang harus dimiliki seseorang
+                            untuk menduduki jabatan tertentu. Contoh: posisi Manager memerlukan Leadership level 4,
+                            Communication level 3. Kolom <b>target_level</b> = nilai minimum yang harus dicapai. Data
+                            ini digunakan sistem untuk memperlihatkan "gap yang harus ditutup" oleh talent agar layak
+                            dipromosikan ke jabatan target.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">position_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ position</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">competence_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ competencies</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">target_level</span> <span class="col-type">int</span> <span
+                                    class="col-note">level minimum yang harus dicapai</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: panelis_assessments</div>
+                        <div class="table-desc"><b>Penilaian akhir oleh Panelis (penguji independen).</b> Tahap ini
+                            terjadi setelah talent lolos dari assessment atasan. Panelis melakukan wawancara/sidang dan
+                            mengisi skor akhir di sini. Constraint UNIQUE pada (user_id_talent, panelis_id) memastikan
+                            satu panelis hanya menilai talent yang sama sekali dalam satu session. Kolom
+                            <b>panelis_scores_json</b> menyimpan rincian skor per aspek dalam format JSON. Kolom
+                            <b>panelis_rekomendasi</b> berisi keputusan akhir panelis apakah talent direkomendasikan
+                            promosi atau tidak.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_talent</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users (yang dinilai)</span>
+                            </li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">panelis_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users (penilai)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">development_session_id</span>
+                                <span class="col-type">bigint, nullable</span> <span class="col-note">→
+                                    development_sessions</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_score</span> <span class="col-type">int, nullable</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_scores_json</span> <span class="col-type">json</span> <span
+                                    class="col-note">detail skor per aspek</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_komentar</span> <span class="col-type">text,
+                                    nullable</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_rekomendasi</span> <span class="col-type">text,
+                                    nullable</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_tanggal_penilaian</span> <span class="col-type">date,
+                                    nullable</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_active</span> <span class="col-type">boolean</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN IDP ===== -->
+            <div class="section" style="grid-column: span 1;">
+                <div class="section-header">📓 DATABASE BAGIAN IDP (Individual Development Plan)</div>
+                <div class="section-body">
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: idp_type</div>
+                        <div class="table-desc"><b>Kategori/jenis metode pengembangan dalam IDP.</b> Berisi 3 jenis
+                            utama: <b>Exposure</b> (paparan langsung ke situasi baru, misal: rotasi, magang, job
+                            shadowing), <b>Mentoring</b> (bimbingan tatap muka rutin dengan mentor), dan <b>Learning</b>
+                            (pelatihan formal seperti training, seminar, kursus). Setiap aktivitas logbook IDP wajib
+                            dikategorikan ke salah satu tipe ini.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">type_name</span> <span class="col-type">string</span> <span
+                                    class="col-note">Exposure, Mentoring, Learning</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: idp_activity</div>
+                        <div class="table-desc"><b>Logbook aktivitas pengembangan talent (inti dari IDP).</b> Setiap
+                            baris = satu kegiatan yang dilakukan talent dalam rangka mengembangkan kompetensinya. Kolom
+                            penting: <b>theme</b> (tema kegiatan), <b>activity_date</b> (kapan dilakukan),
+                            <b>location</b> (tempat), <b>activity</b> (nama kegiatan), <b>description</b> (penjelasan
+                            detail), <b>action_plan</b> (rencana tindak lanjut), <b>document_path &amp; file_name</b>
+                            (bukti berupa file). Setelah talent mengajukan, mentor/atasan memverifikasi: <b>status</b> =
+                            Pending → Approved/Rejected. Kolom <b>verify_by</b> mencatat siapa yang memverifikasi.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_talent</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">type_idp</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ idp_type</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">verify_by</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users
+                                    (mentor/atasan)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">development_session_id</span>
+                                <span class="col-type">bigint, nullable</span> <span class="col-note">→
+                                    development_sessions</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">theme</span> <span class="col-type">string</span> <span
+                                    class="col-note">tema kegiatan</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">activity_date</span> <span class="col-type">date</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">location</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">activity</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">description</span> <span class="col-type">text</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">action_plan</span> <span class="col-type">text</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">document_path</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">file_name</span> <span class="col-type">string, nullable</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">status</span> <span class="col-type">enum</span> <span
+                                    class="col-note">Pending, Approved, Rejected</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">platform</span> <span class="col-type">string</span> <span
+                                    class="col-note">online/offline/hybrid</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_active</span> <span class="col-type">boolean</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN IMPROVEMENT PROJECT ===== -->
+            <div class="section" style="grid-column: span 1;">
+                <div class="section-header">🏗️ DATABASE BAGIAN IMPROVEMENT PROJECT</div>
+                <div class="section-body">
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: improvement_project</div>
+                        <div class="table-desc"><b>Proyek perbaikan/inovasi nyata yang dikerjakan talent.</b> Ini adalah
+                            "bukti kerja" konkret bahwa talent mampu menerapkan kompetensi yang dikembangkan. Talent
+                            mengajukan proposal proyek, lalu mentor/atasan memverifikasi, kemudian Finance meninjau
+                            aspek anggaran. Alur status: <b>On Progress</b> → <b>Pending</b> (diajukan) →
+                            <b>Verified</b> / <b>Rejected</b>. Kolom <b>feedback</b> = catatan dari mentor/atasan,
+                            <b>finance_feedback</b> = catatan dari Finance. ⚠️ Model juga menyimpan field panelis
+                            (score, komentar, rekomendasi, tanggal penilaian) sebagai data legacy yang mungkin akan
+                            dipindah ke tabel panelis_assessments.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id_talent</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users (pemilik
+                                    proyek)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">verify_by</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users
+                                    (mentor/atasan yang verifikasi)</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">development_session_id</span>
+                                <span class="col-type">bigint, nullable</span> <span class="col-note">→
+                                    development_sessions</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">title</span> <span class="col-type">string</span> <span
+                                    class="col-note">judul proyek</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">document_path</span> <span class="col-type">string</span> <span
+                                    class="col-note">path file dokumen proyek</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">status</span> <span class="col-type">enum</span> <span
+                                    class="col-note">On Progress, Pending, Verified, Rejected</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_active</span> <span class="col-type">boolean</span> <span
+                                    class="col-note">session aktif/arsip</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">verify_at</span> <span class="col-type">datetime, nullable</span>
+                                <span class="col-note">waktu diverifikasi</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">feedback</span> <span class="col-type">text, nullable</span> <span
+                                    class="col-note">catatan mentor/atasan</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">finance_feedback</span> <span class="col-type">text,
+                                    nullable</span> <span class="col-note">catatan dari Finance</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_score</span> <span class="col-type">int, nullable</span>
+                                <span class="col-note">⚠️ field legacy panelis</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_scores_json</span> <span class="col-type">json,
+                                    nullable</span> <span class="col-note">⚠️ rincian skor panelis</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_komentar</span> <span class="col-type">text,
+                                    nullable</span> <span class="col-note">⚠️ komentar panelis</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_rekomendasi</span> <span class="col-type">text,
+                                    nullable</span> <span class="col-note">⚠️ rekomendasi panelis</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">panelis_tanggal_penilaian</span> <span class="col-type">date,
+                                    nullable</span> <span class="col-note">⚠️ tanggal sidang panelis</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN SISTEM & LOG ===== -->
+            <div class="section" style="grid-column: span 1;">
+                <div class="section-header">🔧 DATABASE BAGIAN SISTEM & LOG</div>
+                <div class="section-body">
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: status_log</div>
+                        <div class="table-desc"><b>Log riwayat perubahan status secara generic/global.</b> Dirancang
+                            untuk merekam semua perubahan status di berbagai tabel (IDP Activity, Improvement Project,
+                            dll.) tanpa menggunakan FK langsung — nama tabel asal disimpan di kolom <b>name_tabel</b>
+                            sebagai teks. Kolom <b>remark</b> berisi alasan perubahan (misal: "Dokumen belum lengkap").
+                            ⚠️ <b>Catatan penting:</b> Tabel ini saat ini belum aktif digunakan oleh kode backend —
+                            strukturnya sudah ada di database tapi belum ada controller/model yang menulis ke tabel ini.
+                            Fungsinya akan berguna jika diimplementasikan untuk menampilkan riwayat audit trail ke
+                            Atasan atau Mentor.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">name_tabel</span> <span class="col-type">string</span> <span
+                                    class="col-note">nama tabel yang berubah</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">status</span> <span class="col-type">enum</span> <span
+                                    class="col-note">Pending, Approved, Rejected</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">remark</span> <span class="col-type">string, nullable</span> <span
+                                    class="col-note">alasan perubahan</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: audit_activity</div>
+                        <div class="table-desc"><b>Log keamanan dan audit trail sistem.</b> Merekam semua event penting
+                            untuk keperluan monitoring keamanan dan forensik. Jenis event yang direkam:
+                            <b>login_success</b>, <b>login_failed</b>, <b>password_reset</b>, <b>role_change</b>,
+                            <b>file_upload</b>, <b>file_download</b>, <b>file_download_unauthorized</b>,
+                            <b>user_updated</b>, dll. Kolom <b>properties</b> (JSON) menyimpan data konteks tambahan
+                            (nama file, perubahan data, dll.). Kolom <b>ip_address</b> dan <b>user_agent</b> membantu
+                            identifikasi apakah akses berasal dari perangkat/lokasi yang mencurigakan. Kolom
+                            <b>user_id</b> nullable karena event seperti login gagal terjadi sebelum user
+                            terautentikasi.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users (null jika
+                                    belum login)</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">event</span> <span class="col-type">string(100)</span> <span
+                                    class="col-note">login_success, file_upload, dll</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">description</span> <span class="col-type">string, nullable</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">properties</span> <span class="col-type">json, nullable</span>
+                                <span class="col-note">data tambahan</span>
+                            </li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">ip_address</span> <span class="col-type">string(45)</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">user_agent</span> <span class="col-type">string</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: app_notifications</div>
+                        <div class="table-desc">Notifikasi dalam aplikasi untuk setiap user. Dikirim saat ada perubahan
+                            status IDP, approval, penolakan, dll. Bisa ditandai sudah dibaca (is_read).</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id</span> <span
+                                    class="col-type">bigint, nullable</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">title</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">desc</span> <span class="col-type">text</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">type</span> <span class="col-type">string</span> <span
+                                    class="col-note">success, info, warning</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">is_read</span> <span class="col-type">boolean</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-block">
+                        <div class="table-name">TABEL: documents</div>
+                        <div class="table-desc">Penyimpanan metadata file yang diupload oleh user. Path file disimpan di
+                            sini (file fisik di storage). Digunakan untuk manajemen dokumen terpusat.</div>
+                        <ul class="cols">
+                            <li><span class="badge pk">PK</span> <span class="col-name">id</span> <span
+                                    class="col-type">bigint</span></li>
+                            <li><span class="badge fk">FK</span> <span class="col-name">user_id</span> <span
+                                    class="col-type">bigint</span> <span class="col-note">→ users</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">original_name</span> <span class="col-type">string</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">file_path</span> <span class="col-type">string, unique</span></li>
+                            <li><span class="badge" style="visibility:hidden">--</span> <span
+                                    class="col-name">mime_type</span> <span class="col-type">string(150),
+                                    nullable</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div><!-- end tab-desc -->
+
+    <!-- TABEL RELASI FK -->
+    <div class="relations" style="margin-top:20px;">
+        <div class="section-header">🔗 RINGKASAN SELURUH FOREIGN KEY (FK)</div>
+        <div style="padding:14px; overflow-x:auto;">
+            <table class="rel-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tabel</th>
+                        <th>Kolom FK</th>
+                        <th></th>
+                        <th>Tabel Tujuan</th>
+                        <th>Kolom</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>department</td>
+                        <td>company_id</td>
+                        <td class="arr">→</td>
+                        <td>company</td>
+                        <td>id</td>
+                        <td>Departemen milik perusahaan</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>users</td>
+                        <td>company_id</td>
+                        <td class="arr">→</td>
+                        <td>company</td>
+                        <td>id</td>
+                        <td>User bekerja di perusahaan (nullable)</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>users</td>
+                        <td>department_id</td>
+                        <td class="arr">→</td>
+                        <td>department</td>
+                        <td>id</td>
+                        <td>User di departemen tertentu (nullable)</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>users</td>
+                        <td>position_id</td>
+                        <td class="arr">→</td>
+                        <td>position</td>
+                        <td>id</td>
+                        <td>Jabatan user saat ini (nullable)</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>users</td>
+                        <td>role_id</td>
+                        <td class="arr">→</td>
+                        <td>role</td>
+                        <td>id</td>
+                        <td>Role utama user</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>users</td>
+                        <td>mentor_id</td>
+                        <td class="arr">→</td>
+                        <td class="self-ref">users (self)</td>
+                        <td>id</td>
+                        <td>Self-referencing: siapa mentor user ini</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>users</td>
+                        <td>atasan_id</td>
+                        <td class="arr">→</td>
+                        <td class="self-ref">users (self)</td>
+                        <td>id</td>
+                        <td>Self-referencing: siapa atasan user ini</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>user_role</td>
+                        <td>id_user</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Pivot role-user</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>user_role</td>
+                        <td>id_role</td>
+                        <td class="arr">→</td>
+                        <td>role</td>
+                        <td>id</td>
+                        <td>Pivot role-user</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>password_resets</td>
+                        <td>user_id</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Token reset milik user tertentu</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>development_sessions</td>
+                        <td>user_id_talent</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Talent yang mengikuti sesi</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>development_sessions</td>
+                        <td>source_position_id</td>
+                        <td class="arr">→</td>
+                        <td>position</td>
+                        <td>id</td>
+                        <td>Jabatan asal sebelum promosi</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>development_sessions</td>
+                        <td>target_position_id</td>
+                        <td class="arr">→</td>
+                        <td>position</td>
+                        <td>id</td>
+                        <td>Jabatan tujuan promosi</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>development_sessions</td>
+                        <td>atasan_id</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Atasan yang mengawasi sesi</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>promotion_plan</td>
+                        <td>user_id_talent</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Talent yang direncanakan promosi</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>promotion_plan</td>
+                        <td>target_position_id</td>
+                        <td class="arr">→</td>
+                        <td>position</td>
+                        <td>id</td>
+                        <td>Target jabatan promosi</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td>promotion_plan</td>
+                        <td>development_session_id</td>
+                        <td class="arr">→</td>
+                        <td>development_sessions</td>
+                        <td>id</td>
+                        <td>Terhubung ke sesi pengembangan</td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td>assessment_session</td>
+                        <td>user_id_talent</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Talent yang dinilai</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td>assessment_session</td>
+                        <td>user_id_atasan</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Atasan yang menilai (nullable)</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>assessment_session</td>
+                        <td>development_session_id</td>
+                        <td class="arr">→</td>
+                        <td>development_sessions</td>
+                        <td>id</td>
+                        <td>Sesi pengembangan terkait</td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td>detail_assessment</td>
+                        <td>assessment_id</td>
+                        <td class="arr">→</td>
+                        <td>assessment_session</td>
+                        <td>id</td>
+                        <td>Bagian dari sesi assessment</td>
+                    </tr>
+                    <tr>
+                        <td>22</td>
+                        <td>detail_assessment</td>
+                        <td>competence_id</td>
+                        <td class="arr">→</td>
+                        <td>competencies</td>
+                        <td>id</td>
+                        <td>Kompetensi yang dinilai</td>
+                    </tr>
+                    <tr>
+                        <td>23</td>
+                        <td>question</td>
+                        <td>competence_id</td>
+                        <td class="arr">→</td>
+                        <td>competencies</td>
+                        <td>id</td>
+                        <td>Soal milik kompetensi tertentu</td>
+                    </tr>
+                    <tr>
+                        <td>24</td>
+                        <td>position_target_competence</td>
+                        <td>position_id</td>
+                        <td class="arr">→</td>
+                        <td>position</td>
+                        <td>id</td>
+                        <td>Jabatan yang punya target kompetensi</td>
+                    </tr>
+                    <tr>
+                        <td>25</td>
+                        <td>position_target_competence</td>
+                        <td>competence_id</td>
+                        <td class="arr">→</td>
+                        <td>competencies</td>
+                        <td>id</td>
+                        <td>Kompetensi yang ditargetkan</td>
+                    </tr>
+                    <tr>
+                        <td>26</td>
+                        <td>idp_activity</td>
+                        <td>user_id_talent</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Talent pemilik aktivitas</td>
+                    </tr>
+                    <tr>
+                        <td>27</td>
+                        <td>idp_activity</td>
+                        <td>type_idp</td>
+                        <td class="arr">→</td>
+                        <td>idp_type</td>
+                        <td>id</td>
+                        <td>Jenis aktivitas IDP</td>
+                    </tr>
+                    <tr>
+                        <td>28</td>
+                        <td>idp_activity</td>
+                        <td>verify_by</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>User yang memverifikasi</td>
+                    </tr>
+                    <tr>
+                        <td>29</td>
+                        <td>idp_activity</td>
+                        <td>development_session_id</td>
+                        <td class="arr">→</td>
+                        <td>development_sessions</td>
+                        <td>id</td>
+                        <td>Sesi pengembangan terkait</td>
+                    </tr>
+                    <tr>
+                        <td>30</td>
+                        <td>improvement_project</td>
+                        <td>user_id_talent</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Talent pemilik proyek</td>
+                    </tr>
+                    <tr>
+                        <td>31</td>
+                        <td>improvement_project</td>
+                        <td>verify_by</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>User yang memverifikasi</td>
+                    </tr>
+                    <tr>
+                        <td>32</td>
+                        <td>improvement_project</td>
+                        <td>development_session_id</td>
+                        <td class="arr">→</td>
+                        <td>development_sessions</td>
+                        <td>id</td>
+                        <td>Sesi pengembangan terkait</td>
+                    </tr>
+                    <tr>
+                        <td>33</td>
+                        <td>panelis_assessments</td>
+                        <td>user_id_talent</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Talent yang dinilai panelis</td>
+                    </tr>
+                    <tr>
+                        <td>34</td>
+                        <td>panelis_assessments</td>
+                        <td>panelis_id</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Panelis yang menilai</td>
+                    </tr>
+                    <tr>
+                        <td>35</td>
+                        <td>panelis_assessments</td>
+                        <td>development_session_id</td>
+                        <td class="arr">→</td>
+                        <td>development_sessions</td>
+                        <td>id</td>
+                        <td>Sesi pengembangan terkait</td>
+                    </tr>
+                    <tr>
+                        <td>36</td>
+                        <td>documents</td>
+                        <td>user_id</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>File milik user tertentu</td>
+                    </tr>
+                    <tr>
+                        <td>37</td>
+                        <td>app_notifications</td>
+                        <td>user_id</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Notifikasi untuk user tertentu</td>
+                    </tr>
+                    <tr>
+                        <td>38</td>
+                        <td>audit_activity</td>
+                        <td>user_id</td>
+                        <td class="arr">→</td>
+                        <td>users</td>
+                        <td>id</td>
+                        <td>Log aktivitas user (nullable)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p style="text-align:center; margin-top:16px; color:#888; font-size:11px;">
+        ⚙️ Dibuat otomatis dari migration Laravel — Dashboard IDP &nbsp;|&nbsp; Total: 18 Tabel, 38 Foreign Key
+    </p>
+
+    <script>
+        function showTab(t) {
+            document.getElementById('tab-diagram').style.display = t === 'diagram' ? 'block' : 'none';
+            document.getElementById('tab-desc').style.display = t === 'desc' ? 'block' : 'none';
+            document.getElementById('btn-diagram').className = 'tab-btn' + (t === 'diagram' ? ' active' : '');
+            document.getElementById('btn-desc').className = 'tab-btn' + (t === 'desc' ? ' active' : '');
+            if (t === 'diagram') drawERD();
+        }
+
+        // ─── DATA TABLES ───
+        const TABLES = [
+            {
+                id: 'company', label: 'company', color: '#7c3aed', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'nama_company', k: '' }
+                ]
+            },
+            {
+                id: 'department', label: 'department', color: '#7c3aed', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'company_id', k: 'FK' }, { n: 'nama_department', k: '' }
+                ]
+            },
+            {
+                id: 'position', label: 'position', color: '#7c3aed', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'position_name', k: '' }, { n: 'grade_level', k: '' }
+                ]
+            },
+            {
+                id: 'role', label: 'role', color: '#7c3aed', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'role_name', k: '' }
+                ]
+            },
+            {
+                id: 'idp_type', label: 'idp_type', color: '#0891b2', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'type_name', k: '' }
+                ]
+            },
+            {
+                id: 'users', label: 'users', color: '#dc2626', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'username', k: '' }, { n: 'nama', k: '' }, { n: 'email', k: '' },
+                    { n: 'company_id', k: 'FK' }, { n: 'department_id', k: 'FK' }, { n: 'position_id', k: 'FK' },
+                    { n: 'role_id', k: 'FK' }, { n: 'mentor_id', k: 'FK' }, { n: 'atasan_id', k: 'FK' }, { n: 'foto', k: '' }
+                ]
+            },
+            {
+                id: 'user_role', label: 'user_role', color: '#7c3aed', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'id_user', k: 'FK' }, { n: 'id_role', k: 'FK' }
+                ]
+            },
+            {
+                id: 'password_resets', label: 'password_resets', color: '#b45309', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id', k: 'FK' }, { n: 'email', k: '' }, { n: 'token', k: '' }, { n: 'expires_at', k: '' }, { n: 'is_used', k: '' }
+                ]
+            },
+            {
+                id: 'development_sessions', label: 'development_sessions', color: '#dc2626', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id_talent', k: 'FK' }, { n: 'source_position_id', k: 'FK' },
+                    { n: 'target_position_id', k: 'FK' }, { n: 'atasan_id', k: 'FK' }, { n: 'mentor_ids', k: '' },
+                    { n: 'status', k: '' }, { n: 'start_date', k: '' }, { n: 'is_active', k: '' }
+                ]
+            },
+            {
+                id: 'promotion_plan', label: 'promotion_plan', color: '#b45309', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id_talent', k: 'FK' }, { n: 'target_position_id', k: 'FK' },
+                    { n: 'development_session_id', k: 'FK' }, { n: 'status_promotion', k: '' }, { n: 'is_locked', k: '' }, { n: 'is_active', k: '' }
+                ]
+            },
+            {
+                id: 'assessment_session', label: 'assessment_session', color: '#065f46', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id_talent', k: 'FK' }, { n: 'user_id_atasan', k: 'FK' },
+                    { n: 'development_session_id', k: 'FK' }, { n: 'period', k: '' }, { n: 'is_active', k: '' }
+                ]
+            },
+            {
+                id: 'competencies', label: 'competencies', color: '#065f46', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'name', k: '' }
+                ]
+            },
+            {
+                id: 'detail_assessment', label: 'detail_assessment', color: '#065f46', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'assessment_id', k: 'FK' }, { n: 'competence_id', k: 'FK' },
+                    { n: 'score_atasan', k: '' }, { n: 'score_talent', k: '' }, { n: 'gap_score', k: '' }, { n: 'notes', k: '' }
+                ]
+            },
+            {
+                id: 'question', label: 'question', color: '#065f46', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'competence_id', k: 'FK' }, { n: 'level', k: '' }, { n: 'question_text', k: '' }
+                ]
+            },
+            {
+                id: 'position_target_competence', label: 'position_target_competence', color: '#065f46', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'position_id', k: 'FK' }, { n: 'competence_id', k: 'FK' }, { n: 'target_level', k: '' }
+                ]
+            },
+            {
+                id: 'panelis_assessments', label: 'panelis_assessments', color: '#065f46', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id_talent', k: 'FK' }, { n: 'panelis_id', k: 'FK' },
+                    { n: 'development_session_id', k: 'FK' }, { n: 'panelis_score', k: '' }, { n: 'panelis_komentar', k: '' }, { n: 'is_active', k: '' }
+                ]
+            },
+            {
+                id: 'idp_activity', label: 'idp_activity', color: '#0891b2', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id_talent', k: 'FK' }, { n: 'type_idp', k: 'FK' },
+                    { n: 'verify_by', k: 'FK' }, { n: 'development_session_id', k: 'FK' },
+                    { n: 'theme', k: '' }, { n: 'status', k: '' }, { n: 'is_active', k: '' }
+                ]
+            },
+            {
+                id: 'improvement_project', label: 'improvement_project', color: '#0891b2', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id_talent', k: 'FK' }, { n: 'verify_by', k: 'FK' },
+                    { n: 'development_session_id', k: 'FK' }, { n: 'title', k: '' }, { n: 'status', k: '' }, { n: 'finance_feedback', k: '' }, { n: 'is_active', k: '' }
+                ]
+            },
+            {
+                id: 'documents', label: 'documents', color: '#475569', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id', k: 'FK' }, { n: 'original_name', k: '' }, { n: 'file_path', k: '' }, { n: 'mime_type', k: '' }
+                ]
+            },
+            {
+                id: 'app_notifications', label: 'app_notifications', color: '#475569', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id', k: 'FK' }, { n: 'title', k: '' }, { n: 'type', k: '' }, { n: 'is_read', k: '' }
+                ]
+            },
+            {
+                id: 'status_log', label: 'status_log', color: '#475569', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'name_tabel', k: '' }, { n: 'status', k: '' }, { n: 'remark', k: '' }
+                ]
+            },
+            {
+                id: 'audit_activity', label: 'audit_activity', color: '#475569', cols: [
+                    { n: 'id', k: 'PK' }, { n: 'user_id', k: 'FK' }, { n: 'event', k: '' }, { n: 'ip_address', k: '' }, { n: 'user_agent', k: '' }
+                ]
+            }
+        ];
+
+        const EDGES = [
+            ['department', 'company'], ['users', 'company'], ['users', 'department'], ['users', 'position'],
+            ['users', 'role'], ['users', 'users'],
+            ['user_role', 'users'], ['user_role', 'role'],
+            ['password_resets', 'users'],
+            ['development_sessions', 'users'], ['development_sessions', 'position'],
+            ['promotion_plan', 'users'], ['promotion_plan', 'position'], ['promotion_plan', 'development_sessions'],
+            ['assessment_session', 'users'], ['assessment_session', 'development_sessions'],
+            ['detail_assessment', 'assessment_session'], ['detail_assessment', 'competencies'],
+            ['question', 'competencies'],
+            ['position_target_competence', 'position'], ['position_target_competence', 'competencies'],
+            ['panelis_assessments', 'users'], ['panelis_assessments', 'development_sessions'],
+            ['idp_activity', 'users'], ['idp_activity', 'idp_type'], ['idp_activity', 'development_sessions'],
+            ['improvement_project', 'users'], ['improvement_project', 'development_sessions'],
+            ['documents', 'users'], ['app_notifications', 'users'], ['audit_activity', 'users']
+        ];
+
+        // ─── LAYOUT POSITIONS ───
+        const LAYOUT = {
+            company: { x: 80, y: 60 }, department: { x: 80, y: 210 }, role: { x: 80, y: 380 },
+            position: { x: 80, y: 510 }, idp_type: { x: 80, y: 660 },
+            users: { x: 340, y: 220 },
+            user_role: { x: 340, y: 60 },
+            password_resets: { x: 340, y: 550 },
+            development_sessions: { x: 620, y: 220 },
+            promotion_plan: { x: 620, y: 60 },
+            assessment_session: { x: 900, y: 60 },
+            competencies: { x: 900, y: 280 },
+            detail_assessment: { x: 900, y: 440 },
+            question: { x: 1150, y: 280 },
+            position_target_competence: { x: 1150, y: 440 },
+            panelis_assessments: { x: 900, y: 620 },
+            idp_activity: { x: 620, y: 430 },
+            improvement_project: { x: 620, y: 640 },
+            documents: { x: 340, y: 700 },
+            app_notifications: { x: 120, y: 820 },
+            status_log: { x: 870, y: 820 },
+            audit_activity: { x: 1150, y: 620 }
+        };
+
+        const TW = 200, ROW = 18, HDR = 26, PAD = 6;
+        function tableHeight(t) { return HDR + t.cols.length * ROW + PAD; }
+        function tableRect(id) {
+            const t = TABLES.find(x => x.id === id);
+            const pos = LAYOUT[id];
+            return { x: pos.x, y: pos.y, w: TW, h: tableHeight(t) };
+        }
+
+        let canvas, ctx, scale = 0.72, ox = 40, oy = 20, dragging = false, lastX, lastY, hovered = null;
+
+        function drawERD() {
+            canvas = document.getElementById('erd-canvas');
+            if (!canvas) return;
+            const wrap = document.getElementById('erd-canvas-wrap');
+            canvas.width = wrap.clientWidth || 1400;
+            canvas.height = 920;
+            ctx = canvas.getContext('2d');
+            render();
+
+            canvas.onmousedown = e => { dragging = true; lastX = e.clientX; lastY = e.clientY; };
+            canvas.onmouseup = () => dragging = false;
+            canvas.onmouseleave = () => dragging = false;
+            canvas.onmousemove = e => {
+                if (dragging) { ox += e.clientX - lastX; oy += e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; render(); return; }
+                const mx = (e.offsetX - ox) / scale, my = (e.offsetY - oy) / scale;
+                let h = null;
+                TABLES.forEach(t => { const r = tableRect(t.id); if (mx >= r.x && mx <= r.x + r.w && my >= r.y && my <= r.y + r.h) h = t.id; });
+                if (h !== hovered) { hovered = h; render(); }
+            };
+            canvas.onwheel = e => { e.preventDefault(); const f = e.deltaY < 0 ? 1.1 : 0.9; scale = Math.max(0.2, Math.min(3, scale * f)); render(); };
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(ox, oy);
+            ctx.scale(scale, scale);
+
+            // Draw edges
+            EDGES.forEach(([from, to]) => {
+                const a = tableRect(from), b = tableRect(to);
+                const isHigh = hovered && (hovered === from || hovered === to);
+                ctx.save();
+                ctx.strokeStyle = isHigh ? '#f59e0b' : 'rgba(148,163,184,0.5)';
+                ctx.lineWidth = isHigh ? 2.5 : 1.2;
+                ctx.setLineDash(from === to ? [6, 3] : []);
+                const ax = a.x + a.w / 2, ay = a.y + a.h / 2, bx = b.x + b.w / 2, by = b.y + b.h / 2;
+                // Find edge connection points
+                const [x1, y1] = edgePoint(a, bx, by);
+                const [x2, y2] = edgePoint(b, ax, ay);
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                const cpx = (x1 + x2) / 2, cpy = (y1 + y2) / 2 - 30;
+                if (from === to) { ctx.bezierCurveTo(x1 - 60, y1 - 60, x2 - 60, y2 - 60, x2, y2); }
+                else { ctx.bezierCurveTo(cpx, cpy, cpx, cpy, x2, y2); }
+                ctx.stroke();
+                // Arrow
+                drawArrow(x2, y2, x1, y1, isHigh ? '#f59e0b' : 'rgba(148,163,184,0.7)');
+                // FK label
+                if (isHigh) {
+                    ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 9px monospace';
+                    ctx.fillText('FK', (x1 + x2) / 2, (y1 + y2) / 2 - 4);
+                }
+                ctx.restore();
+            });
+
+            // Draw tables
+            TABLES.forEach(t => {
+                const pos = LAYOUT[t.id], h = tableHeight(t);
+                const isHov = hovered === t.id;
+                ctx.save();
+                // Shadow
+                ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = isHov ? 20 : 8;
+                // Box
+                ctx.fillStyle = '#1e293b';
+                roundRect(ctx, pos.x, pos.y, TW, h, 6);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // Border
+                ctx.strokeStyle = isHov ? '#f59e0b' : t.color;
+                ctx.lineWidth = isHov ? 2.5 : 1.5;
+                roundRect(ctx, pos.x, pos.y, TW, h, 6);
+                ctx.stroke();
+                // Header
+                ctx.fillStyle = t.color + (isHov ? '' : 'cc');
+                roundRectTop(ctx, pos.x, pos.y, TW, HDR, 6);
+                ctx.fill();
+                // Header text
+                ctx.fillStyle = '#fff'; ctx.font = 'bold 10px monospace';
+                ctx.fillText(t.label, pos.x + 8, pos.y + 17, TW - 16);
+                // Columns
+                t.cols.forEach((c, i) => {
+                    const cy = pos.y + HDR + i * ROW;
+                    if (i % 2 === 1) { ctx.fillStyle = 'rgba(255,255,255,0.03)'; ctx.fillRect(pos.x, cy, TW, ROW); }
+                    // badge
+                    if (c.k === 'PK') { ctx.fillStyle = '#fbbf24'; ctx.fillRect(pos.x + 5, cy + 3, 22, 12); ctx.fillStyle = '#1e1e2e'; ctx.font = 'bold 8px sans-serif'; ctx.fillText('PK', pos.x + 8, cy + 13); }
+                    else if (c.k === 'FK') { ctx.fillStyle = '#38bdf8'; ctx.fillRect(pos.x + 5, cy + 3, 22, 12); ctx.fillStyle = '#1e1e2e'; ctx.font = 'bold 8px sans-serif'; ctx.fillText('FK', pos.x + 8, cy + 13); }
+                    else { ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fillRect(pos.x + 5, cy + 3, 22, 12); }
+                    ctx.fillStyle = c.k === 'PK' ? '#fde68a' : c.k === 'FK' ? '#7dd3fc' : '#cbd5e1';
+                    ctx.font = c.k ? 'bold 9px monospace' : '9px monospace';
+                    ctx.fillText(c.n, pos.x + 32, cy + 13, TW - 36);
+                });
+                ctx.restore();
+            });
+            ctx.restore();
+        }
+
+        function edgePoint(r, tx, ty) {
+            const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+            const dx = tx - cx, dy = ty - cy;
+            if (Math.abs(dx) * r.h > Math.abs(dy) * r.w) {
+                return dx > 0 ? [r.x + r.w, cy] : [r.x, cy];
+            } else {
+                return dy > 0 ? [cx, r.y + r.h] : [cx, r.y];
+            }
+        }
+        function drawArrow(x, y, fx, fy, color) {
+            const angle = Math.atan2(y - fy, x - fx);
+            ctx.save(); ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - 10 * Math.cos(angle - 0.4), y - 10 * Math.sin(angle - 0.4));
+            ctx.lineTo(x - 10 * Math.cos(angle + 0.4), y - 10 * Math.sin(angle + 0.4));
+            ctx.closePath(); ctx.fill(); ctx.restore();
+        }
+        function roundRect(c, x, y, w, h, r) {
+            c.beginPath(); c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y); c.arcTo(x + w, y, x + w, y + r, r);
+            c.lineTo(x + w, y + h - r); c.arcTo(x + w, y + h, x + w - r, y + h, r);
+            c.lineTo(x + r, y + h); c.arcTo(x, y + h, x, y + h - r, r);
+            c.lineTo(x, y + r); c.arcTo(x, y, x + r, y, r); c.closePath();
+        }
+        function roundRectTop(c, x, y, w, h, r) {
+            c.beginPath(); c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y); c.arcTo(x + w, y, x + w, y + r, r);
+            c.lineTo(x + w, y + h); c.lineTo(x, y + h);
+            c.lineTo(x, y + r); c.arcTo(x, y, x + r, y, r); c.closePath();
+        }
+
+        window.addEventListener('load', drawERD);
+        window.addEventListener('resize', () => { if (document.getElementById('tab-diagram').style.display !== 'none') drawERD(); });
+    </script>
+</body>
+
+</html>

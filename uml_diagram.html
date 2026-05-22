@@ -1,0 +1,1692 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UML Diagram â€” Dashboard IDP</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+            font-size: 12px
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a237e;
+            font-size: 22px;
+            margin-bottom: 6px
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 12px;
+            font-size: 13px
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap
+        }
+
+        .tab-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 2px solid #3949ab;
+            background: #fff;
+            color: #3949ab;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all .2s
+        }
+
+        .tab-btn.active {
+            background: #3949ab;
+            color: #fff
+        }
+
+        .tab-pane {
+            display: none
+        }
+
+        .tab-pane.active {
+            display: block
+        }
+
+        /* USECASE */
+        .uc-wrap {
+            background: #1e1e2e;
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 640px;
+            overflow-x: auto;
+            border: 2px solid #3949ab
+        }
+
+        /* ACTIVITY */
+        .act-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px
+        }
+
+        .act-card {
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid #3949ab;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1)
+        }
+
+        .act-header {
+            background: #3949ab;
+            color: #fff;
+            font-weight: bold;
+            padding: 8px 12px;
+            font-size: 12px
+        }
+
+        .act-body {
+            padding: 10px;
+            display: flex;
+            justify-content: center
+        }
+
+        /* SEQUENCE */
+        .seq-wrap {
+            overflow-x: auto;
+            background: #1e1e2e;
+            border-radius: 12px;
+            border: 2px solid #3949ab;
+            padding: 16px
+        }
+
+        /* COMPONENT */
+        .comp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .comp-box {
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid #3949ab;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1)
+        }
+
+        .comp-header {
+            background: #1565c0;
+            color: #fff;
+            font-weight: bold;
+            padding: 8px 12px;
+            font-size: 12px
+        }
+
+        .comp-body {
+            padding: 10px 12px
+        }
+
+        .comp-item {
+            display: flex;
+            gap: 6px;
+            align-items: flex-start;
+            padding: 4px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 11px
+        }
+
+        .comp-item:last-child {
+            border-bottom: none
+        }
+
+        .badge-role {
+            display: inline-block;
+            border-radius: 3px;
+            padding: 1px 6px;
+            font-size: 9px;
+            font-weight: bold;
+            white-space: nowrap;
+            flex-shrink: 0
+        }
+
+        .role-talent {
+            background: #e8f5e9;
+            color: #1b5e20
+        }
+
+        .role-mentor {
+            background: #e3f2fd;
+            color: #0d47a1
+        }
+
+        .role-atasan {
+            background: #fff8e1;
+            color: #e65100
+        }
+
+        .role-panelis {
+            background: #fce4ec;
+            color: #880e4f
+        }
+
+        .role-finance {
+            background: #f3e5f5;
+            color: #4a148c
+        }
+
+        .role-admin {
+            background: #e8eaf6;
+            color: #1a237e
+        }
+
+        .hint {
+            text-align: center;
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 14px
+        }
+
+        .legend {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            align-items: center;
+            justify-content: center
+        }
+
+        .leg-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            color: #444
+        }
+
+        .leg-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            flex-shrink: 0
+        }
+
+        /* UML legend bar */
+        .uml-legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 14px;
+            align-items: center;
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px 16px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, .08)
+        }
+
+        .uml-leg {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #333;
+            font-weight: 600
+        }
+
+        /* swimlane label inside card */
+        .swim-row {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 3px;
+            width: 100%
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>UML Diagram - Dashboard IDP</h1>
+    <p class="subtitle">Use Case · Activity Diagram · Sequence Diagram · Component Diagram</p>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('usecase')">Use Case</button>
+        <button class="tab-btn" onclick="switchTab('activity')">Activity Diagram</button>
+        <button class="tab-btn" onclick="switchTab('taskflow')">Taskflow UX</button>
+        <button class="tab-btn" onclick="switchTab('userflow')">User Flow UX</button>
+        <button class="tab-btn" onclick="switchTab('sequence')">Sequence Diagram</button>
+        <button class="tab-btn" onclick="switchTab('component')">Component / Fitur</button>
+    </div>
+
+    <!-- ===================== USE CASE ===================== -->
+    <div id="tab-usecase" class="tab-pane active">
+        <p class="hint">Use Case Diagram - hubungan aktor dengan fitur sistem Dashboard IDP</p>
+        <div class="uc-wrap">
+            <svg id="uc-svg" width="100%" height="980" viewBox="0 0 1400 980"></svg>
+        </div>
+    </div>
+
+    <!-- ===================== ACTIVITY DIAGRAM ===================== -->
+    <div id="tab-activity" class="tab-pane">
+        <!-- Legenda simbol UML -->
+        <div class="uml-legend">
+            <div class="uml-leg">
+                <svg width="22" height="22">
+                    <circle cx="11" cy="11" r="10" fill="#1e293b" />
+                </svg>
+                Status Awal
+            </div>
+            <div class="uml-leg">
+                <svg width="54" height="24">
+                    <rect x="1" y="3" width="52" height="18" rx="5" fill="#f8fafc" stroke="#1e293b"
+                        stroke-width="1.5" />
+                </svg>
+                Aktivitas
+            </div>
+            <div class="uml-leg">
+                <svg width="46" height="34">
+                    <polygon points="23,1 45,17 23,33 1,17" fill="#fffbeb" stroke="#d97706" stroke-width="1.5" />
+                </svg>
+                Percabangan / Decision
+            </div>
+            <div class="uml-leg">
+                <svg width="54" height="14">
+                    <rect x="1" y="4" width="52" height="6" rx="2" fill="#1e293b" />
+                </svg>
+                Penggabungan / Join
+            </div>
+            <div class="uml-leg">
+                <svg width="22" height="22">
+                    <circle cx="11" cy="11" r="10" fill="none" stroke="#1e293b" stroke-width="2" />
+                    <circle cx="11" cy="11" r="6" fill="#1e293b" />
+                </svg>
+                Status Akhir
+            </div>
+            <div class="uml-leg">
+                <svg width="46" height="22">
+                    <rect x="1" y="1" width="44" height="20" fill="rgba(59,130,246,.07)" stroke="#3b82f6"
+                        stroke-width="1" stroke-dasharray="3,2" />
+                </svg>
+                Swimlane
+            </div>
+        </div>
+        <div class="act-grid" id="act-svgs"></div>
+    </div>
+
+    <!-- ===================== TASKFLOW DIAGRAM ===================== -->
+    <div id="tab-taskflow" class="tab-pane">
+        <p class="hint">Taskflow UX - Alur antar-muka (*User Interface*) tahap demi tahap berbasis flowchart standar
+        </p>
+        <!-- Legenda flowchart -->
+        <div class="uml-legend">
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <rect x="2" y="4" width="36" height="16" rx="8" fill="#eff6ff" stroke="#3b82f6"
+                        stroke-width="1.5" />
+                </svg> Terminator (Awal/Akhir)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <rect x="2" y="4" width="36" height="16" rx="2" fill="#f0fdf4" stroke="#22c55e"
+                        stroke-width="1.5" />
+                </svg> Process (Tindakan/Sistem)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <polygon points="8,4 38,4 32,20 2,20" fill="#fdf4ff" stroke="#d946ef" stroke-width="1.5" />
+                </svg> Data (Input/Form/Output)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <path d="M 2 4 L 38 4 L 38 18 Q 29 22 20 18 T 2 18 Z" fill="#fffbeb" stroke="#f59e0b"
+                        stroke-width="1.5" />
+                </svg> Document (Laporan/File)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="26">
+                    <polygon points="20,1 38,13 20,25 2,13" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5" />
+                </svg> Decision (Keputusan)
+            </div>
+        </div>
+        <div class="act-grid" id="tf-svgs"></div>
+    </div>
+
+    <!-- ===================== USERFLOW DIAGRAM ===================== -->
+    <div id="tab-userflow" class="tab-pane">
+        <p class="hint">User Flow UX - Perjalanan visual komprehensif interaksi pengguna dari hulu ke hilir
+            berdasarkan Role akunnya</p>
+        <!-- Legenda flowchart -->
+        <div class="uml-legend">
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <rect x="2" y="4" width="36" height="16" rx="8" fill="#eff6ff" stroke="#3b82f6"
+                        stroke-width="1.5" />
+                </svg> Terminator (Awal/Akhir)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <rect x="2" y="4" width="36" height="16" rx="2" fill="#f0fdf4" stroke="#22c55e"
+                        stroke-width="1.5" />
+                </svg> Process (Aktivitas Layar)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <polygon points="8,4 38,4 32,20 2,20" fill="#fdf4ff" stroke="#d946ef" stroke-width="1.5" />
+                </svg> Data (Input Form)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="24">
+                    <path d="M 2 4 L 38 4 L 38 18 Q 29 22 20 18 T 2 18 Z" fill="#fffbeb" stroke="#f59e0b"
+                        stroke-width="1.5" />
+                </svg> Document (Laporan File)
+            </div>
+            <div class="uml-leg">
+                <svg width="40" height="26">
+                    <polygon points="20,1 38,13 20,25 2,13" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5" />
+                </svg> Decision (Keputusan Status)
+            </div>
+        </div>
+        <div class="act-grid" id="uf-svgs"></div>
+        <h3 style="margin-left: 20px; font-size: 13px; margin-top: 30px; margin-bottom: 5px; color: #1e293b;">
+            Userflow UX: Tanggung Jawab Komprehensif PDC Admin
+        </h3>
+        <p style="margin-left: 20px; font-size: 11px; margin-top: 0px; margin-bottom: 10px; color: #64748b;">
+            Memuat keseluruhan rute perjalanan antarmuka dari 7 Modul yang tersedia secara berdampingan.
+        </p>
+        <div class="act-grid" id="uf-admin-svg" style="padding-top: 5px; margin-bottom: 40px; padding-bottom: 20px;">
+        </div>
+    </div>
+
+    <!-- ===================== SEQUENCE DIAGRAM ===================== -->
+    <div id="tab-sequence" class="tab-pane">
+        <p class="hint">Sequence Diagram - alur komunikasi antar komponen sistem</p>
+        <div class="seq-wrap">
+            <svg id="seq-svg" width="100%" height="900" viewBox="0 0 1280 900"></svg>
+        </div>
+    </div>
+
+    <!-- ===================== COMPONENT DIAGRAM ===================== -->
+    <div id="tab-component" class="tab-pane">
+        <p class="hint">Fitur &amp; Hak Akses per Role</p>
+        <div class="legend">
+            <div class="leg-item">
+                <div class="leg-dot" style="background:#e8f5e9"></div> Talent
+            </div>
+            <div class="leg-item">
+                <div class="leg-dot" style="background:#e3f2fd"></div> Mentor
+            </div>
+            <div class="leg-item">
+                <div class="leg-dot" style="background:#fff8e1"></div> Atasan
+            </div>
+            <div class="leg-item">
+                <div class="leg-dot" style="background:#fce4ec"></div> Panelis
+            </div>
+            <div class="leg-item">
+                <div class="leg-dot" style="background:#f3e5f5"></div> Finance
+            </div>
+            <div class="leg-item">
+                <div class="leg-dot" style="background:#e8eaf6"></div> PDC Admin
+            </div>
+        </div>
+        <div class="comp-grid">
+            <div class="comp-box">
+                <div class="comp-header">ðŸ” Modul Autentikasi &amp; Profil</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Login, verifikasi email, reset password,
+                        edit profil (foto, email)</div>
+                    <div class="comp-item"><span class="badge-role role-mentor">Mentor</span>Login, verifikasi email, reset password,
+                        edit profil</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Login, verifikasi email, reset password,
+                        edit profil</div>
+                    <div class="comp-item"><span class="badge-role role-panelis">Panelis</span>Login, verifikasi email, reset
+                        password, edit profil</div>
+                    <div class="comp-item"><span class="badge-role role-finance">Finance</span>Login, verifikasi email, reset
+                        password, edit profil</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Login, pilih role,
+                        manajemen session</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">ðŸ“Š Modul Dashboard &amp; Statistik</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Dashboard: status promosi,
+                        progress IDP, kompetensi, notifikasi</div>
+                    <div class="comp-item"><span class="badge-role role-mentor">Mentor</span>Dashboard: daftar mentee
+                        aktif, progress tiap mentee</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Dashboard: daftar bawahan,
+                        status assessment, progress</div>
+                    <div class="comp-item"><span class="badge-role role-panelis">Panelis</span>Dashboard: daftar talent
+                        yang perlu dinilai</div>
+                    <div class="comp-item"><span class="badge-role role-finance">Finance</span>Dashboard: daftar project
+                        improvement yang perlu direview</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Dashboard: overview
+                        seluruh talent, statistik sistem, progress global</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">ðŸ“‹ Modul Penilaian Kompetensi (Assessment)</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Isi self-assessment (skor
+                        per kompetensi via kuesioner)</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Nilai score_atasan per
+                        kompetensi, hitung gap_score</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Lihat hasil assessment
+                        semua talent, atur standar kompetensi per jabatan</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">ðŸ““ Modul IDP Logbook (Monitoring)</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Tambah/edit/hapus aktivitas
+                        logbook (Exposure, Mentoring, Learning), upload bukti file</div>
+                    <div class="comp-item"><span class="badge-role role-mentor">Mentor</span>Lihat &amp; verifikasi
+                        (Approve/Reject) logbook mentee</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Monitoring logbook,
+                        kompetensi, dan project bawahan</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Pantau logbook semua
+                        talent, lihat riwayat per talent</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">ðŸ—ï¸ Modul Improvement Project</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Upload proposal project
+                        (judul + file dokumen)</div>
+                    <div class="comp-item"><span class="badge-role role-mentor">Mentor</span>Melihat progress project
+                        sebagai bagian monitoring talent</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Melihat progress project
+                        bawahan pada halaman monitoring dan riwayat</div>
+                    <div class="comp-item"><span class="badge-role role-finance">Finance</span>Review aspek anggaran,
+                        beri finance_feedback, Approve/Reject</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Pantau status semua
+                        project, request validasi finance, lihat riwayat</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">âš–ï¸ Modul Panelis Assessment (Sidang Akhir)</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-panelis">Panelis</span>Lihat profil lengkap
+                        talent, isi skor sidang, komentar, rekomendasi (Ready Now / Ready 1-2Y / Not Ready)</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Assign panelis ke talent,
+                        ubah status ke Pending Panelis, lihat hasil penilaian panelis</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Lihat hasil penilaian
+                        panelis untuk bawahan</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">ðŸš€ Modul Promotion Plan &amp; Development Session</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Buat development_session
+                        (jabatan asalâ†’tujuan), buat promotion_plan, set mentor, set target waktu</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Ubah status: Draftâ†’In
+                        Progressâ†’Pending Panelisâ†’Approved/Rejectedâ†’Promoted/Not Promoted</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Lock/unlock progress
+                        talent (is_locked)</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Assign panelis dan
+                        menutup review panelis saat semua penilaian selesai</div>
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Lihat status promosi,
+                        target jabatan, mentor yang assign</div>
+                </div>
+            </div>
+            <div class="comp-box">
+                <div class="comp-header">ðŸ”” Modul Notifikasi &amp; Keamanan</div>
+                <div class="comp-body">
+                    <div class="comp-item"><span class="badge-role role-talent">Talent</span>Terima notifikasi: status
+                        IDP diapprove/reject, status project, hasil panelis</div>
+                    <div class="comp-item"><span class="badge-role role-mentor">Mentor</span>Terima notifikasi: IDP baru
+                        dari mentee, project baru</div>
+                    <div class="comp-item"><span class="badge-role role-atasan">Atasan</span>Terima notifikasi:
+                        assessment talent selesai, IDP baru</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Terima semua notifikasi
+                        aktivitas sistem</div>
+                    <div class="comp-item"><span class="badge-role role-admin">PDC Admin</span>Lihat audit_activity log
+                        (IP, event, waktu, user_agent)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ TAB SWITCHING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        function switchTab(name) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            event.target.classList.add('active');
+            if (name === 'usecase') drawUseCase();
+            if (name === 'sequence') drawSequence();
+        }
+
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ ACTIVITY DIAGRAM ENGINE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // Step types: S=Start, E=End, A=Activity, D=Decision, J=Join
+        // For D: {t:'D', txt, yes, no}  â€” yes=label down, no=label right (side branch text)
+        // For A: {t:'A', txt, lane}     â€” lane: color string for swimlane shade
+
+        const NS = 'http://www.w3.org/2000/svg';
+        let _mkId = 0;
+
+        function mkSVG(W, H) {
+            const svg = document.createElementNS(NS, 'svg');
+            svg.setAttribute('width', W); svg.setAttribute('height', H);
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            return svg;
+        }
+        function svgEl(svg, tag, attrs, txt) {
+            const e = document.createElementNS(NS, tag);
+            for (const k in attrs) e.setAttribute(k, attrs[k]);
+            if (txt !== undefined && txt !== null) e.textContent = txt;
+            svg.appendChild(e); return e;
+        }
+        function wrapLines(text, maxChars) {
+            const words = text.split(' '); let line = '', lines = [];
+            words.forEach(w => {
+                if ((line + w).length > maxChars) { if (line.trim()) lines.push(line.trim()); line = w + ' '; }
+                else line += w + ' ';
+            });
+            if (line.trim()) lines.push(line.trim());
+            return lines.length ? lines : [text];
+        }
+
+        function drawFlow(steps, title, laneColors) {
+            // Dimensions
+            const SVG_W = 300, CX = 150;
+            const BW = 230, BH = 32;      // activity box
+            const DW = 120, DH = 50;      // decision diamond
+            const SR = 12;               // start/end radius
+            const ARROW = 22;            // arrow height between elements
+            const SIDE_EXTRA = 22;       // extra height for side-branch text on decisions
+            const PAD_TOP = 12, PAD_BOT = 12;
+
+            // Pre-calculate total height
+            let totalH = PAD_TOP + PAD_BOT;
+            steps.forEach(s => {
+                if (s.t === 'S' || s.t === 'E') totalH += SR * 2 + ARROW;
+                else if (s.t === 'A') totalH += BH + ARROW;
+                else if (s.t === 'D') totalH += DH + (s.no ? SIDE_EXTRA : 0) + ARROW;
+                else if (s.t === 'J') totalH += 8 + ARROW;
+            });
+
+            const svg = mkSVG(SVG_W, totalH);
+            // Background
+            svgEl(svg, 'rect', { x: 0, y: 0, width: SVG_W, height: totalH, fill: '#ffffff' });
+
+            // Arrow marker
+            const markId = 'mk' + (_mkId++);
+            const defs = document.createElementNS(NS, 'defs');
+            const mk = document.createElementNS(NS, 'marker');
+            mk.setAttribute('id', markId); mk.setAttribute('markerWidth', '8'); mk.setAttribute('markerHeight', '8');
+            mk.setAttribute('refX', '7'); mk.setAttribute('refY', '3'); mk.setAttribute('orient', 'auto');
+            const mp = document.createElementNS(NS, 'path');
+            mp.setAttribute('d', 'M0,0 L0,6 L8,3 z'); mp.setAttribute('fill', '#334155');
+            mk.appendChild(mp); defs.appendChild(mk); svg.appendChild(defs);
+
+            function arrow(x1, y1, x2, y2, col) {
+                svgEl(svg, 'line', { x1, y1, x2, y2, stroke: col || '#334155', 'stroke-width': 1.5, 'marker-end': `url(#${markId})` });
+            }
+            function label(x, y, txt, col, anchor, size) {
+                svgEl(svg, 'text', { x, y, 'font-size': size || 8.5, fill: col || '#334155', 'text-anchor': anchor || 'middle', 'font-family': 'Segoe UI,sans-serif', 'dominant-baseline': 'middle' }, txt);
+            }
+            function multiline(x, y, txt, maxCh, colFill, size, lineH) {
+                const lines = wrapLines(txt, maxCh);
+                const lh = lineH || 12;
+                const startY = y - (lines.length - 1) * lh / 2;
+                lines.forEach((ln, i) => svgEl(svg, 'text', { x, y: startY + i * lh, 'font-size': size || 9.5, fill: colFill || '#1e293b', 'text-anchor': 'middle', 'font-family': 'Segoe UI,sans-serif', 'dominant-baseline': 'middle' }, ln));
+            }
+
+            let y = PAD_TOP;
+
+            steps.forEach((s, i) => {
+                const isLast = (i === steps.length - 1);
+
+                // Swimlane background band
+                if (s.lane && laneColors && laneColors[s.lane]) {
+                    svgEl(svg, 'rect', { x: 0, y: y, width: SVG_W, height: s.t === 'D' ? DH + (s.no ? SIDE_EXTRA : 0) : s.t === 'A' ? BH : SR * 2, fill: laneColors[s.lane] + '18', opacity: 1 });
+                }
+
+                if (s.t === 'S') {
+                    // â— Filled circle â€” Status Awal
+                    svgEl(svg, 'circle', { cx: CX, cy: y + SR, r: SR, fill: '#1e293b' });
+                    if (!isLast) arrow(CX, y + SR * 2, CX, y + SR * 2 + ARROW - 6);
+                    y += SR * 2 + ARROW;
+                }
+                else if (s.t === 'E') {
+                    // â—‰ Bullseye â€” Status Akhir
+                    svgEl(svg, 'circle', { cx: CX, cy: y + SR, r: SR, fill: 'none', stroke: '#1e293b', 'stroke-width': 2 });
+                    svgEl(svg, 'circle', { cx: CX, cy: y + SR, r: SR - 4, fill: '#1e293b' });
+                    y += SR * 2 + ARROW;
+                }
+                else if (s.t === 'A') {
+                    // â–¡ Rounded Rectangle â€” Aktivitas
+                    const laneCol = (s.lane && laneColors) ? laneColors[s.lane] : '#3949ab';
+                    svgEl(svg, 'rect', { x: CX - BW / 2, y: y, width: BW, height: BH, rx: 6, fill: '#f8fafc', stroke: laneCol || '#1e293b', 'stroke-width': 1.5 });
+                    // Lane indicator strip
+                    if (s.lane && laneColors) {
+                        svgEl(svg, 'rect', { x: CX - BW / 2, y: y, width: 5, height: BH, rx: 3, fill: laneColors[s.lane] });
+                    }
+                    multiline(CX + (s.lane ? 3 : 0), y + BH / 2, s.txt, 28, '#1e293b', 9, 11);
+                    if (!isLast) arrow(CX, y + BH, CX, y + BH + ARROW - 6);
+                    y += BH + ARROW;
+                }
+                else if (s.t === 'D') {
+                    // â—‡ Diamond â€” Percabangan/Decision
+                    const cy = y + DH / 2;
+                    svgEl(svg, 'polygon', { points: `${CX},${y} ${CX + DW / 2},${cy} ${CX},${y + DH} ${CX - DW / 2},${cy}`, fill: '#fffbeb', stroke: '#d97706', 'stroke-width': 1.5 });
+                    multiline(CX, cy, s.txt, 18, '#92400e', 8.5, 12);
+
+                    // Arrow down (YES path)
+                    const yesY = y + DH + (s.no ? SIDE_EXTRA : 0);
+                    arrow(CX, y + DH, CX, yesY + ARROW - 7, '#059669');
+                    label(CX + 5, y + DH + (s.no ? SIDE_EXTRA / 2 : 10), s.yes || 'Ya', '#059669', 'middle', 8);
+
+                    // NO side branch (right)
+                    if (s.no) {
+                        // Arrow right from diamond
+                        svgEl(svg, 'line', { x1: CX + DW / 2, y1: cy, x2: CX + DW / 2 + 16, y2: cy, stroke: '#b91c1c', 'stroke-width': 1.5, 'marker-end': `url(#${markId})` });
+                        // Side note text
+                        const noLines = wrapLines(s.no, 20);
+                        noLines.forEach((ln, li) => {
+                            svgEl(svg, 'text', { x: CX + DW / 2 + 20, y: cy + (li - (noLines.length - 1) / 2) * 11, 'font-size': 8, fill: '#b91c1c', 'font-family': 'Segoe UI,sans-serif', 'dominant-baseline': 'middle' }, ln);
+                        });
+                    }
+                    y += DH + (s.no ? SIDE_EXTRA : 0) + ARROW;
+                }
+                else if (s.t === 'J') {
+                    // â•â•â• Thick bar â€” Penggabungan/Join
+                    svgEl(svg, 'rect', { x: CX - 80, y: y + 2, width: 160, height: 6, rx: 2, fill: '#1e293b' });
+                    if (!isLast) arrow(CX, y + 8, CX, y + 8 + ARROW - 6);
+                    y += 8 + ARROW;
+                }
+            });
+            return svg;
+        }
+
+        // â”€â”€â”€ LANE COLOR PALETTE â”€â”€â”€
+        const LC = {
+            user: '#2563eb',
+            sistem: '#059669',
+            admin: '#1d4ed8',
+            mentor: '#2563eb',
+            atasan: '#d97706',
+            panelis: '#db2777',
+            finance: '#7c3aed',
+        };
+
+        // â”€â”€â”€ FLOW DEFINITIONS (9 diagrams) â”€â”€â”€
+        const FLOWS = [
+            {
+                title: 'Alur Autentikasi & Login',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Buka halaman login', lane: 'user' },
+                    { t: 'A', txt: 'Input username & password', lane: 'user' },
+                    { t: 'A', txt: 'Sistem validasi kredensial ke tabel users', lane: 'sistem' },
+                    { t: 'D', txt: 'Kredensial valid?', yes: 'Ya', no: 'Tidak â†’ Tampil error login' },
+                    { t: 'A', txt: 'Cek jumlah role user (tabel user_role)', lane: 'sistem' },
+                    { t: 'D', txt: 'Lebih dari 1 role?', yes: 'Ya â†’ Halaman Pilih Role', no: 'Tidak â†’ otomatis set role' },
+                    { t: 'J' },
+                    { t: 'A', txt: 'Redirect ke dashboard sesuai role', lane: 'sistem' },
+                    { t: 'A', txt: 'Notifikasi unread otomatis expand', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Talent: Submit IDP Logbook',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Talent buka halaman IDP Monitoring', lane: 'user' },
+                    { t: 'A', txt: 'Sistem cek is_locked di promotion_plan', lane: 'sistem' },
+                    { t: 'D', txt: 'Terkunci (is_locked)?', yes: 'Tidak', no: 'Ya â†’ Error, henti' },
+                    { t: 'A', txt: 'Cek development_session aktif (is_active=true)', lane: 'sistem' },
+                    { t: 'D', txt: 'Session aktif ada?', yes: 'Ya', no: 'Tidak â†’ Error, hub. Admin' },
+                    { t: 'A', txt: 'Pilih tipe: Exposure / Mentoring / Learning', lane: 'user' },
+                    { t: 'A', txt: 'Isi form (tema, tanggal, lokasi, deskripsi)', lane: 'user' },
+                    { t: 'A', txt: 'Upload dokumen bukti (maks 5 file, maks 5MB)', lane: 'user' },
+                    { t: 'A', txt: 'Simpan ke idp_activity (status=Pending)', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi ke Mentor & PDC Admin', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Talent: Self-Assessment Kompetensi',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Talent buka halaman Kompetensi', lane: 'user' },
+                    { t: 'A', txt: 'Sistem load daftar competencies & question', lane: 'sistem' },
+                    { t: 'A', txt: 'Tampilkan target level dari position_target_competence', lane: 'sistem' },
+                    { t: 'A', txt: 'Talent isi skor tiap kompetensi (0â€“5)', lane: 'user' },
+                    { t: 'A', txt: 'Non-aktifkan assessment session lama (is_active=false)', lane: 'sistem' },
+                    { t: 'A', txt: 'Buat baris baru di assessment_session', lane: 'sistem' },
+                    { t: 'A', txt: 'Batch insert ke detail_assessment (score_talent terisi, score_atasan=0)', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi ke Atasan & PDC Admin', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Mentor: Verifikasi Logbook IDP',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Mentor buka halaman Validasi Logbook', lane: 'mentor' },
+                    { t: 'A', txt: 'Sistem load idp_activity mentee (status=Pending)', lane: 'sistem' },
+                    { t: 'A', txt: 'Mentor review detail aktivitas & dokumen', lane: 'mentor' },
+                    { t: 'D', txt: 'Keputusan Mentor?', yes: 'Approve', no: 'Reject â†’ update Rejected + notif' },
+                    { t: 'A', txt: 'Update status idp_activity â†’ Approved', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi ke Talent & PDC Admin', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Atasan: Nilai Kompetensi Talent',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Atasan buka dashboard â†’ pilih talent', lane: 'atasan' },
+                    { t: 'A', txt: 'Sistem load assessment_session aktif talent', lane: 'sistem' },
+                    { t: 'A', txt: 'Tampilkan detail_assessment (self-score talent sudah terisi)', lane: 'sistem' },
+                    { t: 'A', txt: 'Atasan isi score_atasan per kompetensi', lane: 'atasan' },
+                    { t: 'A', txt: 'Hitung gap_score = score_atasan - score_talent', lane: 'sistem' },
+                    { t: 'A', txt: 'Update detail_assessment (score_atasan, gap_score)', lane: 'sistem' },
+                    { t: 'A', txt: 'Sistem identifikasi 3 kompetensi gap terbesar', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi ke Talent & PDC Admin', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: Progress Talent',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu Progress Talent', lane: 'admin' },
+                    { t: 'A', txt: 'Pilih Talent dan klik "Buat Promotion Plan"', lane: 'admin' },
+                    { t: 'A', txt: 'Input target Jabatan dan pilih Mentor', lane: 'admin' },
+                    { t: 'A', txt: 'Simpan promotion_plan dengan status Draft', lane: 'sistem' },
+                    { t: 'A', txt: 'Admin mengubah status menjadi In Progress', lane: 'admin' },
+                    { t: 'A', txt: 'Akses fitur logbook & assessment terbuka bagi Talent', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: Kompetensi',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu Kompetensi', lane: 'admin' },
+                    { t: 'A', txt: 'Sistem menampilkan daftar bank kompetensi', lane: 'sistem' },
+                    { t: 'A', txt: 'Input target nilai standar (1-5) untuk tiap Jabatan', lane: 'admin' },
+                    { t: 'A', txt: 'Simpan profil position_target_competence', lane: 'sistem' },
+                    { t: 'A', txt: 'Digunakan sebagai basis hitung gap score saat assessment', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: Company Management',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu Company Management', lane: 'admin' },
+                    { t: 'A', txt: 'Tampilkan hirarki struktur organisasi dari database', lane: 'sistem' },
+                    { t: 'A', txt: 'Admin tambah/edit Master Data Department', lane: 'admin' },
+                    { t: 'A', txt: 'Admin tambah/edit Master Data Position', lane: 'admin' },
+                    { t: 'A', txt: 'Simpan ke tabel departments & positions', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Panelis: Sidang Akhir',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Panelis login â†’ lihat daftar talent yang perlu dinilai', lane: 'panelis' },
+                    { t: 'A', txt: 'Sistem load data talent (assessment, IDP, project)', lane: 'sistem' },
+                    { t: 'A', txt: 'Review data lengkap talent', lane: 'panelis' },
+                    { t: 'A', txt: 'Isi panelis_score, panelis_scores_json, komentar', lane: 'panelis' },
+                    { t: 'A', txt: 'Isi rekomendasi: Ready Now / Ready 1-2Y / Not Ready', lane: 'panelis' },
+                    { t: 'A', txt: 'Simpan ke panelis_assessments', lane: 'sistem' },
+                    { t: 'A', txt: 'Update promotion_plan.status_promotion â†’ Approved/Rejected Panelis', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi ke Talent & PDC Admin', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Finance: Review Improvement Project',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Finance login â†’ lihat daftar improvement_project', lane: 'finance' },
+                    { t: 'A', txt: 'Buka & download dokumen proyek talent', lane: 'finance' },
+                    { t: 'A', txt: 'Isi finance_feedback (catatan aspek anggaran)', lane: 'finance' },
+                    { t: 'D', txt: 'Keputusan Finance?', yes: 'Setujui', no: 'Tolak â†’ update Rejected + notif' },
+                    { t: 'A', txt: 'Update status project â†’ Verified', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi ke Talent & PDC Admin', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur Reset Password',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'User klik "Lupa Password" â†’ isi email', lane: 'user' },
+                    { t: 'A', txt: 'Sistem cek email di tabel users', lane: 'sistem' },
+                    { t: 'D', txt: 'Email ditemukan?', yes: 'Ya', no: 'Tidak â†’ tampil error' },
+                    { t: 'A', txt: 'Generate token hash â†’ simpan di password_resets (expires_at, is_used=false)', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim email berisi link reset', lane: 'sistem' },
+                    { t: 'A', txt: 'User klik link â†’ buka form password baru', lane: 'user' },
+                    { t: 'A', txt: 'Validasi token: ada, belum kedaluarsa, is_used=false', lane: 'sistem' },
+                    { t: 'D', txt: 'Token valid?', yes: 'Ya', no: 'Tidak â†’ Error, minta ulang' },
+                    { t: 'A', txt: 'Update password user â†’ tandai token is_used=true', lane: 'sistem' },
+                    { t: 'A', txt: 'Catat di audit_activity: event=password_reset', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: User Management',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu User Management', lane: 'admin' },
+                    { t: 'A', txt: 'Pilih "Tambah User" atau "Edit Role"', lane: 'admin' },
+                    { t: 'A', txt: 'Tampilkan modal form (department, position, select role)', lane: 'sistem' },
+                    { t: 'A', txt: 'Sembunyikan filter jabatan opsional jika role=Finance/Admin', lane: 'sistem' },
+                    { t: 'A', txt: 'Admin input data dan klik Simpan perubahan', lane: 'admin' },
+                    { t: 'A', txt: 'Sinkronisasi ke tabel users & tabel pivot user_role', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: Finance Validation',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu Finance Validation', lane: 'admin' },
+                    { t: 'A', txt: 'Sistem load riwayat project yang telah direview', lane: 'sistem' },
+                    { t: 'A', txt: 'Admin memantau status validasi anggaran dari Finance', lane: 'admin' },
+                    { t: 'D', txt: 'Project Approved Finance?', yes: 'Ya', no: 'Tidak â†’ Talent revisi' },
+                    { t: 'A', txt: 'Progress promosi siap dilanjutkan ke tahapan Panelis', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: Panelis Review',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu Panelis Review', lane: 'admin' },
+                    { t: 'A', txt: 'Pilih Talent yang memenuhi syarat akhir', lane: 'admin' },
+                    { t: 'A', txt: 'Klik Assign Panelis lalu input nama-nama penguji', lane: 'admin' },
+                    { t: 'A', txt: 'Ubah status promotion_plan menjadi Pending Panelis', lane: 'sistem' },
+                    { t: 'A', txt: 'Kirim notifikasi tugas assessment kepada Panelis', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            },
+            {
+                title: 'Alur PDC Admin: Progress Archive',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'Admin buka menu Progress Archive', lane: 'admin' },
+                    { t: 'A', txt: 'Sistem meload riwayat promotion_plan (status=Finished)', lane: 'sistem' },
+                    { t: 'A', txt: 'Admin melihat histori riwayat detail pencapaian', lane: 'admin' },
+                    { t: 'A', txt: 'Melakukan eksport laporan akhir berformat PDF/Excel', lane: 'admin' },
+                    { t: 'A', txt: 'Akses data dienkripsi as-is (is_locked = true)', lane: 'sistem' },
+                    { t: 'E' },
+                ]
+            }
+        ];
+
+        function renderActivityDiagrams() {
+            const container = document.getElementById('act-svgs');
+            container.innerHTML = '';
+            FLOWS.forEach(flow => {
+                const card = document.createElement('div');
+                card.className = 'act-card';
+                const header = document.createElement('div');
+                header.className = 'act-header';
+                header.textContent = flow.title;
+                card.appendChild(header);
+                const body = document.createElement('div');
+                body.className = 'act-body';
+                // Draw swimlane legend inside card
+                const lanedSteps = flow.steps.filter(s => s.lane);
+                const usedLanes = [...new Set(lanedSteps.map(s => s.lane))];
+                if (usedLanes.length > 0) {
+                    const laneBar = document.createElement('div');
+                    laneBar.style.cssText = 'display:flex;gap:4px;flex-wrap:wrap;padding:4px 6px 0;width:100%;justify-content:center;margin-bottom:2px';
+                    usedLanes.forEach(ln => {
+                        const chip = document.createElement('span');
+                        chip.style.cssText = `background:${LC[ln]};color:#fff;font-size:8px;font-weight:700;padding:1px 7px;border-radius:10px;letter-spacing:.4px`;
+                        chip.textContent = ln.toUpperCase();
+                        laneBar.appendChild(chip);
+                    });
+                    card.appendChild(laneBar);
+                }
+                const svgEl = drawFlow(flow.steps, flow.title, LC);
+                body.appendChild(svgEl);
+                card.appendChild(body);
+                container.appendChild(card);
+            });
+        }
+
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ USE CASE DIAGRAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        function drawUseCase() {
+            const svg = document.getElementById('uc-svg');
+            svg.innerHTML = '';
+
+            const NS = 'http://www.w3.org/2000/svg';
+            const UC_W = 100, UC_H = 22;
+
+            function el(tag, attrs, txt) {
+                const e = document.createElementNS(NS, tag);
+                for (const k in attrs) e.setAttribute(k, attrs[k]);
+                if (txt !== undefined && txt !== null) e.textContent = txt;
+                svg.appendChild(e);
+                return e;
+            }
+
+            function text(x, y, t, size, color, anchor) {
+                el('text', {
+                    x,
+                    y,
+                    'font-size': size || 11,
+                    fill: color || '#fff',
+                    'text-anchor': anchor || 'middle',
+                    'dominant-baseline': 'middle'
+                }, t);
+            }
+
+            function handleHover(e) {
+                const actId = e.currentTarget.getAttribute('data-id');
+                const orange = '#f97316';
+                e.currentTarget.querySelectorAll('.act-shape').forEach(node => {
+                    if (node.tagName === 'circle') node.setAttribute('fill', orange);
+                    else node.setAttribute('stroke', orange);
+                });
+                e.currentTarget.querySelectorAll('.act-text').forEach(node => node.setAttribute('fill', orange));
+
+                const linkedUcs = new Set();
+                svg.querySelectorAll(`line[data-act="${actId}"]`).forEach(ln => {
+                    ln.setAttribute('stroke', orange);
+                    ln.setAttribute('stroke-width', 2);
+                    const ucId = ln.getAttribute('data-uc');
+                    if (ucId) linkedUcs.add(ucId);
+                });
+
+                linkedUcs.forEach(ucId => {
+                    const ucNode = svg.querySelector(`#uc-${ucId}`);
+                    if (!ucNode) return;
+                    ucNode.querySelectorAll('.uc-shape').forEach(s => s.setAttribute('stroke', orange));
+                    ucNode.querySelectorAll('.uc-text').forEach(t => t.setAttribute('fill', orange));
+                });
+            }
+
+            function handleLeave(e) {
+                const actId = e.currentTarget.getAttribute('data-id');
+                e.currentTarget.querySelectorAll('.act-shape').forEach(node => {
+                    if (node.tagName === 'circle') node.setAttribute('fill', node.getAttribute('data-orig'));
+                    else node.setAttribute('stroke', '#fff');
+                });
+                e.currentTarget.querySelectorAll('.act-text').forEach(node => node.setAttribute('fill', node.getAttribute('data-orig')));
+
+                const linkedUcs = new Set();
+                svg.querySelectorAll(`line[data-act="${actId}"]`).forEach(ln => {
+                    ln.setAttribute('stroke', ln.getAttribute('data-orig-stroke'));
+                    ln.setAttribute('stroke-width', 1.2);
+                    const ucId = ln.getAttribute('data-uc');
+                    if (ucId) linkedUcs.add(ucId);
+                });
+
+                linkedUcs.forEach(ucId => {
+                    const ucNode = svg.querySelector(`#uc-${ucId}`);
+                    if (!ucNode) return;
+                    ucNode.querySelectorAll('.uc-shape').forEach(s => s.setAttribute('stroke', s.getAttribute('data-orig')));
+                    ucNode.querySelectorAll('.uc-text').forEach(t => t.setAttribute('fill', t.getAttribute('data-orig')));
+                });
+            }
+
+            function actor(act, label, color) {
+                const g = el('g', { class: 'actor-group', 'data-id': act.id, style: 'cursor:pointer; transition: all 0.2s;' });
+                g.addEventListener('mouseenter', handleHover);
+                g.addEventListener('mouseleave', handleLeave);
+
+                function gel(tag, attrs, txt) {
+                    const node = document.createElementNS(NS, tag);
+                    for (const k in attrs) node.setAttribute(k, attrs[k]);
+                    if (txt) node.textContent = txt;
+                    g.appendChild(node);
+                }
+
+                gel('circle', { cx: act.x, cy: act.y - 30, r: 14, fill: color, stroke: '#fff', 'stroke-width': 2, class: 'act-shape', 'data-orig': color });
+                gel('line', { x1: act.x, y1: act.y - 16, x2: act.x, y2: act.y + 10, stroke: '#fff', 'stroke-width': 2, class: 'act-shape' });
+                gel('line', { x1: act.x - 16, y1: act.y - 5, x2: act.x + 16, y2: act.y - 5, stroke: '#fff', 'stroke-width': 2, class: 'act-shape' });
+                gel('line', { x1: act.x, y1: act.y + 10, x2: act.x - 12, y2: act.y + 30, stroke: '#fff', 'stroke-width': 2, class: 'act-shape' });
+                gel('line', { x1: act.x, y1: act.y + 10, x2: act.x + 12, y2: act.y + 30, stroke: '#fff', 'stroke-width': 2, class: 'act-shape' });
+                gel('text', { x: act.x, y: act.y + 48, 'font-size': 11, fill: color, 'text-anchor': 'middle', 'dominant-baseline': 'middle', class: 'act-text', 'data-orig': color }, label);
+            }
+
+            function usecase(node, color) {
+                const g = el('g', { id: `uc-${node.id}`, class: 'uc-group' });
+                function gel(tag, attrs, txt) {
+                    const item = document.createElementNS(NS, tag);
+                    for (const k in attrs) item.setAttribute(k, attrs[k]);
+                    if (txt) item.textContent = txt;
+                    g.appendChild(item);
+                }
+
+                gel('ellipse', { cx: node.x, cy: node.y, rx: UC_W, ry: UC_H, fill: '#1e293b', stroke: color, 'stroke-width': 1.5, class: 'uc-shape', 'data-orig': color });
+                const lines = node.t.split('\n');
+                lines.forEach((ln, i) => {
+                    gel('text', {
+                        x: node.x,
+                        y: (node.y - (lines.length - 1) * 7.5) + (i * 15),
+                        'font-size': 9.5,
+                        fill: '#e2e8f0',
+                        'text-anchor': 'middle',
+                        'dominant-baseline': 'middle',
+                        class: 'uc-text',
+                        'data-orig': '#e2e8f0'
+                    }, ln);
+                });
+            }
+
+            function linkActor(act, node) {
+                el('line', {
+                    x1: act.x,
+                    y1: act.y,
+                    x2: node.x,
+                    y2: node.y,
+                    stroke: 'rgba(148,163,184,0.25)',
+                    'stroke-width': 1.2,
+                    'stroke-dasharray': 'none',
+                    class: 'ac-line',
+                    'data-act': act.id,
+                    'data-uc': node.id,
+                    'data-orig-stroke': 'rgba(148,163,184,0.25)'
+                });
+            }
+
+            const defs = el('defs', {});
+            const mkUc = el('marker', { id: 'arr-uc', markerWidth: '10', markerHeight: '10', refX: '9', refY: '5', orient: 'auto' });
+            const pUc = el('path', { d: 'M0,0 L10,5 L0,10 z', fill: '#cbd5e1', stroke: '#cbd5e1', 'stroke-width': '1' });
+            mkUc.appendChild(pUc);
+            defs.appendChild(mkUc);
+
+            function ellipseP(cx, cy, a) {
+                const ex = UC_W * UC_H / Math.sqrt(Math.pow(UC_H * Math.cos(a), 2) + Math.pow(UC_W * Math.sin(a), 2));
+                return { x: cx + ex * Math.cos(a), y: cy + ex * Math.sin(a) };
+            }
+
+            // UML dependency direction:
+            // - include: base use case  -> included use case
+            // - extend : extension case -> base use case
+            function relation(n1, n2, type) {
+                const angle = Math.atan2(n2.y - n1.y, n2.x - n1.x);
+                const p1 = ellipseP(n1.x, n1.y, angle);
+                const p2 = ellipseP(n2.x, n2.y, angle + Math.PI);
+                el('line', {
+                    x1: p1.x,
+                    y1: p1.y,
+                    x2: p2.x,
+                    y2: p2.y,
+                    stroke: '#94a3b8',
+                    'stroke-width': 1.2,
+                    'stroke-dasharray': '5,4',
+                    'marker-end': 'url(#arr-uc)'
+                });
+                const mx = (p1.x + p2.x) / 2;
+                const my = (p1.y + p2.y) / 2;
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const len = Math.sqrt((dx * dx) + (dy * dy)) || 1;
+                const nx = -dy / len;
+                const ny = dx / len;
+                const bias = type === 'include' ? -16 : 16;
+                const lx = mx + (nx * bias);
+                const ly = my + (ny * bias);
+                const label = type === 'include' ? '<<include>>' : '<<extend>>';
+                const boxW = type === 'include' ? 70 : 66;
+                el('rect', { x: lx - (boxW / 2), y: ly - 9, width: boxW, height: 18, rx: 3, fill: '#1e293b' });
+                text(lx, ly + 1, label, 10, '#cbd5e1', 'middle');
+            }
+
+            el('rect', { x: 180, y: 15, width: 1040, height: 900, rx: 10, fill: 'rgba(255,255,255,0.02)', stroke: 'rgba(148,163,184,0.3)', 'stroke-width': 1.5, 'stroke-dasharray': '6,4' });
+            text(700, 33, '<< System >> Dashboard IDP - Enterprise Talent & Competency System', 11, 'rgba(148,163,184,0.7)', 'middle');
+
+            const A = {
+                Gst: { id: 'Gst', x: 60, y: 80 },
+                Tal: { id: 'Tal', x: 60, y: 180 },
+                Men: { id: 'Men', x: 60, y: 340 },
+                Ats: { id: 'Ats', x: 60, y: 500 },
+                Pan: { id: 'Pan', x: 60, y: 690 },
+                Fin: { id: 'Fin', x: 1340, y: 300 },
+                Adm: { id: 'Adm', x: 1340, y: 640 }
+            };
+
+            const U_Reg = { id: 'Reg', x: 320, y: 50, t: 'Registrasi\nAkun' };
+            const U_Log = { id: 'Log', x: 320, y: 90, t: 'Login' };
+            const U_Rst = { id: 'Rst', x: 320, y: 160, t: 'Reset Password' };
+            const U_Prf = { id: 'Prf', x: 320, y: 230, t: 'Update Profil' };
+            const U_Not = { id: 'Not', x: 320, y: 300, t: 'Lihat Notifikasi' };
+
+            const U_Ver = { id: 'Ver', x: 560, y: 50, t: 'Verifikasi\nEmail' };
+            const U_Cmp = { id: 'Cmp', x: 560, y: 110, t: 'Self-Assessment\nKompetensi' };
+            const U_Logb = { id: 'Logb', x: 560, y: 170, t: 'Kelola IDP\nLogbook' };
+            const U_Prj = { id: 'Prj', x: 560, y: 240, t: 'Upload Improvement\nProject' };
+            const U_Sts = { id: 'Sts', x: 560, y: 310, t: 'Lihat Status\nPromosi' };
+            const U_Riwt = { id: 'Riwt', x: 560, y: 380, t: 'Lihat Riwayat\nPribadi' };
+
+            const U_Doc = { id: 'Doc', x: 790, y: 140, t: 'Upload Dokumen\nBukti' };
+            const U_VLog = { id: 'VLog', x: 790, y: 230, t: 'Verifikasi\nLogbook IDP' };
+            const U_Mon = { id: 'Mon', x: 790, y: 320, t: 'Monitoring\nTalent' };
+            const U_Riw = { id: 'Riw', x: 790, y: 410, t: 'Lihat Riwayat\nTalent' };
+            const U_NKm = { id: 'NKm', x: 790, y: 500, t: 'Nilai Kompetensi\nTalent' };
+
+            const U_Dtl = { id: 'Dtl', x: 790, y: 650, t: 'Review Detail\nTalent' };
+            const U_Sdg = { id: 'Sdg', x: 790, y: 730, t: 'Isi Penilaian\nPanelis' };
+            const U_Rkm = { id: 'Rkm', x: 790, y: 810, t: 'Isi Rekomendasi\nPromosi' };
+
+            const U_FReq = { id: 'FReq', x: 1030, y: 210, t: 'Lihat Permintaan\nValidasi Finance' };
+            const U_RAng = { id: 'RAng', x: 1030, y: 290, t: 'Beri Keputusan\nFinance' };
+            const U_FFbk = { id: 'FFbk', x: 1030, y: 370, t: 'Isi Finance\nFeedback' };
+            const U_FRiw = { id: 'FRiw', x: 1030, y: 450, t: 'Lihat Riwayat\nValidasi Finance' };
+
+            const U_Ptg = { id: 'Ptg', x: 1030, y: 570, t: 'Kelola Progress\nTalent' };
+            const U_Dvp = { id: 'Dvp', x: 1030, y: 640, t: 'Kelola Development\nPlan' };
+            const U_FinReq = { id: 'FinReq', x: 1030, y: 710, t: 'Request Validasi\nFinance' };
+            const U_PanAsg = { id: 'PanAsg', x: 1030, y: 780, t: 'Assign / Complete\nPanelis Review' };
+            const U_Lck = { id: 'Lck', x: 1030, y: 850, t: 'Kunci / Buka\nProgress' };
+
+            const U_Cpy = { id: 'Cpy', x: 1180, y: 570, t: 'Company\nManagement' };
+            const U_Dep = { id: 'Dep', x: 1180, y: 640, t: 'Department\nManagement' };
+            const U_Usr = { id: 'Usr', x: 1180, y: 710, t: 'User\nManagement' };
+            const U_KmpA = { id: 'KmpA', x: 1180, y: 780, t: 'Kelola Kompetensi\n& Target' };
+            const U_Arc = { id: 'Arc', x: 1180, y: 850, t: 'Akses Progress\nArchive' };
+
+            linkActor(A.Gst, U_Reg);
+            linkActor(A.Gst, U_Log);
+
+            [A.Tal, A.Men, A.Ats, A.Pan, A.Fin, A.Adm].forEach(a => {
+                linkActor(a, U_Log);
+                linkActor(a, U_Prf);
+                linkActor(a, U_Not);
+            });
+
+            linkActor(A.Tal, U_Cmp);
+            linkActor(A.Tal, U_Logb);
+            linkActor(A.Tal, U_Prj);
+            linkActor(A.Tal, U_Sts);
+            linkActor(A.Tal, U_Riwt);
+
+            linkActor(A.Men, U_VLog);
+            linkActor(A.Men, U_Riw);
+
+            linkActor(A.Ats, U_Mon);
+            linkActor(A.Ats, U_Riw);
+            linkActor(A.Ats, U_NKm);
+
+            linkActor(A.Pan, U_Dtl);
+            linkActor(A.Pan, U_Sdg);
+            linkActor(A.Pan, U_Rkm);
+
+            linkActor(A.Fin, U_FReq);
+            linkActor(A.Fin, U_RAng);
+            linkActor(A.Fin, U_FRiw);
+
+            [U_Ptg, U_Dvp, U_FinReq, U_PanAsg, U_Lck, U_Cpy, U_Dep, U_Usr, U_KmpA, U_Arc].forEach(u => linkActor(A.Adm, u));
+
+            // include = langkah wajib yang selalu dipanggil oleh use case utama
+            relation(U_Reg, U_Ver, 'include');
+            relation(U_Logb, U_Doc, 'include');
+            relation(U_Prj, U_Doc, 'include');
+            relation(U_Sdg, U_Rkm, 'include');
+
+            // extend = perilaku tambahan/opsional yang memperluas use case utama
+            relation(U_FFbk, U_RAng, 'extend');
+
+            const colAuth = '#38bdf8';
+            const colTalent = '#10b981';
+            const colSuperior = '#f59e0b';
+            const colPanelis = '#ec4899';
+            const colFinance = '#8b5cf6';
+            const colAdmin = '#3b82f6';
+
+            [U_Reg, U_Log, U_Rst, U_Prf, U_Not].forEach(u => usecase(u, colAuth));
+            [U_Ver, U_Cmp, U_Logb, U_Prj, U_Sts, U_Riwt].forEach(u => usecase(u, colTalent));
+            [U_Doc, U_VLog, U_Mon, U_Riw, U_NKm].forEach(u => usecase(u, colSuperior));
+            [U_Dtl, U_Sdg, U_Rkm].forEach(u => usecase(u, colPanelis));
+            [U_FReq, U_RAng, U_FFbk, U_FRiw].forEach(u => usecase(u, colFinance));
+            [U_Ptg, U_Dvp, U_FinReq, U_PanAsg, U_Lck, U_Cpy, U_Dep, U_Usr, U_KmpA, U_Arc].forEach(u => usecase(u, colAdmin));
+
+            actor(A.Gst, 'Guest', '#475569');
+            actor(A.Tal, 'Talent', '#059669');
+            actor(A.Men, 'Mentor', '#2563eb');
+            actor(A.Ats, 'Atasan', '#d97706');
+            actor(A.Pan, 'Panelis', '#db2777');
+            actor(A.Fin, 'Finance', '#7c3aed');
+            actor(A.Adm, 'PDC Admin', '#1d4ed8');
+        }
+
+        function drawSequence() {
+            const svg = document.getElementById('seq-svg');
+            svg.innerHTML = '';
+            const H = 900;
+            function el(tag, attrs, txt) {
+                const e = document.createElementNS(NS, tag);
+                for (const k in attrs) e.setAttribute(k, attrs[k]);
+                if (txt) e.textContent = txt;
+                svg.appendChild(e); return e;
+            }
+            const actors = [
+                { label: 'Talent', x: 80, color: '#059669' }, { label: 'Browser\n/ UI', x: 200, color: '#64748b' },
+                { label: 'Laravel\nRouter', x: 330, color: '#7c3aed' }, { label: 'Controller', x: 470, color: '#1d4ed8' },
+                { label: 'Model /\nDatabase', x: 610, color: '#b45309' }, { label: 'Mentor /\nAtasan', x: 760, color: '#2563eb' },
+                { label: 'Panelis', x: 900, color: '#db2777' }, { label: 'PDC\nAdmin', x: 1040, color: '#1d4ed8' },
+                { label: 'Notif\nService', x: 1165, color: '#c62828' },
+            ];
+            actors.forEach(a => {
+                el('rect', { x: a.x - 45, y: 8, width: 90, height: 36, rx: 6, fill: a.color, stroke: '#fff', 'stroke-width': 1.5 });
+                (a.label || '').split('\n').forEach((ln, i) => el('text', { x: a.x, y: 18 + (i * 13), 'font-size': 9, 'font-weight': 'bold', fill: '#fff', 'text-anchor': 'middle', 'dominant-baseline': 'middle' }, ln));
+                el('line', { x1: a.x, y1: 44, x2: a.x, y2: H - 10, stroke: 'rgba(148,163,184,0.3)', 'stroke-width': 1, 'stroke-dasharray': '4,4' });
+            });
+            let y = 70; const msgH = 28;
+            const defs = el('defs', {});
+            const mk = document.createElementNS(NS, 'marker');
+            mk.setAttribute('id', 'arr'); mk.setAttribute('markerWidth', '6'); mk.setAttribute('markerHeight', '6');
+            mk.setAttribute('refX', '5'); mk.setAttribute('refY', '3'); mk.setAttribute('orient', 'auto');
+            const p2 = document.createElementNS(NS, 'path');
+            p2.setAttribute('d', 'M0,0 L0,6 L6,3 z'); p2.setAttribute('fill', '#38bdf8');
+            mk.appendChild(p2); svg.appendChild(mk);
+            function msg(fI, tI, lbl, type) {
+                const from = actors[fI].x, to = actors[tI].x, yLine = y + msgH / 2;
+                const col = type === 'return' ? 'rgba(148,163,184,0.5)' : '#38bdf8';
+                const dash = type === 'return' ? '5,3' : 'none';
+                el('line', { x1: from, y1: yLine, x2: to, y2: yLine, stroke: col, 'stroke-width': 1.5, 'stroke-dasharray': dash, 'marker-end': 'url(#arr)' });
+                el('text', { x: (from + to) / 2, y: yLine - 5, 'font-size': 9, fill: '#94a3b8', 'text-anchor': 'middle' }, lbl);
+                y += msgH;
+            }
+            function note(txt) {
+                el('rect', { x: 15, y: y, width: 1250, height: 16, rx: 3, fill: 'rgba(255,255,255,0.04)', stroke: 'rgba(148,163,184,0.2)', 'stroke-width': 1 });
+                el('text', { x: 30, y: y + 8, 'font-size': 9, fill: 'rgba(148,163,184,0.7)', 'dominant-baseline': 'middle' }, txt);
+                y += 17;
+            }
+            note('â”€â”€ ALUR 1: LOGIN & ROUTING â”€â”€'); y += 4;
+            msg(0, 1, 'Buka URL / Isi Form Login'); msg(1, 2, 'POST /login (username, password)');
+            msg(2, 3, 'AuthenticatedSessionController'); msg(3, 4, 'Validasi user di tabel users');
+            msg(4, 3, 'User found + password match', 'return'); msg(3, 4, 'Cek user_role (multi-role?)');
+            msg(4, 3, 'Jumlah role user', 'return'); msg(3, 1, 'Redirect: /role/select atau /dashboard', 'return');
+            msg(1, 0, 'Tampil Dashboard sesuai role', 'return');
+            y += 8; note('â”€â”€ ALUR 2: TALENT SUBMIT IDP LOGBOOK â”€â”€'); y += 4;
+            msg(0, 1, 'Buka form IDP Logbook + isi data + upload file');
+            msg(1, 2, 'POST /talent/idp-monitoring/{tab}');
+            msg(2, 3, 'TalentDashboardController@storeIdpMonitoring');
+            msg(3, 4, 'Cek is_locked & development_session aktif');
+            msg(4, 3, 'Session aktif ditemukan', 'return');
+            msg(3, 4, 'Simpan idp_activity (status=Pending)');
+            msg(3, 8, 'Notifikasi â†’ Mentor & PDC Admin');
+            msg(1, 0, 'Redirect dashboard + pesan sukses', 'return');
+            y += 8; note('â”€â”€ ALUR 3: MENTOR VERIFIKASI LOGBOOK â”€â”€'); y += 4;
+            msg(5, 1, 'Buka halaman Validasi Logbook'); msg(1, 2, 'GET /mentor/logbook');
+            msg(2, 3, 'MentorDashboardController@logbook'); msg(3, 4, 'Load idp_activity mentee (status=Pending)');
+            msg(4, 3, 'Data logbook', 'return'); msg(1, 5, 'Tampil list logbook pending', 'return');
+            msg(5, 1, 'Klik Approve / Reject'); msg(1, 2, 'POST /mentor/logbook/{id}/verify');
+            msg(2, 3, 'verifyLogbook()'); msg(3, 4, 'Update idp_activity.status = Approved/Rejected');
+            msg(3, 8, 'Notifikasi ke Talent'); msg(1, 5, 'Redirect + sukses', 'return');
+            y += 8; note('â”€â”€ ALUR 4: PANELIS SIDANG AKHIR â”€â”€'); y += 4;
+            msg(6, 1, 'Login & buka Daftar Talent'); msg(1, 2, 'GET /panelis/dashboard');
+            msg(2, 3, 'PanelisController@index'); msg(3, 4, 'Load panelis_assessments & talent');
+            msg(1, 6, 'Tampil daftar talent', 'return'); msg(6, 1, 'Isi skor, komentar, rekomendasi');
+            msg(1, 2, 'POST /panelis/assess/{talent}'); msg(2, 3, 'PanelisController@store');
+            msg(3, 4, 'Simpan panelis_assessments'); msg(3, 4, 'Update promotion_plan.status_promotion');
+            msg(3, 8, 'Notifikasi ke Talent & PDC Admin'); msg(1, 6, 'Selesai', 'return');
+        }
+
+        function drawTaskflow(steps, title) {
+            const svg = document.createElementNS(NS, 'svg');
+            const X_CENTER = 150;
+            const W = 300;
+            const SPACING = 25;
+            let H = 30;
+            steps.forEach(s => {
+                let nodeH = 34;
+                if (s.t === 'DEC') nodeH = 46;
+                H += nodeH + SPACING;
+                if (s.no) H += 15;
+            });
+            H += 20;
+
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.style.minHeight = Math.max(H, 400) + 'px';
+
+            const defs = document.createElementNS(NS, 'defs');
+            const markId = 'arr-tf-' + Math.random().toString(36).substr(2, 6);
+            const mk = document.createElementNS(NS, 'marker');
+            mk.setAttribute('id', markId); mk.setAttribute('markerWidth', '6'); mk.setAttribute('markerHeight', '6');
+            mk.setAttribute('refX', '5'); mk.setAttribute('refY', '3'); mk.setAttribute('orient', 'auto');
+            const p2 = document.createElementNS(NS, 'path');
+            p2.setAttribute('d', 'M0,0 L0,6 L6,3 z'); p2.setAttribute('fill', '#94a3b8');
+            mk.appendChild(p2); defs.appendChild(mk); svg.appendChild(defs);
+
+            function svgEl(parent, tag, attrs) {
+                const e = document.createElementNS(NS, tag);
+                for (const k in attrs) e.setAttribute(k, attrs[k]);
+                parent.appendChild(e); return e;
+            }
+            function arrow(x1, y1, x2, y2, col) {
+                svgEl(svg, 'line', { x1, y1, x2, y2, stroke: col || '#94a3b8', 'stroke-width': 1.5, 'marker-end': `url(#${markId})` });
+            }
+            function label(x, y, txt, col) {
+                const e = svgEl(svg, 'text', { x, y, 'font-size': 8.5, fill: col, 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-family': 'Segoe UI,sans-serif', 'font-weight': 'bold' });
+                e.textContent = txt;
+            }
+            function multiline(x, y, txt, col) {
+                const words = txt.split(' ');
+                let lines = []; let cur = '';
+                words.forEach(w => {
+                    if ((cur + w).length > 20) { lines.push(cur); cur = w + ' '; }
+                    else { cur += w + ' '; }
+                });
+                if (cur.trim()) lines.push(cur.trim());
+                const startY = y - (lines.length - 1) * 6;
+                lines.forEach((ln, i) => {
+                    const e = svgEl(svg, 'text', { x, y: startY + i * 12, 'font-size': 8.5, fill: col, 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-family': 'Segoe UI,sans-serif' });
+                    e.textContent = ln;
+                });
+            }
+
+            let y = 15;
+            steps.forEach((s, i) => {
+                const isLast = (i === steps.length - 1);
+                const rectW = 140, rectH = 34;
+
+                if (s.t === 'TERM') {
+                    svgEl(svg, 'rect', { x: X_CENTER - 50, y, width: 100, height: 30, rx: 15, fill: '#eff6ff', stroke: '#3b82f6', 'stroke-width': 1.5 });
+                    multiline(X_CENTER, y + 15, s.txt, '#1e3a8a');
+                    y += 30;
+                } else if (s.t === 'PROC') {
+                    svgEl(svg, 'rect', { x: X_CENTER - rectW / 2, y, width: rectW, height: rectH, rx: 3, fill: '#f0fdf4', stroke: '#22c55e', 'stroke-width': 1.5 });
+                    multiline(X_CENTER, y + rectH / 2, s.txt, '#14532d');
+                    y += rectH;
+                } else if (s.t === 'DOC') {
+                    svgEl(svg, 'path', { d: `M ${X_CENTER - rectW / 2} ${y} L ${X_CENTER + rectW / 2} ${y} L ${X_CENTER + rectW / 2} ${y + rectH - 6} Q ${X_CENTER + rectW / 4} ${y + rectH + 6} ${X_CENTER} ${y + rectH - 3} T ${X_CENTER - rectW / 2} ${y + rectH - 6} Z`, fill: '#fffbeb', stroke: '#f59e0b', 'stroke-width': 1.5 });
+                    multiline(X_CENTER, y + rectH / 2 - 2, s.txt, '#78350f');
+                    y += rectH;
+                } else if (s.t === 'DATA') {
+                    svgEl(svg, 'polygon', { points: `${X_CENTER - rectW / 2 + 10},${y} ${X_CENTER + rectW / 2},${y} ${X_CENTER + rectW / 2 - 10},${y + rectH} ${X_CENTER - rectW / 2},${y + rectH}`, fill: '#fdf4ff', stroke: '#d946ef', 'stroke-width': 1.5 });
+                    multiline(X_CENTER, y + rectH / 2, s.txt, '#701a75');
+                    y += rectH;
+                } else if (s.t === 'DEC') {
+                    const dh = 46;
+                    svgEl(svg, 'polygon', { points: `${X_CENTER},${y} ${X_CENTER + 65},${y + dh / 2} ${X_CENTER},${y + dh} ${X_CENTER - 65},${y + dh / 2}`, fill: '#fef2f2', stroke: '#ef4444', 'stroke-width': 1.5 });
+                    multiline(X_CENTER, y + dh / 2, s.txt, '#7f1d1d');
+                    y += dh;
+                }
+
+                if (!isLast) {
+                    if (s.t === 'DEC' && s.no) {
+                        svgEl(svg, 'line', { x1: X_CENTER + 65, y1: y - 23, x2: X_CENTER + 80, y2: y - 23, stroke: '#ef4444', 'stroke-width': 1.5 });
+                        label(X_CENTER + 75, y - 32, "Tidak", '#ef4444');
+                        const sideWords = s.no.replace('Tidak â†’ ', '').split(' ');
+                        let sy = y - 18;
+                        sideWords.forEach((word) => {
+                            const we = svgEl(svg, 'text', { x: X_CENTER + 85, y: sy, 'font-size': 8.5, fill: '#ef4444', 'dominant-baseline': 'middle', 'font-family': 'Segoe UI,sans-serif' });
+                            we.textContent = word;
+                            sy += 11;
+                        });
+
+                        arrow(X_CENTER, y, X_CENTER, y + SPACING, '#22c55e');
+                        label(X_CENTER + 12, y + 10, "Ya", '#22c55e');
+                    } else {
+                        arrow(X_CENTER, y, X_CENTER, y + SPACING, '#94a3b8');
+                    }
+                    y += SPACING;
+                }
+            });
+            return svg;
+        }
+
+        function renderTaskFlows() {
+            const container = document.getElementById('tf-svgs');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const tfMaps = FLOWS.map(f => {
+                const newSteps = f.steps.map((s, i) => {
+                    let type = 'PROC';
+                    if (s.t === 'S') return { t: 'TERM', txt: 'Mulai' };
+                    if (s.t === 'E') return { t: 'TERM', txt: 'Selesai' };
+                    if (s.t === 'D') return { t: 'DEC', txt: s.txt, no: s.no, yes: s.yes };
+                    if (s.t === 'J') return null;
+
+                    const tL = s.txt.toLowerCase();
+                    if (tL.includes('input') || tL.includes('isi') || tL.includes('pilih') || tL.includes('buka halaman') || tL.includes('tampil')) type = 'DATA';
+                    if (tL.includes('upload') || tL.includes('dokumen') || tL.includes('laporan') || tL.includes('catat di audit')) type = 'DOC';
+
+                    return { t: type, txt: s.txt };
+                }).filter(Boolean);
+                return { title: f.title.replace('Alur', 'UX Taskflow:'), steps: newSteps };
+            });
+
+            tfMaps.forEach(tf => {
+                const card = document.createElement('div');
+                card.className = 'act-card';
+                const header = document.createElement('div');
+                header.className = 'act-header';
+                header.textContent = tf.title;
+                card.appendChild(header);
+
+                const body = document.createElement('div');
+                body.className = 'act-body';
+                const svgEl = drawTaskflow(tf.steps, tf.title);
+                body.appendChild(svgEl);
+                card.appendChild(body);
+                container.appendChild(card);
+            });
+        }
+
+        const USERFLOWS = [
+            {
+                title: 'Userflow UX: Karir Talent',
+                steps: [
+                    { t: 'TERM', txt: 'Mulai' },
+                    { t: 'DATA', txt: 'Login ke Dashboard Talent' },
+                    { t: 'PROC', txt: 'Cek Status Promosi Terkini' },
+                    { t: 'DEC', txt: 'Ada Jadwal Terbuka?', yes: 'Ada', no: 'Tidak (lanjut)' },
+                    { t: 'DATA', txt: 'Isi Self-Assesment Kompetensi' },
+                    { t: 'DEC', txt: 'Harus Isi Logbook?', yes: 'Ya', no: 'Tidak (lanjut)' },
+                    { t: 'DOC', txt: 'Upload Laporan & File Logbook' },
+                    { t: 'DEC', txt: 'Submit Project Akhir?', yes: 'Ya', no: 'Belum' },
+                    { t: 'DOC', txt: 'Upload Proposal Project' },
+                    { t: 'PROC', txt: 'Pantau Status Persetujuan Anda' },
+                    { t: 'TERM', txt: 'Selesai / Logout' }
+                ]
+            },
+            {
+                title: 'Userflow UX: Tugas Mentor',
+                steps: [
+                    { t: 'TERM', txt: 'Mulai' },
+                    { t: 'DATA', txt: 'Login ke Dashboard Mentor' },
+                    { t: 'PROC', txt: 'Lihat Daftar Mentee Aktif' },
+                    { t: 'DEC', txt: 'Ada Logbook Pending?', yes: 'Ada', no: 'Tidak' },
+                    { t: 'DOC', txt: 'Review Bukti Logbook Mentee' },
+                    { t: 'DEC', txt: 'Keputusan Validasi Logbook', yes: 'Approve', no: 'Reject' },
+                    { t: 'DEC', txt: 'Ada Project Pending?', yes: 'Ada', no: 'Selesai' },
+                    { t: 'DOC', txt: 'Review Proposal Project Mentee' },
+                    { t: 'DEC', txt: 'Keputusan Validasi Project', yes: 'Approve', no: 'Reject' },
+                    { t: 'TERM', txt: 'Selesai / Logout' }
+                ]
+            },
+            {
+                title: 'Userflow UX: Validasi Atasan',
+                steps: [
+                    { t: 'TERM', txt: 'Mulai' },
+                    { t: 'DATA', txt: 'Login ke Dashboard Atasan' },
+                    { t: 'PROC', txt: 'Lihat Progres Bawahan' },
+                    { t: 'DEC', txt: 'Tugas Self-Assessment?', yes: 'Ada', no: 'Selesai' },
+                    { t: 'DATA', txt: 'Isi Skor Penilaian Kompetensi Bawahan' },
+                    { t: 'DEC', txt: 'Ada Pending Logbook/Project?', yes: 'Ada', no: 'Selesai' },
+                    { t: 'DOC', txt: 'Review Dokumen Logbook / Project' },
+                    { t: 'DEC', txt: 'Keputusan Validasi Kelengkapan', yes: 'Approve', no: 'Reject' },
+                    { t: 'TERM', txt: 'Selesai / Logout' }
+                ]
+            },
+            {
+                title: 'Userflow UX: Ujian Panelis',
+                steps: [
+                    { t: 'TERM', txt: 'Mulai' },
+                    { t: 'DATA', txt: 'Login ke Dashboard Panelis' },
+                    { t: 'PROC', txt: 'Lihat Antrean Ujian' },
+                    { t: 'DEC', txt: 'Ada Jadwal Sidang?', yes: 'Ada', no: 'Tidak' },
+                    { t: 'DOC', txt: 'Review Seluruh Dokumen Riwayat Talent' },
+                    { t: 'DATA', txt: 'Isi Lembar Skor Hasil Ujian' },
+                    { t: 'DATA', txt: 'Tulis Komentar & Rekomendasi Promosi' },
+                    { t: 'TERM', txt: 'Selesai / Logout' }
+                ]
+            },
+            {
+                title: 'Userflow UX: Validasi Finance',
+                steps: [
+                    { t: 'TERM', txt: 'Mulai' },
+                    { t: 'DATA', txt: 'Login ke Dashboard Finance' },
+                    { t: 'PROC', txt: 'Pantau Antrean Project' },
+                    { t: 'DEC', txt: 'Ada Review Anggaran?', yes: 'Ada', no: 'Kosong' },
+                    { t: 'DOC', txt: 'Buka Proposal Improvement Project' },
+                    { t: 'DATA', txt: 'Catat Analisis Kelayakan & Finansial' },
+                    { t: 'DEC', txt: 'Validasi Persetujuan Dana', yes: 'Approve', no: 'Reject' },
+                    { t: 'TERM', txt: 'Selesai / Logout' }
+                ]
+            },
+            {
+                title: 'Userflow UX: Tanggung Jawab PDC Admin',
+                customBranchingAdmin: true,
+                steps: []
+            }
+        ];
+
+        function drawAdminBranching() {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            const W = 700, H = 580;
+            svg.setAttribute('width', '100%'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.style.minHeight = H + 'px';
+
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const mk = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            mk.setAttribute('id', 'ad-arr'); mk.setAttribute('markerWidth', '6'); mk.setAttribute('markerHeight', '6');
+            mk.setAttribute('refX', '5'); mk.setAttribute('refY', '3'); mk.setAttribute('orient', 'auto');
+            const p2 = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p2.setAttribute('d', 'M0,0 L0,6 L6,3 z'); p2.setAttribute('fill', '#94a3b8');
+            mk.appendChild(p2); defs.appendChild(mk); svg.appendChild(defs);
+
+            function el(tag, attrs) { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; }
+            function t(x, y, txt, col) { const e = el('text', { x, y, 'font-size': 9, fill: col || '#1e293b', 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-family': 'Segoe UI,sans-serif', 'font-weight': 'bold' }); e.textContent = txt; }
+            function tw(x, y, txt, col) {
+                const arr = txt.split('|');
+                const startY = y - (arr.length - 1) * 6;
+                arr.forEach((str, i) => { t(x, startY + i * 13, str, col); });
+            }
+            function arr(x1, y1, x2, y2) { el('line', { x1, y1, x2, y2, stroke: '#94a3b8', 'stroke-width': 1.5, 'marker-end': 'url(#ad-arr)' }); }
+            function path(d) { el('path', { d, fill: 'none', stroke: '#94a3b8', 'stroke-width': 1.5, 'marker-end': 'url(#ad-arr)' }); }
+
+            function _term(x, y, txt) { el('rect', { x: x - 50, y, width: 100, height: 26, rx: 13, fill: '#eff6ff', stroke: '#3b82f6', 'stroke-width': 1.5 }); tw(x, y + 13, txt, '#1d4ed8'); }
+            function _proc(x, y, txt) { el('rect', { x: x - 65, y, width: 130, height: 32, rx: 2, fill: '#f0fdf4', stroke: '#22c55e', 'stroke-width': 1.5 }); tw(x, y + 16, txt, '#15803d'); }
+            function _data(x, y, txt) { el('polygon', { points: `${x - 60},${y} ${x + 70},${y} ${x + 60},${y + 32} ${x - 70},${y + 32}`, fill: '#fdf4ff', stroke: '#d946ef', 'stroke-width': 1.5 }); tw(x, y + 16, txt, '#a21caf'); }
+            function _dec(x, y, txt) { el('polygon', { points: `${x},${y} ${x + 65},${y + 22} ${x},${y + 44} ${x - 65},${y + 22}`, fill: '#fef2f2', stroke: '#ef4444', 'stroke-width': 1.5 }); tw(x, y + 22, txt, '#b91c1c'); }
+            function _doc(x, y, txt) { el('path', { d: `M ${x - 65} ${y} L ${x + 65} ${y} L ${x + 65} ${y + 25} Q ${x} ${y + 36} ${x - 65} ${y + 25} Z`, fill: '#fffbeb', stroke: '#f59e0b', 'stroke-width': 1.5 }); tw(x, y + 14, txt, '#b45309'); }
+            function msg(x, y, txt) { t(x, y, txt, '#b91c1c') }
+
+            const C = 350, L = 160, R = 540;
+
+            arr(C, 36, C, 60);
+            arr(C, 92, C, 120);
+
+            path(`M ${C - 65} 142 L ${L} 142 L ${L} 180`);
+            msg(C - 110, 134, 'Mode Master Data');
+
+            path(`M ${C + 65} 142 L ${R} 142 L ${R} 180`);
+            msg(C + 110, 134, 'Mode Rekap Siklus');
+
+            // Left
+            arr(L, 212, L, 240);
+            arr(L, 272, L, 300);
+            arr(L, 332, L, 360);
+            arr(L, 392, L, 420);
+            arr(L, 452, L, 480);
+            path(`M ${L} 512 L ${L} 540 L ${C - 5} 540`);
+
+            // Right
+            arr(R, 212, R, 240);
+            arr(R, 272, R, 300);
+            arr(R, 344, R, 370);
+            arr(R, 402, R, 430);
+            path(`M ${R - 65} 322 L ${R - 90} 322 L ${R - 90} 256 L ${R - 55} 256`);
+            msg(R - 80, 248, 'Revisi / Mundur');
+            path(`M ${R} 455 L ${R} 540 L ${C + 5} 540`);
+
+            arr(C, 540, C, 560);
+
+            _term(C, 10, 'Mulai');
+            _data(C, 60, 'Login Dashboard|PDC Admin');
+            _dec(C, 120, 'Menu Dashboard|Pilih Tujuan?');
+
+            _proc(L, 180, 'Company Management');
+            _data(L, 240, 'Atur Struktur Department|& Position Jabatan');
+            _proc(L, 300, 'Kompetensi');
+            _data(L, 360, 'Input Standarisasi Nilai|Target per Jabatan');
+            _proc(L, 420, 'User Management');
+            _data(L, 480, 'Assign Multi-Role User|& Modifikasi Akun');
+
+            _proc(R, 180, 'Progress Talent');
+            _data(R, 240, 'Buat Promotion Plan &|Registrasi Mentor');
+            _dec(R, 300, 'Finance Validation|Disetujui?');
+            _proc(R, 370, 'Panelis Review');
+            _doc(R, 430, 'Progress Archive|Ekspor Laporan PDF');
+
+            _term(C, 560, 'Selesai / Logout');
+
+            return svg;
+        }
+
+        function renderUserFlows() {
+            const container = document.getElementById('uf-svgs');
+            const adminContainer = document.getElementById('uf-admin-svg');
+            if (!container) return;
+            container.innerHTML = '';
+            if (adminContainer) adminContainer.innerHTML = '';
+
+            USERFLOWS.forEach(uf => {
+                const card = document.createElement('div');
+                card.className = 'act-card';
+                card.style.minWidth = uf.customBranchingAdmin ? '720px' : '300px';
+
+                const header = document.createElement('div');
+                header.className = 'act-header';
+                header.textContent = uf.title;
+                card.appendChild(header);
+
+                const body = document.createElement('div');
+                body.className = 'act-body';
+                const svgEl = uf.customBranchingAdmin ? drawAdminBranching() : drawTaskflow(uf.steps, uf.title);
+                body.appendChild(svgEl);
+                card.appendChild(body);
+
+                if (uf.customBranchingAdmin && adminContainer) {
+                    adminContainer.appendChild(card);
+                } else {
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        // Auto render on load
+        window.addEventListener('load', () => {
+            drawUseCase();
+            renderActivityDiagrams();
+            renderTaskFlows();
+            renderUserFlows();
+        });
+    </script>
+</body>
+
+</html>

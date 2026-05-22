@@ -1,5 +1,5 @@
-<x-talent.layout title="Detail Riwayat Program – Individual Development Plan" :user="$user"
-    :notifications="$notifications" :mobileCollapsible="true" :showProfileCard="true">
+<x-talent.layout title="Detail Riwayat Program – Individual Development Plan" :user="$user" :notifications="$notifications"
+    :mobileCollapsible="true" :showProfileCard="true">
     <x-slot name="styles">
         <style>
             /* ── Donut Chart ── */
@@ -150,6 +150,100 @@
                 flex-shrink: 0;
                 margin-top: 5px;
             }
+
+            .panelis-total-card {
+                width: 100%;
+                min-height: 150px;
+                height: 150px;
+                border: 1px solid #cbd5e1;
+                border-radius: 10px;
+                padding: 16px 18px 26px;
+                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+            }
+
+            .panelis-total-score {
+                font-size: 2rem;
+                font-weight: 800;
+                color: #0f766e;
+                line-height: 1;
+                text-align: center;
+                margin: auto 0;
+            }
+
+            .panelis-bottom-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1.22fr) minmax(210px, 0.40fr);
+                gap: 16px;
+                align-items: stretch;
+                padding: 20px 16px 28px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .panelis-comment-card {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                align-self: stretch;
+                height: 100%;
+            }
+
+            .panelis-score-side {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                align-self: stretch;
+                height: 100%;
+                box-sizing: border-box;
+            }
+
+            .panelis-section-label {
+                min-height: 30px;
+                display: flex;
+                align-items: center;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #1e293b;
+                margin-bottom: 10px;
+            }
+
+            .panelis-score-spacer {
+                min-height: 30px;
+                margin-bottom: 10px;
+                visibility: hidden;
+            }
+
+            .panelis-comment-box {
+                width: 100%;
+                min-height: 150px;
+                height: 150px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                padding: 16px 18px 24px;
+                font-size: 0.82rem;
+                color: #334155;
+                background: white;
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+            }
+
+            @media (max-width: 1024px) {
+                .panelis-bottom-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .panelis-comment-card,
+                .panelis-score-side {
+                    width: 100%;
+                }
+
+                .panelis-score-side {
+                    margin-top: 0;
+                }
+            }
         </style>
     </x-slot>
 
@@ -248,7 +342,7 @@
                             'from' => '#334155',
                             'to' => '#334155',
                             'id' => 'grad-exposure',
-                            'btn_color' => 'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)]'
+                            'btn_color' => 'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-lg',
                         ],
                         'Mentoring' => [
                             'done' => min($mentoringCount ?? 0, 6),
@@ -256,7 +350,7 @@
                             'from' => '#f59e0b',
                             'to' => '#f59e0b',
                             'id' => 'grad-mentoring',
-                            'btn_color' => 'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)]'
+                            'btn_color' => 'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-lg',
                         ],
                         'Learning' => [
                             'done' => min($learningCount ?? 0, 6),
@@ -264,7 +358,7 @@
                             'from' => '#0d9488',
                             'to' => '#0d9488',
                             'id' => 'grad-learning',
-                            'btn_color' => 'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)]'
+                            'btn_color' => 'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-lg',
                         ],
                     ];
                     $r = 38;
@@ -281,14 +375,16 @@
                             <div class="relative w-48 h-48 drop-shadow-sm">
                                 <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
                                     <defs>
-                                        <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%"
+                                            x2="100%" y2="100%">
                                             <stop offset="0%" stop-color="{{ $d['from'] }}" />
                                             <stop offset="100%" stop-color="{{ $d['to'] }}" />
                                         </linearGradient>
                                     </defs>
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="#f1f5f9" stroke-width="10" />
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none" stroke="url(#{{ $d['id'] }})"
-                                        stroke-width="10" stroke-linecap="round"
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                        stroke="#f1f5f9" stroke-width="10" />
+                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                        stroke="url(#{{ $d['id'] }})" stroke-width="10" stroke-linecap="round"
                                         stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
                                         style="transition: stroke-dasharray 0.8s ease;" />
                                 </svg>
@@ -301,8 +397,8 @@
                                 class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer">
                                 <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-4 w-4 relative transition-transform group-hover:translate-x-1" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M9 5l7 7-7 7" />
                                 </svg>
@@ -328,28 +424,44 @@
             </div>
 
             <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
-                <div class="overflow-x-auto rounded-xl border border-[#d1d5db]">
-                    <table class="w-full text-sm bg-white min-w-[600px] border-collapse">
-                        <thead>
-                            <tr class="bg-[#f1f5f9]">
-                                <th
-                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-r border-[#cbd5e1] text-[0.8rem] uppercase">
-                                    Judul Project Improvement</th>
-                                <th
-                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-[#cbd5e1] w-44 text-[0.8rem] uppercase">
-                                    Status</th>
+                <div class="rounded-xl overflow-hidden border border-gray-200">
+                    <table class="w-full text-left bg-white">
+                        <thead class="bg-slate-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project
+                                    Improvement</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($projects as $project)
-                                <tr class="bg-white border-b border-[#d1d5db] hover:bg-[#f8fafc] transition-colors">
-                                    <td class="px-6 py-4 text-[#334155] border-r border-[#e5e7eb] font-bold text-[0.88rem]">
+                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                    <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
                                         {{ $project->title }}
                                         <div class="text-xs text-gray-400 font-normal mt-0.5">
-                                            {{ \Carbon\Carbon::parse($project->created_at)->format('d M Y') }}
+                                            {{ \Carbon\Carbon::parse($project->created_at)->locale('id')->translatedFormat('d F Y') }}
                                         </div>
                                     </td>
-                                    <td class="text-center px-6 py-4">
+                                    <td class="py-4 px-6 text-center w-48">
+                                        @if ($project->document_path)
+                                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
+                                                target="_blank"
+                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                title="Lihat/Download File Project">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                </svg>
+                                                Lihat File
+                                            </a>
+                                        @else
+                                            <span class="text-gray-400 text-xs italic">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-6 text-center w-48">
                                         @php
                                             // Ambil status dari Finance Validation (via feedback)
                                             $finDec = 'Pending';
@@ -360,28 +472,35 @@
                                                     $finDec = 'Rejected';
                                                 }
                                             }
-                                            
-                                            // Gunakan status akhir (keputusan PDC) jika sudah ada, jika belum gunakan status Finance
-                                            $displayStatus = in_array($project->status, ['Approved', 'Rejected']) ? $project->status : $finDec;
 
-                                            $statusThemes = [
-                                                'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-green-500'],
-                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-red-500'],
-                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'],
-                                            ];
-                                            $theme = $statusThemes[$displayStatus] ?? ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'];
+                                            // Gunakan status akhir (keputusan PDC) jika sudah ada, jika belum gunakan status Finance
+                                            $displayStatus = in_array($project->status, ['Approved', 'Rejected'])
+                                                ? $project->status
+                                                : $finDec;
                                         @endphp
-                                        <span
-                                            class="inline-flex items-center gap-2 {{ $theme['text'] }} text-xs font-bold px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 shadow-sm">
-                                            <span class="w-1.5 h-1.5 rounded-full {{ $theme['dot'] }} inline-block"></span>
-                                            {{ $displayStatus }}
-                                        </span>
+                                        @if ($displayStatus === 'Approved')
+                                            <span
+                                                class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                            </span>
+                                        @elseif($displayStatus === 'Rejected')
+                                            <span
+                                                class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="bg-white">
-                                    <td class="px-4 py-8 text-gray-400 border-r border-[#e5e7eb] text-center italic text-sm"
-                                        colspan="2">Belum ada project yang disubmit.</td>
+                                <tr>
+                                    <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="3">
+                                        Belum ada project yang disubmit.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -394,7 +513,8 @@
         @if ($panelisCount > 0)
             <div class="space-y-4" id="Hasil Penilaian Panelis">
                 <div class="page-header animate-title mb-2 mt-6">
-                    <div class="page-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #38475a 100%);">
+                    <div class="page-header-icon"
+                        style="background: linear-gradient(135deg, #0f172a 0%, #38475a 100%);">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M5.625 1.5H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875ZM9.75 14.25a.75.75 0 0 0 0 1.5H15a.75.75 0 0 0 0-1.5H9.75Zm0-3a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H9.75Z"
@@ -405,23 +525,27 @@
                     </div>
                     <div>
                         <div class="page-header-title">Hasil Penilaian Panelis</div>
-                        <div class="page-header-sub">Rata-rata penilaian dari {{ $panelisCount }} panelis pada sesi ini
+                        <div class="page-header-sub">Rata-rata penilaian dari {{ $panelisCount }} panelis pada sesi
+                            ini
                         </div>
                     </div>
                 </div>
 
-                <div class="prem-card fade-up fade-up-4 overflow-hidden" style="padding: 0;">
+                <div class="prem-card fade-up fade-up-4 overflow-visible" style="padding: 0;">
                     @php
                         $panelisIndicators = [
-                            'Pemahaman Bisnis & Strategi' => 'Memahami konteks industri, Business proses dan arah perusahaan',
+                            'Pemahaman Bisnis & Strategi' =>
+                                'Memahami konteks industri, Business proses dan arah perusahaan',
                             'Identifikasi Masalah' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
-                            'Analisis Akar Masalah' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
+                            'Analisis Akar Masalah' =>
+                                "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
                             'Solusi yang Ditawarkan' => 'Solusi konkret, realistis, dan menjawab akar masalah',
                             'Rencana Implementasi' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
                             'Target Dampak & KPI' => 'Indikator keberhasilan terukur, baseline–target jelas',
                             'Risiko & Mitigasi' => 'Mengenali risiko dan menyusun strategi antisipasi',
                             'Gaya Presentasi & Penguasaan Materi' => 'Komunikatif, percaya diri, menjawab pertanyaan',
-                            'Refleksi Peran sebagai Posisi yang Dituju' => 'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
+                            'Refleksi Peran sebagai Posisi yang Dituju' =>
+                                'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
                             'Nilai Tambah' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',
                         ];
                     @endphp
@@ -449,26 +573,38 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    
-                                    @if (!empty($panelisKomentar))
-                                        <tr>
-                                            <td colspan="3" style="padding: 20px 16px; text-align: left; border-bottom: none;">
-                                                <div style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 10px;">Komentar / Catatan Penilai:</div>
-                                                <div style="width: 100%; min-height: 80px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px 16px; font-size: 0.82rem; color: #334155; background: white; font-family: 'Poppins', sans-serif;">
-                                                    @foreach ($panelisKomentar as $item)
-                                                        <div class="komentar-bullet" style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
-                                                            <div class="komentar-dot"></div>
-                                                            <p style="margin: 0; line-height: 1.5; flex: 1;">{{ $item['komentar'] }}</p>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endif
                                 </tbody>
                             </table>
                         </div>
 
+                        <div class="panelis-bottom-layout">
+                            <div class="panelis-comment-card">
+                                <div class="panelis-section-label">Komentar / Catatan Penilai:</div>
+                                <div class="panelis-comment-box">
+                                    @forelse ($panelisKomentar as $item)
+                                        <div class="komentar-bullet"
+                                            style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
+                                            <div class="komentar-dot"></div>
+                                            <p style="margin: 0; line-height: 1.5; flex: 1;">{{ $item['komentar'] }}
+                                            </p>
+                                        </div>
+                                    @empty
+                                        <p style="margin: 0; color: #94a3b8;">Belum ada komentar dari panelis.</p>
+                                    @endforelse
+                                </div>
+                            </div>
+
+                            <div class="panelis-score-side">
+                                <div class="panelis-score-spacer" aria-hidden="true">.</div>
+                                <div class="panelis-total-card">
+                                    <div
+                                        style="font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 10px;">
+                                        Total Skor</div>
+                                    <div class="panelis-total-score">
+                                        {{ number_format($panelisScoreTotalDikaliDua, 2) }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

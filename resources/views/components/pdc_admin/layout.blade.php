@@ -433,9 +433,9 @@
         }
 
         .empty-prem svg {
-            width: 56px;
-            height: 56px;
-            color: #cbd5e1;
+            width: 32px;
+            height: 32px;
+            color: #0d9488;
         }
 
         .empty-prem h3 {

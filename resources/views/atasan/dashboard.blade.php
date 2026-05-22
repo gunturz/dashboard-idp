@@ -339,15 +339,15 @@
                 <div
                     class="col-span-1 lg:col-span-2 text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
                     <div
-                        class="relative w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-5 ring-8 ring-slate-50">
-                        <!-- Garis kuning bercahaya di dalam lingkaran -->
-                        <div class="absolute inset-1.5 rounded-full border-2 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]"></div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-500 relative z-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        class="w-20 h-20 rounded-full flex items-center justify-center mb-5"
+                        style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-teal-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-2">Belum Ada Talent</h3>
-                    <p class="text-slate-500 text-base max-w-sm">Saat ini belum ada talent yang terhubung dengan Anda untuk dilakukan penilaian assessment.</p>
+                    <h3 class="text-base font-bold text-gray-700 mb-0">Belum Ada Talent</h3>
+                    <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada talent yang tersedia
+                        untuk dinilai saat ini.</p>
                 </div>
             @else
                 <div

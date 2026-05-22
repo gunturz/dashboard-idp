@@ -43,9 +43,18 @@
     </div>
 
     @if ($talents->isEmpty())
-        <div class="text-center py-20 bg-white border border-gray-200 rounded-xl shadow-sm">
-            <h3 class="text-xl font-bold text-slate-700 mb-2">Talent tidak ditemukan</h3>
-            <p class="text-gray-500 text-sm">Anda belum memiliki talent untuk dimonitor.</p>
+        <div class="text-center py-20 bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col items-center justify-center">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center mb-5"
+                style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-teal-600" fill="none"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+            </div>
+            <h3 class="text-base font-bold text-gray-700 mb-0">Belum Ada Talent</h3>
+            <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada talent yang tersedia
+                untuk dimonitor saat ini.</p>
         </div>
     @else
         {{-- KOMPETENSI --}}
@@ -393,38 +402,51 @@
                                         @forelse($talent->improvementProjects as $proj)
                                             <tr
                                                 class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
-                                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-center">
-                                                    {{ $proj->title }}</td>
-                                                <td class="py-4 px-6 text-center">
-                                                    <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
-                                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
-                                                        target="_blank">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
-                                                            </path>
-                                                        </svg>
-                                                        Lihat File
-                                                    </a>
+                                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
+                                                    {{ $proj->title }}
+                                                    <div class="text-xs text-gray-400 font-normal mt-0.5">
+                                                        {{ \Carbon\Carbon::parse($proj->created_at)->locale('id')->translatedFormat('d F Y') }}
+                                                    </div>
                                                 </td>
-                                                <td class="py-4 px-6 text-center">
-                                                    @if (in_array($proj->status, ['Approved', 'Approve']))
+                                                <td class="py-4 px-6 text-center w-48">
+                                                    @if ($proj->document_path)
+                                                        <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
+                                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                            target="_blank" title="Lihat/Download File Project">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-3.5 w-3.5" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                                                </path>
+                                                            </svg>
+                                                            Lihat File
+                                                        </a>
+                                                    @else
+                                                        <span class="text-gray-400 text-xs italic">-</span>
+                                                    @endif
+                                                </td>
+                                                <td class="py-4 px-6 text-center w-48">
+                                                    @php
+                                                        $projectStatus =
+                                                            $proj->status === 'Verified' ? 'Approved' : $proj->status;
+                                                    @endphp
+                                                    @if ($projectStatus === 'Approved')
                                                         <span
-                                                            class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                            class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                                                             Approved
                                                         </span>
-                                                    @elseif(in_array($proj->status, ['Rejected', 'Reject']))
+                                                    @elseif($projectStatus === 'Rejected')
                                                         <span
-                                                            class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                            class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
                                                             <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                                             Rejected
                                                         </span>
                                                     @else
                                                         <span
-                                                            class="inline-flex items-center gap-1 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                            class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
                                                             <span
                                                                 class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
                                                             Pending

@@ -464,6 +464,79 @@
                 color: #0f172a !important;
             }
 
+            /* --- Admin Detail Style Tabs --- */
+            .nav-tabs-container {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 32px;
+                width: 100%;
+            }
+
+            .nav-tabs {
+                display: flex;
+                background: #e2e8f0;
+                padding: 4px;
+                border-radius: 99px;
+                width: 100%;
+                max-width: 900px;
+                overflow-x: auto;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .nav-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-item {
+                flex: 1;
+                text-align: center;
+                padding: 10px 0;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #475569;
+                cursor: pointer;
+                border-radius: 99px;
+                transition: all 0.2s;
+                white-space: nowrap;
+                border: none;
+                background: transparent;
+                font-family: inherit;
+            }
+
+            .tab-item.active {
+                background: #0f172a;
+                color: white;
+            }
+
+            .tab-section {
+                animation: fadeSlideUp 0.35s ease both;
+            }
+
+            .admin-section-title {
+                position: relative;
+                padding-left: 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 1.25rem;
+                font-weight: 800;
+                color: #1e293b;
+                margin-bottom: 24px;
+            }
+
+            .admin-section-title::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 99px;
+            }
+
             @media (max-width: 1024px) {
                 .header-info-card {
                     flex-direction: column;
@@ -484,6 +557,13 @@
                 .idp-monitoring-box {
                     flex-direction: column;
                     gap: 32px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .tab-item {
+                    flex: 0 0 auto;
+                    padding: 10px 24px;
                 }
             }
         </style>
@@ -510,6 +590,23 @@
         <div class="mb-10 overflow-hidden rounded-2xl shadow-sm border border-gray-100">
             @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
         </div>
+
+        {{-- Nav Tabs (match admin detail style) --}}
+        <div class="nav-tabs-container">
+            <div class="nav-tabs">
+                <button type="button" class="tab-item active" data-section="kompetensi"
+                    onclick="switchRiwayatSection('kompetensi', this)">Kompetensi</button>
+                <button type="button" class="tab-item" data-section="idp"
+                    onclick="switchRiwayatSection('idp', this)">IDP Monitoring</button>
+                <button type="button" class="tab-item" data-section="project"
+                    onclick="switchRiwayatSection('project', this)">Project Improvement</button>
+                <button type="button" class="tab-item" data-section="logbook"
+                    onclick="switchRiwayatSection('logbook', this)">LogBook</button>
+            </div>
+        </div>
+
+        <div id="section-kompetensi" class="tab-section">
+            <div class="admin-section-title">Kompetensi</div>
 
         {{-- TOP 3 GAP Kompetensi --}}
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.1s;">
@@ -656,7 +753,12 @@
             </div>
         </div>
 
+        </div>
+
         {{-- IDP Monitoring --}}
+        <div id="section-idp" class="tab-section" style="display: none;">
+            <div class="admin-section-title">IDP Monitoring</div>
+
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.3s;">
             <div class="prem-card-header">
                 <div class="prem-card-title">
@@ -745,7 +847,12 @@
             </div>
         </div>
 
+        </div>
+
         {{-- Project Improvement --}}
+        <div id="section-project" class="tab-section" style="display: none;">
+            <div class="admin-section-title">Project Improvement</div>
+
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.4s;">
             <div class="prem-card-header">
                 <div class="project-section-title">
@@ -759,55 +866,70 @@
                 </div>
             </div>
             <div class="p-0">
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="highlight-table project-improvement-table mb-0">
-                        <thead>
+                <div class="rounded-xl overflow-hidden border border-gray-200 mt-4 mx-6 mb-6">
+                    <table class="w-full text-left bg-white">
+                        <thead class="bg-slate-50 border-b border-gray-200">
                             <tr>
-                                <th>Judul Project Improvement</th>
-                                <th class="text-center">File</th>
-                                <th class="text-center">Status</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project
+                                    Improvement</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($talent->improvementProjects as $proj)
-                                <tr>
-                                    <td class="project-title-cell">{{ $proj->title }}</td>
-                                    <td class="project-action-cell">
-                                        <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
-                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
-                                            target="_blank">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                            </svg>
-                                            Lihat File
-                                        </a>
+                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                    <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
+                                        {{ $proj->title }}
+                                        <div class="text-xs text-gray-400 font-normal mt-0.5">
+                                            {{ \Carbon\Carbon::parse($proj->created_at)->locale('id')->translatedFormat('d F Y') }}
+                                        </div>
                                     </td>
-                                    <td class="project-status-cell">
-                                        @if (in_array($proj->status, ['Approved', 'Approve']))
+                                    <td class="py-4 px-6 text-center w-48">
+                                        @if ($proj->document_path)
+                                            <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
+                                                target="_blank"
+                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                title="Lihat/Download File Project">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                </svg>
+                                                Lihat File
+                                            </a>
+                                        @else
+                                            <span class="text-gray-400 text-xs italic">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-6 text-center w-48">
+                                        @php
+                                            $projectStatus = $proj->status === 'Verified' ? 'Approved' : $proj->status;
+                                        @endphp
+                                        @if ($projectStatus === 'Approved')
                                             <span
-                                                class="inline-flex items-center gap-1 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
                                             </span>
-                                        @elseif(in_array($proj->status, ['Rejected', 'Reject']))
+                                        @elseif($projectStatus === 'Rejected')
                                             <span
-                                                class="inline-flex items-center gap-1 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
                                             </span>
                                         @else
                                             <span
-                                                class="inline-flex items-center gap-1 text-orange-600 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Pending
+                                                class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
                                             </span>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-12 text-center text-gray-400 font-medium italic">
-                                        Belum
-                                        ada project improvement yang diupload.</td>
+                                    <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="3">
+                                        Belum ada project yang disubmit.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -816,7 +938,12 @@
             </div>
         </div>
 
+        </div>
+
         {{-- LogBook --}}
+        <div id="section-logbook" class="tab-section" style="display: none;">
+            <div class="admin-section-title">LogBook</div>
+
         <div class="prem-card mb-12 animate-fade-in" style="animation-delay: 0.5s;">
             <div class="p-8">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -844,6 +971,20 @@
             </div>
         </div>
 
+        </div>
+
         <div class="h-8"></div>
     </div>
+
+    <script>
+        function switchRiwayatSection(section, trigger) {
+            document.querySelectorAll('.tab-section').forEach((panel) => {
+                panel.style.display = panel.id === `section-${section}` ? 'block' : 'none';
+            });
+
+            document.querySelectorAll('.tab-item').forEach((tab) => {
+                tab.classList.toggle('active', tab === trigger);
+            });
+        }
+    </script>
 </x-atasan.layout>

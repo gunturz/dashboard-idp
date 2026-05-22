@@ -51,6 +51,7 @@
             }
 
             .dash-header-title {
+                font-family: 'Poppins', sans-serif;
                 font-size: 1.6rem;
                 font-weight: 800;
                 color: #1e293b;
@@ -112,7 +113,7 @@
             .talent-hero-divider { width: 1px; align-self: stretch; background: rgba(255,255,255,0.15); flex-shrink: 0; margin: 4px 0; }
 
             .talent-hero-info { min-width: 0; }
-            .talent-hero-name { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.2; }
+            .talent-hero-name { font-family: 'Poppins', sans-serif; font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.2; }
             .talent-hero-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 3px; }
             .talent-hero-badge {
                 display: inline-flex; align-items: center; gap: 6px; background: rgba(20,184,166,0.18);
@@ -120,7 +121,7 @@
                 padding: 4px 12px; border-radius: 99px; margin-top: 10px; letter-spacing: .04em;
             }
             .talent-hero-meta-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-weight: 500; line-height: 1.2; }
-            .talent-hero-meta-value { font-size: 0.9rem; color: rgba(255,255,255,0.92); font-weight: 700; margin-top: 1px; line-height: 1.3; }
+            .talent-hero-meta-value { font-family: 'Poppins', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.92); font-weight: 700; margin-top: 1px; line-height: 1.3; }
             .talent-hero-meta-row { display: flex; flex-direction: column; }
 
             .date-input-custom {
@@ -144,6 +145,7 @@
 
             /* ── Section heading ── */
             .section-heading {
+                font-family: 'Poppins', sans-serif;
                 display: flex;
                 align-items: center;
                 gap: 14px;

@@ -5,20 +5,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preview - Laporan Hasil Penilaian Promosi Talent</title>
+    @php
+        $poppinsRegular =
+            'file:///' .
+            str_replace('\\', '/', storage_path('fonts/poppins_normal_59578db0d134e5107911b0772fcd36b3.ttf'));
+        $poppinsLight =
+            'file:///' . str_replace('\\', '/', storage_path('fonts/poppins_300_2e2883f4cf5280db5a8f5b456d9f76e7.ttf'));
+        $poppinsMedium =
+            'file:///' . str_replace('\\', '/', storage_path('fonts/poppins_500_e357e72d1459b7129a703bd036127015.ttf'));
+        $poppinsSemiBold =
+            'file:///' . str_replace('\\', '/', storage_path('fonts/poppins_600_7d20ab77d986921f47f6842ca5ca81b1.ttf'));
+        $poppinsBold =
+            'file:///' .
+            str_replace('\\', '/', storage_path('fonts/poppins_bold_e92875066bf07ed4e7ee92062224b42c.ttf'));
+        $libreRegular =
+            'file:///' .
+            str_replace('\\', '/', storage_path('fonts/libre_baskerville_normal_77dd107e43bb42406212ddbe1662875c.ttf'));
+        $libreBold =
+            'file:///' .
+            str_replace('\\', '/', storage_path('fonts/libre_baskerville_bold_0df436a566c5292bde25190e2feb6d2f.ttf'));
+    @endphp
     <style>
-        @page {
-            margin: 2.54cm !important;
+        @font-face {
+            font-family: 'PoppinsPdf';
+            font-style: normal;
+            font-weight: 300;
+            src: url('{{ $poppinsLight }}') format('truetype');
         }
 
+        @font-face {
+            font-family: 'PoppinsPdf';
+            font-style: normal;
+            font-weight: 400;
+            src: url('{{ $poppinsRegular }}') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'PoppinsPdf';
+            font-style: normal;
+            font-weight: 500;
+            src: url('{{ $poppinsMedium }}') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'PoppinsPdf';
+            font-style: normal;
+            font-weight: 600;
+            src: url('{{ $poppinsSemiBold }}') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'PoppinsPdf';
+            font-style: normal;
+            font-weight: 700;
+            src: url('{{ $poppinsBold }}') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'LibreBaskervillePdf';
+            font-style: normal;
+            font-weight: 400;
+            src: url('{{ $libreRegular }}') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'LibreBaskervillePdf';
+            font-style: normal;
+            font-weight: 700;
+            src: url('{{ $libreBold }}') format('truetype');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            margin: 0cm;
+        }
+
+        html,
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'PoppinsPdf', sans-serif;
             background-color: #ffffff;
             margin: 0;
             padding: 0;
         }
 
+        /* ===== COVER PAGE ===== */
         .preview-container {
             width: 100%;
+        }
+
+        /* Margin untuk halaman konten (bukan cover) */
+        .content-page {
+            padding: 2.54cm;
         }
 
         .page {
@@ -33,6 +115,7 @@
         }
 
         .title {
+            font-family: 'LibreBaskervillePdf', serif;
             font-size: 20px;
             font-weight: bold;
             color: #2c3e50;
@@ -68,7 +151,7 @@
         .info-table .label {
             width: 200px;
             font-weight: bold;
-            color: #555;
+            color: #000000;
         }
 
         .info-table .separator {
@@ -232,6 +315,120 @@
             font-weight: bold;
             display: inline-block;
         }
+
+        .profile-table {
+            width: 78%;
+            margin: 0 auto;
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.5;
+            page-break-inside: avoid;
+        }
+
+        .profile-table th,
+        .profile-table td {
+            border: none !important;
+            background-color: transparent !important;
+            font-size: inherit;
+            padding: 4px 9px !important;
+            color: #000000 !important;
+        }
+
+        .profile-table th {
+            font-weight: 700;
+        }
+
+        .profile-table td {
+            font-weight: 400;
+        }
+
+        .profile-table tr,
+        .profile-table tr:nth-child(even),
+        .profile-table tr:hover {
+            background-color: transparent !important;
+        }
+
+        .profile-page-content {
+            position: relative;
+            z-index: 10;
+            padding: 76px 58px 48px;
+            text-align: center;
+        }
+
+        .profile-logo-wrap {
+            margin-top: 0;
+            margin-bottom: 56px;
+        }
+
+        .profile-logo {
+            height: 55px;
+            width: auto;
+            display: inline-block;
+        }
+
+        .profile-main-title {
+            font-family: 'LibreBaskervillePdf', serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: #000000;
+            line-height: 1.25;
+            margin-bottom: 36px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-subtitle {
+            font-size: 16px;
+            color: #000000;
+            margin: 0 auto 70px;
+            padding: 0 72px;
+            line-height: 1.45;
+        }
+
+        .profile-project-summary {
+            margin-top: 70px;
+            font-size: 16px;
+            color: #000000;
+            line-height: 1.45;
+            padding: 0 72px;
+            page-break-inside: avoid;
+        }
+
+        .pdf-footer-text {
+            font-size: 12px;
+            color: #828282;
+            font-weight: 200;
+            letter-spacing: 0.5px;
+        }
+
+        .idp-section-row,
+        .idp-section-row>td,
+        .idp-section-block,
+        .idp-note {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .idp-section-title,
+        .idp-activity-table {
+            page-break-after: avoid !important;
+        }
+
+        .competency-score-table th,
+        .competency-score-table td,
+        .idp-activity-table th,
+        .idp-activity-table td {
+            font-size: 16px !important;
+        }
+
+        .panelis-company-name {
+            font-family: poppins, 'PoppinsPdf', sans-serif !important;
+            font-style: normal !important;
+            font-weight: 300 !important;
+            color: #666;
+            font-size: 10px;
+            margin-top: 2px;
+        }
     </style>
 </head>
 
@@ -241,11 +438,13 @@
         $details = optional($latestAssessment)->details;
         $topGaps = collect();
         if ($details) {
-            $overrides = $details->filter(function ($d) {
-                return str_starts_with($d->notes ?? '', 'priority_');
-            })->sortBy(function ($d) {
-                return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
-            });
+            $overrides = $details
+                ->filter(function ($d) {
+                    return str_starts_with($d->notes ?? '', 'priority_');
+                })
+                ->sortBy(function ($d) {
+                    return (int) explode('|', str_replace('priority_', '', $d->notes))[0];
+                });
             if ($overrides->count() > 0) {
                 $topGaps = $overrides->values();
             } else {
@@ -254,376 +453,663 @@
         }
     @endphp
 
+    <!-- FIXED BACKGROUND BORDER UNTUK HALAMAN DINAMIS (Logbook IDP dll.) -->
+    <div style="position: fixed; top: 0; left: 0; width: 210mm; height: 297mm; z-index: -1;">
+        <img src="{{ $border_image }}" style="width: 210mm; height: 297mm; display:block; margin:0; padding:0;"
+            alt="Border">
+    </div>
+
+    <!-- GLOBALLY FIXED FOOTER FOR DYNAMIC PAGES -->
+    <div style="position: fixed; bottom: 45px; left: 0; right: 0; text-align: center; z-index: -1;">
+        <span class="pdf-footer-text">PDC | Laporan Hasil
+            Penelitian Promosi Talent</span>
+    </div>
+
     <div class="preview-container">
-        <!-- HALAMAN 1 -->
-        <div class="page">
-            <div class="content-wrapper">
-                <!-- Header -->
-                <div class="header">
-                    <div class="title">LAPORAN HASIL PENILAIAN PROMOSI TALENT</div>
+        <!-- COVER PAGE: full-bleed @page margin=0 approach (Halaman 1)-->
+        <div
+            style="width:210mm; height:297mm; page-break-after:always; page-break-inside:avoid; background:#ffffff; position:relative; overflow:hidden; margin: 0; padding: 0;">
+
+            <!-- BUILDING PHOTO: absolutely positioned to fill the bottom, ditaruh di atas secara urutan HTML agar jadi background dan border kiri tidak terpotong -->
+            <div
+                style="position:absolute; bottom:0; left:0; width:210mm; height:297mm; overflow:hidden; z-index:1; margin:0; padding:0;">
+                <img src="{{ $bg_image }}"
+                    style="position:absolute; top:0; left:0; width:210mm; height:297mm; display:block; padding:0; margin:0;"
+                    alt="Gedung Tiga Serangkai">
+                <!-- Green overlay -->
+                <div style="position:absolute; top:0; left:0; width:210mm; height:297mm;
+                            background:linear-gradient(to bottom,
+                                rgba(180,210,80,0.40) 0%,
+                                rgba(58,170,53,0.62) 30%,
+                                rgba(0,100,45,0.80) 100%);
+                            z-index:2; margin:0; padding:0;">
+                </div>
+            </div>
+
+            <!-- Left accent bar: full page height, from edge, dipisah di bawah building photo HTML nya supaya layer-nya lebih tinggi -->
+            <div style="position:absolute; left:0; top:0; width:14px; height:297mm;
+                        background:linear-gradient(to bottom, #f5c518 0%, #3aaa35 40%, #006633 100%);
+                        z-index:10; margin:0; padding:0;">
+            </div>
+
+            <!-- TOP CONTENT with manual margin (like 2.54cm) -->
+            <div style="padding: 2.54cm 2.54cm 0 2.8cm; position:relative; z-index:20; max-width: 210mm;">
+
+                <!-- Logo -->
+                <div style="margin-bottom:30px;">
+                    <img src="{{ $logo_image }}" style="height:55px; width:auto; display:block;" alt="Logo TS dan PDC">
                 </div>
 
-                <!-- Informasi Talent -->
-                <div class="section">
-                    <div class="section-title">Informasi Talent</div>
-                    <table class="info-table">
-                        <tr>
-                            <td class="label">Nama</td>
-                            <td class="separator">:</td>
-                            <td class="value">{{ $talent->nama }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Perusahaan</td>
-                            <td class="separator">:</td>
-                            <td class="value">{{ optional($talent->company)->nama_company ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Department</td>
-                            <td class="separator">:</td>
-                            <td class="value">{{ optional($talent->department)->nama_department ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Posisi Saat Ini</td>
-                            <td class="separator">:</td>
-                            <td class="value">{{ optional($talent->position)->position_name ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Atasan</td>
-                            <td class="separator">:</td>
-                            <td class="value">{{ optional($talent->atasan)->nama ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Mentor</td>
-                            <td class="separator">:</td>
-                            <td class="value">{{ optional($talent->mentor)->nama ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Posisi yang Di Tuju</td>
-                            <td class="separator">:</td>
-                            <td class="value"><strong
-                                    style="color: #e74c3c;">{{ optional($talent->promotion_plan->targetPosition)->position_name ?? '-' }}</strong>
-                            </td>
-                        </tr>
-                    </table>
+                <!-- Judul -->
+                <div style="font-family: 'LibreBaskervillePdf', serif; font-size:34px; font-weight:700; color:#000000; line-height:1.15;
+                            margin-bottom:22px; text-transform:uppercase; letter-spacing:0.5px;">
+                    Laporan Hasil Penelitian<br>Promosi Talent
                 </div>
 
-                <!-- Top 3 GAP Kompetensi -->
-                <div class="section">
-                    <div class="section-title">Top 3 GAP Kompetensi</div>
-                    <table>
+                <!-- Subtitle -->
+                <div style="font-size:13px; color:#000000; margin-bottom:5px;">Disusun melalui program:</div>
+                <div style="font-size:16px; color:#000000;">
+                    <strong>IDP (<em>Individual Development Plan</em>)</strong>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- HALAMAN PROFILE TALENT (Halaman 2) -->
+        <div
+            style="width:210mm; height:297mm; page-break-after:always; page-break-inside:avoid; position:relative; overflow:hidden; margin: 0; padding: 0;">
+            <img src="{{ $border_image }}"
+                style="position:absolute; top:0; left:0; width:210mm; height:297mm; display:block; z-index:1;"
+                alt="Border">
+
+            <div class="profile-page-content">
+
+                <!-- Logo -->
+                <div class="profile-logo-wrap">
+                    <img src="{{ $logo_image }}" class="profile-logo" alt="Logo TS dan PDC">
+                </div>
+
+                <!-- Judul -->
+                <div class="profile-main-title">
+                    Laporan Hasil Penelitian<br>Promosi Talent
+                </div>
+
+                <!-- Subtitle -->
+                <div class="profile-subtitle">
+                    Laporan ini disusun berdasarkan hasil observasi mendalam, evaluasi kompetensi teknis, serta tinjauan
+                    proyek perbaikan yang telah dilaksanakan oleh talent
+                </div>
+
+                <!-- Table Data -->
+                <table class="profile-table">
+                    <tr>
+                        <th style="width: 35%;">Nama</th>
+                        <td style="width: 5%;">:</td>
+                        <td style="width: 60%;">{{ $talent->nama }}</td>
+                    </tr>
+                    <tr>
+                        <th>Perusahaan</th>
+                        <td>:</td>
+                        <td>
+                            {{ optional($talent->company)->nama_company ?? '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td>:</td>
+                        <td>
+                            {{ optional($talent->department)->nama_department ?? '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Posisi Saat Ini</th>
+                        <td>:</td>
+                        <td>
+                            {{ optional($talent->position)->position_name ?? '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Atasan</th>
+                        <td>:</td>
+                        <td>{{ optional($talent->atasan)->nama ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mentor</th>
+                        <td>:</td>
+                        <td>{{ optional($talent->mentor)->nama ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Posisi yang Dituju</th>
+                        <td>:</td>
+                        <td>
+                            {{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '-' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Periode</th>
+                        <td>:</td>
+                        <td>
+                            @if (optional($talent->promotion_plan)->start_date && optional($talent->promotion_plan)->target_date)
+                                {{ \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat('d F Y') }}
+                                -
+                                {{ \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y') }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="profile-project-summary">
+                    @php
+                        $improvementTitle = '-';
+                        $latestProject = $talent->improvementProjects ? $talent->improvementProjects->first() : null;
+                        if ($latestProject) {
+                            $improvementTitle = $latestProject->title;
+                        }
+
+                        $exposureCount = $talent->idpActivities
+                            ? $talent->idpActivities->where('type_idp', 1)->count()
+                            : 0;
+                        $mentoringCount = $talent->idpActivities
+                            ? $talent->idpActivities->where('type_idp', 2)->count()
+                            : 0;
+                        $learningCount = $talent->idpActivities
+                            ? $talent->idpActivities->where('type_idp', 3)->count()
+                            : 0;
+
+                        $exposurePct = min(100, round(($exposureCount / 6) * 100));
+                        $mentoringPct = min(100, round(($mentoringCount / 6) * 100));
+                        $learningPct = min(100, round(($learningCount / 6) * 100));
+                    @endphp
+                    Telah berhasil menuntaskan <em>project improvement</em> dengan judul<br>
+                    <strong>"{{ $improvementTitle }}"</strong>
+                    <br><br><br>
+                    yang dibuktikan dengan perolehan skor penilaian <strong>Exposure {{ $exposurePct }}%, Mentoring
+                        {{ $mentoringPct }}% dan Learning {{ $learningPct }}%</strong> dari persentase maksimal 100%
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN SKOR KOMPETENSI (Halaman 3) -->
+        <div
+            style="width:210mm; height:297mm; page-break-after:always; page-break-inside:avoid; position:relative; overflow:hidden; margin: 0; padding: 0;">
+            <img src="{{ $border_image }}"
+                style="position:absolute; top:0; left:0; width:210mm; height:297mm; display:block; z-index:1;"
+                alt="Border">
+
+            <!-- Content -->
+            <div style="position:relative; z-index:10; padding: 100px 55px 60px 55px;">
+
+                <!-- Judul Halaman -->
+                <div
+                    style="font-family: 'PoppinsPdf', sans-serif; font-size:22px; font-weight:700; color:#000000; text-align:center; margin-bottom:40px;">
+                    Skor Kompetensi
+                </div>
+
+                <!-- Tabel Skor Kompetensi -->
+                <table class="competency-score-table"
+                    style="width:100%; border-collapse:collapse; font-size:16px; margin-top:40px;">
+                    <thead>
+                        <tr>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:center; border:none; width:5%;">
+                                No</th>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:left; border:none; width:30%;">
+                                Kompetensi</th>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:center; border:none; width:13%;">
+                                Standar</th>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:center; border:none; width:13%;">
+                                Skor Talent</th>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:center; border:none; width:13%;">
+                                Skor Atasan</th>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:center; border:none; width:13%;">
+                                Final Skor</th>
+                            <th
+                                style="background-color:#d4e6e1; color:#000000; padding:10px 8px; text-align:center; border:none; width:13%;">
+                                GAP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($competencies as $index => $comp)
+                            @php
+                                $detailRow = $latestAssessment
+                                    ? $latestAssessment->details->where('competence_id', $comp->id)->first()
+                                    : null;
+                                $selfScore2 = $detailRow ? $detailRow->score_talent : 0;
+                                $atasanScore2 = $detailRow ? $detailRow->score_atasan : 0;
+                                $finalScore2 =
+                                    $atasanScore2 > 0
+                                    ? ($selfScore2 + $atasanScore2) / 2
+                                    : ($selfScore2 > 0
+                                        ? $selfScore2
+                                        : 0);
+                                $std2 = $standards->get($comp->id) ?? 0;
+                                $gap2 = $detailRow
+                                    ? $detailRow->gap_score
+                                    : ($finalScore2 > 0
+                                        ? $finalScore2 - $std2
+                                        : 0);
+                                $hasData2 = $detailRow && ($selfScore2 > 0 || $atasanScore2 > 0);
+                            @endphp
+                            <tr style="border-bottom: 1px solid #b2d8d0;">
+                                <td style="padding:14px 10px; text-align:center; border:none; color:#000000;">
+                                    {{ $index + 1 }}
+                                </td>
+                                <td style="padding:14px 10px; text-align:left; border:none; color:#000000;">
+                                    {{ $comp->name }}
+                                </td>
+                                <td style="padding:14px 10px; text-align:center; border:none; color:#000000;">
+                                    {{ $hasData2 ? number_format($std2, 2) : '' }}
+                                </td>
+                                <td style="padding:14px 10px; text-align:center; border:none; color:#000000;">
+                                    {{ $hasData2 ? number_format($selfScore2, 2) : '' }}
+                                </td>
+                                <td style="padding:14px 10px; text-align:center; border:none; color:#000000;">
+                                    {{ $hasData2 ? number_format($atasanScore2, 2) : '' }}
+                                </td>
+                                <td style="padding:14px 10px; text-align:center; border:none; color:#000000;">
+                                    {{ $hasData2 ? number_format($finalScore2, 2) : '' }}
+                                </td>
+                                <td style="padding:14px 10px; text-align:center; border:none;">
+                                    @if ($hasData2)
+                                        @if ($gap2 <= -2)
+                                            <span style="color:#e74c3c; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                        @elseif($gap2 < -1)
+                                            <span style="color:#e74c3c; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                        @elseif($gap2 < 0)
+                                            <span style="color:#f39c12; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                        @elseif($gap2 == 0)
+                                            <span style="color:#95a5a6; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                        @else
+                                            <span style="color:#2980b9; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                        @endif
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- HALAMAN LOGBOOK IDP (Halaman 4+) -->
+        @php
+            $exposureRows = $talent->idpActivities ? $talent->idpActivities->where('type_idp', 1) : collect();
+            $mentoringRows = $talent->idpActivities ? $talent->idpActivities->where('type_idp', 2) : collect();
+            $learningRows = $talent->idpActivities ? $talent->idpActivities->where('type_idp', 3) : collect();
+        @endphp
+
+        <table
+            style="width: 100%; border: none; border-collapse: collapse; margin:0; padding:0; page-break-inside: auto; position:relative; z-index:10;">
+            <thead>
+                <tr>
+                    <td
+                        style="height: 70px; border: none; background: transparent; padding:0; margin:0; line-height:0;">
+                        &nbsp;</td>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td
+                        style="height: 125px; border: none; background: transparent; padding:0; margin:0; line-height:0;">
+                        &nbsp;</td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <!-- Header IDP -->
+                <tr>
+                    <td style="border: none; padding: 0 55px 0 45px; vertical-align: top; background: transparent;">
+                        <div
+                            style="font-family: 'PoppinsPdf', sans-serif; font-size:22px; font-weight:700; color:#000000; text-align:center; margin-bottom:40px; margin-top:-80px;">
+                            LogBook IDP
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- EXPOSURE -->
+                <tr class="idp-section-row">
+                    <td style="border: none; padding: 0 55px 0 45px; vertical-align: top; background: transparent;">
+                        <div class="idp-section-block" style="margin-bottom: 40px;">
+                            <div class="idp-section-title" style="page-break-after: avoid;">
+                                <div
+                                    style="font-family: 'PoppinsPdf', sans-serif; font-size: 16px; font-weight: 700; color: #000000; padding-bottom: 5px; margin-bottom: 15px; border-bottom: 2px solid #b2d8d0; display: inline-block;">
+                                    Exposure 70%
+                                </div>
+                            </div>
+                            <table class="idp-activity-table"
+                                style="width:100%; border-collapse: collapse; font-size: 16px; margin-bottom: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px; width: 10%; text-align: center; border: none;">
+                                            No</th>
+                                        <th
+                                            style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px; width: 90%; text-align: center; border: none;">
+                                            Tema</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($exposureRows as $index => $row)
+                                        <tr style="border-bottom: 1px solid #b2d8d0;">
+                                            <td
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000;">
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000;">
+                                                {{ $row->theme ?? '-' }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr style="border-bottom: 1px solid #b2d8d0;">
+                                            <td colspan="2"
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000; font-style: italic;">
+                                                Tidak ada data aktivitas Exposure.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            <div class="idp-note"
+                                style="font-size: 12px; font-style: italic; color: #000000; line-height:1.4;">
+                                *Pencapaian pada aspek <strong>exposure</strong> merepresentasikan keterlibatan aktif
+                                talent dalam penyelesaian problem nyata di lapangan melalui proyek perbaikan strategis
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- MENTORING -->
+                <tr class="idp-section-row">
+                    <td style="border: none; padding: 0 55px 0 45px; vertical-align: top; background: transparent;">
+                        <div class="idp-section-block" style="margin-bottom: 40px;">
+                            <div class="idp-section-title" style="page-break-after: avoid;">
+                                <div
+                                    style="font-family: 'PoppinsPdf', sans-serif; font-size: 16px; font-weight: 700; color: #000000; padding-bottom: 5px; margin-bottom: 15px; border-bottom: 2px solid #b2d8d0; display: inline-block;">
+                                    Mentoring 20%
+                                </div>
+                            </div>
+                            <table class="idp-activity-table"
+                                style="width:100%; border-collapse: collapse; font-size: 16px; margin-bottom: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px; width: 10%; text-align: center; border: none;">
+                                            No</th>
+                                        <th
+                                            style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px; width: 90%; text-align: center; border: none;">
+                                            Tema</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($mentoringRows as $index => $row)
+                                        <tr style="border-bottom: 1px solid #b2d8d0;">
+                                            <td
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000;">
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000;">
+                                                {{ $row->theme ?? '-' }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr style="border-bottom: 1px solid #b2d8d0;">
+                                            <td colspan="2"
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000; font-style: italic;">
+                                                Tidak ada data aktivitas Mentoring.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            <div class="idp-note"
+                                style="font-size: 12px; font-style: italic; color: #000000; line-height:1.4;">
+                                *Melalui sesi <strong>mentoring</strong>, talent menunjukkan peningkatan signifikan
+                                dalam aspek pengambilan keputusan dan pola pikir kepemimpinan yang selaras dengan nilai
+                                organisasi.
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- LEARNING -->
+                <tr class="idp-section-row">
+                    <td style="border: none; padding: 0 55px 0 45px; vertical-align: top; background: transparent;">
+                        <div
+                            style="font-family: 'PoppinsPdf', sans-serif; font-size:22px; font-weight:700; color:transparent; text-align:center; margin-bottom:40px; margin-top:-20px;">
+                            LogBook IDP
+                        </div>
+                        <div class="idp-section-block" style="margin-bottom: 40px;">
+                            <div class="idp-section-title" style="page-break-after: avoid;">
+                                <div
+                                    style="font-family: 'PoppinsPdf', sans-serif; font-size: 16px; font-weight: 700; color: #000000; padding-bottom: 5px; margin-bottom: 15px; border-bottom: 2px solid #b2d8d0; display: inline-block;">
+                                    Learning 10%
+                                </div>
+                            </div>
+                            <table class="idp-activity-table"
+                                style="width:100%; border-collapse: collapse; font-size: 16px; margin-bottom: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px; width: 10%; text-align: center; border: none;">
+                                            No</th>
+                                        <th
+                                            style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px; width: 90%; text-align: center; border: none;">
+                                            Tema</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($learningRows as $index => $row)
+                                        <tr style="border-bottom: 1px solid #b2d8d0;">
+                                            <td
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000;">
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000;">
+                                                {{ $row->theme ?? '-' }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr style="border-bottom: 1px solid #b2d8d0;">
+                                            <td colspan="2"
+                                                style="padding: 12px 10px; text-align: center; border:none; color: #000000; font-style: italic;">
+                                                Tidak ada data aktivitas Learning.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            <div class="idp-note"
+                                style="font-size: 12px; font-style: italic; color: #000000; line-height:1.4;">
+                                *Aspek <strong>learning</strong> mengonfirmasi bahwa talent telah menguasai landasan
+                                teoritis dan teknis yang diperlukan untuk memikul tanggung jawab pada level jabatan.
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- HALAMAN PENILAIAN PANELIS -->
+    <table
+        style="width: 100%; border: none; border-collapse: collapse; margin:0; padding:0; page-break-before: always; page-break-inside: auto; position:relative; z-index:10;">
+        <thead>
+            <tr>
+                <td style="border: none; background: transparent; padding:0; margin:0; line-height:0;">
+                    <div style="height: 70px;"></div>
+                </td>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td style="border: none; background: transparent; padding:0; margin:0; line-height:0;">
+                    <div style="height: 80px;"></div>
+                </td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <td style="border: none; padding: 0 55px 0 45px; vertical-align: top; background: transparent;">
+
+                    <!-- Intro paragraph -->
+                    <div
+                        style="font-size: 16px; color: #000000; line-height: 1.7; margin-bottom: 30px; margin-top: -10px;">
+                        Berikut adalah rincian perolehan skor evaluasi yang diberikan oleh Panelis berdasarkan
+                        rangkaian aktivitas penilaian dan status capaian kompetensi talent:
+                    </div>
+
+                    <!-- Tabel Panelis -->
+                    <table style="width: 100%; border-collapse: collapse; font-size: 16px;">
                         <thead>
                             <tr>
-                                <th width="10%" class="text-center">No</th>
-                                <th width="60%">Kompetensi</th>
-                                <th width="30%" class="text-center">GAP</th>
+                                <th
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 5%;">
+                                    No</th>
+                                <th
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: left; border: none; width: 22%;">
+                                    Nama</th>
+                                <th
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 9%;">
+                                    Score</th>
+                                <th
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 37%;">
+                                    Feedback</th>
+                                <th
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 27%;">
+                                    Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($topGaps as $index => $detail)
+                            @forelse($talent->panelisAssessments as $index => $pa)
                                 @php
-                                    $compName = optional($detail->competence)->name ?? 'Unknown';
-                                    $gapVal = $detail->gap_score;
-                                    $gapClass = 'gap-low';
-                                    if ($gapVal <= -2)
-                                        $gapClass = 'gap-high';
-                                    elseif ($gapVal <= -1)
-                                        $gapClass = 'gap-medium';
+                                    $rekomendasi = $pa->panelis_rekomendasi ?? '';
+                                    // Pisahkan teks utama dan keterangan dalam tanda (..)
+                                    preg_match('/^(.*?)(\(.*?\))?\s*$/', $rekomendasi, $matches);
+                                    $statusMain = trim($matches[1] ?? $rekomendasi);
+                                    $statusSub = trim($matches[2] ?? '');
                                 @endphp
-                                <tr>
-                                    <td class="text-center">{{ $index + 1 }}</td>
-                                    <td>{{ $compName }}</td>
-                                    <td class="text-center">
-                                        <span class="{{ $gapClass }}">{{ number_format($gapVal, 2) }}</span>
+                                <tr style="border-bottom: 1px solid #b2d8d0;">
+                                    <td
+                                        style="padding: 14px 8px; text-align: center; border: none; color: #000000; vertical-align: top;">
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td style="padding: 14px 8px; text-align: left; border: none; vertical-align: top;">
+                                        <div style="font-weight: bold; color: #000000; font-size: 11.5px;">
+                                            {{ optional($pa->panelis)->nama ?? '-' }}
+                                        </div>
+                                        <div class="panelis-company-name"
+                                            style="font-family: poppins, 'PoppinsPdf', sans-serif !important; font-style: normal !important; font-weight: 300 !important; color: #666; font-size: 10px; margin-top: 2px;">
+                                            {{ optional(optional($pa->panelis)->company)->nama_company ?? '' }}
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="padding: 14px 8px; text-align: center; border: none; color: #000000; vertical-align: top;">
+                                        {{ is_numeric($pa->panelis_score) ? $pa->panelis_score * 2 : '-' }}
+                                    </td>
+                                    <td
+                                        style="padding: 14px 8px; text-align: left; border: none; color: #000000; vertical-align: top; line-height: 1.5;">
+                                        {{ $pa->panelis_komentar ?? '-' }}
+                                    </td>
+                                    <td
+                                        style="padding: 14px 8px; text-align: center; border: none; vertical-align: top; line-height: 1.4;">
+                                        @if ($statusMain)
+                                            <div style="color: #000000; font-size: 11px;">{{ $statusMain }}</div>
+                                        @endif
+                                        @if ($statusSub)
+                                            <div style="color: #000000; font-size: 10px; font-style: italic; margin-top: 2px;">
+                                                {{ $statusSub }}
+                                            </div>
+                                        @endif
+                                        @if (!$statusMain && !$statusSub)
+                                            <span style="color: #000000;">-</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="text-center" style="padding: 15px;">Tidak ada gap kompetensi
-                                        signifikan.</td>
+                                <tr style="border-bottom: 1px solid #b2d8d0;">
+                                    <td colspan="5"
+                                        style="padding: 14px 8px; text-align: center; border: none; color: #000000; font-style: italic;">
+                                        Belum ada penilaian dari Panelis.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
-                </div>
 
-                <!-- Score Kompetensi -->
-                <div class="section">
-                    <div class="section-title">Score Kompetensi</div>
-                    <table style="font-size: 11px;">
-                        <thead>
-                            <tr>
-                                <th width="5%" class="text-center">No</th>
-                                <th width="28%">Kompetensi</th>
-                                <th width="10%" class="text-center">Standar</th>
-                                <th width="11%" class="text-center">Skor Talent</th>
-                                <th width="11%" class="text-center">Skor Atasan</th>
-                                <th width="11%" class="text-center">Final Skor</th>
-                                <th width="11%" class="text-center">GAP</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($competencies as $index => $comp)
-                                @php
-                                    $detail = $latestAssessment ? $latestAssessment->details->where('competence_id', $comp->id)->first() : null;
-                                    $selfScore = $detail ? $detail->score_talent : 0;
-                                    $atasanScore = $detail ? $detail->score_atasan : 0;
-                                    $finalScore = $atasanScore > 0 ? ($selfScore + $atasanScore) / 2 : ($selfScore > 0 ? $selfScore : 0);
-                                    $std = $standards->get($comp->id) ?? 0;
-                                    $gap = $detail ? $detail->gap_score : ($finalScore > 0 ? $finalScore - $std : 0);
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-                                    $gapClass = '';
-                                    if ($gap <= -2)
-                                        $gapClass = 'gap-high';
-                                    elseif ($gap <= -1)
-                                        $gapClass = 'gap-medium';
-                                    elseif ($gap < 0)
-                                        $gapClass = 'gap-low';
-                                @endphp
-                                <tr>
-                                    <td class="text-center">{{ $index + 1 }}</td>
-                                    <td>{{ $comp->name }}</td>
-                                    <td class="text-center">{{ number_format($std, 2) }}</td>
-                                    <td class="text-center">{{ number_format($selfScore, 2) }}</td>
-                                    <td class="text-center">{{ number_format($atasanScore, 2) }}</td>
-                                    <td class="text-center"><strong>{{ number_format($finalScore, 2) }}</strong></td>
-                                    <td class="text-center">
-                                        @if($gap < 0)
-                                            <span class="{{ $gapClass }}">{{ number_format($gap, 2) }}</span>
-                                        @else
-                                            <span style="color: #7f8c8d;">{{ number_format($gap, 2) }}</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- BAGIAN KESIMPULAN -->
+    @php
+        $adminUser = auth()->user();
+        $statusPromotion = optional($talent->promotion_plan)->status_promotion ?? '';
+        if (str_contains($statusPromotion, 'Not Promoted')) {
+            $statusLabel = 'Not Promoted';
+        } elseif (str_contains($statusPromotion, 'Not Ready')) {
+            $statusLabel = 'Not Ready';
+        } elseif (str_contains($statusPromotion, '> 2') || str_contains($statusPromotion, 'over 2')) {
+            $statusLabel = 'Ready in > 2 Years';
+        } elseif (
+            str_contains($statusPromotion, '1-2') ||
+            str_contains($statusPromotion, '1–2') ||
+            str_contains($statusPromotion, '1 - 2') ||
+            str_contains($statusPromotion, '1 – 2')
+        ) {
+            $statusLabel = 'Ready in 1 – 2 Years';
+        } elseif (str_contains($statusPromotion, 'Promoted')) {
+            $statusLabel = 'Ready Now';
+        } else {
+            $statusLabel = $statusPromotion ?: '-';
+        }
+
+        $panelisAssessments = $talent->panelisAssessments ?? collect();
+        $totalScore = 0;
+        $panelisCount = 0;
+        foreach ($panelisAssessments as $pa) {
+            if (is_numeric($pa->panelis_score)) {
+                $totalScore += ($pa->panelis_score * 2);
+                $panelisCount++;
+            }
+        }
+        $averageScore = $panelisCount > 0 ? $totalScore / $panelisCount : 0;
+
+        $exportDate = \Carbon\Carbon::now()->translatedFormat('d F Y');
+    @endphp
+
+    <div style="page-break-inside: avoid; padding: 60px 55px 40px 45px; position: relative; z-index: 10;">
+        <div style="font-size: 16px; color: #000000; line-height: 1.9; text-align: justify; margin-bottom: 60px;">
+            Berdasarkan hasil rangkaian aktivitas penilaian (<em>assessment</em>) serta evaluasi komprehensif
+            yang dilakukan oleh Tim People Developmen Center (PDC), dengan ini
+            <strong>merekomendasikan Saudara/i {{ $talent->nama }}</strong>
+            untuk dipromosikan ke jabatan target, dengan status kesiapan promosi:
+            <strong>[{{ $statusLabel }}]</strong>. Dengan memperoleh nilai rata-rata sebesar
+            <strong>{{ str_replace('.', ',', (float) round($averageScore, 1)) }} point.</strong>
         </div>
 
-        @php
-            $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
-            $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
-            $learningCount = $talent->idpActivities->where('type_idp', 3)->count();
-
-            $idpCharts = [
-                ['label' => 'Exposure (Rotasi / Penugasan Khusus)', 'done' => min($exposureCount, 6), 'total' => 6, 'type_idp' => 1, 'short_label' => 'Exposure'],
-                ['label' => 'Mentoring (Coaching & Mentoring)', 'done' => min($mentoringCount, 6), 'total' => 6, 'type_idp' => 2, 'short_label' => 'Mentoring'],
-                ['label' => 'Learning (Training & Development)', 'done' => min($learningCount, 6), 'total' => 6, 'type_idp' => 3, 'short_label' => 'Learning'],
-            ];
-        @endphp
-
-        <!-- HALAMAN 2 -->
-        <div class="page page-break">
-            <div class="content-wrapper">
-                <!-- Monitoring IDP -->
-                <div class="section">
-                    <div class="section-title">Monitoring IDP</div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="10%" class="text-center">No</th>
-                                <th width="50%">IDP Type</th>
-                                <th width="40%" class="text-center">Persentase Progress</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php $noIdp = 1; @endphp
-                            @foreach($idpCharts as $chart)
-                                @php
-                                    $percent = ($chart['done'] / $chart['total']) * 100;
-                                @endphp
-                                <tr>
-                                    <td class="text-center">{{ $noIdp++ }}</td>
-                                    <td>{{ $chart['label'] }}</td>
-                                    <td class="text-center">
-                                        <span class="badge-progress">{{ number_format($percent, 2) }}%</span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- LogBook IDP -->
-                <div class="section">
-                    <div class="section-title">LogBook IDP</div>
-
-                    @foreach($idpCharts as $chart)
-                        @php
-                            $activities = $talent->idpActivities->where('type_idp', $chart['type_idp']);
-                        @endphp
-                        <div class="subsection-title">{{ $chart['short_label'] }}</div>
-                        <table style="font-size: 11px;">
-                            <thead>
-                                <tr>
-                                    <th width="8%" class="text-center">No</th>
-                                    @if($chart['type_idp'] == 1)
-                                        <th width="46%">Tema</th>
-                                        <th width="46%">Aktivitas</th>
-                                    @elseif($chart['type_idp'] == 2)
-                                        <th width="30%">Tema</th>
-                                        <th width="32%">Deskripsi</th>
-                                        <th width="30%">Action Plan</th>
-                                    @elseif($chart['type_idp'] == 3)
-                                        <th width="30%">Tema</th>
-                                        <th width="32%">Sumber</th>
-                                        <th width="30%">Platform</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($activities as $act)
-                                    <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        @if($chart['type_idp'] == 1)
-                                            <td>{{ $act->theme ?: '-' }}</td>
-                                            <td>{{ $act->activity ?: '-' }}</td>
-                                        @elseif($chart['type_idp'] == 2)
-                                            <td>{{ $act->theme ?: '-' }}</td>
-                                            <td>{{ $act->description ?: '-' }}</td>
-                                            <td>{{ $act->action_plan ?: '-' }}</td>
-                                        @elseif($chart['type_idp'] == 3)
-                                            <td>{{ $act->theme ?: '-' }}</td>
-                                            <td>{{ $act->activity ?: '-' }}</td>
-                                            <td>{{ $act->platform ?: '-' }}</td>
-                                        @endif
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        @php $colCount = $chart['type_idp'] == 1 ? 3 : 4; @endphp
-                                        <td colspan="{{ $colCount }}" class="text-center">Belum ada aktivitas.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <!-- HALAMAN 3 -->
-        <div class="page page-break">
-            <div class="content-wrapper">
-                <!-- Project Improvement -->
-                <div class="section">
-                    <div class="section-title">Project Improvement</div>
-                    @php
-                        $bodUsers = \App\Models\User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bod', 'bo_director', 'board_of_directors', 'board_of_director']))
-                            ->with('company')
-                            ->orderBy('nama')
-                            ->get();
-                        $totalRows = max(5, $bodUsers->count());
-                    @endphp
-
-                    @forelse($talent->improvementProjects as $proj)
-                        <table style="margin-bottom: 25px;">
-                            <!-- Baris Judul Project -->
-                            <tr class="project-title-row">
-                                <td colspan="5" style="vertical-align: top; text-align: left; height: 75px; padding: 12px;">
-                                    <div style="font-size: 10px; font-weight: normal; color: #7f8c8d; margin-bottom: -15px;">Judul :</div>
-                                    <div style="text-transform: uppercase; text-align: center; margin-top: 15px; font-weight: bold; width: 100%;">
-                                        {{ $proj->title }}
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Header Kolom Review BOD -->
-                            <tr class="bod-review-header">
-                                <th width="25%">Reviewer / Verifikator</th>
-                                <th width="20%">Status Proyek</th>
-                                <th width="35%">Feedback</th>
-                                <th width="20%" class="text-center">Status</th>
-                            </tr>
-
-                            <!-- Review -->
-                            @php
-                                $noBOD = 1;
-                                $hasReviewData = false;
-                            @endphp
-                            @for ($i = 0; $i < $bodUsers->count(); $i++)
-                                @php 
-                                    $bod = $bodUsers->get($i); 
-                                    $hasScoreThisBod = ($i === 0 && ($proj->verify_at || $proj->feedback || $proj->status === 'Verified'));
-                                @endphp
-                                
-                                @if ($hasScoreThisBod)
-                                    @php $hasReviewData = true; @endphp
-                                    <tr>
-                                        <td class="text-center">{{ $noBOD++ }}</td>
-                                        <td>
-                                            @if ($bod)
-                                                <strong>{{ $bod->nama }}</strong><br>
-                                                @if (optional($bod->company)->nama_company)
-                                                    <em style="font-size: 11px; color: #555;">{{ $bod->company->nama_company }}</em>
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($proj->verify_at)
-                                                
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($proj->feedback)
-                                                {{ $proj->feedback }}
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($proj->status === 'Verified')
-                                                <span style="font-weight: bold; color: #1e293b; display: block;">Ready in 1 – 2 Years</span>
-                                                <em style="font-size: 10px; color: #64748b; display: block;">(Siap dengan pengembangan terarah)</em>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endfor
-
-                            @if (!$hasReviewData)
-                                <tr>
-                                    <td colspan="5" class="text-center" style="padding: 20px; color: #7f8c8d; font-style: italic;">
-                                        Belum ada BOD yang memberikan nilai.
-                                    </td>
-                                </tr>
-                            @endif
-                        </table>
-                    @empty
-                        <p class="text-center" style="font-size: 12px; padding: 20px;">Belum ada Project Improvement yang
-                            diajukan.</p>
-                    @endforelse
-                </div>
-
-                <!-- Signature Section -->
-                <div class="section" style="margin-top: 60px; page-break-inside: avoid;">
-                    <table style="width: 100%; border: none;">
-                        <tr>
-                            <td style="width: 50%; border: none; text-align: center; padding: 20px;">
-                                <div style="margin-bottom: 80px;">
-                                    <strong>Mengetahui,</strong><br>
-                                    <strong>Head of People Development Center</strong>
-                                </div>
-                                <div style="border-bottom: 2px solid #000; width: 250px; margin: 0 auto;"></div>
-                                <div style="margin-top: 10px;">
-                                    <strong>Dr. Rahayu Wijayanti, M.Psi</strong><br>
-                                    <small>NIK: 19850615.001</small>
-                                </div>
-                            </td>
-                            <td style="width: 50%; border: none; text-align: center; padding: 20px;">
-                                <div style="margin-bottom: 80px;">
-                                    <strong>Menyetujui,</strong><br>
-                                    <strong>Chief Executive Officer</strong>
-                                </div>
-                                <div style="border-bottom: 2px solid #000; width: 250px; margin: 0 auto;"></div>
-                                <div style="margin-top: 10px;">
-                                    <strong>Hendra Gunawan, S.E., M.B.A.</strong><br>
-                                    <small>NIK: 19750523.002</small>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 40px;">
+            <tr>
+                <td style="width: 55%; border: none; background: transparent;"></td>
+                <td style="width: 45%; border: none; background: transparent; padding: 0; vertical-align: top;">
+                    <div style="font-size: 14px; color: #000000; margin-bottom: 6px;">Surakarta, {{ $exportDate }}
+                    </div>
+                    <div style="font-size: 16px; color: #000000; font-weight: bold; margin-bottom: 70px;">Head of
+                        People Development Center</div>
+                    <div style="border-top: 1.5px solid #555; padding-top: 6px; width: 220px;">
+                        <div style="font-size: 16px; color: #000000; font-weight: bold;">Wisnu Wijaya Putra</div>
+                        <div style="font-size: 14px; color: #000000; margin-top: 2px;">NIK: 0987645321</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 

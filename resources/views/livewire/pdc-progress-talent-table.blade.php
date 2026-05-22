@@ -279,58 +279,57 @@
                         </table>
                     </div>
                 </div>
-        </div>
-        @empty
-            <div class="empty-prem">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                </svg>
-                <h3>Belum Ada Data Talent</h3>
-                <p>Data akan muncul setelah talent memiliki development plan aktif.</p>
-            </div>
-            @endforelse
-        </div>{{-- /progress-talent-wrapper --}}
-    </div>
-
-    {{-- Delete Confirmation Modal (handled via Livewire property, not JS) --}}
-    @if ($showDeleteModal)
-        <div class="delete-modal-backdrop" wire:click.self="$set('showDeleteModal', false)">
-            <div class="delete-modal-panel">
-                <div class="px-6 pt-6 pb-4">
-                    <div
-                        class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2">
+                @empty
+                    <div class="empty-prem">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 9v3.75m0 3h.008v.008H12v-.008Zm-7.938 4.5h15.876c1.54 0 2.502-1.667 1.732-3L13.732 4.5c-.77-1.333-2.694-1.333-3.464 0L2.33 17.25c-.77 1.333.192 3 1.732 3Z" />
+                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                         </svg>
+                        <h3>Belum Ada Data Talent</h3>
+                        <p>Data akan muncul setelah talent memiliki development plan aktif.</p>
                     </div>
-                    <h3 class="text-center text-lg font-bold text-slate-800">Hapus Progress Talent?</h3>
-                    <p class="mt-2 text-center text-sm leading-6 text-slate-500">
-                        Progress talent untuk posisi <span
-                            class="font-semibold text-slate-700">{{ $deletePositionName }}</span> dengan nama talent
-                        <span class="font-semibold text-slate-700">{{ $deleteTalentNames }}</span> akan dihapus.
-                        Tindakan ini tidak bisa dibatalkan.
-                    </p>
-                </div>
-                <div class="flex items-center justify-end gap-3 border-t border-slate-100 px-6 py-4">
-                    <button type="button"
-                        class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-                        wire:click="$set('showDeleteModal', false)">
-                        Batal
-                    </button>
-                    <form action="{{ $deleteAction }}" method="POST" id="livewire-delete-progress-form">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="inline-flex items-center justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600">
-                            Hapus
+                @endforelse
+            </div>{{-- /progress-talent-wrapper --}}
+        </div>
+
+        {{-- Delete Confirmation Modal (handled via Livewire property, not JS) --}}
+        @if ($showDeleteModal)
+            <div class="delete-modal-backdrop" wire:click.self="$set('showDeleteModal', false)">
+                <div class="delete-modal-panel">
+                    <div class="px-6 pt-6 pb-4">
+                        <div
+                            class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v3.75m0 3h.008v.008H12v-.008Zm-7.938 4.5h15.876c1.54 0 2.502-1.667 1.732-3L13.732 4.5c-.77-1.333-2.694-1.333-3.464 0L2.33 17.25c-.77 1.333.192 3 1.732 3Z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-center text-lg font-bold text-slate-800">Hapus Progress Talent?</h3>
+                        <p class="mt-2 text-center text-sm leading-6 text-slate-500">
+                            Progress talent untuk posisi <span
+                                class="font-semibold text-slate-700">{{ $deletePositionName }}</span> dengan nama talent
+                            <span class="font-semibold text-slate-700">{{ $deleteTalentNames }}</span> akan dihapus.
+                            Tindakan ini tidak bisa dibatalkan.
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-end gap-3 border-t border-slate-100 px-6 py-4">
+                        <button type="button"
+                            class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                            wire:click="$set('showDeleteModal', false)">
+                            Batal
                         </button>
-                    </form>
+                        <form action="{{ $deleteAction }}" method="POST" id="livewire-delete-progress-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="inline-flex items-center justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600">
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
     </div>

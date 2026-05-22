@@ -458,51 +458,78 @@
 
                     </div>
 
-                    <table class="pdc-custom-table">
-                        <thead>
-                            <tr>
-                                <th class="w-1/2">Judul Project Improvement</th>
-                                <th>File</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($talent->improvementProjects as $proj)
+                    <div class="rounded-xl overflow-hidden border border-gray-200 mt-4 mb-4 text-left">
+                        <table class="w-full text-left bg-white">
+                            <thead class="bg-slate-50 border-b border-gray-200">
                                 <tr>
-                                    <td class="font-bold">{{ $proj->title }}</td>
-                                    <td>
-                                        <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
-                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
-                                            target="_blank">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
-                                                </path>
-                                            </svg>
-                                            Lihat File
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @php
-                                            $projectStatus = $proj->status === 'Verified' ? 'Approved' : $proj->status;
-                                        @endphp
-                                        <div class="flex items-center justify-center gap-2">
-                                            <div
-                                                class="w-2 h-2 rounded-full {{ $projectStatus === 'Approved' ? 'bg-green-500' : ($projectStatus === 'Rejected' ? 'bg-red-500' : 'bg-orange-500') }}">
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project
+                                        Improvement</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
+                                    <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($talent->improvementProjects as $proj)
+                                    <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                        <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
+                                            {{ $proj->title }}
+                                            <div class="text-xs text-gray-400 font-normal mt-0.5">
+                                                {{ \Carbon\Carbon::parse($proj->created_at)->locale('id')->translatedFormat('d F Y') }}
                                             </div>
-                                            <span class="font-bold">{{ $projectStatus ?: 'Pending' }}</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-gray-400 py-8">Belum ada project improvement yang
-                                        diunggah.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                        </td>
+                                        <td class="py-4 px-6 text-center w-48">
+                                            @if ($proj->document_path)
+                                                <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
+                                                    target="_blank"
+                                                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                    title="Lihat/Download File Project">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                    </svg>
+                                                    Lihat File
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400 text-xs italic">-</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-4 px-6 text-center w-48">
+                                            @php
+                                                $projectStatus =
+                                                    $proj->status === 'Verified' ? 'Approved' : $proj->status;
+                                            @endphp
+                                            @if ($projectStatus === 'Approved')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                                    Approved
+                                                </span>
+                                            @elseif($projectStatus === 'Rejected')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                                                    Pending
+                                                </span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="3">
+                                            Belum ada project yang disubmit.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             @endforeach
         </div>

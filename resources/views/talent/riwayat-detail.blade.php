@@ -424,29 +424,44 @@
             </div>
 
             <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
-                <div class="overflow-x-auto rounded-xl border border-[#d1d5db]">
-                    <table class="w-full text-sm bg-white min-w-[600px] border-collapse">
-                        <thead>
-                            <tr class="bg-[#f1f5f9]">
-                                <th
-                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-r border-[#cbd5e1] text-[0.8rem] uppercase">
-                                    Judul Project Improvement</th>
-                                <th
-                                    class="text-center px-4 py-3 font-bold text-[#1e293b] border-b-2 border-[#cbd5e1] w-44 text-[0.8rem] uppercase">
-                                    Status</th>
+                <div class="rounded-xl overflow-hidden border border-gray-200">
+                    <table class="w-full text-left bg-white">
+                        <thead class="bg-slate-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project
+                                    Improvement</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($projects as $project)
-                                <tr class="bg-white border-b border-[#d1d5db] hover:bg-[#f8fafc] transition-colors">
-                                    <td
-                                        class="px-6 py-4 text-[#334155] border-r border-[#e5e7eb] font-bold text-[0.88rem]">
+                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                    <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
                                         {{ $project->title }}
                                         <div class="text-xs text-gray-400 font-normal mt-0.5">
-                                            {{ \Carbon\Carbon::parse($project->created_at)->translatedFormat('d F Y') }}
+                                            {{ \Carbon\Carbon::parse($project->created_at)->locale('id')->translatedFormat('d F Y') }}
                                         </div>
                                     </td>
-                                    <td class="text-center px-6 py-4">
+                                    <td class="py-4 px-6 text-center w-48">
+                                        @if ($project->document_path)
+                                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
+                                                target="_blank"
+                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                title="Lihat/Download File Project">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                </svg>
+                                                Lihat File
+                                            </a>
+                                        @else
+                                            <span class="text-gray-400 text-xs italic">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-6 text-center w-48">
                                         @php
                                             // Ambil status dari Finance Validation (via feedback)
                                             $finDec = 'Pending';
@@ -462,29 +477,30 @@
                                             $displayStatus = in_array($project->status, ['Approved', 'Rejected'])
                                                 ? $project->status
                                                 : $finDec;
-
-                                            $statusThemes = [
-                                                'Approved' => ['text' => 'text-green-600', 'dot' => 'bg-green-500'],
-                                                'Rejected' => ['text' => 'text-red-600', 'dot' => 'bg-red-500'],
-                                                'Pending' => ['text' => 'text-orange-600', 'dot' => 'bg-orange-500'],
-                                            ];
-                                            $theme = $statusThemes[$displayStatus] ?? [
-                                                'text' => 'text-orange-600',
-                                                'dot' => 'bg-orange-500',
-                                            ];
                                         @endphp
-                                        <span
-                                            class="inline-flex items-center gap-2 {{ $theme['text'] }} text-xs font-bold px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 shadow-sm">
+                                        @if ($displayStatus === 'Approved')
                                             <span
-                                                class="w-1.5 h-1.5 rounded-full {{ $theme['dot'] }} inline-block"></span>
-                                            {{ $displayStatus }}
-                                        </span>
+                                                class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                            </span>
+                                        @elseif($displayStatus === 'Rejected')
+                                            <span
+                                                class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="bg-white">
-                                    <td class="px-4 py-8 text-gray-400 border-r border-[#e5e7eb] text-center italic text-sm"
-                                        colspan="2">Belum ada project yang disubmit.</td>
+                                <tr>
+                                    <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="3">
+                                        Belum ada project yang disubmit.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>

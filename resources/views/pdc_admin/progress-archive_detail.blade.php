@@ -1030,7 +1030,7 @@
                                 <span
                                     class="text-[1.45rem] font-extrabold text-slate-1500 tracking-tight">{{ round($pct * 100) }}%</span>
                                 <span
-                                    class="text-[0.7rem] font-bold text-slate-1350 tracking-tight">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
+                                    class="text-[0.7rem] font-bold text-slate-1350 tracking-tight">{{ $d['done'] }}/{{ $d['total'] }}</span>
                             </div>
                         </div>
                         <div

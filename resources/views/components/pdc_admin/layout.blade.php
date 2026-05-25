@@ -35,7 +35,8 @@
 
         /* ── Scrollbar ── */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 7px;
+            height: 7px;
         }
 
         ::-webkit-scrollbar-track {
@@ -43,8 +44,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #14b8a6;
             border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0d9488;
         }
 
         /* ── Title Animation ── */
@@ -945,7 +950,7 @@
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
-            background-color: #ffffff;    
+            background-color: #ffffff;
         }
 
         .bg-decoration::before {
@@ -1008,13 +1013,13 @@
             if (!dropdown) return;
 
             const isHidden = dropdown.classList.contains('hidden') || dropdown.style.display === 'none';
-            
+
             // Tutup semua dropdown lain
             document.querySelectorAll('.dropdown-panel').forEach(el => {
                 el.classList.add('hidden');
                 el.style.display = 'none';
             });
-            
+
             if (isHidden) {
                 dropdown.classList.remove('hidden');
                 dropdown.style.display = 'block';
@@ -1198,8 +1203,6 @@
                 toggleIcon.style.transform = 'rotate(180deg)';
             }
         });
-
-
     </script>
     <script>
         // Custom scripts block has been removed for SweetAlert

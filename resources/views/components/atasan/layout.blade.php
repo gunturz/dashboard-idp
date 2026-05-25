@@ -681,13 +681,14 @@
                                 $unreadCount = $unreadNotifications->count();
                                 $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
                             @endphp
-                            <span class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">
+                            <span
+                                class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">
                                 {{ $displayCount }}
                             </span>
                         @endif
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
@@ -731,7 +732,8 @@
                                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
                                     @if ($hasUnreadNotif)
-                                        <span data-mobile-unread-badge class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">
+                                        <span data-mobile-unread-badge
+                                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">
                                             {{ $displayCount }}
                                         </span>
                                     @endif
@@ -739,7 +741,8 @@
                                 <span class="font-medium">Notifikasi</span>
                                 @if ($hasUnreadNotif)
                                     <span data-mobile-unread-pill
-                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }} Baru</span>
+                                        class="ml-auto bg-[#f97316]/10 text-[#f97316] text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }}
+                                        Baru</span>
                                 @endif
                             </a>
                         </div>
@@ -847,230 +850,238 @@
                 {{-- Header --}}
                 <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                             <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                         </svg>
                         <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
                     </div>
-                    <a href="{{ route('atasan.notifikasi') }}" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat Semua</a>
+                    <a href="{{ route('atasan.notifikasi') }}"
+                        class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat
+                        Semua</a>
                 </div>
                 {{-- Notification List --}}
                 <ul id="atasan-mobile-notif-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
                 {{-- Empty state --}}
                 <div id="atasan-mobile-notif-empty" class="flex flex-col items-center py-8 text-center px-4">
                     <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
                     </div>
                     <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi baru</p>
                 </div>
                 {{-- Footer --}}
                 <div class="px-5 py-3 border-t border-gray-100 text-center">
-                    <a href="{{ route('atasan.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua notifikasi →</a>
+                    <a href="{{ route('atasan.notifikasi') }}"
+                        class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua
+                        notifikasi →</a>
                 </div>
             </div>
         </div>
 
-            {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
-            <div class="relative hidden lg:block" id="bell-wrapper">
-                <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
-                    class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path
-                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                    </svg>
-                    @if ($hasUnreadNotif)
-                        @php
-                            $unreadCount = $unreadNotifications->count();
-                            $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
-                        @endphp
-                        <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
-                            {{ $displayCount }}
-                        </span>
-                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
-                    @endif
-                </button>
+        {{-- ═══ Desktop: Notification (hidden on mobile) ═══ --}}
+        <div class="relative hidden lg:block" id="bell-wrapper">
+            <button id="bell-btn" onclick="toggleDropdown('bell-dropdown', 'bell-btn')" aria-label="Notifikasi"
+                class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                    <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
+                @if ($hasUnreadNotif)
+                    @php
+                        $unreadCount = $unreadNotifications->count();
+                        $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
+                    @endphp
+                    <span id="bell-red-badge"
+                        class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce"
+                        style="animation-duration: 2s;">
+                        {{ $displayCount }}
+                    </span>
+                    <span
+                        class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
+                @endif
+            </button>
 
-                <div id="bell-dropdown" style="display:none;"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                    <div
-                        class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                                <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                            </svg>
-                            <span class="text-sm font-bold text-white">Notifikasi</span>
-                        </div>
-                        <form action="{{ route('atasan.notifikasi.markAllRead') }}" method="POST" class="m-0">
-                            @csrf
-                            <button type="submit"
-                                class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
-                                Tandai semua
-                            </button>
-                        </form>
+            <div id="bell-dropdown" style="display:none;"
+                class="dropdown-panel hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                <div
+                    class="px-5 py-3.5 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                            <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                        </svg>
+                        <span class="text-sm font-bold text-white">Notifikasi</span>
                     </div>
-
-                    @if ($hasUnreadNotif)
-                        <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto" id="atasan-bell-list">
-                            @foreach ($unreadNotifications->take(3) as $notif)
-                                <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
-                                    onclick="window.location='{{ route('atasan.notifikasi') }}'">
-                                    <div
-                                        class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}
-                                        </p>
-                                        <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? $notif['time'] !!}</p>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="flex flex-col items-center py-10 text-center px-4" id="atasan-bell-empty-state">
-                            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                </svg>
-                            </div>
-                            <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi</p>
-                            <p class="text-gray-400 text-xs mt-1">Anda sudah up to date!</p>
-                        </div>
-                    @endif
-
-                    <div class="px-5 py-3 border-t border-gray-100 text-center">
-                        <a href="{{ route('atasan.notifikasi') }}"
-                            class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
-                            Lihat semua notifikasi →
-                        </a>
-                    </div>
+                    <form action="{{ route('atasan.notifikasi.markAllRead') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit"
+                            class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">
+                            Tandai semua
+                        </button>
+                    </form>
                 </div>
-            </div>
 
-            {{-- ═══ Desktop: Profile (hidden on mobile) ═══ --}}
-            <div class="relative hidden lg:block lg:ml-3" id="profile-wrapper">
-                <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')"
-                    aria-label="Profil"
-                    class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
-
-                    @if ($avatarUrl)
-                        <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
-                            class="w-8 h-8 rounded-lg object-cover border border-white/15 flex-shrink-0">
-                    @else
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
-                            style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                            {{ $initials }}
-                        </div>
-                    @endif
-
-                    <div class="hidden lg:block text-left">
-                        <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">
-                            {{ $nama }}</p>
-                        <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Atasan</p>
-                    </div>
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-3.5 w-3.5 text-white/60 hidden lg:block flex-shrink-0" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <div id="profile-dropdown" style="display:none;"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
-                        <div class="flex items-center gap-3">
-                            @if ($avatarUrl)
-                                <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
-                                    class="w-11 h-11 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
-                            @else
-                                <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
-                                    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
-                                    {{ $initials }}
-                                </div>
-                            @endif
-                            <div class="overflow-hidden">
-                                <p class="text-sm font-bold text-white truncate">{{ $nama }}</p>
-                                <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
-                                <span
-                                    class="inline-block mt-1 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">Atasan</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <ul class="py-1.5">
-                        <li>
-                            <a href="{{ route('profile.edit') }}"
-                                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+                @if ($hasUnreadNotif)
+                    <ul class="divide-y divide-gray-50 max-h-60 overflow-y-auto" id="atasan-bell-list">
+                        @foreach ($unreadNotifications->take(3) as $notif)
+                            <li class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                                onclick="window.location='{{ route('atasan.notifikasi') }}'">
                                 <div
-                                    class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                            clip-rule="evenodd" />
+                                    class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
-                                <span>Lihat Profil</span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-800 truncate">{!! $notif['title'] !!}
+                                    </p>
+                                    <p class="text-xs text-gray-500 truncate">{!! $notif['desc'] ?? $notif['time'] !!}</p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="flex flex-col items-center py-10 text-center px-4" id="atasan-bell-empty-state">
+                        <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi</p>
+                        <p class="text-gray-400 text-xs mt-1">Anda sudah up to date!</p>
+                    </div>
+                @endif
+
+                <div class="px-5 py-3 border-t border-gray-100 text-center">
+                    <a href="{{ route('atasan.notifikasi') }}"
+                        class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">
+                        Lihat semua notifikasi →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- ═══ Desktop: Profile (hidden on mobile) ═══ --}}
+        <div class="relative hidden lg:block lg:ml-3" id="profile-wrapper">
+            <button id="profile-btn" onclick="toggleDropdown('profile-dropdown', 'profile-btn')" aria-label="Profil"
+                class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all hover:scale-105 active:scale-95">
+
+                @if ($avatarUrl)
+                    <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                        class="w-8 h-8 rounded-lg object-cover border border-white/15 flex-shrink-0">
+                @else
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
+                        style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                        {{ $initials }}
+                    </div>
+                @endif
+
+                <div class="hidden lg:block text-left">
+                    <p class="text-white text-sm font-semibold leading-tight max-w-[120px] truncate">
+                        {{ $nama }}</p>
+                    <p class="text-[#94a3b8] text-[10px] font-medium leading-tight">Atasan</p>
+                </div>
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-3.5 w-3.5 text-white/60 hidden lg:block flex-shrink-0" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            <div id="profile-dropdown" style="display:none;"
+                class="dropdown-panel hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                <div class="px-4 py-4 bg-gradient-to-br from-[#0f172a] to-[#38475a]">
+                    <div class="flex items-center gap-3">
+                        @if ($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="{{ $nama }}"
+                                class="w-11 h-11 rounded-xl object-cover border border-white/15 flex-shrink-0 shadow-[0_4px_12px_rgba(20,184,166,0.4)]">
+                        @else
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-white flex-shrink-0 text-sm"
+                                style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 4px 12px rgba(20,184,166,0.4);">
+                                {{ $initials }}
+                            </div>
+                        @endif
+                        <div class="overflow-hidden">
+                            <p class="text-sm font-bold text-white truncate">{{ $nama }}</p>
+                            <p class="text-xs text-[#94a3b8] truncate mt-0.5">{{ $user->email ?? '-' }}</p>
+                            <span
+                                class="inline-block mt-1 text-[10px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2 py-0.5 rounded-full">Atasan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="py-1.5">
+                    <li>
+                        <a href="{{ route('profile.edit') }}"
+                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+                            <div
+                                class="w-7 h-7 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-3.5 w-3.5 text-gray-500 group-hover:text-white transition-colors"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <span>Lihat Profil</span>
+                        </a>
+                    </li>
+                    <li class="mx-3 border-t border-gray-100 my-1"></li>
+                    @if (Auth::user()->roles->count() > 1)
+                        <li>
+                            <a href="{{ route('role.select') }}"
+                                class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                    </svg>
+                                </div>
+                                <span>Ganti Role</span>
                             </a>
                         </li>
                         <li class="mx-3 border-t border-gray-100 my-1"></li>
-                        @if (Auth::user()->roles->count() > 1)
-                            <li>
-                                <a href="{{ route('role.select') }}"
-                                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                        </svg>
-                                    </div>
-                                    <span>Ganti Role</span>
-                                </a>
-                            </li>
-                            <li class="mx-3 border-t border-gray-100 my-1"></li>
-                        @endif
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors group">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-3.5 w-3.5 text-red-500 group-hover:text-white transition-colors"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                            stroke-width="2.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                        </svg>
-                                    </div>
-                                    <span>Keluar</span>
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                    @endif
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors group">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-red-50 group-hover:bg-red-500 flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-3.5 w-3.5 text-red-500 group-hover:text-white transition-colors"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                </div>
+                                <span>Keluar</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
     </div>
 
     {{-- MAIN CONTENT --}}
@@ -1148,13 +1159,14 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const shouldShowAtasanNotifPopup = @json(session()->pull('atasan_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
 
             if (shouldShowAtasanNotifPopup) {
-                setTimeout(function () {
+                setTimeout(function() {
                     const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
-                    const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
+                    const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' :
+                        'bell-dropdown');
                     if (!bellDropdown) return;
 
                     document.querySelectorAll('.dropdown-panel').forEach(el => {
@@ -1166,21 +1178,24 @@
                     bellDropdown.style.display = '';
                     bellDropdown.style.opacity = '0';
                     bellDropdown.style.transformOrigin = 'top right';
-                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(.96) translateY(-6px)';
-                    bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' :
+                        'scale(.96) translateY(-6px)';
+                    bellDropdown.style.transition =
+                        'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
 
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
                             bellDropdown.style.opacity = '1';
                             bellDropdown.style.transform = 'translateY(0) scale(1)';
                         });
                     });
 
-                    setTimeout(function () {
+                    setTimeout(function() {
                         bellDropdown.style.opacity = '0';
-                        bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
-                        
-                        setTimeout(function () {
+                        bellDropdown.style.transform = isMobileActive ?
+                            'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
+
+                        setTimeout(function() {
                             bellDropdown.classList.add('hidden');
                             bellDropdown.style.display = 'none';
                             bellDropdown.style.transition = '';
@@ -1193,7 +1208,7 @@
             }
         });
 
-        window.addEventListener('notifikasi-marked-read', function () {
+        window.addEventListener('notifikasi-marked-read', function() {
             const badge = document.getElementById('bell-red-badge');
             if (badge) badge.remove();
 
@@ -1203,10 +1218,11 @@
                 if (ping) ping.remove();
             }
             document.querySelectorAll('.mobile-trigger-notif-dot').forEach(el => el.remove());
-            document.querySelectorAll('[data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(el => el.remove());
+            document.querySelectorAll('[data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(el => el
+                .remove());
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let atasanBellPopupTimeout = null;
             let atasanBellCleanupTimeout = null;
             let atasanRealtimeUiBound = false;
@@ -1220,7 +1236,7 @@
                 atasanShowToast(data.title || 'Notifikasi Baru', data.desc || '');
             }
 
-            window.addEventListener('app-notification-received', function (event) {
+            window.addEventListener('app-notification-received', function(event) {
                 if (!atasanRealtimeUiBound) return;
                 handleAtasanIncomingNotification(event.detail || {});
             });
@@ -1237,18 +1253,19 @@
                     return true;
                 }
 
-                if (window.__atasanNotificationChannelInitialized && window.__atasanNotificationChannelInitialized !== channelName) {
+                if (window.__atasanNotificationChannelInitialized && window
+                    .__atasanNotificationChannelInitialized !== channelName) {
                     window.Echo.leave(window.__atasanNotificationChannelInitialized);
                 }
 
                 window.Echo.private(channelName)
-                    .subscribed(function () {
+                    .subscribed(function() {
                         console.info('[Atasan Realtime] subscribed to', channelName);
                     })
-                    .error(function (error) {
+                    .error(function(error) {
                         console.error('[Atasan Realtime] subscription error', error);
                     })
-                    .listen('.notification.created', function (data) {
+                    .listen('.notification.created', function(data) {
                         window.dispatchEvent(new CustomEvent('app-notification-received', {
                             detail: data
                         }));
@@ -1262,7 +1279,7 @@
 
             if (!initAtasanRealtimeNotifications()) {
                 let retryCount = 0;
-                const retryTimer = setInterval(function () {
+                const retryTimer = setInterval(function() {
                     retryCount++;
 
                     if (initAtasanRealtimeNotifications() || retryCount >= 20) {
@@ -1274,16 +1291,16 @@
             window.addEventListener('load', initAtasanRealtimeNotifications);
             document.addEventListener('livewire:navigated', initAtasanRealtimeNotifications);
 
-            if (typeof window.Echo !== 'undefined'
-                && window.Echo.connector
-                && window.Echo.connector.pusher
-                && window.Echo.connector.pusher.connection) {
-                window.Echo.connector.pusher.connection.bind('connected', function () {
+            if (typeof window.Echo !== 'undefined' &&
+                window.Echo.connector &&
+                window.Echo.connector.pusher &&
+                window.Echo.connector.pusher.connection) {
+                window.Echo.connector.pusher.connection.bind('connected', function() {
                     console.info('[Atasan Realtime] websocket connected');
                     initAtasanRealtimeNotifications();
                 });
 
-                window.Echo.connector.pusher.connection.bind('error', function (error) {
+                window.Echo.connector.pusher.connection.bind('error', function(error) {
                     console.error('[Atasan Realtime] websocket error', error);
                 });
             }
@@ -1293,7 +1310,8 @@
                 if (!container) {
                     container = document.createElement('div');
                     container.id = 'atasan-rt-toast-container';
-                    container.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
+                    container.style.cssText =
+                        'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
                     document.body.appendChild(container);
                 }
 
@@ -1347,7 +1365,7 @@
                     });
                 });
 
-                setTimeout(function () {
+                setTimeout(function() {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translateX(40px) scale(.96)';
                     setTimeout(() => toast.remove(), 400);
@@ -1357,8 +1375,10 @@
             function atasanUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');
                 const mobileIndicatorHost = document.querySelector('#mobile-menu-btn .relative');
-                const mobileMenuLinkBadge = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-badge]');
-                const mobileMenuLinkPill = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-pill]');
+                const mobileMenuLinkBadge = document.querySelector(
+                    '#mobile-menu-dropdown [data-mobile-unread-badge]');
+                const mobileMenuLinkPill = document.querySelector(
+                '#mobile-menu-dropdown [data-mobile-unread-pill]');
 
                 function nextBadgeCountFromElement(element) {
                     const current = parseInt((element?.textContent || '').trim(), 10) || 0;
@@ -1371,7 +1391,8 @@
 
                 if (mobileIndicatorHost && !mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot')) {
                     const dot = document.createElement('span');
-                    dot.className = 'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
+                    dot.className =
+                        'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
                     dot.textContent = '1';
                     mobileIndicatorHost.appendChild(dot);
                 } else if (mobileIndicatorHost) {
@@ -1380,7 +1401,7 @@
                     dot.textContent = next.display;
                 }
 
-                                if (mobileMenuLinkBadge) {
+                if (mobileMenuLinkBadge) {
                     let nextValue;
                     if (typeof nextBadgeCountFromElement === 'function') {
                         const res = nextBadgeCountFromElement(mobileMenuLinkBadge);
@@ -1392,10 +1413,13 @@
                     }
                     mobileMenuLinkBadge.textContent = nextValue;
                 } else {
-                    let iconContainer = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector('#profile-dropdown a[href*="notifikasi"] .relative');
+                    let iconContainer = document.querySelector(
+                        '#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector(
+                        '#profile-dropdown a[href*="notifikasi"] .relative');
                     if (iconContainer) {
                         let badge = document.createElement('span');
-                        badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
+                        badge.className =
+                            'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
                         badge.setAttribute('data-mobile-unread-badge', '');
                         badge.textContent = '1';
                         iconContainer.appendChild(badge);
@@ -1407,10 +1431,12 @@
                     const next = current + 1;
                     mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
                 } else {
-                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document.querySelector('#profile-dropdown a[href*="notifikasi"]');
+                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document
+                        .querySelector('#profile-dropdown a[href*="notifikasi"]');
                     if (navLink) {
                         let pill = document.createElement('span');
-                        pill.className = 'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
+                        pill.className =
+                            'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
                         pill.setAttribute('data-mobile-unread-pill', '');
                         pill.textContent = '1 Baru';
                         navLink.appendChild(pill);
@@ -1428,13 +1454,15 @@
 
                 badge = document.createElement('span');
                 badge.id = 'bell-red-badge';
-                badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
+                badge.className =
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
                 badge.style.animationDuration = '2s';
                 badge.textContent = '1';
                 bellBtn.appendChild(badge);
 
                 const ping = document.createElement('span');
-                ping.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
+                ping.className =
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
                 bellBtn.appendChild(ping);
 
             }
@@ -1457,8 +1485,11 @@
                     }
 
                     const item = document.createElement('li');
-                    item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                    item.onclick = function () { window.location = '{{ route('atasan.notifikasi') }}'; };
+                    item.className =
+                        'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                    item.onclick = function() {
+                        window.location = '{{ route('atasan.notifikasi') }}';
+                    };
                     item.innerHTML = `
                         <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1489,8 +1520,11 @@
                 if (!mobileList) return;
 
                 const mobileItem = document.createElement('li');
-                mobileItem.className = 'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                mobileItem.onclick = function () { window.location = '{{ route('atasan.notifikasi') }}'; };
+                mobileItem.className =
+                    'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                mobileItem.onclick = function() {
+                    window.location = '{{ route('atasan.notifikasi') }}';
+                };
                 mobileItem.innerHTML = `
                     <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1504,9 +1538,9 @@
                     </div>
                 `;
                 const mobileTitleEl = mobileItem.querySelectorAll('p')[0];
-                const mobileDescEl  = mobileItem.querySelectorAll('p')[1];
+                const mobileDescEl = mobileItem.querySelectorAll('p')[1];
                 if (mobileTitleEl) mobileTitleEl.innerHTML = title;
-                if (mobileDescEl)  mobileDescEl.innerHTML  = desc;
+                if (mobileDescEl) mobileDescEl.innerHTML = desc;
 
                 mobileList.prepend(mobileItem);
                 while (mobileList.children.length > 5) mobileList.removeChild(mobileList.lastElementChild);
@@ -1515,7 +1549,8 @@
             function atasanShowBellPopup() {
                 const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
                 // Mobile: buka panel notifikasi khusus (bukan menu navigasi umum)
-                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
+                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' :
+                    'bell-dropdown');
                 if (!bellDropdown) return;
 
                 clearTimeout(atasanBellPopupTimeout);
@@ -1524,11 +1559,12 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
                 showDropdownPanel(bellDropdown, isMobileActive);
 
-                atasanBellPopupTimeout = setTimeout(function () {
+                atasanBellPopupTimeout = setTimeout(function() {
                     bellDropdown.style.opacity = '0';
-                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' :
+                        'scale(0.86) translateY(-8px)';
 
-                    atasanBellCleanupTimeout = setTimeout(function () {
+                    atasanBellCleanupTimeout = setTimeout(function() {
                         hideDropdownPanel(bellDropdown);
                     }, 350);
                 }, 5000);
@@ -1536,31 +1572,39 @@
         });
     </script>
     {{-- FOOTER --}}
-    @if(request()->routeIs('atasan.dashboard'))
-    <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
-        <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
-            {{-- Bagian Kiri: Logo & Deskripsi --}}
-            <div class="flex items-center gap-[12px]">
-                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
-                <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
-                    <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
-                    Platform Individual Development Plan
+    @if (request()->routeIs('atasan.dashboard'))
+        <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
+            <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
+                {{-- Bagian Kiri: Logo & Deskripsi --}}
+                <div class="flex items-center gap-[12px]">
+                    <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
+                        class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl"
+                        style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
+                    <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
+                        <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
+                        Platform Individual Development Plan
+                    </div>
+                </div>
+
+                {{-- Bagian Tengah: Links --}}
+                <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
+                    <a href="{{ route('atasan.dashboard') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Dashboard</a>
+                    <a href="{{ route('atasan.monitoring') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Monitoring</a>
+                    <a href="{{ route('atasan.riwayat') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Riwayat</a>
+                </div>
+
+                {{-- Bagian Kanan: Copyright --}}
+                <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
+                    &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
                 </div>
             </div>
-
-            {{-- Bagian Tengah: Links --}}
-            <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
-                <a href="{{ route('atasan.dashboard') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Dashboard</a>
-                <a href="{{ route('atasan.monitoring') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Monitoring</a>
-                <a href="{{ route('atasan.riwayat') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Riwayat</a>
-            </div>
-
-            {{-- Bagian Kanan: Copyright --}}
-            <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
-                &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
-            </div>
-        </div>
-    </footer>
+        </footer>
     @endif
 
     @livewireScripts

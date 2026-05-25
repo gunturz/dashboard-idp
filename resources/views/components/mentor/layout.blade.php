@@ -241,302 +241,337 @@
                 padding: 16px !important;
             }
         }
-    /* ══ Premium Stats Cards ══ */
-    .prem-stat-grid {
-        display: grid;
-        gap: 20px;
-        margin-bottom: 24px;
-    }
 
-    .prem-stat {
-        background: #f9fafb;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 20px 20px 18px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-        position: relative;
-        overflow: hidden;
-        text-decoration: none;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+        /* ══ Premium Stats Cards ══ */
+        .prem-stat-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
 
-    .prem-stat::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3.5px;
-        border-radius: 16px 16px 0 0;
-    }
+        .prem-stat {
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px 20px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    .prem-stat-teal::before { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
-    .prem-stat-blue::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-    .prem-stat-amber::before { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
-    .prem-stat-green::before { background: linear-gradient(90deg, #10b981, #34d399); }
-    .prem-stat-red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .prem-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3.5px;
+            border-radius: 16px 16px 0 0;
+        }
 
-    .prem-stat-icon {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        margin-bottom: 10px;
-    }
+        .prem-stat-teal::before {
+            background: linear-gradient(90deg, #14b8a6, #2dd4bf);
+        }
 
-    .prem-stat-icon svg {
-        width: 18px;
-        height: 18px;
-    }
+        .prem-stat-blue::before {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
 
-    .si-teal { background: rgba(20, 184, 166, 0.12); color: #14b8a6; }
-    .si-blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
-    .si-amber { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
-    .si-green { background: rgba(16, 185, 129, 0.12); color: #10b981; }
-    .si-red { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+        .prem-stat-amber::before {
+            background: linear-gradient(90deg, #f59e0b, #fcd34d);
+        }
 
-    .prem-stat-value {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #1e293b;
-        line-height: 1;
-        margin-bottom: 2px;
-    }
+        .prem-stat-green::before {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
 
-    .prem-stat-label {
-        font-size: 0.875rem;
-        color: #64748b;
-        font-weight: 500;
-    }
+        .prem-stat-red::before {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
 
-    .page-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 28px;
-    }
+        .prem-stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+        }
 
-    .page-header-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        background: #0f172a;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
-        flex-shrink: 0;
-        color: white;
-    }
+        .prem-stat-icon svg {
+            width: 18px;
+            height: 18px;
+        }
 
-    .page-header-icon svg {
-        width: 26px;
-        height: 26px;
-    }
+        .si-teal {
+            background: rgba(20, 184, 166, 0.12);
+            color: #14b8a6;
+        }
 
-    .page-header-title {
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: #1e293b;
-        line-height: 1.15;
-    }
+        .si-blue {
+            background: rgba(59, 130, 246, 0.12);
+            color: #3b82f6;
+        }
 
-    .page-header-sub {
-        font-size: 0.875rem;
-        color: #64748b;
-        margin-top: 3px;
-        font-weight: 400;
-    }
+        .si-amber {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+        }
 
-    .page-header-actions {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
-    }
+        .si-green {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+        }
 
-    .prem-card {
-        background: #f9fafb;
-        border: 1px solid #e2e8f0;
-        border-radius: 20px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
-        overflow: hidden;
-        margin-bottom: 24px;
-    }
+        .si-red {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+        }
 
-    .prem-card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 20px;
-        border-bottom: 1px solid #e2e8f0;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
+        .prem-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
 
-    .prem-card-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: .9rem;
-        font-weight: 700;
-        color: #1e293b;
-    }
+        .prem-stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+        }
 
-    .prem-card-title svg {
-        width: 18px;
-        height: 18px;
-        color: #14b8a6;
-        flex-shrink: 0;
-    }
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
 
-    .btn-prem {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        font-size: 0.8rem;
-        font-weight: 700;
-        padding: 8px 16px;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: none;
-        white-space: nowrap;
-    }
+        .page-header-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+            flex-shrink: 0;
+            color: white;
+        }
 
-    .btn-prem:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    }
+        .page-header-icon svg {
+            width: 26px;
+            height: 26px;
+        }
 
-    .btn-prem svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-    }
+        .page-header-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.15;
+        }
 
-    .btn-teal {
-        background: #14b8a6;
-        color: #fff;
-        box-shadow: 0 2px 6px rgba(20, 184, 166, 0.25);
-    }
+        .page-header-sub {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 3px;
+            font-weight: 400;
+        }
 
-    .btn-teal:hover {
-        background: #0d9488;
-        color: #fff;
-    }
+        .page-header-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
 
-    .btn-ghost {
-        background: #f1f5f9;
-        color: #334155;
-        border: 1px solid #e2e8f0;
-    }
+        .prem-card {
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
 
-    .btn-ghost:hover {
-        background: #e2e8f0;
-        color: #1e293b;
-    }
+        .prem-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
 
-    .btn-blue {
-        background: #3b82f6;
-        color: #fff;
-        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
-    }
+        .prem-card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .9rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
 
-    .btn-blue:hover {
-        background: #2563eb;
-        color: #fff;
-    }
+        .prem-card-title svg {
+            width: 18px;
+            height: 18px;
+            color: #14b8a6;
+            flex-shrink: 0;
+        }
 
-    .btn-red {
-        background: #ef4444;
-        color: #fff;
-        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
-    }
+        .btn-prem {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            white-space: nowrap;
+        }
 
-    .btn-red:hover {
-        background: #dc2626;
-        color: #fff;
-    }
+        .btn-prem:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
 
-    .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 3px 10px;
-        border-radius: 99px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: .02em;
-    }
+        .btn-prem svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
 
-    .badge-teal {
-        background: rgba(20, 184, 166, 0.12);
-        color: #0d9488;
-        border: 1px solid rgba(20, 184, 166, 0.25);
-    }
+        .btn-teal {
+            background: #14b8a6;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(20, 184, 166, 0.25);
+        }
 
-    .badge-gray {
-        background: rgba(100, 116, 139, 0.1);
-        color: #475569;
-        border: 1px solid rgba(100, 116, 139, 0.2);
-    }
+        .btn-teal:hover {
+            background: #0d9488;
+            color: #fff;
+        }
 
-    .empty-prem {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 60px 24px;
-        text-align: center;
-        gap: 12px;
-    }
+        .btn-ghost {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+        }
 
-    .empty-prem svg {
-        width: 56px;
-        height: 56px;
-        color: #cbd5e1;
-    }
+        .btn-ghost:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
 
-    .empty-prem h3 {
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #475569;
-        margin: 0;
-    }
+        .btn-blue {
+            background: #3b82f6;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+        }
 
-    .empty-prem p {
-        font-size: 0.82rem;
-        color: #94a3b8;
-        margin: 0;
-    }
+        .btn-blue:hover {
+            background: #2563eb;
+            color: #fff;
+        }
 
-    /* ── Background Decoration ── */
-            .bg-decoration {
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                overflow: hidden;
-                pointer-events: none;
-                background-color: #ffffff;
-            }
-            .bg-decoration::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
-                background-size: 32px 32px;
-                opacity: 0.3;
-            }
+        .btn-red {
+            background: #ef4444;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-red:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+        }
+
+        .badge-teal {
+            background: rgba(20, 184, 166, 0.12);
+            color: #0d9488;
+            border: 1px solid rgba(20, 184, 166, 0.25);
+        }
+
+        .badge-gray {
+            background: rgba(100, 116, 139, 0.1);
+            color: #475569;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .empty-prem {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .empty-prem svg {
+            width: 56px;
+            height: 56px;
+            color: #cbd5e1;
+        }
+
+        .empty-prem h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #475569;
+            margin: 0;
+        }
+
+        .empty-prem p {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        /* ── Background Decoration ── */
+        .bg-decoration {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background-color: #ffffff;
+        }
+
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
+            background-size: 32px 32px;
+            opacity: 0.3;
+        }
     </style>
     {{ $styles ?? '' }}
     @vite(['resources/js/app.js'])
@@ -595,11 +630,12 @@
                             </div>
                         @endif
                         @if ($hasUnreadNotif)
-                            <span class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
+                            <span
+                                class="mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]">{{ $displayCount }}</span>
                         @endif
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-white/70 flex-shrink-0"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
@@ -643,13 +679,15 @@
                                         <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                                     </svg>
                                     @if ($hasUnreadNotif)
-                                        <span data-mobile-unread-badge class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">{{ $displayCount }}</span>
+                                        <span data-mobile-unread-badge
+                                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white">{{ $displayCount }}</span>
                                     @endif
                                 </div>
                                 <span class="font-medium">Notifikasi</span>
                                 @if ($hasUnreadNotif)
                                     <span data-mobile-unread-pill
-                                        class="ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }} Baru</span>
+                                        class="ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">{{ $displayCount }}
+                                        Baru</span>
                                 @endif
                             </a>
                         </div>
@@ -682,10 +720,14 @@
                                 </div>
                                 <span class="font-medium">Validasi</span>
                             </a>
-                            <a href="{{ route('mentor.riwayat') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('mentor.riwayat') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
-                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <a href="{{ route('mentor.riwayat') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('mentor.riwayat') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-teal-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
                                 <span class="font-medium">Riwayat</span>
@@ -763,10 +805,13 @@
                             $unreadCount = $unreadNotifications->count();
                             $displayCount = $unreadCount > 99 ? '99+' : $unreadCount;
                         @endphp
-                        <span id="bell-red-badge" class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce" style="animation-duration: 2s;">
+                        <span id="bell-red-badge"
+                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce"
+                            style="animation-duration: 2s;">
                             {{ $displayCount }}
                         </span>
-                        <span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
+                        <span
+                            class="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40"></span>
                     @endif
                 </button>
 
@@ -947,31 +992,38 @@
         class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
         <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                     <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
                 <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
             </div>
-            <a href="{{ route('mentor.notifikasi') }}" class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat Semua</a>
+            <a href="{{ route('mentor.notifikasi') }}"
+                class="text-[11px] font-semibold text-[#14b8a6] bg-[#14b8a6]/15 px-2.5 py-0.5 rounded-full hover:bg-[#14b8a6]/25 transition-colors">Lihat
+                Semua</a>
         </div>
         <ul id="mentor-mobile-notif-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
         <div id="mentor-mobile-notif-empty" class="flex flex-col items-center py-8 text-center px-4">
             <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
             </div>
             <p class="text-gray-500 font-semibold text-sm">Tidak ada notifikasi baru</p>
         </div>
         <div class="px-5 py-3 border-t border-gray-100 text-center">
-            <a href="{{ route('mentor.notifikasi') }}" class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua notifikasi &#x2192;</a>
+            <a href="{{ route('mentor.notifikasi') }}"
+                class="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors">Lihat semua
+                notifikasi &#x2192;</a>
         </div>
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main id="main-content"
-        class="px-4 lg:px-6 py-8 min-h-[calc(100vh-80px)]">
+    <main id="main-content" class="px-4 lg:px-6 py-8 min-h-[calc(100vh-80px)]">
         {{ $slot }}
     </main>
 
@@ -1043,13 +1095,14 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const shouldShowMentorNotifPopup = @json(session()->pull('mentor_just_logged_in', false) && $hasUnreadNotif && config('app.env') !== 'testing');
 
             if (shouldShowMentorNotifPopup) {
-                setTimeout(function () {
+                setTimeout(function() {
                     const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
-                    const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
+                    const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' :
+                        'bell-dropdown');
                     if (!bellDropdown) return;
 
                     document.querySelectorAll('.dropdown-panel').forEach(el => {
@@ -1061,21 +1114,24 @@
                     bellDropdown.style.display = '';
                     bellDropdown.style.opacity = '0';
                     bellDropdown.style.transformOrigin = 'top right';
-                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(.96) translateY(-6px)';
-                    bellDropdown.style.transition = 'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' :
+                        'scale(.96) translateY(-6px)';
+                    bellDropdown.style.transition =
+                        'opacity .35s ease, transform .35s cubic-bezier(0.22, 1, 0.36, 1)';
 
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
                             bellDropdown.style.opacity = '1';
                             bellDropdown.style.transform = 'translateY(0) scale(1)';
                         });
                     });
 
-                    setTimeout(function () {
+                    setTimeout(function() {
                         bellDropdown.style.opacity = '0';
-                        bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
-                        
-                        setTimeout(function () {
+                        bellDropdown.style.transform = isMobileActive ?
+                            'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
+
+                        setTimeout(function() {
                             bellDropdown.classList.add('hidden');
                             bellDropdown.style.display = 'none';
                             bellDropdown.style.transition = '';
@@ -1088,7 +1144,7 @@
             }
         });
 
-        window.addEventListener('notifikasi-marked-read', function () {
+        window.addEventListener('notifikasi-marked-read', function() {
             const badge = document.getElementById('bell-red-badge');
             if (badge) badge.remove();
 
@@ -1097,10 +1153,12 @@
                 const ping = bellBtn.querySelector('.animate-ping');
                 if (ping) ping.remove();
             }
-            document.querySelectorAll('.mobile-trigger-notif-dot, [data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(el => el.remove());
+            document.querySelectorAll(
+                '.mobile-trigger-notif-dot, [data-mobile-unread-badge], [data-mobile-unread-pill]').forEach(
+                el => el.remove());
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let mentorBellPopupTimeout = null;
             let mentorBellCleanupTimeout = null;
 
@@ -1115,7 +1173,7 @@
                 mentorShowToast(data.title || 'Notifikasi Baru', data.desc || '');
             }
 
-            window.addEventListener('app-notification-received', function (event) {
+            window.addEventListener('app-notification-received', function(event) {
                 if (!mentorRealtimeUiBound) return;
                 handleMentorIncomingNotification(event.detail || {});
             });
@@ -1132,18 +1190,19 @@
                     return true;
                 }
 
-                if (window.__mentorNotificationChannelInitialized && window.__mentorNotificationChannelInitialized !== channelName) {
+                if (window.__mentorNotificationChannelInitialized && window
+                    .__mentorNotificationChannelInitialized !== channelName) {
                     window.Echo.leave(window.__mentorNotificationChannelInitialized);
                 }
 
                 window.Echo.private(channelName)
-                    .subscribed(function () {
+                    .subscribed(function() {
                         console.info('[Mentor Realtime] subscribed to', channelName);
                     })
-                    .error(function (error) {
+                    .error(function(error) {
                         console.error('[Mentor Realtime] subscription error', error);
                     })
-                    .listen('.notification.created', function (data) {
+                    .listen('.notification.created', function(data) {
                         window.dispatchEvent(new CustomEvent('app-notification-received', {
                             detail: data
                         }));
@@ -1157,7 +1216,7 @@
 
             if (!initMentorRealtimeNotifications()) {
                 let retryCount = 0;
-                const retryTimer = setInterval(function () {
+                const retryTimer = setInterval(function() {
                     retryCount++;
 
                     if (initMentorRealtimeNotifications() || retryCount >= 20) {
@@ -1169,16 +1228,16 @@
             window.addEventListener('load', initMentorRealtimeNotifications);
             document.addEventListener('livewire:navigated', initMentorRealtimeNotifications);
 
-            if (typeof window.Echo !== 'undefined'
-                && window.Echo.connector
-                && window.Echo.connector.pusher
-                && window.Echo.connector.pusher.connection) {
-                window.Echo.connector.pusher.connection.bind('connected', function () {
+            if (typeof window.Echo !== 'undefined' &&
+                window.Echo.connector &&
+                window.Echo.connector.pusher &&
+                window.Echo.connector.pusher.connection) {
+                window.Echo.connector.pusher.connection.bind('connected', function() {
                     console.info('[Mentor Realtime] websocket connected');
                     initMentorRealtimeNotifications();
                 });
 
-                window.Echo.connector.pusher.connection.bind('error', function (error) {
+                window.Echo.connector.pusher.connection.bind('error', function(error) {
                     console.error('[Mentor Realtime] websocket error', error);
                 });
             }
@@ -1188,7 +1247,8 @@
                 if (!container) {
                     container = document.createElement('div');
                     container.id = 'mentor-rt-toast-container';
-                    container.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
+                    container.style.cssText =
+                        'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;flex-direction:column-reverse;align-items:flex-end;gap:10px;pointer-events:none;';
                     document.body.appendChild(container);
                 }
 
@@ -1242,7 +1302,7 @@
                     });
                 });
 
-                setTimeout(function () {
+                setTimeout(function() {
                     toast.style.opacity = '0';
                     toast.style.transform = 'translateX(40px) scale(.96)';
                     setTimeout(() => toast.remove(), 400);
@@ -1252,8 +1312,10 @@
             function mentorUpdateBadge() {
                 let badge = document.getElementById('bell-red-badge');
                 const mobileIndicatorHost = document.querySelector('#mobile-menu-btn .relative');
-                const mobileMenuLinkBadge = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-badge]');
-                const mobileMenuLinkPill = document.querySelector('#mobile-menu-dropdown [data-mobile-unread-pill]');
+                const mobileMenuLinkBadge = document.querySelector(
+                    '#mobile-menu-dropdown [data-mobile-unread-badge]');
+                const mobileMenuLinkPill = document.querySelector(
+                '#mobile-menu-dropdown [data-mobile-unread-pill]');
 
                 function nextBadgeCountFromElement(element) {
                     const current = parseInt((element?.textContent || '').trim(), 10) || 0;
@@ -1263,14 +1325,16 @@
 
                 if (mobileIndicatorHost && !mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot')) {
                     const dot = document.createElement('span');
-                    dot.className = 'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
+                    dot.className =
+                        'mobile-trigger-notif-dot absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a]';
                     dot.textContent = '1';
                     mobileIndicatorHost.appendChild(dot);
                 } else if (mobileIndicatorHost) {
-                    mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent = nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
+                    mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot').textContent =
+                        nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
                 }
 
-                                if (mobileMenuLinkBadge) {
+                if (mobileMenuLinkBadge) {
                     let nextValue;
                     if (typeof nextBadgeCountFromElement === 'function') {
                         const res = nextBadgeCountFromElement(mobileMenuLinkBadge);
@@ -1282,10 +1346,13 @@
                     }
                     mobileMenuLinkBadge.textContent = nextValue;
                 } else {
-                    let iconContainer = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector('#profile-dropdown a[href*="notifikasi"] .relative');
+                    let iconContainer = document.querySelector(
+                        '#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector(
+                        '#profile-dropdown a[href*="notifikasi"] .relative');
                     if (iconContainer) {
                         let badge = document.createElement('span');
-                        badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
+                        badge.className =
+                            'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
                         badge.setAttribute('data-mobile-unread-badge', '');
                         badge.textContent = '1';
                         iconContainer.appendChild(badge);
@@ -1297,10 +1364,12 @@
                     const next = current + 1;
                     mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
                 } else {
-                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document.querySelector('#profile-dropdown a[href*="notifikasi"]');
+                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document
+                        .querySelector('#profile-dropdown a[href*="notifikasi"]');
                     if (navLink) {
                         let pill = document.createElement('span');
-                        pill.className = 'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
+                        pill.className =
+                            'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
                         pill.setAttribute('data-mobile-unread-pill', '');
                         pill.textContent = '1 Baru';
                         navLink.appendChild(pill);
@@ -1319,13 +1388,15 @@
 
                 badge = document.createElement('span');
                 badge.id = 'bell-red-badge';
-                badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
+                badge.className =
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-[#0f172a] animate-bounce';
                 badge.style.animationDuration = '2s';
                 badge.textContent = '1';
                 bellBtn.appendChild(badge);
 
                 const ping = document.createElement('span');
-                ping.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
+                ping.className =
+                    'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] rounded-full bg-red-500 animate-ping opacity-40';
                 bellBtn.appendChild(ping);
 
             }
@@ -1352,8 +1423,9 @@
                 }
 
                 const item = document.createElement('li');
-                item.className = 'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                item.onclick = function () {
+                item.className =
+                    'px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                item.onclick = function() {
                     window.location = '{{ route('mentor.notifikasi') }}';
                 };
                 item.innerHTML = `
@@ -1390,8 +1462,11 @@
                 if (!mobileList) return;
 
                 const mobileItem = document.createElement('li');
-                mobileItem.className = 'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
-                mobileItem.onclick = function () { window.location = '{{ route('mentor.notifikasi') }}'; };
+                mobileItem.className =
+                    'px-4 py-3.5 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer';
+                mobileItem.onclick = function() {
+                    window.location = '{{ route('mentor.notifikasi') }}';
+                };
                 mobileItem.innerHTML = `
                     <div class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1405,9 +1480,9 @@
                     </div>
                 `;
                 const mobileTitleEl = mobileItem.querySelectorAll('p')[0];
-                const mobileDescEl  = mobileItem.querySelectorAll('p')[1];
+                const mobileDescEl = mobileItem.querySelectorAll('p')[1];
                 if (mobileTitleEl) mobileTitleEl.innerHTML = title;
-                if (mobileDescEl)  mobileDescEl.innerHTML  = desc;
+                if (mobileDescEl) mobileDescEl.innerHTML = desc;
 
                 mobileList.prepend(mobileItem);
                 while (mobileList.children.length > 5) mobileList.removeChild(mobileList.lastElementChild);
@@ -1416,7 +1491,8 @@
             function mentorShowBellPopup() {
                 const isMobileActive = window.matchMedia('(max-width: 1023px)').matches;
                 // Mobile: buka panel notifikasi khusus
-                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' : 'bell-dropdown');
+                const bellDropdown = document.getElementById(isMobileActive ? 'mobile-notif-dropdown' :
+                    'bell-dropdown');
                 if (!bellDropdown) return;
 
                 clearTimeout(mentorBellPopupTimeout);
@@ -1425,11 +1501,12 @@
                 document.querySelectorAll('.dropdown-panel').forEach(el => hideDropdownPanel(el));
                 showDropdownPanel(bellDropdown, isMobileActive);
 
-                mentorBellPopupTimeout = setTimeout(function () {
+                mentorBellPopupTimeout = setTimeout(function() {
                     bellDropdown.style.opacity = '0';
-                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' : 'scale(0.86) translateY(-8px)';
+                    bellDropdown.style.transform = isMobileActive ? 'translateY(-8px) scale(.98)' :
+                        'scale(0.86) translateY(-8px)';
 
-                    mentorBellCleanupTimeout = setTimeout(function () {
+                    mentorBellCleanupTimeout = setTimeout(function() {
                         hideDropdownPanel(bellDropdown);
                     }, 350);
                 }, 4500);
@@ -1440,31 +1517,39 @@
     {{ $scripts ?? '' }}
 
     {{-- FOOTER --}}
-    @if(request()->routeIs('mentor.dashboard'))
-    <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
-        <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
-            {{-- Bagian Kiri: Logo & Deskripsi --}}
-            <div class="flex items-center gap-[12px]">
-                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl" style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
-                <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
-                    <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
-                    Platform Individual Development Plan
+    @if (request()->routeIs('mentor.dashboard'))
+        <footer class="mt-auto w-full relative z-10 border-t border-white/5 bg-[#0f172a] py-[50px] px-8">
+            <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[20px]">
+                {{-- Bagian Kiri: Logo & Deskripsi --}}
+                <div class="flex items-center gap-[12px]">
+                    <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
+                        class="h-[52px] w-[52px] object-contain bg-white p-[6px] rounded-xl"
+                        style="max-width: 52px; max-height: 52px; width: 100%; height: auto;">
+                    <div class="text-left text-[0.75rem] text-white/30 leading-[1.6]">
+                        <strong class="text-white/50 text-[0.8rem]">IDP Dashboard</strong><br>
+                        Platform Individual Development Plan
+                    </div>
+                </div>
+
+                {{-- Bagian Tengah: Links --}}
+                <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
+                    <a href="{{ route('mentor.dashboard') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Dashboard</a>
+                    <a href="{{ route('mentor.validasi') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Validasi</a>
+                    <a href="{{ route('mentor.riwayat') }}"
+                        class="text-white/40 hover:text-emerald-400 transition-colors"
+                        style="text-decoration:none;">Riwayat</a>
+                </div>
+
+                {{-- Bagian Kanan: Copyright --}}
+                <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
+                    &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
                 </div>
             </div>
-
-            {{-- Bagian Tengah: Links --}}
-            <div class="flex flex-wrap justify-center gap-6 text-[0.78rem]">
-                <a href="{{ route('mentor.dashboard') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Dashboard</a>
-                <a href="{{ route('mentor.validasi') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Validasi</a>
-                <a href="{{ route('mentor.riwayat') }}" class="text-white/40 hover:text-emerald-400 transition-colors" style="text-decoration:none;">Riwayat</a>
-            </div>
-
-            {{-- Bagian Kanan: Copyright --}}
-            <div class="text-center md:text-right text-[0.75rem] text-white/30 leading-[1.6]">
-                &copy; {{ date('Y') }} IDP Dashboard. All rights reserved.
-            </div>
-        </div>
-    </footer>
+        </footer>
     @endif
 </body>
 

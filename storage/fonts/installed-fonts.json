@@ -1,0 +1,13 @@
+{
+    "libre baskerville": {
+        "normal": "C:\\laragon\\www\\dashboard-idp\\storage\\fonts\/libre_baskerville_normal_77dd107e43bb42406212ddbe1662875c",
+        "bold": "libre_baskerville_bold_0df436a566c5292bde25190e2feb6d2f"
+    },
+    "poppins": {
+        "300": "C:\\laragon\\www\\dashboard-idp\\storage\\fonts\/poppins_300_2e2883f4cf5280db5a8f5b456d9f76e7",
+        "normal": "C:\\laragon\\www\\dashboard-idp\\storage\\fonts\/poppins_normal_59578db0d134e5107911b0772fcd36b3",
+        "500": "C:\\laragon\\www\\dashboard-idp\\storage\\fonts\/poppins_500_e357e72d1459b7129a703bd036127015",
+        "600": "C:\\laragon\\www\\dashboard-idp\\storage\\fonts\/poppins_600_7d20ab77d986921f47f6842ca5ca81b1",
+        "bold": "poppins_bold_e92875066bf07ed4e7ee92062224b42c"
+    }
+}

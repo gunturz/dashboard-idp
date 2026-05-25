@@ -3,6 +3,7 @@
         <style>
             /* ── Section Title ── */
             .section-title {
+                font-family: 'Poppins', sans-serif;
                 font-size: 1.2rem;
                 font-weight: 800;
                 color: #1e293b;
@@ -342,6 +343,7 @@
         }
 
         .talent-hero-meta-value {
+            font-family: 'Poppins', sans-serif;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.92);
             font-weight: 700;

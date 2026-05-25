@@ -1904,8 +1904,6 @@ class PDCAdminController extends Controller
             'all_panelisAssessments.panelis.position'
         ])->findOrFail($talent_id);
 
-        $this->authorize('export-pdf', $talent);
-
         $requestedSessionId = $request->query('session_id');
         $archivedPlan = $requestedSessionId
             ? $talent->all_promotion_plans->firstWhere('development_session_id', (int) $requestedSessionId)
@@ -1934,8 +1932,17 @@ class PDCAdminController extends Controller
             ? PositionTargetCompetence::where('position_id', $positionId)->pluck('target_level', 'competence_id')
             : collect();
 
-        $pdf = Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards'));
+        $bgPath = public_path('asset/Sampul IDP 2 convert.png');
+        $logoPath = public_path('asset/LOGO TS dan PDC Transparan.png');
+        $borderPath = public_path('asset/Border Raport.png');
+
+        $bg_image = 'data:image/png;base64,' . base64_encode(file_get_contents($bgPath));
+        $logo_image = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+        $border_image = 'data:image/png;base64,' . base64_encode(file_get_contents($borderPath));
+
+        $pdf = Pdf::loadView('pdc_admin.pdf_export', compact('talent', 'competencies', 'standards', 'bg_image', 'logo_image', 'border_image'));
         $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption('isRemoteEnabled', true);
 
         $filename = 'Talent_Report_' . str_replace(' ', '_', $talent->nama) . '.pdf';
         return $pdf->download($filename);

@@ -19,24 +19,6 @@
                 font-weight: 600;
                 color: #0f172a;
             }
-            .btn-back {
-                padding: 8px 16px;
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                background: white;
-                color: #475569;
-                font-weight: 500;
-                font-size: 0.875rem;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                transition: all 0.2s;
-                width: fit-content;
-            }
-            .btn-back:hover {
-                background: #f8fafc;
-                border-color: #cbd5e1;
-            }
         </style>
     </x-slot>
 
@@ -105,14 +87,6 @@
                 <p class="text-center text-gray-400 py-12 italic">Belum ada departemen untuk perusahaan ini.</p>
             @endforelse
         </div>
-    </div>
-
-    {{-- Bottom Actions --}}
-    <div class="flex justify-start mb-10">
-        <a href="{{ route('pdc_admin.company_management') }}" class="btn-prem btn-dark px-4 inline-flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
-            Kembali
-        </a>
     </div>
 
     {{-- Modals --}}

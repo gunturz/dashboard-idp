@@ -215,7 +215,7 @@
                                 <td>
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('pdc_admin.progress_archive.detail', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
-                                            class="inline-block px-4 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs font-medium hover:text-[#14b8a6] hover:border-[#14b8a6] hover:shadow-[0_0_4px_#14b8a6] hover:bg-transparent transition-all whitespace-nowrap">
+                                            class="inline-block px-4 py-1.5 bg-[#14b8a6] border border-[#14b8a6] text-white rounded-lg text-xs font-semibold hover:bg-[#0d9488] hover:border-[#0d9488] transition-all whitespace-nowrap shadow-sm">
                                             Lihat Detail
                                         </a>
                                         <a href="{{ route('pdc_admin.export_pdf', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"

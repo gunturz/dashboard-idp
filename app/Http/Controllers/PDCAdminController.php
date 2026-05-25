@@ -892,14 +892,73 @@ class PDCAdminController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        [$exposureData, $mentoringData, $learningData] = $this->formatLogbookActivities($activities);
+
+        return view('pdc_admin.logbook', compact(
+            'user',
+            'talent',
+            'exposureData',
+            'mentoringData',
+            'learningData'
+        ));
+    }
+
+    public function progressArchiveLogbook(Request $request, $talent_id)
+    {
+        $user = auth()->user();
+        $talent = User::with([
+            'company',
+            'department',
+            'position',
+            'mentor',
+            'atasan',
+            'all_promotion_plans.targetPosition',
+            'all_promotion_plans.developmentSession.sourcePosition',
+        ])->findOrFail($talent_id);
+
+        $requestedSessionId = $request->query('session_id');
+        $archivedPlan = $requestedSessionId
+            ? $talent->all_promotion_plans->firstWhere('development_session_id', (int) $requestedSessionId)
+            : $talent->all_promotion_plans->first(fn($plan) => !$plan->is_active);
+        $sessionId = $archivedPlan?->development_session_id;
+
+        $talent->promotion_plan = $archivedPlan ?? $talent->all_promotion_plans->first();
+        if ($archivedPlan?->developmentSession?->sourcePosition) {
+            $talent->setRelation('position', $archivedPlan->developmentSession->sourcePosition);
+        }
+
+        $activities = \App\Models\IDPActivity::with(['type', 'verifier'])
+            ->where('user_id_talent', $talent->id)
+            ->when($sessionId, fn($query) => $query->where('development_session_id', $sessionId))
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        [$exposureData, $mentoringData, $learningData] = $this->formatLogbookActivities($activities);
+
+        $pageTitle = 'LogBook Archive';
+        $pageSubtitle = 'Rekam jejak aktivitas pengembangan archive talent ' . $talent->nama;
+
+        return view('pdc_admin.logbook', compact(
+            'user',
+            'talent',
+            'exposureData',
+            'mentoringData',
+            'learningData',
+            'pageTitle',
+            'pageSubtitle'
+        ));
+    }
+
+    protected function formatLogbookActivities($activities): array
+    {
         $exposureData = [];
         $mentoringData = [];
         $learningData = [];
 
         foreach ($activities as $act) {
-            $typeName = $act->type?->type_name ?? '';
+            $typeName = strtolower($act->type?->type_name ?? '');
 
-            if ($typeName === 'Exposure') {
+            if (str_contains($typeName, 'exposure')) {
                 $exposureData[] = [
                     'id' => $act->id,
                     'mentor' => $act->verifier?->nama ?? '-',
@@ -908,7 +967,7 @@ class PDCAdminController extends Controller
                     'tanggal' => $act->activity_date,
                     'status' => $act->status,
                 ];
-            } elseif ($typeName === 'Mentoring') {
+            } elseif (str_contains($typeName, 'mentor')) {
                 $mentoringData[] = [
                     'id' => $act->id,
                     'mentor' => $act->verifier?->nama ?? '-',
@@ -917,7 +976,7 @@ class PDCAdminController extends Controller
                     'tanggal' => $act->activity_date,
                     'status' => $act->status,
                 ];
-            } elseif ($typeName === 'Learning') {
+            } elseif (str_contains($typeName, 'learn')) {
                 $learningData[] = [
                     'id' => $act->id,
                     'sumber' => $act->activity,
@@ -929,13 +988,7 @@ class PDCAdminController extends Controller
             }
         }
 
-        return view('pdc_admin.logbook', compact(
-            'user',
-            'talent',
-            'exposureData',
-            'mentoringData',
-            'learningData'
-        ));
+        return [$exposureData, $mentoringData, $learningData];
     }
 
     public function financeValidation()

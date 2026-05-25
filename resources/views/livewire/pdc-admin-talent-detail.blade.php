@@ -640,7 +640,7 @@
                                                     <td class="py-4 px-6 text-center">
                                                         <div class="flex items-center justify-center gap-2">
                                                             <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-[12px] font-semibold text-white hover:bg-[#0d9488] hover:border-[#0d9488] shadow-sm transition-all"
                                                                 title="Detail">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="h-3.5 w-3.5" fill="none"
@@ -738,7 +738,7 @@
                                                     <td class="py-4 px-6 text-center">
                                                         <div class="flex items-center justify-center gap-2">
                                                             <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-[12px] font-semibold text-white hover:bg-[#0d9488] hover:border-[#0d9488] shadow-sm transition-all"
                                                                 title="Detail">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="h-3.5 w-3.5" fill="none"
@@ -836,7 +836,7 @@
                                                     <td class="py-4 px-6 text-center">
                                                         <div class="flex items-center justify-center gap-2">
                                                             <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-[12px] font-semibold text-white hover:bg-[#0d9488] hover:border-[#0d9488] shadow-sm transition-all"
                                                                 title="Detail">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="h-3.5 w-3.5" fill="none"

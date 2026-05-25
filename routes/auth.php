@@ -190,6 +190,8 @@ Route::middleware(['auth', 'verified', 'pdc_admin.only'])->group(function () {
         ->name('pdc_admin.progress_archive');
     Route::get('/pdc-admin/progress-archive/talent/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'exportDetail'])
         ->name('pdc_admin.progress_archive.detail');
+    Route::get('/pdc-admin/progress-archive/talent/{talent_id}/logbook', [\App\Http\Controllers\PDCAdminController::class, 'progressArchiveLogbook'])
+        ->name('pdc_admin.progress_archive.logbook');
     Route::get('/pdc-admin/panelis-review', [\App\Http\Controllers\PDCAdminController::class, 'panelisReview'])
         ->name('pdc_admin.panelis_review');
     Route::post('/pdc-admin/panelis-review/send/{talent_id}', [\App\Http\Controllers\PDCAdminController::class, 'sendPanelisReview'])
@@ -293,4 +295,3 @@ Route::middleware(['auth', 'verified', 'panelis.only'])->group(function () {
     Route::get('/panelis/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])
         ->name('panelis.profile');
 });
-

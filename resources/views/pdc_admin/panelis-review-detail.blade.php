@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Lihat Penilaian Panelis – Individual Development Plan" :user="$user" :hideSidebar="true">
+<x-pdc_admin.layout title="Lihat Penilaian Panelis – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* ── Section Title ── */
@@ -557,8 +557,6 @@
 
     {{-- ── Bottom Actions ── --}}
     <div class="flex justify-end gap-3">
-        <a href="{{ route('pdc_admin.panelis_review') }}" class="btn-batal" id="batal-panelis-detail">Kembali</a>
-
         @php
             $statusPromo = optional($talent->promotion_plan)->status_promotion;
             $isComplete = in_array($statusPromo, ['Promoted', 'Not Promoted', 'Approved Panelis', 'Rejected Panelis']);
@@ -687,8 +685,6 @@
             </div>
             {{-- Footer --}}
             <div class="px-6 py-4 flex gap-3 justify-end border-t border-gray-100">
-                <button type="button" onclick="backToDecision()"
-                    class="px-5 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Kembali</button>
                 <button type="button" onclick="submitDecision()" id="confirmBtn"
                     class="px-6 py-2 text-sm font-bold text-white rounded-xl transition-colors">Ya, Konfirmasi</button>
             </div>

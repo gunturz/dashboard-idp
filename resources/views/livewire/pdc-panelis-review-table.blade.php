@@ -336,7 +336,7 @@
                         </button>
                     </div>
                     {{-- BODY --}}
-                    <div class="px-6 pb-2" style="min-height: 280px;">
+                    <div class="px-6 pb-2 relative" style="min-height: 280px;">
                         {{-- STEP 1: Pilih Perusahaan --}}
                         <div id="step-1" class="modal-step active">
                             <div class="flex justify-end mb-2">
@@ -589,6 +589,14 @@
         document.addEventListener('DOMContentLoaded', initGroupHover);
     </script>
     <style>
+        .modal-step {
+            display: none;
+        }
+
+        .modal-step.active {
+            display: block;
+        }
+
         @keyframes lvwire-spin {
             from {
                 transform: rotate(0deg);

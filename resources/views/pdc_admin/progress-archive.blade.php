@@ -19,23 +19,23 @@
             </div>
         </div>
 
-        {{-- Filter Bar --}}
-        <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
+        {{-- Filters (Re-styled to match Panelis Review) --}}
+        <div class="flex flex-col sm:flex-row items-center gap-4 mb-8 mt-4" id="archive-filter-bar">
             {{-- Search --}}
-            <div class="relative w-full sm:w-[40%]">
+            <div class="relative w-full sm:flex-[1.5]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor"
                     style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type="text" id="searchInput" placeholder="Cari Nama"
+                <input type="text" id="searchInput" placeholder="Cari Nama Talent…"
                     class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
                     oninput="filterTalents()">
             </div>
 
             {{-- Period Filter --}}
-            <div class="relative w-full sm:w-[30%]">
+            <div class="relative w-full sm:flex-1">
                 <select id="periodFilter"
                     class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -60,7 +60,7 @@
             </div>
 
             {{-- Company Filter --}}
-            <div class="relative w-full sm:w-[30%]">
+            <div class="relative w-full sm:flex-1">
                 <select id="companyFilter"
                     class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -93,7 +93,7 @@
             </div>
 
             {{-- Status Filter --}}
-            <div class="relative w-full sm:w-[30%]">
+            <div class="relative w-full sm:flex-1">
                 <select id="statusFilter"
                     class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -107,7 +107,7 @@
             </div>
         </div>
 
-        {{-- Table --}}
+        {{-- Table grouped by Title (as Section) then data --}}
         @php
             $archiveRows = collect($groupedData)
                 ->flatMap(function ($group) {
@@ -125,26 +125,30 @@
                             optional($talent->promotion_plan)->created_at);
                 })
                 ->values();
-            $totalRows = 0;
         @endphp
 
         <div class="progress-archive-wrapper">
-            <div class="prem-card overflow-x-auto">
-                <table class="prem-table" id="archiveTable" style="width: 100%; table-layout: auto;">
-                    <thead>
+            <div class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
+                <table class="w-full table-auto text-left" id="archiveTable">
+                    <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
-                            <th style="width: 20%">Talent</th>
-                            <th style="width: 20%">Perusahaan</th>
-                            <th style="width: 14%">Start Date</th>
-                            <th style="width: 14%">Due Date</th>
-                            <th style="width: 16%">Status Promosi</th>
-                            <th style="width: 16%">Aksi</th>
+                            <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                Talent</th>
+                            <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                Perusahaan</th>
+                            <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                Start Date</th>
+                            <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                Due Date</th>
+                            <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                Status Promosi</th>
+                            <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="archiveTbody">
+                    <tbody id="archiveTbody" class="divide-y divide-gray-100">
                         @foreach ($archiveRows as $talent)
                             @php
-                                $totalRows++;
                                 $compName = $talent->archive_company_name ?? '-';
                                 $startDate = optional($talent->promotion_plan)->start_date
                                     ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat(
@@ -166,60 +170,74 @@
                                     );
                                 }
                             @endphp
-                            <tr class="archive-row border-b border-slate-300 hover:bg-slate-50 transition-colors"
+                            <tr class="archive-row hover:bg-slate-50 transition-colors"
                                 data-name="{{ strtolower($talent->nama) }}" data-company="{{ $compName }}"
                                 data-period="{{ $periodLabel }}"
                                 data-status="{{ optional($talent->promotion_plan)->status_promotion }}">
-                                <td>
+                                <td class="py-4 px-6 text-center">
                                     <p class="font-bold text-[#0f172a]">{{ $talent->nama }}</p>
                                     <p class="text-xs text-slate-500 italic mt-0.5">{{ $currentPos }} &rarr;
                                         {{ $targetPos }}
                                     </p>
                                 </td>
-                                <td>{{ $compName }}</td>
-                                <td>{{ $startDate }}</td>
-                                <td>{{ $dueDate }}</td>
-                                <td>
+                                <td class="py-4 px-6 text-center text-slate-600 text-sm">{{ $compName }}</td>
+                                <td class="py-4 px-6 text-center text-slate-600 text-sm">{{ $startDate }}</td>
+                                <td class="py-4 px-6 text-center text-slate-600 text-sm">{{ $dueDate }}</td>
+                                <td class="py-4 px-6 text-center">
                                     @php $promoStatus = optional($talent->promotion_plan)->status_promotion; @endphp
                                     @if ($promoStatus === 'Promoted')
                                         <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200 shadow-sm">
                                             <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
                                             Ready Now
                                         </span>
                                     @elseif ($promoStatus === 'Ready in 1-2 Years')
                                         <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 shadow-sm">
                                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
                                             Ready 1–2 Years
                                         </span>
                                     @elseif ($promoStatus === 'Ready in > 2 Years')
                                         <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200 shadow-sm">
                                             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
                                             Ready &gt;2 Years
                                         </span>
                                     @elseif ($promoStatus === 'Not Ready')
                                         <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 shadow-sm">
                                             <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
                                             Not Ready
                                         </span>
                                     @else
                                         <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200 shadow-sm">
                                             {{ $promoStatus ?? '-' }}
                                         </span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="py-4 px-6">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('pdc_admin.progress_archive.detail', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
-                                            class="inline-block px-4 py-1.5 bg-[#14b8a6] border border-[#14b8a6] text-white rounded-lg text-xs font-semibold hover:bg-[#0d9488] hover:border-[#0d9488] transition-all whitespace-nowrap shadow-sm">
-                                            Lihat Detail
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-xs font-bold text-white hover:bg-[#0d9488] hover:border-[#0d9488] transition-colors shadow-sm whitespace-nowrap">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            Detail
                                         </a>
                                         <a href="{{ route('pdc_admin.export_pdf', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
-                                            class="inline-block px-5 py-1.5 bg-[#EE5353] hover:bg-[#d94444] text-white rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shadow-sm">
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#EE5353] border border-[#EE5353] rounded-lg text-xs font-bold text-white hover:bg-[#d94444] hover:border-[#d94444] transition-colors shadow-sm whitespace-nowrap">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                <polyline points="7 10 12 15 17 10"></polyline>
+                                                <line x1="12" y1="15" x2="12" y2="3">
+                                                </line>
+                                            </svg>
                                             Export
                                         </a>
                                     </div>

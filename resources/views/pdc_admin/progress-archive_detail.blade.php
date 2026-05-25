@@ -38,6 +38,12 @@
                 color: #1e293b;
             }
 
+            .btn-back-bottom svg {
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+            }
+
             /* Next button */
             .btn-next-bottom {
                 display: inline-flex;
@@ -326,7 +332,7 @@
             /* Section title */
             .section-title {
                 position: relative;
-                padding-left: 14px;
+                padding-left: 0;
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -337,20 +343,19 @@
             }
 
             .section-title::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 4px;
-                height: 18px;
-                background: linear-gradient(180deg, #14b8a6, #0d9488);
-                border-radius: 99px;
+                content: none;
+            }
+
+            .section-title svg {
+                width: 22px;
+                height: 22px;
+                color: #0f172a;
+                flex-shrink: 0;
             }
 
             .sub-section-title {
                 position: relative;
-                padding-left: 14px;
+                padding-left: 0;
                 display: flex;
                 align-items: center;
                 gap: 8px;
@@ -362,15 +367,14 @@
             }
 
             .sub-section-title::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 3.5px;
-                height: 14px;
-                background: #94a3b8;
-                border-radius: 99px;
+                content: none;
+            }
+
+            .sub-section-title svg {
+                width: 18px;
+                height: 18px;
+                color: #0f172a;
+                flex-shrink: 0;
             }
 
             /* Logbook Specific */
@@ -653,6 +657,24 @@
                 margin-bottom: 32px;
             }
 
+            .idp-chart-button {
+                border: 0;
+                cursor: pointer;
+            }
+
+            .idp-chart-button.is-active {
+                outline: 4px solid rgba(15, 23, 42, 0.12);
+                transform: translateY(-2px) scale(1.02);
+            }
+
+            .idp-logbook-panel {
+                display: none;
+            }
+
+            .idp-logbook-panel.is-active {
+                display: block;
+            }
+
             @media(max-width:768px) {
                 .profile-card {
                     grid-template-columns: 1fr;
@@ -684,6 +706,23 @@
             }
         </style>
     </x-slot>
+
+    {{-- Page Header --}}
+    <div class="page-header animate-title mb-6">
+        <div class="page-header-icon shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
+                <path
+                    d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                <path fill-rule="evenodd"
+                    d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z"
+                    clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div>
+            <div class="page-header-title">Detail Progress Archive</div>
+            <div class="page-header-sub">Ringkasan arsip pengembangan talent dan validasi akhir program.</div>
+        </div>
+    </div>
 
     {{-- Talent Profile Header - Hero Style --}}
     @php
@@ -774,9 +813,21 @@
 
     {{-- ================================= SECTION: KOMPETENSI ================================= --}}
     <div id="section-kompetensi" class="tab-section" style="display: block;">
-        <div class="section-title">Kompetensi</div>
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                    clip-rule="evenodd" />
+            </svg>
+            Kompetensi
+        </div>
 
         <div class="sub-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                    clip-rule="evenodd" />
+            </svg>
             TOP 3 GAP Kompetensi
         </div>
 
@@ -810,6 +861,11 @@
         <hr class="border-t-2 border-slate-200 my-8">
 
         <div class="sub-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z"
+                    clip-rule="evenodd" />
+            </svg>
             Heatmap Kompetensi
         </div>
 
@@ -968,69 +1024,104 @@
 
     {{-- ================================= SECTION: IDP MONITORING ================================= --}}
     <div id="section-idp" class="tab-section" style="display: none;">
-        <div class="section-title">IDP Monitoring</div>
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                    clip-rule="evenodd" />
+                <path
+                    d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+            </svg>
+            IDP Monitoring
+        </div>
 
         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4 mb-8 w-full overflow-hidden">
             <div class="sub-section-title m-0 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                    <path
+                        d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                </svg>
                 IDP Monitoring
             </div>
 
             <div class="donut-container p-6 md:p-12">
                 @php
-                    $charts = [
-                        [
-                            'label' => 'Exposure',
-                            'done' => isset($exposureCount) ? min($exposureCount, 6) : 0,
+                    $idpChartData = [
+                        'Exposure' => [
+                            'done' => min($exposureCount ?? 0, 6),
                             'total' => 6,
-                            'color' => '#475569',
+                            'from' => '#334155',
+                            'to' => '#334155',
+                            'id' => 'archive-grad-exposure',
+                            'target' => 'exposure',
+                            'btn_color' =>
+                                'bg-slate-700 hover:bg-slate-800 shadow-[0_4px_14px_rgba(51,65,85,0.25)] hover:shadow-lg',
                         ],
-                        [
-                            'label' => 'Mentoring',
-                            'done' => isset($mentoringCount) ? min($mentoringCount, 6) : 0,
+                        'Mentoring' => [
+                            'done' => min($mentoringCount ?? 0, 6),
                             'total' => 6,
-                            'color' => '#eab308',
+                            'from' => '#f59e0b',
+                            'to' => '#f59e0b',
+                            'id' => 'archive-grad-mentoring',
+                            'target' => 'mentoring',
+                            'btn_color' =>
+                                'bg-amber-500 hover:bg-amber-600 shadow-[0_4px_14px_rgba(245,158,11,0.28)] hover:shadow-lg',
                         ],
-                        [
-                            'label' => 'Learning',
-                            'done' => isset($learningCount) ? min($learningCount, 6) : 0,
+                        'Learning' => [
+                            'done' => min($learningCount ?? 0, 6),
                             'total' => 6,
-                            'color' => '#14b8a6',
+                            'from' => '#0d9488',
+                            'to' => '#0d9488',
+                            'id' => 'archive-grad-learning',
+                            'target' => 'learning',
+                            'btn_color' =>
+                                'bg-teal-600 hover:bg-teal-700 shadow-[0_4px_14px_rgba(13,148,136,0.28)] hover:shadow-lg',
                         ],
                     ];
-                    $r = 44;
+                    $r = 38;
                     $circ = 2 * M_PI * $r;
                 @endphp
-                @foreach ($charts as $chart)
+                @foreach ($idpChartData as $label => $chart)
                     @php
                         $pct = $chart['done'] / $chart['total'];
                         $filled = $pct * $circ;
                         $empty = $circ - $filled;
                     @endphp
-                    <div class="flex flex-col items-center gap-4">
-                        <div class="relative w-40 h-40">
-                            <!-- Drop shadow SVG -->
-                            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 absolute">
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="relative w-48 h-48 drop-shadow-sm">
+                            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                                <defs>
+                                    <linearGradient id="{{ $chart['id'] }}" x1="0%" y1="0%"
+                                        x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="{{ $chart['from'] }}" />
+                                        <stop offset="100%" stop-color="{{ $chart['to'] }}" />
+                                    </linearGradient>
+                                </defs>
                                 <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                    class="stroke-slate-200" stroke-width="12" />
-                            </svg>
-                            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 relative"
-                                style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                                    stroke="#f1f5f9" stroke-width="10" />
                                 <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                    stroke="{{ $chart['color'] }}" stroke-width="12"
+                                    stroke="url(#{{ $chart['id'] }})" stroke-width="10" stroke-linecap="round"
                                     stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
-                                    stroke-linecap="butt" />
+                                    style="transition: stroke-dasharray 0.8s ease;" />
                             </svg>
-                            <div
-                                class="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-full m-3 border border-slate-100 shadow-inner">
-                                <span
-                                    class="text-[1.45rem] font-extrabold text-slate-800 tracking-tight">{{ $chart['done'] }}/{{ $chart['total'] }}</span>
-                                <span
-                                    class="text-[0.7rem] font-bold text-slate-400 italic">{{ round($pct * 100) }}%</span>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-4xl font-bold"
+                                    style="color:{{ $chart['from'] }};">{{ round($pct * 100) }}%</span>
                             </div>
                         </div>
-                        <div class="border border-slate-300 bg-white px-6 py-1.5 rounded-full shadow-sm mt-2">
-                            <span class="text-[0.8rem] font-bold text-slate-700">{{ $chart['label'] }}</span>
-                        </div>
+                        <button type="button"
+                            onclick="switchArchiveLogbook('{{ $chart['target'] }}', this)"
+                            class="idp-chart-button {{ $chart['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5"
+                            title="Lihat logbook {{ $label }}">
+                            <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
                 @endforeach
             </div>
@@ -1039,136 +1130,150 @@
         <hr class="border-t-2 border-slate-200 my-8">
 
         <div class="sub-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
             LogBook
+        </div>
+
+        <div id="archive-logbook-empty"
+            class="bg-slate-50 border border-dashed border-slate-300 rounded-xl px-6 py-8 text-center text-sm font-semibold text-slate-500">
+            Pilih Exposure, Mentoring, atau Learning untuk melihat logbook.
         </div>
 
         {{-- Exposure Logbook --}}
         @php $exposureActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'exposure')); @endphp
-        <div class="logbook-pill">Exposure</div>
-        <div class="overflow-x-auto w-full">
-            <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Mentor</th>
-                        <th style="width: 25%;">Tema</th>
-                        <th style="width: 15%;">Tanggal Pengiriman</th>
-                        <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 15%;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($exposureActivities as $act)
-                        @php
-                            $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600',
-                                'rejected' => 'text-red-600',
-                                default => 'text-yellow-600',
-                            };
-                            $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500',
-                                'rejected' => 'bg-red-500',
-                                default => 'bg-yellow-500',
-                            };
-                        @endphp
+        <div id="archive-logbook-exposure" class="idp-logbook-panel">
+            <div class="logbook-pill">Exposure</div>
+            <div class="overflow-x-auto w-full">
+                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
+                    <thead>
                         <tr>
-                            <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
-                            <td>{{ $act->theme ?? '-' }}</td>
-                            <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                            <td>{{ $act->activity_date ?? '-' }}</td>
-                            <td><span
-                                    class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                        class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                            </td>
-                            <td>
-                                <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                    class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Detail
-                                </a>
-                            </td>
+                            <th style="width: 20%;">Mentor</th>
+                            <th style="width: 25%;">Tema</th>
+                            <th style="width: 15%;">Tanggal Pengiriman</th>
+                            <th style="width: 15%;">Tanggal Pelaksanaan</th>
+                            <th style="width: 10%;">Status</th>
+                            <th style="width: 15%;">Aksi</th>
                         </tr>
-                    @empty
-                        <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                Exposure</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse($exposureActivities as $act)
+                            @php
+                                $statusColor = match (strtolower($act->status ?? '')) {
+                                    'approved' => 'text-green-600',
+                                    'rejected' => 'text-red-600',
+                                    default => 'text-yellow-600',
+                                };
+                                $dotColor = match (strtolower($act->status ?? '')) {
+                                    'approved' => 'bg-green-500',
+                                    'rejected' => 'bg-red-500',
+                                    default => 'bg-yellow-500',
+                                };
+                            @endphp
+                            <tr>
+                                <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
+                                <td>{{ $act->theme ?? '-' }}</td>
+                                <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
+                                <td>{{ $act->activity_date ?? '-' }}</td>
+                                <td><span
+                                        class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
+                                            class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
+                                        class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr class="empty-row">
+                                <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
+                                    Exposure</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {{-- Mentoring Logbook --}}
         @php $mentoringActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'mentor')); @endphp
-        <div class="logbook-pill">Mentoring</div>
-        <div class="overflow-x-auto w-full">
-            <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Mentor</th>
-                        <th style="width: 25%;">Tema</th>
-                        <th style="width: 15%;">Tanggal Pengiriman</th>
-                        <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 15%;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($mentoringActivities as $act)
-                        @php
-                            $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600',
-                                'rejected' => 'text-red-600',
-                                default => 'text-yellow-600',
-                            };
-                            $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500',
-                                'rejected' => 'bg-red-500',
-                                default => 'bg-yellow-500',
-                            };
-                        @endphp
+        <div id="archive-logbook-mentoring" class="idp-logbook-panel">
+            <div class="logbook-pill">Mentoring</div>
+            <div class="overflow-x-auto w-full">
+                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
+                    <thead>
                         <tr>
-                            <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
-                            <td>{{ $act->theme ?? '-' }}</td>
-                            <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                            <td>{{ $act->activity_date ?? '-' }}</td>
-                            <td><span
-                                    class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                        class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                            </td>
-                            <td>
-                                <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                    class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Detail
-                                </a>
-                            </td>
+                            <th style="width: 20%;">Mentor</th>
+                            <th style="width: 25%;">Tema</th>
+                            <th style="width: 15%;">Tanggal Pengiriman</th>
+                            <th style="width: 15%;">Tanggal Pelaksanaan</th>
+                            <th style="width: 10%;">Status</th>
+                            <th style="width: 15%;">Aksi</th>
                         </tr>
-                    @empty
-                        <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                Mentoring</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse($mentoringActivities as $act)
+                            @php
+                                $statusColor = match (strtolower($act->status ?? '')) {
+                                    'approved' => 'text-green-600',
+                                    'rejected' => 'text-red-600',
+                                    default => 'text-yellow-600',
+                                };
+                                $dotColor = match (strtolower($act->status ?? '')) {
+                                    'approved' => 'bg-green-500',
+                                    'rejected' => 'bg-red-500',
+                                    default => 'bg-yellow-500',
+                                };
+                            @endphp
+                            <tr>
+                                <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
+                                <td>{{ $act->theme ?? '-' }}</td>
+                                <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
+                                <td>{{ $act->activity_date ?? '-' }}</td>
+                                <td><span
+                                        class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
+                                            class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
+                                        class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr class="empty-row">
+                                <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
+                                    Mentoring</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {{-- Learning Logbook --}}
         @php $learningActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'learn')); @endphp
-        <div class="logbook-pill">Learning</div>
-        <div class="overflow-x-auto w-full">
-            <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
+        <div id="archive-logbook-learning" class="idp-logbook-panel">
+            <div class="logbook-pill">Learning</div>
+            <div class="overflow-x-auto w-full">
+                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
                 <thead>
                     <tr>
                         <th style="width: 20%;">Sumber</th>
@@ -1223,12 +1328,18 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 
     {{-- ================================= SECTION: FINANCE VALIDATION ================================= --}}
     <div id="section-finance" class="tab-section" style="display: none;">
-        <div class="section-title">Finance Validation</div>
+        <div class="section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+            </svg>
+            Finance Validation
+        </div>
 
         @php $projects = $talent->improvementProjects; @endphp
 
@@ -1373,7 +1484,17 @@
 
     {{-- ================================= SECTION: PANELIS REVIEW ================================= --}}
     <div id="section-panelis" class="tab-section" style="display: none;">
-        <div class="section-title mb-2">Panelis Review</div>
+        <div class="section-title mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z"
+                    clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                    d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm9.586 4.594a.75.75 0 0 0-1.172-.938l-2.476 3.096-.908-.907a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.116-.062l3-3.75Z"
+                    clip-rule="evenodd" />
+            </svg>
+            Panelis Review
+        </div>
         @php
             $latestProject = $talent->improvementProjects->sortByDesc('updated_at')->first();
             $panelisAspects = [
@@ -1647,7 +1768,11 @@
             {{-- Footer --}}
             <div class="flex justify-end pt-4">
                 <button onclick="closePanelisModal()"
-                    class="px-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition-colors shadow-sm text-sm">
+                    class="px-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition-colors shadow-sm text-sm inline-flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
                     Kembali
                 </button>
             </div>
@@ -1659,6 +1784,10 @@
     <div class="flex justify-end items-center mt-8 mb-4" id="bottom-navigation-container">
         <a href="{{ route('pdc_admin.progress_archive') }}" class="btn-back-bottom shadow-sm"
             style="padding-left: 2rem; padding-right: 2rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
             Kembali
         </a>
     </div>
@@ -1711,6 +1840,30 @@
                     top: 0,
                     behavior: 'smooth'
                 });
+            }
+
+            function switchArchiveLogbook(type, button) {
+                document.querySelectorAll('.idp-logbook-panel').forEach(el => {
+                    el.classList.remove('is-active');
+                });
+
+                document.querySelectorAll('.idp-chart-button').forEach(el => {
+                    el.classList.remove('is-active');
+                });
+
+                const emptyState = document.getElementById('archive-logbook-empty');
+                if (emptyState) {
+                    emptyState.style.display = 'none';
+                }
+
+                const targetPanel = document.getElementById('archive-logbook-' + type);
+                if (targetPanel) {
+                    targetPanel.classList.add('is-active');
+                }
+
+                if (button) {
+                    button.classList.add('is-active');
+                }
             }
 
             // Removed nextSection and prevSection as they are no longer needed

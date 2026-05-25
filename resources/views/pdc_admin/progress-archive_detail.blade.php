@@ -1780,17 +1780,7 @@
     </div>
 
 
-    {{-- Bottom Navigation --}}
-    <div class="flex justify-end items-center mt-8 mb-4" id="bottom-navigation-container">
-        <a href="{{ route('pdc_admin.progress_archive') }}" class="btn-back-bottom shadow-sm"
-            style="padding-left: 2rem; padding-right: 2rem;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Kembali
-        </a>
-    </div>
+
 
     <x-slot name="scripts">
         <script>

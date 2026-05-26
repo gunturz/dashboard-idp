@@ -1167,7 +1167,10 @@
                 @endforeach
             </div>
         </div>
+<<<<<<< HEAD
     </div>
+=======
+>>>>>>> cb38fe7cc0db69fdf11228aa9e041b7594d7ba4f
 
     {{-- ================================= SECTION: FINANCE VALIDATION ================================= --}}
     <div id="section-finance" class="tab-section" style="display: none;">
@@ -1626,6 +1629,12 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> cb38fe7cc0db69fdf11228aa9e041b7594d7ba4f
     <x-slot name="scripts">
         <script>
             const sections = ['kompetensi', 'idp', 'finance', 'panelis'];
@@ -1676,6 +1685,11 @@
                 });
             }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cb38fe7cc0db69fdf11228aa9e041b7594d7ba4f
             // Removed nextSection and prevSection as they are no longer needed
         </script>
     </x-slot>

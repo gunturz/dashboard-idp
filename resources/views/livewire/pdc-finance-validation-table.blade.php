@@ -197,7 +197,8 @@
             </p>
         </div>
     @endif
-    <div id="actionModal" class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4">
+    <div id="actionModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
+        style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-2xl w-full max-w-[440px] shadow-2xl overflow-hidden">
             {{-- Header --}}
             <div class="px-6 pt-6 pb-4 flex flex-col items-center text-center border-b border-gray-100">
@@ -250,7 +251,8 @@
 
     {{-- Finance Modal --}}
     <div id="financeModal"
-        class="fixed inset-0 bg-black/50 z-[100] hidden items-center justify-center p-4 @if ($errors->any()) !flex @endif">
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 @if ($errors->any()) !flex @endif"
+        style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-2xl w-full max-w-[480px] shadow-2xl overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">

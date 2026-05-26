@@ -654,7 +654,8 @@
 
     <!-- Generic Logbook Detail Modal -->
     <div id="logbookDetailModal"
-        class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0">
+        class="hidden fixed inset-0 z-[100] flex items-center justify-center transition-opacity opacity-0"
+        style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-[20px] shadow-2xl w-full max-w-[500px] p-7 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto"
             id="logbookDetailModalContent">
             <div class="flex justify-between items-start mb-4 border-b border-gray-100 pb-4">

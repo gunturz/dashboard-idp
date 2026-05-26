@@ -1451,7 +1451,7 @@
                                 @endif
                             </td>
                             <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                <button onclick="openPanelisModal({{ $idx }})"
+                                <a href="{{ route('pdc_admin.panelis_review.detail', $assessment->user_id_talent) }}?back_url={{ urlencode(url()->current()) }}"
                                     class="inline-flex items-center justify-center gap-1.5 h-9 px-4 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-xs font-bold text-white hover:bg-[#0d9488] hover:border-[#0d9488] transition-colors shadow-sm whitespace-nowrap mx-auto md:mx-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1460,7 +1460,7 @@
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                     Detail
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     @empty

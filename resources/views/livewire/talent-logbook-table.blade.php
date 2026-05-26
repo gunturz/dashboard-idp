@@ -249,7 +249,8 @@
 
     {{-- Delete Confirmation Modal --}}
     @if ($showDeleteModal)
-        <div class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 backdrop-blur-sm transition-opacity"
+        <div class="fixed inset-0 z-[100] flex items-center justify-center transition-opacity"
+            style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);"
             wire:click.self="$set('showDeleteModal', false)">
             <div
                 class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 transform transition-transform duration-300">

@@ -1,4 +1,4 @@
-<x-pdc_admin.layout title="Lihat Penilaian Panelis – Individual Development Plan" :user="$user" :hideSidebar="true">
+<x-pdc_admin.layout title="Lihat Penilaian Panelis – Individual Development Plan" :user="$user">
     <x-slot name="styles">
         <style>
             /* ── Section Title ── */
@@ -113,11 +113,16 @@
             .decision-card {
                 border: 2px solid #e2e8f0;
                 border-radius: 16px;
-                padding: 18px 14px;
+                padding: 45px 14px 20px 14px;
                 text-align: center;
                 cursor: pointer;
                 transition: all 0.22s;
                 background: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                min-height: 145px;
             }
 
             .decision-card:hover {
@@ -125,26 +130,21 @@
                 box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             }
 
-            .decision-card.ready-now:hover     { border-color: #22c55e; }
-            .decision-card.ready-1-2:hover     { border-color: #3b82f6; }
-            .decision-card.ready-over-2:hover  { border-color: #f59e0b; }
-            .decision-card.not-ready:hover     { border-color: #ef4444; }
-
-            .decision-card .card-icon {
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 10px;
-                font-size: 1.4rem;
+            .decision-card.ready-now:hover {
+                border-color: #22c55e;
             }
 
-            .decision-card.ready-now    .card-icon { background: rgba(34, 197, 94, 0.12); }
-            .decision-card.ready-1-2    .card-icon { background: rgba(59, 130, 246, 0.12); }
-            .decision-card.ready-over-2 .card-icon { background: rgba(245, 158, 11, 0.12); }
-            .decision-card.not-ready    .card-icon { background: rgba(239, 68, 68, 0.10); }
+            .decision-card.ready-1-2:hover {
+                border-color: #3b82f6;
+            }
+
+            .decision-card.ready-over-2:hover {
+                border-color: #f59e0b;
+            }
+
+            .decision-card.not-ready:hover {
+                border-color: #ef4444;
+            }
 
             .decision-card h4 {
                 font-size: 0.875rem;
@@ -152,10 +152,21 @@
                 margin-bottom: 4px;
             }
 
-            .decision-card.ready-now    h4 { color: #16a34a; }
-            .decision-card.ready-1-2    h4 { color: #2563eb; }
-            .decision-card.ready-over-2 h4 { color: #d97706; }
-            .decision-card.not-ready    h4 { color: #dc2626; }
+            .decision-card.ready-now h4 {
+                color: #16a34a;
+            }
+
+            .decision-card.ready-1-2 h4 {
+                color: #2563eb;
+            }
+
+            .decision-card.ready-over-2 h4 {
+                color: #d97706;
+            }
+
+            .decision-card.not-ready h4 {
+                color: #dc2626;
+            }
 
             .decision-card p {
                 font-size: 0.72rem;
@@ -559,8 +570,6 @@
 
     {{-- ── Bottom Actions ── --}}
     <div class="flex justify-end gap-3">
-        <a href="{{ route('pdc_admin.panelis_review') }}" class="btn-batal" id="batal-panelis-detail">Kembali</a>
-
         @php
             $statusPromo = optional($talent->promotion_plan)->status_promotion;
             $isComplete = in_array($statusPromo, ['Promoted', 'Not Promoted', 'Approved Panelis', 'Rejected Panelis']);
@@ -636,28 +645,24 @@
 
                 {{-- Ready Now --}}
                 <div class="decision-card ready-now" onclick="selectDecision('ready_now')">
-                    <div class="card-icon">🏆</div>
                     <h4>Ready Now</h4>
                     <p>Talent siap & resmi diangkat ke posisi target sekarang</p>
                 </div>
 
                 {{-- Ready in 1-2 Years --}}
                 <div class="decision-card ready-1-2" onclick="selectDecision('ready_1_2_years')">
-                    <div class="card-icon">📈</div>
                     <h4>Ready in 1–2 Years</h4>
                     <p>Diproyeksikan siap promosi dalam 1–2 tahun dengan pengembangan terarah</p>
                 </div>
 
                 {{-- Ready in > 2 Years --}}
                 <div class="decision-card ready-over-2" onclick="selectDecision('ready_over_2_years')">
-                    <div class="card-icon">🕐</div>
                     <h4>Ready in &gt; 2 Years</h4>
                     <p>Masih membutuhkan pengembangan signifikan sebelum siap promosi</p>
                 </div>
 
                 {{-- Not Ready --}}
                 <div class="decision-card not-ready" onclick="selectDecision('not_ready')">
-                    <div class="card-icon">❌</div>
                     <h4>Not Ready</h4>
                     <p>Belum direkomendasikan untuk jalur suksesi pada periode ini</p>
                 </div>
@@ -675,12 +680,12 @@
     <div id="confirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
         style="background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            {{-- Icon + Header --}}
-            <div class="px-6 pt-7 pb-4 text-center">
-                <div id="confirmIcon"
-                    class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"></div>
-                <h3 class="text-lg font-bold text-[#1e293b] mb-2" id="confirmTitle"></h3>
-                <p class="text-sm text-[#475569]" id="confirmDesc"></p>
+            {{-- Header --}}
+            <div class="px-6 pt-12 pb-4 text-center">
+                <h3 class="text-lg font-bold text-[#1e293b] mb-3" id="confirmTitle"></h3>
+                <div class="min-h-[70px] flex items-center justify-center">
+                    <p class="text-sm text-[#475569]" id="confirmDesc"></p>
+                </div>
             </div>
             {{-- Warning note --}}
             <div class="mx-6 mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
@@ -689,8 +694,6 @@
             </div>
             {{-- Footer --}}
             <div class="px-6 py-4 flex gap-3 justify-end border-t border-gray-100">
-                <button type="button" onclick="backToDecision()"
-                    class="px-5 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Kembali</button>
                 <button type="button" onclick="submitDecision()" id="confirmBtn"
                     class="px-6 py-2 text-sm font-bold text-white rounded-xl transition-colors">Ya, Konfirmasi</button>
             </div>
@@ -714,32 +717,27 @@
                 pendingDecision = decision;
                 document.getElementById('decisionModal').style.display = 'none';
 
-                const confirmIcon  = document.getElementById('confirmIcon');
                 const confirmTitle = document.getElementById('confirmTitle');
-                const confirmDesc  = document.getElementById('confirmDesc');
-                const confirmBtn   = document.getElementById('confirmBtn');
+                const confirmDesc = document.getElementById('confirmDesc');
+                const confirmBtn = document.getElementById('confirmBtn');
 
                 const decisionMap = {
                     ready_now: {
-                        icon: '🏆', bg: 'rgba(34,197,94,0.12)',
                         title: 'Konfirmasi: Ready Now',
                         desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> sebagai <strong class="text-green-600">DIANGKAT</strong> ke posisi target sekarang. Posisi talent akan diperbarui otomatis.',
                         btnColor: '#22c55e'
                     },
                     ready_1_2_years: {
-                        icon: '📈', bg: 'rgba(59,130,246,0.12)',
                         title: 'Konfirmasi: Ready in 1–2 Years',
                         desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> dengan keputusan <strong class="text-blue-600">READY IN 1–2 YEARS</strong>. Talent belum diangkat pada periode ini.',
                         btnColor: '#3b82f6'
                     },
                     ready_over_2_years: {
-                        icon: '🕐', bg: 'rgba(245,158,11,0.12)',
                         title: 'Konfirmasi: Ready in > 2 Years',
                         desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> dengan keputusan <strong class="text-amber-600">READY IN &gt; 2 YEARS</strong>. Talent belum diangkat pada periode ini.',
                         btnColor: '#f59e0b'
                     },
                     not_ready: {
-                        icon: '❌', bg: 'rgba(239,68,68,0.1)',
                         title: 'Konfirmasi: Not Ready',
                         desc: 'Anda akan menetapkan <strong>{{ addslashes($talent->nama) }}</strong> sebagai <strong class="text-red-600">NOT READY</strong>. Talent belum diangkat pada periode ini.',
                         btnColor: '#ef4444'
@@ -749,8 +747,6 @@
                 const cfg = decisionMap[decision];
                 if (!cfg) return;
 
-                confirmIcon.innerHTML = cfg.icon;
-                confirmIcon.style.background = cfg.bg;
                 confirmTitle.textContent = cfg.title;
                 confirmDesc.innerHTML = cfg.desc;
                 confirmBtn.style.background = cfg.btnColor;

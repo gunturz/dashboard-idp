@@ -50,9 +50,9 @@
     </div>
 
     {{-- ── Filters ── --}}
-    <div class="flex flex-col sm:flex-row items-center gap-4 mb-6 mt-8" id="panelis-filter-bar">
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-8 mt-8" id="panelis-filter-bar">
         {{-- Live Search --}}
-        <div class="relative w-full sm:w-[25%]">
+        <div class="relative w-full sm:flex-[1.5]">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -64,7 +64,7 @@
         </div>
 
         {{-- Perusahaan --}}
-        <div class="relative w-full sm:w-[20%]">
+        <div class="relative w-full sm:flex-1">
             <select id="live-company-filter" wire:model.live="companyFilter"
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
@@ -76,7 +76,7 @@
         </div>
 
         {{-- Jabatan --}}
-        <div class="relative w-full sm:w-[20%]">
+        <div class="relative w-full sm:flex-1">
             <select id="live-position-filter" wire:model.live="positionFilter"
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
@@ -89,7 +89,7 @@
 
         {{-- Departemen (tampil jika perusahaan terpilih) --}}
         @if ($companyFilter && $departmentsForFilter->isNotEmpty())
-            <div class="relative w-full sm:w-[20%]">
+            <div class="relative w-full sm:flex-1">
                 <select id="live-department-filter" wire:model.live="departmentFilter"
                     class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
@@ -110,66 +110,91 @@
                     {{ $companyData['company']->nama_company ?? 'Unassigned' }}
                 </h3>
                 <div class="prem-card">
-                    <div class="overflow-x-auto">
-                        <table class="prem-table">
-                            <thead>
+                    <div class="overflow-x-scroll w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
+                        <table class="w-full table-auto text-left">
+                            <thead class="bg-slate-50 border-b border-gray-200">
                                 <tr>
-                                    <th class="w-[20%] text-left pl-6">Posisi Yang Dituju</th>
-                                    <th class="w-[18%]">Talent</th>
-                                    <th class="w-[16%]">Departemen</th>
-                                    <th class="w-[15%]">Validasi Finance</th>
-                                    <th class="w-[13%]">Lock Progress</th>
-                                    <th class="w-[18%]">Aksi</th>
+                                    <th
+                                        class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Posisi Yang Dituju</th>
+                                    <th
+                                        class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Talent</th>
+                                    <th
+                                        class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Departemen</th>
+                                    <th
+                                        class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Validasi Finance</th>
+                                    <th
+                                        class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Lock Progress</th>
+                                    <th
+                                        class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="divide-y divide-gray-100">
                                 @foreach ($companyData['positions'] as $positionId => $posData)
                                     @php
                                         $firstTalent = $posData['talents']->first();
                                         $plan = optional($firstTalent)->promotion_plan;
                                         $periodLabel = '-';
                                         if (!empty($plan->start_date) && !empty($plan->target_date)) {
-                                            $periodLabel = \Carbon\Carbon::parse($plan->start_date)->translatedFormat('d M Y') . ' - ' . \Carbon\Carbon::parse($plan->target_date)->translatedFormat('d M Y');
+                                            $periodLabel =
+                                                \Carbon\Carbon::parse($plan->start_date)->translatedFormat('d M Y') .
+                                                ' - ' .
+                                                \Carbon\Carbon::parse($plan->target_date)->translatedFormat('d M Y');
                                         }
                                     @endphp
                                     @foreach ($posData['talents'] as $index => $talent)
-                                        <tr class="talent-row" data-name="{{ strtolower($talent->nama) }}"
-                                            data-company="{{ $talent->company_id }}" data-position="{{ $positionId }}"
+                                        <tr class="talent-row hover:bg-teal-50/50 transition duration-150"
+                                            data-name="{{ strtolower($talent->nama) }}"
+                                            data-company="{{ $talent->company_id }}"
+                                            data-position="{{ $positionId }}"
                                             data-dept="{{ $talent->department_id }}"
                                             data-pos-group="{{ $companyId }}-{{ $positionId }}">
                                             {{-- Posisi (rowspan) --}}
                                             @if ($index === 0)
                                                 <td rowspan="{{ count($posData['talents']) }}"
-                                                    class="border-r border-[#f1f5f9] text-center align-middle">
-                                                    <div class="flex flex-col items-center justify-center gap-2 px-4 py-2">
+                                                    class="px-6 py-5 border-r border-[#f1f5f9] text-center align-middle bg-slate-50/30">
+                                                    <div class="flex flex-col items-center justify-center gap-2">
                                                         <div
-                                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-200/60 bg-teal-50/50">
+                                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-200/60 bg-white shadow-sm">
                                                             <span
-                                                                class="font-bold text-teal-900 text-sm leading-none">{{ optional($posData['targetPosition'])->position_name ?? '-' }}</span>
+                                                                class="font-bold text-teal-900 text-sm leading-tight text-center">{{ optional($posData['targetPosition'])->position_name ?? '-' }}</span>
                                                         </div>
-                                                        <span class="text-[11px] text-slate-500 font-medium">{{ $periodLabel }}</span>
+                                                        <span
+                                                            class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{{ $periodLabel }}</span>
                                                     </div>
                                                 </td>
                                             @endif
 
                                             {{-- Talent --}}
-                                            <td>
-                                                <span class="font-bold text-[#1e293b] block text-sm">{{ $talent->nama }}</span>
-                                                <span
-                                                    class="text-xs text-[#64748b] italic block mt-0.5">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
+                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
+                                                <div style="display: inline-block; text-align: center; width: 100%;">
+                                                    <span
+                                                        class="font-bold text-slate-800 block text-sm leading-tight">{{ $talent->nama }}</span>
+                                                    <span
+                                                        class="text-[11px] text-gray-500 italic block mt-1 leading-tight">{{ optional($talent->position)->position_name ?? 'Officer' }}</span>
+                                                </div>
                                             </td>
 
                                             {{-- Departemen --}}
-                                            <td>
+                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
                                                 <span
-                                                    class="text-sm text-[#475569]">{{ optional($talent->department)->nama_department ?? '-' }}</span>
+                                                    class="text-sm text-slate-700 font-medium">{{ optional($talent->department)->nama_department ?? '-' }}</span>
                                             </td>
 
                                             {{-- Validasi Finance --}}
-                                            <td>
+                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
                                                 @php
-                                                    $latestProject = $talent->improvementProjects->sortByDesc('created_at')->first();
-                                                    $financeStatus = $latestProject ? $latestProject->status : 'Belum Ada';
+                                                    $latestProject = $talent->improvementProjects
+                                                        ->sortByDesc('created_at')
+                                                        ->first();
+                                                    $financeStatus = $latestProject
+                                                        ? $latestProject->status
+                                                        : 'Belum Ada';
                                                 @endphp
                                                 @if ($financeStatus === 'Verified')
                                                     <span class="badge badge-green">Approved</span>
@@ -181,18 +206,19 @@
                                             </td>
 
                                             {{-- Lock Progress --}}
-                                            <td>
+                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
                                                 @php
                                                     $isLocked = optional($talent->promotion_plan)->is_locked ?? false;
                                                 @endphp
-                                                <form method="POST"
+                                                <form method="POST" class="flex justify-center"
                                                     action="{{ route('pdc_admin.panelis_review.toggle_lock', $talent->id) }}">
                                                     @csrf
                                                     <button type="submit"
-                                                        class="btn-prem {{ $isLocked ? 'btn-red' : 'btn-dark' }} text-[11px] px-2.5 py-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            @if($isLocked)
+                                                        class="btn-prem {{ $isLocked ? 'btn-red' : 'btn-dark' }} text-[10px] px-3 py-1 font-bold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                            stroke-width="2.5">
+                                                            @if ($isLocked)
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                                             @else
@@ -206,24 +232,33 @@
                                             </td>
 
                                             {{-- Aksi --}}
-                                            <td>
+                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
                                                 @php
-                                                    $sessionId = optional($talent->promotion_plan)->development_session_id;
+                                                    $sessionId = optional($talent->promotion_plan)
+                                                        ->development_session_id;
                                                     $alreadySent = in_array(
                                                         optional($talent->promotion_plan)->status_promotion,
-                                                        ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis']
+                                                        ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis'],
                                                     );
-                                                    $isReviewedByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent->id)
-                                                        ->when($sessionId, fn($q) => $q->where('development_session_id', $sessionId))
+                                                    $isReviewedByPanelis = \App\Models\PanelisAssessment::where(
+                                                        'user_id_talent',
+                                                        $talent->id,
+                                                    )
+                                                        ->when(
+                                                            $sessionId,
+                                                            fn($q) => $q->where('development_session_id', $sessionId),
+                                                        )
                                                         ->whereNotNull('panelis_score')
                                                         ->exists();
                                                 @endphp
                                                 @if ($alreadySent || $isReviewedByPanelis)
-                                                    <div class="flex items-center justify-center gap-2">
+                                                    <div class="flex items-center justify-center">
                                                         <a href="{{ route('pdc_admin.panelis_review.detail', $talent->id) }}"
-                                                            class="inline-flex items-center gap-1.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white text-[13px] font-bold px-5 py-2 rounded-xl border-none transition-all shadow-sm whitespace-nowrap">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            class="inline-flex items-center gap-1.5 bg-[#0f172a] hover:bg-[#1e242e] text-white text-[11px] font-bold px-4 py-2 rounded-xl transition-all shadow-sm whitespace-nowrap">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-3.5 w-3.5" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor"
+                                                                stroke-width="2.5">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -233,17 +268,21 @@
                                                         </a>
                                                     </div>
                                                 @else
-                                                    <button type="button"
-                                                        onclick="openPanelisModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}')"
-                                                        class="btn-prem btn-teal text-xs px-3 py-1.5 mx-auto {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                                        {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                        </svg>
-                                                        Kirim Panelis
-                                                    </button>
+                                                    <div class="flex justify-center">
+                                                        <button type="button"
+                                                            onclick="openPanelisModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}')"
+                                                            class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold text-white bg-teal-500 hover:bg-teal-600 rounded-xl transition-all shadow-sm {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                                            {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-3.5 w-3.5" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor"
+                                                                stroke-width="2.5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                                            </svg>
+                                                            Kirim Panelis
+                                                        </button>
+                                                    </div>
                                                 @endif
                                             </td>
                                         </tr>
@@ -269,8 +308,8 @@
     </div>{{-- /panelis-review-wrapper --}}
 
     {{-- ── Kirim Panelis Wizard Modal (tetap di sini agar JS modal tetap bekerja) ── --}}
-    <div id="panelisWizardModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
+    <div id="panelisWizardModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title"
+        role="dialog" aria-modal="true" style="display: none;">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             {{-- Background overlay --}}
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
@@ -289,20 +328,21 @@
                         </div>
                         <button type="button" class="text-gray-400 hover:text-gray-600 transition-colors mt-1"
                             onclick="closePanelisModal()">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
                     {{-- BODY --}}
-                    <div class="px-6 pb-2" style="min-height: 280px;">
+                    <div class="px-6 pb-2 relative" style="min-height: 280px;">
                         {{-- STEP 1: Pilih Perusahaan --}}
                         <div id="step-1" class="modal-step active">
                             <div class="flex justify-end mb-2">
                                 <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" id="selectAllCompanies" onchange="toggleAllCompanies(this)"
+                                    <input type="checkbox" id="selectAllCompanies"
+                                        onchange="toggleAllCompanies(this)"
                                         class="w-4 h-4 rounded border-gray-400 text-teal-600 focus:ring-teal-500">
                                     <span class="text-sm text-gray-600">Pilih semua</span>
                                 </label>
@@ -311,10 +351,12 @@
                                 @forelse($companies as $comp)
                                     <label
                                         class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(:checked)]:border-teal-500 [&:has(:checked)]:bg-teal-50">
-                                        <input type="checkbox" name="selected_companies[]" value="{{ $comp->id }}"
+                                        <input type="checkbox" name="selected_companies[]"
+                                            value="{{ $comp->id }}"
                                             class="w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 company-checkbox"
                                             onchange="updateCompanySelectAll()">
-                                        <span class="text-sm font-medium text-gray-800">{{ $comp->nama_company }}</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-800">{{ $comp->nama_company }}</span>
                                     </label>
                                 @empty
                                     <div class="text-sm text-gray-500 italic">Belum ada data perusahaan.</div>
@@ -352,39 +394,7 @@
     </div>
 </div>
 
-<style>
-    /* ── Panelis Review Table: Perjelas garis & judul kolom Capitalize ── */
-    .panelis-review-wrapper .prem-table th {
-        text-transform: none;
-        letter-spacing: 0;
-        font-size: 0.8rem;
-        color: #1e293b;
-        border-bottom: 2px solid #cbd5e1;
-        border-right: 1px solid #d1d5db;
-        background: #f1f5f9;
-    }
 
-    .panelis-review-wrapper .prem-table th:last-child {
-        border-right: none;
-    }
-
-    .panelis-review-wrapper .prem-table td {
-        border-bottom: 1px solid #d1d5db;
-        border-right: 1px solid #e5e7eb;
-    }
-
-    .panelis-review-wrapper .prem-table td:last-child {
-        border-right: none;
-    }
-
-    .panelis-review-wrapper .prem-table tbody tr:last-child td {
-        border-bottom: 1px solid #d1d5db;
-    }
-
-    .panelis-review-wrapper .prem-card {
-        border: 1.5px solid #cbd5e1;
-    }
-</style>
 
 @push('scripts')
     <script>
@@ -417,7 +427,9 @@
             modal.style.display = 'block';
         }
 
-        function closePanelisModal() { modal.style.display = 'none'; }
+        function closePanelisModal() {
+            modal.style.display = 'none';
+        }
 
         function updateView() {
             step1.classList.remove('active');
@@ -465,7 +477,10 @@
             updateView();
         }
 
-        function prevStep() { currentStep--; updateView(); }
+        function prevStep() {
+            currentStep--;
+            updateView();
+        }
 
         function toggleAllCompanies(selectAllCb) {
             document.querySelectorAll('.company-checkbox').forEach(cb => cb.checked = selectAllCb.checked);
@@ -488,17 +503,22 @@
                 let htmlList = '';
                 let selectAllHtml = '';
                 if (compPanelis.length === 0) {
-                    htmlList = `<div class="text-sm text-gray-500 italic px-2">Tidak ada panelis di perusahaan ini.</div>`;
+                    htmlList =
+                        `<div class="text-sm text-gray-500 italic px-2">Tidak ada panelis di perusahaan ini.</div>`;
                 } else {
-                    selectAllHtml = `<label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="selectAllPanelis_${compId}" onchange="toggleAllPanelis(this, ${compId})" class="w-4 h-4 rounded border-gray-400 text-teal-600 focus:ring-teal-500"><span class="text-sm text-gray-600">Pilih semua</span></label>`;
+                    selectAllHtml =
+                        `<label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="selectAllPanelis_${compId}" onchange="toggleAllPanelis(this, ${compId})" class="w-4 h-4 rounded border-gray-400 text-teal-600 focus:ring-teal-500"><span class="text-sm text-gray-600">Pilih semua</span></label>`;
                     compPanelis.forEach(panelis => {
-                        const isChecked = currentSelections.includes(panelis.id.toString()) ? 'checked' : '';
+                        const isChecked = currentSelections.includes(panelis.id.toString()) ? 'checked' :
+                            '';
                         const roleName = panelis.position?.position_name || 'Panelis';
-                        htmlList += `<label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(:checked)]:border-teal-500 [&:has(:checked)]:bg-teal-50"><input type="checkbox" name="panelis_ids[]" value="${panelis.id}" class="w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 panelis-checkbox-${compId} panelis-checkbox-global" ${isChecked} onchange="updatePanelisSelectAll(${compId})"><span class="text-sm font-medium text-gray-800">${panelis.nama} - ${roleName}</span></label>`;
+                        htmlList +=
+                            `<label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(:checked)]:border-teal-500 [&:has(:checked)]:bg-teal-50"><input type="checkbox" name="panelis_ids[]" value="${panelis.id}" class="w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 panelis-checkbox-${compId} panelis-checkbox-global" ${isChecked} onchange="updatePanelisSelectAll(${compId})"><span class="text-sm font-medium text-gray-800">${panelis.nama} - ${roleName}</span></label>`;
                     });
                 }
 
-                const stepHtml = `<div id="step-comp-${compId}" class="modal-step company-step"><div class="flex items-center justify-between mb-3"><h4 class="text-base font-bold text-gray-900">${companyName}</h4><div>${selectAllHtml}</div></div><div class="space-y-2 max-h-72 overflow-y-auto">${htmlList}</div></div>`;
+                const stepHtml =
+                    `<div id="step-comp-${compId}" class="modal-step company-step"><div class="flex items-center justify-between mb-3"><h4 class="text-base font-bold text-gray-900">${companyName}</h4><div>${selectAllHtml}</div></div><div class="space-y-2 max-h-72 overflow-y-auto">${htmlList}</div></div>`;
                 step2Container.insertAdjacentHTML('beforeend', stepHtml);
             });
         }
@@ -523,18 +543,23 @@
             container.innerHTML = '';
             const selectedIds = getSelectedPanelisIds();
             if (selectedIds.length === 0) {
-                container.innerHTML = '<div class="text-gray-500 italic">Tidak ada panelis yang dipilih. Data tidak dapat dikirim.</div>';
+                container.innerHTML =
+                    '<div class="text-gray-500 italic">Tidak ada panelis yang dipilih. Data tidak dapat dikirim.</div>';
                 btnSubmit.disabled = true;
                 btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
                 btnSubmit.disabled = false;
                 btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
                 selectedCompanyIds.forEach(compId => {
-                    const compPanelis = panelisUsers.filter(u => u.company_id == compId && selectedIds.includes(u.id.toString()));
+                    const compPanelis = panelisUsers.filter(u => u.company_id == compId && selectedIds.includes(u.id
+                        .toString()));
                     if (compPanelis.length > 0) {
                         const companyName = panelisCompanies.find(c => c.id == compId)?.nama_company || 'Unknown';
-                        let listHtml = compPanelis.map(p => `<div class="px-4 py-2.5 border-b border-gray-100 last:border-0"><span class="text-sm font-medium text-gray-800">${p.nama} - ${p.position?.position_name || 'Panelis'}</span></div>`).join('');
-                        container.innerHTML += `<div class="border border-gray-200 rounded-xl overflow-hidden"><div class="bg-gray-50 border-b border-gray-200 px-4 py-3"><h5 class="text-sm font-bold text-gray-900">${companyName}</h5></div><div class="bg-white">${listHtml}</div></div>`;
+                        let listHtml = compPanelis.map(p =>
+                            `<div class="px-4 py-2.5 border-b border-gray-100 last:border-0"><span class="text-sm font-medium text-gray-800">${p.nama} - ${p.position?.position_name || 'Panelis'}</span></div>`
+                        ).join('');
+                        container.innerHTML +=
+                            `<div class="border border-gray-200 rounded-xl overflow-hidden"><div class="bg-gray-50 border-b border-gray-200 px-4 py-3"><h5 class="text-sm font-bold text-gray-900">${companyName}</h5></div><div class="bg-white">${listHtml}</div></div>`;
                     }
                 });
             }
@@ -549,12 +574,14 @@
                 row.addEventListener('mouseenter', () => {
                     const group = row.dataset.posGroup;
                     if (!group) return;
-                    document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => r.classList.add('group-hovered'));
+                    document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => r
+                        .classList.add('group-hovered'));
                 });
                 row.addEventListener('mouseleave', () => {
                     const group = row.dataset.posGroup;
                     if (!group) return;
-                    document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => r.classList.remove('group-hovered'));
+                    document.querySelectorAll(`.talent-row[data-pos-group="${group}"]`).forEach(r => r
+                        .classList.remove('group-hovered'));
                 });
             });
         }
@@ -562,6 +589,14 @@
         document.addEventListener('DOMContentLoaded', initGroupHover);
     </script>
     <style>
+        .modal-step {
+            display: none;
+        }
+
+        .modal-step.active {
+            display: block;
+        }
+
         @keyframes lvwire-spin {
             from {
                 transform: rotate(0deg);

@@ -399,26 +399,6 @@
                 background: #16a34a;
             }
 
-            /* --- PRE-EXISTING STYLES --- */
-            .btn-back {
-                padding: 8px 16px;
-                border: 1px solid #e2e8f0;
-                border-radius: 8px;
-                background: white;
-                color: #475569;
-                font-weight: 500;
-                font-size: 0.875rem;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                transition: all 0.2s;
-            }
-
-            .btn-back:hover {
-                background: #f8fafc;
-                border-color: #cbd5e1;
-            }
-
             .pill-nav-wrapper {
                 display: flex;
                 align-items: center;
@@ -1051,9 +1031,6 @@
                     grid-template-columns: 1fr;
                 }
 
-                .btn-back {
-                    align-self: flex-start;
-                }
             }
         </style>
     </x-slot>

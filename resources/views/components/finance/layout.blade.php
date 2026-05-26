@@ -1117,14 +1117,16 @@
             </div>
 
 
-            
+
             {{-- -- Mobile Notif Dropdown (realtime, dedicated) -- --}}
             <div id="mobile-notif-dropdown" style="display:none;"
                 class="dropdown-panel hidden fixed top-[72px] left-3 right-3 w-auto sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-3 sm:w-[340px] bg-white rounded-[1.25rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden z-50 sm:origin-top-right">
                 <div class="px-5 py-4 bg-gradient-to-r from-[#0f172a] to-[#38475a] flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#14b8a6]" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
                             <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                         </svg>
                         <span class="text-[13px] font-bold text-white">Notifikasi Baru</span>
@@ -1416,7 +1418,7 @@
                 const mobileMenuLinkBadge = document.querySelector(
                     '#mobile-menu-dropdown [data-mobile-unread-badge]');
                 const mobileMenuLinkPill = document.querySelector(
-                '#mobile-menu-dropdown [data-mobile-unread-pill]');
+                    '#mobile-menu-dropdown [data-mobile-unread-pill]');
 
                 function nextBadgeCountFromElement(element) {
                     const current = parseInt((element?.textContent || '').trim(), 10) || 0;
@@ -1435,7 +1437,7 @@
                         nextBadgeCountFromElement(mobileIndicatorHost.querySelector('.mobile-trigger-notif-dot'));
                 }
 
-                                if (mobileMenuLinkBadge) {
+                if (mobileMenuLinkBadge) {
                     let nextValue;
                     if (typeof nextBadgeCountFromElement === 'function') {
                         const res = nextBadgeCountFromElement(mobileMenuLinkBadge);
@@ -1447,10 +1449,13 @@
                     }
                     mobileMenuLinkBadge.textContent = nextValue;
                 } else {
-                    let iconContainer = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector('#profile-dropdown a[href*="notifikasi"] .relative');
+                    let iconContainer = document.querySelector(
+                        '#mobile-menu-dropdown a[href*="notifikasi"] .relative') || document.querySelector(
+                        '#profile-dropdown a[href*="notifikasi"] .relative');
                     if (iconContainer) {
                         let badge = document.createElement('span');
-                        badge.className = 'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
+                        badge.className =
+                            'absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[10px] font-bold text-white shadow ring-2 ring-white lg:hidden';
                         badge.setAttribute('data-mobile-unread-badge', '');
                         badge.textContent = '1';
                         iconContainer.appendChild(badge);
@@ -1462,10 +1467,12 @@
                     const next = current + 1;
                     mobileMenuLinkPill.textContent = `${next > 99 ? '99+' : next} Baru`;
                 } else {
-                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document.querySelector('#profile-dropdown a[href*="notifikasi"]');
+                    let navLink = document.querySelector('#mobile-menu-dropdown a[href*="notifikasi"]') || document
+                        .querySelector('#profile-dropdown a[href*="notifikasi"]');
                     if (navLink) {
                         let pill = document.createElement('span');
-                        pill.className = 'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
+                        pill.className =
+                            'ml-auto bg-[#f97316] text-white text-[11px] font-bold px-2 py-0.5 rounded-full lg:hidden';
                         pill.setAttribute('data-mobile-unread-pill', '');
                         pill.textContent = '1 Baru';
                         navLink.appendChild(pill);

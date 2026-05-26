@@ -78,7 +78,7 @@
         </style>
     </x-slot>
 
-    <div class="w-full px-3 md:px-6 pt-4 pb-6 fade-up">
+    <div class="w-full pb-6 fade-up">
         <div class="page-header animate-title">
             <div class="page-header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

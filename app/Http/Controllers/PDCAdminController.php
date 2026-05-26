@@ -1882,7 +1882,8 @@ class PDCAdminController extends Controller
             'gaps',
             'exposureCount',
             'mentoringCount',
-            'learningCount'
+            'learningCount',
+            'sessionId'
         ));
     }
 

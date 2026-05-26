@@ -170,7 +170,7 @@
                                     );
                                 }
                             @endphp
-                            <tr class="archive-row hover:bg-slate-50 transition-colors"
+                            <tr class="archive-row hover:bg-teal-50/50 transition-colors"
                                 data-name="{{ strtolower($talent->nama) }}" data-company="{{ $compName }}"
                                 data-period="{{ $periodLabel }}"
                                 data-status="{{ optional($talent->promotion_plan)->status_promotion }}">

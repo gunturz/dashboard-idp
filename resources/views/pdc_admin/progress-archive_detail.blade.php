@@ -16,34 +16,6 @@
                 border-radius: 20px;
             }
 
-            /* Back button */
-            .btn-back-bottom {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 32px;
-                border: 1px solid #e2e8f0;
-                border-radius: 10px;
-                background: #f8fafc;
-                color: #475569;
-                font-weight: 600;
-                font-size: 0.85rem;
-                text-decoration: none;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
-
-            .btn-back-bottom:hover {
-                background: #cbd5e1;
-                color: #1e293b;
-            }
-
-            .btn-back-bottom svg {
-                width: 16px;
-                height: 16px;
-                flex-shrink: 0;
-            }
-
             /* Next button */
             .btn-next-bottom {
                 display: inline-flex;
@@ -377,19 +349,6 @@
                 flex-shrink: 0;
             }
 
-            /* Logbook Specific */
-            .logbook-pill {
-                background: #0f172a;
-                color: white;
-                padding: 6px 16px;
-                border-radius: 99px;
-                font-size: 0.75rem;
-                font-weight: 700;
-                display: inline-block;
-                margin-bottom: 16px;
-                margin-top: 24px;
-            }
-
             .logbook-table {
                 width: 100%;
                 border-collapse: collapse;
@@ -647,14 +606,14 @@
                 background: white;
                 border-radius: 12px;
                 border: 1px solid #e2e8f0;
-                padding: 32px;
+                padding: 24px;
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
                 box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
                 flex-wrap: wrap;
                 gap: 24px;
-                margin-bottom: 32px;
+                margin-bottom: 0;
             }
 
             .idp-chart-button {
@@ -667,12 +626,105 @@
                 transform: translateY(-2px) scale(1.02);
             }
 
-            .idp-logbook-panel {
-                display: none;
+            .panelis-archive-table {
+                width: 100%;
+                border-collapse: collapse;
+                background: white;
+                border-radius: 14px;
+                overflow: hidden;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e2e8f0;
             }
 
-            .idp-logbook-panel.is-active {
+            .panelis-archive-table th {
+                background: #f8fafc;
+                color: #1e293b;
+                font-weight: 700;
+                text-align: center;
+                padding: 14px 16px;
+                border: 1px solid #e2e8f0;
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+
+            .panelis-archive-table td {
+                text-align: center;
+                padding: 18px 16px;
+                border: 1px solid #e2e8f0;
+                font-size: 0.875rem;
+                color: #334155;
+                vertical-align: middle;
+                min-height: 60px;
+            }
+
+            .panelis-archive-table td.text-left-cell {
+                text-align: left;
+            }
+
+            .panelis-status-text {
+                font-weight: 700;
+                font-size: 0.85rem;
+                display: inline-flex;
+                align-items: center;
+                padding: 5px 10px;
+                border-radius: 999px;
+            }
+
+            .panelis-status-sub {
+                font-size: 0.75rem;
+                color: #64748b;
+                font-style: italic;
                 display: block;
+                margin-top: 5px;
+            }
+
+            .panelis-status-ready-now {
+                background: #dcfce7;
+                color: #16a34a;
+            }
+
+            .panelis-status-ready-1-2 {
+                background: #dbeafe;
+                color: #2563eb;
+            }
+
+            .panelis-status-ready-over-2 {
+                background: #fef3c7;
+                color: #d97706;
+            }
+
+            .panelis-status-not-ready {
+                background: #fee2e2;
+                color: #dc2626;
+            }
+
+            .panelis-detail-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 7px 12px;
+                border-radius: 10px;
+                background: #f59e0b;
+                border: 1px solid #f59e0b;
+                color: white;
+                font-size: 0.75rem;
+                font-weight: 700;
+                box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+
+            .panelis-detail-btn:hover {
+                background: #d97706;
+                border-color: #d97706;
+                transform: translateY(-1px);
+            }
+
+            .panelis-detail-btn svg {
+                width: 14px;
+                height: 14px;
+                flex-shrink: 0;
             }
 
             @media(max-width:768px) {
@@ -1036,18 +1088,7 @@
         </div>
 
         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4 mb-8 w-full overflow-hidden">
-            <div class="sub-section-title m-0 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                        clip-rule="evenodd" />
-                    <path
-                        d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                </svg>
-                IDP Monitoring
-            </div>
-
-            <div class="donut-container p-6 md:p-12">
+            <div class="donut-container">
                 @php
                     $idpChartData = [
                         'Exposure' => [
@@ -1112,222 +1153,18 @@
                                     style="color:{{ $chart['from'] }};">{{ round($pct * 100) }}%</span>
                             </div>
                         </div>
-                        <button type="button"
-                            onclick="switchArchiveLogbook('{{ $chart['target'] }}', this)"
+                        <a href="{{ route('pdc_admin.progress_archive.logbook', ['talent_id' => $talent->id, 'session_id' => $sessionId]) }}#{{ $chart['target'] }}"
                             class="idp-chart-button {{ $chart['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5"
                             title="Lihat logbook {{ $label }}">
                             <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-4 w-4 relative transition-transform group-hover:translate-x-1" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                             </svg>
-                        </button>
+                        </a>
                     </div>
                 @endforeach
-            </div>
-        </div>
-
-        <hr class="border-t-2 border-slate-200 my-8">
-
-        <div class="sub-section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            LogBook
-        </div>
-
-        <div id="archive-logbook-empty"
-            class="bg-slate-50 border border-dashed border-slate-300 rounded-xl px-6 py-8 text-center text-sm font-semibold text-slate-500">
-            Pilih Exposure, Mentoring, atau Learning untuk melihat logbook.
-        </div>
-
-        {{-- Exposure Logbook --}}
-        @php $exposureActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'exposure')); @endphp
-        <div id="archive-logbook-exposure" class="idp-logbook-panel">
-            <div class="logbook-pill">Exposure</div>
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Mentor</th>
-                            <th style="width: 25%;">Tema</th>
-                            <th style="width: 15%;">Tanggal Pengiriman</th>
-                            <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                            <th style="width: 10%;">Status</th>
-                            <th style="width: 15%;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($exposureActivities as $act)
-                            @php
-                                $statusColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'text-green-600',
-                                    'rejected' => 'text-red-600',
-                                    default => 'text-yellow-600',
-                                };
-                                $dotColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'bg-green-500',
-                                    'rejected' => 'bg-red-500',
-                                    default => 'bg-yellow-500',
-                                };
-                            @endphp
-                            <tr>
-                                <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
-                                <td>{{ $act->theme ?? '-' }}</td>
-                                <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                                <td>{{ $act->activity_date ?? '-' }}</td>
-                                <td><span
-                                        class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                            class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                        class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="empty-row">
-                                <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                    Exposure</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        {{-- Mentoring Logbook --}}
-        @php $mentoringActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'mentor')); @endphp
-        <div id="archive-logbook-mentoring" class="idp-logbook-panel">
-            <div class="logbook-pill">Mentoring</div>
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Mentor</th>
-                            <th style="width: 25%;">Tema</th>
-                            <th style="width: 15%;">Tanggal Pengiriman</th>
-                            <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                            <th style="width: 10%;">Status</th>
-                            <th style="width: 15%;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($mentoringActivities as $act)
-                            @php
-                                $statusColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'text-green-600',
-                                    'rejected' => 'text-red-600',
-                                    default => 'text-yellow-600',
-                                };
-                                $dotColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'bg-green-500',
-                                    'rejected' => 'bg-red-500',
-                                    default => 'bg-yellow-500',
-                                };
-                            @endphp
-                            <tr>
-                                <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
-                                <td>{{ $act->theme ?? '-' }}</td>
-                                <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                                <td>{{ $act->activity_date ?? '-' }}</td>
-                                <td><span
-                                        class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                            class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                        class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="empty-row">
-                                <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                    Mentoring</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        {{-- Learning Logbook --}}
-        @php $learningActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'learn')); @endphp
-        <div id="archive-logbook-learning" class="idp-logbook-panel">
-            <div class="logbook-pill">Learning</div>
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Sumber</th>
-                        <th style="width: 25%;">Tema</th>
-                        <th style="width: 15%;">Tanggal Pengiriman</th>
-                        <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 15%;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($learningActivities as $act)
-                        @php
-                            $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600',
-                                'rejected' => 'text-red-600',
-                                default => 'text-yellow-600',
-                            };
-                            $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500',
-                                'rejected' => 'bg-red-500',
-                                default => 'bg-yellow-500',
-                            };
-                        @endphp
-                        <tr>
-                            <td>{{ $act->platform ?? '-' }}</td>
-                            <td>{{ $act->theme ?? '-' }}</td>
-                            <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                            <td>{{ $act->activity_date ?? '-' }}</td>
-                            <td><span
-                                    class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                        class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                            </td>
-                            <td>
-                                <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                    class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Detail
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                Learning</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
             </div>
         </div>
     </div>
@@ -1407,7 +1244,12 @@
                             <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
                                 target="_blank"
                                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                    </path>
+                                </svg>
                                 Preview File
                             </a>
                         @else
@@ -1461,7 +1303,12 @@
                             <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
                                 target="_blank"
                                 class="inline-flex justify-center items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all flex-1 mr-1 sm:mr-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                    </path>
+                                </svg>
                                 <span class="whitespace-nowrap">Preview File</span>
                             </a>
                         @else
@@ -1537,82 +1384,93 @@
         @endphp
         <p class="text-slate-600 mb-6 text-[1rem]">{{ optional($latestProject)->title ?? '-' }}</p>
 
-        <div class="bg-white rounded-xl border border-slate-200 mt-2 shadow-sm overflow-hidden p-0 w-full">
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table mb-0 border-none min-w-[900px]">
-                    <thead>
-                        <tr class="border-b border-slate-200">
-                            <th style="width: 22%;" class="border-0 border-r border-slate-200">Panelis</th>
-                            <th style="width: 22%;" class="border-0 border-r border-slate-200">Perusahaan</th>
-                            <th style="width: 9%;" class="border-0 border-r border-slate-200">Skor</th>
-                            <th style="width: 20%;" class="border-0 border-r border-slate-200">Feedback</th>
-                            <th style="width: 17%;" class="border-0 border-r border-slate-200">Status</th>
-                            <th style="width: 10%;" class="border-0">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white">
-                        @forelse($talent->panelisAssessments as $idx => $assessment)
-                            @php
-                                $rekomen = $assessment->panelis_rekomendasi ?? '';
-                                $rekomenDesc = '';
-                                if (str_contains($rekomen, 'Ready Now')) {
-                                    $rekomenDesc = 'Siap dipromosikan dalam < 6 bulan';
-                                } elseif (str_contains($rekomen, '1')) {
-                                    $rekomenDesc = 'Siap dengan pengembangan terarah';
-                                } elseif (str_contains($rekomen, '2')) {
-                                    $rekomenDesc = 'Masih membutuhkan pengembangan signifikan';
-                                } elseif (str_contains($rekomen, 'Not Ready')) {
-                                    $rekomenDesc = 'Belum direkomendasikan untuk jalur suksesi';
-                                }
-                            @endphp
-                            <tr class="border-b border-slate-200">
-                                <td class="font-bold text-slate-800 text-left pl-6 border-0 border-r border-slate-200">
-                                    {{ optional($assessment->panelis)->nama ?? '-' }}</td>
-                                <td class="font-bold text-slate-700 text-left pl-6 border-0 border-r border-slate-200">
-                                    {{ optional(optional($assessment->panelis)->company)->nama_company ?? '-' }}</td>
-                                <td class="font-bold text-slate-800 border-0 border-r border-slate-200">
-                                    {{ $assessment->panelis_score ?? '-' }} / 50</td>
-                                <td class="text-slate-700 border-0 border-r border-slate-200 text-xs">
-                                    {{ Str::limit($assessment->panelis_komentar ?? '-', 60) }}</td>
-                                <td class="border-0 border-r border-slate-200 text-left px-4">
-                                    @if ($rekomen)
-                                        <div class="font-bold text-slate-800 text-[0.8rem]">{{ $rekomen }}</div>
-                                        @if ($rekomenDesc)
-                                            <div class="text-[0.65rem] text-slate-500 mt-0.5">{{ $rekomenDesc }}
-                                            </div>
-                                        @endif
-                                    @else
-                                        <span class="text-slate-400 text-xs">-</span>
+        <div class="overflow-x-auto border border-gray-200 rounded-xl overflow-hidden w-full mb-8">
+            <table class="w-full table-auto text-left bg-white min-w-[900px]">
+                <thead class="bg-slate-50 border-b border-gray-200">
+                    <tr>
+                        <th class="w-[22%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                            Panelis</th>
+                        <th class="w-[22%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                            Perusahaan</th>
+                        <th class="w-[9%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                            Skor</th>
+                        <th class="w-[20%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                            Feedback</th>
+                        <th class="w-[17%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                            Status</th>
+                        <th class="w-[10%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
+                            Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @forelse($talent->panelisAssessments as $idx => $assessment)
+                        @php
+                            $rekomen = $assessment->panelis_rekomendasi ?? '';
+                            $rekomenDesc = '';
+                            if (str_contains($rekomen, 'Ready Now')) {
+                                $rekomenDesc = 'Siap dipromosikan dalam < 6 bulan';
+                            } elseif (str_contains($rekomen, '1')) {
+                                $rekomenDesc = 'Siap dengan pengembangan terarah';
+                            } elseif (str_contains($rekomen, '2')) {
+                                $rekomenDesc = 'Masih membutuhkan pengembangan signifikan';
+                            } elseif (str_contains($rekomen, 'Not Ready')) {
+                                $rekomenDesc = 'Belum direkomendasikan untuk jalur suksesi';
+                            }
+                        @endphp
+                        <tr
+                            class="hover:bg-teal-50/50 transition duration-150 {{ $loop->last ? '' : 'border-b border-gray-200' }}">
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                <div class="font-bold text-sm text-slate-800 leading-tight">
+                                    {{ optional($assessment->panelis)->nama ?? '-' }}
+                                </div>
+                            </td>
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                <div class="font-bold text-sm text-slate-700">
+                                    {{ optional(optional($assessment->panelis)->company)->nama_company ?? '-' }}
+                                </div>
+                            </td>
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                <div class="font-bold text-sm text-slate-800">
+                                    {{ $assessment->panelis_score ?? '-' }} / 50
+                                </div>
+                            </td>
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                <div class="text-sm text-slate-700 max-w-[200px] mx-auto truncate"
+                                    title="{{ $assessment->panelis_komentar ?? '-' }}">
+                                    {{ Str::limit($assessment->panelis_komentar ?? '-', 60) }}
+                                </div>
+                            </td>
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                @if ($rekomen)
+                                    <div class="font-bold text-sm text-slate-800">{{ $rekomen }}</div>
+                                    @if ($rekomenDesc)
+                                        <div class="text-[0.7rem] text-slate-500 mt-0.5">{{ $rekomenDesc }}</div>
                                     @endif
-                                </td>
-                                <td class="border-0 text-center px-4">
-                                    <!-- Desktop Button -->
-                                    <button onclick="openPanelisModal({{ $idx }})"
-                                        class="hidden md:inline-block text-xs font-bold text-white bg-teal-500 hover:bg-teal-600 px-3 py-1.5 rounded-lg transition-colors">
-                                        Lihat Detail
-                                    </button>
-                                    <!-- Mobile Button -->
-                                    <button onclick="openPanelisModal({{ $idx }})"
-                                        class="md:hidden mx-auto whitespace-nowrap px-4 py-2 border border-slate-300 bg-white rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors text-slate-700 shadow-sm w-max">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                        Lihat Detail
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center text-slate-400 text-sm py-6">Belum ada penilaian
-                                    Panelis</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                                @else
+                                    <span class="text-slate-400 text-sm">-</span>
+                                @endif
+                            </td>
+                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
+                                <button onclick="openPanelisModal({{ $idx }})"
+                                    class="inline-flex items-center justify-center gap-1.5 h-9 px-4 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-xs font-bold text-white hover:bg-[#0d9488] hover:border-[#0d9488] transition-colors shadow-sm whitespace-nowrap mx-auto md:mx-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    Detail
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center text-slate-400 text-sm py-6">Belum ada penilaian
+                                Panelis</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
 
         {{-- ======= DATA JSON untuk modal (pass dari PHP ke JS) ======= --}}
@@ -1699,7 +1557,7 @@
 
                 // Show detail page, hide others
                 document.getElementById('section-panelis').style.display = 'none';
-                document.getElementById('bottom-navigation-container').style.display = 'none';
+                document.getElementById('bottom-navigation-container')?.style.setProperty('display', 'none');
                 document.querySelector('.nav-tabs-container').style.display = 'none'; // hide tabs
                 document.getElementById('section-panelis-detail').style.display = 'block';
 
@@ -1713,7 +1571,7 @@
             function closePanelisModal() {
                 document.getElementById('section-panelis-detail').style.display = 'none';
                 document.getElementById('section-panelis').style.display = 'block';
-                document.getElementById('bottom-navigation-container').style.display = 'flex';
+                document.getElementById('bottom-navigation-container')?.style.setProperty('display', 'flex');
                 document.querySelector('.nav-tabs-container').style.display = ''; // show tabs
 
                 // Scroll to top
@@ -1765,31 +1623,7 @@
                 </div>
             </div>
 
-            {{-- Footer --}}
-            <div class="flex justify-end pt-4">
-                <button onclick="closePanelisModal()"
-                    class="px-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition-colors shadow-sm text-sm inline-flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Kembali
-                </button>
-            </div>
         </div>
-    </div>
-
-
-    {{-- Bottom Navigation --}}
-    <div class="flex justify-end items-center mt-8 mb-4" id="bottom-navigation-container">
-        <a href="{{ route('pdc_admin.progress_archive') }}" class="btn-back-bottom shadow-sm"
-            style="padding-left: 2rem; padding-right: 2rem;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Kembali
-        </a>
     </div>
 
     <x-slot name="scripts">
@@ -1840,30 +1674,6 @@
                     top: 0,
                     behavior: 'smooth'
                 });
-            }
-
-            function switchArchiveLogbook(type, button) {
-                document.querySelectorAll('.idp-logbook-panel').forEach(el => {
-                    el.classList.remove('is-active');
-                });
-
-                document.querySelectorAll('.idp-chart-button').forEach(el => {
-                    el.classList.remove('is-active');
-                });
-
-                const emptyState = document.getElementById('archive-logbook-empty');
-                if (emptyState) {
-                    emptyState.style.display = 'none';
-                }
-
-                const targetPanel = document.getElementById('archive-logbook-' + type);
-                if (targetPanel) {
-                    targetPanel.classList.add('is-active');
-                }
-
-                if (button) {
-                    button.classList.add('is-active');
-                }
             }
 
             // Removed nextSection and prevSection as they are no longer needed

@@ -1,5 +1,5 @@
 <x-pdc_admin.layout title="Detail Logbook" :user="$user">
-    <div class="w-full px-4 md:px-8 pt-10 md:pt-6 pb-8">
+    <div class="w-full pb-8">
         {{-- ── Page Header ── --}}
         <div class="page-header animate-title mb-4 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -13,13 +13,16 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="page-header-title text-slate-800">Detail Logbook - {{ $activity->type->nama_type ?? 'Aktivitas' }}</h1>
-                    <p class="page-header-sub text-slate-500">Lihat detail aktivitas logbook yang disubmit oleh talent.</p>
+                    <h1 class="page-header-title text-slate-800">Detail Logbook -
+                        {{ $activity->type->nama_type ?? 'Aktivitas' }}</h1>
+                    <p class="page-header-sub text-slate-500">Lihat detail aktivitas logbook yang disubmit oleh talent.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <div class="prem-card border border-slate-200 shadow-xl shadow-slate-200/50 p-6" style="background-color: #f1f5f9 !important;">
+        <div class="prem-card border border-slate-200 shadow-xl shadow-slate-200/50 p-6"
+            style="background-color: #f1f5f9 !important;">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {{-- Row 1 --}}
                 @if ($activity->type_idp == 1 || $activity->type_idp == 2)
@@ -27,14 +30,16 @@
                         <div class="flex items-center gap-3 mb-2">
                             <span class="text-[15px] font-extrabold text-black tracking-normal">Mentor</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->verifier->nama ?? '-' }}</div>
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
+                            {{ $activity->verifier->nama ?? '-' }}</div>
                     </div>
                 @elseif ($activity->type_idp == 3)
                     <div class="p-5 bg-white rounded-xl border border-slate-200">
                         <div class="flex items-center gap-3 mb-2">
                             <span class="text-[15px] font-extrabold text-black tracking-normal">Sumber</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->activity ?? '-' }}</div>
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
+                            {{ $activity->activity ?? '-' }}</div>
                     </div>
                 @endif
 
@@ -42,7 +47,8 @@
                     <div class="flex items-center gap-3 mb-2">
                         <span class="text-[15px] font-extrabold text-black tracking-normal">Tema</span>
                     </div>
-                    <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->theme ?? '-' }}</div>
+                    <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
+                        {{ $activity->theme ?? '-' }}</div>
                 </div>
 
                 <div class="p-5 bg-white rounded-xl border border-slate-200">
@@ -106,7 +112,12 @@
                             @foreach ($dPaths as $di => $dp)
                                 <a href="{{ route('files.preview', ['path' => $dp]) }}" target="_blank"
                                     class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                        </path>
+                                    </svg>
                                     {{ $dNames[$di] ?? 'File ' . ($di + 1) }}
                                 </a>
                             @endforeach
@@ -122,7 +133,8 @@
                         <div class="flex items-center gap-3 mb-3">
                             <span class="text-[15px] font-extrabold text-black tracking-normal">Aktivitas</span>
                         </div>
-                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">{{ $activity->activity ?? '-' }}</div>
+                        <div class="text-[15px] text-slate-800 font-medium leading-relaxed break-words">
+                            {{ $activity->activity ?? '-' }}</div>
                     </div>
                 @endif
 

@@ -66,7 +66,7 @@
                         <tr>
                             <th style="width: 30%;">Aspek yang Dinilai</th>
                             <th style="width: 50%;">Indikator Penilaian</th>
-                            <th style="width: 20%;">Status Aksi</th>
+                            <th style="width: 20%;">Skor</th>
                         </tr>
                     </thead>
                     <tbody>

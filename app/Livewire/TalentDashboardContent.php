@@ -25,6 +25,29 @@ class TalentDashboardContent extends Component
         return Schema::hasColumn($table, 'is_active');
     }
 
+    protected function hasCompleteDevelopmentPlan($user, ?DevelopmentSession $developmentSession = null): bool
+    {
+        $plan = $user->promotion_plan;
+        $developmentSession ??= DevelopmentSession::where('user_id_talent', $user->id)
+            ->where('is_active', true)
+            ->latest('created_at')
+            ->first();
+
+        $hasTargetPosition = !empty($plan?->target_position_id) || !empty($developmentSession?->target_position_id);
+        $hasAtasan = !empty($developmentSession?->atasan_id) || !empty($user->atasan_id);
+        $hasMentor = collect($plan?->mentor_ids ?? $developmentSession?->mentor_ids ?? [])
+            ->filter()
+            ->isNotEmpty() || !empty($user->mentor_id);
+        $hasPeriod = !empty($plan?->start_date) && !empty($plan?->target_date);
+
+        return $hasTargetPosition && $hasAtasan && $hasMentor && $hasPeriod;
+    }
+
+    protected function incompleteDevelopmentPlanMessage(): string
+    {
+        return 'Menunggu PDC Admin mendaftarkan Development plan';
+    }
+
     public function submitProject()
     {
         $user = Auth::user();
@@ -40,6 +63,11 @@ class TalentDashboardContent extends Component
 
         if (!$developmentSession) {
             session()->flash('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
+            return;
+        }
+
+        if (!$this->hasCompleteDevelopmentPlan($user, $developmentSession)) {
+            session()->flash('error', $this->incompleteDevelopmentPlanMessage());
             return;
         }
 
@@ -129,7 +157,8 @@ class TalentDashboardContent extends Component
             ->first();
 
         // 1. Kinerja (Kompetensi) Logic
-        $hasDevPlan = !is_null(optional($user->promotion_plan)->target_position_id);
+        $hasDevPlan = $this->hasCompleteDevelopmentPlan($user, $developmentSession);
+        $developmentPlanIncompleteMessage = $this->incompleteDevelopmentPlanMessage();
 
         // Cek apakah talent pernah mengisi assessment SAMA SEKALI (tidak peduli devSession)
         $hasAnyAssessment = DB::table('assessment_session')
@@ -209,6 +238,7 @@ class TalentDashboardContent extends Component
 
         return view('livewire.talent-dashboard-content', compact(
             'hasDevPlan',
+            'developmentPlanIncompleteMessage',
             'latestAssessment',
             'hasAnyAssessment',
             'atasanHasScored',

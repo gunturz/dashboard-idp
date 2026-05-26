@@ -1036,10 +1036,19 @@
         </div>
 
         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4 mb-8 w-full overflow-hidden">
+            <div class="sub-section-title m-0 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                    <path
+                        d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                </svg>
+                IDP Monitoring
+            </div>
+
             <div class="donut-container p-6 md:p-12">
                 @php
-                    $archiveLogbookBase = route('pdc_admin.progress_archive.logbook', $talent->id);
-                    $archiveLogbookQuery = request()->query('session_id') ? '?session_id=' . request()->query('session_id') : '';
                     $idpChartData = [
                         'Exposure' => [
                             'done' => min($exposureCount ?? 0, 6),
@@ -1103,7 +1112,7 @@
                                     style="color:{{ $chart['from'] }};">{{ round($pct * 100) }}%</span>
                             </div>
                         </div>
-                        <a href="{{ $archiveLogbookBase }}{{ $archiveLogbookQuery }}#{{ $chart['target'] }}"
+                        <a href="{{ route('pdc_admin.progress_archive.logbook', ['talent_id' => $talent->id, 'session_id' => request('session_id')]) }}#{{ $chart['target'] }}"
                             class="idp-chart-button {{ $chart['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5"
                             title="Lihat logbook {{ $label }}">
                             <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
@@ -1116,211 +1125,6 @@
                 @endforeach
             </div>
         </div>
-
-        <hr class="border-t-2 border-slate-200 my-8">
-
-        <div class="sub-section-title">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            LogBook
-        </div>
-
-        <div id="archive-logbook-empty"
-            class="bg-slate-50 border border-dashed border-slate-300 rounded-xl px-6 py-8 text-center text-sm font-semibold text-slate-500">
-            Pilih Exposure, Mentoring, atau Learning untuk melihat logbook.
-        </div>
-
-        {{-- Exposure Logbook --}}
-        @php $exposureActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'exposure')); @endphp
-        <div id="archive-logbook-exposure" class="idp-logbook-panel">
-            <div class="logbook-pill">Exposure</div>
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Mentor</th>
-                            <th style="width: 25%;">Tema</th>
-                            <th style="width: 15%;">Tanggal Pengiriman</th>
-                            <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                            <th style="width: 10%;">Status</th>
-                            <th style="width: 15%;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($exposureActivities as $act)
-                            @php
-                                $statusColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'text-green-600',
-                                    'rejected' => 'text-red-600',
-                                    default => 'text-yellow-600',
-                                };
-                                $dotColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'bg-green-500',
-                                    'rejected' => 'bg-red-500',
-                                    default => 'bg-yellow-500',
-                                };
-                            @endphp
-                            <tr>
-                                <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
-                                <td>{{ $act->theme ?? '-' }}</td>
-                                <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                                <td>{{ $act->activity_date ?? '-' }}</td>
-                                <td><span
-                                        class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                            class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                        class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="empty-row">
-                                <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                    Exposure</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        {{-- Mentoring Logbook --}}
-        @php $mentoringActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'mentor')); @endphp
-        <div id="archive-logbook-mentoring" class="idp-logbook-panel">
-            <div class="logbook-pill">Mentoring</div>
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Mentor</th>
-                            <th style="width: 25%;">Tema</th>
-                            <th style="width: 15%;">Tanggal Pengiriman</th>
-                            <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                            <th style="width: 10%;">Status</th>
-                            <th style="width: 15%;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($mentoringActivities as $act)
-                            @php
-                                $statusColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'text-green-600',
-                                    'rejected' => 'text-red-600',
-                                    default => 'text-yellow-600',
-                                };
-                                $dotColor = match (strtolower($act->status ?? '')) {
-                                    'approved' => 'bg-green-500',
-                                    'rejected' => 'bg-red-500',
-                                    default => 'bg-yellow-500',
-                                };
-                            @endphp
-                            <tr>
-                                <td>{{ optional($act->verifier)->nama ?? '-' }}</td>
-                                <td>{{ $act->theme ?? '-' }}</td>
-                                <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                                <td>{{ $act->activity_date ?? '-' }}</td>
-                                <td><span
-                                        class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                            class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                        class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="empty-row">
-                                <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                    Mentoring</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        {{-- Learning Logbook --}}
-        @php $learningActivities = $talent->idpActivities->filter(fn($a) => str_contains(strtolower(optional($a->type)->type_name ?? ''), 'learn')); @endphp
-        <div id="archive-logbook-learning" class="idp-logbook-panel">
-            <div class="logbook-pill">Learning</div>
-            <div class="overflow-x-auto w-full">
-                <table class="logbook-table shadow-sm bg-white rounded-xl overflow-hidden min-w-[600px]">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Sumber</th>
-                        <th style="width: 25%;">Tema</th>
-                        <th style="width: 15%;">Tanggal Pengiriman</th>
-                        <th style="width: 15%;">Tanggal Pelaksanaan</th>
-                        <th style="width: 10%;">Status</th>
-                        <th style="width: 15%;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($learningActivities as $act)
-                        @php
-                            $statusColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'text-green-600',
-                                'rejected' => 'text-red-600',
-                                default => 'text-yellow-600',
-                            };
-                            $dotColor = match (strtolower($act->status ?? '')) {
-                                'approved' => 'bg-green-500',
-                                'rejected' => 'bg-red-500',
-                                default => 'bg-yellow-500',
-                            };
-                        @endphp
-                        <tr>
-                            <td>{{ $act->platform ?? '-' }}</td>
-                            <td>{{ $act->theme ?? '-' }}</td>
-                            <td>{{ $act->updated_at ? $act->updated_at->format('d/m/Y') : '-' }}</td>
-                            <td>{{ $act->activity_date ?? '-' }}</td>
-                            <td><span
-                                    class="text-[0.7rem] font-bold {{ $statusColor }} flex items-center justify-center gap-1.5"><span
-                                        class="w-1.5 h-1.5 {{ $dotColor }} rounded-full"></span>{{ ucfirst($act->status ?? 'Pending') }}</span>
-                            </td>
-                            <td>
-                                <a href="{{ route('pdc_admin.logbook.detail', $act->id) }}"
-                                    class="text-xs font-bold text-slate-600 flex items-center justify-center gap-1.5 hover:text-[#14b8a6] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Detail
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr class="empty-row">
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-4">Belum ada aktivitas
-                                Learning</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-            </div>
-        </div>
-    </div>
 
     {{-- ================================= SECTION: FINANCE VALIDATION ================================= --}}
     <div id="section-finance" class="tab-section" style="display: none;">
@@ -1770,7 +1574,8 @@
     </div>
 
 
-    {{-- Bottom Navigation --}}
+
+
     <x-slot name="scripts">
         <script>
             const sections = ['kompetensi', 'idp', 'finance', 'panelis'];
@@ -1821,29 +1626,7 @@
                 });
             }
 
-            function switchArchiveLogbook(type, button) {
-                document.querySelectorAll('.idp-logbook-panel').forEach(el => {
-                    el.classList.remove('is-active');
-                });
 
-                document.querySelectorAll('.idp-chart-button').forEach(el => {
-                    el.classList.remove('is-active');
-                });
-
-                const emptyState = document.getElementById('archive-logbook-empty');
-                if (emptyState) {
-                    emptyState.style.display = 'none';
-                }
-
-                const targetPanel = document.getElementById('archive-logbook-' + type);
-                if (targetPanel) {
-                    targetPanel.classList.add('is-active');
-                }
-
-                if (button) {
-                    button.classList.add('is-active');
-                }
-            }
 
             // Removed nextSection and prevSection as they are no longer needed
         </script>

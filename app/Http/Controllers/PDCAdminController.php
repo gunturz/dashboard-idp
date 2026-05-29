@@ -1519,37 +1519,45 @@ class PDCAdminController extends Controller
             ->first();
         $sessionId = $activePlan?->development_session_id;
 
-        // Only panelis assigned to this specific talent/session
-        $assignedPanelisIds = \App\Models\PanelisAssessment::where('user_id_talent', $talent_id)
-            ->when($sessionId, fn($q) => $q->where('development_session_id', $sessionId))
-            ->pluck('panelis_id');
+        $progressTalents = $activePlan
+            ? $this->getPanelisProgressTalents($activePlan, $talent)
+            : collect([$talent]);
 
-        $panelisUsers = User::whereIn('id', $assignedPanelisIds)
-            ->with(['company', 'position'])
-            ->orderBy('nama')
-            ->get();
+        $talentReviews = $progressTalents->map(function ($progressTalent) {
+            $plan = $progressTalent->promotion_plan;
+            $progressSessionId = optional($plan)->development_session_id;
 
-        $panelisAssessmentsByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $talent_id)
-            ->when($sessionId, fn($q) => $q->where('development_session_id', $sessionId))
-            ->whereIn('panelis_id', $assignedPanelisIds)
-            ->get()
-            ->keyBy('panelis_id');
+            $assignedPanelisIds = \App\Models\PanelisAssessment::where('user_id_talent', $progressTalent->id)
+                ->when($progressSessionId, fn($q) => $q->where('development_session_id', $progressSessionId))
+                ->pluck('panelis_id');
 
-        // All companies for the table
-        $companies = Company::orderBy('nama_company')->get();
+            $panelisUsers = User::whereIn('id', $assignedPanelisIds)
+                ->with(['company', 'position'])
+                ->orderBy('nama')
+                ->get();
 
-        // Latest improvement project for this talent (for score/feedback)
-        $latestProject = $sessionId
-            ? $talent->improvementProjects->where('development_session_id', $sessionId)->sortByDesc('updated_at')->first()
-            : $talent->improvementProjects->sortByDesc('updated_at')->first();
+            $panelisAssessmentsByPanelis = \App\Models\PanelisAssessment::where('user_id_talent', $progressTalent->id)
+                ->when($progressSessionId, fn($q) => $q->where('development_session_id', $progressSessionId))
+                ->whereIn('panelis_id', $assignedPanelisIds)
+                ->get()
+                ->keyBy('panelis_id');
+
+            $latestProject = $progressSessionId
+                ? $progressTalent->improvementProjects->where('development_session_id', $progressSessionId)->sortByDesc('updated_at')->first()
+                : $progressTalent->improvementProjects->sortByDesc('updated_at')->first();
+
+            return [
+                'talent' => $progressTalent,
+                'panelisUsers' => $panelisUsers,
+                'panelisAssessmentsByPanelis' => $panelisAssessmentsByPanelis,
+                'latestProject' => $latestProject,
+            ];
+        });
 
         return view('pdc_admin.panelis-review-detail', compact(
             'user',
             'talent',
-            'panelisUsers',
-            'panelisAssessmentsByPanelis',
-            'companies',
-            'latestProject'
+            'talentReviews'
         ));
     }
 
@@ -1636,9 +1644,15 @@ class PDCAdminController extends Controller
             ->where('is_active', true)
             ->latest('created_at')
             ->firstOrFail();
-        $talent = User::findOrFail($talent_id);
+        $talent = User::with(['company', 'department'])->findOrFail($talent_id);
+        $progressTalents = $this->getPanelisProgressTalents($plan, $talent);
+
         if (!$plan->is_locked) {
             return back()->with('error', 'Progress harus dikunci terlebih dahulu sebelum dikirim ke Panelis.');
+        }
+
+        if ($progressTalents->contains(fn($progressTalent) => !optional($progressTalent->promotion_plan)->is_locked)) {
+            return back()->with('error', 'Semua talent dalam progress ini harus terkunci sebelum dikirim ke Panelis.');
         }
 
         $request->validate([
@@ -1646,28 +1660,36 @@ class PDCAdminController extends Controller
             'panelis_ids.*' => 'exists:users,id'
         ]);
 
-        foreach ($request->panelis_ids as $panelis_id) {
-            \App\Models\PanelisAssessment::updateOrCreate([
-                'user_id_talent' => $talent_id,
-                'development_session_id' => $plan->development_session_id,
-                'panelis_id' => $panelis_id,
-            ], [
-                'is_active' => true,
-            ]);
+        foreach ($progressTalents as $progressTalent) {
+            $progressPlan = $progressTalent->promotion_plan;
 
+            foreach ($request->panelis_ids as $panelis_id) {
+                \App\Models\PanelisAssessment::updateOrCreate([
+                    'user_id_talent' => $progressTalent->id,
+                    'development_session_id' => optional($progressPlan)->development_session_id,
+                    'panelis_id' => $panelis_id,
+                ], [
+                    'is_active' => true,
+                ]);
+            }
+
+            optional($progressPlan)->update(['status_promotion' => 'Pending Panelis']);
+            if (optional($progressPlan)->development_session_id) {
+                DevelopmentSession::where('id', $progressPlan->development_session_id)->update(['status' => 'Pending Panelis']);
+            }
+        }
+
+        $talentNames = $progressTalents->pluck('nama')->join(', ');
+        foreach ($request->panelis_ids as $panelis_id) {
             $this->addNotificationToUser(
                 $panelis_id,
                 'Permintaan Penilaian Baru dari PDC Admin',
-                'PDC Admin telah mengirimkan talent <span class="font-semibold">' . e($talent->nama) . '</span> untuk Anda berikan penilaian panelis.',
+                'PDC Admin telah mengirimkan talent <span class="font-semibold">' . e($talentNames) . '</span> untuk Anda berikan penilaian panelis.',
                 'info'
             );
         }
 
-        $plan->update(['status_promotion' => 'Pending Panelis']);
-        if ($plan->development_session_id) {
-            DevelopmentSession::where('id', $plan->development_session_id)->update(['status' => 'Pending Panelis']);
-        }
-        return back()->with('success', 'Berhasil dikirim ke Panelis untuk review.');
+        return back()->with('success', 'Berhasil mengirim progress ini ke Panelis untuk review.');
     }
 
     public function toggleLock($talent_id)
@@ -1676,9 +1698,49 @@ class PDCAdminController extends Controller
             ->where('is_active', true)
             ->latest('created_at')
             ->firstOrFail();
-        $plan->update(['is_locked' => !$plan->is_locked]);
-        $status = $plan->is_locked ? 'dikunci' : 'dibuka';
-        return back()->with('success', "Progress talent berhasil $status.");
+        $talent = User::with(['company', 'department'])->findOrFail($talent_id);
+        $progressTalents = $this->getPanelisProgressTalents($plan, $talent);
+        $shouldLock = !$progressTalents->every(fn($progressTalent) => optional($progressTalent->promotion_plan)->is_locked);
+
+        PromotionPlan::whereIn('user_id_talent', $progressTalents->pluck('id'))
+            ->where('is_active', true)
+            ->update(['is_locked' => $shouldLock]);
+
+        $status = $shouldLock ? 'dikunci' : 'dibuka';
+        return back()->with('success', "Progress talent berhasil $status untuk " . $progressTalents->count() . " talent.");
+    }
+
+    private function getPanelisProgressTalents(PromotionPlan $plan, User $anchorTalent)
+    {
+        return User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))
+            ->where('company_id', $anchorTalent->company_id)
+            ->where('department_id', $anchorTalent->department_id)
+            ->where('atasan_id', $anchorTalent->atasan_id)
+            ->whereHas('promotion_plan', function ($query) use ($plan) {
+                $query->where('is_active', true)
+                    ->where('target_position_id', $plan->target_position_id)
+                    ->whereDate('start_date', $plan->start_date)
+                    ->whereDate('target_date', $plan->target_date);
+            })
+            ->with([
+                'company',
+                'department',
+                'position',
+                'mentor',
+                'atasan',
+                'promotion_plan.targetPosition',
+                'improvementProjects',
+            ])
+            ->orderBy('nama')
+            ->get()
+            ->each(function ($progressTalent) {
+                $sessionId = optional($progressTalent->promotion_plan)->development_session_id;
+                if ($sessionId) {
+                    $progressTalent->improvementProjects = $progressTalent->improvementProjects
+                        ->where('development_session_id', $sessionId)
+                        ->values();
+                }
+            });
     }
 
     protected function archiveDevelopmentSession(User $talent, PromotionPlan $plan, string $finalStatus): void

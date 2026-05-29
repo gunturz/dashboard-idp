@@ -139,6 +139,30 @@
                                     @php
                                         $firstTalent = $posData['talents']->first();
                                         $plan = optional($firstTalent)->promotion_plan;
+                                        $allLocked = $posData['talents']->every(
+                                            fn($progressTalent) => optional($progressTalent->promotion_plan)->is_locked,
+                                        );
+                                        $anySentOrReviewed = $posData['talents']->contains(function ($progressTalent) {
+                                            $progressPlan = optional($progressTalent)->promotion_plan;
+                                            $sessionId = optional($progressPlan)->development_session_id;
+                                            $alreadySent = in_array(optional($progressPlan)->status_promotion, [
+                                                'Pending Panelis',
+                                                'Approved Panelis',
+                                                'Rejected Panelis',
+                                            ]);
+                                            $isReviewedByPanelis = \App\Models\PanelisAssessment::where(
+                                                'user_id_talent',
+                                                $progressTalent->id,
+                                            )
+                                                ->when(
+                                                    $sessionId,
+                                                    fn($q) => $q->where('development_session_id', $sessionId),
+                                                )
+                                                ->whereNotNull('panelis_score')
+                                                ->exists();
+
+                                            return $alreadySent || $isReviewedByPanelis;
+                                        });
                                         $periodLabel = '-';
                                         if (!empty($plan->start_date) && !empty($plan->target_date)) {
                                             $periodLabel =
@@ -206,85 +230,73 @@
                                             </td>
 
                                             {{-- Lock Progress --}}
-                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                                @php
-                                                    $isLocked = optional($talent->promotion_plan)->is_locked ?? false;
-                                                @endphp
-                                                <form method="POST" class="flex justify-center"
-                                                    action="{{ route('pdc_admin.panelis_review.toggle_lock', $talent->id) }}">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="btn-prem {{ $isLocked ? 'btn-red' : 'btn-dark' }} text-[10px] px-3 py-1 font-bold">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                            stroke-width="2.5">
-                                                            @if ($isLocked)
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                                            @else
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                                            @endif
-                                                        </svg>
-                                                        {{ $isLocked ? 'Locked' : 'Unlocked' }}
-                                                    </button>
-                                                </form>
-                                            </td>
+                                            @if ($index === 0)
+                                                <td rowspan="{{ count($posData['talents']) }}" class="px-6 py-5"
+                                                    style="text-align:center; vertical-align:middle;">
+                                                    <form method="POST" class="flex justify-center"
+                                                        action="{{ route('pdc_admin.panelis_review.toggle_lock', $firstTalent->id) }}">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="btn-prem {{ $allLocked ? 'btn-red' : 'btn-dark' }} text-[10px] px-3 py-1 font-bold">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                                stroke-width="2.5">
+                                                                @if ($allLocked)
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                                @else
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                                                @endif
+                                                            </svg>
+                                                            {{ $allLocked ? 'Locked' : 'Unlocked' }}
+                                                        </button>
+                                                    </form>
+                                                    <span class="block mt-2 text-[10px] font-semibold text-slate-500">
+                                                        {{ count($posData['talents']) }} Talent
+                                                    </span>
+                                                </td>
+                                            @endif
 
                                             {{-- Aksi --}}
-                                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                                @php
-                                                    $sessionId = optional($talent->promotion_plan)
-                                                        ->development_session_id;
-                                                    $alreadySent = in_array(
-                                                        optional($talent->promotion_plan)->status_promotion,
-                                                        ['Pending Panelis', 'Approved Panelis', 'Rejected Panelis'],
-                                                    );
-                                                    $isReviewedByPanelis = \App\Models\PanelisAssessment::where(
-                                                        'user_id_talent',
-                                                        $talent->id,
-                                                    )
-                                                        ->when(
-                                                            $sessionId,
-                                                            fn($q) => $q->where('development_session_id', $sessionId),
-                                                        )
-                                                        ->whereNotNull('panelis_score')
-                                                        ->exists();
-                                                @endphp
-                                                @if ($alreadySent || $isReviewedByPanelis)
-                                                    <div class="flex items-center justify-center">
-                                                        <a href="{{ route('pdc_admin.panelis_review.detail', $talent->id) }}"
-                                                            class="inline-flex items-center gap-1.5 bg-[#0f172a] hover:bg-[#1e242e] text-white text-[11px] font-bold px-4 py-2 rounded-xl transition-all shadow-sm whitespace-nowrap">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="h-3.5 w-3.5" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                                stroke-width="2.5">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                            </svg>
-                                                            Lihat Penilaian
-                                                        </a>
-                                                    </div>
-                                                @else
-                                                    <div class="flex justify-center">
-                                                        <button type="button"
-                                                            onclick="openPanelisModal({{ $talent->id }}, '{{ addslashes($talent->nama) }}')"
-                                                            class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold text-white bg-teal-500 hover:bg-teal-600 rounded-xl transition-all shadow-sm {{ !optional($talent->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                                            {{ !optional($talent->promotion_plan)->is_locked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="h-3.5 w-3.5" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                                stroke-width="2.5">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                            </svg>
-                                                            Kirim Panelis
-                                                        </button>
-                                                    </div>
-                                                @endif
-                                            </td>
+                                            @if ($index === 0)
+                                                <td rowspan="{{ count($posData['talents']) }}" class="px-6 py-5"
+                                                    style="text-align:center; vertical-align:middle;">
+                                                    @if ($anySentOrReviewed)
+                                                        <div class="flex items-center justify-center">
+                                                            <a href="{{ route('pdc_admin.panelis_review.detail', $firstTalent->id) }}"
+                                                                class="inline-flex items-center gap-1.5 bg-[#0f172a] hover:bg-[#1e242e] text-white text-[11px] font-bold px-4 py-2 rounded-xl transition-all shadow-sm whitespace-nowrap">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    stroke-width="2.5">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                </svg>
+                                                                Lihat Penilaian
+                                                            </a>
+                                                        </div>
+                                                    @else
+                                                        <div class="flex justify-center">
+                                                            <button type="button"
+                                                                onclick="openPanelisModal({{ $firstTalent->id }}, '{{ addslashes($firstTalent->nama) }}')"
+                                                                class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold text-white bg-teal-500 hover:bg-teal-600 rounded-xl transition-all shadow-sm {{ !$allLocked ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                                                {{ !$allLocked ? 'disabled title="Progress harus dikunci terlebih dahulu"' : '' }}>
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-3.5 w-3.5" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    stroke-width="2.5">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                                                </svg>
+                                                                Kirim Panelis
+                                                            </button>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 @endforeach

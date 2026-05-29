@@ -365,11 +365,6 @@
         </style>
     </x-slot>
 
-<<<<<<< HEAD
-    @if (session('success'))
-        <div id="success-alert"
-            class="flex items-center gap-3 mb-5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500">
-=======
     {{-- ── Talent Profile Header ── --}}
     @php
         $backUrl = request()->get('back_url')
@@ -687,7 +682,6 @@
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                     clip-rule="evenodd" />
             </svg>
->>>>>>> 0912cdb50062bd25c6920713120c649a90c26ff4
             {{ session('success') }}
         </div>
     @endif
@@ -717,103 +711,6 @@
                 $isComplete = in_array($statusPromo, ['Promoted', 'Not Promoted', 'Approved Panelis', 'Rejected Panelis', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
             @endphp
 
-<<<<<<< HEAD
-            <section class="review-card">
-                <div class="review-head">
-                    @if ($reviewTalent->foto ?? false)
-                        <img src="{{ asset('storage/' . $reviewTalent->foto) }}" alt="Foto {{ $namaTalent }}"
-                            class="review-avatar">
-                    @else
-                        <div class="review-avatar-placeholder">{{ $initials }}</div>
-                    @endif
-                    <div>
-                        <div class="review-name">{{ $namaTalent }}</div>
-                        <div class="review-badge">Talent</div>
-                    </div>
-                </div>
-
-                <div class="review-meta">
-                    <div class="meta-item">
-                        <span class="meta-label">Perusahaan</span>
-                        <span class="meta-value">{{ optional($reviewTalent->company)->nama_company ?? '-' }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Mentor</span>
-                        <span class="meta-value">{{ $mentorNames }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Departemen</span>
-                        <span class="meta-value">{{ optional($reviewTalent->department)->nama_department ?? '-' }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Atasan</span>
-                        <span class="meta-value">{{ optional($reviewTalent->atasan)->nama ?? '-' }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Jabatan yang Dituju</span>
-                        <span class="meta-value">{{ optional(optional($reviewPlan)->targetPosition)->position_name ?? '-' }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Periode</span>
-                        <span class="meta-value">{{ $periodeStr }}</span>
-                    </div>
-                </div>
-
-                <div class="project-label">Judul Projek</div>
-                <div class="project-title">{{ $projectTitle }}</div>
-
-                <div class="assessment-list">
-                    @forelse ($review['panelisUsers'] as $panelisIndex => $panelis)
-                        @php
-                            $assessment = $review['panelisAssessmentsByPanelis'][$panelis->id] ?? null;
-                            $panelisCompany = optional($panelis->company)->nama_company ?? optional($panelis->position)->position_name ?? 'Panelis';
-                            $feedback = $assessment?->panelis_komentar ?: 'Belum ada feedback dari panelis.';
-                            $recommendation = $assessment?->panelis_rekomendasi ?: 'Menunggu Penilaian';
-                            $score = $assessment?->panelis_score ?: '-';
-                        @endphp
-                        <article class="assessment-card">
-                            <div class="assessment-head">
-                                <span class="assessment-name">Panelis {{ $panelisIndex + 1 }}</span>
-                                <span class="assessment-dot"></span>
-                                <span class="assessment-company">{{ $panelisCompany }}</span>
-                            </div>
-                            <div class="assessment-feedback">{{ $feedback }}</div>
-                            <div class="assessment-bottom">
-                                <span class="status-pill">{{ $recommendation }}</span>
-                                <span class="score-pill">{{ $score }}</span>
-                            </div>
-                        </article>
-                    @empty
-                        <div class="empty-assessment">Belum ada panelis yang ditugaskan.</div>
-                    @endforelse
-                </div>
-
-                <div class="review-footer">
-                    <div class="score-box">
-                        <span>Rata Rata Skor</span>
-                        <strong>{{ $averageScore ?? '-' }}</strong>
-                    </div>
-
-                    @if ($isComplete)
-                        <button class="btn-selesai"
-                            style="background:#e2e8f0;color:#64748b;box-shadow:none;cursor:default;" disabled>
-                            Sudah Selesai
-                        </button>
-                    @else
-                        <button type="button" class="btn-selesai"
-                            onclick="openDecisionModal({{ $reviewTalent->id }}, '{{ addslashes($reviewTalent->nama) }}')">
-                            Selesai
-                        </button>
-                    @endif
-                </div>
-            </section>
-        @empty
-            <div class="review-card">Belum ada data penilaian panelis.</div>
-        @endforelse
-    </div>
-
-    <form method="POST" action="" id="form-decision">
-=======
     {{-- ── Penilaian Table ── --}}
     <div class="overflow-x-auto border border-gray-200 rounded-xl overflow-hidden w-full mb-8">
         <table class="w-full table-auto text-left bg-white min-w-[700px]">
@@ -960,20 +857,14 @@
 
     {{-- ── Hidden Form untuk submit keputusan ── --}}
     <form method="POST" action="{{ route('pdc_admin.panelis_review.complete', $talent->id) }}" id="form-decision">
->>>>>>> 0912cdb50062bd25c6920713120c649a90c26ff4
         @csrf
         <input type="hidden" name="decision" id="decisionValue" value="">
     </form>
 
     <div id="decisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
-<<<<<<< HEAD
-        style="background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-=======
         style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in">
             {{-- Header --}}
->>>>>>> 0912cdb50062bd25c6920713120c649a90c26ff4
             <div class="px-6 pt-6 pb-4">
                 <div class="flex items-center justify-between mb-1">
                     <h3 class="text-xl font-bold text-[#1e293b]">Decision</h3>
@@ -1137,8 +1028,5 @@
             });
         </script>
     </x-slot>
-<<<<<<< HEAD
-=======
 
->>>>>>> 0912cdb50062bd25c6920713120c649a90c26ff4
 </x-pdc_admin.layout>

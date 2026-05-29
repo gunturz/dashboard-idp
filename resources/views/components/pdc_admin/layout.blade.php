@@ -972,25 +972,44 @@
     </div>
     <script>
         (function() {
+            window.removePdcSidebarPreloadStyle = function() {
+                const preloadStyle = document.getElementById('pdc-sidebar-preload-style');
+                if (preloadStyle) preloadStyle.remove();
+            };
+
+            window.applyPdcSidebarState = function() {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('main-content');
+                const toggleIcon = document.getElementById('toggle-icon');
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+                if (!sidebar || !mainContent || !toggleIcon) return;
+
+                sidebar.classList.toggle('collapsed', isCollapsed);
+                mainContent.classList.toggle('collapsed', isCollapsed);
+                toggleIcon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+                window.removePdcSidebarPreloadStyle();
+            };
+
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
-                const style = document.createElement('style');
+                const style = document.getElementById('pdc-sidebar-preload-style') || document.createElement('style');
+                style.id = 'pdc-sidebar-preload-style';
                 style.innerHTML = `
                     .sidebar { width: 72px !important; transition: none !important; }
                     #main-content { margin-left: 72px !important; transition: none !important; }
                     #toggle-icon { transform: rotate(180deg) !important; transition: none !important; }
                     .sidebar-label { display: none !important; }
                 `;
-                document.head.appendChild(style);
 
-                window.addEventListener('DOMContentLoaded', () => {
-                    const sb = document.getElementById('sidebar');
-                    const mc = document.getElementById('main-content');
-                    const ti = document.getElementById('toggle-icon');
-                    if (sb) sb.classList.add('collapsed');
-                    if (mc) mc.classList.add('collapsed');
-                    if (ti) ti.style.transform = 'rotate(180deg)';
-                    style.remove();
-                });
+                if (!style.parentNode) document.head.appendChild(style);
+            } else {
+                window.removePdcSidebarPreloadStyle();
+            }
+
+            if (!window.__pdcSidebarPreloadListenerBound) {
+                window.addEventListener('DOMContentLoaded', window.applyPdcSidebarState);
+                document.addEventListener('livewire:navigated', window.applyPdcSidebarState);
+                window.__pdcSidebarPreloadListenerBound = true;
             }
         })();
 
@@ -1065,7 +1084,7 @@
             </div>
 
             {{-- Dashboard --}}
-            <a href="{{ route('pdc_admin.dashboard') }}"
+            <a href="{{ route('pdc_admin.dashboard') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.dashboard') ? 'active' : '' }}" title="Dashboard">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -1076,7 +1095,7 @@
             </a>
 
             {{-- Progress Talent --}}
-            <a href="{{ route('pdc_admin.progress_talent') }}"
+            <a href="{{ route('pdc_admin.progress_talent') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.progress_talent', 'pdc_admin.detail') ? 'active' : '' }}"
                 title="Progress Talent">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -1088,7 +1107,7 @@
             </a>
 
             {{-- Kompetensi --}}
-            <a href="{{ route('pdc_admin.kompetensi') }}"
+            <a href="{{ route('pdc_admin.kompetensi') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.kompetensi') ? 'active' : '' }}"
                 title="Kompetensi">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -1100,7 +1119,7 @@
             </a>
 
             {{-- Company Management --}}
-            <a href="{{ route('pdc_admin.company_management') }}"
+            <a href="{{ route('pdc_admin.company_management') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.company_management') ? 'active' : '' }}"
                 title="Company Management">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -1112,7 +1131,7 @@
             </a>
 
             {{-- User Management --}}
-            <a href="{{ route('pdc_admin.user_management') }}"
+            <a href="{{ route('pdc_admin.user_management') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.user_management') ? 'active' : '' }}"
                 title="User Management">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -1124,7 +1143,7 @@
             </a>
 
             {{-- Finance Validation --}}
-            <a href="{{ route('pdc_admin.finance_validation') }}"
+            <a href="{{ route('pdc_admin.finance_validation') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.finance_validation') ? 'active' : '' }}"
                 title="Finance Validation">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -1136,7 +1155,7 @@
             </a>
 
             {{-- Panelis Review --}}
-            <a href="{{ route('pdc_admin.panelis_review') }}"
+            <a href="{{ route('pdc_admin.panelis_review') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.panelis_review') ? 'active' : '' }}"
                 title="Panelis Review">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none"
@@ -1148,7 +1167,7 @@
             </a>
 
             {{-- Progress Archive --}}
-            <a href="{{ route('pdc_admin.progress_archive') }}"
+            <a href="{{ route('pdc_admin.progress_archive') }}" wire:navigate
                 class="sidebar-item {{ request()->routeIs('pdc_admin.progress_archive*') ? 'active' : '' }}"
                 title="Progress Archive">
                 <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-icon h-5 w-5" fill="none"
@@ -1173,6 +1192,10 @@
 
     <script>
         function toggleSidebar() {
+            if (typeof window.removePdcSidebarPreloadStyle === 'function') {
+                window.removePdcSidebarPreloadStyle();
+            }
+
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
             const toggleIcon = document.getElementById('toggle-icon');
@@ -1192,17 +1215,17 @@
         }
 
         // Persistent sidebar state check (handled early by inline script, but this keeps it consistent)
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const toggleIcon = document.getElementById('toggle-icon');
-
-            if (sidebar && mainContent && toggleIcon && localStorage.getItem('sidebarCollapsed') === 'true') {
-                sidebar.classList.add('collapsed');
-                mainContent.classList.add('collapsed');
-                toggleIcon.style.transform = 'rotate(180deg)';
+        window.syncPdcSidebarState = function() {
+            if (typeof window.applyPdcSidebarState === 'function') {
+                window.applyPdcSidebarState();
             }
-        });
+        };
+
+        if (!window.__pdcSidebarStateListenerBound) {
+            document.addEventListener('DOMContentLoaded', window.syncPdcSidebarState);
+            document.addEventListener('livewire:navigated', window.syncPdcSidebarState);
+            window.__pdcSidebarStateListenerBound = true;
+        }
     </script>
     <script>
         // Custom scripts block has been removed for SweetAlert

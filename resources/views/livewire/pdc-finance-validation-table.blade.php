@@ -1,4 +1,18 @@
 <div>
+    @if (session()->has('success'))
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => { $el.style.opacity = '0'; $el.style.transform = 'translateY(-10px)'; setTimeout(() => show = false, 500) }, 3000)" 
+             class="flex items-center gap-3 mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500"
+             style="opacity: 1; transform: translateY(0);">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
+            </svg>
+            {{ session('success') }}
+        </div>
+    @endif
+
     {{-- Summary Cards --}}
     <div class="prem-stat-grid overflow-x-auto pb-2" style="grid-template-columns:repeat(4, minmax(140px, 1fr))">
         <div class="prem-stat prem-stat-teal">
@@ -50,7 +64,7 @@
     {{-- ── Filter Bar ── --}}
     <div class="flex flex-col sm:flex-row items-center gap-4 mt-8 mb-6">
         {{-- Live Search --}}
-        <div class="relative w-full sm:w-[40%]">
+        <div class="relative w-full sm:flex-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -62,7 +76,7 @@
         </div>
 
         {{-- Status Filter --}}
-        <div class="relative w-full sm:w-[30%]">
+        <div class="relative w-full sm:w-56">
             <select id="live-status-filter"
                 class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
                 style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -187,11 +201,13 @@
         </div>
     @else
         <div class="empty-prem" style="margin-top: 40px">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
             <h3>Belum Ada Project Improvement Talent</h3>
             <p>{{ $search || $statusFilter ? 'Tidak ada data yang cocok dengan filter yang dipilih.' : 'Data akan muncul setelah talent meng-upload project improvement.' }}
             </p>
@@ -219,25 +235,26 @@
                     class="w-full py-3 text-sm font-bold text-white bg-[#0f172a] hover:bg-[#1e242e] rounded-xl transition-colors shadow-sm">
                     Kirim ke Finance
                 </button>
-                <div class="flex gap-3">
-                    <form id="rejectForm" method="POST" action="" class="flex-1">
+                <div class="flex gap-3 w-full">
+                    <form id="rejectForm" method="POST" action="" class="hidden">
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="status" value="Rejected">
-                        <button type="submit"
-                            class="w-full py-3 text-sm font-bold text-white bg-[#EF4444] hover:bg-[#dc2626] rounded-xl transition-colors shadow-sm">
-                            ✕ Reject
-                        </button>
                     </form>
-                    <form id="approveForm" method="POST" action="" class="flex-1">
+                    <form id="approveForm" method="POST" action="" class="hidden">
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="status" value="Approved">
-                        <button type="submit"
-                            class="w-full py-3 text-sm font-bold text-white bg-[#14b8a6] hover:bg-[#0d9488] rounded-xl transition-colors shadow-sm">
-                            ✓ Approve
-                        </button>
                     </form>
+                    
+                    <button type="button" onclick="openConfirmModal('Rejected')"
+                        class="flex-1 py-3 text-sm font-bold text-white bg-[#EF4444] hover:bg-[#dc2626] rounded-xl transition-colors shadow-sm">
+                        ✕ Reject
+                    </button>
+                    <button type="button" onclick="openConfirmModal('Approved')"
+                        class="flex-1 py-3 text-sm font-bold text-white bg-[#14b8a6] hover:bg-[#0d9488] rounded-xl transition-colors shadow-sm">
+                        ✓ Approve
+                    </button>
                 </div>
             </div>
             <div class="px-6 pb-5">
@@ -346,19 +363,15 @@
                         <div>
                             <label
                                 class="block text-[11px] font-extrabold text-[#0f172a] uppercase mb-1">Lampiran</label>
-                            <div
-                                class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 flex items-center h-[34px]">
-                                <a id="finance-proj-file" href="#" target="_blank"
-                                    class="text-blue-600 hover:underline font-semibold text-[12px] flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                        class="w-3.5 h-3.5">
-                                        <path fill-rule="evenodd"
-                                            d="M15.621 4.379a3 3 0 0 0-4.242 0l-7 7a3 3 0 0 0 4.241 4.243h.001l.497-.5a.75.75 0 0 1 1.064 1.057l-.498.501-.002.002a4.5 4.5 0 0 1-6.364-6.364l7-7a4.5 4.5 0 0 1 6.368 6.36l-3.455 3.553A2.625 2.625 0 1 1 9.52 9.52l3.45-3.451a.75.75 0 1 1 1.061 1.06l-3.45 3.451a1.125 1.125 0 0 0 1.587 1.595l3.454-3.553a3 3 0 0 0 0-4.242Z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    Lihat File
-                                </a>
-                            </div>
+                            <a id="finance-proj-file" href="#" target="_blank"
+                                class="inline-flex justify-center items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] font-bold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all w-full h-[34px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                </svg>
+                                Lihat File
+                            </a>
                         </div>
                     </div>
 
@@ -401,10 +414,46 @@
                     <button type="button" onclick="closeFinanceModal()"
                         class="px-5 py-2.5 text-sm font-bold text-[#475569] bg-[#F4F1EA] hover:bg-[#eadecc] rounded-xl transition-colors">Batal</button>
                     <button type="submit"
-                        class="px-6 py-2.5 text-sm font-bold text-white bg-[#16c60c] hover:bg-[#14b00a] shadow-lg shadow-green-500/30 rounded-xl transition-all hover:-translate-y-px"
+                        class="px-6 py-2.5 text-sm font-bold text-white bg-[#14b8a6] hover:bg-[#0d9488] shadow-lg shadow-teal-500/30 rounded-xl transition-all hover:-translate-y-px"
                         onclick="this.innerHTML='Mengirim...';">Kirim</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    {{-- Modal Confirm Action (Mentor Design Style) --}}
+    <div id="financeConfirmModal"
+        class="hidden fixed inset-0 z-[110] flex items-center justify-center transition-opacity opacity-0"
+        style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
+        <div class="bg-white rounded-[28px] shadow-2xl w-full max-w-[400px] p-8 text-center transform scale-90 transition-transform duration-400 ease-out border border-slate-100"
+            id="financeConfirmModalContent">
+            <div id="confirmIconContainer"
+                class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900 mb-6 shadow-xl shadow-slate-900/20">
+                <svg id="confirmIconSvg" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+
+            <h3 class="text-2xl font-black text-slate-900 mb-3 tracking-tight">Konfirmasi Tindakan</h3>
+            <p class="text-[14px] text-slate-500 leading-relaxed mb-8 font-medium">
+                Apakah Anda yakin ingin <span id="confirmActionText"
+                    class="font-black text-slate-900 underline decoration-teal-400 decoration-2">...</span>
+                project <span id="confirmProjectTitle" class="font-black text-slate-800">...</span> dari <span id="confirmTalentName" class="font-black text-slate-800">...</span>?
+                <br><span class="text-slate-400 text-[12px] italic mt-2 block">Keputusan ini akan langsung mengubah status project talent.</span>
+            </p>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button type="button" onclick="closeConfirmModal()"
+                    class="w-full bg-slate-100 text-slate-500 font-black py-3.5 rounded-2xl hover:bg-slate-200 transition-all duration-200">
+                    Batal
+                </button>
+                <button type="button" id="confirmSubmitBtn" onclick="submitConfirmModal()"
+                    class="w-full text-white font-black py-3.5 rounded-2xl transition-all duration-200">
+                    Konfirmasi
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -521,6 +570,71 @@
             modal.style.display = 'none';
             modal.classList.add('hidden');
             modal.classList.remove('!flex'); // remove error state visibility tag
+        }
+
+        let confirmDecisionValue = null;
+
+        function openConfirmModal(decision) {
+            confirmDecisionValue = decision;
+
+            const modal = document.getElementById('financeConfirmModal');
+            const modalContent = document.getElementById('financeConfirmModalContent');
+            const actionText = document.getElementById('confirmActionText');
+            const projectTitleSpan = document.getElementById('confirmProjectTitle');
+            const talentNameSpan = document.getElementById('confirmTalentName');
+            const iconContainer = document.getElementById('confirmIconContainer');
+            const iconSvg = document.getElementById('confirmIconSvg');
+            const submitBtn = document.getElementById('confirmSubmitBtn');
+
+            actionText.textContent = decision === 'Approved' ? 'Approve' : 'Reject';
+            projectTitleSpan.textContent = `"${currentProjectData.projTitle}"`;
+            talentNameSpan.textContent = currentProjectData.talentName;
+
+            // Reset classes
+            iconContainer.className = "mx-auto flex h-20 w-20 items-center justify-center rounded-full mb-6 shadow-xl";
+            submitBtn.className = "w-full text-white font-black py-3.5 rounded-2xl transition-all duration-200";
+
+            if (decision === 'Approved') {
+                iconContainer.classList.add('bg-[#14b8a6]', 'shadow-teal-500/30');
+                submitBtn.classList.add('bg-[#14b8a6]', 'hover:bg-teal-600', 'hover:shadow-lg', 'hover:shadow-teal-500/30');
+                iconSvg.innerHTML =
+                    `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />`;
+            } else {
+                iconContainer.classList.add('bg-red-500', 'shadow-red-500/30');
+                submitBtn.classList.add('bg-red-500', 'hover:bg-red-600', 'hover:shadow-lg', 'hover:shadow-red-500/30');
+                iconSvg.innerHTML =
+                    `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />`;
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-90');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('financeConfirmModal');
+            const modalContent = document.getElementById('financeConfirmModalContent');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-90');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 400);
+        }
+
+        function submitConfirmModal() {
+            if (confirmDecisionValue === 'Approved') {
+                closeConfirmModal();
+                closeActionModal();
+                document.getElementById('approveForm').submit();
+            } else if (confirmDecisionValue === 'Rejected') {
+                closeConfirmModal();
+                closeActionModal();
+                document.getElementById('rejectForm').submit();
+            }
         }
     </script>
 @endpush

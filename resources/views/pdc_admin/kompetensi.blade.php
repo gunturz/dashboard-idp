@@ -116,6 +116,7 @@
                 border-right: 1px solid #e5e7eb;
                 line-height: 1.6;
                 background: white;
+                transition: background-color 0.2s ease;
             }
 
             .comp-table td:first-child {
@@ -126,14 +127,23 @@
                 vertical-align: middle;
                 border-right: 1px solid #d1d5db;
                 background: #f8fafc;
+                transition: background-color 0.2s ease;
             }
 
             .comp-table td:last-child {
                 border-right: none;
             }
 
+            .comp-table tbody tr {
+                cursor: pointer;
+            }
+
             .comp-table tbody tr:hover td {
-                background: #f8fafc;
+                background: #f0fdfa;
+            }
+
+            .comp-table tbody tr.active-row td {
+                background: #f0fdfa !important;
             }
 
             .question-text {

@@ -27,7 +27,7 @@
             .top-tab-btn.active {
                 background: #0f172a;
                 color: white;
-                box-shadow: 0 2px 8px rgba(0,0,0,.18);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
             }
 
             /* ── Sub Tabs ── */
@@ -56,7 +56,7 @@
             .sub-tab-btn.active {
                 background: #0f172a;
                 color: white;
-                box-shadow: 0 2px 8px rgba(0,0,0,.18);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
             }
 
             /* ── Competency Card ── */
@@ -99,8 +99,13 @@
                 border-right: 1px solid #d1d5db;
             }
 
-            .comp-table th:first-child { width: 96px; }
-            .comp-table th:last-child { border-right: none; }
+            .comp-table th:first-child {
+                width: 96px;
+            }
+
+            .comp-table th:last-child {
+                border-right: none;
+            }
 
             .comp-table td {
                 padding: 14px 20px;
@@ -111,6 +116,7 @@
                 border-right: 1px solid #e5e7eb;
                 line-height: 1.6;
                 background: white;
+                transition: background-color 0.2s ease;
             }
 
             .comp-table td:first-child {
@@ -121,10 +127,24 @@
                 vertical-align: middle;
                 border-right: 1px solid #d1d5db;
                 background: #f8fafc;
+                transition: background-color 0.2s ease;
             }
-            .comp-table td:last-child { border-right: none; }
 
-            .comp-table tbody tr:hover td { background: #f8fafc; }
+            .comp-table td:last-child {
+                border-right: none;
+            }
+
+            .comp-table tbody tr {
+                cursor: pointer;
+            }
+
+            .comp-table tbody tr:hover td {
+                background: #f0fdfa;
+            }
+
+            .comp-table tbody tr.active-row td {
+                background: #f0fdfa !important;
+            }
 
             .question-text {
                 font-size: 1rem;
@@ -172,7 +192,10 @@
                 transition: all .2s;
                 box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
             }
-            .btn-edit-comp:hover { background: #1e2737; }
+
+            .btn-edit-comp:hover {
+                background: #1e2737;
+            }
 
             .comp-card-footer {
                 padding: 12px 16px;
@@ -183,16 +206,28 @@
             }
 
             /* Panel visibility */
-            .tab-panel { display: none; }
-            .tab-panel.active { display: block; }
-            .pos-panel { display: none; }
-            .pos-panel.active { display: block; }
+            .tab-panel {
+                display: none;
+            }
+
+            .tab-panel.active {
+                display: block;
+            }
+
+            .pos-panel {
+                display: none;
+            }
+
+            .pos-panel.active {
+                display: block;
+            }
 
             /* Target Score Position table */
             .ts-table {
                 width: 100%;
                 border-collapse: collapse;
             }
+
             .ts-table th {
                 padding: 12px 16px;
                 font-size: 0.8rem;
@@ -203,15 +238,21 @@
                 border-bottom: 2px solid #cbd5e1;
                 border-right: 1px solid #d1d5db;
             }
-            .ts-table th:last-child { border-right: none; }
-            
+
+            .ts-table th:last-child {
+                border-right: none;
+            }
+
             .ts-table td {
                 border-bottom: 1px solid #d1d5db;
                 border-right: 1px solid #e5e7eb;
                 padding: 0;
                 vertical-align: middle;
             }
-            .ts-table td:last-child { border-right: none; }
+
+            .ts-table td:last-child {
+                border-right: none;
+            }
 
             .ts-comp-name {
                 padding: 16px 24px !important;
@@ -233,11 +274,16 @@
                 cursor: pointer;
                 transition: background 0.2s, color 0.2s;
             }
-            .ts-radio-label:hover { background: #f1f5f9; }
-            input[type="radio"]:checked + .ts-radio-label {
+
+            .ts-radio-label:hover {
+                background: #f1f5f9;
+            }
+
+            input[type="radio"]:checked+.ts-radio-label {
                 background: #14b8a6;
                 color: white;
             }
+
             .ts-radio-label.is-checked {
                 background: #14b8a6;
                 color: white;
@@ -255,7 +301,10 @@
                 cursor: pointer;
                 transition: background 0.2s;
             }
-            .btn-simpan-ts:hover { background: #0d9488; }
+
+            .btn-simpan-ts:hover {
+                background: #0d9488;
+            }
 
             .btn-batal-ts {
                 background: #F4F1EA;
@@ -269,7 +318,10 @@
                 cursor: pointer;
                 transition: background 0.2s;
             }
-            .btn-batal-ts:hover { background: #eadecc; }
+
+            .btn-batal-ts:hover {
+                background: #eadecc;
+            }
 
             .btn-edit-ts {
                 background: #0f172a;
@@ -283,7 +335,10 @@
                 cursor: pointer;
                 transition: background 0.2s;
             }
-            .btn-edit-ts:hover { background: #1e2737; }
+
+            .btn-edit-ts:hover {
+                background: #1e2737;
+            }
 
             .ts-table.view-mode .ts-radio-label {
                 pointer-events: none;
@@ -292,15 +347,21 @@
 
             /* ── Responsive ── */
             @media (max-width: 768px) {
-                .top-tabs, .sub-tabs {
+
+                .top-tabs,
+                .sub-tabs {
                     flex-direction: column;
                     border-radius: 12px;
                 }
-                .top-tab-btn, .sub-tab-btn {
+
+                .top-tab-btn,
+                .sub-tab-btn {
                     border-radius: 8px;
                     padding: 8px 16px;
                 }
-                .comp-table, .ts-table {
+
+                .comp-table,
+                .ts-table {
                     min-width: 900px;
                 }
             }
@@ -311,7 +372,9 @@
     <div class="page-header animate-title mb-8">
         <div class="page-header-icon shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                    d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                    clip-rule="evenodd" />
             </svg>
         </div>
         <div>

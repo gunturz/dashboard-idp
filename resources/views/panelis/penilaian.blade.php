@@ -648,7 +648,7 @@
                 <tr>
                     <th class="col-aspek">Aspek yang Dinilai</th>
                     <th class="col-indikator">Indikator Penilaian</th>
-                    <th class="col-status">Status Aksi</th>
+                    <th class="col-status">Skor</th>
                 </tr>
             </thead>
             <tbody>

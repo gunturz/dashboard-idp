@@ -148,6 +148,12 @@
                 </div>
             @endif
 
+            @if (!$hasDevPlan)
+                <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-700 text-center flex items-center justify-center">
+                    {{ $developmentPlanIncompleteMessage }}
+                </div>
+            @endif
+
             {{-- Smooth Progress Circle Charts --}}
             @php
                 $idpChartData = [
@@ -251,9 +257,9 @@
                         </ul>
                         <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 70%</p>
                     </div>
-                    <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'exposure') }}"
-                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
-                        {{ optional($user->promotion_plan)->is_locked ? 'title="Progress telah dikunci"' : '' }}>
+                    <a href="{{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'exposure') }}"
+                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
+                        title="{{ !$hasDevPlan ? $developmentPlanIncompleteMessage : (optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : '') }}">
                         Upload
                     </a>
                 </div>
@@ -281,9 +287,9 @@
                         </ul>
                         <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 20%</p>
                     </div>
-                    <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'mentoring') }}"
-                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
-                        {{ optional($user->promotion_plan)->is_locked ? 'title="Progress telah dikunci"' : '' }}>
+                    <a href="{{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'mentoring') }}"
+                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
+                        title="{{ !$hasDevPlan ? $developmentPlanIncompleteMessage : (optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : '') }}">
                         Upload
                     </a>
                 </div>
@@ -312,9 +318,9 @@
                         </ul>
                         <p class="text-sm text-teal-600 font-bold text-right mt-auto">Bobot : 10%</p>
                     </div>
-                    <a href="{{ optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'learning') }}"
-                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
-                        {{ optional($user->promotion_plan)->is_locked ? 'title="Progress telah dikunci"' : '' }}>
+                    <a href="{{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? '#' : route('talent.idp_monitoring', 'learning') }}"
+                        class="mt-4 w-full block text-center bg-amber-500 text-white text-sm font-semibold py-2 rounded-[10px] {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-amber-600 transition active:scale-95' }}"
+                        title="{{ !$hasDevPlan ? $developmentPlanIncompleteMessage : (optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : '') }}">
                         Upload
                     </a>
                 </div>
@@ -359,12 +365,18 @@
                 </div>
             @endif
 
+            @if (!$hasDevPlan)
+                <div class="mb-4 rounded-[10px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                    {{ $developmentPlanIncompleteMessage }}
+                </div>
+            @endif
+
             <form wire:submit.prevent="submitProject" enctype="multipart/form-data">
                 {{-- Judul Project Input --}}
                 <div class="mb-4">
                     <input type="text" wire:model="judul_project"
                         class="w-full text-sm border border-gray-300 rounded-[8px] px-4 py-2 focus:outline-none focus:border-green-500 focus:ring-[3px] focus:ring-green-500/20 bg-white transition-all"
-                        placeholder="Judul Project..." required>
+                        placeholder="Judul Project..." required {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
                     @error('judul_project') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
 
@@ -391,7 +403,7 @@
                     x-on:livewire-upload-progress="progress = $event.detail.progress">
                     
                     <label for="file-upload-livewire"
-                        class="upload-area rounded-2xl cursor-pointer flex flex-col items-center justify-center py-10 bg-gray-50 border-2 border-dashed border-gray-200 hover:border-teal-500 transition-colors">
+                        class="upload-area rounded-2xl {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-teal-500' }} flex flex-col items-center justify-center py-10 bg-gray-50 border-2 border-dashed border-gray-200 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -401,10 +413,10 @@
                             @if($project_file)
                                 {{ $project_file->getClientOriginalName() }}
                             @else
-                                Klik untuk mengunggah
+                                {{ !$hasDevPlan ? 'Upload dinonaktifkan sampai development plan lengkap' : 'Klik untuk mengunggah' }}
                             @endif
                         </span>
-                        <input id="file-upload-livewire" wire:model="project_file" type="file" class="sr-only" required>
+                        <input id="file-upload-livewire" wire:model="project_file" type="file" class="sr-only" required {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
                     </label>
 
                     <div x-show="uploading" class="absolute bottom-0 left-0 w-full rounded-b-2xl overflow-hidden bg-gray-200 h-2">
@@ -417,7 +429,8 @@
                 <div class="flex justify-end mb-6">
                     <button type="submit"
                         class="btn-action-teal px-8"
-                        {{ optional($user->promotion_plan)->is_locked ? 'disabled title="Progress telah dikunci"' : '' }}>
+                        {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}
+                        title="{{ !$hasDevPlan ? $developmentPlanIncompleteMessage : (optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : '') }}">
                         Submit
                         <div wire:loading wire:target="submitProject" class="ml-2">
                             <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

@@ -15,6 +15,26 @@ use App\Models\DevelopmentSession;
 
 class TalentDashboardController extends Controller
 {
+    protected function hasCompleteDevelopmentPlan(User $user, ?DevelopmentSession $developmentSession = null): bool
+    {
+        $plan = $user->promotion_plan;
+        $developmentSession ??= $this->activeDevelopmentSessionFor($user);
+
+        $hasTargetPosition = !empty($plan?->target_position_id) || !empty($developmentSession?->target_position_id);
+        $hasAtasan = !empty($developmentSession?->atasan_id) || !empty($user->atasan_id);
+        $hasMentor = collect($plan?->mentor_ids ?? $developmentSession?->mentor_ids ?? [])
+            ->filter()
+            ->isNotEmpty() || !empty($user->mentor_id);
+        $hasPeriod = !empty($plan?->start_date) && !empty($plan?->target_date);
+
+        return $hasTargetPosition && $hasAtasan && $hasMentor && $hasPeriod;
+    }
+
+    protected function incompleteDevelopmentPlanMessage(): string
+    {
+        return 'Development plan belum lengkap. PDC Admin harus mengisi posisi yang dituju, mentor, atasan, dan periode terlebih dahulu.';
+    }
+
     protected function hasIsActiveColumn(string $table): bool
     {
         return Schema::hasColumn($table, 'is_active');
@@ -207,6 +227,12 @@ class TalentDashboardController extends Controller
                 abort(403, 'Hanya talent/talent yang bisa mengakses halaman ini.');
             }
 
+            $developmentSession = $this->activeDevelopmentSessionFor($user);
+            if (!$this->hasCompleteDevelopmentPlan($user, $developmentSession)) {
+                return redirect(route('talent.dashboard') . '#IDP Monitoring')
+                    ->with('error', $this->incompleteDevelopmentPlanMessage());
+            }
+
             // Ambil mentor dari promotion plan (multiple mentors)
             $mentors = $user->promotion_plan ? $user->promotion_plan->mentor_models : collect();
             $atasans = $user->atasan ? collect([$user->atasan]) : collect();
@@ -238,6 +264,10 @@ class TalentDashboardController extends Controller
             }
 
             // ── Validasi input ──────────────────────────────────────────────
+            if (!$this->hasCompleteDevelopmentPlan($user, $developmentSession)) {
+                return back()->with('error', $this->incompleteDevelopmentPlanMessage());
+            }
+
             $rules = [
                 'theme' => 'required|string|max:255',
                 'activity_date' => 'required|date',
@@ -369,6 +399,10 @@ class TalentDashboardController extends Controller
             $developmentSession = $this->activeDevelopmentSessionFor($user);
             if (!$developmentSession) {
                 return back()->with('error', 'Development plan aktif belum tersedia. Hubungi Admin PDC terlebih dahulu.');
+            }
+
+            if (!$this->hasCompleteDevelopmentPlan($user, $developmentSession)) {
+                return back()->with('error', $this->incompleteDevelopmentPlanMessage());
             }
 
             $request->validate([

@@ -18,11 +18,24 @@
                 </div>
             </div>
         </div>
+        
+        @if (session('success'))
+            <div id="success-alert"
+                class="flex items-center gap-3 mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
+                </svg>
+                {{ session('success') }}
+            </div>
+        @endif
 
         {{-- Filters (Re-styled to match Panelis Review) --}}
         <div class="flex flex-col sm:flex-row items-center gap-4 mb-8 mt-4" id="archive-filter-bar">
             {{-- Search --}}
-            <div class="relative w-full sm:flex-[1.5]">
+            <div class="relative w-full sm:flex-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor"
                     style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -35,7 +48,7 @@
             </div>
 
             {{-- Period Filter --}}
-            <div class="relative w-full sm:flex-1">
+            <div class="relative w-full sm:w-56">
                 <select id="periodFilter"
                     class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -60,7 +73,7 @@
             </div>
 
             {{-- Company Filter --}}
-            <div class="relative w-full sm:flex-1">
+            <div class="relative w-full sm:w-56">
                 <select id="companyFilter"
                     class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -93,7 +106,7 @@
             </div>
 
             {{-- Status Filter --}}
-            <div class="relative w-full sm:flex-1">
+            <div class="relative w-full sm:w-56">
                 <select id="statusFilter"
                     class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
                     style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
@@ -247,8 +260,18 @@
 
                         {{-- Empty state row --}}
                         <tr id="emptyRow" class="hidden">
-                            <td colspan="6" class="py-12 text-center text-slate-500 italic">
-                                Tidak ada talent yang sesuai dengan pencarian Anda.
+                            <td colspan="6" class="py-12">
+                                <div class="empty-prem" style="border: none; padding: 20px;">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                            style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                        </svg>
+                                    </div>
+                                    <h3>Tidak Ada Data Talent</h3>
+                                    <p>Tidak ada talent yang sesuai dengan pencarian Anda.</p>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -333,6 +356,20 @@
                 border: 1.5px solid #cbd5e1;
             }
         </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const alert = document.getElementById('success-alert');
+                if (alert) {
+                    setTimeout(function() {
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(function() {
+                            alert.remove();
+                        }, 500);
+                    }, 3000);
+                }
+            });
+        </script>
     </x-slot>
 
 </x-pdc_admin.layout>

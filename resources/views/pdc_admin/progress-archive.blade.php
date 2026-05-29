@@ -18,6 +18,19 @@
                 </div>
             </div>
         </div>
+        
+        @if (session('success'))
+            <div id="success-alert"
+                class="flex items-center gap-3 mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
+                </svg>
+                {{ session('success') }}
+            </div>
+        @endif
 
         {{-- Filters (Re-styled to match Panelis Review) --}}
         <div class="flex flex-col sm:flex-row items-center gap-4 mb-8 mt-4" id="archive-filter-bar">
@@ -247,8 +260,18 @@
 
                         {{-- Empty state row --}}
                         <tr id="emptyRow" class="hidden">
-                            <td colspan="6" class="py-12 text-center text-slate-500 italic">
-                                Tidak ada talent yang sesuai dengan pencarian Anda.
+                            <td colspan="6" class="py-12">
+                                <div class="empty-prem" style="border: none; padding: 20px;">
+                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                            style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                        </svg>
+                                    </div>
+                                    <h3>Tidak Ada Data Talent</h3>
+                                    <p>Tidak ada talent yang sesuai dengan pencarian Anda.</p>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -333,6 +356,20 @@
                 border: 1.5px solid #cbd5e1;
             }
         </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const alert = document.getElementById('success-alert');
+                if (alert) {
+                    setTimeout(function() {
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(function() {
+                            alert.remove();
+                        }, 500);
+                    }, 3000);
+                }
+            });
+        </script>
     </x-slot>
 
 </x-pdc_admin.layout>

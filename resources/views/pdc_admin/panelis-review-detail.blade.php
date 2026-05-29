@@ -825,7 +825,7 @@
                         setTimeout(function() {
                             alert.remove();
                         }, 500);
-                    }, 5000);
+                    }, 3000);
                 }
             });
         </script>

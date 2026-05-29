@@ -664,6 +664,17 @@
                     refreshMentorOptions();
                     refreshAtasanOptions();
                 }
+
+                const alert = document.getElementById('success-alert');
+                if (alert) {
+                    setTimeout(function() {
+                        alert.style.opacity = '0';
+                        alert.style.transform = 'translateY(-10px)';
+                        setTimeout(function() {
+                            alert.remove();
+                        }, 500);
+                    }, 3000);
+                }
             });
         </script>
     </x-slot>

@@ -1,6 +1,8 @@
 <div>
     @if (session()->has('success_top'))
-        <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm" role="alert">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => { $el.style.opacity = '0'; $el.style.transform = 'translateY(-10px)'; setTimeout(() => show = false, 500) }, 3000)" 
+             class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm transition-all duration-500" role="alert"
+             style="opacity: 1; transform: translateY(0);">
             <strong class="font-bold">Berhasil!</strong>
             <span class="block sm:inline">{{ session('success_top') }}</span>
         </div>
@@ -166,7 +168,12 @@
                                                                 </div>
                                                             @else
                                                                 <div class="flex flex-col gap-3 px-2 sm:px-4">
-                                                                    <button type="button" class="btn-edit-ts" wire:click="editTargetScore('core')">Edit</button>
+                                                                    <button type="button" class="btn-edit-ts flex items-center justify-center gap-1.5" wire:click="editTargetScore('core')">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                                                        Edit
+                                                                    </button>
                                                                 </div>
                                                             @endif
                                                         </td>
@@ -216,7 +223,12 @@
                                                                 </div>
                                                             @else
                                                                 <div class="flex flex-col gap-3 px-2 sm:px-4">
-                                                                    <button type="button" class="btn-edit-ts" wire:click="editTargetScore('managerial')">Edit</button>
+                                                                    <button type="button" class="btn-edit-ts flex items-center justify-center gap-1.5" wire:click="editTargetScore('managerial')">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                        </svg>
+                                                                        Edit
+                                                                    </button>
                                                                 </div>
                                                             @endif
                                                         </td>
@@ -264,6 +276,20 @@
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     window.location.hash = targetId;
                 });
+            });
+
+            // Handle row click highlight in comp-table
+            document.addEventListener('click', (e) => {
+                const tr = e.target.closest('.comp-table tbody tr');
+                if (tr) {
+                    // Remove active-row class from all rows in this table
+                    const table = tr.closest('.comp-table');
+                    table.querySelectorAll('tbody tr').forEach(row => {
+                        row.classList.remove('active-row');
+                    });
+                    // Add active-row class to the clicked row
+                    tr.classList.add('active-row');
+                }
             });
 
             const hash = window.location.hash.replace('#', '');

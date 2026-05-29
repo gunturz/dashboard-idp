@@ -42,53 +42,52 @@
         </div>{{-- /prem-stat-grid --}}
     </div>{{-- /overflow-x wrapper --}}
 
-    {{-- Tambah User Button (Atas, Kanan) --}}
-    <div class="flex justify-end mb-4">
+    <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 mb-6">
+        <div class="flex flex-col sm:flex-row w-full flex-1 gap-4">
+            {{-- Search --}}
+            <div class="relative w-full sm:flex-1 max-w-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor"
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari Nama..."
+                    class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
+            </div>
+
+            {{-- Filter Perusahaan --}}
+            <div class="relative w-full sm:w-56">
+                <select wire:model.live="company"
+                    class="w-full border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white appearance-none transition-all">
+                    <option value="">Semua Perusahaan</option>
+                    @foreach ($companies as $c)
+                        <option value="{{ $c->id }}">{{ $c->nama_company }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            @if ($company)
+                <div class="relative w-full sm:w-56">
+                    <select wire:model.live="department"
+                        class="w-full border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white appearance-none transition-all">
+                        <option value="">Semua Departemen</option>
+                        @foreach ($departments as $d)
+                            <option value="{{ $d->nama_department }}">{{ $d->nama_department }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
+        </div>
+
+        {{-- Tambah User Button (Atas, Kanan) --}}
         <button type="button" onclick="openAddUserModal()"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2e3746] hover:bg-[#1e2736] text-white text-sm font-semibold rounded-xl transition-colors shadow-sm shrink-0">
+            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#2e3746] hover:bg-[#1e2736] text-white text-sm font-semibold rounded-xl transition-colors shadow-sm shrink-0 w-full xl:w-auto">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
             Tambah User
         </button>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        {{-- Search --}}
-        <div class="md:col-span-2 relative">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                stroke="currentColor"
-                style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari Nama..."
-                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all">
-        </div>
-
-        {{-- Filter Perusahaan --}}
-        <div class="relative">
-            <select wire:model.live="company"
-                class="w-full border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white appearance-none transition-all">
-                <option value="">Semua Perusahaan</option>
-                @foreach ($companies as $c)
-                    <option value="{{ $c->id }}">{{ $c->nama_company }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        @if ($company)
-            <div class="relative">
-                <select wire:model.live="department"
-                    class="w-full border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] bg-white appearance-none transition-all">
-                    <option value="">Semua Departemen</option>
-                    @foreach ($departments as $d)
-                        <option value="{{ $d->nama_department }}">{{ $d->nama_department }}</option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
-
     </div>
 
     <div class="flex flex-col gap-8 relative">
@@ -269,21 +268,11 @@
             font-size: 0.8rem;
             color: #1e293b;
             border-bottom: 2px solid #cbd5e1;
-            border-right: 1px solid #d1d5db;
             background: #f1f5f9;
-        }
-
-        .user-management-wrapper .prem-table th:last-child {
-            border-right: none;
         }
 
         .user-management-wrapper .prem-table td {
             border-bottom: 1px solid #d1d5db;
-            border-right: 1px solid #e5e7eb;
-        }
-
-        .user-management-wrapper .prem-table td:last-child {
-            border-right: none;
         }
 
         .user-management-wrapper .prem-table tbody tr:last-child td {

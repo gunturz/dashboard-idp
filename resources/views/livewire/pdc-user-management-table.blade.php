@@ -196,23 +196,14 @@
                                                 <div class="flex items-center justify-center gap-2">
                                                     <button type="button"
                                                         onclick="openEditUserModal({{ $u->id }}, '{{ addslashes($u->username) }}', '{{ addslashes($u->nama) }}', '{{ addslashes($u->email) }}', '{{ $u->company_id }}', '{{ $u->department_id }}', '{{ $u->position_id }}', '{{ $roleKey }}')"
-                                                        class="inline-flex items-center justify-center w-9 h-9 bg-blue-500 hover:bg-blue-600 text-white border border-blue-600 hover:border-blue-700 rounded-lg transition-colors shadow-sm"
+                                                        class="inline-flex items-center justify-center w-9 h-9 bg-blue-500 hover:bg-blue-600 border border-blue-600 hover:border-blue-700 rounded-lg transition-colors shadow-sm"
                                                         title="Edit Profile">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="h-4 w-4 text-white" viewBox="0 0 24 24">
-                                                            <path fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                                d="M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                            <path fill="currentColor" fill-opacity="0.25"
-                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-                                                            <path fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-                                                            <path fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round" d="M16.862 4.487L19.5 7.125" />
+                                                            class="h-4 w-4 text-white" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                         </svg>
                                                     </button>
                                                     <button type="button"

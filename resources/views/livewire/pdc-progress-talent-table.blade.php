@@ -241,18 +241,15 @@
                                                         </a>
                                                         <div class="grid grid-cols-2 gap-1.5 w-full">
                                                             <a href="{{ route('pdc_admin.development_plan.edit', $detailRouteParams) }}"
-                                                                class="inline-flex h-9 w-full items-center justify-center rounded-lg bg-[#f7f1e4] text-[#334155] transition hover:bg-[#e5dfcf]"
+                                                                class="inline-flex h-9 w-full items-center justify-center rounded-lg bg-blue-500 hover:bg-blue-600 border border-blue-600 hover:border-blue-700 transition-colors shadow-sm"
                                                                 title="Edit development plan">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="h-4 w-4" fill="none"
+                                                                    class="h-4 w-4 text-white" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
                                                                     stroke-width="2">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round"
-                                                                        d="M16.862 4.487a2.25 2.25 0 113.182 3.182L7.5 20.212 3 21l.788-4.5L16.862 4.487z" />
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        d="M15 6.75l2.25 2.25" />
+                                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                                 </svg>
                                                             </a>
                                                             <button type="button"

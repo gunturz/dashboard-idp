@@ -312,8 +312,9 @@
         role="dialog" aria-modal="true" style="display: none;">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             {{-- Background overlay --}}
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
-                onclick="closePanelisModal()"></div>
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true"
+                style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);" onclick="closePanelisModal()">
+            </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             {{-- Modal panel --}}
             <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle w-full"

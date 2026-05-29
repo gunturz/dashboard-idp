@@ -272,18 +272,20 @@
             </div>
         @endif
         @if (session('status') === 'profile-updated')
-            <div id="success-banner" class="prof-alert-success">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="text-sm font-semibold text-teal-800">Profile berhasil diperbarui!</span>
-                </div>
-                <button onclick="document.getElementById('success-banner').remove()" class="text-teal-500 hover:text-teal-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => { show = false }, 3000)"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-[-10px]"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-[-10px]"
+                class="mb-6 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-xl shadow-sm w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500 flex-shrink-0" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Profile berhasil diperbarui!
             </div>
         @endif
 
@@ -377,7 +379,7 @@
                         <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}"
                                class="edit-field prof-input hidden">
                     @elseif ($field['type'] === 'select')
-                        <select name="{{ $field['key'] }}" class="edit-field prof-input hidden"
+                        <select name="{{ $field['key'] }}" class="edit-field prof-input hidden appearance-none pr-10 cursor-pointer" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
                                 {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
                             <option value="" disabled>Pilih {{ $field['label'] }}</option>
                             @foreach ($field['options'] as $opt)

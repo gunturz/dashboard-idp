@@ -209,8 +209,7 @@
                 </svg>
             </div>
             <h3>Belum Ada Project Improvement Talent</h3>
-            <p>{{ $search || $statusFilter ? 'Tidak ada data yang cocok dengan filter yang dipilih.' : 'Data akan muncul setelah talent meng-upload project improvement.' }}
-            </p>
+            <p>{{ $search || $statusFilter ? 'Tidak ada data validasi finance yang cocok dengan pencarian atau filter yang dipilih.' : 'Data akan muncul setelah talent meng-upload project improvement.' }}</p>
         </div>
     @endif
     <div id="actionModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4"

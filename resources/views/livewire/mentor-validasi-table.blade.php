@@ -67,11 +67,18 @@
 
     {{-- Flash Messages --}}
     @if (session('success'))
-        <div id="flash-success"
-            class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-xl shadow-sm">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => { show = false }, 3000)"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-[-10px]"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-[-10px]"
+            class="mb-5 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-xl shadow-sm w-full">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500 flex-shrink-0" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             {{ session('success') }}
         </div>
@@ -84,16 +91,13 @@
             <span class="text-sm font-bold text-[#475569] whitespace-nowrap">Pilih Talent:</span>
             <div class="relative flex-1">
                 <select wire:model.live="selectedTalentId"
-                    class="w-full border border-[#d1d5db] rounded-lg p-2.5 text-sm text-[#475569] font-medium outline-none focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf] bg-white appearance-none cursor-pointer">
+                    class="w-full border border-[#d1d5db] rounded-lg p-2.5 pr-10 text-sm text-[#475569] font-medium outline-none focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf] bg-white appearance-none cursor-pointer"
+                    style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;">
                     <option value="0">Tampilkan Semua Talent</option>
                     @foreach ($mentees as $m)
                         <option value="{{ $m->id }}">{{ $m->nama }}</option>
                     @endforeach
                 </select>
-                <svg class="w-4 h-4 text-[#94a3b8] absolute right-3.5 top-3.5 pointer-events-none" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
             </div>
         </div>
 

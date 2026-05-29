@@ -106,9 +106,14 @@ class PdcPanelisReviewTable extends Component
                     ),
                     'positions' => $sorted->groupBy(
                         function ($item) {
-                            $pos = $item->promotion_plan->target_position_id ?? 0;
+                            $plan = $item->promotion_plan;
+                            $pos = $plan->target_position_id ?? 0;
                             $dept = $item->department_id ?? 0;
-                            return $pos . '_' . $dept;
+                            $atasan = $item->atasan_id ?? 0;
+                            $start = optional(optional($plan)->start_date)->format('Y-m-d') ?? 'no-start';
+                            $target = optional(optional($plan)->target_date)->format('Y-m-d') ?? 'no-target';
+
+                            return $pos . '_' . $dept . '_' . $atasan . '_' . $start . '_' . $target;
                         }
                     )
                         ->map(

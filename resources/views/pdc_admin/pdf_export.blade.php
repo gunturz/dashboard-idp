@@ -422,12 +422,13 @@
         }
 
         .panelis-company-name {
-            font-family: poppins, 'PoppinsPdf', sans-serif !important;
-            font-style: normal !important;
-            font-weight: 300 !important;
+            font-family: 'PoppinsPdf', sans-serif !important;
+            font-style: italic !important;
+            font-weight: 400 !important;
             color: #666;
             font-size: 10px;
             margin-top: 2px;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -1005,7 +1006,7 @@
                                             {{ optional($pa->panelis)->nama ?? '-' }}
                                         </div>
                                         <div class="panelis-company-name"
-                                            style="font-family: poppins, 'PoppinsPdf', sans-serif !important; font-style: normal !important; font-weight: 300 !important; color: #666; font-size: 10px; margin-top: 2px;">
+                                            style="font-family: 'PoppinsPdf', sans-serif !important; font-style: italic !important; font-weight: 400 !important; color: #666; font-size: 10px; margin-top: 2px; line-height: 1.4;">
                                             {{ optional(optional($pa->panelis)->company)->nama_company ?? '' }}
                                         </div>
                                     </td>
@@ -1101,7 +1102,7 @@
                 <td style="width: 45%; border: none; background: transparent; padding: 0; vertical-align: top;">
                     <div style="font-size: 14px; color: #000000; margin-bottom: 6px;">Surakarta, {{ $exportDate }}
                     </div>
-                    <div style="font-size: 16px; color: #000000; font-weight: bold; margin-bottom: 70px;">Head of
+                    <div style="font-size: 16px; color: #000000; font-weight: bold; margin-bottom: 90px;">Head of
                         People Development Center</div>
                     <div style="border-top: 1.5px solid #555; padding-top: 6px; width: 220px;">
                         <div style="font-size: 16px; color: #000000; font-weight: bold;">Wisnu Wijaya Putra</div>

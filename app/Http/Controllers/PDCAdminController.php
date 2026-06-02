@@ -44,8 +44,17 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
+        // Role statistics
+        $roleCounts = [
+            'Talent' => User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))->count(),
+            'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
+            'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
+            'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
+            'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
+        ];
+
         // Summary Cards
-        $totalUsers = User::whereDoesntHave('role', fn($q) => $q->where('role_name', 'admin'))->count();
+        $totalUsers = array_sum($roleCounts);
         $onProgressTalent = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })->whereHas('promotion_plan', function ($q) {
@@ -62,15 +71,6 @@ class PDCAdminController extends Controller
                 });
         })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
-
-        // Role statistics
-        $roleCounts = [
-            'Talent' => User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))->count(),
-            'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
-            'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
-            'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
-            'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
-        ];
 
         // Fetch the 8 most recent talents whose development plan is still active
         // Menampilkan semua talent yang sedang aktif dalam siklus promosi (belum Promoted/Not Promoted)
@@ -455,7 +455,22 @@ class PDCAdminController extends Controller
                     'atasan_id' => null,
                 ]);
 
-                $talent->promotion_plan()->update(['is_active' => false]);
+                $plan = $talent->promotion_plan()->first();
+                if ($plan && $plan->development_session_id) {
+                    $sessionId = $plan->development_session_id;
+                    \App\Models\DevelopmentSession::where('id', $sessionId)->update(['is_active' => false, 'status' => 'Removed', 'completed_at' => now()]);
+                    \App\Models\PromotionPlan::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\AssessmentSession::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\IdpActivity::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\ImprovementProject::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\PanelisAssessment::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                } else {
+                    $talent->promotion_plan()->update(['is_active' => false]);
+                    $talent->assessmentSession()->update(['is_active' => false]);
+                    $talent->idpActivities()->update(['is_active' => false]);
+                    $talent->improvementProjects()->update(['is_active' => false]);
+                    $talent->panelisAssessments()->update(['is_active' => false]);
+                }
             }
         });
 

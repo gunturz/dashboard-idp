@@ -500,7 +500,9 @@
 
     <x-slot name="scripts">
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            function initPdcDashboard() {
+                const dashboard = document.getElementById('pdc-dashboard-wrapper');
+                if (!dashboard) return;
                 // ── Animated Counter ─────────────────────────────────────────────────
                 const counters = document.querySelectorAll('.animate-counter');
                 counters.forEach(counter => {
@@ -556,7 +558,15 @@
                     ctx.shadowBlur = 0;
                     ctx.fill();
                 }
-            });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initPdcDashboard);
+            } else {
+                initPdcDashboard();
+            }
+
+            document.addEventListener('livewire:navigated', initPdcDashboard);
         </script>
     </x-slot>
 

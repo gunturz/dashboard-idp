@@ -207,6 +207,11 @@
                 overflow-wrap: anywhere;
             }
 
+            .status-pill.ready-now { border-color: #22c55e; color: #16a34a; background: #f0fdf4; }
+            .status-pill.ready-1-2 { border-color: #3b82f6; color: #2563eb; background: #eff6ff; }
+            .status-pill.ready-over-2 { border-color: #f59e0b; color: #d97706; background: #fffbeb; }
+            .status-pill.not-ready { border-color: #ef4444; color: #dc2626; background: #fef2f2; }
+
             .score-pill {
                 display: inline-flex;
                 align-items: center;
@@ -388,7 +393,7 @@
                     optional($review['latestProject'])->title ??
                     'Penilaian Panelis - ' . (optional($reviewTalent->company)->nama_company ?? '-');
                 $scoreValues = $review['panelisAssessmentsByPanelis']->pluck('panelis_score')->filter();
-                $averageScore = $scoreValues->isNotEmpty() ? round($scoreValues->avg()) : null;
+                $averageScore = $scoreValues->isNotEmpty() ? round($scoreValues->avg() * 2) : null;
                 $statusPromo = optional($reviewPlan)->status_promotion;
                 $isComplete = in_array($statusPromo, ['Promoted', 'Not Promoted', 'Approved Panelis', 'Rejected Panelis', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
             @endphp
@@ -444,17 +449,25 @@
                             $panelisCompany = optional($panelis->company)->nama_company ?? optional($panelis->position)->position_name ?? 'Panelis';
                             $feedback = $assessment?->panelis_komentar ?: 'Belum ada feedback dari panelis.';
                             $recommendation = $assessment?->panelis_rekomendasi ?: 'Menunggu Penilaian';
-                            $score = $assessment?->panelis_score ?: '-';
+                            $score = $assessment?->panelis_score ? ($assessment->panelis_score * 2) : '-';
+                            
+                            $recClass = '';
+                            if ($recommendation !== 'Menunggu Penilaian') {
+                                if (stripos($recommendation, 'Ready Now') !== false) $recClass = 'ready-now';
+                                elseif (stripos($recommendation, 'Not Ready') !== false) $recClass = 'not-ready';
+                                elseif (str_contains($recommendation, '1') && str_contains($recommendation, '2')) $recClass = 'ready-1-2';
+                                elseif (str_contains($recommendation, '2')) $recClass = 'ready-over-2';
+                            }
                         @endphp
                         <article class="assessment-card">
                             <div class="assessment-head">
-                                <span class="assessment-name">Panelis {{ $panelisIndex + 1 }}</span>
+                                <span class="assessment-name">{{ $panelis->nama ?? ('Panelis ' . ($panelisIndex + 1)) }}</span>
                                 <span class="assessment-dot"></span>
                                 <span class="assessment-company">{{ $panelisCompany }}</span>
                             </div>
                             <div class="assessment-feedback">{{ $feedback }}</div>
                             <div class="assessment-bottom">
-                                <span class="status-pill">{{ $recommendation }}</span>
+                                <span class="status-pill {{ $recClass }}">{{ $recommendation }}</span>
                                 <span class="score-pill">{{ $score }}</span>
                             </div>
                         </article>

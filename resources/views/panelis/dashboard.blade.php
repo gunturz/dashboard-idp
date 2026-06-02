@@ -386,6 +386,13 @@
         </style>
     </x-slot>
 
+    @if (session('success'))
+        <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700">
+            <strong class="font-bold">Berhasil!</strong>
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+
     {{-- Page Title --}}
     <div class="mb-8">
         <div class="dash-header animate-title !mb-0">

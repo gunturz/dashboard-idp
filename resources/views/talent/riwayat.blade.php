@@ -42,59 +42,81 @@
                 font-weight: 500;
             }
 
-            /* ── Premium Card & Table ── */
-            .prem-card {
-                background: #f9fafb;
+            /* ── Custom Scrollbar for Mobile View ── */
+            .custom-scrollbar::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f8fafc;
+                border-radius: 10px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #0d9488;
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #0f766e;
+            }
+
+            @media (max-width: 767px) {
+                .custom-scrollbar {
+                    max-width: calc(100vw - 1.5rem);
+                }
+            }
+
+            .log-table-container {
+                background: white;
+                border-radius: 16px;
                 border: 1px solid #e2e8f0;
-                border-radius: 24px;
                 overflow: hidden;
+                position: relative;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
 
-            .prem-card:hover {
-                transform: none !important;
-            }
-
-            .highlight-table {
+            .pdc-log-table {
                 width: 100%;
                 border-collapse: collapse;
             }
 
-            .highlight-table thead {
-                background: #f1f5f9;
-            }
-
-            .highlight-table th {
+            .pdc-log-table th {
                 padding: 12px 16px;
-                text-align: center;
-                font-size: 0.75rem;
+                background: #f1f5f9;
                 font-weight: 700;
                 color: #1e293b;
+                font-size: 0.8rem;
+                text-align: center;
                 border-bottom: 2px solid #cbd5e1;
                 border-right: 1px solid #d1d5db;
             }
 
-            .highlight-table th:last-child {
+            .pdc-log-table th:last-child {
                 border-right: none;
             }
 
-            .highlight-table td {
+            .pdc-log-table td {
                 padding: 12px 16px;
-                font-size: 0.82rem;
                 color: #334155;
+                font-size: 0.88rem;
                 border-bottom: 1px solid #d1d5db;
                 border-right: 1px solid #e5e7eb;
                 vertical-align: middle;
             }
 
-            .highlight-table td:last-child {
+            .pdc-log-table td:last-child {
                 border-right: none;
             }
 
-            .highlight-table tr:hover td {
-                background: #f8fafc;
+            .pdc-log-table tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
             }
 
-            /* Row hover removed per request */
+            .pdc-log-table tr:hover td {
+                background: #f8fafc;
+            }
 
             .talent-name-main {
                 display: block;
@@ -109,65 +131,6 @@
                 color: #64748b;
                 font-style: italic;
                 margin-top: 3px;
-            }
-
-            /* ── Dashboard Style Buttons ── */
-            .btn-prem {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 10px 24px;
-                border-radius: 12px;
-                font-size: 0.85rem;
-                font-weight: 700;
-                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                white-space: nowrap;
-                cursor: pointer;
-                border: none;
-            }
-
-            .btn-action-teal {
-                padding: 0.75rem 1.5rem;
-                background: linear-gradient(135deg, #0d9488, #10b981);
-                color: white;
-                border: none;
-                border-radius: 12px;
-                font-size: 0.95rem;
-                font-weight: 700;
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.5rem;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
-                letter-spacing: 0.5px;
-                white-space: nowrap;
-            }
-
-            .btn-action-teal:hover {
-                background: linear-gradient(135deg, #0f766e, #059669);
-                box-shadow: 0 15px 25px -5px rgba(13, 148, 136, 0.5);
-                transform: translateY(-2px);
-            }
-
-            .btn-action-teal:active {
-                transform: translateY(0);
-                background: linear-gradient(135deg, #115e59, #065f46);
-                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
-            }
-
-            .btn-back-prem {
-                background: white;
-                border: 1.5px solid #e2e8f0;
-                color: #475569;
-                font-weight: 700;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            }
-
-            /* Back button hover simplified */
-            .btn-back-prem:active {
-                transform: scale(0.98);
             }
 
             .animate-reveal {
@@ -225,92 +188,182 @@
                 </div>
             </div>
         @else
-            {{-- Table Section (Dashboard Style) --}}
-            <div class="prem-card mb-12 overflow-x-auto mt-2">
-                <table class="highlight-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%; text-align: left;">Talent</th>
-                            <th style="width: 25%; text-align: left;">Perusahaan</th>
-                            <th style="width: 14%;">Start Date</th>
-                            <th style="width: 14%;">Due Date</th>
-                            <th style="width: 15%;">Status Promosi</th>
-                            <th style="width: 12%;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($sessions as $session)
-                            @php
-                                $startDate = \Carbon\Carbon::parse($session->start_date ?? $session->created_at);
-                                $dueDate = \Carbon\Carbon::parse($session->target_date ?? $session->created_at)->addMonths(isset($session->target_date) ? 0 : 6);
-                                // Gunakan posisi yang di-snapshot saat sesi dibuat
-                                $posName = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
-                                $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';
-                            @endphp
+            {{-- Table Section --}}
+            <div class="mb-12 relative">
+                {{-- Desktop View --}}
+                <div class="hidden md:block rounded-xl overflow-hidden border border-gray-200 w-full overflow-x-auto">
+                    <table class="w-full text-left bg-white min-w-[800px]">
+                        <thead class="bg-slate-50 border-b border-gray-200">
                             <tr>
-                                <td style="text-align: left;">
-                                    <span class="talent-name-main">{{ $user->nama }}</span>
-                                    <span class="talent-role-sub">{{ $posName }} – {{ $targetPos }}</span>
-                                </td>
-                                <td style="text-align: left;">
-                                    {{ optional($user->company)->nama_perusahaan ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
-                                </td>
-                                <td class="text-center font-bold text-gray-500">
-                                    {{ $startDate->translatedFormat('d F Y') }}
-                                </td>
-                                <td class="text-center font-bold text-gray-500">
-                                    {{ $dueDate->translatedFormat('d F Y') }}
-                                </td>
-                                <td class="text-center" style="vertical-align: middle;">
-                                    @php $promoStatus = $session->status_promotion; @endphp
-                                    @if ($promoStatus === 'Promoted')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
-                                            Ready Now
-                                        </span>
-                                    @elseif ($promoStatus === 'Ready in 1-2 Years')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
-                                            Ready 1–2 Years
-                                        </span>
-                                    @elseif ($promoStatus === 'Ready in > 2 Years')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
-                                            Ready &gt;2 Years
-                                        </span>
-                                    @elseif ($promoStatus === 'Not Ready')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                                            Not Ready
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
-                                            {{ $promoStatus ?? '-' }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('talent.riwayat.detail', $session->id) }}" class="btn-action-teal">
-                                        Lihat Detail
-                                    </a>
-                                </td>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Talent</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Perusahaan</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Start Date</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Due Date</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status Promosi</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                             </tr>
-                        @empty
+                        </thead>
+                        <tbody>
+                            @forelse($sessions as $session)
+                                @php
+                                    $startDate = \Carbon\Carbon::parse($session->start_date ?? $session->created_at);
+                                    $dueDate = \Carbon\Carbon::parse($session->target_date ?? $session->created_at)->addMonths(isset($session->target_date) ? 0 : 6);
+                                    // Gunakan posisi yang di-snapshot saat sesi dibuat
+                                    $posName = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
+                                    $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';
+                                @endphp
+                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                    <td class="py-4 px-6 text-center">
+                                        <span class="talent-name-main">{{ $user->nama }}</span>
+                                        <span class="talent-role-sub">{{ $posName }} – {{ $targetPos }}</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm font-semibold text-slate-800 text-center">
+                                        {{ optional($user->company)->nama_company ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
+                                    </td>
+                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap font-medium">
+                                        {{ $startDate->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap font-medium">
+                                        {{ $dueDate->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td class="py-4 px-6 text-center w-40">
+                                        @php $promoStatus = $session->status_promotion; @endphp
+                                        @if ($promoStatus === 'Promoted')
+                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
+                                                Ready Now
+                                            </span>
+                                        @elseif ($promoStatus === 'Ready in 1-2 Years')
+                                            <span class="inline-flex items-center gap-1.5 text-blue-600 text-[11px] font-bold bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                                                Ready 1–2 Years
+                                            </span>
+                                        @elseif ($promoStatus === 'Ready in > 2 Years')
+                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0"></span>
+                                                Ready &gt;2 Years
+                                            </span>
+                                        @elseif ($promoStatus === 'Not Ready')
+                                            <span class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                                                Not Ready
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 text-slate-600 text-[11px] font-bold bg-slate-50 px-3 py-1 rounded-full border border-slate-200">
+                                                {{ $promoStatus ?? '-' }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-4 px-6 text-center">
+                                        <a href="{{ route('talent.riwayat.detail', $session->id) }}"
+                                            class="inline-flex items-center gap-2 font-bold text-[13px] bg-[#14b8a6] text-white px-4 py-2 rounded-xl hover:bg-[#0d9488] transition-all duration-300 shadow-md shadow-teal-500/20 hover:shadow-lg hover:scale-105"
+                                            title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Detail
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-16 text-center text-gray-400">
+                                        Belum ada riwayat aktivitas pengembangan yang dicatat.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Mobile View --}}
+                <div class="block md:hidden log-table-container custom-scrollbar overflow-x-auto">
+                    <table class="pdc-log-table w-full" style="min-width: 700px;">
+                        <thead>
                             <tr>
-                                <td colspan="6" class="py-16 text-center">
-                                    <div class="flex flex-col items-center justify-center text-gray-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-20" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                        </svg>
-                                        <p class="font-bold text-lg">Belum ada riwayat</p>
-                                    </div>
-                                </td>
+                                <th style="width: 150px; font-size: 11px; padding: 8px;">Talent</th>
+                                <th style="width: 150px; font-size: 11px; padding: 8px;">Perusahaan</th>
+                                <th style="width: 100px; font-size: 11px; padding: 8px;">Start Date</th>
+                                <th style="width: 100px; font-size: 11px; padding: 8px;">Due Date</th>
+                                <th style="width: 110px; font-size: 11px; padding: 8px;">Status Promosi</th>
+                                <th style="width: 90px; font-size: 11px; padding: 8px;">Aksi</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($sessions as $session)
+                                @php
+                                    $startDate = \Carbon\Carbon::parse($session->start_date ?? $session->created_at);
+                                    $dueDate = \Carbon\Carbon::parse($session->target_date ?? $session->created_at)->addMonths(isset($session->target_date) ? 0 : 6);
+                                    $posName = $session->source_position_name ?? optional($user->position)->position_name ?? 'Staff';
+                                    $targetPos = $session->target_position_name ?? optional($user->promotion_plan)->targetPosition?->position_name ?? 'Supervisor';
+                                @endphp
+                                <tr>
+                                    <td class="text-center font-bold text-[#1e293b] text-[11px] p-2 leading-tight">
+                                        <span class="block text-slate-800 text-[12px] font-extrabold">{{ $user->nama }}</span>
+                                        <span class="block text-slate-500 text-[10px] italic font-medium mt-0.5">{{ $posName }} – {{ $targetPos }}</span>
+                                    </td>
+                                    <td class="text-center font-bold text-[#1e293b] text-[11px] p-2 whitespace-normal leading-tight">
+                                        {{ optional($user->company)->nama_company ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
+                                    </td>
+                                    <td class="text-center text-[10px] p-2 whitespace-nowrap font-medium text-slate-600">
+                                        {{ $startDate->translatedFormat('d M Y') }}
+                                    </td>
+                                    <td class="text-center text-[10px] p-2 whitespace-nowrap font-medium text-slate-600">
+                                        {{ $dueDate->translatedFormat('d M Y') }}
+                                    </td>
+                                    <td class="text-center p-2 whitespace-nowrap">
+                                        @php $promoStatus = $session->status_promotion; @endphp
+                                        @if ($promoStatus === 'Promoted')
+                                            <span class="inline-flex items-center gap-1 text-green-600 text-[9px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                                Ready Now
+                                            </span>
+                                        @elseif ($promoStatus === 'Ready in 1-2 Years')
+                                            <span class="inline-flex items-center gap-1 text-blue-600 text-[9px] font-bold bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                                Ready 1–2 Years
+                                            </span>
+                                        @elseif ($promoStatus === 'Ready in > 2 Years')
+                                            <span class="inline-flex items-center gap-1 text-orange-500 text-[9px] font-bold bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
+                                                Ready &gt;2 Years
+                                            </span>
+                                        @elseif ($promoStatus === 'Not Ready')
+                                            <span class="inline-flex items-center gap-1 text-red-600 text-[9px] font-bold bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+                                                Not Ready
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1 text-slate-600 text-[9px] font-bold bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200">
+                                                {{ $promoStatus ?? '-' }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center p-2">
+                                        <a href="{{ route('talent.riwayat.detail', $session->id) }}"
+                                            class="flex items-center justify-center w-6 h-6 rounded bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors border border-teal-100 mx-auto"
+                                            title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-12 px-6 text-center text-gray-400 text-xs">
+                                        Belum ada riwayat aktivitas pengembangan yang dicatat.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         @endif
     </div>

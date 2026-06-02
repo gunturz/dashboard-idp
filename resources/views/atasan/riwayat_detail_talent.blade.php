@@ -199,13 +199,13 @@
             }
 
             .gap-badge {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
+                display: block;
+                width: 100%;
+                height: 100%;
                 padding: 4px;
                 border-radius: 4px;
                 font-weight: 700;
-                min-width: 40px;
+                color: white;
             }
 
             .gap-none {
@@ -226,6 +226,28 @@
             .gap-large {
                 background: #ef4444;
                 color: white;
+            }
+
+            .legend {
+                display: flex;
+                gap: 16px;
+                font-size: 0.65rem;
+                font-weight: 700;
+                color: #64748b;
+                margin-bottom: 12px;
+                text-transform: uppercase;
+            }
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .legend-box {
+                width: 12px;
+                height: 12px;
+                border-radius: 2px;
             }
 
             .row-summary td {
@@ -513,28 +535,22 @@
                 animation: fadeSlideUp 0.35s ease both;
             }
 
-            .admin-section-title {
-                position: relative;
-                padding-left: 14px;
+            .section-title {
                 display: flex;
                 align-items: center;
-                gap: 10px;
+                gap: 12px;
                 font-size: 1.25rem;
                 font-weight: 800;
                 color: #1e293b;
+                margin-top: 24px;
                 margin-bottom: 24px;
             }
 
-            .admin-section-title::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 4px;
-                height: 18px;
-                background: linear-gradient(180deg, #14b8a6, #0d9488);
-                border-radius: 99px;
+            .section-title svg {
+                width: 24px;
+                height: 24px;
+                color: #0f172a;
+                flex-shrink: 0;
             }
 
             @media (max-width: 1024px) {
@@ -566,22 +582,140 @@
                     padding: 10px 24px;
                 }
             }
+
+            /* Custom Scrollbar & Logbook Table */
+            .custom-scrollbar::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f8fafc;
+                border-radius: 10px;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #0d9488;
+                border-radius: 10px;
+                border: 2px solid #f8fafc;
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #0f766e;
+            }
+
+            .log-table-container {
+                background: white;
+                border-radius: 16px;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+
+            .pdc-log-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .pdc-log-table th {
+                padding: 12px 16px;
+                background: #f1f5f9;
+                font-weight: 700;
+                color: #1e293b;
+                font-size: 0.8rem;
+                text-align: center;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+                text-transform: capitalize;
+            }
+
+            .pdc-log-table th:last-child {
+                border-right: none;
+            }
+
+            .pdc-log-table td {
+                padding: 12px 16px;
+                color: #334155;
+                font-size: 0.88rem;
+                border-bottom: 1px solid #d1d5db;
+                border-right: 1px solid #e5e7eb;
+                vertical-align: middle;
+            }
+
+            .pdc-log-table td:last-child {
+                border-right: none;
+            }
+
+            .pdc-log-table tr:last-child td {
+                border-bottom: 1px solid #d1d5db;
+            }
+
+            .pdc-log-table tr:hover td {
+                background: #f8fafc;
+            }
+
+            .filter-pills {
+                display: flex;
+                background: #e2e8f0;
+                padding: 4px;
+                border-radius: 9999px;
+                width: fit-content;
+                margin-bottom: 20px;
+            }
+
+            .pill {
+                padding: 8px 32px;
+                border-radius: 9999px;
+                font-size: 0.875rem;
+                font-weight: 700;
+                color: #475569;
+                cursor: pointer;
+                transition: all 0.2s;
+                border: none;
+                background: transparent;
+            }
+
+            .pill:hover {
+                background: #cbd5e1;
+                color: #1e293b;
+            }
+
+            .pill.active {
+                background: #0f172a;
+                color: white;
+                box-shadow: 0 2px 12px rgba(15, 23, 42, 0.22);
+            }
         </style>
     </x-slot>
 
     {{-- ── Page Header ── --}}
-    <div class="page-header animate-title">
-        <div class="page-header-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
+    <div class="page-header animate-title flex items-center justify-between mt-2">
+        <div class="flex items-center gap-4">
+            <div class="page-header-icon" style="background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd"
+                        d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z"
+                        clip-rule="evenodd" />
+                    <path fill-rule="evenodd"
+                        d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <div class="flex items-center gap-3">
+                    <h1 class="page-header-title" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1;">Riwayat Progres Talent</h1>
+                </div>
+                <p class="page-header-sub" style="font-size: 0.875rem; color: #64748b; margin-top: 4px; font-weight: 500;">Individual Development Plan – Monitoring Talent</p>
+            </div>
         </div>
         <div>
-            <div class="flex items-center gap-3">
-                <h1 class="page-header-title">Riwayat Progres Talent</h1>
-            </div>
-            <p class="page-header-sub">Pantau detail capaian kompetensi dan progres IDP individu secara real-time</p>
+            <a href="{{ route('atasan.riwayat') }}"
+                class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-bold px-6 py-2.5 rounded-xl transition-all shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali
+            </a>
         </div>
     </div>
 
@@ -600,13 +734,18 @@
                     onclick="switchRiwayatSection('idp', this)">IDP Monitoring</button>
                 <button type="button" class="tab-item" data-section="project"
                     onclick="switchRiwayatSection('project', this)">Project Improvement</button>
-                <button type="button" class="tab-item" data-section="logbook"
-                    onclick="switchRiwayatSection('logbook', this)">LogBook</button>
             </div>
         </div>
 
         <div id="section-kompetensi" class="tab-section">
-            <div class="admin-section-title">Kompetensi</div>
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd"
+                        d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                        clip-rule="evenodd" />
+                </svg>
+                Kompetensi
+            </div>
 
         {{-- TOP 3 GAP Kompetensi --}}
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.1s;">
@@ -673,17 +812,34 @@
                     Heatmap Kompetensi
                 </div>
             </div>
+            <div class="p-6 pb-4">
+                <div class="legend flex-wrap">
+                    <span class="mr-2">Keterangan GAP:</span>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #6293ff;"></div> Di Atas Standar (> 0)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (&lt; -1.5)
+                    </div>
+                </div>
+            </div>
             <div class="p-0">
                 <div class="overflow-x-auto custom-scrollbar">
                     <table class="heatmap-table">
                         <thead>
                             <tr>
-                                <th class="th-main" style="width:30%">Kompetensi</th>
-                                <th class="th-main" style="width:70px">Standar</th>
-                                <th class="th-sub">Skor Talent</th>
-                                <th class="th-sub">Skor Atasan</th>
-                                <th class="th-sub">Final Score</th>
-                                <th class="th-sub" style="width:110px">Gap</th>
+                                <th class="th-main" style="width:30%">KOMPETENSI</th>
+                                <th class="th-main" style="width:80px">STANDAR</th>
+                                <th class="th-sub">SKOR TALENT</th>
+                                <th class="th-sub">SKOR ATASAN</th>
+                                <th class="th-sub">FINAL SCORE</th>
+                                <th class="th-sub" style="width:110px">GAP</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -697,7 +853,7 @@
                                     $gap = $finalScore - $standard;
 
                                     $gapClass = 'gap-none';
-                                    if ($gap <= -2) {
+                                    if ($gap < -1.5) {
                                         $gapClass = 'gap-large';
                                     } elseif ($gap < 0) {
                                         $gapClass = 'gap-small';
@@ -707,13 +863,13 @@
                                 @endphp
                                 <tr>
                                     <td class="td-left">{{ $comp->name }}</td>
-                                    <td>{{ $standard % 1 == 0 ? (int) $standard : number_format($standard, 1) }}</td>
+                                    <td>{{ number_format($standard, 1) }}</td>
                                     <td><span class="font-bold">{{ $scoreTalent ?: '-' }}</span></td>
                                     <td><span class="font-bold">{{ $scoreAtasan ?: '-' }}</span></td>
                                     <td><span
                                             class="font-bold">{{ $finalScore ? ($finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1)) : '-' }}</span>
                                     </td>
-                                    <td class="text-center p-2">
+                                    <td class="p-1">
                                         <span
                                             class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
                                     </td>
@@ -728,7 +884,7 @@
                             $avgGap = $avgFinal - $avgStandard;
 
                             $avgGapClass = 'gap-none';
-                            if ($avgGap <= -2) {
+                            if ($avgGap < -1.5) {
                                 $avgGapClass = 'gap-large';
                             } elseif ($avgGap < 0) {
                                 $avgGapClass = 'gap-small';
@@ -743,8 +899,9 @@
                                 <td>{{ number_format($avgTalent, 1) }}</td>
                                 <td>{{ number_format($avgAtasan, 1) }}</td>
                                 <td>{{ number_format($avgFinal, 1) }}</td>
-                                <td class="text-center p-2 font-bold text-[#1e293b]">
-                                    {{ number_format($avgGap, 2) }}
+                                <td class="p-1">
+                                    <span
+                                        class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 1) }}</span>
                                 </td>
                             </tr>
                         </tfoot>
@@ -757,7 +914,16 @@
 
         {{-- IDP Monitoring --}}
         <div id="section-idp" class="tab-section" style="display: none;">
-            <div class="admin-section-title">IDP Monitoring</div>
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd"
+                        d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                    <path
+                        d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                </svg>
+                IDP Monitoring
+            </div>
 
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.3s;">
             <div class="prem-card-header">
@@ -837,10 +1003,16 @@
                                         style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                                 </div>
                             </div>
-                            <div
-                                class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2">
+                            <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'tab' => strtolower($label), 'session_id' => $sessionId]) }}"
+                                class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
                                 <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
-                            </div>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -851,7 +1023,13 @@
 
         {{-- Project Improvement --}}
         <div id="section-project" class="tab-section" style="display: none;">
-            <div class="admin-section-title">Project Improvement</div>
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path
+                        d="M19.5 6h-6.879a1.5 1.5 0 0 1-1.06-.44l-.622-.62A1.5 1.5 0 0 0 9.88 4.5H6A2.25 2.25 0 0 0 3.75 6.75v10.5A2.25 2.25 0 0 0 6 19.5h13.5a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 19.5 6Z" />
+                </svg>
+                Project Improvement
+            </div>
 
         <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.4s;">
             <div class="prem-card-header">
@@ -939,41 +1117,6 @@
         </div>
 
         </div>
-
-        {{-- LogBook --}}
-        <div id="section-logbook" class="tab-section" style="display: none;">
-            <div class="admin-section-title">LogBook</div>
-
-        <div class="prem-card mb-12 animate-fade-in" style="animation-delay: 0.5s;">
-            <div class="p-8">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div class="flex items-center gap-6">
-                        <div
-                            class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-bold text-[#1e293b] mb-1">Rekap Aktivitas LogBook</h4>
-                            <p class="text-sm text-gray-500 leading-relaxed md:max-w-md">Pantau progress
-                                Exposure, Mentoring, dan Learning secara lengkap melalui dashboard logbook
-                                terintegrasi.</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'session_id' => $sessionId ?? optional($talent->promotion_plan)->development_session_id]) }}"
-                        class="btn-prem btn-teal px-8 py-3 rounded-xl shadow-md whitespace-nowrap">
-                        Lihat Detail Selengkapnya
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        </div>
-
-        <div class="h-8"></div>
     </div>
 
     <script>

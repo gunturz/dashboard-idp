@@ -103,6 +103,18 @@ const formatAndHideSuccessAlerts = () => {
     selectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(alert => {
             if (alert.dataset.formatted) return;
+
+            // Jangan ubah badge/status pill kecil di tabel atau list.
+            // Approved/Rejected di dashboard sering memakai `span.inline-flex`,
+            // dan sebelumnya ikut terformat sebagai alert sukses.
+            const isStatusBadge =
+                alert.tagName === 'SPAN' ||
+                alert.classList.contains('inline-flex') ||
+                alert.classList.contains('rounded-full') ||
+                alert.closest('table') !== null;
+
+            if (isStatusBadge) return;
+
             alert.dataset.formatted = "true";
 
             // Get message content using a highly robust extraction strategy

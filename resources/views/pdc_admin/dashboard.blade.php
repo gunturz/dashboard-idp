@@ -500,7 +500,10 @@
 
     <x-slot name="scripts">
         <script>
-            function initDashboard() {
+            function initPdcDashboard() {
+                const dashboard = document.getElementById('pdc-dashboard-wrapper');
+                if (!dashboard) return;
+
                 // ── Animated Counter ─────────────────────────────────────────────────
                 const counters = document.querySelectorAll('.animate-counter');
                 counters.forEach(counter => {
@@ -522,8 +525,10 @@
                     const ctx = canvas.getContext('2d');
                     const roleChartData = {!! $roleChartDataJson ?? '[]' !!};
 
-                    const W = canvas.width, H = canvas.height;
-                    const cx = W / 2, cy = H / 2;
+                    const W = canvas.width,
+                        H = canvas.height;
+                    const cx = W / 2,
+                        cy = H / 2;
                     const R = Math.min(W, H) / 2 - 14;
                     const r = R * 0.60;
 
@@ -558,15 +563,13 @@
                 }
             }
 
-            // Run on initial load
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initDashboard);
+                document.addEventListener('DOMContentLoaded', initPdcDashboard);
             } else {
-                initDashboard();
+                initPdcDashboard();
             }
 
-            // Run on Livewire navigation (wire:navigate)
-            document.addEventListener('livewire:navigated', initDashboard);
+            document.addEventListener('livewire:navigated', initPdcDashboard);
         </script>
     </x-slot>
 

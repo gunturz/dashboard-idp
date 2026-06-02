@@ -80,23 +80,10 @@
                     onchange="filterTalents()">
                     <option value="">Semua Perusahaan</option>
                     @php
-                        $uniqueCompanies = collect();
-                        foreach ($groupedData as $group) {
-                            if (isset($group['company']) && $group['company']) {
-                                $uniqueCompanies->push($group['company']->nama_company);
-                            }
-                        }
-                        $uniqueCompanies = $uniqueCompanies
+                        $uniqueCompanies = collect($groupedData)
+                            ->map(fn($group) => $group['company']->nama_company ?? null)
+                            ->filter()
                             ->unique()
-                            ->sortBy(function ($name) {
-                                if (strpos($name, 'PT. Tiga Serangkai Inti Corpora') !== false) {
-                                    return '1';
-                                }
-                                if (strpos($name, 'PT. Tiga Serangkai Pustaka Mandiri') !== false) {
-                                    return '2';
-                                }
-                                return '3-' . $name;
-                            })
                             ->values();
                     @endphp
                     @foreach ($uniqueCompanies as $comp)

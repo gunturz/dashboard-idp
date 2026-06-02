@@ -52,8 +52,7 @@
                 <button type="button" wire:click="$set('search', '')" class="btn-prem btn-ghost">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     Reset
                 </button>
@@ -61,8 +60,8 @@
 
             <a href="{{ route('pdc_admin.development_plan') }}"
                 class="flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-[#0f172a] hover:bg-[#1f2937] rounded-xl transition-all whitespace-nowrap shadow-lg shadow-slate-200 transform hover:scale-[1.02] active:scale-[0.98]">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                    stroke-width="3" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 Development Plan
@@ -136,8 +135,8 @@
                                         }
                                         $groupLabel = trim(
                                             ($posData['targetPosition']->position_name ?? '-') .
-                                                ' - ' .
-                                                ($posData['department_name'] ?? '-'),
+                                            ' - ' .
+                                            ($posData['department_name'] ?? '-'),
                                         );
                                         $talentNames = $posData['talents']->pluck('nama')->filter()->implode(', ');
                                     @endphp
@@ -147,22 +146,21 @@
                                             @if ($index === 0)
                                                 <td rowspan="{{ count($posData['talents']) }}" class="px-5 py-4"
                                                     style="text-align:center; vertical-align:middle;">
-                                                    <div
-                                                        class="flex flex-col items-center justify-center gap-2 px-4 py-2">
+                                                    <div class="flex flex-col items-center justify-center gap-2 px-4 py-2">
                                                         <div
                                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-200/60 bg-teal-50/50">
                                                             <span
                                                                 class="font-bold text-teal-900 text-sm leading-none">{{ $posData['targetPosition']->position_name ?? '-' }}</span>
                                                         </div>
-                                                        <span
-                                                            class="text-[11px] text-slate-500 font-medium">{{ $periodLabel }}</span>
+                                                        <span class="text-[11px] text-slate-500 font-medium">{{ $periodLabel }}</span>
                                                     </div>
                                                 </td>
                                             @endif
                                             <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
                                                 <div style="display: inline-block; text-align: center; width: 100%;">
                                                     <div class="font-bold text-sm text-slate-800 leading-tight">
-                                                        {{ $talent->nama }}</div>
+                                                        {{ $talent->nama }}
+                                                    </div>
                                                     <div class="text-xs text-gray-500 font-medium mt-1">
                                                         {{ optional($talent->position)->position_name ?? 'Officer' }}
                                                     </div>
@@ -189,9 +187,8 @@
                                                     @forelse($mentorList as $mn)
                                                         <span
                                                             class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[0.75rem] font-semibold text-blue-700 bg-blue-50 border border-blue-200 whitespace-nowrap">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 20 20"
-                                                                fill="currentColor">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-blue-500"
+                                                                viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd"
                                                                     d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                                                                     clip-rule="evenodd" />
@@ -209,8 +206,7 @@
                                                     @if ($atasanName)
                                                         <span
                                                             class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[0.75rem] font-semibold text-purple-700 bg-purple-50 border border-purple-200 whitespace-nowrap">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-3.5 h-3.5 text-purple-500"
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-purple-500"
                                                                 viewBox="0 0 20 20" fill="currentColor">
                                                                 <path
                                                                     d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
@@ -225,15 +221,13 @@
                                             @if ($index === 0)
                                                 <td rowspan="{{ count($posData['talents']) }}" class="px-5 py-4"
                                                     style="vertical-align:middle;">
-                                                    <div
-                                                        class="flex flex-col gap-1.5 py-1 w-full max-w-[120px] mx-auto">
+                                                    <div class="flex flex-col gap-1.5 py-1 w-full max-w-[120px] mx-auto">
                                                         <a href="{{ route('pdc_admin.detail', $detailRouteParams) }}"
                                                             class="btn-prem btn-teal inline-flex items-center justify-center h-9 w-full px-2"
                                                             style="margin: 0; font-size: 11px; white-space: nowrap;">
                                                             Lihat Detail
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-3.5 h-3.5 ml-1 shrink-0" viewBox="0 0 20 20"
-                                                                fill="currentColor">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 ml-1 shrink-0"
+                                                                viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd"
                                                                     d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
                                                                     clip-rule="evenodd" />
@@ -243,12 +237,10 @@
                                                             <a href="{{ route('pdc_admin.development_plan.edit', $detailRouteParams) }}"
                                                                 class="inline-flex h-9 w-full items-center justify-center rounded-lg bg-blue-500 hover:bg-blue-600 border border-blue-600 hover:border-blue-700 transition-colors shadow-sm"
                                                                 title="Edit development plan">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="h-4 w-4 text-white" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white"
+                                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                                     stroke-width="2">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
                                                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                                 </svg>
                                                             </a>
@@ -256,12 +248,9 @@
                                                                 class="inline-flex h-9 w-full items-center justify-center rounded-lg border border-red-500 bg-[#ef4444] text-white transition hover:bg-[#dc2626]"
                                                                 title="Hapus progress talent"
                                                                 wire:click="openDeleteModal('{{ route('pdc_admin.development_plan.destroy', $detailRouteParams) }}', '{{ addslashes($groupLabel) }}', '{{ addslashes($talentNames) }}')">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="h-4 w-4" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    stroke-width="2">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
                                                                         d="M6 7.5h12M9.75 7.5V6a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v1.5m-7.5 0v10.125A1.875 1.875 0 008.625 19.5h6.75a1.875 1.875 0 001.875-1.875V7.5M10.5 10.5v5.25m3-5.25v5.25" />
                                                                 </svg>
                                                             </button>
@@ -276,59 +265,61 @@
                         </table>
                     </div>
                 </div>
-                @empty
-                    <div class="empty-prem">
-                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                            </svg>
-                        </div>
-                        <h3>{{ $search || $companyFilter || $positionFilter || $departmentFilter ? 'Tidak Ada Data Talent' : 'Belum Ada Data Talent' }}</h3>
-                        <p>{{ $search || $companyFilter || $positionFilter || $departmentFilter ? 'Tidak ada data progress talent yang cocok dengan pencarian atau filter yang dipilih.' : 'Data akan muncul setelah talent memiliki development plan aktif.' }}</p>
+            @empty
+                <div class="empty-prem">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+                        style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
                     </div>
-                @endforelse
-            </div>{{-- /progress-talent-wrapper --}}
-        </div>
+                    <h3>{{ $search ? 'Tidak Ada Data Talent' : 'Belum Ada Data Talent' }}</h3>
+                    <p>{{ $search ? 'Tidak ada data progress talent yang cocok dengan pencarian Anda.' : 'Data akan muncul setelah talent memiliki development plan aktif.' }}
+                    </p>
+                </div>
+            @endforelse
+        </div>{{-- /progress-talent-wrapper --}}
+    </div>
 
-        {{-- Delete Confirmation Modal (handled via Livewire property, not JS) --}}
-        @if ($showDeleteModal)
-            <div class="delete-modal-backdrop" wire:click.self="$set('showDeleteModal', false)">
-                <div class="delete-modal-panel">
-                    <div class="px-6 pt-6 pb-4">
-                        <div
-                            class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 9v3.75m0 3h.008v.008H12v-.008Zm-7.938 4.5h15.876c1.54 0 2.502-1.667 1.732-3L13.732 4.5c-.77-1.333-2.694-1.333-3.464 0L2.33 17.25c-.77 1.333.192 3 1.732 3Z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-center text-lg font-bold text-slate-800">Hapus Progress Talent?</h3>
-                        <p class="mt-2 text-center text-sm leading-6 text-slate-500">
-                            Progress talent untuk posisi <span
-                                class="font-semibold text-slate-700">{{ $deletePositionName }}</span> dengan nama talent
-                            <span class="font-semibold text-slate-700">{{ $deleteTalentNames }}</span> akan dihapus.
-                            Tindakan ini tidak bisa dibatalkan.
-                        </p>
+    {{-- Delete Confirmation Modal (handled via Livewire property, not JS) --}}
+    @if ($showDeleteModal)
+        <div class="delete-modal-backdrop" wire:click.self="$set('showDeleteModal', false)">
+            <div class="delete-modal-panel">
+                <div class="px-6 pt-6 pb-4">
+                    <div
+                        class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m0 3h.008v.008H12v-.008Zm-7.938 4.5h15.876c1.54 0 2.502-1.667 1.732-3L13.732 4.5c-.77-1.333-2.694-1.333-3.464 0L2.33 17.25c-.77 1.333.192 3 1.732 3Z" />
+                        </svg>
                     </div>
-                    <div class="flex items-center justify-end gap-3 border-t border-slate-100 px-6 py-4">
-                        <button type="button"
-                            class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-                            wire:click="$set('showDeleteModal', false)">
-                            Batal
+                    <h3 class="text-center text-lg font-bold text-slate-800">Hapus Progress Talent?</h3>
+                    <p class="mt-2 text-center text-sm leading-6 text-slate-500">
+                        Progress talent untuk posisi <span
+                            class="font-semibold text-slate-700">{{ $deletePositionName }}</span> dengan nama talent
+                        <span class="font-semibold text-slate-700">{{ $deleteTalentNames }}</span> akan dihapus.
+                        Tindakan ini tidak bisa dibatalkan.
+                    </p>
+                </div>
+                <div class="flex items-center justify-end gap-3 border-t border-slate-100 px-6 py-4">
+                    <button type="button"
+                        class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                        wire:click="$set('showDeleteModal', false)">
+                        Batal
+                    </button>
+                    <form action="{{ $deleteAction }}" method="POST" id="livewire-delete-progress-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="inline-flex items-center justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600">
+                            Hapus
                         </button>
-                        <form action="{{ $deleteAction }}" method="POST" id="livewire-delete-progress-form">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="inline-flex items-center justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600">
-                                Hapus
-                            </button>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
+</div>

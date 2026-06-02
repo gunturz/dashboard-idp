@@ -1139,6 +1139,21 @@
                 ]
             },
             {
+                title: 'Alur Reset Password',
+                steps: [
+                    { t: 'S' },
+                    { t: 'A', txt: 'User Klik "lupa password"', lane: 'user', forceType: 'DATA' },
+                    { t: 'A', txt: 'User memasukkan Username / Email', lane: 'user', forceType: 'DATA' },
+                    { t: 'A', txt: 'Sistem mengecek username / email di tabel users', lane: 'sistem', forceType: 'PROC' },
+                    { t: 'D', txt: 'Email atau Username ditemukan?', yes: 'Ya', no: 'Tidak â†’ Tampil Error' },
+                    { t: 'A', txt: 'Sistem mengirim email berisi link reset', lane: 'sistem', forceType: 'DATA' },
+                    { t: 'A', txt: 'User klik tombol reset password', lane: 'user', forceType: 'DATA' },
+                    { t: 'A', txt: 'User mengisi password baru dan konfirmasi password', lane: 'user', forceType: 'DATA' },
+                    { t: 'A', txt: 'Sistem akan mengganti passwordnya sesuai dengan password yang baru', lane: 'sistem', forceType: 'PROC' },
+                    { t: 'E' },
+                ]
+            },
+            {
                 title: 'Alur Talent: Submit IDP Logbook',
                 steps: [
                     { t: 'S' },
@@ -1306,23 +1321,6 @@
                     { t: 'A', txt: 'Finance masuk ke halaman Riwayat', lane: 'finance', forceType: 'DATA' },
                     { t: 'A', txt: 'Menampilkan Riwayat Validasi Project Improvement Talent', lane: 'sistem', forceType: 'DATA' },
                     { t: 'CUSTOM_FINANCE_RIWAYAT' },
-                    { t: 'E' },
-                ]
-            },
-            {
-                title: 'Alur Reset Password',
-                steps: [
-                    { t: 'S' },
-                    { t: 'A', txt: 'User klik "Lupa Password" â†’ isi email', lane: 'user' },
-                    { t: 'A', txt: 'Sistem cek email di tabel users', lane: 'sistem' },
-                    { t: 'D', txt: 'Email ditemukan?', yes: 'Ya', no: 'Tidak â†’ tampil error' },
-                    { t: 'A', txt: 'Generate token hash â†’ simpan di password_resets (expires_at, is_used=false)', lane: 'sistem' },
-                    { t: 'A', txt: 'Kirim email berisi link reset', lane: 'sistem' },
-                    { t: 'A', txt: 'User klik link â†’ buka form password baru', lane: 'user' },
-                    { t: 'A', txt: 'Validasi token: ada, belum kedaluarsa, is_used=false', lane: 'sistem' },
-                    { t: 'D', txt: 'Token valid?', yes: 'Ya', no: 'Tidak â†’ Error, minta ulang' },
-                    { t: 'A', txt: 'Update password user â†’ tandai token is_used=true', lane: 'sistem' },
-                    { t: 'A', txt: 'Catat di audit_activity: event=password_reset', lane: 'sistem' },
                     { t: 'E' },
                 ]
             },
@@ -2446,6 +2444,10 @@
                     card.style.borderColor = '#d6b656';
                     header.style.backgroundColor = '#fff2cc';
                     header.style.color = '#1a1a1a';
+                } else if (tf.title.includes('Reset Password') || tf.title.includes('Autentikasi')) {
+                    card.style.borderColor = '#5d9c24';
+                    header.style.backgroundColor = '#65aa28';
+                    header.style.color = '#ffffff';
                 }
                 container.appendChild(card);
             });

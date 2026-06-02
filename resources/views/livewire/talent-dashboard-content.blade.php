@@ -346,8 +346,9 @@
 
         <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
+
             @if (session('success_project'))
-                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
                     x-transition:leave="transition ease-out duration-500"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
@@ -357,6 +358,7 @@
                     <span class="block sm:inline">{{ session('success_project') }}</span>
                 </div>
             @endif
+
             @if (session('error'))
                 <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-[10px] relative text-sm"
                     role="alert">

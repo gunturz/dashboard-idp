@@ -44,8 +44,17 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
+        // Role statistics
+        $roleCounts = [
+            'Talent' => User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))->count(),
+            'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
+            'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
+            'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
+            'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
+        ];
+
         // Summary Cards
-        $totalUsers = User::whereDoesntHave('role', fn($q) => $q->where('role_name', 'admin'))->count();
+        $totalUsers = array_sum($roleCounts);
         $onProgressTalent = User::whereHas('roles', function ($q) {
             $q->where('role_name', 'talent');
         })->whereHas('promotion_plan', function ($q) {
@@ -62,15 +71,6 @@ class PDCAdminController extends Controller
                 });
         })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
-
-        // Role statistics
-        $roleCounts = [
-            'Talent' => User::whereHas('roles', fn($q) => $q->where('role_name', 'talent'))->count(),
-            'Mentor' => User::whereHas('roles', fn($q) => $q->where('role_name', 'mentor'))->count(),
-            'Atasan' => User::whereHas('roles', fn($q) => $q->where('role_name', 'atasan'))->count(),
-            'Finance' => User::whereHas('roles', fn($q) => $q->where('role_name', 'finance'))->count(),
-            'Panelis' => User::whereHas('roles', fn($q) => $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']))->count(),
-        ];
 
         // Fetch the 8 most recent talents whose development plan is still active
         // Menampilkan semua talent yang sedang aktif dalam siklus promosi (belum Promoted/Not Promoted)
@@ -328,7 +328,16 @@ class PDCAdminController extends Controller
     public function developmentPlan()
     {
         $user = auth()->user();
-        $companies = Company::orderBy('nama_company')->get();
+        $companies = Company::orderByRaw("
+            CASE 
+                WHEN nama_company LIKE '%Inti corpora%' THEN 1
+                WHEN nama_company LIKE '%Pustaka mandiri%' THEN 2
+                WHEN nama_company LIKE '%Wangsa Jatra Lestari%' THEN 3
+                WHEN nama_company LIKE '%Assalam Niaga Utama%' THEN 4
+                WHEN nama_company LIKE '%K33 Distribusi%' THEN 5
+                ELSE 6 
+            END ASC
+        ")->orderBy('nama_company')->get();
         $departments = Department::orderBy('nama_department')->get();
 
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->orderBy('grade_level')->get();
@@ -355,7 +364,17 @@ class PDCAdminController extends Controller
     public function editDevelopmentPlan($company_id, $position_id)
     {
         $user = auth()->user();
-        $companies = Company::orderBy('nama_company')->get();
+        // $companies = Company::orderBy('nama_company')->get();
+        $companies = Company::orderByRaw("
+            CASE 
+                WHEN nama_company LIKE '%Inti corpora%' THEN 1
+                WHEN nama_company LIKE '%Pustaka mandiri%' THEN 2
+                WHEN nama_company LIKE '%Wangsa Jatra Lestari%' THEN 3
+                WHEN nama_company LIKE '%Assalam Niaga Utama%' THEN 4
+                WHEN nama_company LIKE '%K33 Distribusi%' THEN 5
+                ELSE 6 
+            END ASC
+        ")->orderBy('nama_company')->get();
         $departments = Department::orderBy('nama_department')->get();
         $departmentsByCompany = $departments
             ->groupBy('company_id')
@@ -455,7 +474,22 @@ class PDCAdminController extends Controller
                     'atasan_id' => null,
                 ]);
 
-                $talent->promotion_plan()->update(['is_active' => false]);
+                $plan = $talent->promotion_plan()->first();
+                if ($plan && $plan->development_session_id) {
+                    $sessionId = $plan->development_session_id;
+                    \App\Models\DevelopmentSession::where('id', $sessionId)->update(['is_active' => false, 'status' => 'Removed', 'completed_at' => now()]);
+                    \App\Models\PromotionPlan::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\AssessmentSession::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\IdpActivity::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\ImprovementProject::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                    \App\Models\PanelisAssessment::where('development_session_id', $sessionId)->update(['is_active' => false]);
+                } else {
+                    $talent->promotion_plan()->update(['is_active' => false]);
+                    $talent->assessmentSession()->update(['is_active' => false]);
+                    $talent->idpActivities()->update(['is_active' => false]);
+                    $talent->improvementProjects()->update(['is_active' => false]);
+                    $talent->panelisAssessments()->update(['is_active' => false]);
+                }
             }
         });
 
@@ -1170,7 +1204,16 @@ class PDCAdminController extends Controller
             ->toArray();
         $positions = Position::whereNotIn('position_name', ['Super Admin', 'panelis'])->get();
         $rolesData = Role::all(); // Provide all roles for the assign modal
-        $companies = Company::orderBy('nama_company')->get();
+        $companies = Company::orderByRaw("
+            CASE 
+                WHEN nama_company LIKE '%Inti corpora%' THEN 1
+                WHEN nama_company LIKE '%Pustaka mandiri%' THEN 2
+                WHEN nama_company LIKE '%Wangsa Jatra Lestari%' THEN 3
+                WHEN nama_company LIKE '%Assalam Niaga Utama%' THEN 4
+                WHEN nama_company LIKE '%K33 Distribusi%' THEN 5
+                ELSE 6 
+            END ASC
+        ")->orderBy('nama_company')->get();
 
         return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'departmentsByCompany', 'positions', 'rolesData', 'companies'));
     }
@@ -1774,19 +1817,17 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
-        // Specific order as requested by user
-        $desiredOrder = [
-            'PT. Tiga Serangkai Inti Corpora',
-            'PT. Tiga Serangkai Pustaka Mandiri',
-            'PT. Wangsa Jatra Lestari',
-            'PT. K33 Distribusi',
-            'Assalam Hypermarket'
-        ];
+        $companies = Company::orderByRaw("
+            CASE 
+                WHEN nama_company LIKE '%Inti corpora%' THEN 1
+                WHEN nama_company LIKE '%Pustaka mandiri%' THEN 2
+                WHEN nama_company LIKE '%Wangsa Jatra Lestari%' THEN 3
+                WHEN nama_company LIKE '%Assalam Niaga Utama%' THEN 4
+                WHEN nama_company LIKE '%K33 Distribusi%' THEN 5
+                ELSE 6 
+            END ASC
+        ")->orderBy('nama_company')->get();
 
-        $companies = Company::all()->sortBy(function ($company) use ($desiredOrder) {
-            $pos = array_search($company->nama_company, $desiredOrder);
-            return $pos !== false ? $pos : 999;
-        });
 
         // Fetch talents whose promotion process is completed (all final decision statuses)
         $finalStatuses = ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];

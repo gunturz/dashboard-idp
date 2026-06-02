@@ -168,8 +168,21 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
-                                    Exposure yang dicatat.</td>
+                                <td colspan="6" class="py-10 px-6">
+                                    <div class="flex flex-col items-center justify-center text-center">
+                                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                                            style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-base font-bold text-gray-700">Belum Ada Aktivitas</p>
+                                        <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada aktivitas Exposure yang dicatat.</p>
+                                    </div>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -242,8 +255,21 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
-                                    Mentoring yang dicatat.</td>
+                                <td colspan="6" class="py-10 px-6">
+                                    <div class="flex flex-col items-center justify-center text-center">
+                                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                                            style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-base font-bold text-gray-700">Belum Ada Aktivitas</p>
+                                        <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada aktivitas Mentoring yang dicatat.</p>
+                                    </div>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -317,8 +343,21 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
-                                    Learning yang dicatat.</td>
+                                <td colspan="6" class="py-10 px-6">
+                                    <div class="flex flex-col items-center justify-center text-center">
+                                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                                            style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-base font-bold text-gray-700">Belum Ada Aktivitas</p>
+                                        <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada aktivitas Learning yang dicatat.</p>
+                                    </div>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -98,6 +98,29 @@
             <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-b-[#14b8a6]"></div>
         </div>
 
+        @php
+            $totalUsers = 0;
+            foreach ($roleConfig as $roleKey => $cfg) {
+                if (isset($usersByRole[$roleKey])) {
+                    $totalUsers += $usersByRole[$roleKey]->total();
+                }
+            }
+        @endphp
+
+        @if ($totalUsers === 0)
+            <div class="empty-prem" style="margin-top: 40px">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                </div>
+                <h3>{{ $search || $company || $department || $selectedRole ? 'Tidak Ada Data User' : 'Belum Ada Data User' }}</h3>
+                <p>{{ $search || $company || $department || $selectedRole ? 'Tidak ada data user yang cocok dengan pencarian atau filter yang dipilih.' : 'Belum ada data pengguna yang terdaftar.' }}</p>
+            </div>
+        @endif
+
         @foreach ($roleConfig as $roleKey => $cfg)
             @php
                 $showRoleTable = isset($usersByRole[$roleKey]) && $usersByRole[$roleKey]->total() > 0;
@@ -235,7 +258,7 @@
                                                             {!! $roleIcons[$roleKey] !!}
                                                         </svg>
                                                     </div>
-                                                    <span>Tidak ada {{ $cfg['label'] }} ditemukan</span>
+                                                    <span>{{ $search || $company || $department ? 'Tidak ada data ' . strtolower($cfg['label']) . ' yang cocok dengan pencarian atau filter yang dipilih.' : 'Belum ada data ' . strtolower($cfg['label']) . '.' }}</span>
                                                 </div>
                                             </td>
                                         </tr>

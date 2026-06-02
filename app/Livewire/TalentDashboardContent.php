@@ -101,8 +101,9 @@ class TalentDashboardContent extends Component
                 'info'
             );
 
+            $submittedJudul = $this->judul_project;
             $this->reset(['judul_project', 'project_file']);
-            session()->flash('success_project', 'Project Improvement berhasil disubmit.');
+            session()->flash('success_project', 'Anda sudah berhasil mensubmit project improvement dengan judul "' . $submittedJudul . '".');
 
         } catch (\Exception $e) {
             Log::error('Livewire submitProject error: ' . $e->getMessage());

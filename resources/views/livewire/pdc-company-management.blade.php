@@ -86,7 +86,7 @@
                     </div>
                 </div>
             @empty
-                <p class="text-center text-gray-400 text-sm py-8">Belum ada perusahaan.</p>
+                <p class="text-center text-gray-400 text-sm py-8">{{ $search ? 'Tidak ada data perusahaan yang sesuai dengan pencarian.' : 'Belum ada perusahaan.' }}</p>
             @endforelse
         </div>
     </div>

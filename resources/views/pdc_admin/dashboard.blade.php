@@ -503,6 +503,7 @@
             function initPdcDashboard() {
                 const dashboard = document.getElementById('pdc-dashboard-wrapper');
                 if (!dashboard) return;
+
                 // ── Animated Counter ─────────────────────────────────────────────────
                 const counters = document.querySelectorAll('.animate-counter');
                 counters.forEach(counter => {
@@ -524,8 +525,10 @@
                     const ctx = canvas.getContext('2d');
                     const roleChartData = {!! $roleChartDataJson ?? '[]' !!};
 
-                    const W = canvas.width, H = canvas.height;
-                    const cx = W / 2, cy = H / 2;
+                    const W = canvas.width,
+                        H = canvas.height;
+                    const cx = W / 2,
+                        cy = H / 2;
                     const R = Math.min(W, H) / 2 - 14;
                     const r = R * 0.60;
 

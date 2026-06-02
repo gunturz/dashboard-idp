@@ -366,6 +366,27 @@
         </style>
     </x-slot>
 
+
+    {{-- Page Header --}}
+    <div class="page-header animate-title mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="page-header-icon bg-[#0f172a] text-white shadow-lg shadow-slate-900/20">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
+                    <path fill-rule="evenodd"
+                        d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z"
+                        clip-rule="evenodd" />
+                    <path fill-rule="evenodd"
+                        d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375Zm9.586 4.594a.75.75 0 0 0-1.172-.938l-2.476 3.096-.908-.907a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.116-.062l3-3.75Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="page-header-title text-slate-800">Detail Penilaian Panelis</h1>
+                <p class="page-header-sub text-slate-500">Hasil evaluasi, feedback, dan rekomendasi akhir dari seluruh Panelis.</p>
+            </div>
+        </div>
+    </div>
+
     @if (session('success'))
         <div id="success-alert"
             class="flex items-center gap-3 mb-5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500">
@@ -397,6 +418,7 @@
                 $statusPromo = optional($reviewPlan)->status_promotion;
                 $isComplete = in_array($statusPromo, ['Promoted', 'Not Promoted', 'Approved Panelis', 'Rejected Panelis', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
             @endphp
+
 
             <section class="review-card">
                 <div class="review-head">
@@ -506,8 +528,10 @@
     </form>
 
     <div id="decisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+
         style="background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+
             <div class="px-6 pt-6 pb-4">
                 <div class="flex items-center justify-between mb-1">
                     <h3 class="text-xl font-bold text-[#1e293b]">Decision</h3>

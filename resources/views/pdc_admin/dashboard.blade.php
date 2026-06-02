@@ -500,7 +500,7 @@
 
     <x-slot name="scripts">
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            function initDashboard() {
                 // ── Animated Counter ─────────────────────────────────────────────────
                 const counters = document.querySelectorAll('.animate-counter');
                 counters.forEach(counter => {
@@ -556,7 +556,17 @@
                     ctx.shadowBlur = 0;
                     ctx.fill();
                 }
-            });
+            }
+
+            // Run on initial load
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDashboard);
+            } else {
+                initDashboard();
+            }
+
+            // Run on Livewire navigation (wire:navigate)
+            document.addEventListener('livewire:navigated', initDashboard);
         </script>
     </x-slot>
 

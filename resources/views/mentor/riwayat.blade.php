@@ -42,9 +42,9 @@
         </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
         {{-- Cari Nama --}}
-        <div class="relative flex-grow group">
+        <div class="relative w-full sm:flex-1 group">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -56,9 +56,10 @@
         </div>
 
         {{-- Filters --}}
-        <div class="flex flex-wrap gap-4">
+        <div class="relative w-full sm:w-56">
             <select id="filter-perusahaan"
-                class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
                 onchange="filterRiwayat()">
                 <option value="">Semua Perusahaan</option>
                 @php $companies = $completedTalents->pluck('company.nama_company','company_id')->filter()->unique(); @endphp
@@ -66,9 +67,12 @@
                     <option value="{{ $cId }}">{{ $cName }}</option>
                 @endforeach
             </select>
+        </div>
 
+        <div class="relative w-full sm:w-56">
             <select id="filter-departemen"
-                class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
                 onchange="filterRiwayat()">
                 <option value="">Semua Departemen</option>
                 @php $depts = $completedTalents->pluck('department.nama_department','department_id')->filter()->unique(); @endphp
@@ -150,9 +154,19 @@
                     </tr>
                 @empty
                     <tr id="empty-row">
-                        <td colspan="6" class="py-12 px-6 text-center text-gray-400">
-                            <div class="flex flex-col items-center justify-center">
-                                <p class="font-medium">Belum ada talent yang menyelesaikan penilaian panelis.</p>
+                        <td colspan="6" class="py-10 px-6">
+                            <div class="flex flex-col items-center justify-center text-center">
+                                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                                    style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
+                                <p class="text-base font-bold text-gray-700">Belum Ada Data Talent</p>
+                                <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada talent yang menyelesaikan penilaian panelis.</p>
                             </div>
                         </td>
                     </tr>
@@ -160,9 +174,19 @@
 
                 {{-- Hidden empty row for JS filtering --}}
                 <tr id="js-empty-row" class="hidden">
-                    <td colspan="6" class="py-12 px-6 text-center text-gray-400">
-                        <div class="flex flex-col items-center justify-center">
-                            <p class="font-medium">Tidak ada data yang sesuai dengan filter.</p>
+                    <td colspan="6" class="py-10 px-6">
+                        <div class="flex flex-col items-center justify-center text-center">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                                style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <p class="text-base font-bold text-gray-700">Tidak Ditemukan</p>
+                            <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Tidak ada data yang sesuai dengan filter.</p>
                         </div>
                     </td>
                 </tr>

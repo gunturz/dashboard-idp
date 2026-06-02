@@ -315,8 +315,7 @@
                     </svg>
                 </div>
                 <h3>Belum Ada Project Improvement Talent</h3>
-                <p>{{ $search || $companyFilter || $positionFilter || $departmentFilter ? 'Tidak ada data yang cocok dengan filter yang dipilih.' : 'Data akan muncul setelah talent meng-upload project improvement.' }}
-                </p>
+                <p>{{ $search || $companyFilter || $positionFilter || $departmentFilter ? 'Tidak ada data review panelis yang cocok dengan pencarian atau filter yang dipilih.' : 'Data akan muncul setelah talent meng-upload project improvement.' }}</p>
             </div>
         @endforelse
     </div>{{-- /panelis-review-wrapper --}}

@@ -1384,93 +1384,164 @@
         @endphp
         <p class="text-slate-600 mb-6 text-[1rem]">{{ optional($latestProject)->title ?? '-' }}</p>
 
-        <div class="overflow-x-auto border border-gray-200 rounded-xl overflow-hidden w-full mb-8">
-            <table class="w-full table-auto text-left bg-white min-w-[900px]">
-                <thead class="bg-slate-50 border-b border-gray-200">
-                    <tr>
-                        <th class="w-[22%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
-                            Panelis</th>
-                        <th class="w-[22%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
-                            Perusahaan</th>
-                        <th class="w-[9%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
-                            Skor</th>
-                        <th class="w-[20%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
-                            Feedback</th>
-                        <th class="w-[17%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
-                            Status</th>
-                        <th class="w-[10%] py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">
-                            Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @forelse($talent->panelisAssessments as $idx => $assessment)
-                        @php
-                            $rekomen = $assessment->panelis_rekomendasi ?? '';
-                            $rekomenDesc = '';
-                            if (str_contains($rekomen, 'Ready Now')) {
-                                $rekomenDesc = 'Siap dipromosikan dalam < 6 bulan';
-                            } elseif (str_contains($rekomen, '1')) {
-                                $rekomenDesc = 'Siap dengan pengembangan terarah';
-                            } elseif (str_contains($rekomen, '2')) {
-                                $rekomenDesc = 'Masih membutuhkan pengembangan signifikan';
-                            } elseif (str_contains($rekomen, 'Not Ready')) {
-                                $rekomenDesc = 'Belum direkomendasikan untuk jalur suksesi';
-                            }
-                        @endphp
-                        <tr
-                            class="hover:bg-teal-50/50 transition duration-150 {{ $loop->last ? '' : 'border-b border-gray-200' }}">
-                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                <div class="font-bold text-sm text-slate-800 leading-tight">
-                                    {{ optional($assessment->panelis)->nama ?? '-' }}
-                                </div>
-                            </td>
-                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                <div class="font-bold text-sm text-slate-700">
-                                    {{ optional(optional($assessment->panelis)->company)->nama_company ?? '-' }}
-                                </div>
-                            </td>
-                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                <div class="font-bold text-sm text-slate-800">
-                                    {{ $assessment->panelis_score ?? '-' }} / 50
-                                </div>
-                            </td>
-                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                <div class="text-sm text-slate-700 max-w-[200px] mx-auto truncate"
-                                    title="{{ $assessment->panelis_komentar ?? '-' }}">
-                                    {{ Str::limit($assessment->panelis_komentar ?? '-', 60) }}
-                                </div>
-                            </td>
-                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                @if ($rekomen)
-                                    <div class="font-bold text-sm text-slate-800">{{ $rekomen }}</div>
-                                    @if ($rekomenDesc)
-                                        <div class="text-[0.7rem] text-slate-500 mt-0.5">{{ $rekomenDesc }}</div>
-                                    @endif
-                                @else
-                                    <span class="text-slate-400 text-sm">-</span>
-                                @endif
-                            </td>
-                            <td class="px-5 py-4" style="text-align:center; vertical-align:middle;">
-                                <a href="{{ route('pdc_admin.panelis_review.detail', $assessment->user_id_talent) }}?back_url={{ urlencode(url()->current()) }}"
-                                    class="inline-flex items-center justify-center gap-1.5 h-9 px-4 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-xs font-bold text-white hover:bg-[#0d9488] hover:border-[#0d9488] transition-colors shadow-sm whitespace-nowrap mx-auto md:mx-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                    Detail
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-slate-400 text-sm py-6">Belum ada penilaian
-                                Panelis</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        {{-- Card-based Panelis Review Layout --}}
+        <style>
+            .panelis-card {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 20px 24px;
+                margin-bottom: 14px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                transition: box-shadow 0.18s, border-color 0.18s;
+            }
+            .panelis-card:hover {
+                box-shadow: 0 4px 18px rgba(20, 184, 166, 0.10);
+                border-color: #99f6e4;
+            }
+            .panelis-card-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .panelis-card-name {
+                font-size: 0.92rem;
+                font-weight: 800;
+                color: #1e293b;
+            }
+            .panelis-card-dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: #94a3b8;
+                flex-shrink: 0;
+                display: inline-block;
+            }
+            .panelis-card-company {
+                font-size: 0.82rem;
+                font-weight: 500;
+                color: #94a3b8;
+                font-style: italic;
+            }
+            .panelis-card-feedback {
+                font-size: 0.84rem;
+                color: #475569;
+                line-height: 1.6;
+            }
+            .panelis-card-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 4px;
+            }
+            .panelis-status-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                padding: 6px 18px;
+                border: 1.5px solid #14b8a6;
+                border-radius: 999px;
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: #0d9488;
+                background: #fff;
+                white-space: nowrap;
+            }
+            .panelis-score-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 52px;
+                height: 52px;
+                border-radius: 999px;
+                background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+                color: #fff;
+                font-size: 1.05rem;
+                font-weight: 800;
+                box-shadow: 0 4px 14px rgba(20, 184, 166, 0.30);
+                padding: 0 14px;
+                flex-shrink: 0;
+            }
+            .panelis-avg-card {
+                background: #14b8a6;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 8px 28px;
+                display: inline-flex;
+                align-items: center;
+                gap: 32px;
+                margin-top: 6px;
+            }
+            .panelis-avg-label {
+                font-size: 0.88rem;
+                font-weight: 800;
+                color: #fff;
+            }
+            .panelis-avg-value {
+                font-size: 1.15rem;
+                font-weight: 800;
+                color: #fff;
+            }
+        </style>
+
+        <div class="mb-8">
+            @php
+                $totalScore = 0;
+                $countAssessments = $talent->panelisAssessments->count();
+            @endphp
+
+            @forelse($talent->panelisAssessments as $idx => $assessment)
+                @php
+                    $rekomen = $assessment->panelis_rekomendasi ?? '';
+                    $rekomenLabel = $rekomen ?: '-';
+                    $score = ($assessment->panelis_score ?? 0) * 2;
+                    $totalScore += $score;
+                @endphp
+                <div class="panelis-card">
+                    {{-- Header: Nama & Perusahaan --}}
+                    <div class="panelis-card-header">
+                        <span class="panelis-card-name">{{ optional($assessment->panelis)->nama ?? '-' }}</span>
+                        <span class="panelis-card-dot"></span>
+                        <span class="panelis-card-company">
+                            {{ optional(optional($assessment->panelis)->company)->nama_company ?? '-' }}
+                        </span>
+                    </div>
+
+                    {{-- Feedback / Komentar --}}
+                    <div class="panelis-card-feedback">
+                        {{ $assessment->panelis_komentar ?? '-' }}
+                    </div>
+
+                    {{-- Footer: Status Pill + Skor Badge --}}
+                    <div class="panelis-card-footer">
+                        <span class="panelis-status-pill">
+                            {{ $rekomenLabel }}
+                        </span>
+                        <span class="panelis-score-badge">
+                            {{ $score }}
+                        </span>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-slate-50 border border-slate-200 rounded-xl px-6 py-8 text-center text-slate-400 text-sm">
+                    Belum ada penilaian Panelis
+                </div>
+            @endforelse
+
+            @if($countAssessments > 0)
+                @php
+                    $avgScore = round($totalScore / $countAssessments);
+                @endphp
+                <div class="panelis-avg-card">
+                    <span class="panelis-avg-label">Rata Rata Skor</span>
+                    <span class="panelis-avg-value">{{ $avgScore }}</span>
+                </div>
+            @endif
         </div>
 
         {{-- ======= DATA JSON untuk modal (pass dari PHP ke JS) ======= --}}

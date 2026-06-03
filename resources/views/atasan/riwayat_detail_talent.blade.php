@@ -51,8 +51,7 @@
             }
 
             .detail-container {
-                max-width: 1200px;
-                margin: 0 auto;
+                width: 100%;
             }
 
             /* --- Section Titles --- */
@@ -82,44 +81,61 @@
                 letter-spacing: 0.5px;
             }
 
-            /* --- Top 3 GAP --- */
-            .gap-pills-container {
+            /* --- Sub Section Title (matches admin) --- */
+            .sub-section-title {
+                position: relative;
+                padding-left: 0;
                 display: flex;
-                flex-direction: column;
-                gap: 16px;
-                margin-bottom: 32px;
+                align-items: center;
+                gap: 8px;
+                font-size: 1rem;
+                font-weight: 800;
+                color: #475569;
+                margin-bottom: 16px;
+                margin-top: 16px;
             }
 
-            .gap-pill {
+            .sub-section-title::before {
+                content: none;
+            }
+
+            .sub-section-title svg {
+                width: 18px;
+                height: 18px;
+                color: #0f172a;
+                flex-shrink: 0;
+            }
+
+            /* --- Top 3 GAP Items (matches admin) --- */
+            .gap-item {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 12px 24px;
+                padding: 14px 24px;
                 border-radius: 99px;
-                border: 1.5px solid #e2e8f0;
+                margin-bottom: 12px;
+                font-size: 1rem;
+                font-weight: 700;
                 background: white;
-                position: relative;
+                border: 1px solid #e2e8f0;
             }
 
-            .gap-pill.prio-1 {
-                border-color: #ef4444;
+            .gap-item.prio-1 {
+                border: 1.5px solid #ef4444;
+                color: #1e293b;
             }
 
-            .gap-pill.prio-2 {
-                border-color: #f97316;
+            .gap-item.prio-2 {
+                border: 1.5px solid #f97316;
+                color: #1e293b;
             }
 
-            .gap-pill.prio-3 {
-                border-color: #3b82f6;
+            .gap-item.prio-3 {
+                border: 1.5px solid #8b5cf6;
+                color: #1e293b;
             }
 
-            .gap-pill-left {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-            }
-
-            .gap-rank {
+            .gap-number {
                 width: 28px;
                 height: 28px;
                 border-radius: 50%;
@@ -127,32 +143,21 @@
                 align-items: center;
                 justify-content: center;
                 color: white;
-                font-size: 0.813rem;
+                font-size: 0.85rem;
+                margin-right: 16px;
                 font-weight: 800;
             }
 
-            .prio-1 .gap-rank {
+            .gap-item.prio-1 .gap-number {
                 background: #ef4444;
             }
 
-            .prio-2 .gap-rank {
+            .gap-item.prio-2 .gap-number {
                 background: #f97316;
             }
 
-            .prio-3 .gap-rank {
-                background: #3b82f6;
-            }
-
-            .gap-name {
-                font-size: 1rem;
-                font-weight: 700;
-                color: #1e293b;
-            }
-
-            .gap-score {
-                font-size: 1.125rem;
-                font-weight: 800;
-                color: #475569;
+            .gap-item.prio-3 .gap-number {
+                background: #8b5cf6;
             }
 
             /* --- Heatmap Table --- */
@@ -189,6 +194,7 @@
                 color: #475569;
                 text-transform: uppercase;
                 background: #f8fafc;
+                white-space: nowrap;
             }
 
             .heatmap-table .td-left {
@@ -199,13 +205,13 @@
             }
 
             .gap-badge {
-                display: block;
-                width: 100%;
-                height: 100%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 padding: 4px;
                 border-radius: 4px;
                 font-weight: 700;
-                color: white;
+                min-width: 40px;
             }
 
             .gap-none {
@@ -314,29 +320,33 @@
             /* --- Project Improvement Table --- */
             .project-table {
                 width: 100%;
-                border-collapse: separate;
-                border-spacing: 0;
-                border: 1.5px solid #e2e8f0;
-                border-radius: 12px;
+                border-collapse: collapse;
+                background: white;
+                border-radius: 14px;
                 overflow: hidden;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e2e8f0;
             }
 
             .project-table th {
                 background: #f8fafc;
-                padding: 16px;
-                font-size: 0.813rem;
-                font-weight: 800;
                 color: #1e293b;
+                font-weight: 700;
                 text-align: center;
-                border-bottom: 1.5px solid #e2e8f0;
+                padding: 14px 16px;
+                border: 1px solid #e2e8f0;
+                font-size: 0.85rem;
+                white-space: nowrap;
             }
 
             .project-table td {
-                padding: 16px;
+                text-align: center;
+                padding: 18px 16px;
+                border: 1px solid #e2e8f0;
                 font-size: 0.875rem;
                 color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-                text-align: center;
+                vertical-align: middle;
+                min-height: 60px;
             }
 
             .status-approve {
@@ -739,32 +749,29 @@
 
         <div id="section-kompetensi" class="tab-section">
             <div class="section-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd"
-                        d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                        d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
                         clip-rule="evenodd" />
                 </svg>
                 Kompetensi
             </div>
 
-        {{-- TOP 3 GAP Kompetensi --}}
-        <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.1s;">
-            <div class="prem-card-header">
-                <div class="prem-card-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    TOP 3 GAP Kompetensi
-                </div>
+            {{-- TOP 3 GAP Kompetensi --}}
+            <div class="sub-section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                        clip-rule="evenodd" />
+                </svg>
+                TOP 3 GAP Kompetensi
             </div>
-            <div class="p-6">
+
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8 mt-4">
                 @php
                     $details = optional($talent->assessmentSession)->details;
                     $gaps = collect();
                     if ($details && $details->sum('score_atasan') > 0) {
-                        // Check for manual overrides first (notes starting with priority_)
                         $overrides = $details
                             ->filter(function ($d) {
                                 return str_starts_with($d->notes ?? '', 'priority_');
@@ -781,39 +788,36 @@
                     }
                 @endphp
 
-                <div class="gap-pills-container">
-                    @forelse($gaps as $index => $gap)
-                        <div class="gap-pill prio-{{ $index + 1 }}">
-                            <div class="gap-pill-left">
-                                <span class="gap-rank">{{ $index + 1 }}</span>
-                                <span class="gap-name">{{ $gap->competence->name }}</span>
-                            </div>
-                            <span class="gap-score">{{ number_format($gap->gap_score, 1) }}</span>
+                @forelse($gaps as $index => $gap)
+                    <div class="gap-item prio-{{ $index + 1 }}">
+                        <div class="flex items-center">
+                            <span class="gap-number">{{ $index + 1 }}</span>
+                            {{ optional($gap->competence)->name ?? '-' }}
                         </div>
-                    @empty
-                        <div
-                            class="py-10 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-100 text-gray-400">
-                            <p class="font-medium italic">Belum ada data GAP prioritas.</p>
-                        </div>
-                    @endforelse
-                </div>
+                        <span>{{ number_format($gap->gap_score, 1) }}</span>
+                    </div>
+                @empty
+                    <div class="py-8 text-center text-gray-400 italic font-medium">
+                        Belum ada data GAP prioritas.
+                    </div>
+                @endforelse
             </div>
-        </div>
 
-        {{-- Heatmap Kompetensi --}}
-        <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.2s;">
-            <div class="prem-card-header">
-                <div class="prem-card-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    Heatmap Kompetensi
-                </div>
+            <hr class="border-t-2 border-slate-200 my-8">
+
+            {{-- Heatmap Kompetensi --}}
+            <div class="sub-section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z"
+                        clip-rule="evenodd" />
+                </svg>
+                Heatmap Kompetensi
             </div>
-            <div class="p-6 pb-4">
-                <div class="legend flex-wrap">
+
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
+                {{-- Legend --}}
+                <div class="legend flex-wrap mb-4">
                     <span class="mr-2">Keterangan GAP:</span>
                     <div class="legend-item">
                         <div class="legend-box" style="background: #6293ff;"></div> Di Atas Standar (> 0)
@@ -828,18 +832,17 @@
                         <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (&lt; -1.5)
                     </div>
                 </div>
-            </div>
-            <div class="p-0">
-                <div class="overflow-x-auto custom-scrollbar">
+
+                <div class="heatmap-container overflow-x-auto m-0">
                     <table class="heatmap-table">
                         <thead>
                             <tr>
-                                <th class="th-main" style="width:30%">KOMPETENSI</th>
-                                <th class="th-main" style="width:80px">STANDAR</th>
-                                <th class="th-sub">SKOR TALENT</th>
-                                <th class="th-sub">SKOR ATASAN</th>
-                                <th class="th-sub">FINAL SCORE</th>
-                                <th class="th-sub" style="width:110px">GAP</th>
+                                <th class="th-main" style="width:300px;">Kompetensi</th>
+                                <th class="th-main" style="width:70px;">Standar</th>
+                                <th class="th-sub border-b-2 border-slate-200 bg-white">Skor Talent</th>
+                                <th class="th-sub border-b-2 border-slate-200 bg-white">Skor Atasan</th>
+                                <th class="th-sub border-b-2 border-slate-200 bg-white">Final Score</th>
+                                <th class="th-sub bg-[#ef4444] border-[#ef4444] text-white" style="width: 120px;">Gap</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -849,8 +852,8 @@
                                     $standard = (float) ($standards[$comp->id] ?? 0);
                                     $scoreTalent = (float) ($detail->score_talent ?? 0);
                                     $scoreAtasan = (float) ($detail->score_atasan ?? 0);
-                                    $finalScore = ($scoreTalent + $scoreAtasan) / 2;
-                                    $gap = $finalScore - $standard;
+                                    $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
+                                    $gap = $detail->gap_score ?? ($finalScore - $standard);
 
                                     $gapClass = 'gap-none';
                                     if ($gap < -1.5) {
@@ -866,49 +869,43 @@
                                     <td>{{ number_format($standard, 1) }}</td>
                                     <td><span class="font-bold">{{ $scoreTalent ?: '-' }}</span></td>
                                     <td><span class="font-bold">{{ $scoreAtasan ?: '-' }}</span></td>
-                                    <td><span
-                                            class="font-bold">{{ $finalScore ? ($finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1)) : '-' }}</span>
-                                    </td>
-                                    <td class="p-1">
-                                        <span
-                                            class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
+                                    <td><span class="font-bold">{{ $finalScore ? ($finalScore % 1 == 0 ? (int) $finalScore : number_format($finalScore, 1)) : '-' }}</span></td>
+                                    <td class="text-center p-2">
+                                        <span class="gap-badge {{ $gapClass }}">{{ $gap == 0 ? '0' : number_format($gap, 1) }}</span>
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                        @php
-                            $avgStandard = $standards->avg() ?: 0;
-                            $avgTalent = $details ? $details->avg('score_talent') : 0;
-                            $avgAtasan = $details ? $details->avg('score_atasan') : 0;
-                            $avgFinal = ($avgTalent + $avgAtasan) / 2;
-                            $avgGap = $avgFinal - $avgStandard;
+                            {{-- Average Row --}}
+                            @php
+                                $avgStandard = $standards->avg() ?: 0;
+                                $avgTalent = $details ? $details->avg('score_talent') : 0;
+                                $avgAtasan = $details ? $details->avg('score_atasan') : 0;
+                                $avgFinal = ($avgTalent + $avgAtasan) / 2;
+                                $avgGap = $details ? $details->avg('gap_score') : ($avgFinal - $avgStandard);
 
-                            $avgGapClass = 'gap-none';
-                            if ($avgGap < -1.5) {
-                                $avgGapClass = 'gap-large';
-                            } elseif ($avgGap < 0) {
-                                $avgGapClass = 'gap-small';
-                            } elseif ($avgGap > 0) {
-                                $avgGapClass = 'gap-ok';
-                            }
-                        @endphp
-                        <tfoot>
-                            <tr class="row-summary">
+                                $avgGapClass = 'gap-none';
+                                if ($avgGap < -1.5) {
+                                    $avgGapClass = 'gap-large';
+                                } elseif ($avgGap < 0) {
+                                    $avgGapClass = 'gap-small';
+                                } elseif ($avgGap > 0) {
+                                    $avgGapClass = 'gap-ok';
+                                }
+                            @endphp
+                            <tr class="font-bold bg-gray-50 border-t-2 border-slate-200">
                                 <td class="td-left">Nilai Rata-Rata</td>
                                 <td>{{ number_format($avgStandard, 1) }}</td>
                                 <td>{{ number_format($avgTalent, 1) }}</td>
                                 <td>{{ number_format($avgAtasan, 1) }}</td>
                                 <td>{{ number_format($avgFinal, 1) }}</td>
-                                <td class="p-1">
-                                    <span
-                                        class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 1) }}</span>
+                                <td class="text-center p-2">
+                                    <span class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 1) }}</span>
                                 </td>
                             </tr>
-                        </tfoot>
+                        </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
         </div>
 

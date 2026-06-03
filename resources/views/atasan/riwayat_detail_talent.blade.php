@@ -713,7 +713,7 @@
             </div>
             <div>
                 <div class="flex items-center gap-3">
-                    <h1 class="page-header-title" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1;">Riwayat Progres Talent</h1>
+                    <h1 class="page-header-title" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1;">Riwayat Progress Talent</h1>
                 </div>
                 <p class="page-header-sub" style="font-size: 0.875rem; color: #64748b; margin-top: 4px; font-weight: 500;">Individual Development Plan – Monitoring Talent</p>
             </div>

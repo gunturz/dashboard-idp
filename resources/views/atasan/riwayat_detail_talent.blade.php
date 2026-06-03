@@ -208,10 +208,10 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                padding: 4px;
-                border-radius: 4px;
+                padding: 6px 16px;
+                border-radius: 5px;
                 font-weight: 700;
-                min-width: 40px;
+                min-width: 56px;
             }
 
             .gap-none {
@@ -220,8 +220,8 @@
             }
 
             .gap-ok {
-                background: #6293ff;
-                color: white;
+                background: #cbd5e1;
+                color: #1e293b;
             }
 
             .gap-small {
@@ -695,11 +695,26 @@
                 color: white;
                 box-shadow: 0 2px 12px rgba(15, 23, 42, 0.22);
             }
+
+            /* --- Donut Container (IDP Monitoring) --- */
+            .donut-container {
+                background: white;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                padding: 24px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+                flex-wrap: wrap;
+                gap: 24px;
+                margin-bottom: 0;
+            }
         </style>
     </x-slot>
 
     {{-- ── Page Header ── --}}
-    <div class="page-header animate-title flex items-center justify-between mt-2">
+    <div class="page-header animate-title flex items-center mb-6">
         <div class="flex items-center gap-4">
             <div class="page-header-icon" style="background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -712,26 +727,16 @@
                 </svg>
             </div>
             <div>
-                <div class="flex items-center gap-3">
-                    <h1 class="page-header-title" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1;">Riwayat Progres Talent</h1>
-                </div>
+                <h1 class="page-header-title" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.1;">Riwayat Progres Talent</h1>
                 <p class="page-header-sub" style="font-size: 0.875rem; color: #64748b; margin-top: 4px; font-weight: 500;">Individual Development Plan – Monitoring Talent</p>
             </div>
-        </div>
-        <div>
-            <a href="{{ route('atasan.riwayat') }}"
-                class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-bold px-6 py-2.5 rounded-xl transition-all shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Kembali
-            </a>
         </div>
     </div>
 
     <div class="detail-container">
         {{-- Header Info (Match Talent Dashboard) --}}
-        <div class="mb-10 overflow-hidden rounded-2xl shadow-sm border border-gray-100">
+        <div class="mb-10" style="--hero-margin:0;">
+            <style>.detail-container .talent-prof-hero { margin: 0 !important; border-radius: 20px; }</style>
             @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
         </div>
 
@@ -797,13 +802,17 @@
                         <span>{{ number_format($gap->gap_score, 1) }}</span>
                     </div>
                 @empty
-                    <div class="py-8 text-center text-gray-400 italic font-medium">
-                        Belum ada data GAP prioritas.
-                    </div>
+                    @foreach([1, 2, 3] as $n)
+                        <div class="gap-item" style="border-color: #cbd5e1; color: #cbd5e1;">
+                            <div class="flex items-center">
+                                <span class="gap-number" style="background: #cbd5e1;">{{ $n }}</span>
+                                <span>–</span>
+                            </div>
+                            <span>–</span>
+                        </div>
+                    @endforeach
                 @endforelse
             </div>
-
-            <hr class="border-t-2 border-slate-200 my-8">
 
             {{-- Heatmap Kompetensi --}}
             <div class="sub-section-title">
@@ -815,26 +824,8 @@
                 Heatmap Kompetensi
             </div>
 
-            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
-                {{-- Legend --}}
-                <div class="legend flex-wrap mb-4">
-                    <span class="mr-2">Keterangan GAP:</span>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: #6293ff;"></div> Di Atas Standar (> 0)
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: #f1f5f9; border: 1px solid #e2e8f0;"></div> Sesuai Standar (0)
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: #f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box" style="background: #ef4444;"></div> Gap Besar (&lt; -1.5)
-                    </div>
-                </div>
-
-                <div class="heatmap-container overflow-x-auto m-0">
-                    <table class="heatmap-table">
+            <div class="heatmap-container overflow-x-auto mt-4">
+                <table class="heatmap-table">
                         <thead>
                             <tr>
                                 <th class="th-main" style="width:300px;">Kompetensi</th>
@@ -854,15 +845,7 @@
                                     $scoreAtasan = (float) ($detail->score_atasan ?? 0);
                                     $finalScore = $scoreAtasan > 0 ? ($scoreTalent + $scoreAtasan) / 2 : ($scoreTalent > 0 ? $scoreTalent : 0);
                                     $gap = $detail->gap_score ?? ($finalScore - $standard);
-
-                                    $gapClass = 'gap-none';
-                                    if ($gap < -1.5) {
-                                        $gapClass = 'gap-large';
-                                    } elseif ($gap < 0) {
-                                        $gapClass = 'gap-small';
-                                    } elseif ($gap > 0) {
-                                        $gapClass = 'gap-ok';
-                                    }
+                                    $gapClass = $gap >= 0 ? 'gap-none' : ($gap <= -1.5 ? 'gap-large' : 'gap-small');
                                 @endphp
                                 <tr>
                                     <td class="td-left">{{ $comp->name }}</td>
@@ -877,34 +860,25 @@
                             @endforeach
                             {{-- Average Row --}}
                             @php
+                                $sess = $talent->assessmentSession;
+                                $avgT = $sess ? $sess->details->avg('score_talent') ?? 0 : 0;
+                                $avgA = $sess ? $sess->details->avg('score_atasan') ?? 0 : 0;
+                                $avgGap = $sess ? $sess->details->avg('gap_score') ?? 0 : 0;
                                 $avgStandard = $standards->avg() ?: 0;
-                                $avgTalent = $details ? $details->avg('score_talent') : 0;
-                                $avgAtasan = $details ? $details->avg('score_atasan') : 0;
-                                $avgFinal = ($avgTalent + $avgAtasan) / 2;
-                                $avgGap = $details ? $details->avg('gap_score') : ($avgFinal - $avgStandard);
-
-                                $avgGapClass = 'gap-none';
-                                if ($avgGap < -1.5) {
-                                    $avgGapClass = 'gap-large';
-                                } elseif ($avgGap < 0) {
-                                    $avgGapClass = 'gap-small';
-                                } elseif ($avgGap > 0) {
-                                    $avgGapClass = 'gap-ok';
-                                }
+                                $avgCls = $avgGap >= 0 ? 'gap-none' : ($avgGap <= -1.5 ? 'gap-large' : 'gap-small');
                             @endphp
                             <tr class="font-bold bg-gray-50 border-t-2 border-slate-200">
                                 <td class="td-left">Nilai Rata-Rata</td>
                                 <td>{{ number_format($avgStandard, 1) }}</td>
-                                <td>{{ number_format($avgTalent, 1) }}</td>
-                                <td>{{ number_format($avgAtasan, 1) }}</td>
-                                <td>{{ number_format($avgFinal, 1) }}</td>
+                                <td>{{ number_format($avgT, 1) }}</td>
+                                <td>{{ number_format($avgA, 1) }}</td>
+                                <td>{{ number_format(($avgT + $avgA) / 2, 1) }}</td>
                                 <td class="text-center p-2">
-                                    <span class="gap-badge {{ $avgGapClass }}">{{ number_format($avgGap, 1) }}</span>
+                                    <span class="gap-badge {{ $avgCls }}">{{ number_format($avgGap, 1) }}</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
             </div>
 
         </div>
@@ -922,20 +896,8 @@
                 IDP Monitoring
             </div>
 
-        <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.3s;">
-            <div class="prem-card-header">
-                <div class="prem-card-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                            clip-rule="evenodd" />
-                        <path
-                            d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                    </svg>
-                    IDP Monitoring
-                </div>
-            </div>
-            <div class="p-8">
+        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4 mb-8 w-full overflow-hidden">
+            <div class="donut-container">
                 @php
                     $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
                     $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
@@ -947,72 +909,69 @@
                             'total' => 6,
                             'from' => '#334155',
                             'to' => '#334155',
-                            'id' => 'grad-exposure',
-                            'btn_color' => 'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-lg',
+                            'id' => 'riwayat-grad-exposure',
+                            'btn_color' => 'bg-slate-700 hover:bg-slate-800 shadow-[0_4px_14px_rgba(51,65,85,0.25)] hover:shadow-lg',
                         ],
                         'Mentoring' => [
                             'done' => min($mentoringCount ?? 0, 6),
                             'total' => 6,
                             'from' => '#f59e0b',
                             'to' => '#f59e0b',
-                            'id' => 'grad-mentoring',
-                            'btn_color' => 'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-lg',
+                            'id' => 'riwayat-grad-mentoring',
+                            'btn_color' => 'bg-amber-500 hover:bg-amber-600 shadow-[0_4px_14px_rgba(245,158,11,0.28)] hover:shadow-lg',
                         ],
                         'Learning' => [
                             'done' => min($learningCount ?? 0, 6),
                             'total' => 6,
                             'from' => '#0d9488',
                             'to' => '#0d9488',
-                            'id' => 'grad-learning',
-                            'btn_color' => 'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-lg',
+                            'id' => 'riwayat-grad-learning',
+                            'btn_color' => 'bg-teal-600 hover:bg-teal-700 shadow-[0_4px_14px_rgba(13,148,136,0.28)] hover:shadow-lg',
                         ],
                     ];
                     $r = 38;
                     $circ = 2 * M_PI * $r;
                 @endphp
-
-                <div class="flex flex-col md:flex-row justify-around items-center gap-10">
-                    @foreach ($idpChartData as $label => $d)
-                        @php
-                            $pct = $d['done'] / $d['total'];
-                            $filled = $pct * $circ;
-                            $empty = $circ - $filled;
-                        @endphp
-                        <div class="flex flex-col items-center gap-3">
-                            <div class="relative w-48 h-48 drop-shadow-sm">
-                                <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-                                    <defs>
-                                        <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%"
-                                            x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="{{ $d['from'] }}" />
-                                            <stop offset="100%" stop-color="{{ $d['to'] }}" />
-                                        </linearGradient>
-                                    </defs>
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                        stroke="#f1f5f9" stroke-width="10" />
-                                    <circle cx="50" cy="50" r="{{ $r }}" fill="none"
-                                        stroke="url(#{{ $d['id'] }})" stroke-width="10" stroke-linecap="round"
-                                        stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
-                                        style="transition: stroke-dasharray 0.8s ease;" />
-                                </svg>
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-bold"
-                                        style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
-                                </div>
+                @foreach ($idpChartData as $label => $d)
+                    @php
+                        $pct = $d['done'] / $d['total'];
+                        $filled = $pct * $circ;
+                        $empty = $circ - $filled;
+                    @endphp
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="relative w-48 h-48 drop-shadow-sm">
+                            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                                <defs>
+                                    <linearGradient id="{{ $d['id'] }}" x1="0%" y1="0%"
+                                        x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="{{ $d['from'] }}" />
+                                        <stop offset="100%" stop-color="{{ $d['to'] }}" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                    stroke="#f1f5f9" stroke-width="10" />
+                                <circle cx="50" cy="50" r="{{ $r }}" fill="none"
+                                    stroke="url(#{{ $d['id'] }})" stroke-width="10" stroke-linecap="round"
+                                    stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
+                                    style="transition: stroke-dasharray 0.8s ease;" />
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-4xl font-bold"
+                                    style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
                             </div>
-                            <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'tab' => strtolower($label), 'session_id' => $sessionId]) }}"
-                                class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer text-decoration-none">
-                                <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                    stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
                         </div>
-                    @endforeach
-                </div>
+                        <a href="{{ route('atasan.riwayat.logbook', ['talentId' => $talent->id, 'tab' => strtolower($label), 'session_id' => $sessionId]) }}"
+                            class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5 cursor-pointer"
+                            title="Lihat logbook {{ $label }}">
+                            <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
 
@@ -1028,20 +987,7 @@
                 Project Improvement
             </div>
 
-        <div class="prem-card mb-8 animate-fade-in" style="animation-delay: 0.4s;">
-            <div class="prem-card-header">
-                <div class="project-section-title">
-                    <span class="project-section-icon" aria-hidden="true">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M19.5 6h-6.879a1.5 1.5 0 0 1-1.06-.44l-.622-.62A1.5 1.5 0 0 0 9.88 4.5H6A2.25 2.25 0 0 0 3.75 6.75v10.5A2.25 2.25 0 0 0 6 19.5h13.5a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 19.5 6Z" />
-                        </svg>
-                    </span>
-                    <span>Project Improvement</span>
-                </div>
-            </div>
-            <div class="p-0">
-                <div class="rounded-xl overflow-hidden border border-gray-200 mt-4 mx-6 mb-6">
+        <div class="rounded-xl overflow-hidden border border-gray-200 mt-4">
                     <table class="w-full text-left bg-white">
                         <thead class="bg-slate-50 border-b border-gray-200">
                             <tr>
@@ -1110,8 +1056,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
 
         </div>
     </div>

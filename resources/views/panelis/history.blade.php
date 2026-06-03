@@ -344,6 +344,20 @@
                     $rekomenColor = 'yellow';
                     if (str_contains($assessment->panelis_rekomendasi ?? '', 'Ready Now'))       $rekomenColor = 'green';
                     elseif (str_contains($assessment->panelis_rekomendasi ?? '', 'Not Ready'))   $rekomenColor = 'red';
+
+                    // Determine if talent is in Progress Archive
+                    $finalStatuses = ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
+                    $isArchived = false;
+                    $devSession = $assessment->developmentSession;
+                    if ($devSession) {
+                        if (in_array($devSession->status, $finalStatuses) || !$devSession->is_active) {
+                            $isArchived = true;
+                        }
+                    } elseif ($talent && optional($talent->promotion_plan)->status_promotion) {
+                        if (in_array($talent->promotion_plan->status_promotion, $finalStatuses) || !optional($talent->promotion_plan)->is_active) {
+                            $isArchived = true;
+                        }
+                    }
                 @endphp
 
                 <div class="hist-card">
@@ -428,7 +442,11 @@
                                 @else
                                     <span class="btn-preview" style="opacity:0.4;cursor:default;">Preview File</span>
                                 @endif
-                                <a href="{{ route('panelis.penilaian', optional($talent)->id) }}" class="btn-edit">Edit</a>
+                                @if($isArchived)
+                                    <span class="btn-edit" style="background:#94a3b8; cursor:not-allowed; opacity:0.7;" title="Talent sudah berada di Progress Archive">Edit</span>
+                                @else
+                                    <a href="{{ route('panelis.penilaian', optional($talent)->id) }}" class="btn-edit">Edit</a>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -61,7 +61,16 @@
         @if ($activeSection === 'kompetensi')
             <div class="w-full animate-fade-in">
                 <div class="section-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-slate-800">
+                        <path fill-rule="evenodd"
+                            d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Kompetensi
+                </div>
+
+                <div class="flex items-center gap-2 text-base font-extrabold text-slate-600 mb-4 mt-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-slate-800">
                         <path fill-rule="evenodd"
                             d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
                             clip-rule="evenodd" />
@@ -270,7 +279,7 @@
                     IDP Monitoring
                 </div>
                 @foreach ($talents as $talent)
-                    <div class="idp-card-container bg-white border border-gray-200">
+                    <div class="idp-card-container border border-slate-200" style="background:#f8fafc;">
                         <div class="flex items-center gap-4 mb-6 p-2">
                             <img src="{{ $talent->foto ? asset('storage/' . $talent->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($talent->nama) . '&background=random&color=fff&bold=true' }}"
                                 class="w-16 h-16 rounded-full border-2 border-white shadow-sm bg-white"
@@ -282,7 +291,7 @@
                                     {{ optional($talent->department)->nama_department }}</p>
                             </div>
                         </div>
-                        <div class="donut-container !shadow-none !border !border-gray-50 !bg-[#f8fafc]">
+                        <div class="donut-container">
                             @php
                                 $exposureCount = $talent->idpActivities->where('type_idp', 1)->count();
                                 $mentoringCount = $talent->idpActivities->where('type_idp', 2)->count();
@@ -296,7 +305,7 @@
                                         'to' => '#334155',
                                         'id' => 'grad-exposure',
                                         'btn_color' =>
-                                            'bg-slate-700 shadow-[0_4px_12px_-2px_rgba(51,65,85,0.4)] hover:shadow-lg',
+                                            'bg-slate-700 hover:bg-slate-800 shadow-[0_4px_14px_rgba(51,65,85,0.25)] hover:shadow-lg',
                                     ],
                                     'Mentoring' => [
                                         'done' => min($mentoringCount ?? 0, 6),
@@ -305,7 +314,7 @@
                                         'to' => '#f59e0b',
                                         'id' => 'grad-mentoring',
                                         'btn_color' =>
-                                            'bg-amber-500 shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] hover:shadow-lg',
+                                            'bg-amber-500 hover:bg-amber-600 shadow-[0_4px_14px_rgba(245,158,11,0.28)] hover:shadow-lg',
                                     ],
                                     'Learning' => [
                                         'done' => min($learningCount ?? 0, 6),
@@ -314,7 +323,7 @@
                                         'to' => '#0d9488',
                                         'id' => 'grad-learning',
                                         'btn_color' =>
-                                            'bg-teal-600 shadow-[0_4px_12px_-2px_rgba(13,148,136,0.4)] hover:shadow-lg',
+                                            'bg-teal-600 hover:bg-teal-700 shadow-[0_4px_14px_rgba(13,148,136,0.28)] hover:shadow-lg',
                                     ],
                                 ];
                                 $r = 38;
@@ -371,7 +380,12 @@
         {{-- PROJECT --}}
         @if ($activeSection === 'project')
             <div class="w-full animate-fade-in">
-                <div class="section-title">Project Improvement</div>
+                <div class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path d="M19.5 6h-6.879a1.5 1.5 0 0 1-1.06-.44l-.622-.62A1.5 1.5 0 0 0 9.88 4.5H6A2.25 2.25 0 0 0 3.75 6.75v10.5A2.25 2.25 0 0 0 6 19.5h13.5a2.25 2.25 0 0 0 2.25-2.25v-9A2.25 2.25 0 0 0 19.5 6Z" />
+                    </svg>
+                    Project Improvement
+                </div>
                 <div class="flex flex-col gap-6 w-full mb-8">
                     @foreach ($talents as $talent)
                         <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm overflow-hidden block">

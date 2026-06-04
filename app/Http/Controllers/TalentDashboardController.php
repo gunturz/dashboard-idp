@@ -967,10 +967,6 @@ class TalentDashboardController extends Controller
                 ->orderByDesc('created_at')
                 ->first();
 
-            if (!$session) {
-                abort(404, 'Data assessment pada riwayat ini tidak ditemukan.');
-            }
-
             // Ensure the profile card shows data from the viewed session's cycle
             $sessionPlan = \App\Models\PromotionPlan::with(['targetPosition'])
                 ->where('user_id_talent', $user->id)
@@ -988,19 +984,21 @@ class TalentDashboardController extends Controller
             );
 
             // Data Kompetensi dari sesi ini
-            $details = DB::table('detail_assessment')
-                ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
-                ->where('assessment_id', $session->id)
-                ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan', 'detail_assessment.gap_score')
-                ->get();
-
             $kompetensiData = [];
-            foreach ($details as $d) {
-                $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
-                $kompetensiData[$d->name] = [
-                    'score' => $avg,
-                    'gap' => $d->gap_score ?? 0
-                ];
+            if ($session) {
+                $details = DB::table('detail_assessment')
+                    ->join('competencies', 'detail_assessment.competence_id', '=', 'competencies.id')
+                    ->where('assessment_id', $session->id)
+                    ->select('competencies.name', 'detail_assessment.score_talent', 'detail_assessment.score_atasan', 'detail_assessment.gap_score')
+                    ->get();
+
+                foreach ($details as $d) {
+                    $avg = min(5, ($d->score_talent + $d->score_atasan) / 2);
+                    $kompetensiData[$d->name] = [
+                        'score' => $avg,
+                        'gap' => $d->gap_score ?? 0
+                    ];
+                }
             }
 
             // IDP Monitoring (Aktivitas)

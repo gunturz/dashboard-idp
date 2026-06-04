@@ -161,14 +161,10 @@ class TalentDashboardContent extends Component
         $hasDevPlan = $this->hasCompleteDevelopmentPlan($user, $developmentSession);
         $developmentPlanIncompleteMessage = $this->incompleteDevelopmentPlanMessage();
 
-        // Cek apakah talent pernah mengisi assessment SAMA SEKALI (tidak peduli devSession)
-        $hasAnyAssessment = DB::table('assessment_session')
-            ->where('user_id_talent', $user->id)
-            ->exists();
-
         $latestAssessment = DB::table('assessment_session')
             ->where('user_id_talent', $user->id)
             ->when($developmentSession, fn($query) => $query->where('development_session_id', $developmentSession->id))
+            ->when(!$developmentSession, fn($query) => $query->whereNull('development_session_id'))
             ->when(
                 $this->hasIsActiveColumn('assessment_session'),
                 fn($query) => $query->where('is_active', true)
@@ -176,18 +172,7 @@ class TalentDashboardContent extends Component
             ->orderBy('created_at', 'desc')
             ->first();
 
-        // Jika tidak ada assessment untuk devSession saat ini, ambil assessment terbaru manapun
-        // agar atasan score dan kompetensiData tetap bisa ditampilkan
-        if (!$latestAssessment && $hasAnyAssessment) {
-            $latestAssessment = DB::table('assessment_session')
-                ->where('user_id_talent', $user->id)
-                ->when(
-                    $this->hasIsActiveColumn('assessment_session'),
-                    fn($query) => $query->where('is_active', true)
-                )
-                ->orderBy('created_at', 'desc')
-                ->first();
-        }
+        $hasActiveAssessment = $latestAssessment ? true : false;
 
         $kompetensiData = [];
         $atasanHasScored = false;
@@ -241,7 +226,7 @@ class TalentDashboardContent extends Component
             'hasDevPlan',
             'developmentPlanIncompleteMessage',
             'latestAssessment',
-            'hasAnyAssessment',
+            'hasActiveAssessment',
             'atasanHasScored',
             'kompetensiData',
             'exposureCount',

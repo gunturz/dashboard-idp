@@ -684,6 +684,12 @@ class PDCAdminController extends Controller
                         'is_active' => true,
                     ]);
                     $existingPlan->update(['development_session_id' => $developmentSession->id]);
+
+                    // Link any floating assessment_session to this new development session
+                    DB::table('assessment_session')
+                        ->where('user_id_talent', $talentId)
+                        ->whereNull('development_session_id')
+                        ->update(['development_session_id' => $developmentSession->id]);
                 }
 
                 $existingMentorIds = collect($existingPlan?->mentor_ids ?? [])
@@ -759,6 +765,12 @@ class PDCAdminController extends Controller
                         'target_date' => $request->target_date,
                         'is_active' => true,
                     ]);
+
+                    // Link any floating assessment_session to this new development session
+                    DB::table('assessment_session')
+                        ->where('user_id_talent', $talentId)
+                        ->whereNull('development_session_id')
+                        ->update(['development_session_id' => $developmentSession->id]);
                 }
 
                 if ($plan->wasRecentlyCreated && $request->query('plan_created_at')) {

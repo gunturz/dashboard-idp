@@ -587,8 +587,22 @@
                     </div>
 
                     <div class="py-2.5">
-                        {{-- Quick Action: Notifikasi --}}
-                        <div class="px-3 mb-1">
+                        {{-- Section: Top Actions (Profile & Notifikasi) --}}
+                        <div class="px-3 space-y-0.5">
+                            <a href="{{ route('panelis.profile') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Lihat Profil</span>
+                            </a>
                             <a href="{{ route('panelis.notifikasi') }}"
                                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div
@@ -616,7 +630,7 @@
 
                         <div class="mx-4 border-t border-gray-100 my-1.5"></div>
 
-                        {{-- Section: Dashboard Menu --}}
+                        {{-- Section: Navigation --}}
                         <div class="px-3 space-y-0.5">
                             <a href="{{ route('panelis.dashboard') }}"
                                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-600 hover:bg-gray-50 transition-colors group {{ request()->routeIs('panelis.dashboard') ? 'bg-gray-50 font-bold text-[#005ba1]' : '' }}">
@@ -648,20 +662,6 @@
 
                         {{-- Section: Account --}}
                         <div class="px-3">
-                            <a href="{{ route('panelis.profile') }}"
-                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
-                                <div
-                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <span class="font-medium">Lihat Profil</span>
-                            </a>
                             @if (Auth::user() && Auth::user()->roles->count() > 1)
                                 <a href="{{ route('role.select') }}"
                                     class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">

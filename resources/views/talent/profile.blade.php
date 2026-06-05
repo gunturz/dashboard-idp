@@ -280,14 +280,23 @@
 
             /* Responsive */
             @media (max-width: 768px) {
-                .prof-hero { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px; }
+                .prof-page { padding-top: 20px; }
+                .prof-hero { flex-direction: row; align-items: center; gap: 16px; padding: 20px; }
+                .prof-hero-name { font-size: 1.25rem; }
                 .prof-hero-meta { text-align: left; }
                 .prof-stat-strip { grid-template-columns: 1fr; }
                 .avatar-wrap { width: 80px; height: 80px; }
-                .avatar-img, .avatar-placeholder { width: 80px; height: 80px; }
+                .avatar-img, .avatar-placeholder { width: 80px; height: 80px; font-size: 2rem; }
                 .prof-field-row { flex-direction: column; align-items: flex-start; gap: 6px; }
                 .prof-field-label { width: 100%; }
                 .prof-input { width: 100%; }
+                .page-header { margin-top: 0 !important; margin-bottom: 20px; }
+
+                .prof-footer { flex-wrap: wrap; }
+                #btn-edit { width: 100%; justify-content: center; }
+                #btn-hapus-foto { order: 1; width: calc(50% - 6px); justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 0.8rem; }
+                #btn-batal { order: 2; width: calc(50% - 6px); justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 0.8rem; }
+                #btn-simpan { order: 3; width: 100%; justify-content: center; margin-top: 4px; }
             }
         </style>
     </x-slot>
@@ -480,12 +489,12 @@
                     <span class="prof-field-label">Password</span>
                     
                     {{-- View Mode --}}
-                    <div class="view-field flex-1 relative">
+                    <div class="view-field flex-1 w-full relative">
                         <input type="password" value="password1234" readonly class="prof-input w-full pr-10 text-slate-600 bg-[#eff6ff] border-none shadow-sm cursor-default" style="pointer-events: none;">
                     </div>
 
                     {{-- Edit Mode --}}
-                    <div class="edit-field hidden flex-1 relative">
+                    <div class="edit-field hidden flex-1 w-full relative">
                         <input type="password" name="password" value="" placeholder="Abaikan jika tidak diubah" class="prof-input w-full pr-10 text-slate-600 outline-none">
                         <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility(this)">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-500 hover:text-slate-700 toggle-icon" viewBox="0 0 20 20" fill="currentColor">

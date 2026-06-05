@@ -207,10 +207,29 @@
                 overflow-wrap: anywhere;
             }
 
-            .status-pill.ready-now { border-color: #22c55e; color: #16a34a; background: #f0fdf4; }
-            .status-pill.ready-1-2 { border-color: #3b82f6; color: #2563eb; background: #eff6ff; }
-            .status-pill.ready-over-2 { border-color: #f59e0b; color: #d97706; background: #fffbeb; }
-            .status-pill.not-ready { border-color: #ef4444; color: #dc2626; background: #fef2f2; }
+            .status-pill.ready-now {
+                border-color: #22c55e;
+                color: #16a34a;
+                background: #f0fdf4;
+            }
+
+            .status-pill.ready-1-2 {
+                border-color: #3b82f6;
+                color: #2563eb;
+                background: #eff6ff;
+            }
+
+            .status-pill.ready-over-2 {
+                border-color: #f59e0b;
+                color: #d97706;
+                background: #fffbeb;
+            }
+
+            .status-pill.not-ready {
+                border-color: #ef4444;
+                color: #dc2626;
+                background: #fef2f2;
+            }
 
             .score-pill {
                 display: inline-flex;
@@ -323,10 +342,21 @@
                 line-height: 1.4;
             }
 
-            .ready-now h4 { color: #16a34a; }
-            .ready-1-2 h4 { color: #2563eb; }
-            .ready-over-2 h4 { color: #d97706; }
-            .not-ready h4 { color: #dc2626; }
+            .ready-now h4 {
+                color: #16a34a;
+            }
+
+            .ready-1-2 h4 {
+                color: #2563eb;
+            }
+
+            .ready-over-2 h4 {
+                color: #d97706;
+            }
+
+            .not-ready h4 {
+                color: #dc2626;
+            }
 
             @media (max-width: 1100px) {
                 .review-grid {
@@ -382,7 +412,8 @@
             </div>
             <div>
                 <h1 class="page-header-title text-slate-800">Detail Penilaian Panelis</h1>
-                <p class="page-header-sub text-slate-500">Hasil evaluasi, feedback, dan rekomendasi akhir dari seluruh Panelis.</p>
+                <p class="page-header-sub text-slate-500">Hasil evaluasi, feedback, dan rekomendasi akhir dari seluruh
+                    Panelis.</p>
             </div>
         </div>
     </div>
@@ -401,22 +432,36 @@
                 $reviewPlan = $reviewTalent->promotion_plan;
                 $namaTalent = $reviewTalent->nama ?? '-';
                 $parts = explode(' ', trim($namaTalent));
-                $initials = strtoupper(substr($parts[0] ?? '-', 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''));
+                $initials = strtoupper(
+                    substr($parts[0] ?? '-', 0, 1) . (isset($parts[1]) ? substr($parts[1], 0, 1) : ''),
+                );
                 $mentorIds = optional($reviewPlan)->mentor_ids ?? [];
                 $mentorNames = !empty($mentorIds)
                     ? \App\Models\User::whereIn('id', $mentorIds)->pluck('nama')->implode(', ')
                     : optional($reviewTalent->mentor)->nama ?? '-';
                 $periodeStr =
-                    (optional($reviewPlan)->start_date ? \Carbon\Carbon::parse($reviewPlan->start_date)->format('d/m/Y') : '-') .
+                    (optional($reviewPlan)->start_date
+                        ? \Carbon\Carbon::parse($reviewPlan->start_date)->format('d/m/Y')
+                        : '-') .
                     ' - ' .
-                    (optional($reviewPlan)->target_date ? \Carbon\Carbon::parse($reviewPlan->target_date)->format('d/m/Y') : '-');
+                    (optional($reviewPlan)->target_date
+                        ? \Carbon\Carbon::parse($reviewPlan->target_date)->format('d/m/Y')
+                        : '-');
                 $projectTitle =
                     optional($review['latestProject'])->title ??
                     'Penilaian Panelis - ' . (optional($reviewTalent->company)->nama_company ?? '-');
                 $scoreValues = $review['panelisAssessmentsByPanelis']->pluck('panelis_score')->filter();
                 $averageScore = $scoreValues->isNotEmpty() ? round($scoreValues->avg() * 2) : null;
                 $statusPromo = optional($reviewPlan)->status_promotion;
-                $isComplete = in_array($statusPromo, ['Promoted', 'Not Promoted', 'Approved Panelis', 'Rejected Panelis', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready']);
+                $isComplete = in_array($statusPromo, [
+                    'Promoted',
+                    'Not Promoted',
+                    'Approved Panelis',
+                    'Rejected Panelis',
+                    'Ready in 1-2 Years',
+                    'Ready in > 2 Years',
+                    'Not Ready',
+                ]);
             @endphp
 
 
@@ -445,7 +490,8 @@
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Departemen</span>
-                        <span class="meta-value">{{ optional($reviewTalent->department)->nama_department ?? '-' }}</span>
+                        <span
+                            class="meta-value">{{ optional($reviewTalent->department)->nama_department ?? '-' }}</span>
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Atasan</span>
@@ -453,7 +499,8 @@
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Jabatan yang Dituju</span>
-                        <span class="meta-value">{{ optional(optional($reviewPlan)->targetPosition)->position_name ?? '-' }}</span>
+                        <span
+                            class="meta-value">{{ optional(optional($reviewPlan)->targetPosition)->position_name ?? '-' }}</span>
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Periode</span>
@@ -468,22 +515,30 @@
                     @forelse ($review['panelisUsers'] as $panelisIndex => $panelis)
                         @php
                             $assessment = $review['panelisAssessmentsByPanelis'][$panelis->id] ?? null;
-                            $panelisCompany = optional($panelis->company)->nama_company ?? optional($panelis->position)->position_name ?? 'Panelis';
+                            $panelisCompany =
+                                optional($panelis->company)->nama_company ??
+                                (optional($panelis->position)->position_name ?? 'Panelis');
                             $feedback = $assessment?->panelis_komentar ?: 'Belum ada feedback dari panelis.';
                             $recommendation = $assessment?->panelis_rekomendasi ?: 'Menunggu Penilaian';
-                            $score = $assessment?->panelis_score ? ($assessment->panelis_score * 2) : '-';
-                            
+                            $score = $assessment?->panelis_score ? $assessment->panelis_score * 2 : '-';
+
                             $recClass = '';
                             if ($recommendation !== 'Menunggu Penilaian') {
-                                if (stripos($recommendation, 'Ready Now') !== false) $recClass = 'ready-now';
-                                elseif (stripos($recommendation, 'Not Ready') !== false) $recClass = 'not-ready';
-                                elseif (str_contains($recommendation, '1') && str_contains($recommendation, '2')) $recClass = 'ready-1-2';
-                                elseif (str_contains($recommendation, '2')) $recClass = 'ready-over-2';
+                                if (stripos($recommendation, 'Ready Now') !== false) {
+                                    $recClass = 'ready-now';
+                                } elseif (stripos($recommendation, 'Not Ready') !== false) {
+                                    $recClass = 'not-ready';
+                                } elseif (str_contains($recommendation, '1') && str_contains($recommendation, '2')) {
+                                    $recClass = 'ready-1-2';
+                                } elseif (str_contains($recommendation, '2')) {
+                                    $recClass = 'ready-over-2';
+                                }
                             }
                         @endphp
                         <article class="assessment-card">
                             <div class="assessment-head">
-                                <span class="assessment-name">{{ $panelis->nama ?? ('Panelis ' . ($panelisIndex + 1)) }}</span>
+                                <span
+                                    class="assessment-name">{{ $panelis->nama ?? 'Panelis ' . ($panelisIndex + 1) }}</span>
                                 <span class="assessment-dot"></span>
                                 <span class="assessment-company">{{ $panelisCompany }}</span>
                             </div>
@@ -528,7 +583,6 @@
     </form>
 
     <div id="decisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4"
-
         style="background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
 
@@ -582,7 +636,8 @@
                 </div>
             </div>
             <div class="mx-6 mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-                <p class="text-xs text-amber-700 font-medium">Tindakan ini tidak dapat dibatalkan setelah dikonfirmasi.</p>
+                <p class="text-xs text-amber-700 font-medium">Tindakan ini tidak dapat dibatalkan setelah dikonfirmasi.
+                </p>
             </div>
             <div class="px-6 py-4 flex gap-3 justify-end border-t border-gray-100">
                 <button type="button" onclick="submitDecision()" id="confirmBtn"
@@ -604,7 +659,7 @@
                         '>': '&gt;',
                         '"': '&quot;',
                         "'": '&#039;'
-                    }[char];
+                    } [char];
                 });
             }
 

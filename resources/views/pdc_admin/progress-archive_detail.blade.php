@@ -1439,19 +1439,26 @@
                 gap: 10px;
                 margin-top: 4px;
             }
+            /* Base pill */
             .panelis-status-pill {
                 display: inline-flex;
                 align-items: center;
                 gap: 7px;
                 padding: 6px 18px;
-                border: 1.5px solid #14b8a6;
+                border: 1.5px solid #cbd5e1;
                 border-radius: 999px;
                 font-size: 0.78rem;
                 font-weight: 700;
-                color: #0d9488;
+                color: #475569;
                 background: #fff;
                 white-space: nowrap;
             }
+            /* Pill variants */
+            .panelis-status-pill.pill-ready-now    { border-color: #16a34a; color: #16a34a; }
+            .panelis-status-pill.pill-ready-1-2    { border-color: #2563eb; color: #2563eb; }
+            .panelis-status-pill.pill-ready-over-2 { border-color: #ea580c; color: #ea580c; }
+            .panelis-status-pill.pill-not-ready    { border-color: #dc2626; color: #dc2626; }
+
             .panelis-score-badge {
                 display: inline-flex;
                 align-items: center;
@@ -1501,6 +1508,19 @@
                     $rekomenLabel = $rekomen ?: '-';
                     $score = ($assessment->panelis_score ?? 0) * 2;
                     $totalScore += $score;
+
+                    // Tentukan class warna pill berdasarkan rekomendasi
+                    if (str_contains($rekomen, 'Ready Now')) {
+                        $pillClass = 'pill-ready-now';
+                    } elseif (str_contains($rekomen, '> 2') || str_contains($rekomen, '>2') || str_contains($rekomen, 'over 2') || str_contains($rekomen, 'Over 2')) {
+                        $pillClass = 'pill-ready-over-2';
+                    } elseif (str_contains($rekomen, '1') || str_contains($rekomen, '2') || str_contains(strtolower($rekomen), '1-2')) {
+                        $pillClass = 'pill-ready-1-2';
+                    } elseif (str_contains(strtolower($rekomen), 'not ready')) {
+                        $pillClass = 'pill-not-ready';
+                    } else {
+                        $pillClass = '';
+                    }
                 @endphp
                 <div class="panelis-card">
                     {{-- Header: Nama & Perusahaan --}}
@@ -1519,7 +1539,7 @@
 
                     {{-- Footer: Status Pill + Skor Badge --}}
                     <div class="panelis-card-footer">
-                        <span class="panelis-status-pill">
+                        <span class="panelis-status-pill {{ $pillClass }}">
                             {{ $rekomenLabel }}
                         </span>
                         <span class="panelis-score-badge">

@@ -1,4 +1,36 @@
 <div>
+    <style>
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.12);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.12);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+    </style>
     {{-- ══════════════════════════════ CHART ROW ══════════════════════════════ --}}
     <div class="space-y-4" id="Kompetensi">
         <div class="page-header animate-title mb-2 mt-2">
@@ -17,7 +49,7 @@
 
         {{-- ── Kompetensi Bar Chart (full width) ── --}}
         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 fade-up fade-up-2">
-            @if(!$hasAnyAssessment)
+            @if(!$hasActiveAssessment)
                 <div class="flex flex-col items-center justify-center py-6">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
@@ -28,7 +60,7 @@
                     </div>
                     <p class="text-base font-bold text-gray-700">Belum Ada Data Assessment</p>
                     <p class="text-sm text-gray-500 mt-1 mb-2 text-center max-w-md">
-                        Anda belum mengisi assessment kompetensi awal. Silakan isi terlebih dahulu untuk melihat grafik kompetensi Anda meskipun Development Plan belum dibuat.
+                        Anda belum mengisi assessment kompetensi untuk periode saat ini. Silakan isi terlebih dahulu untuk melihat grafik kompetensi Anda.
                     </p>
                     <a href="{{ route('talent.competency') }}"
                         class="mt-5 inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
@@ -477,20 +509,24 @@
                                     </td>
                                     <td class="py-4 px-6 text-center w-48">
                                         @php
-                                            $projectStatus = $project->status === 'Verified' ? 'Approved' : $project->status;
+                                            $projectStatus = 'Pending';
+
+                                            if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) {
+                                                $projectStatus = 'Approved';
+                                            } elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) {
+                                                $projectStatus = 'Rejected';
+                                            } elseif (in_array($project->status, ['Approved', 'Verified'], true)) {
+                                                $projectStatus = 'Approved';
+                                            } elseif ($project->status === 'Rejected') {
+                                                $projectStatus = 'Rejected';
+                                            }
                                         @endphp
                                         @if($projectStatus === 'Approved')
-                                            <span class="inline-flex items-center gap-1.5 text-green-600 text-[11px] font-bold bg-green-50 px-3 py-1 rounded-full border border-green-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
-                                            </span>
+                                            <span class="badge badge-green">Approved</span>
                                         @elseif($projectStatus === 'Rejected')
-                                            <span class="inline-flex items-center gap-1.5 text-red-600 text-[11px] font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
-                                            </span>
+                                            <span class="badge badge-red">Rejected</span>
                                         @else
-                                            <span class="inline-flex items-center gap-1.5 text-orange-500 text-[11px] font-bold bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
-                                            </span>
+                                            <span class="badge badge-amber">Pending</span>
                                         @endif
                                     </td>
                                 </tr>

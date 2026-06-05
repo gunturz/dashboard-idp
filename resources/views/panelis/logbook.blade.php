@@ -311,10 +311,9 @@
                                 </td>
                             </tr>
                         @empty
-
-                            <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
-                                Mentoring yang dicatat.</td>
-
+                            <tr>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400">Belum ada aktivitas
+                                    Mentoring yang dicatat.</td>
                             </tr>
                         @endforelse
                     </tbody>

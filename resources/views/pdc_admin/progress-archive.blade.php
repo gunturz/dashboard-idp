@@ -128,7 +128,7 @@
         @endphp
 
         <div class="progress-archive-wrapper">
-            <div class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
+            <div id="archiveTableContainer" class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white {{ $archiveRows->isEmpty() ? 'hidden' : '' }}">
                 <table class="w-full table-auto text-left" id="archiveTable">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -244,26 +244,25 @@
                                 </td>
                             </tr>
                         @endforeach
-
-                        {{-- Empty state row --}}
-                        <tr id="emptyRow" class="hidden">
-                            <td colspan="6" class="py-12">
-                                <div class="empty-prem" style="border: none; padding: 20px;">
-                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                            style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                        </svg>
-                                    </div>
-                                    <h3>Tidak Ada Data Talent</h3>
-                                    <p>Tidak ada talent yang sesuai dengan pencarian Anda.</p>
-                                </div>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
+
+            {{-- Empty State Outside Table --}}
+            <div id="emptyStateContainer" class="{{ $archiveRows->isEmpty() ? '' : 'hidden' }} mt-8 mb-12">
+                <div class="empty-prem" style="border: none; padding: 20px;">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 id="emptyTitle">Belum Ada Arsip Progress Talent</h3>
+                    <p id="emptyText">Data akan muncul setelah ada talent yang masuk ke dalam arsip.</p>
+                </div>
+            </div>
+
         </div>{{-- /progress-archive-wrapper --}}
 
     </div>
@@ -297,13 +296,35 @@
                     }
                 });
 
-                const emptyRow = document.getElementById('emptyRow');
-                if (emptyRow) {
-                    emptyRow.classList.toggle('hidden', visibleCount > 0);
+                const tableContainer = document.getElementById('archiveTableContainer');
+                const emptyStateContainer = document.getElementById('emptyStateContainer');
+                const emptyTitle = document.getElementById('emptyTitle');
+                const emptyText = document.getElementById('emptyText');
+                
+                if (tableContainer && emptyStateContainer) {
+                    if (visibleCount > 0) {
+                        tableContainer.classList.remove('hidden');
+                        emptyStateContainer.classList.add('hidden');
+                    } else {
+                        tableContainer.classList.add('hidden');
+                        emptyStateContainer.classList.remove('hidden');
+                        
+                        if (searchTxt || compVal || periodVal || statusVal) {
+                            emptyTitle.innerHTML = 'Tidak Ada Data Talent';
+                            if (searchTxt) {
+                                emptyText.innerHTML = `Tidak ada hasil pencarian yang cocok untuk "<strong>${document.getElementById('searchInput').value}</strong>"`;
+                            } else {
+                                emptyText.innerHTML = 'Tidak ada hasil untuk filter yang dipilih.';
+                            }
+                        } else {
+                            emptyTitle.innerHTML = 'Belum Ada Arsip Progress Talent';
+                            emptyText.innerHTML = 'Data akan muncul setelah ada talent yang masuk ke dalam arsip.';
+                        }
+                    }
                 }
             }
 
-            document.addEventListener('DOMContentLoaded', () => {
+            function initArchive() {
                 filterTalents();
 
                 // Warna placeholder select (abu-abu saat opsi default, gelap saat dipilih)
@@ -314,7 +335,10 @@
                     syncSelectColor(sel);
                     sel.addEventListener('change', () => syncSelectColor(sel));
                 });
-            });
+            }
+
+            document.addEventListener('DOMContentLoaded', initArchive);
+            document.addEventListener('livewire:navigated', initArchive);
         </script>
         <style>
             .archive-row td {

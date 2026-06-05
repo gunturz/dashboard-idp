@@ -216,6 +216,39 @@
             box-shadow: 0 2px 4px rgba(20, 184, 166, 0.3);
         }
 
+        /* ── Empty Premium State ── */
+        .empty-prem {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            text-align: center;
+            max-width: 560px;
+            margin: 40px auto;
+        }
+
+        .empty-prem svg {
+            width: 48px;
+            height: 48px;
+            color: #64748b;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .empty-prem h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .empty-prem p {
+            font-size: 0.82rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
         /* ── Background Decoration ── */
         .bg-decoration {
             position: fixed;

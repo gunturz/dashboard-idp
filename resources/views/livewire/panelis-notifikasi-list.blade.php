@@ -104,10 +104,13 @@
                 </label>
             @empty
                 <div class="empty-prem" style="border:none; padding:48px 20px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 56px; height: 56px; color: #cbd5e1;">
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                    </svg>
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
+                            <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                        </svg>
+                    </div>
                     <h3>Tidak Ada Notifikasi</h3>
                     <p>Anda sudah up to date! Tidak ada pemberitahuan baru.</p>
                 </div>

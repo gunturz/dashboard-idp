@@ -230,7 +230,7 @@
 
             {{-- Footer: Kirim Finance, Reject, Approve --}}
             <div class="px-6 pt-5 pb-5 flex flex-col gap-3">
-                <button type="button" id="btnKirimFinance"
+                <button type="button" id="btnKirimFinance" onclick="kirimKeFinance()"
                     class="w-full py-3 text-sm font-bold text-white bg-[#0f172a] hover:bg-[#1e242e] rounded-xl transition-colors shadow-sm">
                     Kirim ke Finance
                 </button>
@@ -497,12 +497,11 @@
             modal.style.display = 'flex';
         }
 
-        document.getElementById('btnKirimFinance').addEventListener('click', function() {
+        function kirimKeFinance() {
             closeActionModal();
             const p = currentProjectData;
-            openFinanceModal(p.talentName, p.deptName, p.posName, p.companyName, p.projectId, p.projTitle, p
-                .projFileUrl, p.companyId);
-        });
+            openFinanceModal(p.talentName, p.deptName, p.posName, p.companyName, p.projectId, p.projTitle, p.projFileUrl, p.companyId);
+        }
 
         function closeActionModal() {
             const modal = document.getElementById('actionModal');
@@ -511,19 +510,23 @@
         }
 
         const allFinanceOptions = [];
-        document.addEventListener('DOMContentLoaded', () => {
-            const selectEl = document.getElementById('finance-assigned-select');
-            if (selectEl) {
-                selectEl.querySelectorAll('option[data-company-id]').forEach(opt => {
-                    allFinanceOptions.push({
-                        value: opt.value,
-                        text: opt.text,
-                        companyId: opt.getAttribute('data-company-id'),
-                        selected: opt.selected
+        function initFinanceOptions() {
+            if (allFinanceOptions.length === 0) {
+                const selectEl = document.getElementById('finance-assigned-select');
+                if (selectEl) {
+                    selectEl.querySelectorAll('option[data-company-id]').forEach(opt => {
+                        allFinanceOptions.push({
+                            value: opt.value,
+                            text: opt.text,
+                            companyId: opt.getAttribute('data-company-id'),
+                            selected: opt.selected
+                        });
                     });
-                });
+                }
             }
-        });
+        }
+        document.addEventListener('DOMContentLoaded', initFinanceOptions);
+        document.addEventListener('livewire:navigated', initFinanceOptions);
 
         function openFinanceModal(talentName, deptName, posName, companyName, projId, projTitle, projFileUrl, companyId) {
             document.getElementById('fin-talent-name').textContent = talentName || '-';

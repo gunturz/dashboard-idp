@@ -23,22 +23,22 @@
             .section-title {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                gap: 16px;
+                gap: 8px;
                 font-size: 1.2rem;
                 font-weight: 800;
                 color: #1e293b;
                 margin-bottom: 24px;
                 margin-top: 40px;
-                text-align: center;
+                text-align: left;
             }
 
-            .section-title::before,
-            .section-title::after {
+            .section-title::before {
                 content: '';
-                flex: 1;
-                height: 1.5px;
-                background: #cbd5e1;
+                display: inline-block;
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 99px;
             }
 
             .section-subtitle {
@@ -238,21 +238,18 @@
             </div>
         </div>
     @empty
-        <div
-            class="bg-white border border-slate-200 rounded-[20px] shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden mb-10">
-            <div class="flex flex-col items-center justify-center py-10 text-center">
-                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
-                    style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </div>
-                <p class="text-base font-bold text-gray-700">Tidak ada permintaan validasi</p>
-                <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed mx-auto">Semua permintaan telah diproses
-                    atau belum ada yang baru.</p>
+        <div class="flex flex-col items-center justify-center py-10 text-center">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+                style="background: linear-gradient(135deg, #ccfbf1, #99f6e4);">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
             </div>
+            <p class="text-base font-bold text-gray-700">Tidak ada permintaan validasi</p>
+            <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed mx-auto">Semua permintaan telah diproses
+                atau belum ada yang baru.</p>
         </div>
     @endforelse
 

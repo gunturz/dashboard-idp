@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Auth;
 class TalentLogbookTable extends Component
 {
     public $activeTab = 'exposure';
+    public $sessionId = null;
 
-    public function mount($activeTab = 'exposure')
+    public function mount($activeTab = 'exposure', $sessionId = null)
     {
+        $this->sessionId = $sessionId;
         if (in_array($activeTab, ['exposure', 'mentoring', 'learning'], true)) {
             $this->activeTab = $activeTab;
         }
@@ -138,7 +140,7 @@ class TalentLogbookTable extends Component
 
         // Determine if the talent's training period is over:
         // True if no active plan exists (e.g. already archived), OR if it's locked, OR if it's in a final state
-        $trainingDone = !$plan 
+        $trainingDone = !$plan
             || $plan->is_locked
             || in_array(
                 $plan->status_promotion,
@@ -154,10 +156,12 @@ class TalentLogbookTable extends Component
             ->whereHas('type', function ($q) use ($tabName) {
                 $q->where('type_name', $tabName);
             })
-            ->when(
-                $this->hasIsActiveColumn('idp_activity'),
-                fn($query) => $query->where('is_active', true)
-            )
+            ->when($this->sessionId, function ($query) {
+                return $query->where('development_session_id', $this->sessionId);
+            })
+            ->when(!$this->sessionId && $this->hasIsActiveColumn('idp_activity'), function ($query) {
+                return $query->where('is_active', true);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -176,26 +180,26 @@ class TalentLogbookTable extends Component
             }
 
             $data[] = [
-                'id'           => $act->id,
-                'mentor'       => $act->verifier ? $act->verifier->nama : '-',
-                'sumber'       => $act->activity,       // for Learning
-                'tema'         => $act->theme,
+                'id' => $act->id,
+                'mentor' => $act->verifier ? $act->verifier->nama : '-',
+                'sumber' => $act->activity,       // for Learning
+                'tema' => $act->theme,
                 'tanggal_update' => $act->updated_at,
-                'tanggal'      => $act->activity_date,
-                'lokasi'       => $act->location,
-                'aktivitas'    => $act->activity,       // for Exposure
-                'deskripsi'    => $act->description,
-                'action_plan'  => $act->action_plan,
-                'platform'     => $act->platform,       // for Learning
-                'file_paths'   => $docPaths,
-                'file_names'   => $docNames,
-                'status'       => $act->status,
+                'tanggal' => $act->activity_date,
+                'lokasi' => $act->location,
+                'aktivitas' => $act->activity,       // for Exposure
+                'deskripsi' => $act->description,
+                'action_plan' => $act->action_plan,
+                'platform' => $act->platform,       // for Learning
+                'file_paths' => $docPaths,
+                'file_names' => $docNames,
+                'status' => $act->status,
             ];
         }
 
         return view('livewire.talent-logbook-table', [
-            'data'         => $data,
-            'user'         => $user,
+            'data' => $data,
+            'user' => $user,
             'trainingDone' => $trainingDone,
         ]);
     }

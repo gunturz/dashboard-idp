@@ -137,14 +137,16 @@
             </div>
         </div>
     @empty
-        <div class="review-card">
-            <div class="p-8 text-center text-gray-400">
-                @if($search)
-                    Tidak ada hasil untuk "<strong>{{ $search }}</strong>"
-                @else
-                    Belum ada permintaan penilaian.
-                @endif
+        <div class="empty-prem" style="border: none; padding: 40px 24px; margin-top: 40px;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
             </div>
+            <h3>{{ $search ? 'Tidak Ada Project Improvement' : 'Belum Ada Project Improvement' }}</h3>
+            <p>{{ $search ? 'Tidak ada data project improvement yang cocok dengan pencarian Anda.' : 'Belum ada data project improvement talent yang masuk untuk direview.' }}</p>
         </div>
     @endforelse
 

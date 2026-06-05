@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
+    <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto {{ $completedTalents->isEmpty() ? 'hidden' : '' }}" id="riwayatTableContainer">
         <table class="w-full min-w-[900px] table-auto text-left bg-white" id="riwayat-table">
             <thead class="bg-slate-50 border-b border-gray-200">
                 <tr>
@@ -96,7 +96,7 @@
                 </tr>
             </thead>
             <tbody id="riwayat-tbody">
-                @forelse($completedTalents as $talent)
+                @foreach($completedTalents as $talent)
                     @php
                         $plan = $talent->promotion_plan;
                         $startDate = $plan?->start_date;
@@ -152,46 +152,23 @@
                             </a>
                         </td>
                     </tr>
-                @empty
-                    <tr id="empty-row">
-                        <td colspan="6" class="py-10 px-6">
-                            <div class="flex flex-col items-center justify-center text-center">
-                                <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                                    style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                </div>
-                                <p class="text-base font-bold text-gray-700">Belum Ada Data Talent</p>
-                                <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada talent yang menyelesaikan penilaian panelis.</p>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-
-                {{-- Hidden empty row for JS filtering --}}
-                <tr id="js-empty-row" class="hidden">
-                    <td colspan="6" class="py-10 px-6">
-                        <div class="flex flex-col items-center justify-center text-center">
-                            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                                style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </div>
-                            <p class="text-base font-bold text-gray-700">Tidak Ditemukan</p>
-                            <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Tidak ada data yang sesuai dengan filter.</p>
-                        </div>
-                    </td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
+    </div>
+
+    <div id="emptyStateContainer" class="{{ $completedTalents->isEmpty() ? '' : 'hidden' }} mt-8 mb-12">
+        <div class="empty-prem" style="border: none; padding: 20px;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+            </div>
+            <h3 id="emptyTitle">Belum Ada Data Talent</h3>
+            <p id="emptyText">Belum ada talent yang menyelesaikan penilaian panelis.</p>
+        </div>
     </div>
 
     <x-slot name="scripts">
@@ -221,9 +198,27 @@
                     }
                 });
 
-                const emptyRow = document.getElementById('js-empty-row');
-                if (emptyRow) {
-                    emptyRow.classList.toggle('hidden', visibleCount > 0);
+                const tableContainer = document.getElementById('riwayatTableContainer');
+                const emptyStateContainer = document.getElementById('emptyStateContainer');
+                const emptyTitle = document.getElementById('emptyTitle');
+                const emptyText = document.getElementById('emptyText');
+
+                if (tableContainer && emptyStateContainer) {
+                    if (visibleCount > 0) {
+                        tableContainer.classList.remove('hidden');
+                        emptyStateContainer.classList.add('hidden');
+                    } else {
+                        tableContainer.classList.add('hidden');
+                        emptyStateContainer.classList.remove('hidden');
+
+                        if (searchTxt || perusahaan || departemen) {
+                            emptyTitle.innerHTML = 'Tidak Ditemukan';
+                            emptyText.innerHTML = 'Tidak ada data yang sesuai dengan filter.';
+                        } else {
+                            emptyTitle.innerHTML = 'Belum Ada Data Talent';
+                            emptyText.innerHTML = 'Belum ada talent yang menyelesaikan penilaian panelis.';
+                        }
+                    }
                 }
             }
         </script>

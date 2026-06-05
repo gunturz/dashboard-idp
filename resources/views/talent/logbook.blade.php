@@ -94,7 +94,8 @@
         </div>
 
         {{-- Livewire Tab & Table Content --}}
-        <livewire:talent-logbook-table :active-tab="$activeTab ?? 'exposure'" />
+        <livewire:talent-logbook-table :active-tab="$activeTab ?? 'exposure'"
+            :session-id="request()->query('session_id')" />
 
     </div>
 

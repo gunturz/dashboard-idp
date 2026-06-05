@@ -530,12 +530,16 @@ class TalentDashboardController extends Controller
             $activeTab = 'exposure';
         }
 
+        $sessionId = $request->query('session_id');
+
         $activities = \App\Models\IdpActivity::with(['type', 'verifier'])
             ->where('user_id_talent', $user->id)
-            ->when(
-                $this->hasIsActiveColumn('idp_activity'),
-                fn($query) => $query->where('is_active', true)
-            )
+            ->when($sessionId, function ($query) use ($sessionId) {
+                return $query->where('development_session_id', $sessionId);
+            })
+            ->when(!$sessionId && $this->hasIsActiveColumn('idp_activity'), function ($query) {
+                return $query->where('is_active', true);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 

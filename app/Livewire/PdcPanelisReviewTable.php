@@ -137,7 +137,7 @@ class PdcPanelisReviewTable extends Component
 
     public function getStatsProperty(): array
     {
-        $totalProjectImprovement = ImprovementProject::where('is_active', true)->count();
+        $totalProjectImprovement = ImprovementProject::where('is_active', true)->distinct('user_id_talent')->count('user_id_talent');
 
         // Stats berdasarkan penugasan panelis (PanelisAssessment)
         $totalTargetPenilaian = PanelisAssessment::where('is_active', true)->count();

@@ -24,7 +24,7 @@
         style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
         <div class="bg-white rounded-[28px] shadow-2xl w-full max-w-[400px] p-8 text-center transform scale-90 transition-transform duration-400 ease-out border border-slate-100"
             id="confirmModalContent">
-            <div
+            <div id="confirm-modal-icon-container"
                 class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900 mb-6 shadow-xl shadow-slate-900/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -87,20 +87,35 @@
             const projectTitleSpan = document.getElementById('modalProjectTitle');
             const talentNameSpan = document.getElementById('modalTalentName');
             const submitBtn = document.getElementById('confirm-modal-submit-btn');
+            const iconContainer = document.getElementById('confirm-modal-icon-container');
 
             projectTitleSpan.textContent = `"${projectTitle}"`;
             talentNameSpan.textContent = talentName;
 
             if (decision === 'Approved') {
                 actionText.textContent = 'Approve';
-                actionText.className = 'font-black text-slate-900';
+                actionText.className = 'font-black text-[#14b8a6]';
                 submitBtn.className =
                     'w-full bg-[#14b8a6] text-white font-black py-3.5 rounded-2xl hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-200';
+                iconContainer.className =
+                    'mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#14b8a6] mb-6 shadow-xl shadow-teal-500/20';
+                iconContainer.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>
+                `;
             } else {
                 actionText.textContent = 'Reject';
-                actionText.className = 'font-black text-slate-900';
+                actionText.className = 'font-black text-red-500';
                 submitBtn.className =
                     'w-full bg-red-500 text-white font-black py-3.5 rounded-2xl hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/30 transition-all duration-200';
+                iconContainer.className =
+                    'mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-500 mb-6 shadow-xl shadow-red-500/20';
+                iconContainer.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                `;
             }
 
             const modal = document.getElementById('finance-confirm-modal');

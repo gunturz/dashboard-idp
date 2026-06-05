@@ -84,6 +84,15 @@
                         d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
                         clip-rule="evenodd" />
                 </svg>
+                Kompetensi
+            </div>
+
+            <div class="sub-section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path fill-rule="evenodd"
+                        d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                        clip-rule="evenodd" />
+                </svg>
                 TOP 3 GAP Kompetensi
             </div>
 
@@ -165,7 +174,7 @@
                 @endforeach
             </div>
 
-            <div class="section-title">
+            <div class="sub-section-title">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                     <path fill-rule="evenodd"
                         d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z"
@@ -926,11 +935,21 @@
                     1)) : g.score;
                 const gapDisplay = (typeof g.gap === 'number') ? (g.gap == 0 ? '0' : g.gap.toFixed(1)) : g.gap;
 
+                let gapClass = 'gap-ok';
+                const gapVal = parseFloat(g.gap);
+                if (gapVal === 0) {
+                    gapClass = 'gap-none';
+                } else if (gapVal < -1.5) {
+                    gapClass = 'gap-large';
+                } else if (gapVal < 0) {
+                    gapClass = 'gap-small';
+                }
+
                 item.innerHTML = `
                     <input type="checkbox" ${g.selected ? 'checked' : ''} onclick="event.stopPropagation(); updatePriorityStyles();">
                     <div class="gap-name-modal">${g.name}</div>
                     <div class="gap-score-modal">${scoreDisplay}/${g.standard}</div>
-                    <div class="gap-value-badge">${gapDisplay}</div>
+                    <div class="gap-value-badge ${gapClass}">${gapDisplay}</div>
                 `;
                 listContainer.appendChild(item);
             });
@@ -1037,14 +1056,6 @@
 
         function closeModalOnOutside(e) {
             if (e.target.id === 'gap-modal') closeGapModal();
-        }
-
-
-
-
-        }
-
-        );
         }
 
         // --- FINANCE MODAL FUNCTIONS ---

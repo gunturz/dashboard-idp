@@ -166,9 +166,9 @@
                                         $periodLabel = '-';
                                         if (!empty($plan->start_date) && !empty($plan->target_date)) {
                                             $periodLabel =
-                                                \Carbon\Carbon::parse($plan->start_date)->translatedFormat('d M Y') .
+                                                \Carbon\Carbon::parse($plan->start_date)->locale('id')->translatedFormat('d M Y') .
                                                 ' - ' .
-                                                \Carbon\Carbon::parse($plan->target_date)->translatedFormat('d M Y');
+                                                \Carbon\Carbon::parse($plan->target_date)->locale('id')->translatedFormat('d M Y');
                                         }
                                     @endphp
                                     @foreach ($posData['talents'] as $index => $talent)

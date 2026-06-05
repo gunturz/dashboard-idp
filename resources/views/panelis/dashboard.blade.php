@@ -167,19 +167,21 @@
             .company-section-title {
                 display: flex;
                 align-items: center;
-                gap: 16px;
-                font-size: 1.15rem;
+                gap: 8px;
+                font-size: 1.2rem;
                 font-weight: 800;
                 color: #1e293b;
                 margin-bottom: 16px;
+                text-align: left;
             }
 
-            .company-section-title::before,
-            .company-section-title::after {
+            .company-section-title::before {
                 content: '';
-                flex: 1;
-                height: 1.5px;
-                background: #e2e8f0;
+                display: inline-block;
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 99px;
             }
 
             /* ── Cards Grid ── */

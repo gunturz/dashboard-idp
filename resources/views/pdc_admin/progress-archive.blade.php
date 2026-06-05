@@ -151,12 +151,12 @@
                             @php
                                 $compName = $talent->archive_company_name ?? '-';
                                 $startDate = optional($talent->promotion_plan)->start_date
-                                    ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat(
+                                    ? \Carbon\Carbon::parse($talent->promotion_plan->start_date)->locale('id')->translatedFormat(
                                         'd F Y',
                                     )
                                     : '-';
                                 $dueDate = optional($talent->promotion_plan)->target_date
-                                    ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat(
+                                    ? \Carbon\Carbon::parse($talent->promotion_plan->target_date)->locale('id')->translatedFormat(
                                         'd F Y',
                                     )
                                     : '-';

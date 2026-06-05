@@ -386,7 +386,7 @@
                             <span class="hist-role">
                                 {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
                             </span>
-                            <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
+                            <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
                         </div>
                         <span class="hist-project-title">{{ $latestProject->title ?? 'Judul Project' }}</span>
                         <span class="badge-done">Done Review</span>

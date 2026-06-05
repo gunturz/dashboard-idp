@@ -591,9 +591,9 @@
                         <td>:</td>
                         <td>
                             @if (optional($talent->promotion_plan)->start_date && optional($talent->promotion_plan)->target_date)
-                                {{ \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($talent->promotion_plan->start_date)->locale('id')->translatedFormat('d F Y') }}
                                 -
-                                {{ \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($talent->promotion_plan->target_date)->locale('id')->translatedFormat('d F Y') }}
                             @else
                                 -
                             @endif
@@ -1083,7 +1083,7 @@
         }
         $averageScore = $panelisCount > 0 ? $totalScore / $panelisCount : 0;
 
-        $exportDate = \Carbon\Carbon::now()->translatedFormat('d F Y');
+        $exportDate = \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y');
     @endphp
 
     <div style="page-break-inside: avoid; padding: 60px 55px 40px 45px; position: relative; z-index: 10;">

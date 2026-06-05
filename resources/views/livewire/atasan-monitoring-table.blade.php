@@ -353,9 +353,9 @@
                                                 stroke-dasharray="{{ number_format($filled, 2) }} {{ number_format($empty, 2) }}"
                                                 style="transition: stroke-dasharray 0.8s ease;" />
                                         </svg>
-                                        <div class="absolute inset-0 flex items-center justify-center">
-                                            <span class="text-4xl font-bold"
-                                                style="color:{{ $d['from'] }};">{{ round($pct * 100) }}%</span>
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                            <span class="text-2xl font-extrabold text-[#1e293b]">{{ round($pct * 100) }}%</span>
+                                            <span class="text-xs font-bold text-gray-400">{{ $d['done'] }}/{{ $d['total'] }}</span>
                                         </div>
                                     </div>
                                     <a href="{{ route('atasan.monitoring.logbook', ['talentId' => $talent->id, 'tab' => strtolower($label)]) }}"

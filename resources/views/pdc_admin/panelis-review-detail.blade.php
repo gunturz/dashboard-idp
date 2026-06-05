@@ -61,7 +61,7 @@
                 border-radius: 999px;
                 background: #14b8a6;
                 color: #ffffff;
-                font-size: 0.72rem;
+                font-size: 0.8rem;
                 font-weight: 800;
             }
 
@@ -102,7 +102,7 @@
             .meta-label {
                 display: block;
                 color: rgba(255, 255, 255, 0.6);
-                font-size: 0.68rem;
+                font-size: 0.76rem;
                 font-weight: 500;
             }
 
@@ -110,7 +110,7 @@
                 display: block;
                 margin-top: 2px;
                 color: rgba(255, 255, 255, 0.96);
-                font-size: 0.78rem;
+                font-size: 0.85rem;
                 font-weight: 800;
                 line-height: 1.35;
                 overflow-wrap: anywhere;
@@ -118,13 +118,13 @@
 
             .project-label {
                 color: #64748b;
-                font-size: 0.72rem;
+                font-size: 0.8rem;
                 font-weight: 500;
             }
 
             .project-title {
                 color: #0f172a;
-                font-size: 0.82rem;
+                font-size: 0.9rem;
                 font-weight: 800;
                 line-height: 1.35;
                 margin: 2px 0 12px;
@@ -154,7 +154,7 @@
 
             .assessment-name {
                 color: #0f172a;
-                font-size: 0.78rem;
+                font-size: 0.85rem;
                 font-weight: 900;
                 white-space: nowrap;
             }
@@ -169,7 +169,7 @@
 
             .assessment-company {
                 color: #64748b;
-                font-size: 0.68rem;
+                font-size: 0.75rem;
                 font-style: italic;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -178,9 +178,40 @@
 
             .assessment-feedback {
                 color: #64748b;
-                font-size: 0.76rem;
+                font-size: 0.85rem;
                 line-height: 1.55;
                 margin-bottom: 12px;
+            }
+
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .btn-expand {
+                display: inline-block;
+                color: #14b8a6;
+                font-size: 0.8rem;
+                font-weight: 800;
+                cursor: pointer;
+                border: none;
+                background: none;
+                padding: 0;
+                margin-top: -8px;
+                margin-bottom: 12px;
+                transition: color 0.2s;
+                text-align: left;
+            }
+
+            .btn-expand:hover {
+                color: #0d9488;
+                text-decoration: underline;
+            }
+
+            .btn-expand.hidden {
+                display: none;
             }
 
             .assessment-bottom {
@@ -201,7 +232,7 @@
                 border-radius: 99px;
                 color: #0f9389;
                 background: #f8fffe;
-                font-size: 0.72rem;
+                font-size: 0.8rem;
                 font-weight: 900;
                 line-height: 1.2;
                 overflow-wrap: anywhere;
@@ -241,7 +272,7 @@
                 border-radius: 999px;
                 background: #14a99c;
                 color: #ffffff;
-                font-size: 0.9rem;
+                font-size: 0.95rem;
                 font-weight: 900;
                 flex-shrink: 0;
             }
@@ -251,7 +282,7 @@
                 border-radius: 12px;
                 padding: 22px 14px;
                 color: #94a3b8;
-                font-size: 0.82rem;
+                font-size: 0.88rem;
                 text-align: center;
             }
 
@@ -542,7 +573,8 @@
                                 <span class="assessment-dot"></span>
                                 <span class="assessment-company">{{ $panelisCompany }}</span>
                             </div>
-                            <div class="assessment-feedback">{{ $feedback }}</div>
+                            <div class="assessment-feedback line-clamp-2" style="margin-bottom: 12px;">{{ $feedback }}</div>
+                            <button type="button" class="btn-expand hidden" onclick="toggleExpandFeedback(this)">Lihat Selengkapnya</button>
                             <div class="assessment-bottom">
                                 <span class="status-pill {{ $recClass }}">{{ $recommendation }}</span>
                                 <span class="score-pill">{{ $score }}</span>
@@ -736,6 +768,30 @@
                 });
             });
 
+            function toggleExpandFeedback(btn) {
+                const feedbackEl = btn.previousElementSibling;
+                if (feedbackEl) {
+                    if (feedbackEl.classList.contains('line-clamp-2')) {
+                        feedbackEl.classList.remove('line-clamp-2');
+                        btn.textContent = 'Sembunyikan';
+                    } else {
+                        feedbackEl.classList.add('line-clamp-2');
+                        btn.textContent = 'Lihat Selengkapnya';
+                    }
+                }
+            }
+
+            function initFeedbackExpand() {
+                document.querySelectorAll('.assessment-feedback').forEach(el => {
+                    if (el.scrollHeight > el.clientHeight) {
+                        const btn = el.nextElementSibling;
+                        if (btn && btn.classList.contains('btn-expand')) {
+                            btn.classList.remove('hidden');
+                        }
+                    }
+                });
+            }
+
             document.addEventListener('DOMContentLoaded', function() {
                 const alert = document.getElementById('success-alert');
                 if (alert) {
@@ -747,6 +803,7 @@
                         }, 500);
                     }, 5000);
                 }
+                initFeedbackExpand();
             });
         </script>
     </x-slot>

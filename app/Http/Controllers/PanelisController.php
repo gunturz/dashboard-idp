@@ -237,7 +237,7 @@ class PanelisController extends Controller
             'info'
         );
 
-        return redirect()->route('panelis.dashboard')
+        return redirect()->route('panelis.history')
             ->with('success', 'Penilaian berhasil disimpan dengan Total skor: ' . $totalScore);
     }
 

@@ -170,10 +170,8 @@
             .aspek-table {
                 width: 100%;
                 border-collapse: collapse;
-                border: 1px solid #d1d5db;
-                border-radius: 12px;
-                overflow: hidden;
-                margin-bottom: 28px;
+                border: none;
+                margin-bottom: 0;
             }
 
             .aspek-table th {
@@ -209,7 +207,7 @@
             }
 
             .aspek-table tbody tr:last-child td {
-                border-bottom: 1px solid #d1d5db;
+                border-bottom: none;
             }
 
             .aspek-table .col-aspek {
@@ -287,9 +285,10 @@
                 padding: 14px 16px;
                 font-size: 0.82rem;
                 color: #334155;
-                resize: vertical;
+                resize: none;
                 font-family: 'Poppins', sans-serif;
                 outline: none;
+                overflow-y: hidden;
             }
 
             .comment-textarea::placeholder {
@@ -465,9 +464,7 @@
             .rubrik-table {
                 width: 100%;
                 border-collapse: collapse;
-                border: 1px solid #d1d5db;
-                border-radius: 12px;
-                overflow: hidden;
+                border: none;
                 font-size: 0.88rem;
             }
 
@@ -499,7 +496,7 @@
             }
 
             .rubrik-table tbody tr:last-child td {
-                border-bottom: 1px solid #d1d5db;
+                border-bottom: none;
             }
 
             .rubrik-table .skor-cell {
@@ -596,7 +593,8 @@
             </svg>
             Rubrik Skor Penilaian
         </p>
-        <table class="rubrik-table">
+        <div class="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white">
+            <table class="rubrik-table">
             <thead>
                 <tr>
                     <th class="text-center" style="width:60px;">Skor</th>
@@ -632,6 +630,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 
     {{-- Aspek Penilaian --}}
@@ -642,7 +641,7 @@
         </svg>
         Aspek Penilaian
     </p>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
         <table class="aspek-table" id="aspek-table">
             <thead>
                 <tr>
@@ -816,6 +815,17 @@
                     }
                 });
                 updateTotal();
+
+                // Auto expand komentar textarea
+                const komentarTextarea = document.getElementById('komentar');
+                if (komentarTextarea) {
+                    const autoExpand = () => {
+                        komentarTextarea.style.height = 'auto';
+                        komentarTextarea.style.height = komentarTextarea.scrollHeight + 'px';
+                    };
+                    komentarTextarea.addEventListener('input', autoExpand);
+                    autoExpand();
+                }
             });
 
             function selectScore(row, score) {
@@ -858,7 +868,11 @@
                     selectedRekomen = null;
                     selectedRekomenText = null;
                 }
-                document.getElementById('komentar').value = '';
+                const komentarTextarea = document.getElementById('komentar');
+                if (komentarTextarea) {
+                    komentarTextarea.value = '';
+                    komentarTextarea.dispatchEvent(new Event('input'));
+                }
             }
 
             function doSimpan() {

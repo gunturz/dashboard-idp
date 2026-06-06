@@ -389,11 +389,31 @@
     </x-slot>
 
     @if (session('success'))
-        <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700">
+        <div id="panelis-success-alert" class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700" style="transition: opacity 0.5s ease, transform 0.5s ease;">
             <strong class="font-bold">Berhasil!</strong>
             <span>{{ session('success') }}</span>
         </div>
     @endif
+    <script>
+        (function() {
+            function dismissPanelisAlert() {
+                var el = document.getElementById('panelis-success-alert');
+                if (!el) return;
+                setTimeout(function() {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-10px)';
+                    setTimeout(function() {
+                        el.remove();
+                    }, 500);
+                }, 3000);
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', dismissPanelisAlert);
+            } else {
+                dismissPanelisAlert();
+            }
+        })();
+    </script>
 
     {{-- Page Title --}}
     <div class="mb-8">

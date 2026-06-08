@@ -1127,7 +1127,7 @@
 
     <div style="page-break-inside: avoid; padding: 60px 55px 40px 45px; position: relative; z-index: 10;">
         <div style="font-size: 16px; color: #000000; line-height: 1.9; text-align: justify; margin-bottom: 60px;">
-            Berdasarkan hasil komprehensif dan penilaian (<em>assessment</em>)
+            Berdasarkan hasil evaluasi komprehensif dan penilaian (<em>assessment</em>) mendalam
             yang telah dilakukan, dengan ini <strong>Saudara/i {{ $talent->nama }}</strong>
             mendapatkan rekomendasi dari Atasan, Mentor dan Panelis <strong><em>{{ $statusLabel }}</em></strong> untuk
             posisi yang dituju.

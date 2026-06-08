@@ -27,7 +27,7 @@ class PDCAdminController extends Controller
             return '-';
         }
 
-        return Carbon::parse($startDate)->translatedFormat('d F Y') . ' - ' . Carbon::parse($targetDate)->translatedFormat('d F Y');
+        return Carbon::parse($startDate)->locale('id')->translatedFormat('d F Y') . ' - ' . Carbon::parse($targetDate)->locale('id')->translatedFormat('d F Y');
     }
 
     public function notifikasi()

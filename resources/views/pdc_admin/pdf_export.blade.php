@@ -591,9 +591,9 @@
                         <td>:</td>
                         <td>
                             @if (optional($talent->promotion_plan)->start_date && optional($talent->promotion_plan)->target_date)
-                                {{ \Carbon\Carbon::parse($talent->promotion_plan->start_date)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($talent->promotion_plan->start_date)->locale('id')->translatedFormat('d F Y') }}
                                 -
-                                {{ \Carbon\Carbon::parse($talent->promotion_plan->target_date)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($talent->promotion_plan->target_date)->locale('id')->translatedFormat('d F Y') }}
                             @else
                                 -
                             @endif
@@ -939,6 +939,18 @@
     </div>
 
     <!-- HALAMAN PENILAIAN PANELIS -->
+    @php
+        $panelisAssessments = $talent->panelisAssessments ?? collect();
+        $totalScore = 0;
+        $panelisCount = 0;
+        foreach ($panelisAssessments as $pa) {
+            if (is_numeric($pa->panelis_score)) {
+                $totalScore += ($pa->panelis_score * 2);
+                $panelisCount++;
+            }
+        }
+        $averageScore = $panelisCount > 0 ? $totalScore / $panelisCount : 0;
+    @endphp
     <table
         style="width: 100%; border: none; border-collapse: collapse; margin:0; padding:0; page-break-before: always; page-break-inside: auto; position:relative; z-index:10;">
         <thead>
@@ -984,11 +996,11 @@
                                     Feedback</th>
                                 <th
                                     style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 27%;">
-                                    Status</th>
+                                    Rekomendasi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($talent->panelisAssessments as $index => $pa)
+                            @forelse($panelisAssessments as $index => $pa)
                                 @php
                                     $rekomendasi = $pa->panelis_rekomendasi ?? '';
                                     // Pisahkan teks utama dan keterangan dalam tanda (..)
@@ -1041,6 +1053,22 @@
                                     </td>
                                 </tr>
                             @endforelse
+
+                            @if($panelisAssessments->isNotEmpty())
+                                <tr
+                                    style="border-top: 1.5px solid #b2d8d0; border-bottom: 1.5px solid #b2d8d0; background-color: #f4f9f7;">
+                                    <td style="padding: 14px 8px; border: none;"></td>
+                                    <td
+                                        style="padding: 14px 8px; text-align: left; border: none; color: #000000; font-weight: bold; font-size: 13px;">
+                                        Rata-rata Skor
+                                    </td>
+                                    <td
+                                        style="padding: 14px 8px; text-align: center; border: none; color: #000000; font-weight: bold; font-size: 13px;">
+                                        {{ $panelisCount > 0 ? number_format($averageScore, 2) : '-' }}
+                                    </td>
+                                    <td colspan="2" style="padding: 14px 8px; border: none;"></td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
 
@@ -1072,28 +1100,15 @@
             $statusLabel = $statusPromotion ?: '-';
         }
 
-        $panelisAssessments = $talent->panelisAssessments ?? collect();
-        $totalScore = 0;
-        $panelisCount = 0;
-        foreach ($panelisAssessments as $pa) {
-            if (is_numeric($pa->panelis_score)) {
-                $totalScore += ($pa->panelis_score * 2);
-                $panelisCount++;
-            }
-        }
-        $averageScore = $panelisCount > 0 ? $totalScore / $panelisCount : 0;
-
-        $exportDate = \Carbon\Carbon::now()->translatedFormat('d F Y');
+        $exportDate = \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y');
     @endphp
 
     <div style="page-break-inside: avoid; padding: 60px 55px 40px 45px; position: relative; z-index: 10;">
         <div style="font-size: 16px; color: #000000; line-height: 1.9; text-align: justify; margin-bottom: 60px;">
-            Berdasarkan hasil rangkaian aktivitas penilaian (<em>assessment</em>) serta evaluasi komprehensif
-            yang dilakukan oleh Tim People Developmen Center (PDC), dengan ini
-            <strong>merekomendasikan Saudara/i {{ $talent->nama }}</strong>
-            untuk dipromosikan ke jabatan target, dengan status kesiapan promosi:
-            <strong>[{{ $statusLabel }}]</strong>. Dengan memperoleh nilai rata-rata sebesar
-            <strong>{{ str_replace('.', ',', (float) round($averageScore, 1)) }} point.</strong>
+            Berdasarkan hasil komprehensif dan penilaian (<em>assessment</em>)
+            yang telah dilakukan, dengan ini <strong>Saudara/i {{ $talent->nama }}</strong>
+            mendapatkan rekomendasi dari Atasan, Mentor dan Panelis <strong><em>{{ $statusLabel }}</em></strong> untuk
+            posisi yang dituju.
         </div>
 
         <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 40px;">
@@ -1106,7 +1121,7 @@
                         People Development Center</div>
                     <div style="border-top: 1.5px solid #555; padding-top: 6px; width: 220px;">
                         <div style="font-size: 16px; color: #000000; font-weight: bold;">Wisnu Wijaya Putra</div>
-                        <div style="font-size: 14px; color: #000000; margin-top: 2px;">NIK: 0987645321</div>
+                        <div style="font-size: 14px; color: #000000; margin-top: 2px;">ID : 0320240114</div>
                     </div>
                 </td>
             </tr>

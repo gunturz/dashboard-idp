@@ -237,12 +237,17 @@
 
             /* Responsive */
             @media (max-width: 768px) {
-                .prof-hero { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px; }
+                .prof-hero { flex-direction: row; align-items: center; gap: 16px; padding: 20px; }
+                .prof-hero-name { font-size: 1.25rem; }
                 .avatar-wrap { width: 80px; height: 80px; }
                 .avatar-img, .avatar-placeholder { width: 80px; height: 80px; }
                 .prof-field-row { flex-direction: column; align-items: flex-start; gap: 6px; }
                 .prof-field-label { width: 100%; }
                 .prof-input { width: 100%; }
+                .prof-field-row .relative.flex-1 { width: 100%; }
+                .prof-footer { flex-wrap: wrap; gap: 12px; }
+                #btn-hapus-foto, #btn-batal { flex: 1; min-width: calc(50% - 12px); justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 0.8rem; }
+                #btn-simpan, #btn-edit { width: 100%; justify-content: center; }
             }
         </style>
     </x-slot>

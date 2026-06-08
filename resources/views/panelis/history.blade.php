@@ -5,18 +5,20 @@
             .company-divider {
                 display: flex;
                 align-items: center;
-                gap: 16px;
-                font-size: 1.15rem;
+                gap: 8px;
+                font-size: 1.2rem;
                 font-weight: 800;
                 color: #1e293b;
                 margin: 36px 0 16px 0;
+                text-align: left;
             }
-            .company-divider::before,
-            .company-divider::after {
+            .company-divider::before {
                 content: '';
-                flex: 1;
-                height: 1.5px;
-                background: #e2e8f0;
+                display: inline-block;
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 99px;
             }
             .company-divider:first-of-type { margin-top: 0; }
 
@@ -275,6 +277,33 @@
         </style>
     </x-slot>
 
+    @if (session('success'))
+        <div id="panelis-success-alert" class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700" style="transition: opacity 0.5s ease, transform 0.5s ease;">
+            <strong class="font-bold">Berhasil!</strong>
+            <span>{{ session('success') }}</span>
+        </div>
+        <script>
+            (function() {
+                function dismissPanelisAlert() {
+                    var el = document.getElementById('panelis-success-alert');
+                    if (!el) return;
+                    setTimeout(function() {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(-10px)';
+                        setTimeout(function() {
+                            el.remove();
+                        }, 500);
+                    }, 3000);
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', dismissPanelisAlert);
+                } else {
+                    dismissPanelisAlert();
+                }
+            })();
+        </script>
+    @endif
+
     <div class="page-header animate-title mb-8">
         <div class="page-header-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -317,7 +346,17 @@
     @endphp
 
     @if($assessments->isEmpty())
-        <div class="empty-state">Belum ada riwayat penilaian.</div>
+        <div class="empty-prem" style="border: none; padding: 20px;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3>Belum Ada Riwayat Penilaian</h3>
+            <p>Data riwayat penilaian akan muncul setelah Anda memberikan penilaian kepada talent.</p>
+        </div>
     @else
         @foreach($grouped as $companyName => $companyProjects)
             <div class="company-divider">{{ $companyName }}</div>
@@ -376,7 +415,8 @@
                             <span class="hist-role">
                                 {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
                             </span>
-                            <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->translatedFormat('d F Y') : '-' }}</span>
+                            <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
+                            <span class="hist-date">Diupdate: {{ $assessment->updated_at ? \Carbon\Carbon::parse($assessment->updated_at)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
                         </div>
                         <span class="hist-project-title">{{ $latestProject->title ?? 'Judul Project' }}</span>
                         <span class="badge-done">Done Review</span>
@@ -414,7 +454,7 @@
                             {{-- Komentar --}}
                             <div class="komentar-wrap">
                                 <p class="komentar-label">Komentar / Catatan Penilai:</p>
-                                <textarea class="komentar-ta" readonly>{{ $assessment->panelis_komentar ?? '' }}</textarea>
+                                <div class="komentar-ta whitespace-pre-wrap break-words">{{ $assessment->panelis_komentar ?? '' }}</div>
                             </div>
 
                             {{-- Readiness --}}

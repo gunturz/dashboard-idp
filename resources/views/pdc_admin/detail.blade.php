@@ -195,6 +195,26 @@
                 text-align: center;
             }
 
+            .gap-value-badge.gap-none {
+                background: #f1f5f9;
+                color: #64748b;
+            }
+
+            .gap-value-badge.gap-ok {
+                background: #6293ff;
+                color: white;
+            }
+
+            .gap-value-badge.gap-small {
+                background: #f97316;
+                color: white;
+            }
+
+            .gap-value-badge.gap-large {
+                background: #ef4444;
+                color: white;
+            }
+
             /* Priority Colors */
             .gap-select-item.priority-1 {
                 border-color: #ef4444;
@@ -206,12 +226,12 @@
             }
 
             .gap-select-item.priority-2 {
-                border-color: #f97316;
+                border-color: #ea580c;
                 border-width: 2px;
             }
 
             .gap-select-item.priority-2 input {
-                accent-color: #f97316;
+                accent-color: #ea580c;
             }
 
             .gap-select-item.priority-3 {
@@ -498,6 +518,26 @@
                 color: #1e293b;
                 margin-top: 40px;
                 margin-bottom: 24px;
+            }
+
+            .sub-section-title {
+                position: relative;
+                padding-left: 0;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 1rem;
+                font-weight: 800;
+                color: #475569;
+                margin-bottom: 16px;
+                margin-top: 16px;
+            }
+
+            .sub-section-title svg {
+                width: 18px;
+                height: 18px;
+                color: #0f172a;
+                flex-shrink: 0;
             }
 
             /* --- IDP DONUT CHARTS --- */

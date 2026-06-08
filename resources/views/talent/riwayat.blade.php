@@ -221,10 +221,10 @@
                                         {{ optional($user->company)->nama_company ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
                                     </td>
                                     <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap font-medium">
-                                        {{ $startDate->translatedFormat('d F Y') }}
+                                        {{ $startDate->locale('id')->translatedFormat('d F Y') }}
                                     </td>
                                     <td class="py-4 px-6 text-center text-sm text-slate-600 whitespace-nowrap font-medium">
-                                        {{ $dueDate->translatedFormat('d F Y') }}
+                                        {{ $dueDate->locale('id')->translatedFormat('d F Y') }}
                                     </td>
                                     <td class="py-4 px-6 text-center w-40">
                                         @php $promoStatus = $session->status_promotion; @endphp
@@ -310,10 +310,10 @@
                                         {{ optional($user->company)->nama_company ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
                                     </td>
                                     <td class="text-center text-[10px] p-2 whitespace-nowrap font-medium text-slate-600">
-                                        {{ $startDate->translatedFormat('d M Y') }}
+                                        {{ $startDate->locale('id')->translatedFormat('d M Y') }}
                                     </td>
                                     <td class="text-center text-[10px] p-2 whitespace-nowrap font-medium text-slate-600">
-                                        {{ $dueDate->translatedFormat('d M Y') }}
+                                        {{ $dueDate->locale('id')->translatedFormat('d M Y') }}
                                     </td>
                                     <td class="text-center p-2 whitespace-nowrap">
                                         @php $promoStatus = $session->status_promotion; @endphp

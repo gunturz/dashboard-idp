@@ -222,7 +222,31 @@
 
         @media (max-width: 640px) {
             .prem-stat-grid {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important;
+            }
+
+            .prem-stat {
+                aspect-ratio: 1 / 1 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 16px !important;
+            }
+
+            .prem-stat-icon {
+                position: absolute !important;
+                top: 14px !important;
+                left: 14px !important;
+                margin-bottom: 0 !important;
+            }
+
+            .prem-stat-value {
+                font-size: 2rem !important;
+            }
+
+            .prem-stat-label {
+                font-size: 0.75rem !important;
             }
 
             .dash-header-date {
@@ -992,8 +1016,37 @@
                     </div>
 
                     <div class="py-2.5">
-                        {{-- Quick Action: Notifikasi --}}
-                        <div class="px-3 mb-1">
+                        {{-- Section: Top Actions --}}
+                        <div class="px-3 space-y-0.5">
+                            <a href="{{ route('profile.edit') }}"
+                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium">Lihat Profil</span>
+                            </a>
+                            @if (Auth::user() && Auth::user()->roles->count() > 1)
+                                <a href="{{ route('role.select') }}"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-medium">Ganti Role</span>
+                                </a>
+                            @endif
                             <a href="{{ route('finance.notifikasi') }}"
                                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
                                 <div
@@ -1065,35 +1118,6 @@
 
                         {{-- Section: Account --}}
                         <div class="px-3">
-                            <a href="{{ route('profile.edit') }}"
-                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-gray-700 hover:bg-gray-50 transition-colors group">
-                                <div
-                                    class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#0f172a] flex items-center justify-center transition-colors flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-4 w-4 text-gray-500 group-hover:text-white transition-colors"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <span class="font-medium">Lihat Profil</span>
-                            </a>
-                            @if (Auth::user()->roles->count() > 1)
-                                <a href="{{ route('role.select') }}"
-                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] text-[#005ba1] hover:bg-[#f8fafc] transition-colors group">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-[#e6f0f9] group-hover:bg-[#005ba1] flex items-center justify-center transition-colors flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-3.5 w-3.5 text-[#005ba1] group-hover:text-white transition-colors"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                        </svg>
-                                    </div>
-                                    <span class="font-medium">Ganti Role</span>
-                                </a>
-                            @endif
                             <form method="POST" action="{{ route('logout') }}" class="m-0">
                                 @csrf
                                 <button type="submit"

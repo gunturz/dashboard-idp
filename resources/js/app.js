@@ -115,6 +115,9 @@ const formatAndHideSuccessAlerts = () => {
 
             if (isStatusBadge) return;
 
+            // Skip elements that are handled by their own dedicated inline script
+            if (alert.id && (alert.id === 'panelis-success-alert' || alert.dataset.skipGlobalFormat)) return;
+
             alert.dataset.formatted = "true";
 
             // Get message content using a highly robust extraction strategy
@@ -153,25 +156,27 @@ const formatAndHideSuccessAlerts = () => {
             // Remove common prefixes
             message = message.replace(/^(Berhasil!|Success!)\s*/i, '').trim();
 
-            // Apply the gorgeous consistent template styles
-            alert.className = "flex items-start gap-3 bg-gradient-to-br from-[#f0fdf4] to-[#dcfce7] border-2 border-[#86efac] text-[#15803d] text-sm font-semibold px-5 py-4 rounded-2xl shadow-md transition-all duration-500 mb-5 relative overflow-hidden";
-            alert.style.cssText = `
-                display: flex !important;
-                align-items: flex-start !important;
-                gap: 12px !important;
-                background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
-                border: 2px solid #86efac !important;
-                color: #15803d !important;
-                font-size: 0.875rem !important;
-                font-weight: 600 !important;
-                padding: 16px 20px !important;
-                border-radius: 16px !important;
-                box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.08), 0 4px 6px -2px rgba(22, 163, 74, 0.04) !important;
-                margin-bottom: 20px !important;
-                transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                opacity: 1 !important;
-                transform: scale(1) !important;
-            `;
+            // Apply the gorgeous consistent template styles using setProperty
+            // so that the fade-out setTimeout can override opacity/transform later.
+            alert.className = '';
+            const applyStyle = (prop, val) => alert.style.setProperty(prop, val, 'important');
+            applyStyle('display', 'flex');
+            applyStyle('align-items', 'flex-start');
+            applyStyle('gap', '12px');
+            applyStyle('background', 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)');
+            applyStyle('border', '2px solid #86efac');
+            applyStyle('color', '#15803d');
+            applyStyle('font-size', '0.875rem');
+            applyStyle('font-weight', '600');
+            applyStyle('padding', '16px 20px');
+            applyStyle('border-radius', '16px');
+            applyStyle('box-shadow', '0 10px 15px -3px rgba(22, 163, 74, 0.08), 0 4px 6px -2px rgba(22, 163, 74, 0.04)');
+            applyStyle('margin-bottom', '20px');
+            applyStyle('transition', 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin 0.5s cubic-bezier(0.4, 0, 0.2, 1)');
+            applyStyle('opacity', '1');
+            applyStyle('transform', 'scale(1)');
+            applyStyle('overflow', 'hidden');
+            applyStyle('position', 'relative');
             
             alert.innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" style="width:20px; height:20px; color:#16a34a; flex-shrink:0; margin-top:2px; display:inline-block;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -183,18 +188,17 @@ const formatAndHideSuccessAlerts = () => {
                 </div>
             `;
 
-            // Auto disappear after 3 seconds
+            // Auto disappear after 3 seconds — use setProperty 'important' so it overrides
             setTimeout(() => {
-                alert.style.opacity = '0';
-                alert.style.transform = 'translateY(-10px) scale(0.95)';
+                alert.style.setProperty('opacity', '0', 'important');
+                alert.style.setProperty('transform', 'translateY(-10px) scale(0.95)', 'important');
                 setTimeout(() => {
-                    alert.style.height = '0';
-                    alert.style.paddingTop = '0';
-                    alert.style.paddingBottom = '0';
-                    alert.style.marginTop = '0';
-                    alert.style.marginBottom = '0';
-                    alert.style.overflow = 'hidden';
-                    alert.style.border = 'none';
+                    alert.style.setProperty('height', '0', 'important');
+                    alert.style.setProperty('padding-top', '0', 'important');
+                    alert.style.setProperty('padding-bottom', '0', 'important');
+                    alert.style.setProperty('margin-top', '0', 'important');
+                    alert.style.setProperty('margin-bottom', '0', 'important');
+                    alert.style.setProperty('border', 'none', 'important');
                     setTimeout(() => {
                         alert.remove();
                     }, 500);

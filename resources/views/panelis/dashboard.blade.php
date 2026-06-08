@@ -167,19 +167,21 @@
             .company-section-title {
                 display: flex;
                 align-items: center;
-                gap: 16px;
-                font-size: 1.15rem;
+                gap: 8px;
+                font-size: 1.2rem;
                 font-weight: 800;
                 color: #1e293b;
                 margin-bottom: 16px;
+                text-align: left;
             }
 
-            .company-section-title::before,
-            .company-section-title::after {
+            .company-section-title::before {
                 content: '';
-                flex: 1;
-                height: 1.5px;
-                background: #e2e8f0;
+                display: inline-block;
+                width: 4px;
+                height: 18px;
+                background: linear-gradient(180deg, #14b8a6, #0d9488);
+                border-radius: 99px;
             }
 
             /* ── Cards Grid ── */
@@ -387,11 +389,31 @@
     </x-slot>
 
     @if (session('success'))
-        <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700">
+        <div id="panelis-success-alert" class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700" style="transition: opacity 0.5s ease, transform 0.5s ease;">
             <strong class="font-bold">Berhasil!</strong>
             <span>{{ session('success') }}</span>
         </div>
     @endif
+    <script>
+        (function() {
+            function dismissPanelisAlert() {
+                var el = document.getElementById('panelis-success-alert');
+                if (!el) return;
+                setTimeout(function() {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-10px)';
+                    setTimeout(function() {
+                        el.remove();
+                    }, 500);
+                }, 3000);
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', dismissPanelisAlert);
+            } else {
+                dismissPanelisAlert();
+            }
+        })();
+    </script>
 
     {{-- Page Title --}}
     <div class="mb-8">
@@ -576,8 +598,16 @@
             </div>
         </div>
     @empty
-        <div class="empty-state">
-            Belum ada data progress talent yang menunggu penilaian Panelis.
+        <div class="empty-prem" style="border: none; padding: 20px;">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+            </div>
+            <h3>Belum Ada Data Talent</h3>
+            <p>Belum ada data progress talent yang menunggu penilaian Panelis.</p>
         </div>
     @endforelse
 

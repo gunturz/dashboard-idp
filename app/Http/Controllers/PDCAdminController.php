@@ -1449,7 +1449,7 @@ class PDCAdminController extends Controller
             ->values();
 
         // Stats
-        $totalProjectImprovement = ImprovementProject::count();
+        $totalProjectImprovement = ImprovementProject::distinct('user_id_talent')->count('user_id_talent');
 
         $belumDinilai = 0;
         $sudahDinilai = 0;

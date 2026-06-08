@@ -478,7 +478,8 @@
                     style="position:absolute; top:0; left:0; width:210mm; height:297mm; display:block; padding:0; margin:0;"
                     alt="Gedung Tiga Serangkai">
                 <!-- Green overlay -->
-                <div style="position:absolute; top:0; left:0; width:210mm; height:297mm;
+                <div
+                    style="position:absolute; top:0; left:0; width:210mm; height:297mm;
                             background:linear-gradient(to bottom,
                                 rgba(180,210,80,0.40) 0%,
                                 rgba(58,170,53,0.62) 30%,
@@ -488,7 +489,8 @@
             </div>
 
             <!-- Left accent bar: full page height, from edge, dipisah di bawah building photo HTML nya supaya layer-nya lebih tinggi -->
-            <div style="position:absolute; left:0; top:0; width:14px; height:297mm;
+            <div
+                style="position:absolute; left:0; top:0; width:14px; height:297mm;
                         background:linear-gradient(to bottom, #f5c518 0%, #3aaa35 40%, #006633 100%);
                         z-index:10; margin:0; padding:0;">
             </div>
@@ -498,11 +500,13 @@
 
                 <!-- Logo -->
                 <div style="margin-bottom:30px;">
-                    <img src="{{ $logo_image }}" style="height:55px; width:auto; display:block;" alt="Logo TS dan PDC">
+                    <img src="{{ $logo_image }}" style="height:55px; width:auto; display:block;"
+                        alt="Logo TS dan PDC">
                 </div>
 
                 <!-- Judul -->
-                <div style="font-family: 'LibreBaskervillePdf', serif; font-size:34px; font-weight:700; color:#000000; line-height:1.15;
+                <div
+                    style="font-family: 'LibreBaskervillePdf', serif; font-size:34px; font-weight:700; color:#000000; line-height:1.15;
                             margin-bottom:22px; text-transform:uppercase; letter-spacing:0.5px;">
                     Laporan Hasil Penelitian<br>Promosi Talent
                 </div>
@@ -686,10 +690,10 @@
                                 $atasanScore2 = $detailRow ? $detailRow->score_atasan : 0;
                                 $finalScore2 =
                                     $atasanScore2 > 0
-                                    ? ($selfScore2 + $atasanScore2) / 2
-                                    : ($selfScore2 > 0
-                                        ? $selfScore2
-                                        : 0);
+                                        ? ($selfScore2 + $atasanScore2) / 2
+                                        : ($selfScore2 > 0
+                                            ? $selfScore2
+                                            : 0);
                                 $std2 = $standards->get($comp->id) ?? 0;
                                 $gap2 = $detailRow
                                     ? $detailRow->gap_score
@@ -720,15 +724,20 @@
                                 <td style="padding:14px 10px; text-align:center; border:none;">
                                     @if ($hasData2)
                                         @if ($gap2 <= -2)
-                                            <span style="color:#e74c3c; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                            <span
+                                                style="color:#e74c3c; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
                                         @elseif($gap2 < -1)
-                                            <span style="color:#e74c3c; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                            <span
+                                                style="color:#e74c3c; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
                                         @elseif($gap2 < 0)
-                                            <span style="color:#f39c12; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                            <span
+                                                style="color:#f39c12; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
                                         @elseif($gap2 == 0)
-                                            <span style="color:#95a5a6; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                            <span
+                                                style="color:#95a5a6; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
                                         @else
-                                            <span style="color:#2980b9; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
+                                            <span
+                                                style="color:#2980b9; font-weight:bold;">{{ number_format($gap2, 2) }}</span>
                                         @endif
                                     @endif
                                 </td>
@@ -945,7 +954,7 @@
         $panelisCount = 0;
         foreach ($panelisAssessments as $pa) {
             if (is_numeric($pa->panelis_score)) {
-                $totalScore += ($pa->panelis_score * 2);
+                $totalScore += $pa->panelis_score * 2;
                 $panelisCount++;
             }
         }
@@ -1013,7 +1022,8 @@
                                         style="padding: 14px 8px; text-align: center; border: none; color: #000000; vertical-align: top;">
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td style="padding: 14px 8px; text-align: left; border: none; vertical-align: top;">
+                                    <td
+                                        style="padding: 14px 8px; text-align: left; border: none; vertical-align: top;">
                                         <div style="font-weight: bold; color: #000000; font-size: 11.5px;">
                                             {{ optional($pa->panelis)->nama ?? '-' }}
                                         </div>
@@ -1036,7 +1046,8 @@
                                             <div style="color: #000000; font-size: 11px;">{{ $statusMain }}</div>
                                         @endif
                                         @if ($statusSub)
-                                            <div style="color: #000000; font-size: 10px; font-style: italic; margin-top: 2px;">
+                                            <div
+                                                style="color: #000000; font-size: 10px; font-style: italic; margin-top: 2px;">
                                                 {{ $statusSub }}
                                             </div>
                                         @endif
@@ -1054,7 +1065,7 @@
                                 </tr>
                             @endforelse
 
-                            @if($panelisAssessments->isNotEmpty())
+                            @if ($panelisAssessments->isNotEmpty())
                                 <tr
                                     style="border-top: 1.5px solid #b2d8d0; border-bottom: 1.5px solid #b2d8d0; background-color: #f4f9f7;">
                                     <td style="padding: 14px 8px; border: none;"></td>
@@ -1099,6 +1110,17 @@
         } else {
             $statusLabel = $statusPromotion ?: '-';
         }
+
+        $panelisAssessments = $talent->panelisAssessments ?? collect();
+        $totalScore = 0;
+        $panelisCount = 0;
+        foreach ($panelisAssessments as $pa) {
+            if (is_numeric($pa->panelis_score)) {
+                $totalScore += $pa->panelis_score * 2;
+                $panelisCount++;
+            }
+        }
+        $averageScore = $panelisCount > 0 ? $totalScore / $panelisCount : 0;
 
         $exportDate = \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y');
     @endphp

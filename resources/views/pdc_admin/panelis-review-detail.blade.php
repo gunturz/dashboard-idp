@@ -181,6 +181,9 @@
                 font-size: 0.85rem;
                 line-height: 1.55;
                 margin-bottom: 12px;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                word-break: break-word;
             }
 
             .line-clamp-2 {
@@ -219,6 +222,7 @@
                 align-items: center;
                 justify-content: space-between;
                 gap: 12px;
+                flex-wrap: wrap;
             }
 
             .status-pill {
@@ -226,7 +230,7 @@
                 align-items: center;
                 justify-content: center;
                 min-height: 23px;
-                max-width: 72%;
+                max-width: 100%;
                 padding: 3px 14px;
                 border: 1px solid #14b8a6;
                 border-radius: 99px;
@@ -316,7 +320,7 @@
                 min-width: 124px;
                 justify-content: center;
                 padding: 11px 24px;
-                border-radius: 9px;
+                border-radius: 99px;
                 border: none;
                 background: #f6b91a;
                 color: white;
@@ -389,15 +393,56 @@
                 color: #dc2626;
             }
 
-            @media (max-width: 1100px) {
+            @media (max-width: 1024px) {
+                .page-header {
+                    flex-direction: column;
+                    align-items: flex-start !important;
+                    gap: 12px;
+                }
+
+                .page-header > div {
+                    max-width: 100%;
+                    min-width: 0;
+                }
+
+                .page-header-title,
+                .page-header-sub {
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+                }
+
                 .review-grid {
                     grid-template-columns: 1fr;
+                    width: 100%;
                 }
-            }
 
-            @media (max-width: 640px) {
                 .review-card {
                     padding: 16px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    min-width: 0;
+                    overflow-x: hidden;
+                }
+
+                .review-head > div {
+                    min-width: 0;
+                }
+
+                .review-name,
+                .project-title {
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+                }
+
+                .review-avatar,
+                .review-avatar-placeholder {
+                    width: 64px !important;
+                    height: 64px !important;
+                    font-size: 1.35rem !important;
+                }
+
+                .review-head {
+                    gap: 12px;
                 }
 
                 .review-meta {
@@ -408,20 +453,63 @@
                     display: none;
                 }
 
-                .review-footer,
-                .assessment-bottom {
-                    align-items: stretch;
+                .assessment-list {
+                    grid-template-columns: 1fr;
+                    width: 100%;
+                }
+
+                .assessment-card {
+                    width: 100%;
+                    box-sizing: border-box;
+                    min-width: 0;
+                }
+
+                .assessment-head {
                     flex-direction: column;
+                    align-items: flex-start;
+                    gap: 4px;
+                }
+
+                .assessment-dot {
+                    display: none;
+                }
+
+                .assessment-name,
+                .assessment-company {
+                    white-space: normal !important;
+                    text-align: left;
+                }
+
+                .assessment-bottom {
+                    align-items: flex-start;
+                    flex-direction: column;
+                    gap: 10px;
                 }
 
                 .status-pill {
-                    max-width: none;
-                    width: 100%;
+                    max-width: 100%;
+                    width: fit-content;
+                    white-space: normal;
+                    text-align: left;
+                }
+
+                .review-footer {
+                    align-items: stretch;
+                    flex-direction: column;
                 }
 
                 .score-box,
                 .btn-selesai {
                     width: 100%;
+                }
+
+                .decision-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .decision-card {
+                    min-height: auto;
+                    padding: 20px 14px;
                 }
             }
         </style>

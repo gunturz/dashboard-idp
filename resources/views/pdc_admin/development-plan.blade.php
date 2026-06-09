@@ -176,7 +176,7 @@
             @media (max-width: 1024px) {
                 .field-row {
                     flex-direction: column;
-                    align-items: flex-start;
+                    align-items: stretch;
                     gap: 12px;
                 }
 

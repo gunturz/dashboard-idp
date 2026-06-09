@@ -200,6 +200,23 @@
                 flex-direction: column;
             }
 
+            .mobile-profile-detail-panel {
+                display: flex;
+                flex: 2;
+            }
+
+            @media (max-width: 768px) {
+                .mobile-profile-detail-panel {
+                    flex-direction: column;
+                    max-height: 0;
+                    overflow: hidden;
+                    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                .mobile-profile-detail-panel.open {
+                    max-height: 500px !important;
+                }
+            }
+
             @media (max-width: 1024px) {
                 .talent-hero-section {
                     padding: 0 16px;
@@ -797,24 +814,36 @@
             ($targetDate ? \Carbon\Carbon::parse($targetDate)->format('d/m/Y') : '-');
     @endphp
 
-    <div class="talent-prof-hero">
+    <div class="flex talent-prof-hero">
 
         {{-- Section 1: Avatar + Identity --}}
         <div class="talent-hero-section-1">
-            <div class="talent-hero-avatar-wrap">
-                @if ($talent->foto ?? false)
-                    <img src="{{ asset('storage/' . $talent->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
-                @else
-                    <div class="talent-hero-avatar-placeholder">{{ $initials }}</div>
-                @endif
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+                <div class="talent-hero-avatar-wrap">
+                    @if ($talent->foto ?? false)
+                        <img src="{{ asset('storage/' . $talent->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
+                    @else
+                        <div class="talent-hero-avatar-placeholder">{{ $initials }}</div>
+                    @endif
+                </div>
+                <div class="talent-hero-info flex-1 min-w-0">
+                    <div class="talent-hero-name truncate">{{ $namaTalent }}</div>
+                    <div class="talent-hero-badge">Talent</div>
+                </div>
             </div>
-            <div class="talent-hero-info">
-                <div class="talent-hero-name">{{ $namaTalent }}</div>
-                <div class="talent-hero-badge">Talent</div>
-            </div>
+            {{-- Chevron: toggle on mobile --}}
+            <button type="button" onclick="toggleMobileProfile()"
+                class="md:hidden flex items-center justify-center p-1 focus:outline-none">
+                <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-white/40 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
         </div>
 
-        <div class="talent-hero-divider"></div>
+        <div id="mobile-profile-detail" class="mobile-profile-detail-panel">
+            <div class="talent-hero-divider"></div>
 
         {{-- Section 2: Perusahaan, Departemen, Posisi --}}
         <div class="talent-hero-section flex-1">
@@ -848,6 +877,7 @@
             <div class="talent-hero-meta-row">
                 <span class="talent-hero-meta-label">Periode</span>
                 <span class="talent-hero-meta-value">{{ $periodeStr }}</span>
+            </div>
             </div>
         </div>
 
@@ -921,8 +951,7 @@
             Heatmap Kompetensi
         </div>
 
-        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-4">
-            <div class="heatmap-container overflow-x-auto m-0">
+        <div class="heatmap-container overflow-x-auto mt-4">
                 <table class="heatmap-table">
                     <thead>
                         <tr>
@@ -1071,7 +1100,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
     </div>
 
     {{-- ================================= SECTION: IDP MONITORING ================================= --}}
@@ -1430,6 +1458,35 @@
                 font-size: 0.84rem;
                 color: #475569;
                 line-height: 1.6;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                word-break: break-word;
+            }
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .btn-expand {
+                display: inline-block;
+                color: #14b8a6;
+                font-size: 0.8rem;
+                font-weight: 800;
+                cursor: pointer;
+                border: none;
+                background: none;
+                padding: 0;
+                margin-top: 2px;
+                transition: color 0.2s;
+                text-align: left;
+            }
+            .btn-expand:hover {
+                color: #0d9488;
+                text-decoration: underline;
+            }
+            .btn-expand.hidden {
+                display: none;
             }
             .panelis-card-footer {
                 display: flex;
@@ -1494,6 +1551,46 @@
                 font-weight: 800;
                 color: #fff;
             }
+
+            @media (max-width: 1024px) {
+                .panelis-card {
+                    padding: 16px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    min-width: 0;
+                }
+                .panelis-card-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 4px;
+                }
+                .panelis-card-dot {
+                    display: none;
+                }
+                .panelis-card-footer {
+                    align-items: flex-start;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                .panelis-status-pill {
+                    max-width: 100%;
+                    width: fit-content;
+                    white-space: normal;
+                    text-align: left;
+                }
+                .panelis-avg-card {
+                    width: 100%;
+                    box-sizing: border-box;
+                    justify-content: space-between;
+                    gap: 16px;
+                }
+                .panelis-card-name,
+                .panelis-card-company {
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                    word-break: break-word;
+                }
+            }
         </style>
 
         <div class="mb-8">
@@ -1533,9 +1630,10 @@
                     </div>
 
                     {{-- Feedback / Komentar --}}
-                    <div class="panelis-card-feedback">
+                    <div class="panelis-card-feedback line-clamp-2">
                         {{ $assessment->panelis_komentar ?? '-' }}
                     </div>
+                    <button type="button" class="btn-expand hidden" onclick="toggleExpandFeedback(this)">Lihat Selengkapnya</button>
 
                     {{-- Footer: Status Pill + Skor Badge --}}
                     <div class="panelis-card-footer">
@@ -1741,6 +1839,10 @@
                 // show target section
                 document.getElementById('section-' + sectionId).style.display = 'block';
 
+                if (sectionId === 'panelis') {
+                    initFeedbackExpand();
+                }
+
                 // set active tab
                 if (element) {
                     element.classList.add('active');
@@ -1764,6 +1866,40 @@
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
+                });
+            }
+
+            function toggleMobileProfile() {
+                const detail = document.getElementById('mobile-profile-detail');
+                const chevron = document.getElementById('mobile-profile-chevron');
+                if (!detail) return;
+                detail.classList.toggle('open');
+                if (chevron) {
+                    chevron.style.transform = detail.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            }
+
+            function toggleExpandFeedback(btn) {
+                const feedbackEl = btn.previousElementSibling;
+                if (feedbackEl) {
+                    if (feedbackEl.classList.contains('line-clamp-2')) {
+                        feedbackEl.classList.remove('line-clamp-2');
+                        btn.textContent = 'Sembunyikan';
+                    } else {
+                        feedbackEl.classList.add('line-clamp-2');
+                        btn.textContent = 'Lihat Selengkapnya';
+                    }
+                }
+            }
+
+            function initFeedbackExpand() {
+                document.querySelectorAll('.panelis-card-feedback').forEach(el => {
+                    if (el.scrollHeight > el.clientHeight) {
+                        const btn = el.nextElementSibling;
+                        if (btn && btn.classList.contains('btn-expand')) {
+                            btn.classList.remove('hidden');
+                        }
+                    }
                 });
             }
 

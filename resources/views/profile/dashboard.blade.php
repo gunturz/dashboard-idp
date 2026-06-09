@@ -306,18 +306,22 @@
         $negateClass = '';
         if (!$needsTopPadding) {
             if ($layoutNameStr === 'atasan.layout') {
-                $negateClass = '-mx-4 lg:-mx-8 -mt-4 lg:-mt-8';
+                $negateClass = '-mx-4 lg:-mx-8';
             } else {
-                $negateClass = '-mx-4 lg:-mx-6 -mt-4 md:-mt-8';
+                $negateClass = '-mx-4 lg:-mx-6';
             }
         }
+        
+        $profPageClass = $needsTopPadding 
+            ? 'prof-page mx-auto w-full pb-8 pt-4 md:pt-8 px-4 lg:px-6' 
+            : 'prof-page mx-auto w-full pb-8 px-4 lg:px-6';
     @endphp
     
     <div class="{{ $negateClass }}">
-        <div class="prof-page mx-auto w-full pb-8 pt-8 px-4 lg:px-6">
+        <div class="{{ $profPageClass }}">
 
             {{-- ── Page Header ── --}}
-            <div class="page-header animate-title mt-2">
+            <div class="page-header animate-title">
             <div class="page-header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

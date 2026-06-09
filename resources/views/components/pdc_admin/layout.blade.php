@@ -987,7 +987,8 @@
                 const sidebar = document.getElementById('sidebar');
                 const mainContent = document.getElementById('main-content');
                 const toggleIcon = document.getElementById('toggle-icon');
-                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                const isDesktop = window.innerWidth > 1024;
+                const isCollapsed = isDesktop && localStorage.getItem('sidebarCollapsed') === 'true';
 
                 if (!sidebar || !mainContent || !toggleIcon) return;
 
@@ -997,7 +998,7 @@
                 window.removePdcSidebarPreloadStyle();
             };
 
-            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            if (window.innerWidth > 1024 && localStorage.getItem('sidebarCollapsed') === 'true') {
                 const style = document.getElementById('pdc-sidebar-preload-style') || document.createElement('style');
                 style.id = 'pdc-sidebar-preload-style';
                 style.innerHTML = `

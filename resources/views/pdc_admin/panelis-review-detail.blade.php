@@ -472,11 +472,11 @@
                     : optional($reviewTalent->mentor)->nama ?? '-';
                 $periodeStr =
                     (optional($reviewPlan)->start_date
-                        ? \Carbon\Carbon::parse($reviewPlan->start_date)->format('d/m/Y')
+                        ? \Carbon\Carbon::parse($reviewPlan->start_date)->locale('id')->translatedFormat('d F Y')
                         : '-') .
                     ' - ' .
                     (optional($reviewPlan)->target_date
-                        ? \Carbon\Carbon::parse($reviewPlan->target_date)->format('d/m/Y')
+                        ? \Carbon\Carbon::parse($reviewPlan->target_date)->locale('id')->translatedFormat('d F Y')
                         : '-');
                 $projectTitle =
                     optional($review['latestProject'])->title ??

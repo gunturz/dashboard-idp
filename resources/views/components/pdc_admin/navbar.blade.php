@@ -38,7 +38,7 @@
                     return [
                         'title' => $n->title,
                         'desc' => $n->desc,
-                        'time' => $n->created_at->diffForHumans(),
+                        'time' => $n->created_at->locale('id')->diffForHumans(),
                     ];
                 });
                 $unreadCount = $unreadNotifications->count();

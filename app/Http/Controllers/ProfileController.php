@@ -28,19 +28,19 @@ class ProfileController extends Controller
         $roleName = strtolower(trim($activeRole ?: ($user->role->role_name ?? '')));
 
         if (in_array($roleName, ['talent', 'kandidat'])) {
-            $view = 'talent.profile';
+            $layoutName = 'talent.layout';
         } elseif ($roleName === 'mentor') {
-            $view = 'mentor.profile';
+            $layoutName = 'mentor.layout';
         } elseif ($roleName === 'atasan') {
-            $view = 'atasan.profile';
+            $layoutName = 'atasan.layout';
         } elseif (in_array($roleName, ['admin', 'pdc admin', 'pdc_admin'])) {
-            $view = 'pdc_admin.profile';
+            $layoutName = 'pdc_admin.layout';
         } elseif ($roleName === 'finance') {
-            $view = 'finance.profile';
+            $layoutName = 'finance.layout';
         } elseif (in_array($roleName, ['Panelis', 'panelis', 'panelist', 'Panelist'])) {
-            $view = 'panelis.profile';
+            $layoutName = 'panelis.layout';
         } else {
-            $view = 'profile.dashboard'; // fallback
+            $layoutName = 'app-layout'; // fallback
         }
 
         if (in_array($roleName, ['talent', 'kandidat', 'mentor', 'atasan'])) {
@@ -57,7 +57,7 @@ class ProfileController extends Controller
             $hasDevPlan = false;
         }
 
-        return view($view, [
+        return view('profile.dashboard', [
             'user' => $user,
             'notifications' => $this->getNotifications(),
             'companies' => Company::all(),
@@ -66,6 +66,7 @@ class ProfileController extends Controller
             'positions' => Position::all(),
             'activeRoleName' => $roleName,
             'hasDevPlan' => $hasDevPlan,
+            'layoutName' => $layoutName,
         ]);
     }
 

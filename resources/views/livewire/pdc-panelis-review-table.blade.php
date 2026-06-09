@@ -166,9 +166,9 @@
                                         $periodLabel = '-';
                                         if (!empty($plan->start_date) && !empty($plan->target_date)) {
                                             $periodLabel =
-                                                \Carbon\Carbon::parse($plan->start_date)->locale('id')->translatedFormat('d M Y') .
+                                                \Carbon\Carbon::parse($plan->start_date)->locale('id')->translatedFormat('d F Y') .
                                                 ' - ' .
-                                                \Carbon\Carbon::parse($plan->target_date)->locale('id')->translatedFormat('d M Y');
+                                                \Carbon\Carbon::parse($plan->target_date)->locale('id')->translatedFormat('d F Y');
                                         }
                                     @endphp
                                     @foreach ($posData['talents'] as $index => $talent)
@@ -181,7 +181,7 @@
                                             {{-- Posisi (rowspan) --}}
                                             @if ($index === 0)
                                                 <td rowspan="{{ count($posData['talents']) }}"
-                                                    class="px-6 py-5 border-r border-[#f1f5f9] text-center align-middle bg-slate-50/30">
+                                                    class="px-6 py-5 text-center align-middle bg-slate-50/30">
                                                     <div class="flex flex-col items-center justify-center gap-2">
                                                         <div
                                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-200/60 bg-white shadow-sm">
@@ -189,7 +189,7 @@
                                                                 class="font-bold text-teal-900 text-sm leading-tight text-center">{{ optional($posData['targetPosition'])->position_name ?? '-' }}</span>
                                                         </div>
                                                         <span
-                                                            class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{{ $periodLabel }}</span>
+                                                            class="text-[11px] text-slate-500 font-medium">{{ $periodLabel }}</span>
                                                     </div>
                                                 </td>
                                             @endif

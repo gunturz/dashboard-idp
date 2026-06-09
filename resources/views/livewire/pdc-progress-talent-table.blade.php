@@ -125,12 +125,12 @@
                                         $periodLabel = '-';
                                         if (!empty($posData['start_date']) && !empty($posData['target_date'])) {
                                             $periodLabel =
-                                                \Carbon\Carbon::parse($posData['start_date'])->translatedFormat(
-                                                    'd M Y',
+                                                \Carbon\Carbon::parse($posData['start_date'])->locale('id')->translatedFormat(
+                                                    'd F Y',
                                                 ) .
                                                 ' - ' .
-                                                \Carbon\Carbon::parse($posData['target_date'])->translatedFormat(
-                                                    'd M Y',
+                                                \Carbon\Carbon::parse($posData['target_date'])->locale('id')->translatedFormat(
+                                                    'd F Y',
                                                 );
                                         }
                                         $groupLabel = trim(

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\IdpActivity;
 use App\Models\ImprovementProject;
@@ -96,6 +97,15 @@ class TalentDashboardController extends Controller
             Log::error('talentDashboard error: ' . $e->getMessage());
             throw $e;
         }
+    }
+
+    public function downloadProjectTemplate()
+    {
+        $path = 'templates/Template Presentasi Suksesi.pptx';
+
+        abort_unless(Storage::disk('public')->exists($path), 404, 'Template presentasi tidak ditemukan.');
+
+        return Storage::disk('public')->download($path, 'Template Presentasi Suksesi.pptx');
     }
 
     public function competency()

@@ -416,7 +416,7 @@
 
                 {{-- Download Template --}}
                 <div class="flex justify-start mb-5">
-                    <a href="#"
+                    <a href="{{ route('talent.project.template') }}" download
                         class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-[10px] transition shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

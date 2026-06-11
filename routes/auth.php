@@ -83,6 +83,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified', 'talent.only'])->group(function () {
     Route::get('/talent/dashboard', [\App\Http\Controllers\TalentDashboardController::class, 'index'])
         ->name('talent.dashboard');
+    Route::get('/talent/project/template', [\App\Http\Controllers\TalentDashboardController::class, 'downloadProjectTemplate'])
+        ->name('talent.project.template');
     Route::get('/talent/riwayat', [\App\Http\Controllers\TalentDashboardController::class, 'riwayat'])
         ->name('talent.riwayat');
     Route::get('/talent/riwayat/{id}', [\App\Http\Controllers\TalentDashboardController::class, 'riwayatDetail'])

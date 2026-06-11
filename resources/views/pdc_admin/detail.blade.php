@@ -12,12 +12,12 @@
             }
 
             ::-webkit-scrollbar-thumb {
-                background: #cbd5e1;
+                background: #14b8a6;
                 border-radius: 20px;
             }
 
             ::-webkit-scrollbar-thumb:hover {
-                background: #94a3b8;
+                background: #0d9488;
             }
 
             /* Custom Scrollbar Styles for LogBook Tables */
@@ -31,13 +31,13 @@
             }
 
             .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #0d9488;
+                background: #14b8a6;
                 border-radius: 10px;
                 border: 2px solid #f8fafc;
             }
 
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #0f766e;
+                background: #0d9488;
             }
 
             .log-table-container {

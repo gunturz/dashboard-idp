@@ -29,6 +29,12 @@
         }
     </script>
     <style>
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         * {
             font-family: 'Poppins', sans-serif;
         }
@@ -50,6 +56,32 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: #0d9488;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #14b8a6 transparent;
+        }
+
+        /* ── Custom Scrollbar Utility ── */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 99px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #14b8a6 !important;
+            border-radius: 99px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #0d9488 !important;
         }
 
         /* ── Title Animation ── */
@@ -201,7 +233,7 @@
         }
 
         /* ══ Mobile Responsive – Stat Cards ══ */
-        @media (max-width: 767px) {
+        @media (max-width: 1024px) {
             .prem-stat-grid {
                 grid-template-columns: 1fr 1fr !important;
                 gap: 12px !important;
@@ -973,7 +1005,7 @@
     @livewireStyles
 </head>
 
-<body class="bg-[#ffffff] min-h-screen relative {{ $hideNavbar ? '' : 'pt-[60px] lg:pt-[80px]' }}">
+<body class="bg-[#ffffff] min-h-screen relative overflow-x-hidden {{ $hideNavbar ? '' : 'pt-[60px] lg:pt-[80px]' }}">
     <div class="bg-decoration">
     </div>
     <script>

@@ -11,13 +11,13 @@
             }
 
             .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #0d9488;
+                background: #14b8a6;
                 border-radius: 10px;
                 border: 2px solid #f8fafc;
             }
 
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #0f766e;
+                background: #0d9488;
             }
 
             @media (max-width: 767px) {

@@ -61,7 +61,7 @@
                                                 <tr>
                                                     <td>{{ $lvl }}</td>
                                                     <td style="padding:0;">
-                                                        <textarea wire:model.defer="editingQuestions.{{$lvl}}" style="width:100%; min-height:80px; padding:14px 20px; border:none; outline:none; resize:vertical; font-family:inherit; font-size:0.82rem; color:#475569;" placeholder="Masukkan pertanyaan level {{$lvl}}..."></textarea>
+                                                        <textarea wire:model.defer="editingQuestions.{{$lvl}}" x-data x-init="$nextTick(() => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; })" @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'" style="width:100%; min-height:80px; padding:14px 20px; border:none; outline:none; resize:none; overflow:hidden; font-family:inherit; font-size:0.82rem; color:#475569;" placeholder="Masukkan pertanyaan level {{$lvl}}..."></textarea>
                                                     </td>
                                                 </tr>
                                             @endfor

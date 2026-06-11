@@ -86,7 +86,7 @@
             align-items: flex-start;
             gap: 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             text-decoration: none;
@@ -858,7 +858,12 @@
 
         #main-content {
             margin-left: 260px;
-            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (min-width: 1025px) {
+            #main-content {
+                transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            }
         }
 
         #main-content.collapsed {
@@ -920,6 +925,7 @@
             #main-content {
                 margin-left: 0 !important;
                 padding: 16px !important;
+                transition: none !important;
             }
 
             .navbar-outer {
@@ -981,7 +987,8 @@
                 const sidebar = document.getElementById('sidebar');
                 const mainContent = document.getElementById('main-content');
                 const toggleIcon = document.getElementById('toggle-icon');
-                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                const isDesktop = window.innerWidth > 1024;
+                const isCollapsed = isDesktop && localStorage.getItem('sidebarCollapsed') === 'true';
 
                 if (!sidebar || !mainContent || !toggleIcon) return;
 
@@ -991,7 +998,7 @@
                 window.removePdcSidebarPreloadStyle();
             };
 
-            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            if (window.innerWidth > 1024 && localStorage.getItem('sidebarCollapsed') === 'true') {
                 const style = document.getElementById('pdc-sidebar-preload-style') || document.createElement('style');
                 style.id = 'pdc-sidebar-preload-style';
                 style.innerHTML = `

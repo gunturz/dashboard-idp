@@ -1,932 +1,602 @@
-<!DOCTYPE html>
-<html lang="id">
+<x-dynamic-component :component="$layoutName" title="Profile" bodyClass="bg-gray-50 min-h-screen flex flex-col pt-[80px]" :showProfileCard="false"
+    :user="$user" :notifications="$notifications ?? collect()">
+    <x-slot name="styles">
+        <style>
+            /* ══ Profile Page ══ */
+            .prof-page { max-width: 960px }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Talent – Individual Development Plan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
+            /* Avatar */
+            .avatar-wrap {
+                position: relative;
+                width: 120px; height: 120px;
+                flex-shrink: 0;
+            }
+            .avatar-img {
+                width: 120px; height: 120px;
+                border-radius: 24px;
+                object-fit: cover;
+                border: 3px solid #e2e8f0;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+            .avatar-placeholder {
+                width: 120px; height: 120px;
+                border-radius: 24px;
+                background: #0f172a;
+                font-size: 2.6rem; font-weight: 800;
+                color: white;
+                box-shadow: 0 4px 20px rgba(15, 23, 42,0.3);
+                letter-spacing: -1px;
+            }
+            .avatar-placeholder:not(.hidden) {
+                display: flex; align-items: center; justify-content: center;
+            }
+            .avatar-upload-btn {
+                position: absolute;
+                bottom: -8px; right: -8px;
+                width: 32px; height: 32px;
+                border-radius: 10px;
+                background: #14b8a6;
+                box-shadow: 0 2px 8px rgba(20,184,166,0.4);
+                cursor: pointer;
+                border: 2px solid white;
+                transition: transform .15s, background .15s;
+            }
+            .avatar-upload-btn:not(.hidden) {
+                display: flex; align-items: center; justify-content: center;
+            }
+            .avatar-upload-btn:hover { background: #0d9488; transform: scale(1.08); }
+            .avatar-upload-btn svg { width: 14px; height: 14px; color: white; }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
+            /* Hero Banner */
+            .prof-hero {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
+                border-radius: 20px;
+                padding: 32px 36px;
+                display: flex;
+                align-items: center;
+                gap: 28px;
+                margin-bottom: 24px;
+                position: relative;
+                overflow: hidden;
+            }
+            .prof-hero::before {
+                content: '';
+                position: absolute;
+                top: -40px; right: -40px;
+                width: 200px; height: 200px;
+                border-radius: 50%;
+                background: rgba(20,184,166,0.08);
+            }
+            .prof-hero::after {
+                content: '';
+                position: absolute;
+                bottom: -60px; left: 30%;
+                width: 250px; height: 250px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.04);
+            }
+            .prof-hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+            .prof-hero-name {
+                font-size: 1.5rem; font-weight: 800;
+                color: #ffffff;
+                line-height: 1.2;
+            }
+            .prof-hero-email { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+            .prof-hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: rgba(20,184,166,0.18);
+                border: 1px solid rgba(20,184,166,0.3);
+                color: #5eead4;
+                font-size: 0.75rem;
+                font-weight: 700;
+                padding: 4px 12px;
+                border-radius: 99px;
+                margin-top: 10px;
+                letter-spacing: .04em;
+            }
+            .prof-hero-badge::before {
+                content: '';
+                width: 7px; height: 7px;
+                border-radius: 50%;
+                background: #14b8a6;
+                animation: pulse-dot 2s ease infinite;
+            }
+            @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
+            .prof-hero-meta {
+                flex-direction: column;
+                gap: 6px;
+                text-align: right;
+                position: absolute;
+                bottom: 32px;
+                right: 40px;
+                z-index: 1;
+            }
+            .prof-hero-meta-item {
+                font-size: 0.78rem;
+                color: rgba(255,255,255,0.55);
+            }
+            .prof-hero-meta-item span { color: rgba(255,255,255,0.85); font-weight: 600; }
 
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 99px;
-        }
-
-        .navbar-outer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            background: #0f172a;
-            padding: 0 1.75rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-        }
-
-        /* ── Landing Page Style Logo ── */
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .nav-logo img {
-            height: 48px;
-            width: 48px;
-            object-fit: contain;
-            background: #ffffff;
-            padding: 5px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-        }
-
-        .nav-logo-text span:first-child {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #10b981;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .nav-logo-text span:last-child {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.3px;
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 9px;
-            height: 9px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 1.5px solid white;
-        }
-
-        .nav-icon-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-            color: #0f172a;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.15s;
-            position: relative;
-        }
-
-        .nav-icon-btn:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
-
-        .dropdown-panel {
-            transform-origin: top right;
-            animation: dropIn 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-
-        @keyframes dropIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-6px);
+            /* Stat strip */
+            .prof-stat-strip {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+            .prof-stat-item {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 16px;
+                padding: 18px 20px;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                box-shadow: 0 2px 8px rgba(0,0,0,.03);
+                transition: transform .2s, box-shadow .2s;
             }
 
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
+            .prof-stat-icon-wrap {
+                width: 44px; height: 44px;
+                border-radius: 12px;
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
             }
-        }
+            .prof-stat-icon-wrap svg { width: 20px; height: 20px; }
+            .prof-stat-val { font-size: 1.1rem; font-weight: 800; color: #1e293b; line-height: 1.1; }
+            .prof-stat-lbl { font-size: 0.75rem; color: #64748b; font-weight: 500; margin-top: 2px; }
 
-        .section-header {
-            display: inline-block;
-            background: #0f172a;
-            color: white;
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding: 0.35rem 1.25rem;
-            border-radius: 6px 6px 0 0;
-            margin-bottom: -1px;
-        }
-
-        .prof-input {
-            border: 1.5px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 0.45rem 0.75rem;
-            font-size: 0.875rem;
-            width: 100%;
-            background: #fff;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            color: #1e293b;
-        }
-
-        .prof-input:focus {
-            outline: none;
-            border-color: #0f172a;
-            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
-        }
-
-        .prof-input:disabled {
-            background: #f8fafc;
-            color: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
+            /* Form Sections */
+            .prof-section {
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0,0,0,.03);
+                overflow: hidden;
+                margin-bottom: 20px;
             }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .prof-section-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 16px 24px;
+                border-bottom: 1px solid #f1f5f9;
+                background: #fafbfc;
             }
-        }
+            .prof-section-icon {
+                width: 32px; height: 32px;
+                border-radius: 9px;
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
+            }
+            .prof-section-icon svg { width: 16px; height: 16px; }
+            .prof-section-title { font-size: 0.9rem; font-weight: 700; color: #1e293b; }
 
-        .fade-up {
-            animation: fadeSlideUp 0.45s ease both;
-        }
+            /* Field rows */
+            .prof-field-row {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 14px 24px;
+                border-bottom: 1px solid #f8fafc;
+                transition: background .15s;
+            }
+            .prof-field-row:last-child { border-bottom: none; }
+            .prof-field-row:hover { background: #fafbfc; }
+            .prof-field-label {
+                width: 160px;
+                flex-shrink: 0;
+                font-size: 0.82rem;
+                font-weight: 600;
+                color: #475569;
+            }
+            .prof-field-value { font-size: 0.875rem; color: #1e293b; flex: 1; }
+            .prof-input {
+                flex: 1;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 10px;
+                padding: 8px 12px;
+                font-size: 0.875rem;
+                color: #1e293b;
+                background: #f8fafc;
+                transition: border-color .2s, box-shadow .2s, background .2s;
+                outline: none;
+                font-family: 'Poppins', sans-serif;
+            }
+            .prof-input:focus {
+                border-color: #14b8a6;
+                box-shadow: 0 0 0 3px rgba(20,184,166,0.12);
+                background: #fff;
+            }
+            .prof-input:disabled { color: #94a3b8; cursor: not-allowed; background: #f1f5f9; }
 
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ── Mobile Only ── */
-        .mobile-profile-navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            background: #0f172a;
-            padding: 12px 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-        }
-
-        .dropdown-panel .mobile-nav-link {
-            color: #475569;
-            font-weight: 500;
-        }
-
-        .dropdown-panel .mobile-nav-link:hover {
-            color: #005ba1;
-            background-color: #f8fafc;
-        }
-
-        @media (max-width: 767px) {
-
-            html,
-            body {
-                overflow-x: hidden !important;
-                max-width: 100vw;
+            /* Footer actions */
+            .prof-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                padding: 20px 24px;
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0,0,0,.03);
             }
 
-            body.pt-\[80px\] {
-                padding-top: 60px !important;
+            /* Buttons */
+            .btn-prem {
+                align-items: center;
+                gap: 8px;
+                padding: 10px 20px;
+                border-radius: 12px;
+                font-size: 0.875rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+                border: none;
+            }
+            .btn-prem:not(.hidden) {
+                display: inline-flex;
+            }
+            .btn-prem svg { width: 18px; height: 18px; }
+            .btn-teal {
+                background: #14b8a6; color: white;
+                box-shadow: 0 4px 12px rgba(20,184,166,0.25);
+            }
+            .btn-teal:hover { background: #0d9488; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(20,184,166,0.3); }
+            .btn-ghost {
+                background: white; color: #475569; border: 1px solid #e2e8f0;
+            }
+            .btn-ghost:hover { background: #f8fafc; color: #1e293b; }
+
+            /* Modal */
+            .modal-backdrop {
+                position: fixed; inset: 0; z-index: 200;
+                background: rgba(0,0,0,0.5);
+                padding: 16px;
+                backdrop-filter: blur(4px);
+            }
+            .modal-backdrop:not(.hidden) {
+                display: flex; align-items: center; justify-content: center;
+            }
+
+            /* Alerts */
+            .prof-alert-success {
+                display: flex; align-items: center; justify-content: space-between; gap: 12px;
+                background: rgba(20,184,166,0.08);
+                border: 1px solid rgba(20,184,166,0.3);
+                border-radius: 14px;
+                padding: 14px 18px;
+                margin-bottom: 20px;
+            }
+            .prof-alert-error {
+                background: rgba(239,68,68,0.07);
+                border: 1px solid rgba(239,68,68,0.25);
+                border-radius: 14px;
+                padding: 14px 18px;
+                margin-bottom: 20px;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .prof-hero { flex-direction: row; align-items: center; gap: 16px; padding: 20px; }
+                .prof-hero-name { font-size: 1.25rem; }
+                .prof-hero-meta { text-align: left; }
+                .prof-stat-strip { grid-template-columns: 1fr; }
+                .avatar-wrap { width: 80px; height: 80px; }
+                .avatar-img, .avatar-placeholder { width: 80px; height: 80px; font-size: 2rem; }
+                .prof-field-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+                .prof-field-label { width: 100%; }
+                .prof-input { width: 100%; }
+                .page-header { margin-top: 0 !important; margin-bottom: 20px; }
+
+                .prof-footer { flex-wrap: wrap; }
+                #btn-edit { width: 100%; justify-content: center; }
+                #btn-hapus-foto { order: 1; width: calc(50% - 6px); justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 0.8rem; }
+                #btn-batal { order: 2; width: calc(50% - 6px); justify-content: center; padding-left: 8px; padding-right: 8px; font-size: 0.8rem; }
+                #btn-simpan { order: 3; width: 100%; justify-content: center; margin-top: 4px; }
+            }
+        </style>
+    </x-slot>
+    @php
+        $layoutNameStr = $layoutName ?? '';
+        $needsTopPadding = $layoutNameStr === 'talent.layout';
+        
+        $negateClass = '';
+        if (!$needsTopPadding) {
+            if ($layoutNameStr === 'atasan.layout') {
+                $negateClass = '-mx-4 lg:-mx-8';
+            } else {
+                $negateClass = '-mx-4 lg:-mx-6';
             }
         }
-    </style>
-</head>
+        
+        $profPageClass = $needsTopPadding 
+            ? 'prof-page mx-auto w-full pb-8 pt-4 md:pt-8 px-4 lg:px-6' 
+            : 'prof-page mx-auto w-full pb-8 px-4 lg:px-6';
+    @endphp
+    
+    <div class="{{ $negateClass }}">
+        <div class="{{ $profPageClass }}">
 
-
-
-
-
-<body class="bg-gray-100 min-h-screen flex flex-col pt-[80px]">
-
-    {{-- ===== DESKTOP NAVBAR (tampilan asli laptop) ===== --}}
-    <div class="navbar-outer hidden md:flex">
-        {{-- Logo + Title --}}
-        <a href="{{ route('talent.dashboard') }}" class="nav-logo">
-            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP">
-            <div class="nav-logo-text">
-                <span>Portal</span>
-                <span>IDP</span>
-            </div>
-        </a>
-
-        <div class="flex items-center space-x-14 text-white text-sm font-medium ml-auto pr-6">
-            <a href="{{ route('talent.dashboard') }}#Kompetensi"
-                class="hover:text-blue-200 transition-colors">Kompetensi</a>
-            <a href="{{ route('talent.dashboard') }}#IDP Monitoring"
-                class="hover:text-blue-200 transition-colors">IDP</a>
-            <a href="{{ route('talent.dashboard') }}#Project Improvement"
-                class="hover:text-blue-200 transition-colors">Project Improvement</a>
-            <a href="{{ route('talent.dashboard') }}#LogBook" class="hover:text-blue-200 transition-colors">LogBook</a>
-        </div>
-
-        <div class="flex items-center space-x-3 pl-4 border-l border-white/20">
-            {{-- Bell --}}
-            <div class="relative" id="bell-wrapper">
-                <button class="nav-icon-btn" onclick="toggleDropdown('bell-dropdown')">
-                    @if ($notifications->where('is_read', false)->count() > 0)
-                        <span class="notif-badge"></span>
-                    @endif
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path
-                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z" />
-                        <path d="M10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                    </svg>
-                </button>
-                <div id="bell-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                        <span class="text-sm font-bold text-gray-700">Notifikasi</span>
-                        <form action="{{ route('talent.notifikasi.markAllRead') }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                class="text-xs text-teal-500 font-semibold cursor-pointer hover:underline">Tandai
-                                semua</button>
-                        </form>
-                    </div>
-                    <ul class="divide-y divide-gray-50 max-h-64 overflow-y-auto">
-                        @foreach ($notifications as $notif)
-                            <li
-                                class="px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
-                                @if (!$notif['is_read'])
-                                    <span class="w-2 h-2 mt-1.5 rounded-full bg-teal-500 flex-shrink-0"></span>
-                                @else
-                                    <span class="w-2 h-2 mt-1.5 rounded-full bg-gray-300 flex-shrink-0"></span>
-                                @endif
-                                <div>
-                                    <p
-                                        class="text-sm {{ !$notif['is_read'] ? 'text-gray-700 font-medium' : 'text-gray-500' }}">
-                                        {!! $notif['title'] !!}
-                                    </p>
-                                    <p class="text-xs text-gray-400 mt-0.5">{{ $notif['time'] }}</p>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <div class="px-4 py-2.5 border-t border-gray-100 text-center">
-                        <a href="{{ route('talent.notifikasi') }}"
-                            class="text-xs text-gray-400 font-medium hover:text-teal-600 transition-colors">Lihat semua
-                            notifikasi</a>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Profile --}}
-            <div class="relative" id="profile-wrapper">
-                <button class="nav-icon-btn" onclick="toggleDropdown('profile-dropdown')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-                <div id="profile-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div class="px-4 py-3 bg-gray-50 border-b border-gray-100">
-                        <p class="text-sm font-bold text-gray-800 truncate">{{ $user->nama ?? ($user->name ?? '-') }}</p>
-                        <p class="text-xs text-gray-400 mt-0.5 truncate">{{ $user->email }}</p>
-                    </div>
-                    <ul class="py-1">
-                        <li>
-                            <a href="{{ route('profile.edit') }}"
-                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                Lihat Profil
-                            </a>
-                        </li>
-                        <li class="border-t border-gray-100">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Keluar
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- ===== MOBILE NAVBAR (device HP only) ===== --}}
-    <div class="mobile-profile-navbar md:hidden">
-        {{-- Logo + Title --}}
-        <a href="{{ route('talent.dashboard') }}" class="nav-logo">
-            <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" style="height: 40px; width: 40px;">
-            <div class="nav-logo-text">
-                <span style="font-size: 0.65rem;">Portal</span>
-                <span style="font-size: 0.95rem;">IDP</span>
-            </div>
-        </a>
-        <div class="flex items-center ml-auto">
-            <div class="relative" id="mobile-menu-wrapper">
-                <button
-                    class="flex items-center justify-center p-2 text-white hover:bg-white/10 rounded-lg transition-all cursor-pointer"
-                    aria-label="Menu" onclick="toggleDropdown('mobile-menu-dropdown')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <div id="mobile-menu-dropdown"
-                    class="dropdown-panel hidden absolute right-0 mt-3 w-[300px] bg-white rounded-[1.25rem] shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden z-50 origin-top-right">
-                    <div
-                        class="px-5 py-5 border-b border-gray-100 flex items-center justify-between bg-white relative">
-                        <div class="flex items-center gap-3.5">
-                            @if ($user->foto ?? false)
-                                <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                                    class="w-[52px] h-[52px] rounded-full object-cover outline outline-1 outline-[#003865]/10 ring-[3px] ring-white shadow-sm">
-                            @else
-                                @php
-                                    $nameParts = explode(' ', $user->nama ?? $user->name);
-                                    $initials =
-                                        count($nameParts) >= 2
-                                            ? strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1))
-                                            : strtoupper(substr($nameParts[0], 0, 2));
-                                @endphp
-                                <div
-                                    class="w-[52px] h-[52px] rounded-full bg-[#466675] text-white flex items-center justify-center font-bold text-lg tracking-wide outline outline-1 outline-[#003865]/20 ring-[3px] ring-white shadow-sm flex-shrink-0">
-                                    {{ $initials }}
-                                </div>
-                            @endif
-                            <div class="flex flex-col">
-                                <span
-                                    class="text-[13px] font-bold text-[#001e36] uppercase tracking-[0.02em] leading-snug break-words line-clamp-2 max-w-[130px]">{{ $user->nama ?? $user->name }}</span>
-                                <a href="{{ route('profile.edit') }}"
-                                    class="text-[#005ba1] font-semibold text-[13px] mt-0.5 inline-flex items-center group hover:underline">
-                                    Lihat Profil
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-3 w-3 ml-1 transform group-hover:translate-x-0.5 transition-transform"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="py-3 px-3">
-                        <li class="mb-1">
-                            <a href="{{ route('talent.notifikasi') }}"
-                                class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[14px] text-[#475569] hover:bg-slate-50 transition-colors font-medium">
-                                <span>Notifikasi</span>
-                                @if ($notifications->where('is_read', false)->count() > 0)
-                                    <span
-                                        class="bg-[#f97316] text-white text-[12px] font-bold px-3.5 py-1 rounded-[12px] shadow-sm tracking-wide">{{ $notifications->where('is_read', false)->count() }}</span>
-                                @endif
-                            </a>
-                        </li>
-                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#Kompetensi"
-                                class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">Kompetensi</a>
-                        </li>
-                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#IDP Monitoring"
-                                class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">IDP
-                                Monitoring</a></li>
-                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#Project Improvement"
-                                class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">Project
-                                Improvement</a></li>
-                        <li class="mb-1"><a href="{{ route('talent.dashboard') }}#LogBook"
-                                class="mobile-nav-link block px-4 py-3 rounded-xl text-[14px] transition-colors whitespace-nowrap">LogBook</a>
-                        </li>
-                        <li class="border-t border-gray-100 mt-2 pt-2">
-                            <form method="POST" action="{{ route('logout') }}" class="w-full">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-[14px] text-red-500 hover:bg-red-50 transition-colors font-medium">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Keluar
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- MAIN CONTENT --}}
-    <div class="w-full max-w-3xl mx-auto px-6 py-8 flex-grow fade-up">
-
-        {{-- Back Link --}}
-        <div class="mb-4">
-            <a href="{{ route('talent.dashboard') }}"
-                class="px-4 py-2 border border-[#e2e8f0] rounded-lg bg-white text-[#475569] font-medium text-[0.875rem] flex items-center gap-2 transition-all duration-200 hover:bg-[#f8fafc] hover:border-[#cbd5e1] w-fit">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path fill-rule="evenodd"
-                        d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z"
-                        clip-rule="evenodd" />
-                </svg>
-                <span class="text-[#0f172a]">Kembali</span>
-            </a>
-        </div>
-
-        <div class="flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#0f172a]" viewBox="0 0 20 20"
-                fill="currentColor">
-                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clip-rule="evenodd" />
-            </svg>
-            <h1 class="text-2xl font-bold text-[#0f172a]">Profile Talent</h1>
-        </div>
-
-        {{-- Error Display --}}
-        @if ($errors->any())
-            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl shadow-sm">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">Terjadi kesalahan pada data yang Anda masukkan:</p>
-                        <ul class="mt-1 list-disc list-inside text-xs text-red-600">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        {{-- Success banner --}}
-        @if (session('status') === 'profile-updated')
-            <div id="success-banner"
-                class="flex items-center justify-between gap-3 bg-white border border-green-400 text-green-700 rounded-xl px-5 py-3 mb-6 shadow-sm">
-                <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 flex-shrink-0"
-                        viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="text-sm font-semibold">Pengubahan Profile Talent berhasil</span>
-                </div>
-                <button onclick="document.getElementById('success-banner').remove()"
-                    class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </div>
-        @endif
-
-        <form id="profile-form" method="POST" action="{{ route('profile.update') }}"
-            enctype="multipart/form-data">
-            @csrf
-            @method('PATCH')
-
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                {{-- ===== DESKTOP LAYOUT (laptop): foto kiri, data kanan ===== --}}
-                <div class="hidden md:flex gap-8 p-8">
-
-                    {{-- Kolom Kiri: Foto --}}
-                    <div class="flex flex-col items-center gap-4 flex-shrink-0 w-44">
-                        <div class="relative w-44 h-44">
-                            @if ($user->foto ?? false)
-                                <img id="foto-preview" src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                                    class="w-44 h-44 rounded-2xl object-cover border-2 border-gray-200 shadow">
-                                <div id="foto-placeholder"
-                                    class="hidden w-44 h-44 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300"
-                                        viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                    </svg>
-                                </div>
-                            @else
-                                <div id="foto-placeholder"
-                                    class="w-44 h-44 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300"
-                                        viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                    </svg>
-                                </div>
-                                <img id="foto-preview" src="" alt="Foto Profil"
-                                    class="hidden w-44 h-44 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0">
-                            @endif
-                        </div>
-
-                        {{-- Tombol foto – edit mode only --}}
-                        <div id="foto-buttons" class="flex gap-2 hidden w-44">
-                            <label for="foto-input"
-                                class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Ganti Foto
-                            </label>
-                            <input id="foto-input" name="foto" type="file" accept="image/*" class="sr-only"
-                                onchange="previewFoto(this)">
-
-                            {{-- Input tersembunyi untuk penanda hapus foto --}}
-                            <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
-
-                            <button type="button" onclick="hapusFoto()"
-                                class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                Hapus Foto
-                            </button>
-                        </div>
-                    </div>
-
-                    {{-- Kolom Kanan: Data --}}
-                    <div class="flex-1 space-y-6 min-w-0">
-
-                        {{-- Info Akun --}}
-                        <div>
-                            <span class="section-header">Info Akun</span>
-                            <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
-                                @php
-                                    $akunFields = [
-                                        ['label' => 'Username', 'key' => 'username', 'type' => 'text'],
-                                        ['label' => 'Email', 'key' => 'email', 'type' => 'email'],
-                                    ];
-                                @endphp
-                                @foreach ($akunFields as $i => $field)
-                                    <div
-                                        class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span
-                                            class="text-sm font-semibold text-[#3d4f62] w-28 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span
-                                            class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : $user->{$field['key']} ?? '-' }}</span>
-                                        <input type="{{ $field['type'] }}" name="{{ $field['key'] }}"
-                                            value="{{ $field['key'] === 'password' ? '' : $user->{$field['key']} ?? '' }}"
-                                            placeholder="{{ $field['placeholder'] ?? '' }}"
-                                            {{ $field['disabled'] ?? false ? 'disabled' : '' }}
-                                            class="edit-field prof-input hidden">
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- Profil --}}
-                        <div>
-                            <span class="section-header">Profil</span>
-                            <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
-                                @php
-                                    $profilFields = [
-                                        [
-                                            'label' => 'Nama',
-                                            'key' => 'nama',
-                                            'type' => 'text',
-                                            'val' => $user->nama ?? '-',
-                                        ],
-                                        [
-                                            'label' => 'Perusahaan',
-                                            'key' => 'company_id',
-                                            'type' => 'select',
-                                            'options' => $companies ?? [],
-                                            'val' => $user->company->nama_company ?? '-',
-                                        ],
-                                        [
-                                            'label' => 'Departemen',
-                                            'key' => 'department_id',
-                                            'type' => 'select',
-                                            'options' => $departments ?? [],
-                                            'val' => $user->department->nama_department ?? '-',
-                                        ],
-                                        [
-                                            'label' => 'Role',
-                                            'key' => 'role_id',
-                                            'type' => 'select',
-                                            'options' => $roles ?? [],
-                                            'val' => ucwords(
-                                                str_replace(
-                                                    '_',
-                                                    ' ',
-                                                    $activeRoleName ?? ($user->role->role_name ?? '-'),
-                                                ),
-                                            ),
-                                        ],
-                                        [
-                                            'label' => 'Posisi Sekarang',
-                                            'key' => 'position_id',
-                                            'type' => 'select',
-                                            'options' => $positions ?? [],
-                                            'val' => $user->position->position_name ?? '-',
-                                        ],
-                                        [
-                                            'label' => 'Mentor',
-                                            'type' => 'readonly',
-                                            'val' =>
-                                                collect(optional($user->promotion_plan)->mentor_models)
-                                                    ->pluck('nama')
-                                                    ->join(', ') ?:
-                                                optional($user->mentor)->nama ?? '-',
-                                        ],
-                                        [
-                                            'label' => 'Atasan',
-                                            'type' => 'readonly',
-                                            'val' => optional($user->atasan)->nama ?? '-',
-                                        ],
-                                        [
-                                            'label' => 'Posisi Yang Dituju',
-                                            'type' => 'readonly',
-                                            'val' =>
-                                                optional(optional($user->promotion_plan)->targetPosition)
-                                                    ->position_name ?? '-',
-                                        ],
-                                    ];
-                                @endphp
-                                @foreach ($profilFields as $i => $field)
-                                    <div
-                                        class="flex items-center gap-4 px-5 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span
-                                            class="text-sm font-semibold text-[#0f172a] w-36 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
-
-                                        @if (($field['type'] ?? '') === 'text')
-                                            <input type="text" name="{{ $field['key'] }}"
-                                                value="{{ $user->{$field['key']} ?? '' }}"
-                                                class="edit-field prof-input hidden">
-                                        @elseif (($field['type'] ?? '') === 'select')
-                                            @php
-                                                $isLocked = (isset($hasDevPlan) && $hasDevPlan && in_array($field['key'], ['company_id', 'department_id']));
-                                            @endphp
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden"
-                                                {{ $isLocked ? 'disabled title="Tidak bisa diubah karena Anda memiliki Development Plan aktif"' : '' }}>
-                                                <option value="" disabled>Pilih {{ $field['label'] }}</option>
-                                                @foreach ($field['options'] as $opt)
-                                                    @php
-                                                        if ($field['key'] === 'role_id') {
-                                                            $optName = $opt->role_name;
-                                                        } elseif ($field['key'] === 'company_id') {
-                                                            $optName = $opt->nama_company;
-                                                        } elseif ($field['key'] === 'department_id') {
-                                                            $optName = $opt->nama_department;
-                                                        } elseif (
-                                                            in_array($field['key'], [
-                                                                'position_id',
-                                                                'target_position_id',
-                                                            ])
-                                                        ) {
-                                                            $optName = $opt->position_name;
-                                                        } else {
-                                                            $optName =
-                                                                $opt->name ??
-                                                                ($opt->position_name ?? ($opt->nama ?? ''));
-                                                        }
-                                                        $selectedId =
-                                                            $field['key'] === 'target_position_id'
-                                                                ? $user->promotion_plan->target_position_id ?? null
-                                                                : $user->{$field['key']} ?? null;
-                                                    @endphp
-                                                    <option value="{{ $opt->id }}"
-                                                        {{ $selectedId == $opt->id ? 'selected' : '' }}>
-                                                        {{ $optName }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        @else
-                                            <span
-                                                class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- ===== MOBILE LAYOUT (HP): foto atas, data bawah ===== --}}
-                <div class="md:hidden flex flex-col gap-5 p-4">
-                    {{-- Foto --}}
-                    <div class="flex flex-col items-center gap-4">
-                        <div class="relative w-36 h-36">
-                            @if ($user->foto ?? false)
-                                <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil"
-                                    class="w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow foto-preview-mobile">
-                                <div
-                                    class="hidden w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300"
-                                        viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                    </svg>
-                                </div>
-                            @else
-                                <div
-                                    class="w-36 h-36 rounded-2xl bg-gray-100 border-2 border-gray-200 shadow flex items-center justify-center foto-placeholder-mobile">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300"
-                                        viewBox="0 0 24 24" fill="currentColor">
-                                        <path
-                                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                    </svg>
-                                </div>
-                                <img src="" alt="Foto Profil"
-                                    class="hidden w-36 h-36 rounded-2xl object-cover border-2 border-gray-200 shadow absolute inset-0 foto-preview-mobile">
-                            @endif
-                        </div>
-                        <div class="flex gap-2 hidden w-36 foto-buttons-mobile">
-                            <label for="foto-input"
-                                class="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-2 py-2 rounded-lg cursor-pointer transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Ganti
-                            </label>
-                            <button type="button" onclick="hapusFoto()"
-                                class="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-2 py-2 rounded-lg transition active:scale-95">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                Hapus
-                            </button>
-                        </div>
-                    </div>
-
-                    {{-- Data --}}
-                    <div class="space-y-5">
-                        {{-- Info Akun --}}
-                        <div>
-                            <span class="section-header">Info Akun</span>
-                            <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
-                                @foreach ($akunFields as $i => $field)
-                                    <div
-                                        class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span
-                                            class="text-sm font-semibold text-[#3d4f62] w-24 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span
-                                            class="view-field text-sm text-gray-700">{{ $field['label'] === 'Password' ? '•••••••' : $user->{$field['key']} ?? '-' }}</span>
-                                        <input type="{{ $field['type'] }}" name="{{ $field['key'] }}"
-                                            value="{{ $field['key'] === 'password' ? '' : $user->{$field['key']} ?? '' }}"
-                                            placeholder="{{ $field['placeholder'] ?? '' }}"
-                                            {{ $field['disabled'] ?? false ? 'disabled' : '' }}
-                                            class="edit-field prof-input hidden">
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- Profil --}}
-                        <div>
-                            <span class="section-header">Profil</span>
-                            <div class="border border-gray-200 rounded-b-xl rounded-tr-xl">
-                                @foreach ($profilFields as $i => $field)
-                                    <div
-                                        class="flex items-center gap-3 px-4 py-3 {{ $i > 0 ? 'border-t border-gray-100' : '' }}">
-                                        <span
-                                            class="text-sm font-semibold text-[#0f172a] w-28 flex-shrink-0">{{ $field['label'] }}</span>
-                                        <span class="view-field text-sm text-gray-700">{{ $field['val'] }}</span>
-                                        @if (($field['type'] ?? '') === 'text')
-                                            <input type="text" name="{{ $field['key'] }}"
-                                                value="{{ $user->{$field['key']} ?? '' }}"
-                                                class="edit-field prof-input hidden">
-                                        @elseif (($field['type'] ?? '') === 'select')
-                                            <select name="{{ $field['key'] }}" class="edit-field prof-input hidden">
-                                                <option value="" disabled>Pilih {{ $field['label'] }}</option>
-                                                @foreach ($field['options'] as $opt)
-                                                    @php
-                                                        if ($field['key'] === 'role_id') {
-                                                            $optName = $opt->role_name;
-                                                        } elseif ($field['key'] === 'company_id') {
-                                                            $optName = $opt->nama_company;
-                                                        } elseif ($field['key'] === 'department_id') {
-                                                            $optName = $opt->nama_department;
-                                                        } elseif (
-                                                            in_array($field['key'], [
-                                                                'position_id',
-                                                                'target_position_id',
-                                                            ])
-                                                        ) {
-                                                            $optName = $opt->position_name;
-                                                        } else {
-                                                            $optName =
-                                                                $opt->name ??
-                                                                ($opt->position_name ?? ($opt->nama ?? ''));
-                                                        }
-                                                        $selectedId =
-                                                            $field['key'] === 'target_position_id'
-                                                                ? $user->promotion_plan->target_position_id ?? null
-                                                                : $user->{$field['key']} ?? null;
-                                                    @endphp
-                                                    <option value="{{ $opt->id }}"
-                                                        {{ $selectedId == $opt->id ? 'selected' : '' }}>
-                                                        {{ $optName }}</option>
-                                                @endforeach
-                                            </select>
-                                        @else
-                                            <span
-                                                class="edit-field text-sm text-gray-400 hidden">{{ $field['val'] }}</span>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Footer aksi --}}
-                <div class="border-t border-gray-100 px-8 py-5 flex justify-end gap-3">
-                    <button type="button" id="btn-edit" onclick="enterEditMode()"
-                        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
-                        Edit
-                    </button>
-                    <button type="button" id="btn-simpan" onclick="openConfirmModal()"
-                        class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
-                        Simpan
-                    </button>
-                    <button type="button" id="btn-batal" onclick="exitEditMode()"
-                        class="hidden bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-2.5 rounded-xl shadow transition-all hover:shadow-md active:scale-95">
-                        Batal
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    {{-- FOOTER --}}
-    <footer class="mt-auto bg-[#0f172a]/90 backdrop-blur-sm shadow-md py-4 text-center w-full">
-        <span class="text-white/80 text-sm font-medium tracking-wide">
-            &copy; {{ date('Y') }} PT. Tiga Serangkai Inti Corpora
-        </span>
-    </footer>
-
-    {{-- MODAL KONFIRMASI --}}
-    <div id="confirm-modal" class="modal-backdrop hidden">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-80 flex flex-col items-center text-center gap-4">
-            <div class="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-amber-500" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            {{-- ── Page Header ── --}}
+            <div class="page-header animate-title">
+            <div class="page-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
             </div>
             <div>
-                <p class="text-lg font-bold text-gray-800">Konfirmasi</p>
-                <p class="text-sm text-gray-500 mt-1">Apakah Anda yakin menyimpan data ini?</p>
+                <h1 class="page-header-title">Profil Saya</h1>
+                <p class="page-header-sub">Kelola informasi profil dan keamanan akun Anda</p>
             </div>
-            <div class="flex gap-3 w-full mt-1">
+        </div>
+
+        {{-- Alerts --}}
+        @if ($errors->any())
+            <div class="prof-alert-error">
+                <p class="text-sm font-semibold text-red-700 mb-1">Terjadi kesalahan:</p>
+                <ul class="list-disc list-inside text-xs text-red-600 space-y-0.5">
+                    @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach
+                </ul>
+            </div>
+        @endif
+        @if (session('status') === 'profile-updated')
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => { show = false }, 3000)"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-[-10px]"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-[-10px]"
+                class="mb-6 flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-xl shadow-sm w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500 flex-shrink-0" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Profile berhasil diperbarui!
+            </div>
+        @endif
+
+        {{-- FORM --}}
+        <form id="profile-form" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            @csrf @method('PATCH')
+            <input type="hidden" name="should_delete_foto" id="should_delete_foto" value="0">
+
+        {{-- Hero Banner --}}
+        <div class="prof-hero">
+            {{-- Avatar --}}
+            <div class="avatar-wrap" style="position:relative">
+                @if ($user->foto ?? false)
+                    <img id="foto-preview" src="{{ asset('storage/' . $user->foto) }}" alt="Foto" class="avatar-img">
+                    <div id="foto-placeholder" class="avatar-placeholder hidden">{{ strtoupper(substr($user->nama ?? 'A', 0, 1)) }}</div>
+                @else
+                    <div id="foto-placeholder" class="avatar-placeholder">{{ strtoupper(substr($user->nama ?? 'A', 0, 1)) }}</div>
+                    <img id="foto-preview" src="" alt="Foto" class="avatar-img hidden" style="position:absolute;inset:0">
+                @endif
+
+                {{-- Upload button (visible in edit mode) --}}
+                <label for="foto-input" id="foto-upload-btn" class="avatar-upload-btn hidden" title="Ganti Foto">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="14" height="14">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
+                    </svg>
+                </label>
+                <input id="foto-input" name="foto" type="file" accept="image/*" class="sr-only" form="profile-form" onchange="previewFoto(this)">
+            </div>
+
+            <div class="prof-hero-info">
+                <div class="prof-hero-name">{{ $user->nama ?? 'Nama Talent' }}</div>
+                @php $roleName = ucwords(str_replace('_', ' ', $activeRoleName ?? $user->role->role_name ?? 'Talent')); @endphp
+                <div class="prof-hero-badge">{{ $roleName }}</div>
+                
+                @php $roleNameLower = strtolower(trim($activeRoleName ?? $user->role->role_name ?? '')); @endphp
+                @if(in_array($roleNameLower, ['talent', 'kandidat']))
+                <div class="flex md:hidden flex-col mt-3">
+                    @php
+                        $periode = '—';
+                        if (optional($user->promotion_plan)->start_date && optional($user->promotion_plan)->target_date) {
+                            $periode = $user->promotion_plan->start_date->locale('id')->translatedFormat('F Y') . ' - ' . $user->promotion_plan->target_date->locale('id')->translatedFormat('F Y');
+                        }
+                    @endphp
+                    <div class="text-[0.78rem] text-white/70 leading-tight">Periode</div>
+                    <div class="text-[0.85rem] text-white font-semibold leading-tight mt-0.5">{{ $periode }}</div>
+                </div>
+                @endif
+            </div>
+
+            @php $roleNameLower = strtolower(trim($activeRoleName ?? $user->role->role_name ?? '')); @endphp
+            @if(in_array($roleNameLower, ['talent', 'kandidat']))
+            <div class="prof-hero-meta hidden md:flex">
+                @php
+                    $periode = '—';
+                    if (optional($user->promotion_plan)->start_date && optional($user->promotion_plan)->target_date) {
+                        $periode = $user->promotion_plan->start_date->locale('id')->translatedFormat('F Y') . ' - ' . $user->promotion_plan->target_date->locale('id')->translatedFormat('F Y');
+                    }
+                @endphp
+                <div class="prof-hero-meta-item">Periode <br><span>{{ $periode }}</span></div>
+            </div>
+            @endif
+        </div>
+
+
+            {{-- Info Akun --}}
+            <div class="prof-section">
+                <div class="prof-section-header">
+                    <div class="prof-section-icon" style="background:rgba(20,184,166,0.1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#14b8a6" width="16" height="16">
+                            <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="prof-section-title">Info Akun</span>
+                </div>
+                @php $akunFields = [
+                    ['label'=>'Username','key'=>'username','type'=>'text'],
+                    ['label'=>'Email',   'key'=>'email',   'type'=>'email'],
+                ]; @endphp
+                @foreach ($akunFields as $field)
+                <div class="prof-field-row">
+                    <span class="prof-field-label">{{ $field['label'] }}</span>
+                    <span class="view-field prof-field-value">{{ $user->{$field['key']} ?? '—' }}</span>
+                    <input type="{{ $field['type'] }}" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}"
+                           class="edit-field prof-input hidden">
+                </div>
+                @endforeach
+            </div>
+
+            {{-- Data Profil --}}
+            <div class="prof-section">
+                <div class="prof-section-header">
+                    <div class="prof-section-icon" style="background:rgba(59,130,246,0.1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#3b82f6" width="16" height="16">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="prof-section-title">Data Profil</span>
+                </div>
+                @php
+                    $profilFields = [
+                        ['label'=>'Nama Lengkap',         'key'=>'nama',          'type'=>'text',     'val'=>$user->nama ?? '—'],
+                        ['label'=>'Perusahaan',           'key'=>'company_id',    'type'=>'select',   'options'=>$companies ?? [],   'val'=>$user->company->nama_company ?? '—'],
+                        ['label'=>'Departemen',           'key'=>'department_id', 'type'=>'select',   'options'=>$departments ?? [], 'val'=>$user->department->nama_department ?? '—'],
+                        ['label'=>'Role',                 'key'=>'role_id',       'type'=>'readonly', 'val'=>ucwords(str_replace('_',' ',$activeRoleName ?? $user->role->role_name ?? '—'))],
+                        ['label'=>'Posisi Sekarang',      'key'=>'position_id',   'type'=>'readonly', 'val'=>$user->position->position_name ?? '—'],
+                    ];
+                    if (isset($roleNameLower) && in_array($roleNameLower, ['talent', 'kandidat'])) {
+                        $profilFields[] = ['label'=>'Mentor',               'key'=>'mentor',        'type'=>'readonly', 'val'=>collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '—')];
+                        $profilFields[] = ['label'=>'Atasan',               'key'=>'atasan',        'type'=>'readonly', 'val'=>optional($user->atasan)->nama ?? '—'];
+                        $profilFields[] = ['label'=>'Posisi Yang Dituju',   'key'=>'target_position','type'=>'readonly', 'val'=>optional(optional($user->promotion_plan)->targetPosition)->position_name ?? '—'];
+                    }
+                @endphp
+                @foreach ($profilFields as $field)
+                <div class="prof-field-row">
+                    <span class="prof-field-label">{{ $field['label'] }}</span>
+                    <span class="view-field prof-field-value">
+                        @if(($field['type'] === 'readonly'))
+                            <span class="badge badge-gray">{{ $field['val'] }}</span>
+                        @else
+                            {{ $field['val'] }}
+                        @endif
+                    </span>
+
+                    @if ($field['type'] === 'text')
+                        <input type="text" name="{{ $field['key'] }}" value="{{ $user->{$field['key']} ?? '' }}"
+                               class="edit-field prof-input hidden">
+                    @elseif ($field['type'] === 'select')
+                        @php
+                            $isLocked = (isset($hasDevPlan) && $hasDevPlan && in_array($field['key'], ['company_id', 'department_id']));
+                        @endphp
+                        <select name="{{ $field['key'] }}" class="edit-field prof-input hidden appearance-none pr-10 cursor-pointer" style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
+                                {{ $isLocked ? 'disabled title="Tidak bisa diubah karena Anda memiliki Development Plan aktif"' : '' }}
+                                {{ $field['key'] === 'company_id' ? 'onchange=loadDepartmentsByCompanyProfile(this)' : '' }}>
+                            <option value="" disabled>Pilih {{ $field['label'] }}</option>
+                            @foreach ($field['options'] as $opt)
+                                @php
+                                    if ($field['key'] === 'company_id')    $optName = $opt->nama_company;
+                                    elseif ($field['key'] === 'department_id') $optName = $opt->nama_department;
+                                    else                                       $optName = $opt->name ?? '';
+                                    $selId = $user->{$field['key']} ?? null;
+                                @endphp
+                                <option value="{{ $opt->id }}" {{ $selId == $opt->id ? 'selected' : '' }}>{{ $optName }}</option>
+                            @endforeach
+                        </select>
+                    @elseif ($field['type'] === 'readonly')
+                        <span class="edit-field prof-field-value hidden">
+                            <span class="badge badge-gray">{{ $field['val'] }}</span>
+                        </span>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+
+            {{-- Ganti Password --}}
+            <div class="prof-section">
+                <div class="prof-section-header">
+                    <div class="prof-section-icon" style="background:rgba(245,158,11,0.1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#f59e0b" width="16" height="16">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="prof-section-title">Keamanan & Password</span>
+                </div>
+                <div class="prof-field-row">
+                    <span class="prof-field-label">Password</span>
+                    
+                    {{-- View Mode --}}
+                    <div class="view-field flex-1 w-full relative">
+                        <input type="password" value="password1234" readonly class="prof-input w-full pr-10 text-slate-600 bg-[#eff6ff] border-none shadow-sm cursor-default" style="pointer-events: none;">
+                    </div>
+
+                    {{-- Edit Mode --}}
+                    <div class="edit-field hidden flex-1 w-full relative">
+                        <input type="password" name="password" id="password_input" value="" placeholder="Abaikan jika tidak diubah" class="prof-input w-full pr-10 text-slate-600 outline-none">
+                        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none" onclick="togglePasswordVisibility(this)" aria-label="Toggle password visibility">
+                            <!-- Eye Open -->
+                            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <!-- Eye Closed (hidden by default) -->
+                            <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Footer Actions --}}
+            <div class="prof-footer">
+                <button type="button" id="btn-edit" onclick="enterEditMode()" class="btn-prem btn-teal">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"/>
+                    </svg>
+                    Edit Profil
+                </button>
+                <button type="button" id="btn-hapus-foto" onclick="hapusFoto()"
+                        class="btn-prem btn-ghost hidden" style="color:#ef4444;border-color:#fecaca">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    Hapus Foto
+                </button>
+                <button type="button" id="btn-batal" onclick="exitEditMode()" class="btn-prem btn-ghost hidden">
+                    Batal
+                </button>
+                <button type="button" id="btn-simpan" onclick="openConfirmModal()" class="btn-prem btn-teal hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="18" height="18">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                    </svg>
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+
+    {{-- Confirm Modal --}}
+    <div id="confirm-modal" class="modal-backdrop hidden">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm flex flex-col items-center text-center gap-5">
+            <div class="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="36" height="36">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="text-lg font-bold text-gray-800">Simpan Perubahan?</p>
+                <p class="text-sm text-gray-500 mt-1">Data profil Anda akan diperbarui. Lanjutkan?</p>
+            </div>
+            <div class="flex gap-3 w-full">
                 <button type="button" onclick="closeConfirmModal()"
-                    class="flex-1 border border-gray-300 text-gray-600 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition active:scale-95">
+                        class="flex-1 border border-gray-200 text-gray-600 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition active:scale-95">
                     Batalkan
                 </button>
                 <button type="button" onclick="submitForm()"
-                    class="flex-1 bg-[#0f172a] hover:bg-[#1e2a36] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
-                    Ya, Yakin
+                        class="flex-1 bg-[#14b8a6] hover:bg-[#0d9488] text-white font-semibold py-2.5 rounded-xl shadow transition active:scale-95">
+                    Ya, Simpan
                 </button>
             </div>
         </div>
@@ -934,89 +604,96 @@
 
     @include('profile.partials.cropper-modal')
 
+    <x-slot name="scripts">
     <script>
-        // Dropdown
-        function toggleDropdown(id) {
-            const el = document.getElementById(id);
-            const isHidden = el.classList.contains('hidden');
-            document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.add('hidden'));
-            if (isHidden) el.classList.remove('hidden');
-        }
-        document.addEventListener('click', function(e) {
-            const inside = ['bell-wrapper', 'profile-wrapper', 'mobile-menu-wrapper'].some(id => {
-                const el = document.getElementById(id);
-                return el && el.contains(e.target);
-            });
-            if (!inside) document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.add('hidden'));
-        });
 
-        // Edit mode
+
+        // AJAX Load Department
+        function loadDepartmentsByCompanyProfile(selectElement) {
+            const companyId = selectElement.value;
+            const deptSelects = document.querySelectorAll('select[name="department_id"]');
+            deptSelects.forEach(s => {
+                s.innerHTML = '<option value="" disabled selected>Memuat...</option>';
+            });
+
+            if (!companyId) return;
+
+            fetch(`/register/departments?company_id=${companyId}`)
+                .then(r => r.json())
+                .then(data => {
+                    let html = '<option value="" disabled selected>Pilih Departemen</option>';
+                    if (data.length === 0) html = '<option value="" disabled selected>Tidak ada</option>';
+                    else data.forEach(d => html += `<option value="${d.id}">${d.nama_department}</option>`);
+                    deptSelects.forEach(s => s.innerHTML = html);
+                })
+                .catch(() => deptSelects.forEach(s => s.innerHTML = '<option value="" disabled selected>Error</option>'));
+        }
+
         function enterEditMode() {
             document.querySelectorAll('.view-field').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.edit-field').forEach(el => el.classList.remove('hidden'));
-            document.getElementById('foto-buttons').classList.remove('hidden');
-            document.querySelectorAll('.foto-buttons-mobile').forEach(el => el.classList.remove('hidden'));
+            document.getElementById('foto-upload-btn').classList.remove('hidden');
             document.getElementById('btn-edit').classList.add('hidden');
             document.getElementById('btn-simpan').classList.remove('hidden');
             document.getElementById('btn-batal').classList.remove('hidden');
+            document.getElementById('btn-hapus-foto').classList.remove('hidden');
         }
-
         function exitEditMode() {
             document.querySelectorAll('.view-field').forEach(el => el.classList.remove('hidden'));
             document.querySelectorAll('.edit-field').forEach(el => el.classList.add('hidden'));
-            document.getElementById('foto-buttons').classList.add('hidden');
-            document.querySelectorAll('.foto-buttons-mobile').forEach(el => el.classList.add('hidden'));
+            document.getElementById('foto-upload-btn').classList.add('hidden');
             document.getElementById('btn-edit').classList.remove('hidden');
             document.getElementById('btn-simpan').classList.add('hidden');
             document.getElementById('btn-batal').classList.add('hidden');
+            document.getElementById('btn-hapus-foto').classList.add('hidden');
             document.getElementById('foto-input').value = '';
+            document.getElementById('should_delete_foto').value = '0';
+            document.querySelectorAll('input[type="password"]').forEach(el => el.value = '');
         }
-
-        // Foto preview
         function previewFoto(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('foto-preview');
-                    const placeholder = document.getElementById('foto-placeholder');
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                    if (placeholder) placeholder.classList.add('hidden');
+                reader.onload = e => {
+                    const pr    = document.getElementById('foto-preview');
+                    const ph    = document.getElementById('foto-placeholder');
+                    pr.src = e.target.result;
+                    pr.classList.remove('hidden');
+                    if (ph) ph.classList.add('hidden');
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         function hapusFoto() {
-            const preview = document.getElementById('foto-preview');
-            const placeholder = document.getElementById('foto-placeholder');
-            if (preview) {
-                preview.src = '';
-                preview.classList.add('hidden');
-            }
-            if (placeholder) placeholder.classList.remove('hidden');
+            const pr = document.getElementById('foto-preview');
+            const ph = document.getElementById('foto-placeholder');
+            if (pr) { pr.src = ''; pr.classList.add('hidden'); }
+            if (ph) ph.classList.remove('hidden');
             document.getElementById('foto-input').value = '';
             document.getElementById('should_delete_foto').value = '1';
         }
-
-        // Modal konfirmasi
-        function openConfirmModal() {
-            document.getElementById('confirm-modal').classList.remove('hidden');
+        function openConfirmModal()  { document.getElementById('confirm-modal').classList.remove('hidden'); }
+        function closeConfirmModal() { document.getElementById('confirm-modal').classList.add('hidden'); }
+        function submitForm() { 
+            closeConfirmModal(); 
+            document.getElementById('profile-form').submit(); 
         }
-
-        function closeConfirmModal() {
-            document.getElementById('confirm-modal').classList.add('hidden');
+        
+        function togglePasswordVisibility(button) {
+            const input = button.previousElementSibling;
+            const eyeOpen = button.querySelector('.eye-open');
+            const eyeClosed = button.querySelector('.eye-closed');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeOpen.classList.add('hidden');
+                eyeClosed.classList.remove('hidden');
+            } else {
+                input.type = 'password';
+                eyeOpen.classList.remove('hidden');
+                eyeClosed.classList.add('hidden');
+            }
         }
-
-        function submitForm() {
-            closeConfirmModal();
-            document.getElementById('profile-form').submit();
-        }
-        document.getElementById('confirm-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeConfirmModal();
-        });
+        document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === document.getElementById('confirm-modal')) closeConfirmModal(); });
     </script>
-
-</body>
-
-</html>
+    </x-slot>
+</x-dynamic-component>

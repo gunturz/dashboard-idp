@@ -455,6 +455,13 @@
                 border-radius: 9999px;
                 padding: 4px;
                 gap: 0;
+                overflow-x: auto;
+                -ms-overflow-style: none; /* IE and Edge */
+                scrollbar-width: none; /* Firefox */
+            }
+
+            .pill-nav-tabs::-webkit-scrollbar {
+                display: none; /* Chrome, Safari and Opera */
             }
 
             .pill-tab {
@@ -1039,6 +1046,7 @@
                 }
 
                 .pill-tab {
+                    flex: 0 0 auto;
                     padding: 8px 14px;
                     font-size: 0.78rem;
                 }
@@ -1071,6 +1079,25 @@
                     grid-template-columns: 1fr;
                 }
 
+                .talent-header {
+                    flex-direction: column;
+                    gap: 16px;
+                    align-items: stretch;
+                }
+
+                .btn-pilih-gap {
+                    width: 100%;
+                }
+
+                .heatmap-container,
+                .log-table-container {
+                    overflow-x: auto !important;
+                    overflow-y: hidden;
+                }
+
+                .status-modal-actions {
+                    flex-direction: column;
+                }
             }
         </style>
     </x-slot>

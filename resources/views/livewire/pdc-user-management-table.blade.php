@@ -22,12 +22,12 @@
         ];
     @endphp
 
-    <div style="overflow-x: auto; margin: -12px -4px -8px; padding: 12px 4px 8px;">
-        <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(5, minmax(140px, 1fr)); min-width: 700px;">
+    <div>
+        <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(5, 1fr);">
             @foreach ($roleConfig as $key => $cfg)
                 <button type="button" wire:key="stat-{{ $key }}" wire:click="toggleRole('{{ $key }}')"
                     wire:loading.attr="disabled" wire:target="toggleRole"
-                    class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer transition-all select-none text-left disabled:cursor-wait disabled:opacity-90
+                    class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer select-none text-left disabled:cursor-wait disabled:opacity-90
                         {{ $selectedRole === $key ? 'ring-2 ring-offset-1 shadow-lg -translate-y-1 opacity-100' : 'opacity-80 hover:opacity-100' }}"
                     style="{{ $selectedRole === $key ? '--tw-ring-color: ' . $cfg['hex'] . ';' : '' }}">
                     <div class="prem-stat-icon si-{{ $cfg['color'] }}">
@@ -40,7 +40,7 @@
                 </button>
             @endforeach
         </div>{{-- /prem-stat-grid --}}
-    </div>{{-- /overflow-x wrapper --}}
+    </div>
 
     <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row w-full flex-1 gap-4">

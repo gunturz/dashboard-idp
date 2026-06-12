@@ -27,8 +27,8 @@
             @foreach ($roleConfig as $key => $cfg)
                 <button type="button" wire:key="stat-{{ $key }}" wire:click="toggleRole('{{ $key }}')"
                     wire:loading.attr="disabled" wire:target="toggleRole"
-                    class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer select-none text-left disabled:cursor-wait disabled:opacity-90
-                        {{ $selectedRole === $key ? 'ring-2 ring-offset-1 shadow-lg -translate-y-1 opacity-100' : 'opacity-80 hover:opacity-100' }}"
+                    class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer select-none disabled:cursor-wait disabled:opacity-90 focus:outline-none
+                        {{ $selectedRole === $key ? 'ring-2 ring-offset-1 shadow-lg stat-active opacity-100' : 'opacity-80 hover:opacity-100' }}"
                     style="{{ $selectedRole === $key ? '--tw-ring-color: ' . $cfg['hex'] . ';' : '' }}">
                     <div class="prem-stat-icon si-{{ $cfg['color'] }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

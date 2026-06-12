@@ -75,7 +75,7 @@
     </div>
 
     {{-- Main Card --}}
-    <div class="prem-card p-8 w-full mb-10">
+    <div class="prem-card p-4 sm:p-8 w-full mb-10">
         <h3 class="text-lg font-bold text-[#0f172a] mb-6">Daftar Departemen</h3>
 
         {{-- Dept List --}}

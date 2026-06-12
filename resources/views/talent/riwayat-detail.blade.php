@@ -153,8 +153,7 @@
 
             .panelis-total-card {
                 width: 100%;
-                min-height: 150px;
-                height: 150px;
+                min-height: 120px;
                 border: 1px solid #cbd5e1;
                 border-radius: 10px;
                 padding: 16px 18px 26px;
@@ -177,7 +176,7 @@
                 display: grid;
                 grid-template-columns: minmax(0, 1.22fr) minmax(210px, 0.40fr);
                 gap: 16px;
-                align-items: stretch;
+                align-items: start;
                 padding: 20px 16px 28px;
                 width: 100%;
                 box-sizing: border-box;
@@ -187,17 +186,15 @@
                 min-width: 0;
                 display: flex;
                 flex-direction: column;
-                align-self: stretch;
-                height: 100%;
             }
 
             .panelis-score-side {
                 min-width: 0;
                 display: flex;
                 flex-direction: column;
-                align-self: stretch;
-                height: 100%;
                 box-sizing: border-box;
+                position: sticky;
+                top: 16px;
             }
 
             .panelis-section-label {
@@ -218,16 +215,55 @@
 
             .panelis-comment-box {
                 width: 100%;
-                min-height: 150px;
-                height: 150px;
                 border: 1px solid #e2e8f0;
                 border-radius: 10px;
-                padding: 16px 18px 24px;
+                padding: 16px 18px 20px;
                 font-size: 0.82rem;
                 color: #334155;
                 background: white;
                 font-family: 'Poppins', sans-serif;
                 box-sizing: border-box;
+            }
+
+            /* Komentar per item */
+            .komentar-text {
+                line-height: 1.6;
+                margin: 0;
+                word-break: break-word;
+                overflow-wrap: break-word;
+                color: #334155;
+                font-size: 0.82rem;
+            }
+
+            .komentar-text.line-clamp-3 {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .btn-expand-komentar {
+                display: inline-block;
+                color: #14b8a6;
+                font-size: 0.78rem;
+                font-weight: 700;
+                cursor: pointer;
+                border: none;
+                background: none;
+                padding: 4px 0 0;
+                margin: 0;
+                transition: color 0.2s;
+                text-align: left;
+                line-height: 1.4;
+            }
+
+            .btn-expand-komentar:hover {
+                color: #0d9488;
+                text-decoration: underline;
+            }
+
+            .btn-expand-komentar.hidden {
+                display: none;
             }
 
             @media (max-width: 1024px) {
@@ -583,10 +619,12 @@
                                 <div class="panelis-comment-box">
                                     @forelse ($panelisKomentar as $item)
                                         <div class="komentar-bullet"
-                                            style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
-                                            <div class="komentar-dot"></div>
-                                            <p style="margin: 0; line-height: 1.5; flex: 1;">{{ $item['komentar'] }}
-                                            </p>
+                                            style="padding-top: 0; padding-bottom: {{ $loop->last ? '0' : '14px' }}; border-bottom: {{ $loop->last ? 'none' : '1px solid #f1f5f9' }};">
+                                            <div class="komentar-dot" style="margin-top: 5px; flex-shrink: 0;"></div>
+                                            <div style="flex: 1; min-width: 0;">
+                                                <p class="komentar-text line-clamp-3">{{ $item['komentar'] }}</p>
+                                                <button type="button" class="btn-expand-komentar hidden" onclick="toggleKomentar(this)">Lihat Selengkapnya</button>
+                                            </div>
                                         </div>
                                     @empty
                                         <p style="margin: 0; color: #94a3b8;">Belum ada komentar dari panelis.</p>
@@ -611,4 +649,37 @@
         @endif
 
     </div>
+
+    <script>
+        function toggleKomentar(btn) {
+            const textEl = btn.previousElementSibling;
+            if (!textEl) return;
+            if (textEl.classList.contains('line-clamp-3')) {
+                textEl.classList.remove('line-clamp-3');
+                btn.textContent = 'Sembunyikan';
+            } else {
+                textEl.classList.add('line-clamp-3');
+                btn.textContent = 'Lihat Selengkapnya';
+            }
+        }
+
+        function initKomentarExpand() {
+            document.querySelectorAll('.komentar-text').forEach(function(el) {
+                // Sementara hapus clamp untuk ukur tinggi asli
+                el.classList.remove('line-clamp-3');
+                var fullHeight = el.scrollHeight;
+                el.classList.add('line-clamp-3');
+                var clampedHeight = el.clientHeight;
+
+                if (fullHeight > clampedHeight + 4) {
+                    var btn = el.nextElementSibling;
+                    if (btn && btn.classList.contains('btn-expand-komentar')) {
+                        btn.classList.remove('hidden');
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initKomentarExpand);
+    </script>
 </x-talent.layout>

@@ -11,13 +11,13 @@
             }
 
             .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #0d9488;
+                background: #14b8a6;
                 border-radius: 10px;
                 border: 2px solid #f8fafc;
             }
 
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #0f766e;
+                background: #0d9488;
             }
 
             @media (max-width: 767px) {
@@ -104,7 +104,7 @@
         </div>
 
         <div id="panel-exposure" class="mb-12">
-            <div class="rounded-xl overflow-hidden border border-gray-200">
+            <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
                 <table class="w-full min-w-[900px] table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -179,7 +179,7 @@
         </div>
 
         <div id="panel-mentoring" class="mb-12 hidden">
-            <div class="rounded-xl overflow-hidden border border-gray-200">
+            <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
                 <table class="w-full min-w-[900px] table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -254,7 +254,7 @@
         </div>
 
         <div id="panel-learning" class="mb-12 hidden">
-            <div class="rounded-xl overflow-hidden border border-gray-200">
+            <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
                 <table class="w-full min-w-[900px] table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>

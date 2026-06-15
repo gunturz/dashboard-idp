@@ -29,6 +29,12 @@
         }
     </script>
     <style>
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         * {
             font-family: 'Poppins', sans-serif;
         }
@@ -50,6 +56,32 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: #0d9488;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #14b8a6 transparent;
+        }
+
+        /* ── Custom Scrollbar Utility ── */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 99px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #14b8a6 !important;
+            border-radius: 99px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #0d9488 !important;
         }
 
         /* ── Title Animation ── */
@@ -90,18 +122,31 @@
             position: relative;
             overflow: hidden;
             text-decoration: none;
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .prem-stat:focus,
+        .prem-stat:active,
+        .prem-stat:focus-visible {
+            outline: none !important;
         }
 
         .prem-stat.clickable {
             cursor: pointer;
         }
 
-        a.prem-stat:hover,
-        button.prem-stat:hover,
-        .prem-stat.clickable:hover {
+        a.prem-stat:not(.stat-active):hover,
+        button.prem-stat:not(.stat-active):hover,
+        .prem-stat.clickable:not(.stat-active):hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09);
             border-color: #e2e8f0;
+        }
+
+        /* Active/selected card state (desktop: naik sedikit) */
+        .stat-active {
+            transform: translateY(-4px);
         }
 
         /* Always-visible top accent border */
@@ -201,10 +246,11 @@
         }
 
         /* ══ Mobile Responsive – Stat Cards ══ */
-        @media (max-width: 767px) {
+        @media (max-width: 1024px) {
             .prem-stat-grid {
                 grid-template-columns: 1fr 1fr !important;
                 gap: 12px !important;
+                align-items: start !important; /* mencegah row collapse saat card aktif bergerak */
             }
 
             .prem-stat {
@@ -213,6 +259,26 @@
                 justify-content: center !important;
                 text-align: center !important;
                 padding: 16px !important;
+                /* Reset semua translate agar tidak geser grid row */
+                transform: none !important;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
+            }
+
+            /* Hover di mobile: tidak perlu translateY, cukup shadow ringan (kecuali card yang aktif agar ring Tailwind tidak tertutup) */
+            a.prem-stat:not(.stat-active):hover,
+            button.prem-stat:not(.stat-active):hover,
+            .prem-stat.clickable:not(.stat-active):hover {
+                transform: none !important;
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            /* Card aktif/terpilih di mobile: gunakan scale agar tidak geser grid */
+            .prem-stat.stat-active,
+            .prem-stat.stat-active:hover,
+            .prem-stat.stat-active:focus,
+            .prem-stat.stat-active:active {
+                transform: scale(1.04) !important;
+                z-index: 1;
             }
 
             .prem-stat-icon {
@@ -973,7 +1039,7 @@
     @livewireStyles
 </head>
 
-<body class="bg-[#ffffff] min-h-screen relative {{ $hideNavbar ? '' : 'pt-[60px] lg:pt-[80px]' }}">
+<body class="bg-[#ffffff] min-h-screen relative overflow-x-hidden {{ $hideNavbar ? '' : 'pt-[60px] lg:pt-[80px]' }}">
     <div class="bg-decoration">
     </div>
     <script>

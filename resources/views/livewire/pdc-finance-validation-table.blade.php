@@ -75,6 +75,19 @@
                 wire:model.live.debounce.300ms="search">
         </div>
 
+        {{-- Company Filter --}}
+        <div class="relative w-full sm:w-60">
+            <select id="live-company-filter"
+                class="w-full bg-white border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent appearance-none transition-all"
+                style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
+                wire:model.live="companyFilter">
+                <option value="">Semua Perusahaan</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}">{{ $company->nama_company }}</option>
+                @endforeach
+            </select>
+        </div>
+
         {{-- Status Filter --}}
         <div class="relative w-full sm:w-56">
             <select id="live-status-filter"
@@ -91,113 +104,142 @@
 
     {{-- Table --}}
     @if ($projects->isNotEmpty())
-        <div class="overflow-x-scroll w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
-            <table class="w-full table-auto text-left">
-                <thead class="bg-slate-50 border-b border-gray-200">
-                    <tr>
-                        <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">Talent
-                        </th>
-                        <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">Judul
-                            Project Improvement</th>
-                        <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">File
-                        </th>
-                        <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
-                            Validasi Finance</th>
-                        <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
-                            Feedback Dari Finance</th>
-                        <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">Aksi
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @foreach ($projects as $project)
-                        @php
-                            $finDec = 'Pending';
-                            if ($project->finance_feedback) {
-                                if (str_starts_with($project->finance_feedback, '[Approved]')) {
-                                    $finDec = 'Approved';
-                                } elseif (str_starts_with($project->finance_feedback, '[Rejected]')) {
-                                    $finDec = 'Rejected';
-                                }
-                            }
-                            $cleanFeedback = $project->finance_feedback
-                                ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback)
-                                : '—';
-                            if (trim($cleanFeedback) === '') {
-                                $cleanFeedback = '—';
-                            }
-                        @endphp
-                        <tr class="hover:bg-teal-50/50 transition duration-150">
-                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                <div style="display: inline-block; text-align: center; width: 100%;">
-                                    <div class="font-bold text-sm text-slate-800 leading-tight">
-                                        {{ $project->talent->nama ?? '-' }}</div>
-                                    <div class="text-[10px] text-gray-500 font-medium mt-1 italic leading-tight">
-                                        {{ $project->talent->position->position_name ?? '-' }}
-                                        <br>
-                                        &rarr;
-                                        {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                <span
-                                    class="text-sm text-slate-700 font-medium leading-relaxed">{{ $project->title }}</span>
-                            </td>
-                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                @if ($project->document_path)
-                                    <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
-                                        target="_blank"
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[11px] font-bold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
-                                            </path>
-                                        </svg>
-                                        Lihat File
-                                    </a>
-                                @else
-                                    <span class="text-gray-400 text-xs">—</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                @if ($finDec === 'Approved')
-                                    <span class="badge badge-green">Approved</span>
-                                @elseif($finDec === 'Rejected')
-                                    <span class="badge badge-red">Rejected</span>
-                                @else
-                                    <span class="badge badge-amber">Pending</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                <div class="text-[12px] text-gray-600 leading-relaxed max-w-[200px] mx-auto">
-                                    {{ $cleanFeedback }}</div>
-                            </td>
-                            <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
-                                @php
-                                    $isSentToFinance = !empty($project->feedback);
-                                    $alreadyActed = in_array($project->status, ['Approved', 'Verified', 'Rejected']);
-                                @endphp
-                                <div class="w-full flex justify-center">
-                                    @if ($isSentToFinance || $alreadyActed)
-                                        <button type="button" disabled
-                                            class="px-4 py-2 text-[11px] font-bold text-gray-400 bg-gray-50 border border-gray-200 rounded-xl cursor-not-allowed">
-                                            ✓ Sudah Dipilih
-                                        </button>
-                                    @else
-                                        <button type="button"
-                                            onclick="openActionModal({{ $project->id }}, '{{ addslashes($project->talent->nama ?? '-') }}', '{{ route('pdc_admin.finance_validation.update', $project->id) }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', '{{ addslashes($project->title) }}', '{{ $project->document_path ? route('files.preview', ['path' => $project->document_path]) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
-                                            class="px-5 py-2 text-[11px] font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition-all shadow-sm hover:shadow-md">
-                                            Pilih Aksi
-                                        </button>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        @php
+            $groupedProjects = $projects->groupBy(function ($project) {
+                return $project->talent->company_id ?? 0;
+            });
+        @endphp
+
+        <div class="space-y-8 mt-4">
+            @foreach ($groupedProjects as $companyId => $companyProjects)
+                @php
+                    $companyName = $companyProjects->first()->talent->company->nama_company ?? 'Unassigned';
+                @endphp
+                <div class="company-section" data-company-id="{{ $companyId }}">
+                    <h3 class="company-section-title mb-3">
+                        {{ $companyName }}
+                    </h3>
+                    <div class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
+                        <table class="w-full table-auto text-left">
+                            <thead class="bg-slate-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">Talent
+                                    </th>
+                                    <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">Judul
+                                        Project Improvement</th>
+                                    <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">File
+                                    </th>
+                                    <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Validasi Finance</th>
+                                    <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
+                                        Feedback Dari Finance</th>
+                                    <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                @foreach ($companyProjects as $project)
+                                    @php
+                                        $finDec = 'Pending';
+                                        if ($project->finance_feedback) {
+                                            if (str_starts_with($project->finance_feedback, '[Approved]')) {
+                                                $finDec = 'Approved';
+                                            } elseif (str_starts_with($project->finance_feedback, '[Rejected]')) {
+                                                $finDec = 'Rejected';
+                                            }
+                                        }
+                                        $cleanFeedback = $project->finance_feedback
+                                            ? preg_replace('/^\[(Approved|Rejected)\]\s*/', '', $project->finance_feedback)
+                                            : '—';
+                                        if (trim($cleanFeedback) === '') {
+                                            $cleanFeedback = '—';
+                                        }
+                                    @endphp
+                                    <tr class="hover:bg-teal-50/50 transition duration-150">
+                                        <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
+                                            <div style="display: inline-block; text-align: center; width: 100%;">
+                                                <div class="font-bold text-sm text-slate-800 leading-tight">
+                                                    {{ $project->talent->nama ?? '-' }}</div>
+                                                <div class="text-[10px] text-gray-500 font-medium mt-1 italic leading-tight">
+                                                    {{ $project->talent->position->position_name ?? '-' }}
+                                                    <br>
+                                                    &rarr;
+                                                    {{ $project->talent->promotion_plan->targetPosition->position_name ?? '?' }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
+                                            <span
+                                                class="text-sm text-slate-700 font-medium leading-relaxed">{{ $project->title }}</span>
+                                        </td>
+                                        <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
+                                            @if ($project->document_path)
+                                                <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
+                                                    target="_blank"
+                                                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[11px] font-bold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                                        </path>
+                                                    </svg>
+                                                    Lihat File
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400 text-xs">—</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
+                                            @if ($finDec === 'Approved')
+                                                <span class="badge badge-green">Approved</span>
+                                            @elseif($finDec === 'Rejected')
+                                                <span class="badge badge-red">Rejected</span>
+                                            @else
+                                                <span class="badge badge-amber">Pending</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-5" style="text-align:center; vertical-align:middle;">
+                                            <div class="text-[12px] text-gray-600 leading-relaxed max-w-[200px] mx-auto">
+                                                {{ $cleanFeedback }}</div>
+                                        </td>
+                                        <td class="px-6 py-5 whitespace-nowrap" style="text-align:center; vertical-align:middle;">
+                                            @php
+                                                $isSentToFinance = !empty($project->feedback);
+                                                $alreadyActed = in_array($project->status, ['Approved', 'Verified', 'Rejected']);
+                                            @endphp
+                                            <div class="flex items-center justify-center gap-2 flex-nowrap">
+                                                @if ($isSentToFinance || $alreadyActed)
+                                                    <button type="button" disabled
+                                                        class="inline-flex items-center justify-center h-9 px-4 text-[11px] font-bold text-gray-400 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed flex-shrink-0">
+                                                        ✓ Sudah Dipilih
+                                                    </button>
+                                                @else
+                                                    <button type="button"
+                                                        onclick="openActionModal({{ $project->id }}, '{{ addslashes($project->talent->nama ?? '-') }}', '{{ route('pdc_admin.finance_validation.update', $project->id) }}', '{{ addslashes($project->talent->department->nama_department ?? '-') }}', '{{ addslashes($project->talent->promotion_plan->targetPosition->position_name ?? '-') }}', '{{ addslashes($project->talent->company->nama_company ?? '-') }}', '{{ addslashes($project->title) }}', '{{ $project->document_path ? route('files.preview', ['path' => $project->document_path]) : '#' }}', '{{ $project->talent->company_id ?? '' }}')"
+                                                        class="inline-flex items-center justify-center h-9 px-5 text-[11px] font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-all shadow-sm hover:shadow-md flex-shrink-0">
+                                                        Pilih Aksi
+                                                    </button>
+                                                @endif
+                                                {{-- Tombol Hapus (icon-only, sesuai user management) --}}
+                                                <button type="button"
+                                                    wire:click="openDeleteModal({{ $project->id }}, '{{ addslashes($project->title) }}', '{{ addslashes($project->talent->nama ?? '-') }}')"
+                                                    class="inline-flex items-center justify-center w-9 h-9 bg-[#EF4444] hover:bg-[#dc2626] rounded-lg transition-colors shadow-sm flex-shrink-0"
+                                                    title="Hapus">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
         </div>
     @else
         <div class="empty-prem" style="margin-top: 40px">
@@ -455,6 +497,38 @@
             </div>
         </div>
     </div>
+    {{-- Delete Confirmation Modal (sesuai user-management style) --}}
+    @if ($showDeleteModal)
+        <div class="fixed inset-0 z-[120] items-center justify-center p-4 flex"
+            style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);"
+            wire:click.self="$set('showDeleteModal', false)">
+            <div class="bg-white rounded-2xl w-full max-w-[400px] flex flex-col items-center shadow-2xl p-8 text-center transform transition-all">
+                <div class="w-16 h-16 rounded-full bg-[#EF4444] flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-black text-gray-900 mb-2">Hapus Project?</h3>
+                <p class="text-gray-500 text-[15px] mb-8">
+                    Project <strong class="text-gray-700">"{{ $deletingProjectTitle }}"</strong>
+                    milik <strong class="text-gray-700">{{ $deletingTalentName }}</strong>
+                    akan dihapus dan tidak dapat dikembalikan.
+                </p>
+                <div class="flex gap-4 w-full">
+                    <button type="button" wire:click="$set('showDeleteModal', false)"
+                        class="flex-1 py-3 px-4 text-sm font-semibold text-[#475569] bg-[#F4F1EA] rounded-xl hover:bg-[#eadecc] transition-colors">
+                        Batalkan
+                    </button>
+                    <button type="button" wire:click="confirmDelete"
+                        class="flex-1 py-3 px-4 text-sm font-bold text-white bg-[#EF4444] rounded-xl hover:bg-[#dc2626] transition-colors shadow-sm">
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 
 

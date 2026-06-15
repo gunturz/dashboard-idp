@@ -71,8 +71,6 @@ class PdcAdminKompetensiManager extends Component
             $q = $comp->questions->firstWhere('level', $i);
             $this->editingQuestions[$i] = $q ? $q->question_text : '';
         }
-
-        $this->dispatch('scroll-to-competence', competenceId: $compId);
     }
 
     public function saveQuestions()
@@ -99,6 +97,7 @@ class PdcAdminKompetensiManager extends Component
         }
         $this->cancelEdit();
         session()->flash('success_top', 'Pertanyaan kompetensi berhasil diperbarui!');
+        $this->dispatch('scroll-to-top');
     }
 
     // --- LOGIC TARGET SCORE ---
@@ -117,8 +116,6 @@ class PdcAdminKompetensiManager extends Component
                 ? (int) $targets[$competenceId]
                 : null;
         }
-
-        $this->dispatch('scroll-to-target-section', section: $section);
     }
 
     public function saveTargetScores()
@@ -133,6 +130,7 @@ class PdcAdminKompetensiManager extends Component
         }
         $this->cancelEdit();
         session()->flash('success_top', 'Target Score Posisi berhasil diperbarui!');
+        $this->dispatch('scroll-to-top');
     }
 
     public function render()

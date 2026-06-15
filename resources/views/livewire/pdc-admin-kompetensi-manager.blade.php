@@ -16,15 +16,7 @@
                 wire:click="setTopTab('target')">Target Score Position</button>
     </div>
 
-    <!-- Livewire Loading Overlay indicator -->
-    <div wire:loading class="w-full text-center py-4">
-        <svg class="animate-spin h-6 w-6 text-[#0f172a] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-    </div>
-
-    <div wire:loading.remove>
+    <div>
         {{-- ═══════════════════════════════ TAB: QUESTIONS ═══════════════════════════════ --}}
         @if($topTab === 'questions')
             <div id="panel-questions" class="tab-panel active">
@@ -43,9 +35,9 @@
                 @endphp
 
                 @foreach($comps as $comp)
-                    @if($editingCompetenceId === $comp->id)
-                        {{-- Edit Mode --}}
-                        <div class="comp-card competence-card" id="comp-{{ $comp->id }}" data-competence-id="{{ $comp->id }}">
+                    <div class="comp-card competence-card" id="comp-{{ $comp->id }}" data-competence-id="{{ $comp->id }}" wire:key="comp-card-{{ $comp->id }}">
+                        @if($editingCompetenceId === $comp->id)
+                            {{-- Edit Mode --}}
                             <form wire:submit.prevent="saveQuestions">
                                 <div class="comp-card-title">{{ $comp->name }}</div>
                                 <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
@@ -58,7 +50,7 @@
                                         </thead>
                                         <tbody>
                                             @for($lvl = 1; $lvl <= 5; $lvl++)
-                                                <tr>
+                                                <tr wire:key="comp-card-{{ $comp->id }}-edit-row-{{ $lvl }}">
                                                     <td>{{ $lvl }}</td>
                                                     <td style="padding:0;">
                                                         <textarea wire:model.defer="editingQuestions.{{$lvl}}" x-data x-init="$nextTick(() => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; })" @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'" style="width:100%; min-height:80px; padding:14px 20px; border:none; outline:none; resize:none; overflow:hidden; font-family:inherit; font-size:0.82rem; color:#475569;" placeholder="Masukkan pertanyaan level {{$lvl}}..."></textarea>
@@ -73,10 +65,8 @@
                                     <button type="submit" class="btn-simpan-ts" style="padding:8px 30px; width:auto;">Simpan</button>
                                 </div>
                             </form>
-                        </div>
-                    @else
-                        {{-- View Mode --}}
-                        <div class="comp-card competence-card" id="comp-{{ $comp->id }}" data-competence-id="{{ $comp->id }}">
+                        @else
+                            {{-- View Mode --}}
                             <div class="comp-card-title">{{ $comp->name }}</div>
                             <div class="overflow-x-auto w-full" style="-webkit-overflow-scrolling: touch;">
                                 <table class="comp-table min-w-[900px] md:min-w-full">
@@ -89,7 +79,7 @@
                                     <tbody>
                                         @for($lvl = 1; $lvl <= 5; $lvl++)
                                             @php $q = $comp->questions->firstWhere('level', $lvl); @endphp
-                                            <tr>
+                                            <tr wire:key="comp-card-{{ $comp->id }}-view-row-{{ $lvl }}">
                                                 <td>{{ $lvl }}</td>
                                                 <td>{{ $q->question_text ?? '—' }}</td>
                                             </tr>
@@ -105,8 +95,8 @@
                                     Edit
                                 </button>
                             </div>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 @endforeach
             </div>
         @endif
@@ -117,7 +107,7 @@
                 {{-- Position Sub Tabs --}}
                 <div class="sub-tabs">
                     @foreach($positions as $index => $pos)
-                        <button class="sub-tab-btn {{ $activePositionId === $pos->id ? 'active' : '' }}" 
+                        <button wire:key="pos-tab-{{ $pos->id }}" class="sub-tab-btn {{ $activePositionId === $pos->id ? 'active' : '' }}" 
                                 wire:click="setActivePosition({{ $pos->id }})">
                             {{ $pos->position_name }}
                         </button>
@@ -144,7 +134,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach($coreCompetencies as $comp)
-                                                <tr>
+                                                <tr wire:key="core-row-{{ $comp->id }}">
                                                     <td class="ts-comp-name">{{ $comp->name }}</td>
                                                     @for($lvl=1; $lvl<=5; $lvl++)
                                                         <td style="width:12%;">
@@ -199,7 +189,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach($managerialCompetencies as $comp)
-                                                <tr>
+                                                <tr wire:key="managerial-row-{{ $comp->id }}">
                                                     <td class="ts-comp-name">{{ $comp->name }}</td>
                                                     @for($lvl=1; $lvl<=5; $lvl++)
                                                         <td style="width:12%;">
@@ -255,8 +245,8 @@
                 if (!target) return;
 
                 requestAnimationFrame(() => {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    window.location.hash = `comp-${competenceId}`;
+                    target.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+                    window.history.replaceState(null, null, `#comp-${competenceId}`);
                 });
             };
 
@@ -273,8 +263,14 @@
                 if (!target) return;
 
                 requestAnimationFrame(() => {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    window.location.hash = targetId;
+                    target.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+                    window.history.replaceState(null, null, `#${targetId}`);
+                });
+            });
+
+            Livewire.on('scroll-to-top', () => {
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             });
 

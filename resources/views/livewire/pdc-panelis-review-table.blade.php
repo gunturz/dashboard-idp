@@ -110,7 +110,7 @@
                     {{ $companyData['company']->nama_company ?? 'Unassigned' }}
                 </h3>
                 <div class="prem-card">
-                    <div class="overflow-x-scroll w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
+                    <div class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white">
                         <table class="w-full table-auto text-left">
                             <thead class="bg-slate-50 border-b border-gray-200">
                                 <tr>
@@ -263,7 +263,7 @@
                                                 <td rowspan="{{ count($posData['talents']) }}" class="px-6 py-5"
                                                     style="text-align:center; vertical-align:middle;">
                                                     @if ($anySentOrReviewed)
-                                                        <div class="flex items-center justify-center">
+                                                        <div class="flex items-center justify-center gap-2">
                                                             <a href="{{ route('pdc_admin.panelis_review.detail', $firstTalent->id) }}"
                                                                 class="inline-flex items-center gap-1.5 bg-[#0f172a] hover:bg-[#1e242e] text-white text-[11px] font-bold px-4 py-2 rounded-xl transition-all shadow-sm whitespace-nowrap">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -277,6 +277,23 @@
                                                                 </svg>
                                                                 Lihat Penilaian
                                                             </a>
+                                                            @php
+                                                                $firstTalentPlan = optional($firstTalent)->promotion_plan;
+                                                                $firstTalentSessionId = optional($firstTalentPlan)->development_session_id;
+                                                                $assignedPanelisIds = \App\Models\PanelisAssessment::where('user_id_talent', $firstTalent->id)
+                                                                    ->when($firstTalentSessionId, fn($q) => $q->where('development_session_id', $firstTalentSessionId))
+                                                                    ->where('is_active', true)
+                                                                    ->pluck('panelis_id')
+                                                                    ->toArray();
+                                                            @endphp
+                                                            <button type="button"
+                                                                onclick="openPanelisModal({{ $firstTalent->id }}, '{{ addslashes($firstTalent->nama) }}', {{ json_encode($assignedPanelisIds) }})"
+                                                                class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition-all shadow-sm">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                                </svg>
+                                                                Edit
+                                                            </button>
                                                         </div>
                                                     @else
                                                         <div class="flex justify-center">
@@ -417,6 +434,7 @@
 
         let currentStep = 0;
         let selectedCompanyIds = [];
+        let preSelectedPanelisIds = [];
 
         const modal = document.getElementById('panelisWizardModal');
         const step1 = document.getElementById('step-1');
@@ -428,14 +446,41 @@
         const btnCancel = document.getElementById('btn-cancel');
         const wizardForm = document.getElementById('wizardForm');
 
-        function openPanelisModal(talentId, talentName) {
+        function openPanelisModal(talentId, talentName, assignedPanelisIds = []) {
             wizardForm.action = `/pdc-admin/panelis-review/send/${talentId}`;
             wizardForm.reset();
+            
+            preSelectedPanelisIds = assignedPanelisIds.map(id => id.toString());
+            
             document.querySelectorAll('.company-checkbox').forEach(cb => cb.checked = false);
             document.getElementById('selectAllCompanies').checked = false;
             step2Container.innerHTML = '';
             document.getElementById('final-panelis-list').innerHTML = '';
             document.getElementById('step-1-error').classList.add('hidden');
+
+            if (preSelectedPanelisIds.length > 0) {
+                let companiesToCheck = new Set();
+                preSelectedPanelisIds.forEach(pId => {
+                    let user = panelisUsers.find(u => u.id == pId);
+                    if (user && user.company_id) {
+                        companiesToCheck.add(user.company_id.toString());
+                    }
+                });
+
+                document.querySelectorAll('.company-checkbox').forEach(cb => {
+                    if (companiesToCheck.has(cb.value.toString())) {
+                        cb.checked = true;
+                    }
+                });
+                updateCompanySelectAll();
+                
+                selectedCompanyIds = Array.from(companiesToCheck);
+                generateCompanySteps();
+                preSelectedPanelisIds = []; // Clear it after initial step generation
+            } else {
+                selectedCompanyIds = [];
+            }
+            
             currentStep = 0;
             updateView();
             modal.style.display = 'block';
@@ -523,7 +568,7 @@
                     selectAllHtml =
                         `<label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="selectAllPanelis_${compId}" onchange="toggleAllPanelis(this, ${compId})" class="w-4 h-4 rounded border-gray-400 text-teal-600 focus:ring-teal-500"><span class="text-sm text-gray-600">Pilih semua</span></label>`;
                     compPanelis.forEach(panelis => {
-                        const isChecked = currentSelections.includes(panelis.id.toString()) ? 'checked' :
+                        const isChecked = (currentSelections.includes(panelis.id.toString()) || preSelectedPanelisIds.includes(panelis.id.toString())) ? 'checked' :
                             '';
                         const roleName = panelis.position?.position_name || 'Panelis';
                         htmlList +=
@@ -534,6 +579,7 @@
                 const stepHtml =
                     `<div id="step-comp-${compId}" class="modal-step company-step"><div class="flex items-center justify-between mb-3"><h4 class="text-base font-bold text-gray-900">${companyName}</h4><div>${selectAllHtml}</div></div><div class="space-y-2 max-h-72 overflow-y-auto">${htmlList}</div></div>`;
                 step2Container.insertAdjacentHTML('beforeend', stepHtml);
+                updatePanelisSelectAll(compId);
             });
         }
 

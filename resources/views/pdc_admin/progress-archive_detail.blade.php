@@ -12,8 +12,12 @@
             }
 
             ::-webkit-scrollbar-thumb {
-                background: #cbd5e1;
+                background: #14b8a6;
                 border-radius: 20px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #0d9488;
             }
 
             /* Next button */
@@ -205,7 +209,7 @@
                 flex: 2;
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
                 .mobile-profile-detail-panel {
                     flex-direction: column;
                     max-height: 0;
@@ -227,7 +231,7 @@
                 }
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
                 .talent-prof-hero {
                     flex-direction: column;
                     align-items: stretch;
@@ -618,6 +622,17 @@
                 background: #8b5cf6;
             }
 
+            @media (max-width: 768px) {
+                .gap-item {
+                    border-radius: 16px !important;
+                    padding: 12px 16px !important;
+                    font-size: 0.9rem !important;
+                }
+                .gap-number {
+                    margin-right: 12px !important;
+                }
+            }
+
             /* IDP Donut */
             .donut-container {
                 background: white;
@@ -833,7 +848,7 @@
             </div>
             {{-- Chevron: toggle on mobile --}}
             <button type="button" onclick="toggleMobileProfile()"
-                class="md:hidden flex items-center justify-center p-1 focus:outline-none">
+                class="lg:hidden flex items-center justify-center p-1 focus:outline-none">
                 <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 text-white/40 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2.5">

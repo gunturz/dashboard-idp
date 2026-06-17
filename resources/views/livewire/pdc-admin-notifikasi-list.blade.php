@@ -42,23 +42,25 @@ Desain identik dengan template notifikasi PDC Admin yang sudah ada.
                             Edit
                         </button>
                     @else
-                        <div class="flex items-center gap-2">
-                            <span class="text-sm font-semibold text-gray-600 mr-2">{{ count($selectedNotifications) }} dipilih</span>
-                            <button type="button" wire:click="selectAll" class="btn-prem btn-blue"
-                                style="padding: 8px 16px; font-size: 0.85rem; background: #3b82f6; color: white;">
-                                Pilih Semua
-                            </button>
-                            <button type="button" wire:click="toggleEditMode" class="btn-prem btn-ghost"
-                                style="padding: 8px 16px; font-size: 0.85rem;">
-                                Batal
-                            </button>
-                            <button type="button" wire:click="deleteSelected" class="btn-prem btn-red flex items-center gap-2"
-                                style="padding: 8px 16px; font-size: 0.85rem;" @if(empty($selectedNotifications)) disabled style="opacity: 0.5; cursor: not-allowed;" @endif>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
-                                </svg>
-                                Hapus
-                            </button>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+                            <span class="text-sm font-semibold text-gray-600 mb-1 sm:mb-0">{{ count($selectedNotifications) }} dipilih</span>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button type="button" wire:click="selectAll" class="btn-prem btn-blue flex-1 sm:flex-initial"
+                                    style="padding: 8px 16px; font-size: 0.85rem; background: #3b82f6; color: white;">
+                                    Pilih Semua
+                                </button>
+                                <button type="button" wire:click="toggleEditMode" class="btn-prem btn-ghost flex-1 sm:flex-initial"
+                                    style="padding: 8px 16px; font-size: 0.85rem;">
+                                    Batal
+                                </button>
+                                <button type="button" wire:click="deleteSelected" class="btn-prem btn-red flex items-center justify-center gap-2 flex-1 sm:flex-initial"
+                                    style="padding: 8px 16px; font-size: 0.85rem; {{ empty($selectedNotifications) ? 'opacity: 0.5; cursor: not-allowed;' : '' }}" @if(empty($selectedNotifications)) disabled @endif>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
+                                    </svg>
+                                    Hapus
+                                </button>
+                            </div>
                         </div>
                     @endif
                 @endif

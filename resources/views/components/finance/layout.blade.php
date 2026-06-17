@@ -55,13 +55,20 @@
         }
     </script>
     <style>
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         * {
             font-family: 'Poppins', sans-serif;
         }
 
         /* ── Scrollbar ── */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 7px;
+            height: 7px;
         }
 
         ::-webkit-scrollbar-track {
@@ -69,8 +76,38 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #14b8a6;
             border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0d9488;
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #14b8a6 transparent;
+        }
+
+        /* ── Custom Scrollbar Utility ── */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 99px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #14b8a6 !important;
+            border-radius: 99px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #0d9488 !important;
         }
 
         /* ── Title Animation ── */
@@ -732,7 +769,7 @@
     @livewireStyles
 </head>
 
-<body class="bg-[#ffffff] min-h-screen flex flex-col pt-[60px] lg:pt-[80px] relative">
+<body class="bg-[#ffffff] min-h-screen flex flex-col pt-[60px] lg:pt-[80px] relative overflow-x-hidden">
 
     <div class="bg-decoration">
     </div>

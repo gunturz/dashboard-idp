@@ -61,15 +61,16 @@ class PDCAdminController extends Controller
             $q->whereNotNull('target_position_id')
                 ->whereNotIn('status_promotion', ['Approved Panelis', 'Promoted', 'Not Promoted']);
         })->count();
-        $pendingFinance = ImprovementProject::whereHas('talent.promotion_plan', function ($q) {
-            $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
-        })->where(function ($q) {
-            $q->whereNull('finance_feedback')
-                ->orWhere(function ($q2) {
-                    $q2->where('finance_feedback', 'not like', '[Approved]%')
-                        ->where('finance_feedback', 'not like', '[Rejected]%');
-                });
-        })->count();
+        $pendingFinance = ImprovementProject::where('is_active', true)
+            ->whereHas('talent.promotion_plan', function ($q) {
+                $q->whereNotIn('status_promotion', ['Promoted', 'Not Promoted']);
+            })->where(function ($q) {
+                $q->whereNull('finance_feedback')
+                    ->orWhere(function ($q2) {
+                        $q2->where('finance_feedback', 'not like', '[Approved]%')
+                            ->where('finance_feedback', 'not like', '[Rejected]%');
+                    });
+            })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
 
         // Fetch the 8 most recent talents whose development plan is still active
@@ -1041,7 +1042,7 @@ class PDCAdminController extends Controller
     {
         $user = auth()->user();
 
-        $projects = ImprovementProject::with([
+        $projects = ImprovementProject::where('is_active', true)->with([
             'talent.position',
             'talent.department',
             'talent.promotion_plan.targetPosition',
@@ -1717,6 +1718,12 @@ class PDCAdminController extends Controller
 
         foreach ($progressTalents as $progressTalent) {
             $progressPlan = $progressTalent->promotion_plan;
+
+            // Deactivate panelist assessments that are no longer selected
+            \App\Models\PanelisAssessment::where('user_id_talent', $progressTalent->id)
+                ->where('development_session_id', optional($progressPlan)->development_session_id)
+                ->whereNotIn('panelis_id', $request->panelis_ids)
+                ->update(['is_active' => false]);
 
             foreach ($request->panelis_ids as $panelis_id) {
                 \App\Models\PanelisAssessment::updateOrCreate([

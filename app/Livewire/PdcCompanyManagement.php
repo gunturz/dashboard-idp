@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Company;
+use App\Models\Department;
+use App\Models\User;
 use Livewire\Component;
 
 class PdcCompanyManagement extends Component
@@ -74,12 +76,23 @@ class PdcCompanyManagement extends Component
         session()->flash('success', 'Perusahaan berhasil dihapus.');
     }
 
+    public function getStatsProperty(): array
+    {
+        $totalPerusahaan = Company::count();
+        $totalDepartemen = Department::count();
+
+        return compact('totalPerusahaan', 'totalDepartemen');
+    }
+
     public function render()
     {
         $companies = Company::when($this->search, fn($q) => $q->where('nama_company', 'like', '%' . $this->search . '%'))
             ->orderBy('id')
             ->get();
 
-        return view('livewire.pdc-company-management', compact('companies'));
+        return view('livewire.pdc-company-management', [
+            'companies' => $companies,
+            'stats' => $this->stats,
+        ]);
     }
 }

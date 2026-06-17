@@ -12,6 +12,28 @@
         </div>
     @endif
 
+    {{-- Stats Cards --}}
+    <div class="prem-stat-grid overflow-x-auto pb-2 mb-8" style="grid-template-columns:repeat(2, minmax(150px, 1fr))">
+        <div class="prem-stat prem-stat-teal">
+            <div class="prem-stat-icon si-teal">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value">{{ $stats['totalPerusahaan'] }}</div>
+            <div class="prem-stat-label">Total Perusahaan</div>
+        </div>
+        <div class="prem-stat prem-stat-blue">
+            <div class="prem-stat-icon si-blue">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.5 2.25A2.25 2.25 0 0 0 5.25 4.5v3h-.75A2.25 2.25 0 0 0 2.25 9.75v10.5A2.25 2.25 0 0 0 4.5 22.5h15a2.25 2.25 0 0 0 2.25-2.25V9.75a2.25 2.25 0 0 0-2.25-2.25h-.75v-3A2.25 2.25 0 0 0 16.5 2.25h-9Zm8.25 5.25v-3a.75.75 0 0 0-.75-.75h-6a.75.75 0 0 0-.75.75v3h7.5ZM8.25 12.5A.75.75 0 0 1 9 11.75h6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v-3.5Zm1.5.75v2h4.5v-2H9.75Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="prem-stat-value">{{ $stats['totalDepartemen'] }}</div>
+            <div class="prem-stat-label">Total Departemen</div>
+        </div>
+    </div>
+
     {{-- Toolbar --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div class="relative w-full sm:w-80">

@@ -44,9 +44,11 @@
     </x-slot>
 
     {{-- ── Livewire Component – menggantikan loop blade statis ── --}}
-    <div class="px-6 pb-8">
-        <div class="mx-auto w-full animate-title" style="max-width: 960px;">
-            <livewire:pdc-admin-notifikasi-list />
+    <div class="-mx-4 lg:-mx-6">
+        <div class="mx-auto w-full pb-8 px-4 lg:px-6">
+            <div class="mx-auto w-full animate-title" style="max-width: 960px;">
+                <livewire:pdc-admin-notifikasi-list />
+            </div>
         </div>
     </div>
 

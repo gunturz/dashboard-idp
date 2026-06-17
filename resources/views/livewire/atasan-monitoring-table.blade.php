@@ -1,17 +1,17 @@
 <div>
     {{-- Pill Navigation Tabs (top row) --}}
-    <div class="w-full mb-6">
-        <div class="flex w-full bg-[#e5e7eb] rounded-full p-1">
+    <div class="pill-nav-wrapper mb-6">
+        <div class="pill-nav-tabs">
             <button wire:click="switchSection('kompetensi')"
-                class="flex-1 text-center py-2 px-3 rounded-full text-[13px] transition-all whitespace-nowrap {{ $activeSection === 'kompetensi' ? 'bg-[#0f172a] text-white font-bold shadow-md' : 'bg-transparent font-semibold text-gray-500 hover:text-slate-800 hover:bg-white/50' }}">
+                class="pill-tab {{ $activeSection === 'kompetensi' ? 'active' : '' }}">
                 Kompetensi
             </button>
             <button wire:click="switchSection('idp')"
-                class="flex-1 text-center py-2 px-3 rounded-full text-[13px] transition-all whitespace-nowrap {{ $activeSection === 'idp' ? 'bg-[#0f172a] text-white font-bold shadow-md' : 'bg-transparent font-semibold text-gray-500 hover:text-slate-800 hover:bg-white/50' }}">
+                class="pill-tab {{ in_array($activeSection, ['idp', 'logbook']) ? 'active' : '' }}">
                 IDP Monitoring
             </button>
             <button wire:click="switchSection('project')"
-                class="flex-1 text-center py-2 px-3 rounded-full text-[13px] transition-all whitespace-nowrap {{ $activeSection === 'project' ? 'bg-[#0f172a] text-white font-bold shadow-md' : 'bg-transparent font-semibold text-gray-500 hover:text-slate-800 hover:bg-white/50' }}">
+                class="pill-tab {{ $activeSection === 'project' ? 'active' : '' }}">
                 Project Improvement
             </button>
         </div>

@@ -153,10 +153,6 @@
                     width: 48px;
                     height: 48px;
                 }
-
-                .prem-stat-grid {
-                    grid-template-columns: 1fr !important;
-                }
             }
         </style>
     </x-slot>

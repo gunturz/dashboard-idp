@@ -146,6 +146,29 @@
                 display: block;
                 color: #cbd5e1;
             }
+
+            /* ── Dropdown Filter Styles ── */
+            .filter-select {
+                width: 100%;
+                background-color: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 10px 32px 10px 16px;
+                font-size: 0.875rem;
+                color: #334155;
+                outline: none;
+                transition: all 0.2s;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 16px;
+            }
+
+            .filter-select:focus {
+                border-color: #14b8a6;
+                box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12);
+            }
         </style>
     </x-slot>
 
@@ -163,9 +186,9 @@
         </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
         {{-- Cari Nama --}}
-        <div class="relative flex-grow group">
+        <div class="relative w-full sm:flex-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor"
                 style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:#94a3b8;pointer-events:none;">
@@ -177,28 +200,26 @@
         </div>
 
         {{-- Filters --}}
-        <div class="flex flex-wrap gap-4">
-            <select id="filter-periode"
-                class="min-w-[160px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                onchange="filterRiwayat()">
+        <div class="relative w-full sm:w-48">
+            <select id="filter-periode" class="filter-select" onchange="filterRiwayat()">
                 <option value="">Semua Periode</option>
                 @foreach($periodeOptions as $opt)
                     <option value="{{ $opt }}">{{ $opt }}</option>
                 @endforeach
             </select>
+        </div>
 
-            <select id="filter-perusahaan"
-                class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                onchange="filterRiwayat()">
+        <div class="relative w-full sm:w-56">
+            <select id="filter-perusahaan" class="filter-select" onchange="filterRiwayat()">
                 <option value="">Semua Perusahaan</option>
                 @foreach($perusahaanOptions as $opt)
                     <option value="{{ $opt }}">{{ $opt }}</option>
                 @endforeach
             </select>
+        </div>
 
-            <select id="filter-departemen"
-                class="min-w-[180px] bg-white border border-gray-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent transition-all"
-                onchange="filterRiwayat()">
+        <div class="relative w-full sm:w-56">
+            <select id="filter-departemen" class="filter-select" onchange="filterRiwayat()">
                 <option value="">Semua Departemen</option>
                 @foreach($departemenOptions as $opt)
                     <option value="{{ $opt }}">{{ $opt }}</option>

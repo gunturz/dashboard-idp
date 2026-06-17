@@ -992,19 +992,16 @@
                         <thead>
                             <tr>
                                 <th
-                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 5%;">
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 8%;">
                                     No</th>
                                 <th
-                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: left; border: none; width: 22%;">
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: left; border: none; width: 45%;">
                                     Nama</th>
                                 <th
-                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 9%;">
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 12%;">
                                     Score</th>
                                 <th
-                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 37%;">
-                                    Feedback</th>
-                                <th
-                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 27%;">
+                                    style="background-color: #d4e6e1; color: #000000; font-weight: bold; padding: 10px 8px; text-align: center; border: none; width: 35%;">
                                     Rekomendasi</th>
                             </tr>
                         </thead>
@@ -1037,10 +1034,6 @@
                                         {{ is_numeric($pa->panelis_score) ? $pa->panelis_score * 2 : '-' }}
                                     </td>
                                     <td
-                                        style="padding: 14px 8px; text-align: left; border: none; color: #000000; vertical-align: top; line-height: 1.5;">
-                                        {{ $pa->panelis_komentar ?? '-' }}
-                                    </td>
-                                    <td
                                         style="padding: 14px 8px; text-align: center; border: none; vertical-align: top; line-height: 1.4;">
                                         @if ($statusMain)
                                             <div style="color: #000000; font-size: 11px;">{{ $statusMain }}</div>
@@ -1058,7 +1051,7 @@
                                 </tr>
                             @empty
                                 <tr style="border-bottom: 1px solid #b2d8d0;">
-                                    <td colspan="5"
+                                    <td colspan="4"
                                         style="padding: 14px 8px; text-align: center; border: none; color: #000000; font-style: italic;">
                                         Belum ada penilaian dari Panelis.
                                     </td>
@@ -1077,7 +1070,7 @@
                                         style="padding: 14px 8px; text-align: center; border: none; color: #000000; font-weight: bold; font-size: 13px;">
                                         {{ $panelisCount > 0 ? number_format($averageScore, 2) : '-' }}
                                     </td>
-                                    <td colspan="2" style="padding: 14px 8px; border: none;"></td>
+                                    <td style="padding: 14px 8px; border: none;"></td>
                                 </tr>
                             @endif
                         </tbody>

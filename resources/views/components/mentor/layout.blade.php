@@ -248,7 +248,8 @@
 
         @media (max-width: 1023px) {
             .navbar-outer {
-                padding: 12px 16px;
+                height: 60px;
+                padding: 0 16px;
             }
 
             .nav-icon-btn {
@@ -264,6 +265,10 @@
             body {
                 padding-top: 60px !important;
             }
+
+            main {
+                padding: 16px !important;
+            }
         }
 
         /* Prevent horizontal scroll on mobile */
@@ -273,10 +278,6 @@
             body {
                 overflow-x: hidden !important;
                 max-width: 100vw;
-            }
-
-            main {
-                padding: 16px !important;
             }
         }
 

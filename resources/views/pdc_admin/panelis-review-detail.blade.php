@@ -394,11 +394,6 @@
             }
 
             @media (max-width: 1024px) {
-                .page-header {
-                    flex-direction: column;
-                    align-items: flex-start !important;
-                    gap: 12px;
-                }
 
                 .page-header > div {
                     max-width: 100%;

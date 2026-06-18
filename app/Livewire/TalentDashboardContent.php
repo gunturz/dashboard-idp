@@ -19,6 +19,8 @@ class TalentDashboardContent extends Component
 
     public $judul_project;
     public $project_file;
+    public $editingProjectId = null;
+    public $isEditMode = false;
 
     protected function hasIsActiveColumn(string $table): bool
     {
@@ -48,6 +50,48 @@ class TalentDashboardContent extends Component
         return 'Menunggu PDC Admin mendaftarkan Development plan';
     }
 
+    public function editProject($id)
+    {
+        $user = Auth::user();
+        if (optional($user->promotion_plan)->is_locked) {
+            session()->flash('error', 'Progress Anda telah dikunci oleh Admin PDC. Anda tidak dapat mengirim atau mengubah data.');
+            return;
+        }
+
+        $project = ImprovementProject::where('user_id_talent', $user->id)->findOrFail($id);
+
+        // Determine project status
+        $projectStatus = 'Pending';
+        if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) {
+            $projectStatus = 'Approved';
+        } elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) {
+            $projectStatus = 'Rejected';
+        } elseif (in_array($project->status, ['Approved', 'Verified'], true)) {
+            $projectStatus = 'Approved';
+        } elseif ($project->status === 'Rejected') {
+            $projectStatus = 'Rejected';
+        }
+
+        if ($projectStatus === 'Approved') {
+            session()->flash('error', 'Project yang sudah disetujui tidak dapat diedit.');
+            return;
+        }
+
+        $this->editingProjectId = $project->id;
+        $this->isEditMode = true;
+        $this->judul_project = $project->title;
+        $this->project_file = null;
+        $this->resetErrorBag();
+
+        $this->dispatch('scroll-to-project-form');
+    }
+
+    public function cancelEdit()
+    {
+        $this->reset(['judul_project', 'project_file', 'editingProjectId', 'isEditMode']);
+        $this->resetErrorBag();
+    }
+
     public function submitProject()
     {
         $user = Auth::user();
@@ -68,6 +112,61 @@ class TalentDashboardContent extends Component
 
         if (!$this->hasCompleteDevelopmentPlan($user, $developmentSession)) {
             session()->flash('error', $this->incompleteDevelopmentPlanMessage());
+            return;
+        }
+
+        if ($this->isEditMode) {
+            $this->validate([
+                'judul_project' => 'required|string|max:255',
+                'project_file' => 'nullable|file|max:10240|mimes:png,jpg,jpeg,pdf,doc,docx,xls,xlsx,ppt,pptx,zip',
+            ], [
+                'judul_project.required' => 'Judul project harus diisi.',
+                'project_file.max' => 'Ukuran file tidak boleh melebihi 10 MB.',
+                'project_file.mimes' => 'Format file tidak didukung.',
+            ]);
+
+            try {
+                $project = ImprovementProject::where('user_id_talent', $user->id)->findOrFail($this->editingProjectId);
+
+                $updateData = [
+                    'title' => $this->judul_project,
+                    'status' => 'Pending',
+                    'feedback' => null,
+                    'finance_feedback' => null,
+                    'verify_by' => null,
+                    'verify_at' => null,
+                ];
+
+                if ($this->project_file) {
+                    $extension = $this->project_file->getClientOriginalExtension();
+                    $baseName = Str::slug($this->judul_project) ?: 'project-improvement';
+                    $storedFileName = $baseName . '-' . now()->format('Ymd-His') . '.' . $extension;
+                    $documentPath = $this->project_file->storeAs('improvement_projects', $storedFileName, 'public');
+
+                    // Delete old file if exists
+                    if ($project->document_path) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($project->document_path);
+                    }
+
+                    $updateData['document_path'] = $documentPath;
+                }
+
+                $project->update($updateData);
+
+                $this->notifyPdcAdmins(
+                    'Project Improvement Diperbarui',
+                    'Talent <span class="font-semibold">' . e($user->nama) . '</span> telah memperbarui Project Improvement berjudul <span class="font-semibold">' . e($this->judul_project) . '</span>.',
+                    'info'
+                );
+
+                $updatedJudul = $this->judul_project;
+                $this->cancelEdit();
+                session()->flash('success_project', 'Anda sudah berhasil memperbarui project improvement dengan judul "' . $updatedJudul . '".');
+
+            } catch (\Exception $e) {
+                Log::error('Livewire updateProject error: ' . $e->getMessage());
+                session()->flash('error', 'Terjadi kesalahan saat memperbarui project.');
+            }
             return;
         }
 

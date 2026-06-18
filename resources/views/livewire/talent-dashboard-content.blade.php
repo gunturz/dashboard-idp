@@ -1,4 +1,5 @@
-<div>
+<div x-data
+    x-on:scroll-to-project-form.window="document.getElementById('Project Improvement').scrollIntoView({ behavior: 'smooth' })">
     <style>
         .badge {
             display: inline-flex;
@@ -49,9 +50,10 @@
 
         {{-- ── Kompetensi Bar Chart (full width) ── --}}
         <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 fade-up fade-up-2">
-            @if(!$hasActiveAssessment)
+            @if (!$hasActiveAssessment)
                 <div class="flex flex-col items-center justify-center py-6">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                        style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -60,22 +62,28 @@
                     </div>
                     <p class="text-base font-bold text-gray-700">Belum Ada Data Assessment</p>
                     <p class="text-sm text-gray-500 mt-1 mb-2 text-center max-w-md">
-                        Anda belum mengisi assessment kompetensi untuk periode saat ini. Silakan isi terlebih dahulu untuk melihat grafik kompetensi Anda.
+                        Anda belum mengisi assessment kompetensi untuk periode saat ini. Silakan isi terlebih dahulu
+                        untuk melihat grafik kompetensi Anda.
                     </p>
                     <a href="{{ route('talent.competency') }}"
-                        class="mt-5 inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5" 
+                        class="mt-5 inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white shadow-[0_6px_15px_-3px_rgba(13,148,136,0.4)] transition transform hover:-translate-y-0.5"
                         style="background: linear-gradient(135deg, #0d9488, #10b981);">
                         Isi Kompetensi
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
                 </div>
             @elseif(!$hasDevPlan)
                 <div class="flex flex-col items-center justify-center py-8 text-center">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                        style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <p class="text-base font-bold text-gray-700">Menunggu Development Plan</p>
@@ -87,7 +95,8 @@
                 </div>
             @elseif(!$atasanHasScored)
                 <div class="flex flex-col items-center justify-center py-6">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:linear-gradient(135deg,#ffedd5,#fed7aa)">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                        style="background:linear-gradient(135deg,#ffedd5,#fed7aa)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-orange-500" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -112,7 +121,7 @@
                             $pct = ($scoreVal / $maxScore) * 100;
                             $targetPct = ($targetScore / $maxScore) * 100;
 
-                            $textColor = '#64748b'; 
+                            $textColor = '#64748b';
                             if ($gapVal < -1.5) {
                                 $textColor = '#ef4444';
                             } elseif ($gapVal < 0) {
@@ -120,7 +129,8 @@
                             }
                         @endphp
                         <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 group">
-                            <span class="text-base text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate"
+                            <span
+                                class="text-base text-gray-700 md:w-56 flex-shrink-0 whitespace-nowrap overflow-hidden truncate"
                                 title="{{ $label }}">{{ $label }}</span>
                             <div class="flex items-center gap-3 flex-1 w-full">
                                 <div class="flex-1 bg-gray-100 rounded-full h-5 relative overflow-hidden">
@@ -169,9 +179,8 @@
         <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
             @if (session('success'))
-                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
-                    x-transition:leave="transition ease-out duration-500"
-                    x-transition:leave-start="opacity-100"
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+                    x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-sm text-green-700"
                     role="alert">
@@ -181,7 +190,8 @@
             @endif
 
             @if (!$hasDevPlan)
-                <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-700 text-center flex items-center justify-center">
+                <div
+                    class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-700 text-center flex items-center justify-center">
                     {{ $developmentPlanIncompleteMessage }}
                 </div>
             @endif
@@ -253,8 +263,8 @@
                             class="{{ $d['btn_color'] }} text-white px-8 py-2 rounded-[10px] transition-all flex items-center justify-center gap-2 group active:scale-95 hover:-translate-y-0.5">
                             <span class="text-sm font-bold tracking-wide">{{ $label }}</span>
                             <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-4 w-4 relative transition-transform group-hover:translate-x-1"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                class="h-4 w-4 relative transition-transform group-hover:translate-x-1" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M9 5l7 7-7 7" />
                             </svg>
@@ -266,8 +276,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 {{-- Exposure --}}
-                <div
-                    class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
                     <div class="flex flex-col h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-gray-500">
@@ -297,8 +306,7 @@
                 </div>
 
                 {{-- Mentoring --}}
-                <div
-                    class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
                     <div class="flex flex-col h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-gray-500">
@@ -327,8 +335,7 @@
                 </div>
 
                 {{-- Learning --}}
-                <div
-                    class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
+                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex flex-col justify-between">
                     <div class="flex flex-col h-full">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-gray-500">
@@ -379,10 +386,23 @@
         <div class="prem-card p-6 md:p-8 fade-up fade-up-4">
 
 
+            @if ($isEditMode)
+                <div class="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800">Edit Project Improvement</h3>
+                        <p class="text-xs text-gray-500 mt-1">Ubah judul atau unggah file baru untuk memperbarui projek
+                            Anda.</p>
+                    </div>
+                    <button type="button" wire:click="cancelEdit"
+                        class="text-xs font-bold text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-200 px-3 py-1.5 rounded-lg bg-white transition-all">
+                        Batal Edit
+                    </button>
+                </div>
+            @endif
+
             @if (session('success_project'))
                 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
-                    x-transition:leave="transition ease-out duration-500"
-                    x-transition:leave-start="opacity-100"
+                    x-transition:leave="transition ease-out duration-500" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-[10px] relative text-sm"
                     role="alert">
@@ -405,142 +425,187 @@
                 </div>
             @endif
 
-            <form wire:submit.prevent="submitProject" enctype="multipart/form-data">
-                {{-- Judul Project Input --}}
-                <div class="mb-4">
-                    <input type="text" wire:model="judul_project"
-                        class="w-full text-sm border border-gray-300 rounded-[8px] px-4 py-2 focus:outline-none focus:border-green-500 focus:ring-[3px] focus:ring-green-500/20 bg-white transition-all"
-                        placeholder="Judul Project..." required {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
-                    @error('judul_project') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                </div>
-
-                {{-- Download Template --}}
-                <div class="flex justify-start mb-5">
-                    <a href="{{ route('talent.project.template') }}" download
-                        class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-[10px] transition shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Download Template
-                    </a>
-                </div>
-
-                <p class="text-xs text-gray-500 mb-2">Unggah projek anda disini</p>
-
-                {{-- Upload Area --}}
-                <div class="relative upload-wrapper mb-5" x-data="{ uploading: false, progress: 0 }"
-                    x-on:livewire-upload-start="uploading = true"
-                    x-on:livewire-upload-finish="uploading = false"
-                    x-on:livewire-upload-error="uploading = false"
-                    x-on:livewire-upload-progress="progress = $event.detail.progress">
-                    
-                    <label for="file-upload-livewire"
-                        class="upload-area rounded-2xl {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-teal-500' }} flex flex-col items-center justify-center py-10 bg-gray-50 border-2 border-dashed border-gray-200 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                        </svg>
-                        <span class="text-sm text-gray-500" id="file-name-display-livewire">
-                            @if($project_file)
-                                {{ $project_file->getClientOriginalName() }}
-                            @else
-                                {{ !$hasDevPlan ? 'Upload dinonaktifkan sampai development plan lengkap' : 'Klik untuk mengunggah' }}
-                            @endif
-                        </span>
-                        <input id="file-upload-livewire" wire:model="project_file" type="file" class="sr-only" required {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
-                    </label>
-
-                    <div x-show="uploading" class="absolute bottom-0 left-0 w-full rounded-b-2xl overflow-hidden bg-gray-200 h-2">
-                        <div class="h-full bg-teal-500 transition-all duration-200" x-bind:style="'width: ' + progress + '%'"></div>
+            @if ($projects->count() == 0 || $isEditMode)
+                <form wire:submit.prevent="submitProject" enctype="multipart/form-data">
+                    {{-- Judul Project Input --}}
+                    <div class="mb-4">
+                        <input type="text" wire:model="judul_project"
+                            class="w-full text-sm border border-gray-300 rounded-[8px] px-4 py-2 focus:outline-none focus:border-green-500 focus:ring-[3px] focus:ring-green-500/20 bg-white transition-all"
+                            placeholder="Judul Project..." required
+                            {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                        @error('judul_project')
+                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
-                </div>
-                @error('project_file') <div class="text-red-500 text-xs mb-4">{{ $message }}</div> @enderror
 
-                {{-- Submit Project --}}
-                <div class="flex justify-end mb-6">
-                    <button type="submit"
-                        class="btn-action-teal px-8"
-                        {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}
-                        title="{{ !$hasDevPlan ? $developmentPlanIncompleteMessage : (optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : '') }}">
-                        Submit
-                        <div wire:loading wire:target="submitProject" class="ml-2">
-                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    {{-- Download Template --}}
+                    <div class="flex justify-start mb-5">
+                        <a href="{{ route('talent.project.template') }}" download
+                            class="flex items-center gap-2 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-100 px-4 py-2 rounded-[10px] transition shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
+                            Download Template
+                        </a>
+                    </div>
+
+                    <p class="text-xs text-gray-500 mb-2">Unggah projek anda disini</p>
+
+                    {{-- Upload Area --}}
+                    <div class="relative upload-wrapper mb-5" x-data="{ uploading: false, progress: 0 }"
+                        x-on:livewire-upload-start="uploading = true" x-on:livewire-upload-finish="uploading = false"
+                        x-on:livewire-upload-error="uploading = false"
+                        x-on:livewire-upload-progress="progress = $event.detail.progress">
+
+                        <label for="file-upload-livewire"
+                            class="upload-area rounded-2xl {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-teal-500' }} flex flex-col items-center justify-center py-10 bg-gray-50 border-2 border-dashed border-gray-200 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-gray-400 mb-2" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                            </svg>
+                            <span class="text-sm text-gray-500" id="file-name-display-livewire">
+                                @if ($project_file)
+                                    {{ $project_file->getClientOriginalName() }}
+                                @elseif($isEditMode)
+                                    Biarkan kosong jika tidak ingin mengganti file
+                                @else
+                                    {{ !$hasDevPlan ? 'Upload dinonaktifkan sampai development plan lengkap' : 'Klik untuk mengunggah' }}
+                                @endif
+                            </span>
+                            <input id="file-upload-livewire" wire:model="project_file" type="file"
+                                class="sr-only" {{ !$isEditMode ? 'required' : '' }}
+                                {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                        </label>
+
+                        <div x-show="uploading"
+                            class="absolute bottom-0 left-0 w-full rounded-b-2xl overflow-hidden bg-gray-200 h-2">
+                            <div class="h-full bg-teal-500 transition-all duration-200"
+                                x-bind:style="'width: ' + progress + '%'"></div>
                         </div>
-                    </button>
-                </div>
+                    </div>
+                    @error('project_file')
+                        <div class="text-red-500 text-xs mb-4">{{ $message }}</div>
+                    @enderror
 
-                {{-- Project Table --}}
-                <div class="rounded-xl overflow-hidden border border-gray-200">
-                    <table class="w-full text-left bg-white">
-                        <thead class="bg-slate-50 border-b border-gray-200">
-                            <tr>
-                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project Improvement</th>
-                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
-                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
+                    {{-- Submit Project --}}
+                    <div class="flex justify-end mb-6">
+                        <button type="submit" class="btn-action-teal px-8"
+                            {{ !$hasDevPlan || optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}
+                            title="{{ !$hasDevPlan ? $developmentPlanIncompleteMessage : (optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : '') }}">
+                            {{ $isEditMode ? 'Simpan Perubahan' : 'Submit' }}
+                            <div wire:loading wire:target="submitProject" class="ml-2">
+                                <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </button>
+                        @if ($isEditMode)
+                            <button type="button" wire:click="cancelEdit"
+                                class="ml-3 px-6 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 active:scale-95 transition-all">
+                                Batal
+                            </button>
+                        @endif
+                    </div>
+                </form>
+            @endif
+
+            {{-- Project Table --}}
+            <div
+                class="rounded-xl overflow-hidden border border-gray-200 {{ $projects->count() == 0 || $isEditMode ? '' : 'mt-2' }}">
+                <table class="w-full text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project Improvement
+                            </th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">File</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-48">Status</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center w-28">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($projects as $project)
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
+                                    {{ $project->title }}
+                                    <div class="text-xs text-gray-400 font-normal mt-0.5">
+                                        {{ \Carbon\Carbon::parse($project->created_at)->locale('id')->translatedFormat('d F Y') }}
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6 text-center w-48">
+                                    @if ($project->document_path)
+                                        <a href="{{ route('files.preview', ['path' => $project->document_path]) }}"
+                                            target="_blank"
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                            title="Lihat/Download File Project">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                            </svg>
+                                            Lihat File
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 text-xs italic">-</span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-center w-48">
+                                    @php
+                                        $projectStatus = 'Pending';
+
+                                        if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) {
+                                            $projectStatus = 'Approved';
+                                        } elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) {
+                                            $projectStatus = 'Rejected';
+                                        } elseif (in_array($project->status, ['Approved', 'Verified'], true)) {
+                                            $projectStatus = 'Approved';
+                                        } elseif ($project->status === 'Rejected') {
+                                            $projectStatus = 'Rejected';
+                                        }
+                                    @endphp
+                                    @if ($projectStatus === 'Approved')
+                                        <span class="badge badge-green">Approved</span>
+                                    @elseif($projectStatus === 'Rejected')
+                                        <span class="badge badge-red">Rejected</span>
+                                    @else
+                                        <span class="badge badge-amber">Pending</span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-6 text-center w-28">
+                                    @if ($projectStatus === 'Pending' || $projectStatus === 'Rejected')
+                                        <button type="button" wire:click="editProject({{ $project->id }})"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 border border-transparent rounded-lg text-[12px] font-semibold text-white shadow-sm transition-all {{ optional($user->promotion_plan)->is_locked ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-blue-700' }}"
+                                            title="{{ optional($user->promotion_plan)->is_locked ? 'Progress telah dikunci' : 'Edit Judul/File Project' }}"
+                                            {{ optional($user->promotion_plan)->is_locked ? 'disabled' : '' }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                class="size-3.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                            </svg>
+                                        </button>
+                                    @else
+                                        <span class="text-gray-400 text-xs italic">-</span>
+                                    @endif
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($projects as $project)
-                                <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
-                                    <td class="py-4 px-6 font-bold text-sm text-slate-800 text-left">
-                                        {{ $project->title }}
-                                        <div class="text-xs text-gray-400 font-normal mt-0.5">
-                                            {{ \Carbon\Carbon::parse($project->created_at)->locale('id')->translatedFormat('d F Y') }}
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-center w-48">
-                                        @if($project->document_path)
-                                            <a href="{{ route('files.preview', ['path' => $project->document_path]) }}" target="_blank"
-                                                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[12px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all" title="Lihat/Download File Project">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                                </svg>
-                                                Lihat File
-                                            </a>
-                                        @else
-                                            <span class="text-gray-400 text-xs italic">-</span>
-                                        @endif
-                                    </td>
-                                    <td class="py-4 px-6 text-center w-48">
-                                        @php
-                                            $projectStatus = 'Pending';
-
-                                            if (str_starts_with($project->finance_feedback ?? '', '[Approved]')) {
-                                                $projectStatus = 'Approved';
-                                            } elseif (str_starts_with($project->finance_feedback ?? '', '[Rejected]')) {
-                                                $projectStatus = 'Rejected';
-                                            } elseif (in_array($project->status, ['Approved', 'Verified'], true)) {
-                                                $projectStatus = 'Approved';
-                                            } elseif ($project->status === 'Rejected') {
-                                                $projectStatus = 'Rejected';
-                                            }
-                                        @endphp
-                                        @if($projectStatus === 'Approved')
-                                            <span class="badge badge-green">Approved</span>
-                                        @elseif($projectStatus === 'Rejected')
-                                            <span class="badge badge-red">Rejected</span>
-                                        @else
-                                            <span class="badge badge-amber">Pending</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="3">
-                                        Belum ada project yang disubmit.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </form>
+                        @empty
+                            <tr>
+                                <td class="py-12 px-6 text-center text-gray-400 text-xs" colspan="4">
+                                    Belum ada project yang disubmit.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

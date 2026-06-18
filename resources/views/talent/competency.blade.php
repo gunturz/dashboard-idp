@@ -47,57 +47,151 @@
             background-color: #0f766e;
         }
 
-        .subcategory-bar {
-            position: relative;
-            width: 100%;
-            max-width: 80rem;
-            background-color: #ffffff;
-            border-radius: 9999px;
-            box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            margin-bottom: 2rem;
-            overflow: hidden;
+        /* =============================================
+           DESKTOP subcategory bar (progress-fill style)
+           ============================================= */
+        @media (min-width: 768px) {
+            .subcategory-bar {
+                position: relative;
+                width: 100%;
+                max-width: 80rem;
+                background-color: #ffffff;
+                border-radius: 9999px;
+                box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e2e8f0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                margin-bottom: 2rem;
+                overflow: hidden;
+            }
+
+            /* The teal fill that grows from left */
+            .subcategory-fill {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                background-color: #0f766e;
+                border-radius: 9999px;
+                transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 0;
+            }
+
+            /* Each label button sits above the fill */
+            .subcategory-btn {
+                position: relative;
+                z-index: 1;
+                flex: 1;
+                text-align: center;
+                padding: 10px 16px;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                cursor: default;
+                white-space: nowrap;
+            }
+
+            .subcategory-btn.active {
+                font-weight: 700;
+            }
+
+            .subcategory-btn.filled {
+                color: #ffffff;
+            }
+
+            .subcategory-btn.unfilled {
+                color: #4b5563;
+            }
         }
 
-        /* The teal fill that grows from left */
-        .subcategory-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            background-color: #0f766e;
-            border-radius: 9999px;
-            transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 0;
-        }
+        /* =============================================
+           MOBILE subcategory bar (scrollable, same fill style as desktop)
+           ============================================= */
+        @media (max-width: 767px) {
 
-        /* Each label button sits above the fill */
-        .subcategory-btn {
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            text-align: center;
-            padding: 10px 16px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            cursor: default;
-            white-space: nowrap;
-        }
+            /* ── Top tabs (Core/Managerial) compact di mobile ── */
+            #top-tabs-bar {
+                margin-bottom: 0.75rem;
+                /* mb-6 → lebih kecil */
+            }
 
-        .subcategory-btn.active {
-            font-weight: 700;
-        }
+            #tab-core,
+            #tab-managerial {
+                padding-top: 12px !important;
+                padding-bottom: 14px !important;
+                font-size: 0.80rem !important;
+                line-height: 1.2 !important;
+            }
 
-        .subcategory-btn.filled {
-            color: #ffffff;
-        }
 
-        .subcategory-btn.unfilled {
-            color: #4b5563;
+
+            /* Bar bisa digeser horizontal, fill tetap ada seperti desktop */
+            .subcategory-bar {
+                position: relative;
+                width: 100%;
+                background-color: #ffffff;
+                border-radius: 9999px;
+                box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e2e8f0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                /* Sembunyikan scrollbar tapi tetap bisa digeser */
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .subcategory-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* Fill tetap ada — lebar dihitung via offsetLeft di JS */
+            .subcategory-fill {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                background-color: #0f766e;
+                border-radius: 9999px;
+                transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 0;
+            }
+
+            /* Tombol tidak stretch — ukuran ikut teks */
+            .subcategory-btn {
+                position: relative;
+                z-index: 1;
+                flex: 0 0 auto;
+                text-align: center;
+                padding: 10px 16px;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: color 0.3s ease;
+                cursor: default;
+                white-space: nowrap;
+            }
+
+            .subcategory-btn.active {
+                font-weight: 700;
+            }
+
+            .subcategory-btn.filled {
+                color: #ffffff;
+            }
+
+            .subcategory-btn.unfilled {
+                color: #4b5563;
+            }
+
+            .result-modal {
+                width: 50%;
+            }
         }
 
         /* ===== Result Modal ===== */
@@ -124,7 +218,7 @@
             background: #fff;
             border-radius: 1.25rem;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-            width: 100%;
+            width: 93%;
             max-width: 780px;
             max-height: 88vh;
             display: flex;
@@ -228,7 +322,7 @@
             border-radius: 1rem;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
             padding: 2rem 2.25rem;
-            width: 100%;
+            width: 93%;
             max-width: 440px;
             transform: scale(0.9) translateY(16px);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -268,7 +362,8 @@
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Left Logo & Title -->
             <div class="flex items-center gap-[12px] no-underline">
-                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP" class="h-[48px] w-[48px] object-contain bg-white p-[5px] rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                <img src="{{ asset('asset/Logo IDP.png') }}" alt="Logo IDP"
+                    class="h-[48px] w-[48px] object-contain bg-white p-[5px] rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
                 <div class="flex flex-col leading-[1.1]">
                     <span class="text-[0.75rem] font-semibold text-[#10b981] tracking-[1.5px] uppercase">Portal</span>
                     <span class="text-[1.15rem] font-extrabold text-white tracking-[-0.3px]">IDP</span>
@@ -286,7 +381,8 @@
     <main class="flex-grow max-w-[1400px] mx-auto w-full px-2 md:px-4 py-8 flex flex-col items-center">
 
         <!-- Top Level Categories: Core / Managerial -->
-        <div class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-6"
+        <div id="top-tabs-bar"
+            class="w-full bg-white rounded-full flex border border-slate-200 overflow-hidden max-w-7xl mb-6"
             style="padding: 0; box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.08);">
             <button id="tab-core"
                 class="flex-1 text-center py-3 font-semibold text-white bg-teal-primary transition shadow-sm"
@@ -581,25 +677,51 @@
         const activeTopTabClass = "flex-1 text-center py-3 font-semibold text-white bg-teal-primary rounded-full transition shadow-sm";
         const inactiveTopTabClass = "flex-1 text-center py-3 font-semibold text-gray-600 hover:bg-gray-50 rounded-full transition";
 
+        /* Deteksi apakah saat ini di tampilan mobile */
+        function isMobileView() {
+            return window.innerWidth < 768;
+        }
+
         function updateSubcategoryFill() {
             const bar = document.getElementById('subcategory-bar');
             const fill = document.getElementById('subcategory-fill');
             const buttons = categoryIds.map(id => document.getElementById(id));
             const lastIndex = buttons.length - 1;
+            const activeBtn = buttons[currentCategoryIndex];
 
-            if (currentCategoryIndex === lastIndex) {
-                // Tab terakhir aktif: fill penuh sampai tepi kanan
-                fill.style.width = '100%';
+            if (isMobileView()) {
+                /* ── MOBILE: fill dihitung pakai offsetLeft (relatif ke scroll container)
+                   agar tetap akurat meski bar sudah di-scroll ── */
+                if (currentCategoryIndex === lastIndex) {
+                    // Tab terakhir: isi penuh seluruh konten bar
+                    fill.style.width = bar.scrollWidth + 'px';
+                } else {
+                    // Lebar fill = posisi kiri btn aktif + lebar btn aktif
+                    const fillWidth = activeBtn.offsetLeft + activeBtn.offsetWidth;
+                    fill.style.width = fillWidth + 'px';
+                }
+
+                // Auto-scroll agar tab aktif selalu terlihat di tengah
+                if (activeBtn) {
+                    const barWidth = bar.offsetWidth;
+                    const btnLeft = activeBtn.offsetLeft;
+                    const btnWidth = activeBtn.offsetWidth;
+                    const targetScroll = btnLeft - (barWidth / 2) + (btnWidth / 2);
+                    bar.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                }
             } else {
-                // Hitung lebar fill: dari kiri bar sampai ujung kanan tombol aktif
-                const barRect = bar.getBoundingClientRect();
-                const activeBtn = buttons[currentCategoryIndex];
-                const activeBtnRect = activeBtn.getBoundingClientRect();
-                const fillWidth = (activeBtnRect.right - barRect.left);
-                fill.style.width = fillWidth + 'px';
+                /* ── DESKTOP: fill dihitung pakai getBoundingClientRect ── */
+                if (currentCategoryIndex === lastIndex) {
+                    fill.style.width = '100%';
+                } else {
+                    const barRect = bar.getBoundingClientRect();
+                    const activeBtnRect = activeBtn.getBoundingClientRect();
+                    const fillWidth = activeBtnRect.right - barRect.left;
+                    fill.style.width = fillWidth + 'px';
+                }
             }
 
-            // Update warna teks setiap tombol
+            // Update kelas setiap tombol (berlaku untuk desktop & mobile)
             buttons.forEach((btn, index) => {
                 btn.classList.remove('filled', 'unfilled', 'active');
                 if (index <= currentCategoryIndex) {

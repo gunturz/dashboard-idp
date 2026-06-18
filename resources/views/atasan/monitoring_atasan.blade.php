@@ -121,6 +121,57 @@
                 color: #1e293b;
             }
 
+            .pill-nav-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 0;
+                width: 100%;
+            }
+
+            .pill-nav-tabs {
+                display: flex;
+                flex: 1;
+                background: #e5e7eb;
+                border-radius: 9999px;
+                padding: 4px;
+                gap: 0;
+                overflow-x: auto;
+                -ms-overflow-style: none; /* IE and Edge */
+                scrollbar-width: none; /* Firefox */
+            }
+
+            .pill-nav-tabs::-webkit-scrollbar {
+                display: none; /* Chrome, Safari and Opera */
+            }
+
+            .pill-tab {
+                flex: 1;
+                text-align: center;
+                padding: 8px 12px;
+                border-radius: 9999px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #6b7280;
+                cursor: pointer;
+                transition: all 0.2s;
+                white-space: nowrap;
+                background: transparent;
+                border: none;
+            }
+
+            .pill-tab:hover {
+                color: #1e293b;
+                background: rgba(255, 255, 255, 0.5);
+            }
+
+            .pill-tab.active {
+                background: #0f172a;
+                color: white;
+                font-weight: 700;
+                box-shadow: 0 2px 8px rgba(15, 23, 42, 0.22);
+            }
+
             .section-title {
                 display: flex;
                 align-items: center;
@@ -488,6 +539,16 @@
 
             /* ══ MOBILE ONLY — does NOT affect desktop ══ */
             @media (max-width: 767px) {
+                .pill-nav-tabs {
+                    gap: 0;
+                }
+
+                .pill-tab {
+                    flex: 0 0 auto;
+                    padding: 8px 14px;
+                    font-size: 0.78rem;
+                }
+
                 .nav-tabs {
                     overflow-x: auto;
                     -webkit-overflow-scrolling: touch;

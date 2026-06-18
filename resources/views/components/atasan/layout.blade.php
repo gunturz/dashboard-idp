@@ -629,6 +629,52 @@
             main {
                 padding: 16px !important;
             }
+
+            .prem-stat-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important;
+                align-items: start !important;
+            }
+
+            .prem-stat {
+                aspect-ratio: 1 / 1 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 16px !important;
+                transform: none !important;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
+            }
+
+            a.prem-stat:not(.stat-active):hover,
+            button.prem-stat:not(.stat-active):hover,
+            .prem-stat.clickable:not(.stat-active):hover {
+                transform: none !important;
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .prem-stat.stat-active,
+            .prem-stat.stat-active:hover,
+            .prem-stat.stat-active:focus,
+            .prem-stat.stat-active:active {
+                transform: scale(1.04) !important;
+                z-index: 1;
+            }
+
+            .prem-stat-icon {
+                position: absolute !important;
+                top: 14px !important;
+                left: 14px !important;
+                margin-bottom: 0 !important;
+            }
+
+            .prem-stat-value {
+                font-size: 2rem !important;
+            }
+
+            .prem-stat-label {
+                font-size: 0.75rem !important;
+            }
         }
 
         /* Prevent horizontal scroll on mobile */
@@ -638,10 +684,6 @@
             body {
                 overflow-x: hidden !important;
                 max-width: 100vw;
-            }
-
-            .prem-stat-grid {
-                grid-template-columns: 1fr !important;
             }
         }
     </style>

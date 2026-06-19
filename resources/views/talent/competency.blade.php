@@ -50,6 +50,17 @@
         /* =============================================
            DESKTOP subcategory bar (progress-fill style)
            ============================================= */
+        /* Sembunyikan elemen mobile di desktop */
+        @media (min-width: 768px) {
+            .mobile-action-btns {
+                display: none !important;
+            }
+
+            .mobile-submit-footer {
+                display: none !important;
+            }
+        }
+
         @media (min-width: 768px) {
             .subcategory-bar {
                 position: relative;
@@ -163,18 +174,20 @@
                 z-index: 0;
             }
 
-            /* Tombol tidak stretch — ukuran ikut teks */
+            /* Tombol stretch — ukuran flex: 1, memotong teks panjang agar pas di layar */
             .subcategory-btn {
                 position: relative;
                 z-index: 1;
-                flex: 0 0 auto;
+                flex: 1;
                 text-align: center;
-                padding: 10px 16px;
-                font-size: 0.875rem;
+                padding: 8px 12px;
+                font-size: 0.7rem;
                 font-weight: 500;
                 transition: color 0.3s ease;
                 cursor: default;
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .subcategory-btn.active {
@@ -191,6 +204,107 @@
 
             .result-modal {
                 width: 50%;
+            }
+
+            /* ── Mobile Action Buttons (Ragu-ragu & Sudah Kompeten) ── */
+            .mobile-action-btns {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+                margin-top: 1.5rem;
+            }
+
+            .mobile-action-btns .btn-ragu {
+                width: 100%;
+                padding: 14px 20px;
+                background: #f59e0b;
+                color: #fff;
+                font-family: 'Poppins', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                border: none;
+                border-radius: 14px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
+                letter-spacing: 0.01em;
+            }
+
+            .mobile-action-btns .btn-ragu:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+            }
+
+            .mobile-action-btns .btn-kompeten {
+                width: 100%;
+                padding: 14px 20px;
+                background: #0f766e;
+                color: #fff;
+                font-family: 'Poppins', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                border: none;
+                border-radius: 14px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(15, 118, 110, 0.35);
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
+                letter-spacing: 0.01em;
+            }
+
+            .mobile-action-btns .btn-kompeten:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
+            }
+
+            /* ── Mobile Submit Footer ── */
+            .mobile-submit-footer {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .mobile-submit-footer .mobile-total-text {
+                text-align: center;
+                font-size: 0.82rem;
+                color: #64748b;
+                font-weight: 500;
+            }
+
+            .mobile-submit-footer .btn-submit-mobile {
+                width: 100%;
+                padding: 15px 20px;
+                background: #0f766e;
+                color: #fff;
+                font-family: 'Poppins', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                border: none;
+                border-radius: 14px;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(15, 118, 110, 0.4);
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                letter-spacing: 0.01em;
+            }
+
+            .mobile-submit-footer .btn-submit-mobile:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 10px rgba(15, 118, 110, 0.25);
+            }
+
+            /* Sembunyikan elemen desktop di mobile */
+            .desktop-action-btns {
+                display: none !important;
+            }
+
+            .desktop-submit-footer {
+                display: none !important;
             }
         }
 
@@ -447,8 +561,8 @@
                     Memuat data pertanyaan...
                 </p>
 
-                <div class="flex items-center justify-end mt-auto">
-                    {{-- Action Right: Ragu-ragu + Sudah Kompeten --}}
+                {{-- Desktop Action Buttons (tersembunyi di mobile) --}}
+                <div class="desktop-action-btns flex items-center justify-end mt-auto">
                     <div class="flex items-center gap-3">
                         <button type="button" onclick="handleRaguRagu()"
                             class="px-8 py-2.5 bg-[#f59e0b] text-white font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5">
@@ -459,6 +573,16 @@
                             Sudah Kompeten
                         </button>
                     </div>
+                </div>
+
+                {{-- Mobile Action Buttons (tersembunyi di desktop) --}}
+                <div class="mobile-action-btns">
+                    <button type="button" class="btn-ragu" onclick="handleRaguRagu()">
+                        Ragu - ragu
+                    </button>
+                    <button type="button" class="btn-kompeten" onclick="handleSudahKompeten()">
+                        Sudah Kompeten
+                    </button>
                 </div>
             </div>
         </form>
@@ -575,14 +699,29 @@
                 </div>
 
                 <!-- Modal Footer (fixed, tidak scroll) -->
-                <div class="result-modal-footer flex items-center justify-between">
-                    <p class="text-xs text-gray-400">Total: <strong id="result-total-filled"
-                            class="text-slate-700">0</strong> kompetensi dinilai</p>
-                    <button onclick="showSubmitPopup()"
-                        class="px-10 py-3 text-white font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5"
-                        style="background: linear-gradient(135deg, #0f766e, #0d9488);">
-                        ✓ &nbsp;Submit Assessment
-                    </button>
+                <div class="result-modal-footer">
+                    {{-- Desktop Footer (tersembunyi di mobile) --}}
+                    <div class="desktop-submit-footer flex items-center justify-between">
+                        <p class="text-xs text-gray-400">Total: <strong id="result-total-filled"
+                                class="text-slate-700">0</strong> kompetensi dinilai</p>
+                        <button onclick="showSubmitPopup()"
+                            class="px-10 py-3 text-white font-bold rounded-xl shadow-md transition transform hover:-translate-y-0.5"
+                            style="background: linear-gradient(135deg, #0f766e, #0d9488);">
+                            ✓ &nbsp;Submit Assessment
+                        </button>
+                    </div>
+
+                    {{-- Mobile Footer (tersembunyi di desktop) --}}
+                    <div class="mobile-submit-footer">
+                        <p class="mobile-total-text">Total: <strong id="result-total-filled-mobile"
+                                class="text-slate-700">0</strong> kompetensi dinilai</p>
+                        <button class="btn-submit-mobile" onclick="showSubmitPopup()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Submit Assessment
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -961,7 +1100,9 @@
 
             buildRows('result-table-core', topTabs.core.categories, 'core');
             buildRows('result-table-managerial', topTabs.managerial.categories, 'managerial');
-            document.getElementById('result-total-filled').textContent = Object.keys(userScores).length;
+            const totalFilled = Object.keys(userScores).length;
+            document.getElementById('result-total-filled').textContent = totalFilled;
+            document.getElementById('result-total-filled-mobile').textContent = totalFilled;
 
             // Tampilkan modal
             document.getElementById('result-modal-overlay').classList.add('open');

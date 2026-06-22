@@ -395,7 +395,7 @@
 
             @media (max-width: 1024px) {
 
-                .page-header > div {
+                .page-header>div {
                     max-width: 100%;
                     min-width: 0;
                 }
@@ -419,7 +419,7 @@
                     overflow-x: hidden;
                 }
 
-                .review-head > div {
+                .review-head>div {
                     min-width: 0;
                 }
 
@@ -604,8 +604,7 @@
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Departemen</span>
-                        <span
-                            class="meta-value">{{ optional($reviewTalent->department)->nama_department ?? '-' }}</span>
+                        <span class="meta-value">{{ optional($reviewTalent->department)->nama_department ?? '-' }}</span>
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Atasan</span>
@@ -651,13 +650,13 @@
                         @endphp
                         <article class="assessment-card">
                             <div class="assessment-head">
-                                <span
-                                    class="assessment-name">{{ $panelis->nama ?? 'Panelis ' . ($panelisIndex + 1) }}</span>
+                                <span class="assessment-name">{{ $panelis->nama ?? 'Panelis ' . ($panelisIndex + 1) }}</span>
                                 <span class="assessment-dot"></span>
                                 <span class="assessment-company">{{ $panelisCompany }}</span>
                             </div>
                             <div class="assessment-feedback line-clamp-2" style="margin-bottom: 12px;">{{ $feedback }}</div>
-                            <button type="button" class="btn-expand hidden" onclick="toggleExpandFeedback(this)">Lihat Selengkapnya</button>
+                            <button type="button" class="btn-expand hidden" onclick="toggleExpandFeedback(this)">Lihat
+                                Selengkapnya</button>
                             <div class="assessment-bottom">
                                 <span class="status-pill {{ $recClass }}">{{ $recommendation }}</span>
                                 <span class="score-pill">{{ $score }}</span>
@@ -675,8 +674,8 @@
                     </div>
 
                     @if ($isComplete)
-                        <button class="btn-selesai"
-                            style="background:#e2e8f0;color:#64748b;box-shadow:none;cursor:default;" disabled>
+                        <button class="btn-selesai" style="background:#e2e8f0;color:#64748b;box-shadow:none;cursor:default;"
+                            disabled>
                             Sudah Selesai
                         </button>
                     @else
@@ -713,7 +712,7 @@
                         </svg>
                     </button>
                 </div>
-                <p class="text-sm text-[#64748b]">Tentukan hasil promosi untuk <span
+                <p class="text-sm text-[#64748b]">Tentukan hasil rekomendasi untuk <span
                         class="font-semibold text-[#1e293b]" id="decisionTalentName">talent</span></p>
             </div>
             <div class="px-6 pb-2 decision-grid">
@@ -723,7 +722,7 @@
                 </div>
                 <div class="decision-card ready-1-2" onclick="selectDecision('ready_1_2_years')">
                     <h4>Ready in 1-2 Years</h4>
-                    <p>Diproyeksikan siap promosi dalam 1-2 tahun</p>
+                    <p>Direkomendasikan untuk siap dalam 1-2 tahun</p>
                 </div>
                 <div class="decision-card ready-over-2" onclick="selectDecision('ready_over_2_years')">
                     <h4>Ready in &gt; 2 Years</h4>
@@ -767,14 +766,14 @@
             let activeTalentName = '';
 
             function escapeHtml(value) {
-                return String(value).replace(/[&<>"']/g, function(char) {
+                return String(value).replace(/[&<>"']/g, function (char) {
                     return {
                         '&': '&amp;',
                         '<': '&lt;',
                         '>': '&gt;',
                         '"': '&quot;',
                         "'": '&#039;'
-                    } [char];
+                    }[char];
                 });
             }
 
@@ -843,7 +842,7 @@
             }
 
             ['decisionModal', 'confirmModal'].forEach(id => {
-                document.getElementById(id).addEventListener('click', function(e) {
+                document.getElementById(id).addEventListener('click', function (e) {
                     if (e.target === this) {
                         if (id === 'decisionModal') closeDecisionModal();
                         else backToDecision();
@@ -875,13 +874,13 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const alert = document.getElementById('success-alert');
                 if (alert) {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         alert.style.opacity = '0';
                         alert.style.transform = 'translateY(-10px)';
-                        setTimeout(function() {
+                        setTimeout(function () {
                             alert.remove();
                         }, 500);
                     }, 5000);

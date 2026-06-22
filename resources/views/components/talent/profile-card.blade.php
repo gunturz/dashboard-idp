@@ -267,15 +267,44 @@
 @php
     /* Shared data helpers */
     $hasActivePlan = !empty($user->promotion_plan);
+
+    // Jika tidak ada active plan, cari last plan (termasuk yang sudah selesai/Promoted)
+    // agar jabatan tetap tampil "Jabatan Asal → Jabatan Target" setelah lulus
+    $lastPromotionPlan = $hasActivePlan
+        ? $user->promotion_plan
+        : \App\Models\PromotionPlan::with('targetPosition')
+            ->where('user_id_talent', $user->id)
+            ->latest('updated_at')
+            ->first();
+
+    $finalStatuses = ['Promoted', 'Not Promoted', 'Ready Now', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
+    $lastPlanStatus = optional($lastPromotionPlan)->status_promotion;
+    $isFinished = in_array($lastPlanStatus, $finalStatuses, true);
+
+    // Gunakan lastPromotionPlan untuk menampilkan jabatan target jika sudah selesai
+    $effectivePlan = ($hasActivePlan || $isFinished) ? $lastPromotionPlan : null;
+
     $mentorNames = $hasActivePlan
         ? (collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-'))
         : '-';
     $atasanName = $hasActivePlan ? (optional($user->atasan)->nama ?? '-') : '-';
-    $sourcePositionName = $user->history_source_position_name ?? optional($user->position)->position_name ?? '-';
-    $targetPositionName = optional(optional($user->promotion_plan)->targetPosition)->position_name;
+
+    // Ambil source position dari development_session (lebih akurat dari user->position
+    // karena user->position bisa sudah diupdate ke posisi baru setelah promosi)
+    $devSession = \App\Models\DevelopmentSession::with('sourcePosition')
+        ->where('user_id_talent', $user->id)
+        ->latest('updated_at')
+        ->first();
+
+    $sourcePositionName = $user->history_source_position_name
+        ?? optional(optional($devSession)->sourcePosition)->position_name
+        ?? optional($user->position)->position_name
+        ?? '-';
+
+    $targetPositionName = optional(optional($effectivePlan)->targetPosition)->position_name;
     $targetPositionDisplay = $targetPositionName ?? '-';
 
-    $roleDisplay = ($hasActivePlan && $targetPositionName)
+    $roleDisplay = ($effectivePlan && $targetPositionName)
         ? "{$sourcePositionName} &rarr; {$targetPositionName}"
         : $sourcePositionName;
 

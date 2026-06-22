@@ -1653,8 +1653,8 @@ class PDCAdminController extends Controller
 
             $this->addNotificationToUser(
                 $talent_id,
-                '📋 Hasil Evaluasi Promosi',
-                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-blue-600">Ready in 1–2 Years</span>. Anda diproyeksikan siap untuk promosi ke posisi <span class="font-semibold">' . $targetPosition . '</span> dalam 1–2 tahun ke depan. Terus kembangkan diri Anda!',
+                '📋 Hasil Evaluasi Development Talent',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-blue-600">Ready in 1–2 Years</span>. Anda direkomendasikan ke posisi <span class="font-semibold">' . $targetPosition . '</span> dalam 1–2 tahun ke depan. Terus kembangkan diri Anda!',
                 'info'
             );
 
@@ -1667,7 +1667,7 @@ class PDCAdminController extends Controller
 
             $this->addNotificationToUser(
                 $talent_id,
-                '📋 Hasil Evaluasi Promosi',
+                '📋 Hasil Evaluasi Development Talent',
                 'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-amber-600">Ready in &gt; 2 Years</span>. Anda masih membutuhkan pengembangan lebih lanjut sebelum siap untuk posisi <span class="font-semibold">' . $targetPosition . '</span>. Terus tingkatkan kompetensi Anda!',
                 'warning'
             );
@@ -1681,8 +1681,8 @@ class PDCAdminController extends Controller
 
             $this->addNotificationToUser(
                 $talent_id,
-                '📋 Hasil Evaluasi Promosi',
-                'PDC Admin telah menyelesaikan proses evaluasi Anda. Berdasarkan hasil penilaian, Anda dinyatakan <span class="font-semibold text-red-600">Not Ready</span> untuk promosi ke posisi <span class="font-semibold">' . $targetPosition . '</span> pada periode ini. Terus tingkatkan kompetensi Anda!',
+                '📋 Hasil Evaluasi Development Talent',
+                'PDC Admin telah menyelesaikan proses evaluasi Anda. Berdasarkan hasil penilaian, Anda dinyatakan <span class="font-semibold text-red-600">Not Ready</span> untuk posisi <span class="font-semibold">' . $targetPosition . '</span> pada periode ini. Terus tingkatkan kompetensi Anda!',
                 'warning'
             );
 

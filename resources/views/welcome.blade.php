@@ -203,7 +203,7 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image: 
+            background-image:
                 linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(15, 23, 42, 0.9) 100%),
                 url("{{ asset('asset/Gambar TS.png') }}");
             background-size: cover;
@@ -1213,7 +1213,7 @@
                 <div class="tl-body">
                     <div class="tl-label"><span class="tl-dot-mini"></span>Tahap 6</div>
                     <div class="tl-title">Evaluasi &amp; Panelis Review</div>
-                    <div class="tl-desc">Panelis melakukan evaluasi akhir dan memberikan rekomendasi promosi talent.
+                    <div class="tl-desc">Panelis melakukan evaluasi akhir dan memberikan rekomendasi pada talent.
                     </div>
                 </div>
             </div>
@@ -1328,12 +1328,10 @@
                         style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(16, 185, 129, 0.1)); border: 1px solid rgba(13, 148, 136, 0.3); color: #10b981;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                             style="width:28px;height:28px;">
-                            <circle cx="11" cy="11" r="8" fill="none" stroke="#10b981"
-                                stroke-width="2" />
+                            <circle cx="11" cy="11" r="8" fill="none" stroke="#10b981" stroke-width="2" />
                             <path
                                 d="M11 6.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM7.5 14.5a3.5 3.5 0 0 1 7 0v0.5h-7v-0.5z" />
-                            <path d="M16.5 16.5l4.5 4.5" stroke="#10b981" stroke-width="2.5"
-                                stroke-linecap="round" />
+                            <path d="M16.5 16.5l4.5 4.5" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" />
                         </svg>
                     </div>
                     <div class="role-name">Talent</div>

@@ -1,8 +1,8 @@
 <x-panelis.layout title="Detail Logbook" :user="$user">
     <div class="w-full px-4 md:px-8 pt-10 md:pt-6 pb-8">
         {{-- ── Page Header ── --}}
-        <div class="page-header animate-title mb-4 flex justify-between items-center">
-            <div class="flex items-center gap-4">
+        <div class="page-header animate-title mb-4 flex justify-between items-start">
+            <div class="flex items-start gap-4">
                 <div class="page-header-icon bg-[#0f172a] text-white shadow-lg shadow-slate-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd"

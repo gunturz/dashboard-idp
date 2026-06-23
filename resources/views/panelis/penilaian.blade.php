@@ -665,6 +665,89 @@
                 font-weight: 700;
                 color: #1e293b;
             }
+
+            /* ── Mobile Aspek Table ── */
+            .aspek-table-mobile {
+                width: 100%;
+                border-collapse: collapse;
+                border: none;
+            }
+
+            .aspek-table-mobile th {
+                background: #f1f5f9;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #1e293b;
+                padding: 10px 12px;
+                text-align: left;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+            }
+
+            .aspek-table-mobile th:last-child {
+                border-right: none;
+            }
+
+            .aspek-table-mobile td {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+                color: #334155;
+                border-bottom: 1px solid #d1d5db;
+                vertical-align: top;
+            }
+
+            .aspek-table-mobile tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .aspek-mobile-name {
+                font-weight: 700;
+                font-size: 0.8rem;
+                color: #1e293b;
+                margin-bottom: 4px;
+            }
+
+            .aspek-mobile-indicator {
+                font-size: 0.73rem;
+                color: #64748b;
+                margin-bottom: 10px;
+                line-height: 1.4;
+            }
+
+            .score-btns-mobile {
+                display: flex;
+                gap: 6px;
+            }
+
+            .score-btn-mobile {
+                width: 34px;
+                height: 34px;
+                border-radius: 8px;
+                border: 1.5px solid #cbd5e1;
+                background: white;
+                color: #64748b;
+                font-size: 0.88rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.15s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .score-btn-mobile:hover {
+                border-color: #14b8a6;
+                color: #0d9488;
+                background: #f0fdfa;
+            }
+
+            .score-btn-mobile.selected {
+                background: #14b8a6;
+                border-color: #14b8a6;
+                color: white;
+                box-shadow: 0 2px 8px rgba(20, 184, 166, 0.28);
+            }
         </style>
     </x-slot>
 
@@ -803,7 +886,55 @@
         </svg>
         Aspek Penilaian
     </p>
-    <div class="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
+
+    @php
+        $aspects = [
+            [
+                'name' => 'Pemahaman Bisnis & Strategi',
+                'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan',
+            ],
+            [
+                'name' => 'Identifikasi Masalah',
+                'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
+            ],
+            [
+                'name' => 'Analisis Akar Masalah',
+                'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
+            ],
+            [
+                'name' => 'Solusi yang Ditawarkan',
+                'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah',
+            ],
+            [
+                'name' => 'Rencana Implementasi',
+                'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
+            ],
+            [
+                'name' => 'Target Dampak & KPI',
+                'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas',
+            ],
+            [
+                'name' => 'Risiko & Mitigasi',
+                'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi',
+            ],
+            [
+                'name' => 'Gaya Presentasi & Penguasaan Materi',
+                'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',
+            ],
+            [
+                'name' => 'Refleksi Peran sebagai Posisi yang Dituju',
+                'indicator' =>
+                    'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
+            ],
+            [
+                'name' => 'Nilai Tambah',
+                'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',
+            ],
+        ];
+    @endphp
+
+    {{-- PC View --}}
+    <div class="hidden md:block overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
         <table class="aspek-table" id="aspek-table">
             <thead>
                 <tr>
@@ -813,51 +944,6 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $aspects = [
-                        [
-                            'name' => 'Pemahaman Bisnis & Strategi',
-                            'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan',
-                        ],
-                        [
-                            'name' => 'Identifikasi Masalah',
-                            'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
-                        ],
-                        [
-                            'name' => 'Analisis Akar Masalah',
-                            'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
-                        ],
-                        [
-                            'name' => 'Solusi yang Ditawarkan',
-                            'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah',
-                        ],
-                        [
-                            'name' => 'Rencana Implementasi',
-                            'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
-                        ],
-                        [
-                            'name' => 'Target Dampak & KPI',
-                            'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas',
-                        ],
-                        [
-                            'name' => 'Risiko & Mitigasi',
-                            'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi',
-                        ],
-                        [
-                            'name' => 'Gaya Presentasi & Penguasaan Materi',
-                            'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',
-                        ],
-                        [
-                            'name' => 'Refleksi Peran sebagai Posisi yang Dituju',
-                            'indicator' =>
-                                'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
-                        ],
-                        [
-                            'name' => 'Nilai Tambah',
-                            'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',
-                        ],
-                    ];
-                @endphp
                 @foreach ($aspects as $i => $aspect)
                     <tr>
                         <td class="col-aspek">{{ $aspect['name'] }}</td>
@@ -866,6 +952,33 @@
                             <div class="score-btns" data-row="{{ $i }}">
                                 @for ($s = 1; $s <= 5; $s++)
                                     <button type="button" class="score-btn" data-row="{{ $i }}" data-score="{{ $s }}"
+                                        onclick="selectScore({{ $i }}, {{ $s }})">{{ $s }}</button>
+                                @endfor
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    {{-- Mobile View --}}
+    <div class="block md:hidden overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
+        <table class="aspek-table-mobile">
+            <thead>
+                <tr>
+                    <th>Aspek yang Dinilai &amp; Indikator Penilaian</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($aspects as $i => $aspect)
+                    <tr>
+                        <td>
+                            <div class="aspek-mobile-name">{{ $aspect['name'] }}</div>
+                            <div class="aspek-mobile-indicator">{{ $aspect['indicator'] }}</div>
+                            <div class="score-btns-mobile" data-row="{{ $i }}">
+                                @for ($s = 1; $s <= 5; $s++)
+                                    <button type="button" class="score-btn-mobile" data-row="{{ $i }}" data-score="{{ $s }}"
                                         onclick="selectScore({{ $i }}, {{ $s }})">{{ $s }}</button>
                                 @endfor
                             </div>
@@ -969,7 +1082,7 @@
                     scores[row] = parsedScore; // Update nilai di array agar selalu int
 
                     if (parsedScore > 0) {
-                        document.querySelectorAll(`.score-btn[data-row="${row}"]`).forEach(btn => {
+                        document.querySelectorAll(`.score-btn[data-row="${row}"], .score-btn-mobile[data-row="${row}"]`).forEach(btn => {
                             const s = parseInt(btn.getAttribute('data-score'));
                             btn.classList.toggle('selected', s === parsedScore);
                         });
@@ -991,7 +1104,7 @@
 
             function selectScore(row, score) {
                 scores[row] = parseInt(score);
-                document.querySelectorAll(`.score-btn[data-row="${row}"]`).forEach(btn => {
+                document.querySelectorAll(`.score-btn[data-row="${row}"], .score-btn-mobile[data-row="${row}"]`).forEach(btn => {
                     const s = parseInt(btn.getAttribute('data-score'));
                     btn.classList.toggle('selected', s === parseInt(score));
                 });

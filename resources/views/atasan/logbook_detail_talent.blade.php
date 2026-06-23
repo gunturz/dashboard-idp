@@ -24,7 +24,7 @@
                 background: white;
                 border-radius: 16px;
                 border: 1px solid #e2e8f0;
-                overflow: hidden;
+                overflow-x: auto;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
 
@@ -94,6 +94,12 @@
             .tab-btn:not(.active):hover {
                 color: #1e293b;
             }
+
+            @media (max-width: 768px) {
+                .tab-panel table {
+                    min-width: 800px;
+                }
+            }
         </style>
     </x-slot>
 
@@ -128,7 +134,7 @@
 
         {{-- Exposure Panel --}}
         <div id="panel-exposure" class="tab-panel {{ ($activeTab ?? 'exposure') === 'exposure' ? '' : 'hidden' }}">
-            <div class="rounded-xl overflow-hidden border border-gray-200">
+            <div class="rounded-xl overflow-x-auto custom-scrollbar border border-gray-200">
                 <table class="w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -209,7 +215,7 @@
 
         {{-- Mentoring Panel --}}
         <div id="panel-mentoring" class="tab-panel {{ ($activeTab ?? 'exposure') === 'mentoring' ? '' : 'hidden' }}">
-            <div class="rounded-xl overflow-hidden border border-gray-200">
+            <div class="rounded-xl overflow-x-auto custom-scrollbar border border-gray-200">
                 <table class="w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -290,7 +296,7 @@
 
         {{-- Learning Panel --}}
         <div id="panel-learning" class="tab-panel {{ ($activeTab ?? 'exposure') === 'learning' ? '' : 'hidden' }}">
-            <div class="rounded-xl overflow-hidden border border-gray-200">
+            <div class="rounded-xl overflow-x-auto custom-scrollbar border border-gray-200">
                 <table class="w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>

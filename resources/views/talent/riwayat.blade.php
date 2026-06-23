@@ -198,7 +198,7 @@
                                 <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Perusahaan</th>
                                 <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Start Date</th>
                                 <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Due Date</th>
-                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status Promosi</th>
+                                <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Rekomendasi</th>
                                 <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -214,7 +214,7 @@
                                 <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
                                     <td class="py-4 px-6 text-center">
                                         <span class="talent-name-main">{{ $user->nama }}</span>
-                                        <span class="talent-role-sub">{{ $posName }} – {{ $targetPos }}</span>
+                                        <span class="talent-role-sub">{{ $posName }} &rarr; {{ $targetPos }}</span>
                                     </td>
                                     <td class="py-4 px-6 text-sm font-semibold text-slate-800 text-center">
                                         {{ optional($user->company)->nama_company ?? 'PT Tiga Serangkai Pustaka Mandiri' }}
@@ -288,7 +288,7 @@
                                 <th style="width: 150px; font-size: 11px; padding: 8px;">Perusahaan</th>
                                 <th style="width: 100px; font-size: 11px; padding: 8px;">Start Date</th>
                                 <th style="width: 100px; font-size: 11px; padding: 8px;">Due Date</th>
-                                <th style="width: 110px; font-size: 11px; padding: 8px;">Status Promosi</th>
+                                <th style="width: 110px; font-size: 11px; padding: 8px;">Rekomendasi</th>
                                 <th style="width: 90px; font-size: 11px; padding: 8px;">Aksi</th>
                             </tr>
                         </thead>
@@ -303,7 +303,7 @@
                                 <tr>
                                     <td class="text-center font-bold text-[#1e293b] text-[11px] p-2 leading-tight">
                                         <span class="block text-slate-800 text-[12px] font-extrabold">{{ $user->nama }}</span>
-                                        <span class="block text-slate-500 text-[10px] italic font-medium mt-0.5">{{ $posName }} – {{ $targetPos }}</span>
+                                        <span class="block text-slate-500 text-[10px] italic font-medium mt-0.5">{{ $posName }} &rarr; {{ $targetPos }}</span>
                                     </td>
                                     <td class="text-center font-bold text-[#1e293b] text-[11px] p-2 whitespace-normal leading-tight">
                                         {{ optional($user->company)->nama_company ?? 'PT Tiga Serangkai Pustaka Mandiri' }}

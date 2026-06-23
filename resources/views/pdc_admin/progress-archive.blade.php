@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        
+
         @if (session('success'))
             <div id="success-alert"
                 class="flex items-center gap-3 mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500">
@@ -128,7 +128,8 @@
         @endphp
 
         <div class="progress-archive-wrapper">
-            <div id="archiveTableContainer" class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white {{ $archiveRows->isEmpty() ? 'hidden' : '' }}">
+            <div id="archiveTableContainer"
+                class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white {{ $archiveRows->isEmpty() ? 'hidden' : '' }}">
                 <table class="w-full table-auto text-left" id="archiveTable">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -141,7 +142,7 @@
                             <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
                                 Due Date</th>
                             <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
-                                Status Promosi</th>
+                                Rekomendasi</th>
                             <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
                                 Aksi</th>
                         </tr>
@@ -221,8 +222,8 @@
                                         <a href="{{ route('pdc_admin.progress_archive.detail', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#14b8a6] border border-[#14b8a6] rounded-lg text-xs font-bold text-white hover:bg-[#0d9488] hover:border-[#0d9488] transition-colors shadow-sm whitespace-nowrap">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
                                             </svg>
@@ -231,8 +232,8 @@
                                         <a href="{{ route('pdc_admin.export_pdf', ['talent_id' => $talent->id, 'session_id' => $talent->archive_session_id]) }}"
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#EE5353] border border-[#EE5353] rounded-lg text-xs font-bold text-white hover:bg-[#d94444] hover:border-[#d94444] transition-colors shadow-sm whitespace-nowrap">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                                 <polyline points="7 10 12 15 17 10"></polyline>
                                                 <line x1="12" y1="15" x2="12" y2="3">
@@ -251,7 +252,8 @@
             {{-- Empty State Outside Table --}}
             <div id="emptyStateContainer" class="{{ $archiveRows->isEmpty() ? '' : 'hidden' }} mt-8 mb-12">
                 <div class="empty-prem" style="border: none; padding: 20px;">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
+                        style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             style="color: #0d9488; width: 32px; height: 32px; margin: 0;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -300,7 +302,7 @@
                 const emptyStateContainer = document.getElementById('emptyStateContainer');
                 const emptyTitle = document.getElementById('emptyTitle');
                 const emptyText = document.getElementById('emptyText');
-                
+
                 if (tableContainer && emptyStateContainer) {
                     if (visibleCount > 0) {
                         tableContainer.classList.remove('hidden');
@@ -308,7 +310,7 @@
                     } else {
                         tableContainer.classList.add('hidden');
                         emptyStateContainer.classList.remove('hidden');
-                        
+
                         if (searchTxt || compVal || periodVal || statusVal) {
                             emptyTitle.innerHTML = 'Tidak Ada Data Talent';
                             if (searchTxt) {
@@ -368,13 +370,13 @@
             }
         </style>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const alert = document.getElementById('success-alert');
                 if (alert) {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         alert.style.opacity = '0';
                         alert.style.transform = 'translateY(-10px)';
-                        setTimeout(function() {
+                        setTimeout(function () {
                             alert.remove();
                         }, 500);
                     }, 3000);

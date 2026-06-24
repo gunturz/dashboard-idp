@@ -43,7 +43,7 @@
                 background: white;
                 border-radius: 16px;
                 border: 1px solid #e2e8f0;
-                overflow: hidden;
+                overflow-x: auto;
                 position: relative;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             }
@@ -654,6 +654,10 @@
                 .pdc-custom-table td {
                     padding: 8px;
                     font-size: 0.78rem;
+                }
+
+                .log-table-container table {
+                    min-width: 800px;
                 }
             }
         </style>

@@ -36,10 +36,42 @@
             /* ── Card Header ── */
             .hist-header {
                 display: flex;
-                align-items: center;
-                padding: 16px 22px;
-                gap: 14px;
+                flex-direction: column;
+                padding: 16px;
                 cursor: pointer;
+            }
+            @media (min-width: 768px) {
+                .hist-header {
+                    flex-direction: row;
+                    align-items: center;
+                    padding: 16px 22px;
+                    gap: 14px;
+                }
+            }
+            .hist-header-top {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                flex: 1;
+                min-width: 0;
+            }
+            .hist-header-bottom {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid #f1f5f9;
+            }
+            @media (min-width: 768px) {
+                .hist-header-bottom {
+                    margin-top: 0;
+                    padding-top: 0;
+                    border-top: none;
+                    justify-content: flex-end;
+                    flex-shrink: 0;
+                }
             }
             .hist-avatar {
                 width: 56px; height: 56px;
@@ -48,6 +80,32 @@
                 border: 2px solid #e2e8f0;
                 flex-shrink: 0;
                 box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+                display: none;
+            }
+            @media (min-width: 768px) {
+                .hist-avatar {
+                    display: block;
+                }
+            }
+            .hist-avatar-mobile {
+                display: block;
+                width: 36px; height: 36px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #e2e8f0;
+                flex-shrink: 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            }
+            @media (min-width: 768px) {
+                .hist-avatar-mobile {
+                    display: none;
+                }
+            }
+            .hist-name-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 4px;
             }
             .hist-meta { flex: 1; min-width: 0; }
             .hist-name {
@@ -402,28 +460,39 @@
                 <div class="hist-card">
                     {{-- Header --}}
                     <div class="hist-header" onclick="toggleHist('{{ $cardId }}')">
-                        <img class="hist-avatar"
-                             src="{{ optional($talent)->foto ? asset('storage/'.$talent->foto) : 'https://ui-avatars.com/api/?name='.urlencode(optional($talent)->nama ?? 'T').'&background=e0f2fe&color=0284c7&bold=true' }}"
-                             alt="{{ optional($talent)->nama }}">
-                        <div class="hist-meta">
-                            <span class="hist-name">{{ optional($talent)->nama ?? '-' }}</span>
-                            <span class="hist-role">
-                                {{ $sourcePositionName }}
-                                &rarr;
-                                {{ $targetPositionName }}
-                            </span>
-                            <span class="hist-role">
-                                {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
-                            </span>
-                            <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
-                            <span class="hist-date">Diupdate: {{ $assessment->updated_at ? \Carbon\Carbon::parse($assessment->updated_at)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
+                        <div class="hist-header-top">
+                            <img class="hist-avatar"
+                                 src="{{ optional($talent)->foto ? asset('storage/'.$talent->foto) : 'https://ui-avatars.com/api/?name='.urlencode(optional($talent)->nama ?? 'T').'&background=e0f2fe&color=0284c7&bold=true' }}"
+                                 alt="{{ optional($talent)->nama }}">
+                            <div class="hist-meta">
+                                <div class="hist-name-wrapper">
+                                    <img class="hist-avatar-mobile"
+                                         src="{{ optional($talent)->foto ? asset('storage/'.$talent->foto) : 'https://ui-avatars.com/api/?name='.urlencode(optional($talent)->nama ?? 'T').'&background=e0f2fe&color=0284c7&bold=true' }}"
+                                         alt="{{ optional($talent)->nama }}">
+                                    <span class="hist-name" style="margin: 0;">{{ optional($talent)->nama ?? '-' }}</span>
+                                </div>
+                                <span class="hist-role">
+                                    {{ $sourcePositionName }}
+                                    &rarr;
+                                    {{ $targetPositionName }}
+                                </span>
+                                <span class="hist-role">
+                                    {{ optional(optional($talent)->department)->nama_department ?? 'Human Resources' }}
+                                </span>
+                                <span class="hist-date">Dinilai: {{ $assessment->panelis_tanggal_penilaian ? \Carbon\Carbon::parse($assessment->panelis_tanggal_penilaian)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
+                                <span class="hist-date">Diupdate: {{ $assessment->updated_at ? \Carbon\Carbon::parse($assessment->updated_at)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
+                            </div>
                         </div>
-                        <span class="hist-project-title">{{ $latestProject->title ?? 'Judul Project' }}</span>
-                        <span class="badge-done">Done Review</span>
-                        <svg class="hist-arrow {{ $expanded ? 'open' : '' }}" id="arr-{{ $cardId }}"
-                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
+                        <div class="hist-header-bottom">
+                            <span class="hist-project-title">{{ $latestProject->title ?? 'Judul Project' }}</span>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <span class="badge-done">Done Review</span>
+                                <svg class="hist-arrow {{ $expanded ? 'open' : '' }}" id="arr-{{ $cardId }}"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- Body --}}

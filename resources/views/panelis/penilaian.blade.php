@@ -84,63 +84,214 @@
             /* ── Info Card (dark) -> Replaced with Profile Card style ── */
             .talent-prof-hero {
                 background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #2a4060 100%);
-                padding: 28px 32px; display: flex; align-items: stretch; gap: 0;
-                position: relative; overflow: hidden; border-radius: 20px;
-                margin-bottom: 32px; box-shadow: 0 8px 32px rgba(15,23,42,0.35);
+                padding: 28px 32px;
+                display: flex;
+                align-items: stretch;
+                gap: 0;
+                position: relative;
+                overflow: hidden;
+                border-radius: 20px;
+                margin-bottom: 32px;
+                box-shadow: 0 8px 32px rgba(15, 23, 42, 0.35);
             }
+
             .talent-prof-hero::before {
-                content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px;
-                border-radius: 50%; background: rgba(20, 184, 166, 0.08); pointer-events: none;
+                content: '';
+                position: absolute;
+                top: -40px;
+                right: -40px;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: rgba(20, 184, 166, 0.08);
+                pointer-events: none;
             }
+
             .talent-prof-hero::after {
-                content: ''; position: absolute; bottom: -60px; left: 30%; width: 280px; height: 280px;
-                border-radius: 50%; background: rgba(255, 255, 255, 0.04); pointer-events: none;
+                content: '';
+                position: absolute;
+                bottom: -60px;
+                left: 30%;
+                width: 280px;
+                height: 280px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.04);
+                pointer-events: none;
             }
 
-            .talent-hero-avatar-wrap { position: relative; flex-shrink: 0; }
+            .talent-hero-avatar-wrap {
+                position: relative;
+                flex-shrink: 0;
+            }
+
             .talent-hero-avatar-img {
-                width: 96px; height: 96px; border-radius: 20px; object-fit: cover;
-                border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                object-fit: cover;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             }
+
             .talent-hero-avatar-placeholder {
-                width: 96px; height: 96px; border-radius: 20px; background: rgba(255,255,255,0.12);
-                display: flex; align-items: center; justify-content: center; font-size: 2.4rem; font-weight: 800;
-                color: white; border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.2); letter-spacing: -1px;
+                width: 96px;
+                height: 96px;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.4rem;
+                font-weight: 800;
+                color: white;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                letter-spacing: -1px;
             }
 
-            .talent-hero-section { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 28px; position: relative; z-index: 1; }
-            .talent-hero-section-1 { flex: 1; min-width: 0; display: flex; align-items: center; gap: 20px; padding: 0 28px 0 0; position: relative; z-index: 1; }
-            .talent-hero-divider { width: 1px; align-self: stretch; background: rgba(255,255,255,0.15); flex-shrink: 0; margin: 4px 0; }
+            .talent-hero-section {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                padding: 0 28px;
+                position: relative;
+                z-index: 1;
+            }
 
-            .talent-hero-info { min-width: 0; }
-            .talent-hero-name { font-family: 'Poppins', sans-serif; font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.2; }
-            .talent-hero-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 3px; }
+            .talent-hero-section-1 {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                padding: 0 28px 0 0;
+                position: relative;
+                z-index: 1;
+            }
+
+            .talent-hero-divider {
+                width: 1px;
+                align-self: stretch;
+                background: rgba(255, 255, 255, 0.15);
+                flex-shrink: 0;
+                margin: 4px 0;
+            }
+
+            .talent-hero-info {
+                min-width: 0;
+            }
+
+            .talent-hero-name {
+                font-family: 'Poppins', sans-serif;
+                font-size: 1.35rem;
+                font-weight: 800;
+                color: #ffffff;
+                line-height: 1.2;
+            }
+
+            .talent-hero-sub {
+                font-size: 0.82rem;
+                color: rgba(255, 255, 255, 0.55);
+                margin-top: 3px;
+            }
+
             .talent-hero-badge {
-                display: inline-flex; align-items: center; gap: 6px; background: rgba(20,184,166,0.18);
-                border: 1px solid rgba(20,184,166,0.3); color: #5eead4; font-size: 0.75rem; font-weight: 700;
-                padding: 4px 12px; border-radius: 99px; margin-top: 10px; letter-spacing: .04em;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: rgba(20, 184, 166, 0.18);
+                border: 1px solid rgba(20, 184, 166, 0.3);
+                color: #5eead4;
+                font-size: 0.75rem;
+                font-weight: 700;
+                padding: 4px 12px;
+                border-radius: 99px;
+                margin-top: 10px;
+                letter-spacing: .04em;
             }
-            .talent-hero-meta-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-weight: 500; line-height: 1.2; }
-            .talent-hero-meta-value { font-family: 'Poppins', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.92); font-weight: 700; margin-top: 1px; line-height: 1.3; }
-            .talent-hero-meta-row { display: flex; flex-direction: column; }
+
+            .talent-hero-meta-label {
+                font-size: 0.78rem;
+                color: rgba(255, 255, 255, 0.5);
+                font-weight: 500;
+                line-height: 1.2;
+            }
+
+            .talent-hero-meta-value {
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.9rem;
+                color: rgba(255, 255, 255, 0.92);
+                font-weight: 700;
+                margin-top: 1px;
+                line-height: 1.3;
+            }
+
+            .talent-hero-meta-row {
+                display: flex;
+                flex-direction: column;
+            }
 
             .date-input-custom {
-                background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px;
-                color: #f1f5f9; font-size: 0.82rem; padding: 4px 10px; font-family: 'Poppins', sans-serif;
-                outline: none; color-scheme: dark; margin-top: 2px; display: inline-block; width: max-content;
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 6px;
+                color: #f1f5f9;
+                font-size: 0.82rem;
+                padding: 4px 10px;
+                font-family: 'Poppins', sans-serif;
+                outline: none;
+                color-scheme: dark;
+                margin-top: 2px;
+                display: inline-block;
+                width: max-content;
             }
-            .date-input-custom:focus { border-color: #14b8a6; }
+
+            .date-input-custom:focus {
+                border-color: #14b8a6;
+            }
 
             @media (max-width: 1024px) {
-                .talent-hero-section { padding: 0 16px; }
-                .talent-hero-section-1 { padding: 0 16px 0 0; }
+                .talent-hero-section {
+                    padding: 0 16px;
+                }
+
+                .talent-hero-section-1 {
+                    padding: 0 16px 0 0;
+                }
             }
+
             @media (max-width: 768px) {
-                .talent-prof-hero { flex-direction: column; align-items: stretch; gap: 0; padding: 24px; }
-                .talent-hero-section, .talent-hero-section-1 { flex: none; }
-                .talent-hero-section-1 { padding: 0; flex-direction: row; align-items: center; }
-                .talent-hero-divider { width: auto; height: 1px; align-self: auto; margin: 16px 0; }
-                .talent-hero-section { padding: 0; }
+                .talent-prof-hero {
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 0;
+                    padding: 24px;
+                }
+
+                .talent-hero-section,
+                .talent-hero-section-1 {
+                    flex: none;
+                }
+
+                .talent-hero-section-1 {
+                    padding: 0;
+                    flex-direction: row;
+                    align-items: center;
+                }
+
+                .talent-hero-divider {
+                    width: auto;
+                    height: 1px;
+                    align-self: auto;
+                    margin: 16px 0;
+                }
+
+                .talent-hero-section {
+                    padding: 0;
+                }
             }
 
             /* ── Section heading ── */
@@ -156,9 +307,11 @@
                 margin-top: 24px;
                 padding-left: 0;
             }
+
             .section-heading::before {
                 display: none;
             }
+
             .section-heading svg {
                 width: 28px;
                 height: 28px;
@@ -512,6 +665,89 @@
                 font-weight: 700;
                 color: #1e293b;
             }
+
+            /* ── Mobile Aspek Table ── */
+            .aspek-table-mobile {
+                width: 100%;
+                border-collapse: collapse;
+                border: none;
+            }
+
+            .aspek-table-mobile th {
+                background: #f1f5f9;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #1e293b;
+                padding: 10px 12px;
+                text-align: left;
+                border-bottom: 2px solid #cbd5e1;
+                border-right: 1px solid #d1d5db;
+            }
+
+            .aspek-table-mobile th:last-child {
+                border-right: none;
+            }
+
+            .aspek-table-mobile td {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+                color: #334155;
+                border-bottom: 1px solid #d1d5db;
+                vertical-align: top;
+            }
+
+            .aspek-table-mobile tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .aspek-mobile-name {
+                font-weight: 700;
+                font-size: 0.8rem;
+                color: #1e293b;
+                margin-bottom: 4px;
+            }
+
+            .aspek-mobile-indicator {
+                font-size: 0.73rem;
+                color: #64748b;
+                margin-bottom: 10px;
+                line-height: 1.4;
+            }
+
+            .score-btns-mobile {
+                display: flex;
+                gap: 6px;
+            }
+
+            .score-btn-mobile {
+                width: 34px;
+                height: 34px;
+                border-radius: 8px;
+                border: 1.5px solid #cbd5e1;
+                background: white;
+                color: #64748b;
+                font-size: 0.88rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.15s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .score-btn-mobile:hover {
+                border-color: #14b8a6;
+                color: #0d9488;
+                background: #f0fdfa;
+            }
+
+            .score-btn-mobile.selected {
+                background: #14b8a6;
+                border-color: #14b8a6;
+                color: white;
+                box-shadow: 0 2px 8px rgba(20, 184, 166, 0.28);
+            }
         </style>
     </x-slot>
 
@@ -548,7 +784,8 @@
             <div class="talent-hero-info">
                 <div class="talent-hero-name">{{ $talent->nama }}</div>
                 <div class="talent-hero-sub">
-                    {{ optional($talent->position)->position_name ?? '-' }} &rarr; {{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '?' }}
+                    {{ optional($talent->position)->position_name ?? '-' }} &rarr;
+                    {{ optional(optional($talent->promotion_plan)->targetPosition)->position_name ?? '?' }}
                 </div>
                 <div class="talent-hero-badge">{{ ucfirst($talent->role->role_name ?? 'Talent') }}</div>
             </div>
@@ -564,7 +801,8 @@
             </div>
             <div class="talent-hero-meta-row mt-2">
                 <span class="talent-hero-meta-label">Judul Presentasi</span>
-                <span class="talent-hero-meta-value" style="word-wrap: break-word; white-space: normal; line-height: 1.4;">{{ $project->title ?? 'Pengembangan bla bla bla' }}</span>
+                <span class="talent-hero-meta-value"
+                    style="word-wrap: break-word; white-space: normal; line-height: 1.4;">{{ $project->title ?? 'Pengembangan bla bla bla' }}</span>
             </div>
         </div>
 
@@ -588,114 +826,124 @@
     <div class="rubrik-section" style="margin-bottom: 28px;">
         <p class="section-heading">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875Zm6.905 9.97a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72V18a.75.75 0 0 0 1.5 0v-4.19l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
-                <path d="M14.25 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 16.5 7.5h-1.875a.375.375 0 0 1-.375-.375V5.25Z" />
+                <path fill-rule="evenodd"
+                    d="M5.625 1.5H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875Zm6.905 9.97a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72V18a.75.75 0 0 0 1.5 0v-4.19l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z"
+                    clip-rule="evenodd" />
+                <path
+                    d="M14.25 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 16.5 7.5h-1.875a.375.375 0 0 1-.375-.375V5.25Z" />
             </svg>
             Rubrik Skor Penilaian
         </p>
         <div class="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white">
             <table class="rubrik-table">
-            <thead>
-                <tr>
-                    <th class="text-center" style="width:60px;">Skor</th>
-                    <th style="width:130px;">Kategori</th>
-                    <th>Deskripsi Singkat Penilaian</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="skor-cell">5</td>
-                    <td class="kategori-cell">Sangat Baik</td>
-                    <td>Menunjukkan keunggulan luar biasa, melampaui ekspektasi, analisis & solusi sangat kuat</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">4</td>
-                    <td class="kategori-cell">Baik</td>
-                    <td>Memenuhi ekspektasi dengan baik, logis dan tepat, ada insight yang relevan</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">3</td>
-                    <td class="kategori-cell">Cukup</td>
-                    <td>Cukup baik tapi masih bisa dikembangkan, kurang dalam eksplorasi/solusi kurang tajam</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">2</td>
-                    <td class="kategori-cell">Kurang</td>
-                    <td>Analisis atau solusi belum tepat atau dangkal, banyak asumsi, kurang relevan</td>
-                </tr>
-                <tr>
-                    <td class="skor-cell">1</td>
-                    <td class="kategori-cell">Sangat Kurang</td>
-                    <td>Gagal menangkap inti masalah, solusi tidak relevan, pemahaman rendah</td>
-                </tr>
-            </tbody>
-        </table>
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width:60px;">Skor</th>
+                        <th style="width:130px;">Kategori</th>
+                        <th>Deskripsi Singkat Penilaian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="skor-cell">5</td>
+                        <td class="kategori-cell">Sangat Baik</td>
+                        <td>Menunjukkan keunggulan luar biasa, melampaui ekspektasi, analisis & solusi sangat kuat</td>
+                    </tr>
+                    <tr>
+                        <td class="skor-cell">4</td>
+                        <td class="kategori-cell">Baik</td>
+                        <td>Memenuhi ekspektasi dengan baik, logis dan tepat, ada insight yang relevan</td>
+                    </tr>
+                    <tr>
+                        <td class="skor-cell">3</td>
+                        <td class="kategori-cell">Cukup</td>
+                        <td>Cukup baik tapi masih bisa dikembangkan, kurang dalam eksplorasi/solusi kurang tajam</td>
+                    </tr>
+                    <tr>
+                        <td class="skor-cell">2</td>
+                        <td class="kategori-cell">Kurang</td>
+                        <td>Analisis atau solusi belum tepat atau dangkal, banyak asumsi, kurang relevan</td>
+                    </tr>
+                    <tr>
+                        <td class="skor-cell">1</td>
+                        <td class="kategori-cell">Sangat Kurang</td>
+                        <td>Gagal menangkap inti masalah, solusi tidak relevan, pemahaman rendah</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     {{-- Aspek Penilaian --}}
     <p class="section-heading">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
-            <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375ZM6 12a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V12Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 15a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V15Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 18a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V18Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+            <path fill-rule="evenodd"
+                d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z"
+                clip-rule="evenodd" />
+            <path fill-rule="evenodd"
+                d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375ZM6 12a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V12Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 15a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V15Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 18a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V18Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z"
+                clip-rule="evenodd" />
         </svg>
         Aspek Penilaian
     </p>
-    <div class="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
+
+    @php
+        $aspects = [
+            [
+                'name' => 'Pemahaman Bisnis & Strategi',
+                'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan',
+            ],
+            [
+                'name' => 'Identifikasi Masalah',
+                'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
+            ],
+            [
+                'name' => 'Analisis Akar Masalah',
+                'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
+            ],
+            [
+                'name' => 'Solusi yang Ditawarkan',
+                'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah',
+            ],
+            [
+                'name' => 'Rencana Implementasi',
+                'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
+            ],
+            [
+                'name' => 'Target Dampak & KPI',
+                'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas',
+            ],
+            [
+                'name' => 'Risiko & Mitigasi',
+                'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi',
+            ],
+            [
+                'name' => 'Gaya Presentasi & Penguasaan Materi',
+                'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',
+            ],
+            [
+                'name' => 'Refleksi Peran sebagai Posisi yang Dituju',
+                'indicator' =>
+                    'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
+            ],
+            [
+                'name' => 'Nilai Tambah',
+                'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',
+            ],
+        ];
+    @endphp
+
+    {{-- PC View --}}
+    <div class="hidden md:block overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
         <table class="aspek-table" id="aspek-table">
             <thead>
                 <tr>
                     <th class="col-aspek">Aspek yang Dinilai</th>
                     <th class="col-indikator">Indikator Penilaian</th>
                     <th class="col-status">Skor</th>
-                </tr>   
+                </tr>
             </thead>
             <tbody>
-                @php
-                    $aspects = [
-                        [
-                            'name' => 'Pemahaman Bisnis & Strategi',
-                            'indicator' => 'Memahami konteks industri, Business proses dan arah perusahaan',
-                        ],
-                        [
-                            'name' => 'Identifikasi Masalah',
-                            'indicator' => 'Masalah yang diangkat relevan, kritis, dan berbasis data',
-                        ],
-                        [
-                            'name' => 'Analisis Akar Masalah',
-                            'indicator' => "Penggunaan tools (Fishbone, 5 Why's atau yang lain), logis dan mendalam",
-                        ],
-                        [
-                            'name' => 'Solusi yang Ditawarkan',
-                            'indicator' => 'Solusi konkret, realistis, dan menjawab akar masalah',
-                        ],
-                        [
-                            'name' => 'Rencana Implementasi',
-                            'indicator' => 'Timeline jelas, tahapan logis, melibatkan stakeholder',
-                        ],
-                        [
-                            'name' => 'Target Dampak & KPI',
-                            'indicator' => 'Indikator keberhasilan terukur, baseline–target jelas',
-                        ],
-                        [
-                            'name' => 'Risiko & Mitigasi',
-                            'indicator' => 'Mengenali risiko dan menyusun strategi antisipasi',
-                        ],
-                        [
-                            'name' => 'Gaya Presentasi & Penguasaan Materi',
-                            'indicator' => 'Komunikatif, percaya diri, menjawab pertanyaan',
-                        ],
-                        [
-                            'name' => 'Refleksi Peran sebagai Posisi yang Dituju',
-                            'indicator' =>
-                                'Menunjukkan kesiapan mindset kepemimpinan, Strategic Thingking dan Conceptual thinking.',
-                        ],
-                        [
-                            'name' => 'Nilai Tambah',
-                            'indicator' => 'Inisiatif ekstra, kolaborasi, atau insight mendalam',
-                        ],
-                    ];
-                @endphp
                 @foreach ($aspects as $i => $aspect)
                     <tr>
                         <td class="col-aspek">{{ $aspect['name'] }}</td>
@@ -703,8 +951,34 @@
                         <td class="col-status">
                             <div class="score-btns" data-row="{{ $i }}">
                                 @for ($s = 1; $s <= 5; $s++)
-                                    <button type="button" class="score-btn" data-row="{{ $i }}"
-                                        data-score="{{ $s }}"
+                                    <button type="button" class="score-btn" data-row="{{ $i }}" data-score="{{ $s }}"
+                                        onclick="selectScore({{ $i }}, {{ $s }})">{{ $s }}</button>
+                                @endfor
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    {{-- Mobile View --}}
+    <div class="block md:hidden overflow-x-auto border border-gray-200 rounded-2xl shadow-sm bg-white mb-6">
+        <table class="aspek-table-mobile">
+            <thead>
+                <tr>
+                    <th>Aspek yang Dinilai &amp; Indikator Penilaian</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($aspects as $i => $aspect)
+                    <tr>
+                        <td>
+                            <div class="aspek-mobile-name">{{ $aspect['name'] }}</div>
+                            <div class="aspek-mobile-indicator">{{ $aspect['indicator'] }}</div>
+                            <div class="score-btns-mobile" data-row="{{ $i }}">
+                                @for ($s = 1; $s <= 5; $s++)
+                                    <button type="button" class="score-btn-mobile" data-row="{{ $i }}" data-score="{{ $s }}"
                                         onclick="selectScore({{ $i }}, {{ $s }})">{{ $s }}</button>
                                 @endfor
                             </div>
@@ -729,7 +1003,8 @@
 
     <div class="comment-box">
         <div class="comment-box-label">Komentar / Catatan Penilai:</div>
-        <textarea class="comment-textarea" id="komentar" placeholder="Tambahkan komentar ke talent..">{{ $existingAssessment->panelis_komentar ?? '' }}</textarea>
+        <textarea class="comment-textarea" id="komentar"
+            placeholder="Tambahkan komentar ke talent..">{{ $existingAssessment->panelis_komentar ?? '' }}</textarea>
     </div>
 
     {{-- Rekomendasi Panelis --}}
@@ -738,7 +1013,7 @@
 
         @php
             $rekomenOptions = [
-                ['id' => 'r0', 'label' => 'Ready Now', 'desc' => 'Siap dipromosikan dalam < 6 bulan'],
+                ['id' => 'r0', 'label' => 'Ready Now', 'desc' => 'Siap rekomendasikan dalam < 6 bulan'],
                 ['id' => 'r1', 'label' => 'Ready in 1 – 2 Years', 'desc' => 'Siap dengan pengembangan terarah'],
                 ['id' => 'r2', 'label' => 'Ready in > 2 Years', 'desc' => 'Masih membutuhkan pengembangan signifikan'],
                 ['id' => 'r3', 'label' => 'Not Ready', 'desc' => 'Belum direkomendasikan untuk jalur suksesi saat ini'],
@@ -769,8 +1044,7 @@
         @endphp
 
         @foreach ($rekomenOptions as $opt)
-            <div class="rekomen-option"
-                onclick="selectRekomen('{{ $opt['id'] }}', '{{ $rekomenValues[$opt['id']] }}')">
+            <div class="rekomen-option" onclick="selectRekomen('{{ $opt['id'] }}', '{{ $rekomenValues[$opt['id']] }}')">
                 <div class="rekomen-checkbox {{ $rekomenSelectedId === $opt['id'] ? 'checked' : '' }}"
                     id="{{ $opt['id'] }}"></div>
                 <div class="rekomen-label">
@@ -797,18 +1071,18 @@
         <script>
             // scores[rowIndex] = selected score (1-5) or 0
             const scores = {!! $existingAssessment && $existingAssessment->panelis_scores_json
-                ? json_encode($existingAssessment->panelis_scores_json)
-                : 'new Array(10).fill(0)' !!};
+    ? json_encode($existingAssessment->panelis_scores_json)
+    : 'new Array(10).fill(0)' !!};
             const MAX_SCORE = 50;
 
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 scores.forEach((score, row) => {
                     // Pastikan score adalah integer
                     const parsedScore = parseInt(score) || 0;
                     scores[row] = parsedScore; // Update nilai di array agar selalu int
 
                     if (parsedScore > 0) {
-                        document.querySelectorAll(`.score-btn[data-row="${row}"]`).forEach(btn => {
+                        document.querySelectorAll(`.score-btn[data-row="${row}"], .score-btn-mobile[data-row="${row}"]`).forEach(btn => {
                             const s = parseInt(btn.getAttribute('data-score'));
                             btn.classList.toggle('selected', s === parsedScore);
                         });
@@ -830,7 +1104,7 @@
 
             function selectScore(row, score) {
                 scores[row] = parseInt(score);
-                document.querySelectorAll(`.score-btn[data-row="${row}"]`).forEach(btn => {
+                document.querySelectorAll(`.score-btn[data-row="${row}"], .score-btn-mobile[data-row="${row}"]`).forEach(btn => {
                     const s = parseInt(btn.getAttribute('data-score'));
                     btn.classList.toggle('selected', s === parseInt(score));
                 });

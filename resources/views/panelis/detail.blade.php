@@ -389,6 +389,14 @@
                 box-shadow: 0 2px 8px rgba(15, 23, 42, 0.22);
             }
 
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+            }
+
             @media (max-width: 768px) {
                 .donut-container {
                     flex-direction: column;
@@ -454,12 +462,21 @@
     @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
 
 
-    {{-- ====== NAV TABS ====== --}}
-    <div class="pill-nav-wrapper mb-6 mt-8">
+    {{-- ====== NAV TABS (PC) ====== --}}
+    <div class="pill-nav-wrapper mb-6 mt-8 hidden md:flex">
         <div class="pill-nav-tabs">
-            <div class="pill-tab active" id="pill-kompetensi" onclick="setTab('kompetensi')">Kompetensi</div>
-            <div class="pill-tab" id="pill-idp" onclick="setTab('idp')">IDP Monitoring</div>
-            <div class="pill-tab" id="pill-project" onclick="setTab('project')">Project Improvement</div>
+            <div class="pill-tab active pill-tab-kompetensi" onclick="setTab('kompetensi')">Kompetensi</div>
+            <div class="pill-tab pill-tab-idp" onclick="setTab('idp')">IDP Monitoring</div>
+            <div class="pill-tab pill-tab-project" onclick="setTab('project')">Project Improvement</div>
+        </div>
+    </div>
+
+    {{-- ====== NAV TABS (MOBILE) ====== --}}
+    <div class="pill-nav-wrapper mb-6 mt-6 flex md:hidden overflow-x-auto no-scrollbar">
+        <div class="pill-nav-tabs" style="min-width: max-content; width: 100%;">
+            <div class="pill-tab active pill-tab-kompetensi" onclick="setTab('kompetensi')">Kompetensi</div>
+            <div class="pill-tab pill-tab-idp" onclick="setTab('idp')">IDP Monitoring</div>
+            <div class="pill-tab pill-tab-project" onclick="setTab('project')">Project Improvement</div>
         </div>
     </div>
 
@@ -530,7 +547,8 @@
             Heatmap Kompetensi
         </div>
 
-        <div class="legend">
+        {{-- ====== LEGEND (PC) ====== --}}
+        <div class="hidden md:flex gap-4 text-[0.65rem] font-bold text-slate-500 mb-3 uppercase flex-wrap">
             <span>Keterangan GAP</span>
             <div class="legend-item">
                 <div class="legend-box" style="background:#3b82f6;"></div> Di Atas Standar (> 0)
@@ -542,8 +560,28 @@
                 <div class="legend-box" style="background:#f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
             </div>
             <div class="legend-item">
-                <div class="legend-box" style="background:#ef4444;"></div> Gap Besar (< -1.5)</div>
+                <div class="legend-box" style="background:#ef4444;"></div> Gap Besar (< -1.5)
             </div>
+        </div>
+
+        {{-- ====== LEGEND (MOBILE) ====== --}}
+        <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-[0.65rem] font-bold text-slate-500 mb-4 uppercase md:hidden">
+            <div class="flex items-center col-span-2 mb-1">
+                <span>Keterangan GAP</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background:#f1f5f9;border:1px solid #e2e8f0;"></div> Sesuai Standar (0)
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background:#3b82f6;"></div> Di Atas Standar (> 0)
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background:#ef4444;"></div> Gap Besar (< -1.5)
+            </div>
+            <div class="legend-item">
+                <div class="legend-box" style="background:#f97316;"></div> Gap Kecil (-0.1 s/d -1.5)
+            </div>
+        </div>
 
             <div class="heatmap-container overflow-x-auto">
                 <table class="heatmap-table">
@@ -728,7 +766,8 @@
         </div>
 
         <div class="section-card bg-transparent !shadow-none !border-0 !p-0">
-            <div class="rounded-xl overflow-hidden border border-gray-200 mt-4">
+            {{-- PC View --}}
+            <div class="hidden md:block rounded-xl overflow-hidden border border-gray-200 mt-4">
                 <table class="w-full text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
@@ -797,6 +836,77 @@
                     </tbody>
                 </table>
             </div>
+
+            {{-- Mobile View --}}
+            <div class="block md:hidden overflow-x-auto mt-4 rounded-xl border border-gray-200">
+                <table class="w-full text-left bg-white" style="min-width: 480px;">
+                    <thead class="bg-slate-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-3 px-4 text-[11px] font-bold text-slate-700 text-left">Judul Project Improvement
+                            </th>
+                            <th class="py-3 px-4 text-[11px] font-bold text-slate-700 text-center w-32">File</th>
+                            <th class="py-3 px-4 text-[11px] font-bold text-slate-700 text-center w-32">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($talent->improvementProjects as $proj)
+                            <tr class="border-b border-gray-100 hover:bg-teal-50/50 transition duration-150">
+                                <td class="py-3 px-4 font-bold text-[12px] text-slate-800 text-left">
+                                    {{ $proj->title }}
+                                    <div class="text-[10px] text-gray-400 font-normal mt-0.5">
+                                        {{ \Carbon\Carbon::parse($proj->created_at)->locale('id')->translatedFormat('d M Y') }}
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-center w-32">
+                                    @if ($proj->document_path)
+                                        <a href="{{ route('files.preview', ['path' => $proj->document_path]) }}"
+                                            target="_blank"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 bg-white border border-gray-200 rounded-lg text-[10px] font-semibold text-teal-600 hover:text-teal-700 hover:border-teal-300 hover:bg-teal-50/50 shadow-sm transition-all"
+                                            title="Lihat/Download File Project">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                                </path>
+                                            </svg>
+                                            Lihat File
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 text-[10px] italic">-</span>
+                                    @endif
+                                </td>
+                                <td class="py-3 px-4 text-center w-32">
+                                    @php
+                                        $projectStatus = $proj->status === 'Verified' ? 'Approved' : $proj->status;
+                                    @endphp
+                                    @if ($projectStatus === 'Approved')
+                                        <span
+                                            class="inline-flex items-center gap-1 text-green-600 text-[10px] font-bold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                        </span>
+                                    @elseif($projectStatus === 'Rejected')
+                                        <span
+                                            class="inline-flex items-center gap-1 text-red-600 text-[10px] font-bold bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Rejected
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center gap-1 text-orange-500 text-[10px] font-bold bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Pending
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td class="py-8 px-4 text-center text-gray-400 text-[11px]" colspan="3">
+                                    Belum ada project yang disubmit.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>
@@ -810,7 +920,7 @@
                 document.querySelectorAll('.pill-tab').forEach(t => t.classList.remove('active'));
 
                 // Add active class to clicked tab
-                document.getElementById('pill-' + tabId).classList.add('active');
+                document.querySelectorAll('.pill-tab-' + tabId).forEach(t => t.classList.add('active'));
 
                 // Hide all sections
                 document.getElementById('section-kompetensi').style.display = 'none';

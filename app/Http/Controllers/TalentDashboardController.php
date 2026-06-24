@@ -901,14 +901,26 @@ class TalentDashboardController extends Controller
                     'pp.target_date',
                     'pp.target_position_id',
                     'pp.status_promotion',
-                    'tp.position_name as target_position_name'
+                    'tp.position_name as target_position_name',
+                    'sp.position_name as source_position_name'
                 )
                 ->get()
-                ->map(function ($session) {
-                    $session->source_position_name = $this->resolveSourcePositionNameForHistory(
-                        $session->target_position_id,
-                        $session->target_position_name
-                    );
+                ->map(function ($session) use ($user) {
+                    // Gunakan source_position_name dari DB (development_sessions.source_position_id)
+                    // jika tersedia, jika tidak gunakan heuristic sebagai fallback
+                    if (empty($session->source_position_name)) {
+                        // Fallback 1: user's current position jika berbeda dari target
+                        $currentPos = optional($user->position)->position_name;
+                        if ($currentPos && strtolower(trim($currentPos)) !== strtolower(trim($session->target_position_name ?? ''))) {
+                            $session->source_position_name = $currentPos;
+                        } else {
+                            // Fallback 2: heuristic (last resort)
+                            $session->source_position_name = $this->resolveSourcePositionNameForHistory(
+                                $session->target_position_id,
+                                $session->target_position_name
+                            );
+                        }
+                    }
 
                     return $session;
                 });
@@ -992,10 +1004,19 @@ class TalentDashboardController extends Controller
                 $user->setRelation('promotion_plan', $sessionPlan);
             }
 
-            $user->history_source_position_name = $this->resolveSourcePositionNameForHistory(
-                $sessionPlan?->target_position_id ?? $developmentSession->target_position_id,
-                optional($sessionPlan?->targetPosition)->position_name
-            );
+            // Ambil source position dari development_session.source_position_id (akurat)
+            // Heuristic hanya digunakan sebagai last resort jika source_position_id NULL
+            $devSessionSourcePositionName = null;
+            if ($developmentSession->source_position_id) {
+                $sourcePos = \App\Models\Position::find($developmentSession->source_position_id);
+                $devSessionSourcePositionName = $sourcePos?->position_name;
+            }
+
+            $user->history_source_position_name = $devSessionSourcePositionName
+                ?? $this->resolveSourcePositionNameForHistory(
+                    $sessionPlan?->target_position_id ?? $developmentSession->target_position_id,
+                    optional($sessionPlan?->targetPosition)->position_name
+                );
 
             // Data Kompetensi dari sesi ini
             $kompetensiData = [];

@@ -55,6 +55,14 @@
         </div>
     </div>
 
+    <style>
+        @media (max-width: 768px) {
+            #confirmModalContent {
+                width: 93%
+            }
+        }
+    </style>
+
     {{-- Script for Accordion & Modal Behavior --}}
     <script>
         function toggleAccordion(contentId, iconId) {

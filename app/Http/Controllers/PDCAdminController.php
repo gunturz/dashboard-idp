@@ -72,6 +72,9 @@ class PDCAdminController extends Controller
                     });
             })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
+        $progressCompleted = PromotionPlan::where('is_active', false)
+            ->whereIn('status_promotion', ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'])
+            ->count();
 
         // Fetch the 8 most recent talents whose development plan is still active
         // Menampilkan semua talent yang sedang aktif dalam siklus promosi (belum Promoted/Not Promoted)
@@ -131,6 +134,7 @@ class PDCAdminController extends Controller
             'onProgressTalent',
             'pendingFinance',
             'pendingPanelis',
+            'progressCompleted',
             'roleCounts'
         ));
     }

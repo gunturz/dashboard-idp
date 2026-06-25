@@ -32,6 +32,90 @@
             </div>
         @endif
 
+        {{-- Stats Cards --}}
+        @php
+            $allArchiveRows = collect($groupedData)
+                ->flatMap(function ($group) {
+                    $companyName = $group['company']->nama_company ?? '-';
+                    return $group['talents']->map(function ($talent) use ($companyName) {
+                        $talent->archive_company_name = $companyName;
+                        return $talent;
+                    });
+                });
+
+            $statCompleted   = $allArchiveRows->count();
+            $statReadyNow    = $allArchiveRows->filter(fn($t) => optional($t->promotion_plan)->status_promotion === 'Promoted')->count();
+            $statReady12     = $allArchiveRows->filter(fn($t) => optional($t->promotion_plan)->status_promotion === 'Ready in 1-2 Years')->count();
+            $statReadyOver2  = $allArchiveRows->filter(fn($t) => optional($t->promotion_plan)->status_promotion === 'Ready in > 2 Years')->count();
+            $statNotReady    = $allArchiveRows->filter(fn($t) => optional($t->promotion_plan)->status_promotion === 'Not Ready')->count();
+        @endphp
+
+        <div class="archive-stats-grid mb-8">
+            {{-- Progress Completed --}}
+            <div class="archive-stat-card archive-stat-card--teal" data-filter="" onclick="filterByCard(this)" style="cursor:pointer;">
+                <div class="archive-stat-icon archive-stat-icon--teal">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                        <circle cx="12" cy="12" r="12" fill="currentColor" />
+                        <path fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m8 12.5 2.5 2.5 5.5-5.5" />
+                    </svg>
+                </div>
+                <div class="archive-stat-count">{{ $statCompleted }}</div>
+                <div class="archive-stat-label">Progress Completed</div>
+            </div>
+
+            {{-- Ready Now --}}
+            <div class="archive-stat-card archive-stat-card--green" data-filter="Promoted" onclick="filterByCard(this)" style="cursor:pointer;">
+                <div class="archive-stat-icon archive-stat-icon--green">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="archive-stat-count">{{ $statReadyNow }}</div>
+                <div class="archive-stat-label">Ready Now</div>
+            </div>
+
+            {{-- Ready in 1-2 Years --}}
+            <div class="archive-stat-card archive-stat-card--blue" data-filter="Ready in 1-2 Years" onclick="filterByCard(this)" style="cursor:pointer;">
+                <div class="archive-stat-icon archive-stat-icon--blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                        <circle cx="12" cy="12" r="12" fill="currentColor" />
+                        <path fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M12 7.5v4.5h3.5" />
+                    </svg>
+                </div>
+                <div class="archive-stat-count">{{ $statReady12 }}</div>
+                <div class="archive-stat-label">Ready in 1 – 2 Years</div>
+            </div>
+
+            {{-- Ready in > 2 Years --}}
+            <div class="archive-stat-card archive-stat-card--orange" data-filter="Ready in > 2 Years" onclick="filterByCard(this)" style="cursor:pointer;">
+                <div class="archive-stat-icon archive-stat-icon--orange">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                        <circle cx="12" cy="12" r="12" fill="currentColor" />
+                        <g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8.5 6h7M8.5 18h7" />
+                            <path d="M14 18v-3.5l-2-2.5 2-2.5V6" />
+                            <path d="M10 18v-3.5l2-2.5-2-2.5V6" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="archive-stat-count">{{ $statReadyOver2 }}</div>
+                <div class="archive-stat-label">Ready in &gt; 2 Years</div>
+            </div>
+
+            {{-- Not Ready --}}
+            <div class="archive-stat-card archive-stat-card--red" data-filter="Not Ready" onclick="filterByCard(this)" style="cursor:pointer;">
+                <div class="archive-stat-icon archive-stat-icon--red">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                        <circle cx="12" cy="12" r="12" fill="currentColor" />
+                        <path fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M12 7v6" />
+                        <circle cx="12" cy="16.5" r="1.25" fill="#fff" />
+                    </svg>
+                </div>
+                <div class="archive-stat-count">{{ $statNotReady }}</div>
+                <div class="archive-stat-label">Not Ready</div>
+            </div>
+        </div>
+
         {{-- Filters (Re-styled to match Panelis Review) --}}
         <div class="flex flex-col sm:flex-row items-center gap-4 mb-8 mt-4" id="archive-filter-bar">
             {{-- Search --}}
@@ -92,19 +176,8 @@
                 </select>
             </div>
 
-            {{-- Status Filter --}}
-            <div class="relative w-full sm:w-56">
-                <select id="statusFilter"
-                    class="w-full border border-gray-200 rounded-xl py-2.5 px-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-[#14b8a6] focus:border-transparent bg-white appearance-none transition-all"
-                    style="background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat:no-repeat; background-position:right 0.7rem top 50%; background-size:0.65rem auto;"
-                    onchange="filterTalents()">
-                    <option value="">Semua Status</option>
-                    <option value="Promoted">Ready Now (Promoted)</option>
-                    <option value="Ready in 1-2 Years">Ready in 1–2 Years</option>
-                    <option value="Ready in > 2 Years">Ready in &gt; 2 Years</option>
-                    <option value="Not Ready">Not Ready</option>
-                </select>
-            </div>
+            {{-- Status Filter (Hidden because it's controlled by Stats Cards) --}}
+            <input type="hidden" id="statusFilter" value="">
         </div>
 
         {{-- Table grouped by Title (as Section) then data --}}
@@ -129,8 +202,9 @@
 
         <div class="progress-archive-wrapper">
             <div id="archiveTableContainer"
-                class="overflow-x-auto w-full border border-gray-200 rounded-2xl shadow-sm bg-white {{ $archiveRows->isEmpty() ? 'hidden' : '' }}">
-                <table class="w-full table-auto text-left" id="archiveTable">
+                class="w-full border border-gray-200 rounded-2xl shadow-sm bg-white overflow-hidden {{ $archiveRows->isEmpty() ? 'hidden' : '' }}">
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full table-auto text-left" id="archiveTable">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
                             <th class="py-4 px-6 text-[13px] font-bold text-slate-700 text-center whitespace-nowrap">
@@ -247,6 +321,13 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
+
+                {{-- Pagination Bar --}}
+                <div id="archivePaginationBar" class="archive-pagination-bar hidden">
+                    <span id="archivePaginationInfo" class="archive-pagination-info"></span>
+                    <div id="archivePaginationControls" class="archive-pagination-controls"></div>
+                </div>
             </div>
 
             {{-- Empty State Outside Table --}}
@@ -271,65 +352,163 @@
 
     <x-slot name="scripts">
         <script>
+            const ROWS_PER_PAGE = 10;
+            let archiveCurrentPage = 1;
+            let archiveFilteredRows = [];
+
             function filterTalents() {
                 const searchTxt = document.getElementById('searchInput').value.toLowerCase().trim();
-                const compVal = document.getElementById('companyFilter').value;
+                const compVal   = document.getElementById('companyFilter').value;
                 const periodVal = document.getElementById('periodFilter').value;
                 const statusVal = document.getElementById('statusFilter').value;
 
-                let visibleCount = 0;
-
+                // Collect matching rows (but hide all first)
+                archiveFilteredRows = [];
                 document.querySelectorAll('.archive-row').forEach(row => {
-                    const name = row.getAttribute('data-name') || '';
-                    const comp = row.getAttribute('data-company') || '';
-                    const period = row.getAttribute('data-period') || '';
-                    const status = row.getAttribute('data-status') || '';
+                    row.style.display = 'none';
+                    const name   = row.getAttribute('data-name')    || '';
+                    const comp   = row.getAttribute('data-company')  || '';
+                    const period = row.getAttribute('data-period')   || '';
+                    const status = row.getAttribute('data-status')   || '';
 
-                    const matchName = name.includes(searchTxt);
-                    const matchComp = compVal === '' || comp === compVal;
+                    const matchName   = name.includes(searchTxt);
+                    const matchComp   = compVal   === '' || comp   === compVal;
                     const matchPeriod = periodVal === '' || period === periodVal;
                     const matchStatus = statusVal === '' || status === statusVal;
 
                     if (matchName && matchComp && matchPeriod && matchStatus) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
+                        archiveFilteredRows.push(row);
                     }
                 });
 
-                const tableContainer = document.getElementById('archiveTableContainer');
-                const emptyStateContainer = document.getElementById('emptyStateContainer');
-                const emptyTitle = document.getElementById('emptyTitle');
-                const emptyText = document.getElementById('emptyText');
+                // Reset to page 1 whenever filter changes
+                archiveCurrentPage = 1;
+                renderArchivePage();
+            }
 
-                if (tableContainer && emptyStateContainer) {
-                    if (visibleCount > 0) {
-                        tableContainer.classList.remove('hidden');
-                        emptyStateContainer.classList.add('hidden');
+            function renderArchivePage() {
+                const total      = archiveFilteredRows.length;
+                const totalPages = Math.ceil(total / ROWS_PER_PAGE);
+                const start      = (archiveCurrentPage - 1) * ROWS_PER_PAGE;
+                const end        = Math.min(start + ROWS_PER_PAGE, total);
+
+                // Hide all rows, then show current page slice
+                document.querySelectorAll('.archive-row').forEach(r => r.style.display = 'none');
+                archiveFilteredRows.slice(start, end).forEach(r => r.style.display = '');
+
+                const tableContainer    = document.getElementById('archiveTableContainer');
+                const emptyState        = document.getElementById('emptyStateContainer');
+                const emptyTitle        = document.getElementById('emptyTitle');
+                const emptyText         = document.getElementById('emptyText');
+                const paginationBar     = document.getElementById('archivePaginationBar');
+                const paginationInfo    = document.getElementById('archivePaginationInfo');
+                const paginationCtrls   = document.getElementById('archivePaginationControls');
+
+                if (total === 0) {
+                    tableContainer.classList.add('hidden');
+                    paginationBar.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+
+                    const searchTxt = document.getElementById('searchInput').value.trim();
+                    const compVal   = document.getElementById('companyFilter').value;
+                    const periodVal = document.getElementById('periodFilter').value;
+                    const statusVal = document.getElementById('statusFilter').value;
+
+                    if (searchTxt || compVal || periodVal || statusVal) {
+                        emptyTitle.innerHTML = 'Tidak Ada Data Talent';
+                        emptyText.innerHTML  = searchTxt
+                            ? `Tidak ada hasil pencarian yang cocok untuk "<strong>${document.getElementById('searchInput').value}</strong>"`
+                            : 'Tidak ada hasil untuk filter yang dipilih.';
                     } else {
-                        tableContainer.classList.add('hidden');
-                        emptyStateContainer.classList.remove('hidden');
-
-                        if (searchTxt || compVal || periodVal || statusVal) {
-                            emptyTitle.innerHTML = 'Tidak Ada Data Talent';
-                            if (searchTxt) {
-                                emptyText.innerHTML = `Tidak ada hasil pencarian yang cocok untuk "<strong>${document.getElementById('searchInput').value}</strong>"`;
-                            } else {
-                                emptyText.innerHTML = 'Tidak ada hasil untuk filter yang dipilih.';
-                            }
-                        } else {
-                            emptyTitle.innerHTML = 'Belum Ada Arsip Progress Talent';
-                            emptyText.innerHTML = 'Data akan muncul setelah ada talent yang masuk ke dalam arsip.';
-                        }
+                        emptyTitle.innerHTML = 'Belum Ada Arsip Progress Talent';
+                        emptyText.innerHTML  = 'Data akan muncul setelah ada talent yang masuk ke dalam arsip.';
                     }
+                    return;
                 }
+
+                tableContainer.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+
+                // Pagination bar visibility (only when > 10 rows)
+                if (total > ROWS_PER_PAGE) {
+                    paginationBar.classList.remove('hidden');
+                    paginationInfo.textContent = `Menampilkan ${start + 1}-${end} dari ${total} pengguna`;
+
+                    // Build page buttons
+                    let html = '';
+
+                    // Prev
+                    html += `<button class="arch-page-btn arch-page-prev" ${archiveCurrentPage === 1 ? 'disabled' : ''} onclick="goArchivePage(${archiveCurrentPage - 1})">&laquo; Prev</button>`;
+
+                    // Page numbers (show max 5 around current)
+                    const delta = 2;
+                    let pages = [];
+                    for (let p = Math.max(1, archiveCurrentPage - delta); p <= Math.min(totalPages, archiveCurrentPage + delta); p++) {
+                        pages.push(p);
+                    }
+                    // Always show first & last with ellipsis
+                    if (pages[0] > 1) {
+                        html += `<button class="arch-page-btn" onclick="goArchivePage(1)">1</button>`;
+                        if (pages[0] > 2) html += `<span class="arch-page-ellipsis">&hellip;</span>`;
+                    }
+                    pages.forEach(p => {
+                        html += `<button class="arch-page-btn ${p === archiveCurrentPage ? 'arch-page-active' : ''}" onclick="goArchivePage(${p})">${p}</button>`;
+                    });
+                    if (pages[pages.length - 1] < totalPages) {
+                        if (pages[pages.length - 1] < totalPages - 1) html += `<span class="arch-page-ellipsis">&hellip;</span>`;
+                        html += `<button class="arch-page-btn" onclick="goArchivePage(${totalPages})">${totalPages}</button>`;
+                    }
+
+                    // Next
+                    html += `<button class="arch-page-btn arch-page-next" ${archiveCurrentPage === totalPages ? 'disabled' : ''} onclick="goArchivePage(${archiveCurrentPage + 1})">Next &raquo;</button>`;
+
+                    paginationCtrls.innerHTML = html;
+                } else {
+                    paginationBar.classList.add('hidden');
+                }
+            }
+
+            function goArchivePage(page) {
+                const totalPages = Math.ceil(archiveFilteredRows.length / ROWS_PER_PAGE);
+                if (page < 1 || page > totalPages) return;
+                archiveCurrentPage = page;
+                renderArchivePage();
+                // Scroll to top of table
+                document.getElementById('archiveTableContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function filterByCard(card) {
+                const filterVal    = card.getAttribute('data-filter');
+                const statusSelect = document.getElementById('statusFilter');
+
+                if (card.classList.contains('archive-stat-card--active')) {
+                    card.classList.remove('archive-stat-card--active');
+                    statusSelect.value = '';
+                } else {
+                    document.querySelectorAll('.archive-stat-card').forEach(c => c.classList.remove('archive-stat-card--active'));
+                    card.classList.add('archive-stat-card--active');
+                    statusSelect.value = filterVal;
+                }
+
+                filterTalents();
+
+                const tableWrapper = document.getElementById('archiveTableContainer');
+                if (tableWrapper) tableWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
             function initArchive() {
                 filterTalents();
 
-                // Warna placeholder select (abu-abu saat opsi default, gelap saat dipilih)
+                document.getElementById('statusFilter').addEventListener('change', () => {
+                    document.querySelectorAll('.archive-stat-card').forEach(c => c.classList.remove('archive-stat-card--active'));
+                    const val = document.getElementById('statusFilter').value;
+                    if (val !== '') {
+                        document.querySelectorAll('.archive-stat-card').forEach(c => {
+                            if (c.getAttribute('data-filter') === val) c.classList.add('archive-stat-card--active');
+                        });
+                    }
+                });
+
                 function syncSelectColor(sel) {
                     sel.style.color = sel.value === '' ? '#94a3b8' : '#334155';
                 }
@@ -367,6 +546,198 @@
 
             .progress-archive-wrapper .prem-card {
                 border: 1.5px solid #cbd5e1;
+            }
+
+            /* ── Archive Stats Cards ── */
+            .archive-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 16px;
+            }
+
+            @media (max-width: 1100px) {
+                .archive-stats-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+
+            @media (max-width: 640px) {
+                .archive-stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            .archive-stat-card {
+                background: #fff;
+                border-radius: 16px;
+                padding: 20px 18px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                border: 1.5px solid #e2e8f0;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                position: relative;
+                overflow: hidden;
+                transition: transform .18s, box-shadow .18s;
+            }
+
+            .archive-stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+            }
+
+            /* top accent bar */
+            .archive-stat-card::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; right: 0;
+                height: 4px;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .archive-stat-card--teal::before  { background: linear-gradient(90deg,#14b8a6,#0d9488); }
+            .archive-stat-card--green::before { background: linear-gradient(90deg,#22c55e,#16a34a); }
+            .archive-stat-card--blue::before  { background: linear-gradient(90deg,#3b82f6,#2563eb); }
+            .archive-stat-card--orange::before{ background: linear-gradient(90deg,#f97316,#ea580c); }
+            .archive-stat-card--red::before   { background: linear-gradient(90deg,#ef4444,#dc2626); }
+
+            .archive-stat-icon {
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .archive-stat-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* teal */
+            .archive-stat-icon--teal  { background: #ccfbf1; color: #0d9488; }
+            /* green */
+            .archive-stat-icon--green { background: #dcfce7; color: #16a34a; }
+            /* blue */
+            .archive-stat-icon--blue  { background: #dbeafe; color: #2563eb; }
+            /* orange */
+            .archive-stat-icon--orange{ background: #ffedd5; color: #ea580c; }
+            /* red */
+            .archive-stat-icon--red   { background: #fee2e2; color: #dc2626; }
+
+            .archive-stat-count {
+                font-size: 2rem;
+                font-weight: 800;
+                color: #0f172a;
+                line-height: 1;
+            }
+
+            .archive-stat-label {
+                font-size: 0.78rem;
+                color: #64748b;
+                font-weight: 500;
+                line-height: 1.3;
+            }
+
+            /* ── Active / Selected state ── */
+            .archive-stat-card--active {
+                transform: translateY(-3px);
+            }
+            .archive-stat-card--teal.archive-stat-card--active {
+                border-color: #14b8a6;
+                box-shadow: 0 0 0 3px rgba(20,184,166,0.18), 0 6px 20px rgba(20,184,166,0.15);
+                background: #f0fdfb;
+            }
+            .archive-stat-card--green.archive-stat-card--active {
+                border-color: #22c55e;
+                box-shadow: 0 0 0 3px rgba(34,197,94,0.18), 0 6px 20px rgba(34,197,94,0.15);
+                background: #f0fdf4;
+            }
+            .archive-stat-card--blue.archive-stat-card--active {
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59,130,246,0.18), 0 6px 20px rgba(59,130,246,0.15);
+                background: #eff6ff;
+            }
+            .archive-stat-card--orange.archive-stat-card--active {
+                border-color: #f97316;
+                box-shadow: 0 0 0 3px rgba(249,115,22,0.18), 0 6px 20px rgba(249,115,22,0.15);
+                background: #fff7ed;
+            }
+            .archive-stat-card--red.archive-stat-card--active {
+                border-color: #ef4444;
+                box-shadow: 0 0 0 3px rgba(239,68,68,0.18), 0 6px 20px rgba(239,68,68,0.15);
+                background: #fef2f2;
+            }
+            .archive-stat-card--active .archive-stat-count {
+                color: #0f172a;
+            }
+
+            /* ── Pagination Styles ── */
+            .archive-pagination-bar {
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 20px;
+                background-color: #f8fafc;
+                border-top: 1px solid #e2e8f0;
+            }
+            .archive-pagination-bar:not(.hidden) {
+                display: flex;
+            }
+            .archive-pagination-info {
+                font-size: 13px;
+                color: #64748b;
+                font-weight: 500;
+            }
+            .archive-pagination-controls {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .arch-page-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 32px;
+                height: 32px;
+                padding: 0 12px;
+                border-radius: 6px;
+                background: #fff;
+                border: 1px solid #e2e8f0;
+                color: #64748b;
+                font-size: 13px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .arch-page-btn:hover:not(:disabled) {
+                background: #f8fafc;
+                border-color: #cbd5e1;
+                color: #334155;
+            }
+            .arch-page-active {
+                background: #14b8a6 !important;
+                border-color: #14b8a6 !important;
+                color: #fff !important;
+            }
+            .arch-page-prev, .arch-page-next {
+                color: #14b8a6;
+                border-color: #ccfbf1;
+            }
+            .arch-page-prev:hover:not(:disabled), .arch-page-next:hover:not(:disabled) {
+                background: #f0fdfb;
+                border-color: #99f6e4;
+                color: #0d9488;
+            }
+            .arch-page-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            .arch-page-ellipsis {
+                color: #94a3b8;
+                font-weight: 600;
+                padding: 0 4px;
             }
         </style>
         <script>

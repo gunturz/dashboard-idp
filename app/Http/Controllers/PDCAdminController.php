@@ -1631,20 +1631,17 @@ class PDCAdminController extends Controller
         $targetPosition = optional($plan->targetPosition)->position_name ?? 'posisi yang dituju';
 
         if ($request->decision === 'ready_now') {
-            // ── READY NOW: Diangkat ke posisi target ──
+            // ── READY NOW: keputusan akhir tanpa mengubah posisi talent ──
             $plan->update(['status_promotion' => 'Promoted']);
-
-            // Otomatis memperbarui posisi user (talent) ke posisi yang dituju
-            $talent->update(['position_id' => $plan->target_position_id]);
 
             $this->addNotificationToUser(
                 $talent_id,
-                '🎉 Selamat! Anda Resmi Diangkat',
-                'PDC Admin telah memutuskan bahwa Anda <span class="font-semibold text-green-600">berhasil diangkat</span> ke posisi <span class="font-semibold">' . $targetPosition . '</span>. Selamat atas pencapaian luar biasa ini!',
+                'Hasil Evaluasi Development Talent',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-green-600">Ready Now</span> untuk posisi <span class="font-semibold">' . $targetPosition . '</span>. Perubahan posisi akan dilakukan secara manual melalui User Management.',
                 'success'
             );
 
-            $message = 'Talent ' . $talent->nama . ' berhasil diangkat ke ' . $targetPosition . '.';
+            $message = 'Keputusan "Ready Now" untuk ' . $talent->nama . ' telah disimpan. Posisi talent tidak diubah otomatis.';
 
             $this->archiveDevelopmentSession($talent, $plan, 'Promoted');
         } elseif ($request->decision === 'ready_1_2_years') {

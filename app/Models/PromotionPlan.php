@@ -44,6 +44,11 @@ class PromotionPlan extends Model
         return $this->belongsTo(DevelopmentSession::class, 'development_session_id');
     }
 
+    public function talent()
+    {
+        return $this->belongsTo(User::class, 'user_id_talent');
+    }
+
     /**
      * All mentors stored in the JSON column
      */

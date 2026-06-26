@@ -747,7 +747,7 @@
                     border-radius: 20px;
                 }
             </style>
-            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
+            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => true])
         </div>
 
         {{-- Nav Tabs (match admin detail style) --}}
@@ -1008,8 +1008,8 @@
                 Project Improvement
             </div>
 
-            <div class="rounded-xl overflow-hidden border border-gray-200 mt-4">
-                <table class="w-full text-left bg-white">
+            <div class="rounded-xl overflow-x-auto border border-gray-200 mt-4 custom-scrollbar">
+                <table class="w-full min-w-[700px] text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-left">Judul Project
@@ -1089,6 +1089,16 @@
             document.querySelectorAll('.tab-item').forEach((tab) => {
                 tab.classList.toggle('active', tab === trigger);
             });
+        }
+
+        function toggleMobileProfile() {
+            const detail = document.getElementById('mobile-profile-detail');
+            const chevron = document.getElementById('mobile-profile-chevron');
+            if (!detail) return;
+            detail.classList.toggle('open');
+            if (chevron) {
+                chevron.style.transform = detail.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
         }
     </script>
 </x-atasan.layout>

@@ -320,7 +320,7 @@
                     padding: 16px 24px !important;
                 }
             </style>
-            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
+            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => true])
         </div>
 
         <!-- Top Level Categories: Core / Managerial -->
@@ -880,6 +880,16 @@
                 container.appendChild(input);
             }
             document.getElementById('assessment-form').submit();
+        }
+
+        function toggleMobileProfile() {
+            const detail = document.getElementById('mobile-profile-detail');
+            const chevron = document.getElementById('mobile-profile-chevron');
+            if (!detail) return;
+            detail.classList.toggle('open');
+            if (chevron) {
+                chevron.style.transform = detail.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
         }
 
         // Inisialisasi fill saat halaman pertama kali load

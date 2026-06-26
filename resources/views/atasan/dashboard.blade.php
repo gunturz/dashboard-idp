@@ -357,10 +357,8 @@
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-2">Semua Assessment Selesai!</h3>
-                    <p class="text-slate-500 text-base max-w-sm">Anda telah menyelesaikan tugas assessment untuk
-                        seluruh
-                        talent di tim Anda</p>
+                    <h3 class="text-lg font-bold text-slate-800 mb-1">Semua Assessment Selesai!</h3>
+                    <p class="text-slate-500 text-sm max-w-sm">Anda telah menyelesaikan tugas assessment untuk seluruh talent di tim Anda</p>
                 </div>
             @endif
         @endforelse

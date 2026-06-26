@@ -249,6 +249,7 @@
             padding: 0;
             flex-direction: row;
             align-items: center;
+            cursor: pointer;
         }
 
         .talent-hero-divider {
@@ -332,11 +333,9 @@
     <div class="flex talent-prof-hero fade-up fade-up-1" style="box-shadow:0 8px 32px rgba(15,23,42,0.35);">
 
         {{-- Section 1: Avatar + Identity --}}
-        <div class="talent-hero-section-1">
-            {{-- Avatar + Info: klik → navigasi ke halaman profil --}}
-            <a href="{{ route('profile.edit') }}"
-                class="flex items-center gap-4 flex-1 min-w-0 no-underline hover:opacity-90 transition-opacity"
-                style="text-decoration:none;">
+        <div class="talent-hero-section-1" onclick="toggleMobileProfile()">
+            {{-- Avatar + Info --}}
+            <div class="flex items-center gap-4 flex-1 min-w-0">
                 <div class="talent-hero-avatar-wrap">
                     @if ($user->foto ?? false)
                         <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
@@ -353,9 +352,9 @@
                     </div>
                     <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
                 </div>
-            </a>
+            </div>
             {{-- Chevron: hanya toggle expand/collapse di mobile --}}
-            <button type="button" onclick="toggleMobileProfile()"
+            <button type="button"
                 class="md:hidden flex items-center justify-center p-1 focus:outline-none" aria-label="Lihat detail profil">
                 <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 text-white/40 transition-transform duration-300" fill="none" viewBox="0 0 24 24"

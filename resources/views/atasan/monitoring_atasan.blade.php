@@ -198,13 +198,16 @@
 
             .donut-container {
                 background: white;
-                border-radius: 16px;
-                padding: 30px;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                padding: 24px;
                 display: flex;
-                justify-content: space-evenly;
+                justify-content: space-around;
                 align-items: center;
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-                width: 100%;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+                flex-wrap: wrap;
+                gap: 24px;
+                margin-bottom: 0;
             }
 
             /* Tables */
@@ -607,20 +610,7 @@
                     gap: 8px;
                 }
 
-                .donut-container {
-                    flex-wrap: wrap;
-                    gap: 16px;
-                    padding: 16px;
-                }
 
-                .donut-container .relative.w-48.h-48 {
-                    width: 120px !important;
-                    height: 120px !important;
-                }
-
-                .donut-container .text-3xl {
-                    font-size: 1.25rem !important;
-                }
 
                 .idp-card-container {
                     padding: 16px;

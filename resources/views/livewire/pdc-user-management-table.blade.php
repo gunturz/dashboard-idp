@@ -1,4 +1,4 @@
-<div x-data="{ selectedRole: @entangle('selectedRole') }">
+<div x-data>
     @php
         $roleConfig = [
             'talent' => ['label' => 'Talent', 'color' => 'teal', 'hex' => '#14b8a6'],
@@ -154,11 +154,10 @@
         <div class="archive-stats-grid mb-8">
             @foreach ($roleConfig as $key => $cfg)
                 <button type="button" wire:key="stat-{{ $key }}"
-                    x-on:click="selectedRole = (selectedRole === '{{ $key }}' ? '' : '{{ $key }}')"
-                    wire:click="toggleRole('{{ $key }}')"
-                    wire:loading.delay.attr="disabled" wire:target="toggleRole"
+                    x-on:click="$wire.selectedRole = ($wire.selectedRole === '{{ $key }}' ? '' : '{{ $key }}')"
+                    wire:loading.delay.attr="disabled" wire:target="selectedRole"
                     class="archive-stat-card archive-stat-card--{{ $cfg['color'] }} cursor-pointer select-none disabled:cursor-wait disabled:opacity-90 focus:outline-none {{ $selectedRole === $key ? 'archive-stat-card--active' : '' }}"
-                    x-bind:class="{ 'archive-stat-card--active': selectedRole === '{{ $key }}' }">
+                    x-bind:class="{ 'archive-stat-card--active': $wire.selectedRole === '{{ $key }}' }">
                     <div class="archive-stat-icon archive-stat-icon--{{ $cfg['color'] }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             {!! $roleIcons[$key] !!}
@@ -222,7 +221,7 @@
     </div>
 
     <div class="flex flex-col gap-8 relative">
-        <div wire:loading.delay.flex wire:target="toggleRole,search,company,department,nextPage,previousPage,gotoPage"
+        <div wire:loading.delay.flex wire:target="selectedRole,search,company,department,nextPage,previousPage,gotoPage"
             class="absolute inset-0 z-10 hidden items-start justify-center pt-20 bg-white/40 backdrop-blur-[1px] rounded-2xl">
             <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-b-[#14b8a6]"></div>
         </div>

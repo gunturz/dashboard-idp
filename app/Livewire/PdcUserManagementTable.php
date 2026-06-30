@@ -43,6 +43,11 @@ class PdcUserManagementTable extends Component
         $this->resetAllPages();
     }
 
+    public function updatedSelectedRole(): void
+    {
+        $this->resetAllPages();
+    }
+
     private function resetAllPages(): void
     {
         $roles = ['talent', 'mentor', 'atasan', 'finance', 'panelis'];

@@ -20,6 +20,14 @@
                 background: #0f766e;
             }
 
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
             .log-table-container {
                 background: white;
                 border-radius: 16px;
@@ -123,7 +131,7 @@
 
         {{-- Tab Navigation --}}
         <div
-            class="flex bg-white border border-gray-100 rounded-full w-fit p-1 mb-10 shadow-sm ring-1 ring-inset ring-gray-100/50">
+            class="flex overflow-x-auto no-scrollbar bg-white border border-gray-100 rounded-full w-fit max-w-full p-1 mb-10 shadow-sm ring-1 ring-inset ring-gray-100/50">
             <button id="tab-exposure" onclick="switchTab('exposure')"
                 class="tab-btn px-6 py-2.5 font-bold text-sm rounded-full transition-all tracking-wide {{ ($activeTab ?? 'exposure') === 'exposure' ? 'bg-slate-900 text-white shadow-md active' : 'text-slate-500 hover:text-slate-800' }}">Exposure</button>
             <button id="tab-mentoring" onclick="switchTab('mentoring')"

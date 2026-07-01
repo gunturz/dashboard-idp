@@ -466,7 +466,7 @@
     <div id="financeConfirmModal"
         class="hidden fixed inset-0 z-[110] flex items-center justify-center transition-opacity opacity-0"
         style="background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);">
-        <div class="bg-white rounded-[28px] shadow-2xl w-full max-w-[400px] p-8 text-center transform scale-90 transition-transform duration-400 ease-out border border-slate-100"
+        <div class="bg-white rounded-[28px] shadow-2xl w-[calc(100%-2.5rem)] sm:w-full max-w-[400px] p-6 sm:p-8 text-center transform scale-90 transition-transform duration-400 ease-out border border-slate-100"
             id="financeConfirmModalContent">
             <div id="confirmIconContainer"
                 class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-900 mb-6 shadow-xl shadow-slate-900/20">

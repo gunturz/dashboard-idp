@@ -414,7 +414,7 @@
             $roleChartDataJson = json_encode($roleChartData);
         @endphp
 
-        <div class="prem-stat-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="prem-stat-grid" style="grid-template-columns: repeat(5, 1fr);">
             <a href="{{ route('pdc_admin.user_management') }}" class="prem-stat clickable prem-stat-teal">
                 <div class="prem-stat-icon si-teal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -454,6 +454,16 @@
                     </svg></div>
                 <div class="prem-stat-value animate-counter" data-target="{{ (int) ($pendingPanelis ?? 0) }}">0</div>
                 <div class="prem-stat-label">Pending Panelis</div>
+            </a>
+            <a href="{{ route('pdc_admin.progress_archive') }}" class="prem-stat clickable prem-stat-green">
+                <div class="prem-stat-icon si-green">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                        <circle cx="12" cy="12" r="12" fill="currentColor" />
+                        <path fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m8 12.5 2.5 2.5 5.5-5.5" />
+                    </svg>
+                </div>
+                <div class="prem-stat-value animate-counter" data-target="{{ (int) ($progressCompleted ?? 0) }}">0</div>
+                <div class="prem-stat-label">Progress Completed</div>
             </a>
         </div>
 

@@ -72,6 +72,14 @@ class PDCAdminController extends Controller
                     });
             })->count();
         $pendingPanelis = PromotionPlan::where('status_promotion', 'Pending Panelis')->count();
+        $progressCompleted = PromotionPlan::where('is_active', false)
+            ->whereIn('status_promotion', ['Promoted', 'Not Promoted', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'])
+            ->whereHas('talent', function ($q) {
+                $q->whereHas('roles', function ($q2) {
+                    $q2->where('role_name', 'Talent');
+                });
+            })
+            ->count();
 
         // Fetch the 8 most recent talents whose development plan is still active
         // Menampilkan semua talent yang sedang aktif dalam siklus promosi (belum Promoted/Not Promoted)
@@ -131,6 +139,7 @@ class PDCAdminController extends Controller
             'onProgressTalent',
             'pendingFinance',
             'pendingPanelis',
+            'progressCompleted',
             'roleCounts'
         ));
     }
@@ -1631,20 +1640,17 @@ class PDCAdminController extends Controller
         $targetPosition = optional($plan->targetPosition)->position_name ?? 'posisi yang dituju';
 
         if ($request->decision === 'ready_now') {
-            // ── READY NOW: Diangkat ke posisi target ──
+            // ── READY NOW: keputusan akhir tanpa mengubah posisi talent ──
             $plan->update(['status_promotion' => 'Promoted']);
-
-            // Otomatis memperbarui posisi user (talent) ke posisi yang dituju
-            $talent->update(['position_id' => $plan->target_position_id]);
 
             $this->addNotificationToUser(
                 $talent_id,
-                '🎉 Selamat! Anda Resmi Diangkat',
-                'PDC Admin telah memutuskan bahwa Anda <span class="font-semibold text-green-600">berhasil diangkat</span> ke posisi <span class="font-semibold">' . $targetPosition . '</span>. Selamat atas pencapaian luar biasa ini!',
+                'Hasil Evaluasi Development Talent',
+                'PDC Admin telah menyelesaikan evaluasi Anda. Keputusan: <span class="font-semibold text-green-600">Ready Now</span> untuk posisi <span class="font-semibold">' . $targetPosition . '</span>. Perubahan posisi akan dilakukan secara manual melalui User Management.',
                 'success'
             );
 
-            $message = 'Talent ' . $talent->nama . ' berhasil diangkat ke ' . $targetPosition . '.';
+            $message = 'Keputusan "Ready Now" untuk ' . $talent->nama . ' telah disimpan. Posisi talent tidak diubah otomatis.';
 
             $this->archiveDevelopmentSession($talent, $plan, 'Promoted');
         } elseif ($request->decision === 'ready_1_2_years') {

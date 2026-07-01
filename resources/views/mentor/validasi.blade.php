@@ -30,6 +30,14 @@
                 background: #0f766e; 
             }
 
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
             .prem-card {
                 background: #fff;
                 border: 1px solid #e2e8f0;

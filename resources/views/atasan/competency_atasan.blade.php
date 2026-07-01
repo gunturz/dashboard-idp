@@ -109,7 +109,7 @@
             background: #fff;
             border-radius: 1.25rem;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-            width: 100%;
+            width: calc(100% - 2.5rem);
             max-width: 780px;
             max-height: 88vh;
             display: flex;
@@ -234,11 +234,17 @@
             background: #fff;
             border-radius: 1rem;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-            padding: 2rem 2.25rem;
-            width: 100%;
+            padding: 1.5rem;
+            width: calc(100% - 2.5rem);
             max-width: 440px;
             transform: scale(0.9) translateY(16px);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @media (min-width: 768px) {
+            .confirm-box {
+                padding: 2rem 2.25rem;
+            }
         }
 
         .confirm-overlay.open .confirm-box {
@@ -320,7 +326,7 @@
                     padding: 16px 24px !important;
                 }
             </style>
-            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => false])
+            @include('components.talent.profile-card', ['user' => $talent, 'mobileCollapsible' => true])
         </div>
 
         <!-- Top Level Categories: Core / Managerial -->
@@ -880,6 +886,16 @@
                 container.appendChild(input);
             }
             document.getElementById('assessment-form').submit();
+        }
+
+        function toggleMobileProfile() {
+            const detail = document.getElementById('mobile-profile-detail');
+            const chevron = document.getElementById('mobile-profile-chevron');
+            if (!detail) return;
+            detail.classList.toggle('open');
+            if (chevron) {
+                chevron.style.transform = detail.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
         }
 
         // Inisialisasi fill saat halaman pertama kali load

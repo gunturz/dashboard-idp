@@ -1,4 +1,4 @@
-<div>
+<div x-data>
     @php
         $roleConfig = [
             'talent' => ['label' => 'Talent', 'color' => 'teal', 'hex' => '#14b8a6'],
@@ -23,23 +23,151 @@
     @endphp
 
     <div>
-        <div class="prem-stat-grid mb-6" style="grid-template-columns: repeat(5, 1fr);">
+        <style>
+            /* ── Archive Stats Cards (Aligned with progress-archive) ── */
+            .archive-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 16px;
+            }
+
+            @media (max-width: 1100px) {
+                .archive-stats-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+
+            @media (max-width: 640px) {
+                .archive-stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            .archive-stat-card {
+                background: #fff;
+                border-radius: 16px;
+                padding: 20px 18px 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                gap: 10px;
+                border: 1.5px solid #e2e8f0;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                position: relative;
+                overflow: hidden;
+                transition: transform .18s, box-shadow .18s, border-color .18s, background-color .18s;
+                width: 100%;
+                outline: none !important;
+            }
+
+            .archive-stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+            }
+
+            /* top accent bar */
+            .archive-stat-card::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; right: 0;
+                height: 4px;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .archive-stat-card--teal::before   { background: linear-gradient(90deg,#14b8a6,#0d9488); }
+            .archive-stat-card--blue::before   { background: linear-gradient(90deg,#3b82f6,#2563eb); }
+            .archive-stat-card--purple::before { background: linear-gradient(90deg,#8b5cf6,#a78bfa); }
+            .archive-stat-card--green::before  { background: linear-gradient(90deg,#22c55e,#16a34a); }
+            .archive-stat-card--amber::before  { background: linear-gradient(90deg,#f59e0b,#fcd34d); }
+
+            .archive-stat-icon {
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .archive-stat-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* icon colors */
+            .archive-stat-icon--teal   { background: #ccfbf1; color: #0d9488; }
+            .archive-stat-icon--blue   { background: #dbeafe; color: #2563eb; }
+            .archive-stat-icon--purple { background: #f5f3ff; color: #8b5cf6; }
+            .archive-stat-icon--green  { background: #dcfce7; color: #16a34a; }
+            .archive-stat-icon--amber  { background: #fef3c7; color: #d97706; }
+
+            .archive-stat-count {
+                font-size: 2rem;
+                font-weight: 800;
+                color: #0f172a;
+                line-height: 1;
+            }
+
+            .archive-stat-label {
+                font-size: 0.78rem;
+                color: #64748b;
+                font-weight: 500;
+                line-height: 1.3;
+            }
+
+            /* ── Active / Selected state ── */
+            .archive-stat-card--active {
+                transform: translateY(-3px);
+            }
+            .archive-stat-card--teal.archive-stat-card--active {
+                border-color: #14b8a6;
+                box-shadow: 0 0 0 3px rgba(20,184,166,0.18), 0 6px 20px rgba(20,184,166,0.15);
+                background: #f0fdfb;
+            }
+            .archive-stat-card--blue.archive-stat-card--active {
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59,130,246,0.18), 0 6px 20px rgba(59,130,246,0.15);
+                background: #eff6ff;
+            }
+            .archive-stat-card--purple.archive-stat-card--active {
+                border-color: #8b5cf6;
+                box-shadow: 0 0 0 3px rgba(139,92,246,0.18), 0 6px 20px rgba(139,92,246,0.15);
+                background: #faf5ff;
+            }
+            .archive-stat-card--green.archive-stat-card--active {
+                border-color: #22c55e;
+                box-shadow: 0 0 0 3px rgba(34,197,94,0.18), 0 6px 20px rgba(34,197,94,0.15);
+                background: #f0fdf4;
+            }
+            .archive-stat-card--amber.archive-stat-card--active {
+                border-color: #f59e0b;
+                box-shadow: 0 0 0 3px rgba(245,158,11,0.18), 0 6px 20px rgba(245,158,11,0.15);
+                background: #fffbeb;
+            }
+            .archive-stat-card--active .archive-stat-count {
+                color: #0f172a;
+            }
+        </style>
+
+        <div class="archive-stats-grid mb-8">
             @foreach ($roleConfig as $key => $cfg)
-                <button type="button" wire:key="stat-{{ $key }}" wire:click="toggleRole('{{ $key }}')"
-                    wire:loading.attr="disabled" wire:target="toggleRole"
-                    class="prem-stat clickable prem-stat-{{ $cfg['color'] }} cursor-pointer select-none disabled:cursor-wait disabled:opacity-90 focus:outline-none
-                        {{ $selectedRole === $key ? 'ring-2 ring-offset-1 shadow-lg stat-active opacity-100' : 'opacity-80 hover:opacity-100' }}"
-                    style="{{ $selectedRole === $key ? '--tw-ring-color: ' . $cfg['hex'] . ';' : '' }}">
-                    <div class="prem-stat-icon si-{{ $cfg['color'] }}">
+                <button type="button" wire:key="stat-{{ $key }}"
+                    x-on:click="$wire.selectedRole = ($wire.selectedRole === '{{ $key }}' ? '' : '{{ $key }}')"
+                    wire:loading.delay.attr="disabled" wire:target="selectedRole"
+                    class="archive-stat-card archive-stat-card--{{ $cfg['color'] }} cursor-pointer select-none disabled:cursor-wait disabled:opacity-90 focus:outline-none {{ $selectedRole === $key ? 'archive-stat-card--active' : '' }}"
+                    x-bind:class="{ 'archive-stat-card--active': $wire.selectedRole === '{{ $key }}' }">
+                    <div class="archive-stat-icon archive-stat-icon--{{ $cfg['color'] }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             {!! $roleIcons[$key] !!}
                         </svg>
                     </div>
-                    <div class="prem-stat-value">{{ $counts[$cfg['label']] }}</div>
-                    <div class="prem-stat-label">{{ $cfg['label'] }}</div>
+                    <div class="archive-stat-count">{{ $counts[$cfg['label']] }}</div>
+                    <div class="archive-stat-label">{{ $cfg['label'] }}</div>
                 </button>
             @endforeach
-        </div>{{-- /prem-stat-grid --}}
+        </div>
     </div>
 
     <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 mb-6">
@@ -93,7 +221,7 @@
     </div>
 
     <div class="flex flex-col gap-8 relative">
-        <div wire:loading.flex wire:target="toggleRole,search,company,department,nextPage,previousPage,gotoPage"
+        <div wire:loading.delay.flex wire:target="selectedRole,search,company,department,nextPage,previousPage,gotoPage"
             class="absolute inset-0 z-10 hidden items-start justify-center pt-20 bg-white/40 backdrop-blur-[1px] rounded-2xl">
             <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-b-[#14b8a6]"></div>
         </div>

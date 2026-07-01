@@ -249,6 +249,7 @@
             padding: 0;
             flex-direction: row;
             align-items: center;
+            cursor: pointer;
         }
 
         .talent-hero-divider {
@@ -266,53 +267,65 @@
 
 @php
     /* Shared data helpers */
-    $hasActivePlan = !empty($user->promotion_plan);
+    $devSession = $user->relationLoaded('activeDevelopmentSession')
+        ? $user->activeDevelopmentSession
+        : \App\Models\DevelopmentSession::with(['sourcePosition', 'targetPosition', 'atasan'])
+            ->where('user_id_talent', $user->id)
+            ->where('is_active', true)
+            ->latest('updated_at')
+            ->first();
+
+    $hasActivePlan = !empty($user->promotion_plan) || !empty($devSession);
 
     // Jika tidak ada active plan, cari last plan (termasuk yang sudah selesai/Promoted)
     // agar jabatan tetap tampil "Jabatan Asal → Jabatan Target" setelah lulus
-    $lastPromotionPlan = $hasActivePlan
-        ? $user->promotion_plan
-        : \App\Models\PromotionPlan::with('targetPosition')
-            ->where('user_id_talent', $user->id)
-            ->latest('updated_at')
-            ->first();
+    $lastPromotionPlan = $hasActivePlan ? $user->promotion_plan : null;
 
     $finalStatuses = ['Promoted', 'Not Promoted', 'Ready Now', 'Ready in 1-2 Years', 'Ready in > 2 Years', 'Not Ready'];
     $lastPlanStatus = optional($lastPromotionPlan)->status_promotion;
     $isFinished = in_array($lastPlanStatus, $finalStatuses, true);
 
     // Gunakan lastPromotionPlan untuk menampilkan jabatan target jika sudah selesai
-    $effectivePlan = ($hasActivePlan || $isFinished) ? $lastPromotionPlan : null;
+    $effectivePlan = $hasActivePlan ? $lastPromotionPlan : null;
 
-    $mentorNames = $hasActivePlan
-        ? (collect(optional($user->promotion_plan)->mentor_models)->pluck('nama')->join(', ') ?: (optional($user->mentor)->nama ?? '-'))
+    $mentorNames = collect(optional($user->promotion_plan)->mentor_models)
+        ->pluck('nama')
+        ->join(', ');
+
+    if (!$mentorNames && $devSession) {
+        $mentorNames = collect($devSession->mentor_models)->pluck('nama')->join(', ');
+    }
+
+    $mentorNames = $hasActivePlan ? ($mentorNames ?: (optional($user->mentor)->nama ?? '-')) : '-';
+    $atasanName = $hasActivePlan
+        ? (optional($devSession?->atasan)->nama ?? optional($user->atasan)->nama ?? '-')
         : '-';
-    $atasanName = $hasActivePlan ? (optional($user->atasan)->nama ?? '-') : '-';
 
     // Ambil source position dari development_session (lebih akurat dari user->position
     // karena user->position bisa sudah diupdate ke posisi baru setelah promosi)
-    $devSession = \App\Models\DevelopmentSession::with('sourcePosition')
-        ->where('user_id_talent', $user->id)
-        ->latest('updated_at')
-        ->first();
 
     $sourcePositionName = $user->history_source_position_name
         ?? optional(optional($devSession)->sourcePosition)->position_name
         ?? optional($user->position)->position_name
         ?? '-';
 
-    $targetPositionName = optional(optional($effectivePlan)->targetPosition)->position_name;
+    $targetPositionName = optional(optional($effectivePlan)->targetPosition)->position_name
+        ?? optional(optional($devSession)->targetPosition)->position_name;
     $targetPositionDisplay = $targetPositionName ?? '-';
+    $showTargetPosition = true;
 
-    $roleDisplay = ($effectivePlan && $targetPositionName)
+    $roleDisplay = !empty($targetPositionName)
         ? "{$sourcePositionName} &rarr; {$targetPositionName}"
         : $sourcePositionName;
 
-    $periode = (optional($user->promotion_plan)->start_date
-        ? \Carbon\Carbon::parse($user->promotion_plan->start_date)->format('d/m/Y') : '-')
+    $periodeStart = optional($user->promotion_plan)->start_date ?? optional($devSession)->start_date;
+    $periodeTarget = optional($user->promotion_plan)->target_date ?? optional($devSession)->target_date;
+
+    $periode = ($periodeStart
+        ? \Carbon\Carbon::parse($periodeStart)->format('d/m/Y') : '-')
         . ' – '
-        . (optional($user->promotion_plan)->target_date
-            ? \Carbon\Carbon::parse($user->promotion_plan->target_date)->format('d/m/Y') : '-');
+        . ($periodeTarget
+            ? \Carbon\Carbon::parse($periodeTarget)->format('d/m/Y') : '-');
 @endphp
 
 @if($mobileCollapsible)
@@ -320,11 +333,9 @@
     <div class="flex talent-prof-hero fade-up fade-up-1" style="box-shadow:0 8px 32px rgba(15,23,42,0.35);">
 
         {{-- Section 1: Avatar + Identity --}}
-        <div class="talent-hero-section-1">
-            {{-- Avatar + Info: klik → navigasi ke halaman profil --}}
-            <a href="{{ route('profile.edit') }}"
-                class="flex items-center gap-4 flex-1 min-w-0 no-underline hover:opacity-90 transition-opacity"
-                style="text-decoration:none;">
+        <div class="talent-hero-section-1" onclick="toggleMobileProfile()">
+            {{-- Avatar + Info --}}
+            <div class="flex items-center gap-4 flex-1 min-w-0">
                 <div class="talent-hero-avatar-wrap">
                     @if ($user->foto ?? false)
                         <img src="{{ asset('storage/' . $user->foto) }}" alt="Foto Profil" class="talent-hero-avatar-img">
@@ -341,9 +352,9 @@
                     </div>
                     <div class="talent-hero-badge">{{ ucfirst($user->role->role_name ?? 'Talent') }}</div>
                 </div>
-            </a>
+            </div>
             {{-- Chevron: hanya toggle expand/collapse di mobile --}}
-            <button type="button" onclick="toggleMobileProfile()"
+            <button type="button"
                 class="md:hidden flex items-center justify-center p-1 focus:outline-none" aria-label="Lihat detail profil">
                 <svg id="mobile-profile-chevron" xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 text-white/40 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
@@ -366,10 +377,12 @@
                     <span class="talent-hero-meta-label">Departemen</span>
                     <span class="talent-hero-meta-value">{{ optional($user->department)->nama_department ?? '-' }}</span>
                 </div>
-                <div class="talent-hero-meta-row">
-                    <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                    <span class="talent-hero-meta-value">{{ $targetPositionDisplay }}</span>
-                </div>
+                @if($showTargetPosition)
+                    <div class="talent-hero-meta-row">
+                        <span class="talent-hero-meta-label">Posisi yang Dituju</span>
+                        <span class="talent-hero-meta-value">{{ $targetPositionDisplay }}</span>
+                    </div>
+                @endif
             </div>
 
             <div class="talent-hero-divider"></div>
@@ -430,10 +443,12 @@
                 <span class="talent-hero-meta-label">Departemen</span>
                 <span class="talent-hero-meta-value">{{ optional($user->department)->nama_department ?? '-' }}</span>
             </div>
-            <div class="talent-hero-meta-row">
-                <span class="talent-hero-meta-label">Posisi yang Dituju</span>
-                <span class="talent-hero-meta-value">{{ $targetPositionDisplay }}</span>
-            </div>
+            @if($showTargetPosition)
+                <div class="talent-hero-meta-row">
+                    <span class="talent-hero-meta-label">Posisi yang Dituju</span>
+                    <span class="talent-hero-meta-value">{{ $targetPositionDisplay }}</span>
+                </div>
+            @endif
         </div>
 
         <div class="talent-hero-divider"></div>

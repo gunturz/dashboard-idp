@@ -718,7 +718,7 @@
             <div class="px-6 pb-2 decision-grid">
                 <div class="decision-card ready-now" onclick="selectDecision('ready_now')">
                     <h4>Ready Now</h4>
-                    <p>Talent siap dan resmi diangkat ke posisi target sekarang</p>
+                    <p>Talent dinyatakan siap untuk posisi target</p>
                 </div>
                 <div class="decision-card ready-1-2" onclick="selectDecision('ready_1_2_years')">
                     <h4>Ready in 1-2 Years</h4>
@@ -801,7 +801,7 @@
                 const decisionMap = {
                     ready_now: {
                         title: 'Konfirmasi: Ready Now',
-                        desc: `Anda akan menetapkan <strong>${safeTalentName}</strong> sebagai <strong class="text-green-600">DIANGKAT</strong> ke posisi target sekarang.`,
+                        desc: `Anda akan menetapkan <strong>${safeTalentName}</strong> dengan keputusan <strong class="text-green-600">READY NOW</strong>. Posisi talent tidak akan berubah otomatis.`,
                         btnColor: '#22c55e'
                     },
                     ready_1_2_years: {

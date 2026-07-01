@@ -211,7 +211,7 @@
 
                     <div class="px-5 pt-1 pb-5">
                         <div
-                            class="flex gap-1.5 overflow-x-auto rounded-full border border-[#e2e8f0] bg-[#f9fafb] p-1.5 shadow-inner w-fit">
+                            class="flex gap-1.5 overflow-x-auto no-scrollbar rounded-full border border-[#e2e8f0] bg-[#f9fafb] p-1.5 shadow-inner w-fit max-w-full">
                             <button type="button"
                                 class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 whitespace-nowrap {{ $currentTab == 'exposure' ? 'bg-[#0f172a] text-white shadow-sm' : 'text-[#64748b] hover:bg-[#cbd5e1] hover:text-[#0f172a]' }}"
                                 wire:click="switchTab('exposure', {{ $talentId }})">Exposure</button>
@@ -226,21 +226,17 @@
 
                     <div class="px-5 pb-5">
                         <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
-                            <table class="w-full min-w-[900px] table-auto text-left bg-white">
+                            <table class="w-full min-w-[800px] md:min-w-full table-auto text-left bg-white">
                                 <thead class="bg-slate-50 border-b border-gray-200">
                                     <tr>
                                         @if ($currentTab == 'learning')
-                                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber
-                                            </th>
+                                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Sumber</th>
                                         @else
-                                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor
-                                            </th>
+                                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
                                         @endif
                                         <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
-                                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">
-                                            Tanggal Pengiriman/<br>Update</th>
-                                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">
-                                            Tanggal<br>Pelaksanaan</th>
+                                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                                        <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
                                         <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
                                         <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                                     </tr>
@@ -304,23 +300,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="py-10 px-6">
-                                                <div class="flex flex-col items-center justify-center text-center">
-                                                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                                                        style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                            stroke-width="2">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                        </svg>
-                                                    </div>
-                                                    <p class="text-base font-bold text-gray-700">Belum Ada Aktivitas</p>
-                                                    <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">
-                                                        Belum ada aktivitas {{ strtolower($currentTab) }} yang perlu
-                                                        divalidasi untuk talent ini.
-                                                    </p>
-                                                </div>
+                                            <td colspan="6" class="py-12 px-6 text-center text-gray-400 text-sm bg-white">
+                                                Belum ada aktivitas {{ strtolower($currentTab) }} yang perlu divalidasi untuk talent ini.
                                             </td>
                                         </tr>
                                     @endforelse
@@ -330,17 +311,8 @@
                     </div>
                 </div>
             @empty
-                <div class="empty-prem" style="border: none; padding: 20px;">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto"
-                        style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                            style="width: 32px !important; height: 32px !important; color: #0d9488 !important; margin: 0 !important;">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
-                    <h3>Belum Ada Talent</h3>
-                    <p>Belum ada talent yang tersedia untuk divalidasi saat ini.</p>
+                <div class="py-12 px-6 text-center text-gray-400 text-sm">
+                    Belum ada talent yang tersedia untuk divalidasi saat ini.
                 </div>
             @endforelse
         @else
@@ -356,7 +328,7 @@
             @endphp
             <div class="mb-6">
                 <div
-                    class="flex gap-1.5 overflow-x-auto rounded-full border border-[#e2e8f0] bg-[#f9fafb] p-1.5 shadow-inner w-fit">
+                    class="flex gap-1.5 overflow-x-auto no-scrollbar rounded-full border border-[#e2e8f0] bg-[#f9fafb] p-1.5 shadow-inner w-fit max-w-full">
                     <button type="button"
                         class="px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-200 whitespace-nowrap {{ $currentTab == 'exposure' ? 'bg-[#0f172a] text-white shadow-sm' : 'text-[#64748b] hover:bg-[#cbd5e1] hover:text-[#0f172a]' }}"
                         wire:click="switchTab('exposure', {{ $selectedTalent->id }})">Exposure</button>
@@ -370,7 +342,7 @@
             </div>
 
             <div class="rounded-xl overflow-hidden border border-gray-200 custom-scrollbar overflow-x-auto">
-                <table class="w-full min-w-[900px] table-auto text-left bg-white">
+                <table class="w-full min-w-[800px] md:min-w-full table-auto text-left bg-white">
                     <thead class="bg-slate-50 border-b border-gray-200">
                         <tr>
                             @if ($currentTab == 'learning')
@@ -379,10 +351,8 @@
                                 <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Mentor</th>
                             @endif
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Tema</th>
-                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">Tanggal
-                                Pengiriman/<br>Update</th>
-                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center leading-snug">
-                                Tanggal<br>Pelaksanaan</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pengiriman/Update</th>
+                            <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center whitespace-nowrap">Tanggal Pelaksanaan</th>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Status</th>
                             <th class="py-4 px-6 text-sm font-bold text-slate-700 text-center">Aksi</th>
                         </tr>
@@ -441,22 +411,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-10 px-6">
-                                    <div class="flex flex-col items-center justify-center text-center">
-                                        <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                                            style="background:linear-gradient(135deg,#ccfbf1,#99f6e4)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                            </svg>
-                                        </div>
-                                        <p class="text-base font-bold text-gray-700">Belum Ada Aktivitas</p>
-                                        <p class="text-sm text-gray-500 mt-1 max-w-sm leading-relaxed">Belum ada
-                                            aktivitas {{ strtolower($currentTab) }} yang perlu divalidasi untuk talent
-                                            ini.</p>
-                                    </div>
+                                <td colspan="6" class="py-12 px-6 text-center text-gray-400 text-sm bg-white">
+                                    Belum ada aktivitas {{ strtolower($currentTab) }} yang perlu divalidasi untuk talent ini.
                                 </td>
                             </tr>
                         @endforelse

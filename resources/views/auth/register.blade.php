@@ -7,17 +7,17 @@
         {{-- ── NOTIFIKASI INFO (dari Google OAuth redirect) ─────────── --}}
         @if(session('info'))
             <div style="
-                background: rgba(59,130,246,0.12);
-                border: 1px solid rgba(59,130,246,0.35);
-                border-radius: 10px;
-                padding: 0.75rem 1rem;
-                margin-bottom: 1.25rem;
-                font-size: 0.82rem;
-                color: #93c5fd;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            ">
+                    background: rgba(59,130,246,0.12);
+                    border: 1px solid rgba(59,130,246,0.35);
+                    border-radius: 10px;
+                    padding: 0.75rem 1rem;
+                    margin-bottom: 1.25rem;
+                    font-size: 0.82rem;
+                    color: #93c5fd;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor" style="width:16px;height:16px;flex-shrink:0">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -62,8 +62,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                 </svg>
-                <input id="email" type="email" name="email" value="{{ session('google_email', old('email')) }}" {{ session('google_email') ? 'readonly' : '' }}  class="form-input"
-                    placeholder="Masukan email" required autocomplete="email" />
+                <input id="email" type="email" name="email" value="{{ session('google_email', old('email')) }}" {{ session('google_email') ? 'readonly' : '' }} class="form-input" placeholder="Masukan email" required
+                    autocomplete="email" />
             </div>
             @error('email')
                 <p class="error-message">
@@ -130,16 +130,16 @@
                 <input id="password_confirmation" type="password" name="password_confirmation" class="form-input"
                     placeholder="Konfirmasi password" required autocomplete="new-password"
                     style="padding-right: 2.8rem;" />
-                <button type="button" class="password-toggle"
-                    onclick="togglePassword('password_confirmation', this)" aria-label="Toggle konfirmasi password">
+                <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation', this)"
+                    aria-label="Toggle konfirmasi password">
                     <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
                     </svg>
@@ -156,8 +156,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
-                <input id="nama" type="text" name="nama" value="{{ session('google_name', old('nama')) }}" class="form-input"
-                    placeholder="Masukan nama lengkap" required />
+                <input id="nama" type="text" name="nama" value="{{ session('google_name', old('nama')) }}"
+                    class="form-input" placeholder="Masukan nama lengkap" required />
             </div>
             @error('nama')
                 <p class="error-message">
@@ -175,8 +175,7 @@
         <div style="margin-bottom: 1rem;">
             <label for="role_id" class="form-label">Role</label>
             <div class="input-wrapper">
-                <select id="role_id" name="role_id" class="form-select" required
-                    onchange="handleRoleChange(this)">
+                <select id="role_id" name="role_id" class="form-select" required onchange="handleRoleChange(this)">
                     <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Pilih role</option>
                     @foreach ($roles as $rl)
                         <option value="{{ $rl->id }}" data-rolename="{{ $rl->role_name }}" {{ old('role_id') == $rl->id ? 'selected' : '' }}>
@@ -201,7 +200,8 @@
         <div id="field-company" style="margin-bottom: 1rem; display: none;">
             <label for="company_id" class="form-label">Perusahaan</label>
             <div class="input-wrapper">
-                <select id="company_id" name="company_id" class="form-select" onchange="loadDepartmentsByCompany(this.value)">
+                <select id="company_id" name="company_id" class="form-select"
+                    onchange="loadDepartmentsByCompany(this.value)">
                     <option value="" disabled {{ old('company_id') ? '' : 'selected' }}>Pilih nama perusahaan
                     </option>
                     @foreach ($companies as $company)
@@ -300,6 +300,35 @@
                 if (el) el.style.display = isTalent ? 'block' : 'none';
             });
 
+            // Logika untuk Opsi di Posisi Sekarang
+            const posSelect = document.getElementById('position_id');
+            if (posSelect) {
+                Array.from(posSelect.options).forEach(opt => {
+                    const text = opt.textContent.trim().toLowerCase();
+                    // Jangan sentuh option default yang disable (value kosong)
+                    if (opt.value === '') return;
+
+                    if (text === 'panelis') {
+                        // Sembunyikan 'Panelis' secara permanen dari dropdown Posisi
+                        opt.style.display = 'none';
+                        opt.hidden = true;
+                        opt.disabled = true;
+                        if (opt.selected) posSelect.value = '';
+                    } else if (text === 'general manager' && isTalent) {
+                        // Sembunyikan 'General Manager' jika role adalah Talent
+                        opt.style.display = 'none';
+                        opt.hidden = true;
+                        opt.disabled = true;
+                        if (opt.selected) posSelect.value = '';
+                    } else {
+                        // Tampilkan kembali sisanya
+                        opt.style.display = '';
+                        opt.hidden = false;
+                        opt.disabled = false;
+                    }
+                });
+            }
+
             // Company field: tampil untuk Finance, panelis, dan role lain yang butuh company
             const companyEl = document.getElementById('field-company');
             const deptEl = document.getElementById('field-department');
@@ -379,7 +408,7 @@
         }
 
         // Trigger saat halaman dimuat (untuk kasus old() value setelah validasi error)
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const roleSelect = document.getElementById('role_id');
             if (roleSelect && roleSelect.value) {
                 handleRoleChange(roleSelect);

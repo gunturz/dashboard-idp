@@ -1195,25 +1195,34 @@ class PDCAdminController extends Controller
     public function user_management()
     {
         $user = auth()->user();
+        
         $talents = User::whereHas('roles', function ($q) {
-            $q->where('role_name', 'talent');
-        })->with(['position', 'department', 'company'])->latest()->get();
+            $q->whereRaw('LOWER(TRIM(role_name)) = ?', ['talent']);
+        })->with(['position', 'department', 'company', 'roles'])->latest()->get();
 
         $mentors = User::whereHas('roles', function ($q) {
-            $q->where('role_name', 'mentor');
-        })->with(['position', 'department', 'company'])->latest()->get();
+            $q->whereRaw('LOWER(TRIM(role_name)) = ?', ['mentor']);
+        })->with(['position', 'department', 'company', 'roles'])->latest()->get();
 
         $finances = User::whereHas('roles', function ($q) {
-            $q->where('role_name', 'finance');
-        })->with(['position', 'department', 'company'])->latest()->get();
+            $q->whereRaw('LOWER(TRIM(role_name)) = ?', ['finance']);
+        })->with(['position', 'department', 'company', 'roles'])->latest()->get();
 
         $panelisUsers = User::whereHas('roles', function ($q) {
             $q->whereIn('role_name', ['bo_director', 'panelis', 'board_of_directors', 'board_of_director', 'panelis']);
-        })->with(['position', 'department', 'company'])->latest()->get();
+        })->with(['position', 'department', 'company', 'roles'])->latest()->get();
 
         $atasans = User::whereHas('roles', function ($q) {
-            $q->where('role_name', 'atasan');
-        })->with(['position', 'department', 'company'])->latest()->get();
+            $q->whereRaw('LOWER(TRIM(role_name)) = ?', ['atasan']);
+        })->with(['position', 'department', 'company', 'roles'])->latest()->get();
+
+        $counts = [
+            'Talent'  => $talents->count(),
+            'Mentor'  => $mentors->count(),
+            'Atasan'  => $atasans->count(),
+            'Finance' => $finances->count(),
+            'Panelis' => $panelisUsers->count(),
+        ];
 
         $departments = Department::orderBy('nama_department')->get();
         $departmentsByCompany = $departments
@@ -1237,7 +1246,7 @@ class PDCAdminController extends Controller
             END ASC
         ")->orderBy('nama_company')->get();
 
-        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'departmentsByCompany', 'positions', 'rolesData', 'companies'));
+        return view('pdc_admin.user-management', compact('user', 'talents', 'mentors', 'finances', 'panelisUsers', 'atasans', 'departments', 'departmentsByCompany', 'positions', 'rolesData', 'companies', 'counts'));
     }
 
     public function storeUser(Request $request)
